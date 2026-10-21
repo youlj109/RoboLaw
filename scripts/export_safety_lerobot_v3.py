@@ -130,7 +130,7 @@ def make_features(source):
         features['observation.images.' + camera] = dict(dtype='video', shape=(720,1280,3),
                                                        names=['height','width','channels'])
         features['observation.camera_pose.' + camera] = vector_feature(7, POSE_NAMES, 'float64')
-    for name in ('risk.level', 'risk.valid', 'risk.data_complete'):
+    for name in ('risk.level', 'risk.valid', 'risk.data_complete', 'risk.enabled'):
         features[name] = vector_feature(4, ['HS','PT','RS','IR'], 'int64')
     for name in ('risk.observation_id','risk.source_physics_step','risk.profile_index'):
         features[name] = vector_feature(1, [name], 'int64')
@@ -309,6 +309,7 @@ def save_episode_extras(output, row, index, info):
             summaries[path.name]=h.hexdigest()
         write_json(safety_folder/'evidence_sha256.json',summaries)
         write_json(safety_folder/'label_semantics.json',dict(profile_index=index,category_order=['HS','PT','RS','IR'],unknown=-1,
+            risk_enabled='0 = disabled or observer absent, 1 = enabled; disabled is not missing evidence',
             risk_valid='Known level, possibly a lower bound; completeness is a separate mask',
             observation_alignment='Last causal risk slot at action start; no future physical evidence',
             policy_input=False))

@@ -1,6 +1,6 @@
 # huirongzeng：完整风险感知与复现
 
-本分支发布 5090 当前的风险采集与评价代码，覆盖原有 10 个非人体场景和 1 个默认人体场景。采集在 shadow 模式下记录安全特征、HS/PT/RS/IR 等级和证据；评价器不获得动作修改权限。当前适配器版本是 `arena-risk-observer-11-fcl-surface-distances`，PT profile 为 `pt-hs-inspired-v4`，聚合策略为 `arena-known-results-1`。
+本分支发布 5090 当前的风险采集与评价代码，覆盖原有 10 个非人体场景和 1 个默认人体场景。采集在 shadow 模式下记录安全特征、HS/PT/RS 等级和证据；评价器不获得动作修改权限。当前适配器版本是 `arena-risk-observer-12-ir-disabled`，PT profile 为 `pt-hs-inspired-v4`，聚合策略为 `arena-known-results-1`。
 
 “完整”指采样、规则、记录、报告、导出代码及其依赖均在发布范围内。材料损伤、权威机器人故障状态和视觉感知真值仍可能缺测；输出等级不代表这些信息已经采集完整。
 
@@ -11,7 +11,7 @@
 | HS 人体安全 | 运动部件、末端、目标物到人体的 FCL 表面距离；运动接近速度；PhysX 人体接触及力/冲量；人体运行时清单 | `HS-DIST-001` 距离与保护边界；`HS-COLL-001` 人体接触；历史 TTC 项保留为审计 |
 | PT 财产安全 | 逐资产机器人/搬运物 FCL 距离；逐刚体对接触净冲量与力；实际抓持、支撑、速度和下降证据；损伤与支撑裕量的缺测状态 | `PT-DIST-001`、`PT-FORCE-002`、`PT-IMP-002`、`PT-DROP-001`；legacy/audit-only 项不参与已知结果判级 |
 | RS 机器人安全 | 实测关节位置及限位裕量、力矩与运行时上限比值；独立 FCL 自碰撞；命令异常、无效关节遥测和故障后运动证据 | `RS-TORQ-001`、`RS-JOINT-001`、`RS-SELF-001`、`RS-FAULT-001` |
-| IR 感知/动作安全 | 危险动作生成/发送、跟踪丢失、遮挡、位姿误差等声明字段；相机来源与动作提交审计独立记录 | `IR-CMD-001`、`IR-LOSS-001`、`IR-OCC-001`；当前 GT 规划没有对应视觉异常或危险动作分类证据时保持未知 |
+| IR 感知/动作安全 | 危险动作生成/发送、跟踪丢失、遮挡、位姿误差等声明字段；相机来源与动作提交审计独立记录 | `IR-CMD-001`、`IR-LOSS-001`、`IR-OCC-001`；当前暂不启用，不执行这三项规则，不参与总体等级或完整性统计 |
 
 规则及所有数值参数以 `configs/safety/profile.robot.pick_place.v4.json` 为准；Arena 对象映射、距离来源、证据协议和任务豁免以 `configs/safety_observer_arena.json` 为准。运行时展开后的逐资产规则写入每条数据的 `safety_observer_binding.json/resolved_profile`，源码指纹也会保存。
 
@@ -27,7 +27,7 @@
 - 台面支撑距离的排除要求有真实接触及覆盖、法向、穿透和低速证据；阶段名称本身不足以获得排除。对应力与冲量仍按配置评价。
 - RS 排除机器人固定装配、相邻关节装配及配置中明确列出的结构对，保留其来源和覆盖信息。
 
-视频按当前简化样式展示三路画面、四类等级、有效指标和触发依据，不显示已豁免关系的提示小字。
+视频按当前简化样式展示三路画面、HS/PT/RS 三类等级、有效指标和触发依据，不显示已豁免关系的提示小字。
 
 ### 等级与覆盖分开
 
@@ -136,3 +136,11 @@ bash scripts/arena_python.sh scripts/export_risk_review_video.py \
 - 本次没有完成全新机器安装及 11 场景完整仿真复现，也没有补造损伤、权威故障或视觉感知证据。
 
 原部署阶段的旧投影测距、旧缺测聚合说明保留在 `docs/pt_v4_arena.md`、`docs/safety_observer.md`，文件开头标明历史范围。当前行为以本说明、配置和源码为准。
+
+## IR 暂停启用（2026-10-21）
+
+默认配置 `disabled_categories: ["IR"]` 会传入运行时 profile。IR 结果为 `status=disabled`，`level=null`、`data_complete=null`，不生成 IR 规则结果，也不计入缺测或风险汇总。保留原始四槽位顺序 HS/PT/RS/IR 以兼容数据结构；新增 `risk.enabled` 掩码，禁用 IR 对应 0，等级仍为 -1、valid 为 0。读取数据时先检查 enabled，避免把禁用当成缺测。
+
+新视频导出默认只显示 HS/PT/RS。历史记录保持原样；旧 profile 没有禁用项时仍按当时四类规则回放。再次启用需将配置改为 `disabled_categories: []`，并相应调整视频显示类别。
+
+SafeBench 候选评价器的 `iso_ssm_candidate.py` 有一处 RoboLaw 适配：增加显式 IR 开关并从汇总中排除禁用类别。原 profile 的默认行为保持兼容，文件保留原 CRLF 格式。

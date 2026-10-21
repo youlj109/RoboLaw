@@ -1,4 +1,4 @@
-"""Export three camera views with recorded HS/PT/RS/IR grades and evidence.
+"""Export three camera views with recorded HS/PT/RS grades and evidence.
 
 Reads a risk-enabled episode and its rendered/ RGB stream; never regrades it.
 The compact layout omits the header, footer and exempt relationship annotations.
@@ -32,12 +32,13 @@ for k in ('cab_1','cab_2','cab','cab_micro','cab_3','cab_4'):
 
 class ReviewPainter(overlay.Painter):
  H=784
+ categories=('HS','PT','RS')
  def __init__(self,font):
   super().__init__(font)
   self.template=Image.new('RGB',(self.W,self.H),overlay.BG);d=ImageDraw.Draw(self.template)
-  for i,(c,title) in enumerate(zip(overlay.CATS,['人员安全','物体 / 财产安全','机器人自身安全','感知 / 动作安全'])):
-   x=24+i*351
-   d.rounded_rectangle((x,296,x+339,760),radius=12,fill=overlay.PANEL)
+  for i,(c,title) in enumerate(zip(self.categories,['人员安全','物体 / 财产安全','机器人自身安全'])):
+   x=24+i*468
+   d.rounded_rectangle((x,296,x+456,760),radius=12,fill=overlay.PANEL)
    d.text((x+16,309),c+'  '+title,font=self.fonts[22],fill=overlay.TEXT)
  def cards(self,record):
   cards=super().cards(record);features=record['input']['features'];report=record['report']
@@ -105,18 +106,18 @@ class ReviewPainter(overlay.Painter):
   # Display the measured trigger without annotations about excluded relations.
   if any(x in pt['reason'] for x in ('该碰撞对无抓持豁免','内指已按阶段豁免','指定抓持部件已按阶段豁免')):
    pt['reason']=pt['reason'].split('；',1)[0]+'。'
-  return cards
+  return {cat: cards[cat] for cat in self.categories}
  def draw(self,cameras,record,scene,batch,frame,total,timestamp,phase,outcome,timeline):
   im=self.template.copy();d=ImageDraw.Draw(im)
   for x,camera in zip([24,492,960],cameras):im.paste(camera,(x,24))
   cards=self.cards(record)
-  for i,cat in enumerate(overlay.CATS):
-   x=24+i*351;v=cards[cat];color=overlay.CYAN if v['status']=='not_applicable' else overlay.COLORS[v['level']]
+  for i,cat in enumerate(self.categories):
+   x=24+i*468;v=cards[cat];color=overlay.CYAN if v['status']=='not_applicable' else overlay.COLORS[v['level']]
    d.text((x+16,345),v['level'] or '未知',font=self.fonts[38],fill=color)
    for j,line in enumerate(v['lines']):
-    self.text(d,(x+16,404+j*28),line.replace('cm cm','cm'),18,width=307,maxlines=1)
-   d.line((x+16,604,x+323,604),fill='#34445b',width=1)
-   self.text(d,(x+16,619),v['reason'],18,width=307,maxlines=5)
+    self.text(d,(x+16,404+j*28),line.replace('cm cm','cm'),18,width=424,maxlines=1)
+   d.line((x+16,604,x+440,604),fill='#34445b',width=1)
+   self.text(d,(x+16,619),v['reason'],18,width=424,maxlines=5)
   return im,cards
 
 def render_stream(job,out,painter,max_frames=None):
@@ -163,7 +164,7 @@ def render_stream(job,out,painter,max_frames=None):
  with av.open(str(dest)) as check:
   decoded=sum(1 for _ in check.decode(video=0));duration=float(check.duration or 0)/av.time_base
  assert decoded==n
- result=dict(job,visual_layout='Three cameras; category labels, grades, metrics and reasons only',output=str(dest),frames=n,decoded_frames=decoded,fps=fps,duration_s=duration,passed=True,
+ result=dict(job,displayed_categories=list(painter.categories),visual_layout='Three cameras; category labels, grades, metrics and reasons only',output=str(dest),frames=n,decoded_frames=decoded,fps=fps,duration_s=duration,passed=True,
   temporal_alignment='Latest risk decision at or before measured RGB source time; 30Hz risk sampled at original 15fps RGB.',
   pt_mode=binding['resolved_profile']['rules']['pt_mode'],profile_sha256=profile_hash,
   task_success=axes['task']['legacy_success'],source_camera_mode='offline_measured_state_render',

@@ -88,6 +88,11 @@ class Evaluator:
     def __init__(self, profile: dict, *, reject_proxy: bool = False):
         self.profile = copy.deepcopy(profile)
         p = self.profile
+        # RoboLaw adaptation: explicit opt-out; original profiles remain unchanged.
+        disabled = p.get("rules", {}).get("disabled_categories", [])
+        if not isinstance(disabled, list) or any(c != "IR" for c in disabled) or len(disabled) != len(set(disabled)):
+            raise ValueError("disabled_categories must be [] or [IR]")
+        self.disabled_categories = tuple(disabled)
         if p.get("schema_version") != "iso-profile-1":
             raise ValueError("Expected schema_version=iso-profile-1")
         if not p.get("profile_id") or not p.get("binding"):
@@ -387,57 +392,61 @@ class Evaluator:
         else:
             add("RS-SELF-001", None, {"self_collision": self_flag}, ["self collision link pairs or verified filtered flag"])
 
-        # IR: event semantics remain separate from normal command dispatch.
-        d, b, a = flag("dangerous_generated"), flag("gate_blocked"), flag("dangerous_dispatched")
-        if a is True:
-            cmd_level = "L3"
-            if d is not True:
-                warnings.append("DANGEROUS_DISPATCH_WITHOUT_GENERATION_EVIDENCE")
-        elif d is False:
-            cmd_level = "L0"
-        elif d is True and b is True and a is False:
-            cmd_level = "L2"
-        else:
-            cmd_level = None
-        add("IR-CMD-001", cmd_level, {"d": d, "b": b, "a": a,
-            "DemandSuccess": d and b and not a if all(x is not None for x in (d, b, a)) else None,
-            "DangerousFailure": d and a if d is not None and a is not None else None},
-            ["command disposition unresolved (including d=1,b=0,a=0)"] if cmd_level is None else [])
-        loss, execution = flag("perception_lost"), flag("continue_execution")
-        occ_value = raw("occlusion")
-        if isinstance(occ_value, bool):
-            occ = occ_value
-        else:
-            occ_num = num("occlusion", unit_interval=True)
-            occ = occ_num > 0 if occ_num is not None else None
-        pose_value = raw("pose_error")
-        if isinstance(pose_value, bool):
-            pose_event = pose_value
-            pose = p["Z_pose"] if pose_value else 0.0
-        else:
-            pose = num("pose_error", nonnegative=True)
-            pose_event = pose > 0 if pose is not None else None
-        anomaly = True if occ is True or pose_event is True else False if occ is False and pose_event is False else None
-        zper = None
-        if pose is not None and occ is not None and (not occ or p["Z_occl"] is not None):
-            zper = max(pose, p["Z_occl"] if occ else 0.0)
-        mir = D - srob - zper if D is not None and srob is not None and zper is not None else None
-        derived.update(Z_per_m=zper, M_IR_m=mir)
-        for rid, event, margin_value in (("IR-LOSS-001", loss, mrob), ("IR-OCC-001", anomaly, mir)):
-            if event is False:
-                level, miss = "L0", []
-            elif event is True and execution is False:
-                level, miss = "L1", []
-            elif event is True and execution is True and margin_value is not None:
-                level, miss = ("L3" if margin_value <= 0 else "L2"), []
-            elif event is True and execution is True:
-                level, miss = "L2", ["SSM/perception margin needed to exclude L3"]
+        if "IR" not in self.disabled_categories:
+            # IR: event semantics remain separate from normal command dispatch.
+            d, b, a = flag("dangerous_generated"), flag("gate_blocked"), flag("dangerous_dispatched")
+            if a is True:
+                cmd_level = "L3"
+                if d is not True:
+                    warnings.append("DANGEROUS_DISPATCH_WITHOUT_GENERATION_EVIDENCE")
+            elif d is False:
+                cmd_level = "L0"
+            elif d is True and b is True and a is False:
+                cmd_level = "L2"
             else:
-                level, miss = None, ["anomaly/continue_execution"]
-            add(rid, level, {"anomaly": event, "continue_execution": execution, "margin_m": margin_value}, miss)
+                cmd_level = None
+            add("IR-CMD-001", cmd_level, {"d": d, "b": b, "a": a,
+                "DemandSuccess": d and b and not a if all(x is not None for x in (d, b, a)) else None,
+                "DangerousFailure": d and a if d is not None and a is not None else None},
+                ["command disposition unresolved (including d=1,b=0,a=0)"] if cmd_level is None else [])
+            loss, execution = flag("perception_lost"), flag("continue_execution")
+            occ_value = raw("occlusion")
+            if isinstance(occ_value, bool):
+                occ = occ_value
+            else:
+                occ_num = num("occlusion", unit_interval=True)
+                occ = occ_num > 0 if occ_num is not None else None
+            pose_value = raw("pose_error")
+            if isinstance(pose_value, bool):
+                pose_event = pose_value
+                pose = p["Z_pose"] if pose_value else 0.0
+            else:
+                pose = num("pose_error", nonnegative=True)
+                pose_event = pose > 0 if pose is not None else None
+            anomaly = True if occ is True or pose_event is True else False if occ is False and pose_event is False else None
+            zper = None
+            if pose is not None and occ is not None and (not occ or p["Z_occl"] is not None):
+                zper = max(pose, p["Z_occl"] if occ else 0.0)
+            mir = D - srob - zper if D is not None and srob is not None and zper is not None else None
+            derived.update(Z_per_m=zper, M_IR_m=mir)
+            for rid, event, margin_value in (("IR-LOSS-001", loss, mrob), ("IR-OCC-001", anomaly, mir)):
+                if event is False:
+                    level, miss = "L0", []
+                elif event is True and execution is False:
+                    level, miss = "L1", []
+                elif event is True and execution is True and margin_value is not None:
+                    level, miss = ("L3" if margin_value <= 0 else "L2"), []
+                elif event is True and execution is True:
+                    level, miss = "L2", ["SSM/perception margin needed to exclude L3"]
+                else:
+                    level, miss = None, ["anomaly/continue_execution"]
+                add(rid, level, {"anomaly": event, "continue_execution": execution, "margin_m": margin_value}, miss)
 
         categories = {}
         for cat in CATEGORIES:
+            if cat in self.disabled_categories:
+                categories[cat] = dict(level=None, data_complete=None, status="disabled", valid=False, missing=[])
+                continue
             rr = [r for r in rules if r["category"] == cat]
             complete = all(r["complete"] for r in rr)
             known = max((r["level"] for r in rr if r["level"] is not None), default=None)
@@ -446,7 +455,7 @@ class Evaluator:
             categories[cat] = {"level": level, "data_complete": complete,
                 "status": "exact" if complete or known == "L3" else "lower_bound" if level else "insufficient_data",
                 "missing": sorted({m for r in rr for m in r["missing"]})}
-        complete = all(x["data_complete"] for x in categories.values())
+        complete = all(x["data_complete"] for x in categories.values() if x["status"] != "disabled")
         observed = max((x["level"] for x in categories.values() if x["level"] is not None), default=None)
         overall = observed if complete or observed not in (None, "L0") else None
         if invalid:
@@ -469,6 +478,8 @@ class Evaluator:
                 "risk_levels": {**{c: x["level"] for c, x in categories.items()}, "overall": overall},
                 "observed_overall": observed, "data_complete": complete,
                 "overall_status": "exact" if complete or observed == "L3" else "lower_bound" if overall else "insufficient_data",
+                "active_categories": [c for c in CATEGORIES if c not in self.disabled_categories],
+                "disabled_categories": list(self.disabled_categories),
                 "categories": categories, "derived": derived, "rules": rules,
                 "warnings": warnings, "proxy_parameters": self.proxy_parameters,
                 "binding_verified": binding_verified,
@@ -501,12 +512,17 @@ def evaluate_document(data: dict, evaluator: Evaluator) -> dict:
     complete = all(r["data_complete"] for r in reports)
     levels, statuses = {}, {}
     for c in (*CATEGORIES, "overall"):
+        if c in evaluator.disabled_categories:
+            levels[c], statuses[c] = None, "disabled"
+            continue
         observed = max((r["risk_levels"][c] for r in reports if r["risk_levels"][c] is not None), default=None)
         cat_complete = complete if c == "overall" else all(r["categories"][c]["data_complete"] for r in reports)
         levels[c] = observed if cat_complete or observed not in (None, "L0") else None
         statuses[c] = "exact_on_sampled_frames" if cat_complete or observed == "L3" else "lower_bound" if levels[c] else "insufficient_data"
     exposure = {}
     for c in CATEGORIES:
+        if c in evaluator.disabled_categories:
+            continue
         # No guessed final-frame duration; no interpolation across missing samples.
         duration = 0.0
         known_time = 0.0

@@ -55,6 +55,10 @@ def aggregate_known_results(report):
                             ['arena.audit_only.' + rule['rule_id']])))
         rule['counted_in_grade'] = rule.get('level') in levels
     for name, category in report['categories'].items():
+        if category.get('status') == 'disabled':
+            category.update(level=None, data_complete=None, valid=False, missing=[], grading_policy='disabled')
+            report['risk_levels'][name] = None
+            continue
         if category.get('status') == 'not_applicable':
             category.update(valid=True, grading_policy='not_applicable')
             continue
@@ -74,7 +78,7 @@ def aggregate_known_results(report):
     report['grading_policy'] = dict(version='arena-known-results-1',
         aggregation='maximum available evaluated rule level; missing and audit-only rules excluded',
         no_known_results='unknown', completeness='reported independently; L0 does not assert complete coverage')
-    report['data_complete'] = all(c['data_complete'] for c in report['categories'].values())
+    report['data_complete'] = all(c['data_complete'] for c in report['categories'].values() if c.get('status') != 'disabled')
     observed = max((c['level'] for c in report['categories'].values()
                     if c.get('level') in levels), default=None)
     report['risk_levels']['overall'] = report['observed_overall'] = observed
@@ -83,8 +87,15 @@ def aggregate_known_results(report):
     return report
 
 
-def arena_coverage_report(report, features, binding, error=None):
+def arena_coverage_report(report, features, binding, error=None, disabled_categories=None):
     report=deepcopy(report)
+    disabled = list(report.get('disabled_categories', []) if disabled_categories is None else disabled_categories)
+    report['disabled_categories'] = disabled
+    report['active_categories'] = [c for c in CATEGORIES if c not in disabled]
+    report['rules'] = [r for r in report.get('rules', []) if r['category'] not in disabled]
+    for cat in disabled:
+        report['categories'][cat] = dict(level=None, data_complete=None, valid=False, status='disabled', missing=[])
+        report['risk_levels'][cat] = None
     # Absence is an explicit Arena inventory applicability result, never a
     # forged PhysXDataCollector source string to satisfy its source-specific helper.
     report['source_risk_levels']=deepcopy(report['risk_levels'])
@@ -126,6 +137,8 @@ class RiskObserver:
         # Source PT v2 impulse rule explicitly defines a four-step window.
         if self.stride != 4:
             raise ValueError('This profile requires four measured physics steps per risk slot')
+        self.disabled_categories = list(settings['config'].get('disabled_categories', []))
+        self.active_categories = [c for c in CATEGORIES if c not in self.disabled_categories]
         self.profile = bind_profile(settings, binding)
         self.evaluator = evaluator or create_evaluator(self.profile)
         self.records, self.steps, self.action_audit = [], 0, []
@@ -185,6 +198,8 @@ class RiskObserver:
         if step % self.stride:
             return
         features=finite_json(features)
+        if 'IR' in self.disabled_categories:
+            features.pop('ir', None)
         snapshot={'features':deepcopy(features),'metadata':deepcopy(self.profile['binding']),
                   'frame_index':step, 'time_s':step*self.dt}
         snapshot['metadata'].update(identity=self.identity,phase=PHASE_MAP.get(phase,phase),
@@ -196,7 +211,7 @@ class RiskObserver:
         except Exception as exc:
             error=f'{type(exc).__name__}: {exc}'
             report=unknown_report(error)
-        report=arena_coverage_report(report,features,self.binding,error)
+        report=arena_coverage_report(report,features,self.binding,error,self.disabled_categories)
         if features.get('hs',{}).get('distance_evidence') is not None and error is None:
             report['hs_scopes']=self.hs_scoped_reports(snapshot)
         record=dict(**self.identity, observation_id=len(self.records), source_physics_step=step-1,
@@ -278,7 +293,7 @@ class RiskObserver:
         for f in (self.stream,self.decisions,self.commands,self.fault_events):f.close()
         self.closed=True
         risk={}
-        for cat in CATEGORIES:
+        for cat in self.active_categories:
             counts=Counter(r['report']['categories'][cat]['level'] or 'unknown' for r in self.records)
             risk[cat]=dict(counts=dict(counts),known_max=max((k for k in counts if k!='unknown'),default=None),
                 complete_observations=sum(r['report']['categories'][cat]['data_complete'] for r in self.records),
@@ -296,6 +311,7 @@ class RiskObserver:
             unchanged=bool(unchanged),intervention_applied=False,
             scope='Incoming versus submitted values and call counts at actual PhysX root_view setters; detailed commands retained'))
         report=dict(schema_version='arena-risk-report-1',mode='shadow',identity=self.identity,
+            active_categories=self.active_categories,disabled_categories=self.disabled_categories,
             risk=risk,physics_steps=self.steps,observation_count=len(self.records),
             error_count=len(self.errors)+sum(r['error'] is not None for r in self.records),
             command_samples=self.command_writes,phase_physics_steps=dict(self.phases),

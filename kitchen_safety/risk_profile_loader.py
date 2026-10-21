@@ -45,6 +45,11 @@ def load_config(path):
         raise ValueError('This scene binding identifies panda_link0 as the fixed base and stand')
     if not isinstance(config['hs_scopes'].get('exempt_fixed_distance',False),bool):
         raise ValueError('HS fixed-distance exemption must be an explicit boolean')
+    disabled = config.get('disabled_categories', [])
+    if not isinstance(disabled, list) or any(c != 'IR' for c in disabled) or len(disabled) != len(set(disabled)):
+        raise ValueError('disabled_categories must be [] or [IR]')
+    if disabled:
+        profile['rules']['disabled_categories'] = list(disabled)
     create_evaluator(profile)  # Validate the complete rule profile, not four thresholds.
     files = sorted((ROOT / 'kitchen_safety').glob('*.py')) + [ROOT/'scripts'/name for name in
         ('collect_kitchen_vectorized.py','collect_obstacle_library.py','export_safety_lerobot_v3.py',
@@ -65,7 +70,7 @@ def load_config(path):
     scene_definition=dict(layout=json.loads((ROOT/'configs/layout.json').read_text()),
                           assets=sorted(assets,key=lambda a:a['id']))
     return dict(config=config, profile=profile, implementation_files_sha256=code, profile_file_sha256=hashlib.sha256(profile_path.read_bytes()).hexdigest(),
-                scene_definition=scene_definition,adapter_version='arena-risk-observer-11-fcl-surface-distances', evaluator_version=VERSION)
+                scene_definition=scene_definition,adapter_version='arena-risk-observer-12-ir-disabled', evaluator_version=VERSION)
 
 
 def bind_profile(settings, binding):

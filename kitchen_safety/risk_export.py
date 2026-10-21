@@ -8,6 +8,7 @@ from kitchen_safety.risk_observer import CATEGORIES
 def risk_arrays(source,count,profile_index):
     source=Path(source)
     output={'risk.level':np.full((count,4),-1,dtype=np.int64),
+        'risk.enabled':np.zeros((count,4),dtype=np.int64),
         'risk.valid':np.zeros((count,4),dtype=np.int64),
         'risk.data_complete':np.zeros((count,4),dtype=np.int64),
         'risk.observation_id':np.full(count,-1,dtype=np.int64),
@@ -32,7 +33,8 @@ def risk_arrays(source,count,profile_index):
             level=value['level']
             output['risk.level'][action,j]=-1 if level is None else int(level[1:])
             output['risk.valid'][action,j]=int(level is not None)
-            output['risk.data_complete'][action,j]=int(value['data_complete'])
+            output['risk.enabled'][action,j]=int(value.get('status') != 'disabled')
+            output['risk.data_complete'][action,j]=int(value['data_complete'] is True)
         output['risk.observation_id'][action]=r['observation_id']
         output['risk.source_physics_step'][action]=r['source_physics_step']
         output['risk.profile_index'][action]=profile_index

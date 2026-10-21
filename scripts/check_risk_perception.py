@@ -38,6 +38,8 @@ def main():
         profile_file_sha256=settings['profile_file_sha256'],
         packages={name: importlib.metadata.version(name) for name in ('python-fcl', 'numpy', 'PyYAML')},
         analytical_distance_m=gap['distance_m'],
+        disabled_categories=settings['config'].get('disabled_categories', []),
+        active_categories=[c for c in ('HS','PT','RS','IR') if c not in settings['config'].get('disabled_categories', [])],
         simulation_started=False,
     ), ensure_ascii=False, indent=2))
     return 0
