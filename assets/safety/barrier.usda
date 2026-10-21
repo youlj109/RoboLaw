@@ -1,0 +1,600 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset"
+{
+    def "Materials"
+    {
+        def Material "PowderCoatedSteel"
+        {
+            token outputs:surface.connect = </Asset/Materials/PowderCoatedSteel/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.16, 0.2, 0.23)
+                float inputs:metallic = 0.72
+                float inputs:opacity = 1
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+
+        def Material "MachinedSteel"
+        {
+            token outputs:surface.connect = </Asset/Materials/MachinedSteel/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.48, 0.53, 0.56)
+                float inputs:metallic = 0.9
+                float inputs:opacity = 1
+                float inputs:roughness = 0.24
+                token outputs:surface
+            }
+        }
+
+        def Material "SafetyYellow"
+        {
+            token outputs:surface.connect = </Asset/Materials/SafetyYellow/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.95, 0.62, 0.015)
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.42
+                token outputs:surface
+            }
+        }
+
+        def Material "SafetyBlack"
+        {
+            token outputs:surface.connect = </Asset/Materials/SafetyBlack/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.012, 0.016, 0.019)
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.48
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "AnchoredFoot" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/PowderCoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.27, 0.36, 0.04)
+        double3 xformOp:translate = (0, 0, 0.02)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "Upright" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/PowderCoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.06, 0.06, 1.32)
+        double3 xformOp:translate = (0, 0, 0.7)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "PinchUpperBeam" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/PowderCoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.36, 0.06, 0.06)
+        double3 xformOp:translate = (0.15, 0, 1.33)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "PinchLowerBeam" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/PowderCoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.36, 0.06, 0.06)
+        double3 xformOp:translate = (0.15, 0, 0.99)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "UpperJawFace" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.3, 0.064, 0.004)
+        double3 xformOp:translate = (0.18, 0, 1.298)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "LowerJawFace" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.3, 0.064, 0.004)
+        double3 xformOp:translate = (0.18, 0, 1.022)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "UpperBeamEnd" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.002, 0.06, 0.06)
+        double3 xformOp:translate = (0.331, 0, 1.33)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "LowerBeamEnd" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.002, 0.06, 0.06)
+        double3 xformOp:translate = (0.331, 0, 0.99)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "FrontUpperPaint" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/SafetyYellow>
+        double size = 1
+        float3 xformOp:scale = (0.354, 0.0006, 0.052)
+        double3 xformOp:translate = (0.15, -0.0305, 1.33)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "FrontUpperStripe0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3]
+        int[] faceVertexIndices = [0, 1, 2]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.004, -0.0309, 1.356), (-0.027, -0.0309, 1.356), (-0.027, -0.0309, 1.325)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FrontUpperStripe1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(-0.011, -0.0309, 1.304), (0.02, -0.0309, 1.304), (0.072, -0.0309, 1.356), (0.041, -0.0309, 1.356)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FrontUpperStripe2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.057, -0.0309, 1.304), (0.088, -0.0309, 1.304), (0.14, -0.0309, 1.356), (0.109, -0.0309, 1.356)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FrontUpperStripe3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.125, -0.0309, 1.304), (0.156, -0.0309, 1.304), (0.208, -0.0309, 1.356), (0.177, -0.0309, 1.356)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FrontUpperStripe4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.193, -0.0309, 1.304), (0.224, -0.0309, 1.304), (0.276, -0.0309, 1.356), (0.245, -0.0309, 1.356)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FrontUpperStripe5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [5]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.261, -0.0309, 1.304), (0.292, -0.0309, 1.304), (0.327, -0.0309, 1.339), (0.327, -0.0309, 1.356), (0.313, -0.0309, 1.356)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cube "FrontLowerPaint" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/SafetyYellow>
+        double size = 1
+        float3 xformOp:scale = (0.354, 0.0006, 0.052)
+        double3 xformOp:translate = (0.15, -0.0305, 0.99)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "FrontLowerStripe0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3]
+        int[] faceVertexIndices = [0, 1, 2]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.004, -0.0309, 1.016), (-0.027, -0.0309, 1.016), (-0.027, -0.0309, 0.985)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FrontLowerStripe1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(-0.011, -0.0309, 0.964), (0.02, -0.0309, 0.964), (0.072, -0.0309, 1.016), (0.041, -0.0309, 1.016)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FrontLowerStripe2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.057, -0.0309, 0.964), (0.088, -0.0309, 0.964), (0.14, -0.0309, 1.016), (0.109, -0.0309, 1.016)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FrontLowerStripe3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.125, -0.0309, 0.964), (0.156, -0.0309, 0.964), (0.208, -0.0309, 1.016), (0.177, -0.0309, 1.016)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FrontLowerStripe4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.193, -0.0309, 0.964), (0.224, -0.0309, 0.964), (0.276, -0.0309, 1.016), (0.245, -0.0309, 1.016)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FrontLowerStripe5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [5]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.261, -0.0309, 0.964), (0.292, -0.0309, 0.964), (0.327, -0.0309, 0.999), (0.327, -0.0309, 1.016), (0.313, -0.0309, 1.016)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cube "BackUpperPaint" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/SafetyYellow>
+        double size = 1
+        float3 xformOp:scale = (0.354, 0.0006, 0.052)
+        double3 xformOp:translate = (0.15, 0.0305, 1.33)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "BackUpperStripe0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3]
+        int[] faceVertexIndices = [0, 1, 2]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.004, 0.0309, 1.356), (-0.027, 0.0309, 1.356), (-0.027, 0.0309, 1.325)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "BackUpperStripe1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(-0.011, 0.0309, 1.304), (0.02, 0.0309, 1.304), (0.072, 0.0309, 1.356), (0.041, 0.0309, 1.356)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "BackUpperStripe2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.057, 0.0309, 1.304), (0.088, 0.0309, 1.304), (0.14, 0.0309, 1.356), (0.109, 0.0309, 1.356)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "BackUpperStripe3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.125, 0.0309, 1.304), (0.156, 0.0309, 1.304), (0.208, 0.0309, 1.356), (0.177, 0.0309, 1.356)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "BackUpperStripe4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.193, 0.0309, 1.304), (0.224, 0.0309, 1.304), (0.276, 0.0309, 1.356), (0.245, 0.0309, 1.356)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "BackUpperStripe5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [5]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.261, 0.0309, 1.304), (0.292, 0.0309, 1.304), (0.327, 0.0309, 1.339), (0.327, 0.0309, 1.356), (0.313, 0.0309, 1.356)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cube "BackLowerPaint" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/SafetyYellow>
+        double size = 1
+        float3 xformOp:scale = (0.354, 0.0006, 0.052)
+        double3 xformOp:translate = (0.15, 0.0305, 0.99)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "BackLowerStripe0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3]
+        int[] faceVertexIndices = [0, 1, 2]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.004, 0.0309, 1.016), (-0.027, 0.0309, 1.016), (-0.027, 0.0309, 0.985)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "BackLowerStripe1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(-0.011, 0.0309, 0.964), (0.02, 0.0309, 0.964), (0.072, 0.0309, 1.016), (0.041, 0.0309, 1.016)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "BackLowerStripe2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.057, 0.0309, 0.964), (0.088, 0.0309, 0.964), (0.14, 0.0309, 1.016), (0.109, 0.0309, 1.016)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "BackLowerStripe3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.125, 0.0309, 0.964), (0.156, 0.0309, 0.964), (0.208, 0.0309, 1.016), (0.177, 0.0309, 1.016)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "BackLowerStripe4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.193, 0.0309, 0.964), (0.224, 0.0309, 0.964), (0.276, 0.0309, 1.016), (0.245, 0.0309, 1.016)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "BackLowerStripe5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [5]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4]
+        rel material:binding = </Asset/Materials/SafetyBlack>
+        point3f[] points = [(0.261, 0.0309, 0.964), (0.292, 0.0309, 0.964), (0.327, 0.0309, 0.999), (0.327, 0.0309, 1.016), (0.313, 0.0309, 1.016)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "UpperGusset" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        int[] faceVertexCounts = [3, 3, 4, 4, 4]
+        int[] faceVertexIndices = [0, 2, 1, 3, 4, 5, 0, 1, 4, 3, 1, 2, 5, 4, 2, 0, 3, 5]
+        rel material:binding = </Asset/Materials/PowderCoatedSteel>
+        uniform token physics:approximation = "convexHull"
+        point3f[] points = [(0.03, -0.025, 1.1), (0.03, -0.025, 1.3), (0.13, -0.025, 1.3), (0.03, 0.025, 1.1), (0.03, 0.025, 1.3), (0.13, 0.025, 1.3)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cylinder "AnchorBolt00" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.009
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.011
+        double3 xformOp:translate = (-0.098, -0.14, 0.0445)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "AnchorBolt01" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.009
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.011
+        double3 xformOp:translate = (-0.098, 0.14, 0.0445)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "AnchorBolt10" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.009
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.011
+        double3 xformOp:translate = (0.098, -0.14, 0.0445)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "AnchorBolt11" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.009
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.011
+        double3 xformOp:translate = (0.098, 0.14, 0.0445)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "UpperFrontFastener" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.009
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.011
+        double3 xformOp:translate = (0, -0.035, 1.33)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "UpperBackFastener" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.009
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.011
+        double3 xformOp:translate = (0, 0.035, 1.33)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "LowerFrontFastener" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.009
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.011
+        double3 xformOp:translate = (0, -0.035, 0.99)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "LowerBackFastener" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.009
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.011
+        double3 xformOp:translate = (0, 0.035, 0.99)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}

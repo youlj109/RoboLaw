@@ -1,0 +1,171 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "World"
+{
+    def PhysicsScene "Physics"
+    {
+        vector3f physics:gravityDirection = (0, 0, -1)
+        float physics:gravityMagnitude = 9.81
+    }
+
+    def Xform "Kitchen" (
+        prepend references = @../assets/kitchen/scene.usd@
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "Mustard" (
+        prepend references = @../assets/robolab/objects/hope/mustard_bottle.usd@
+    )
+    {
+        double3 xformOp:translate = (2, -0.4, 1.002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "Bowl" (
+        prepend references = @../assets/robolab/objects/ycb/bowl.usd@
+    )
+    {
+        double3 xformOp:translate = (2.49, -0.31, 0.962)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "Robot" (
+        prepend references = @../assets/nvidia/Assets/Isaac/6.1/Isaac/IsaacLab/Arena/assets/robot_library/droid/franka_robotiq_2f_85_flattened.usd@
+    )
+    {
+        float xformOp:rotateZ = 90
+        double3 xformOp:translate = (2.2, -0.93, 0.8)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        over "panda_link0"
+        {
+            over "panda_joint1" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 80
+                float drive:angular:physics:stiffness = 400
+                float drive:angular:physics:targetPosition = 0
+            }
+        }
+
+        over "panda_link1"
+        {
+            over "panda_joint2" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 80
+                float drive:angular:physics:stiffness = 400
+                float drive:angular:physics:targetPosition = -36
+            }
+        }
+
+        over "panda_link2"
+        {
+            over "panda_joint3" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 80
+                float drive:angular:physics:stiffness = 400
+                float drive:angular:physics:targetPosition = 0
+            }
+        }
+
+        over "panda_link3"
+        {
+            over "panda_joint4" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 80
+                float drive:angular:physics:stiffness = 400
+                float drive:angular:physics:targetPosition = -144
+            }
+        }
+
+        over "panda_link4"
+        {
+            over "panda_joint5" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 80
+                float drive:angular:physics:stiffness = 400
+                float drive:angular:physics:targetPosition = 0
+            }
+        }
+
+        over "panda_link5"
+        {
+            over "panda_joint6" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 80
+                float drive:angular:physics:stiffness = 400
+                float drive:angular:physics:targetPosition = 108
+            }
+        }
+
+        over "panda_link6"
+        {
+            over "panda_joint7" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 80
+                float drive:angular:physics:stiffness = 400
+                float drive:angular:physics:targetPosition = 0
+            }
+        }
+    }
+
+    def Cube "Stand" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        color3f[] primvars:displayColor = [(0.2, 0.23, 0.25)]
+        double size = 1
+        float3 xformOp:scale = (0.4, 0.4, 0.8)
+        double3 xformOp:translate = (2.2, -0.93, 0.4)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def DomeLight "Dome"
+    {
+        float inputs:intensity = 650
+    }
+
+    def DistantLight "Sun"
+    {
+        float inputs:intensity = 1800
+        float3 xformOp:rotateXYZ = (25, -35, -25)
+        uniform token[] xformOpOrder = ["xformOp:rotateXYZ"]
+    }
+
+    def Camera "Overview"
+    {
+        float2 clippingRange = (0.05, 100)
+        float focalLength = 34
+        matrix4d xformOp:transform = ( (0.8938589412985827, 0.4483482943656383, 2.7755575615628926e-17, 0), (-0.1805105568747, 0.35987864187044616, 0.91537058177673, -0), (0.41040483905207886, -0.8182121791228154, 0.402612342108052, 0), (3.9, -3.7, 2.55, 0.9999999999999998) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+    }
+
+    def Camera "Detail"
+    {
+        float2 clippingRange = (0.05, 100)
+        float focalLength = 34
+        matrix4d xformOp:transform = ( (0.9936052547897188, 0.11290968804428625, 6.93889390390723e-18, 0), (-0.0476235166473597, 0.41908694649676526, 0.9066962732570132, -0), (0.10237479336436626, -0.900898181606423, 0.42178414866118896, 0), (2.5499999999999994, -2.65, 2.05, 0.9999999999999999) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+    }
+}

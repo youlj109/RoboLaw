@@ -1,0 +1,391 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+    customData = {
+        string asset_category = "property"
+        string generator = "scripts/build_library_property.py"
+    }
+)
+{
+    rel material:binding:physics = </Asset/Materials/Contact>
+    point3f physics:centerOfMass = (0, 0.018, 0.085)
+    float physics:mass = 1.12
+
+    def "Materials"
+    {
+        def Material "Contact" (
+            prepend apiSchemas = ["PhysicsMaterialAPI"]
+        )
+        {
+            float physics:dynamicFriction = 0.42
+            float physics:restitution = 0.03
+            float physics:staticFriction = 0.55
+        }
+
+        def Material "AnodizedAluminum"
+        {
+            token outputs:surface.connect = </Asset/Materials/AnodizedAluminum/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.26, 0.29, 0.32)
+                float inputs:ior = 1.47
+                float inputs:metallic = 0.85
+                float inputs:opacity = 1
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "DarkBezel"
+        {
+            token outputs:surface.connect = </Asset/Materials/DarkBezel/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.012, 0.016, 0.022)
+                float inputs:ior = 1.47
+                float inputs:metallic = 0.25
+                float inputs:opacity = 1
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "ScreenGlass"
+        {
+            token outputs:surface.connect = </Asset/Materials/ScreenGlass/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.012, 0.035, 0.05)
+                float inputs:ior = 1.47
+                float inputs:metallic = 0.12
+                float inputs:opacity = 1
+                float inputs:roughness = 0.12
+                token outputs:surface
+            }
+        }
+
+        def Material "Rubber"
+        {
+            token outputs:surface.connect = </Asset/Materials/Rubber/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.022, 0.025, 0.027)
+                float inputs:ior = 1.47
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.85
+                token outputs:surface
+            }
+        }
+
+        def Material "DisplayCyan"
+        {
+            token outputs:surface.connect = </Asset/Materials/DisplayCyan/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.045, 0.35, 0.44)
+                color3f inputs:emissiveColor = (0.02, 0.13, 0.17)
+                float inputs:ior = 1.47
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.36
+                token outputs:surface
+            }
+        }
+
+        def Material "DisplayWhite"
+        {
+            token outputs:surface.connect = </Asset/Materials/DisplayWhite/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.7, 0.78, 0.77)
+                color3f inputs:emissiveColor = (0.08, 0.09, 0.09)
+                float inputs:ior = 1.47
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.42
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "WeightedBase" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/AnodizedAluminum>
+        double size = 1
+        float3 xformOp:scale = (0.145, 0.132, 0.01)
+        double3 xformOp:translate = (0, 0.018, 0.005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def "Colliders"
+    {
+        def Cube "Base" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.145, 0.132, 0.01)
+            double3 xformOp:translate = (0, 0.018, 0.005)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "StandArm" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            token visibility = "invisible"
+            float xformOp:rotateX = 12
+            float3 xformOp:scale = (0.044, 0.014, 0.12)
+            double3 xformOp:translate = (0, 0.03, 0.067)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+        }
+
+        def Cylinder "StandHinge" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.054
+            rel material:binding = </Asset/Materials/AnodizedAluminum>
+            double radius = 0.011
+            token visibility = "invisible"
+            double3 xformOp:translate = (0, 0.024, 0.12)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "Cradle" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.116, 0.033, 0.008)
+            double3 xformOp:translate = (0, 0.007, 0.035)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Tablet" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            token visibility = "invisible"
+            float xformOp:rotateX = -12
+            float3 xformOp:scale = (0.154, 0.008, 0.218)
+            double3 xformOp:translate = (0, 0.018, 0.142)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+        }
+    }
+
+    def Cube "RubberFoot0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Rubber>
+        double size = 1
+        float3 xformOp:scale = (0.018, 0.1, 0.002)
+        double3 xformOp:translate = (-0.052, 0.018, 0.001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "RubberFoot1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Rubber>
+        double size = 1
+        float3 xformOp:scale = (0.018, 0.1, 0.002)
+        double3 xformOp:translate = (0.052, 0.018, 0.001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "StandArm" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/AnodizedAluminum>
+        double size = 1
+        float xformOp:rotateX = 12
+        float3 xformOp:scale = (0.044, 0.014, 0.12)
+        double3 xformOp:translate = (0, 0.03, 0.067)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+    }
+
+    def Cylinder "StandHinge" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.054
+        rel material:binding = </Asset/Materials/AnodizedAluminum>
+        double radius = 0.011
+        double3 xformOp:translate = (0, 0.024, 0.12)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "Cradle" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/AnodizedAluminum>
+        double size = 1
+        float3 xformOp:scale = (0.116, 0.033, 0.008)
+        double3 xformOp:translate = (0, 0.007, 0.035)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "TabletMetalBack" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/AnodizedAluminum>
+        double size = 1
+        float xformOp:rotateX = -12
+        float3 xformOp:scale = (0.154, 0.008, 0.218)
+        double3 xformOp:translate = (0, 0.018, 0.142)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+    }
+
+    def Cube "Bezel" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/DarkBezel>
+        double size = 1
+        float xformOp:rotateX = -12
+        float3 xformOp:scale = (0.151, 0.0015, 0.215)
+        double3 xformOp:translate = (0, 0.013598335796697874, 0.1429356026086799)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+    }
+
+    def Cube "Screen" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/ScreenGlass>
+        double size = 1
+        float xformOp:rotateX = -12
+        float3 xformOp:scale = (0.137, 0.0005, 0.192)
+        double3 xformOp:translate = (0, 0.01255899864525638, 0.1421341799451412)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+    }
+
+    def Cube "DisplayHeader" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/DisplayCyan>
+        double size = 1
+        float xformOp:rotateX = -12
+        float3 xformOp:scale = (0.119, 0.00015, 0.013)
+        double3 xformOp:translate = (0, 0.0278100237963315, 0.21556801909196283)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+    }
+
+    def Cube "DisplayText0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/DisplayWhite>
+        double size = 1
+        float xformOp:rotateX = -12
+        float3 xformOp:scale = (0.09, 0.00015, 0.0035)
+        double3 xformOp:translate = (-0.009, 0.02157267307179872, 0.18622359106994865)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+    }
+
+    def Cube "DisplayText1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/DisplayWhite>
+        double size = 1
+        float xformOp:rotateX = -12
+        float3 xformOp:scale = (0.079, 0.00015, 0.0035)
+        double3 xformOp:translate = (-0.009, 0.018661909400350087, 0.1725295246596754)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+    }
+
+    def Cube "DisplayText2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/DisplayWhite>
+        double size = 1
+        float xformOp:rotateX = -12
+        float3 xformOp:scale = (0.068, 0.00015, 0.0035)
+        double3 xformOp:translate = (-0.009, 0.015751145728901454, 0.1588354582494021)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+    }
+
+    def Cube "DisplayText3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/DisplayWhite>
+        double size = 1
+        float xformOp:rotateX = -12
+        float3 xformOp:scale = (0.057, 0.00015, 0.0035)
+        double3 xformOp:translate = (-0.009, 0.012840382057452825, 0.14514139183912883)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+    }
+
+    def Cube "DisplayImage" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/DisplayCyan>
+        double size = 1
+        float xformOp:rotateX = -12
+        float3 xformOp:scale = (0.108, 0.00015, 0.047)
+        double3 xformOp:translate = (0, 0.002652709207382614, 0.09721215940317235)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+    }
+
+    def Cube "CameraLens" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/ScreenGlass>
+        double size = 1
+        float xformOp:rotateX = -12
+        float3 xformOp:scale = (0.003, 0.0003, 0.003)
+        double3 xformOp:translate = (0, 0.033827180659375525, 0.24291456957434582)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+    }
+
+    def Cube "SideButton" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/DarkBezel>
+        double size = 1
+        float xformOp:rotateX = -12
+        float3 xformOp:scale = (0.0015, 0.004, 0.018)
+        double3 xformOp:translate = (0.0774, 0.029850966376612283, 0.1977544132418269)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX", "xformOp:scale"]
+    }
+}

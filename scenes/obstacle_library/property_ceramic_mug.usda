@@ -1,0 +1,19 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    subLayers = [
+        @../base.usda@
+    ]
+)
+
+over "World"
+{
+    def Xform "Glass" (
+        prepend references = @../../assets/obstacle_library/property/ceramic_mug.usda@
+    )
+    {
+        float xformOp:rotateZ = 0
+        double3 xformOp:translate = (2.245, -0.355, 0.922)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+}

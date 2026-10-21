@@ -1,0 +1,17 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset" (
+    doc = "Static anchored equipment; materials are visual only. No damage model is authored."
+)
+{
+    def Xform "Fixture" (
+        prepend references = @../../safety/barrier_rotated.usda@
+    )
+    {
+    }
+}

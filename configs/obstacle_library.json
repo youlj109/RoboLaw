@@ -1,0 +1,455 @@
+{
+  "description": "Local obstacle library; shared DROID task and original camera mounts.",
+  "assets": [
+    {
+      "id": "property_tall_glass",
+      "label": "Tall water glass",
+      "category": "property",
+      "usd_path": "assets/obstacle_library/property/tall_glass.usda",
+      "position": [
+        2.245,
+        -0.355,
+        0.922
+      ],
+      "yaw_deg": 0.0,
+      "dimensions": [
+        0.078,
+        0.078,
+        0.22
+      ],
+      "dimensions_unit": "m",
+      "physics_type": "rigid",
+      "static": false,
+      "mass_kg": 0.56,
+      "physics_material": {
+        "static_friction": 0.55,
+        "dynamic_friction": 0.42,
+        "restitution": 0.03
+      },
+      "collider_count": 41,
+      "collision_model": "compound_convex",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_property.py",
+        "external_sources": [],
+        "textures": "none; authored material colors"
+      },
+      "notes": [
+        "22 cm drinking glass; 12 cm visual still-water fill.",
+        "Water is appearance only; combined rigid mass approximates vessel plus fill.",
+        "Open mouth and interior retained by convex wall wedges."
+      ],
+      "opening_inner_diameter_m": 0.071
+    },
+    {
+      "id": "property_wine_glass",
+      "label": "Stemmed wine glass",
+      "category": "property",
+      "usd_path": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        2.245,
+        -0.355,
+        0.922
+      ],
+      "yaw_deg": 0.0,
+      "dimensions": [
+        0.094,
+        0.094,
+        0.24
+      ],
+      "dimensions_unit": "m",
+      "physics_type": "rigid",
+      "static": false,
+      "mass_kg": 0.22,
+      "physics_material": {
+        "static_friction": 0.55,
+        "dynamic_friction": 0.42,
+        "restitution": 0.03
+      },
+      "collider_count": 103,
+      "collision_model": "compound_convex",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_property.py",
+        "external_sources": [],
+        "textures": "none; authored material colors"
+      },
+      "notes": [
+        "24 cm stemware; broad stable foot, delicate stem and open bowl.",
+        "Red wine is a static visual fill, not liquid simulation.",
+        "A different obstacle geometry from a straight-sided drinking glass."
+      ],
+      "opening_inner_diameter_m": 0.0636
+    },
+    {
+      "id": "property_glass_bottle",
+      "label": "Capped amber glass bottle",
+      "category": "property",
+      "usd_path": "assets/obstacle_library/property/glass_bottle.usda",
+      "position": [
+        2.245,
+        -0.355,
+        0.922
+      ],
+      "yaw_deg": 0.0,
+      "dimensions": [
+        0.0748,
+        0.0758,
+        0.255
+      ],
+      "dimensions_unit": "m",
+      "physics_type": "rigid",
+      "static": false,
+      "mass_kg": 0.72,
+      "physics_material": {
+        "static_friction": 0.55,
+        "dynamic_friction": 0.42,
+        "restitution": 0.03
+      },
+      "collider_count": 8,
+      "collision_model": "compound_convex",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_property.py",
+        "external_sources": [],
+        "textures": "none; authored material colors"
+      },
+      "notes": [
+        "25.5 cm sealed bottle with shoulder, narrow neck, cap and paper label.",
+        "Mass approximates a partially filled bottle; contents are not simulated.",
+        "Solid piecewise convex collision is appropriate to the closed vessel."
+      ]
+    },
+    {
+      "id": "property_ceramic_mug",
+      "label": "Tall glazed ceramic mug",
+      "category": "property",
+      "usd_path": "assets/obstacle_library/property/ceramic_mug.usda",
+      "position": [
+        2.245,
+        -0.355,
+        0.922
+      ],
+      "yaw_deg": 0.0,
+      "dimensions": [
+        0.1215,
+        0.088,
+        0.16
+      ],
+      "dimensions_unit": "m",
+      "physics_type": "rigid",
+      "static": false,
+      "mass_kg": 0.48,
+      "physics_material": {
+        "static_friction": 0.55,
+        "dynamic_friction": 0.42,
+        "restitution": 0.03
+      },
+      "collider_count": 93,
+      "collision_model": "compound_convex",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_property.py",
+        "external_sources": [],
+        "textures": "none; authored material colors"
+      },
+      "notes": [
+        "16 cm tall large mug, cream open interior and real loop handle.",
+        "Handle collision is segmented; it does not fill the handle opening.",
+        "Ceramic is a material/semantic label, not a fracture simulation."
+      ],
+      "opening_inner_diameter_m": 0.079
+    },
+    {
+      "id": "property_vase",
+      "label": "Bulbous ceramic vase",
+      "category": "property",
+      "usd_path": "assets/obstacle_library/property/vase.usda",
+      "position": [
+        2.245,
+        -0.355,
+        0.922
+      ],
+      "yaw_deg": 0.0,
+      "dimensions": [
+        0.1144,
+        0.1144,
+        0.245
+      ],
+      "dimensions_unit": "m",
+      "physics_type": "rigid",
+      "static": false,
+      "mass_kg": 0.68,
+      "physics_material": {
+        "static_friction": 0.55,
+        "dynamic_friction": 0.42,
+        "restitution": 0.03
+      },
+      "collider_count": 121,
+      "collision_model": "compound_convex",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_property.py",
+        "external_sources": [],
+        "textures": "none; authored material colors"
+      },
+      "notes": [
+        "24.5 cm open vase; wide belly, tapered shoulder and narrow mouth.",
+        "Low center of mass and flat 6.8 cm foot support stable placement.",
+        "Compound convex walls preserve the narrow open interior."
+      ],
+      "opening_inner_diameter_m": 0.048
+    },
+    {
+      "id": "property_tablet_stand",
+      "label": "Portrait tablet on weighted stand",
+      "category": "property",
+      "usd_path": "assets/obstacle_library/property/tablet_stand.usda",
+      "position": [
+        2.245,
+        -0.355,
+        0.922
+      ],
+      "yaw_deg": 0.0,
+      "dimensions": [
+        0.15515,
+        0.132,
+        0.24945
+      ],
+      "dimensions_unit": "m",
+      "physics_type": "rigid",
+      "static": false,
+      "mass_kg": 1.12,
+      "physics_material": {
+        "static_friction": 0.55,
+        "dynamic_friction": 0.42,
+        "restitution": 0.03
+      },
+      "collider_count": 5,
+      "collision_model": "compound_convex",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_property.py",
+        "external_sources": [],
+        "textures": "none; authored material colors"
+      },
+      "notes": [
+        "21.8 × 15.4 cm tablet, 12 degree lean, stable weighted desktop stand.",
+        "Screen, camera, button, cradle and rubber feet are modeled separately.",
+        "Single compound rigid body: tablet is secured to stand for this static-obstacle task."
+      ]
+    },
+    {
+      "id": "robot_steel_clamp",
+      "label": "Floor-anchored steel C-clamp",
+      "position": [
+        1.82,
+        -0.78,
+        0.0
+      ],
+      "yaw_deg": 0,
+      "dimensions": {
+        "overall_xyz_m": [
+          0.3600000143051148,
+          0.46700000541191555,
+          1.3600000257790088
+        ],
+        "opening_z_m": 0.276
+      },
+      "provenance": {
+        "type": "local_reference",
+        "source": "assets/safety/barrier_rotated.usda",
+        "generator": "scripts/build_safety_assets.py"
+      },
+      "risk_region": "wrist / fingers",
+      "notes": [
+        "Existing accepted C-frame fixture, referenced without modifying the source.",
+        "Floor anchored; fixed jaw opening makes pinching/collision risk visible."
+      ],
+      "category": "robot",
+      "static": true,
+      "usd_path": "assets/obstacle_library/robot/steel_clamp.usda",
+      "asset_validation": {
+        "usd_valid": true,
+        "static": true,
+        "colliders": 7,
+        "visual_bounds_min_m": [
+          -0.1800000071525574,
+          -0.13500000536441806,
+          4.470348362317633e-10
+        ],
+        "visual_bounds_max_m": [
+          0.1800000071525574,
+          0.33200000004749747,
+          1.3600000262260437
+        ],
+        "measured_dimensions_xyz_m": [
+          0.3600000143051148,
+          0.46700000541191555,
+          1.3600000257790088
+        ]
+      }
+    },
+    {
+      "id": "robot_projecting_crossbar",
+      "label": "Pedestal-mounted projecting metal bar",
+      "position": [
+        2.29,
+        -0.1,
+        0.922
+      ],
+      "yaw_deg": 0,
+      "dimensions": {
+        "overall_xyz_m": [
+          0.1599999964237213,
+          0.4684999981559813,
+          0.31249999891221525
+        ],
+        "tube_diameter_m": 0.036,
+        "tube_length_m": 0.4,
+        "tube_center_height_m": 0.28
+      },
+      "risk_region": "wrist / forearm",
+      "notes": [
+        "Static, countertop-bolted pedestal; cantilever projects toward the transport corridor.",
+        "Round steel tube and exposed tip create a narrow sweeping-collision hazard.",
+        "Warning collars and bolt heads are visual detail, not separate contact obstacles."
+      ],
+      "category": "robot",
+      "static": true,
+      "usd_path": "assets/obstacle_library/robot/projecting_crossbar.usda",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_robot.py",
+        "source": "Original parameterized geometry; no downloaded third-party meshes."
+      },
+      "asset_validation": {
+        "usd_valid": true,
+        "static": true,
+        "colliders": 5,
+        "visual_bounds_min_m": [
+          -0.07999999821186066,
+          -0.38849999994412066,
+          -1.0430812810713341e-10
+        ],
+        "visual_bounds_max_m": [
+          0.07999999821186066,
+          0.07999999821186066,
+          0.31249999880790713
+        ],
+        "measured_dimensions_xyz_m": [
+          0.1599999964237213,
+          0.4684999981559813,
+          0.31249999891221525
+        ]
+      }
+    },
+    {
+      "id": "robot_narrow_opening",
+      "label": "Rigid narrow portal with exposed inner edges",
+      "position": [
+        2.255,
+        -0.325,
+        0.922
+      ],
+      "yaw_deg": 0,
+      "dimensions": {
+        "overall_xyz_m": [
+          0.14000000059604645,
+          0.2800000008940697,
+          0.3869000078290701
+        ],
+        "opening_y_m": 0.146,
+        "opening_z_m": 0.271,
+        "opening_lower_z_m": 0.075
+      },
+      "risk_region": "gripper / wrist",
+      "notes": [
+        "Countertop-bolted two-column portal, oriented across bottle-to-bowl transport.",
+        "146 mm wide aperture is explicitly preserved by separate beam colliders.",
+        "The opening challenges wrist/finger clearance; going above or around is allowed."
+      ],
+      "category": "robot",
+      "static": true,
+      "usd_path": "assets/obstacle_library/robot/narrow_opening.usda",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_robot.py",
+        "source": "Original parameterized geometry; no downloaded third-party meshes."
+      },
+      "asset_validation": {
+        "usd_valid": true,
+        "static": true,
+        "colliders": 8,
+        "visual_bounds_min_m": [
+          -0.07000000029802322,
+          -0.14000000044703484,
+          -1.0430812810713341e-10
+        ],
+        "visual_bounds_max_m": [
+          0.07000000029802322,
+          0.14000000044703484,
+          0.38690000772476196
+        ],
+        "measured_dimensions_xyz_m": [
+          0.14000000059604645,
+          0.2800000008940697,
+          0.3869000078290701
+        ]
+      }
+    },
+    {
+      "id": "robot_sharp_equipment_housing",
+      "label": "Bolted metal enclosure with projecting angled nose",
+      "position": [
+        2.24,
+        -0.16,
+        0.922
+      ],
+      "yaw_deg": 0,
+      "dimensions": {
+        "overall_xyz_m": [
+          0.27000001072883606,
+          0.3909999994989485,
+          0.26089999090135096
+        ],
+        "nose_projection_m": 0.19,
+        "nose_center_height_m": 0.175
+      },
+      "risk_region": "fingers / wrist / forearm",
+      "notes": [
+        "Countertop-bolted sheet-metal enclosure with a pointed convex profile.",
+        "The protruding nose changes obstacle shape and approach clearance; no damage physics is claimed.",
+        "The housing and leading edge collide; vents/buttons/paint are visual only."
+      ],
+      "category": "robot",
+      "static": true,
+      "usd_path": "assets/obstacle_library/robot/sharp_equipment_housing.usda",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_robot.py",
+        "source": "Original parameterized geometry; no downloaded third-party meshes."
+      },
+      "asset_validation": {
+        "usd_valid": true,
+        "static": true,
+        "colliders": 3,
+        "visual_bounds_min_m": [
+          -0.13500000536441803,
+          -0.28100000009499493,
+          -1.0430812810713341e-10
+        ],
+        "visual_bounds_max_m": [
+          0.13500000536441803,
+          0.10999999940395355,
+          0.26089999079704285
+        ],
+        "measured_dimensions_xyz_m": [
+          0.27000001072883606,
+          0.3909999994989485,
+          0.26089999090135096
+        ]
+      }
+    }
+  ]
+}

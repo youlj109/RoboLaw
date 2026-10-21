@@ -1,0 +1,19 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    subLayers = [
+        @../base.usda@
+    ]
+)
+
+over "World"
+{
+    def Xform "Barrier" (
+        prepend references = @../../assets/obstacle_library/robot/narrow_opening.usda@
+    )
+    {
+        float xformOp:rotateZ = 0
+        double3 xformOp:translate = (2.255, -0.325, 0.922)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+}

@@ -1,0 +1,26 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    subLayers = [
+        @base.usda@
+    ]
+)
+
+over "World"
+{
+    def Xform "Person" (
+        prepend references = @../assets/people/mpfb_corridor/collidable.usda@
+    )
+    {
+        float xformOp:rotateZ = -30
+        double3 xformOp:translate = (2.6400356691630926, -1.1460625218462162, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+
+    def Camera "Portrait"
+    {
+        float focalLength = 45
+        matrix4d xformOp:transform = ( (0.963450547352574, 0.2678862497516913, 0, 0), (-0.08154883587441011, 0.2932896728816504, 0.9525392144938195, -0), (0.2551721579121712, -0.9177244275788613, 0.3044159076846954, 0), (3.5499999999999994, -2.899999999999999, 2.0499999999999994, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+    }
+}

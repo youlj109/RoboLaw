@@ -1,0 +1,19 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    subLayers = [
+        @../base.usda@
+    ]
+)
+
+over "World"
+{
+    def Xform "Barrier" (
+        prepend references = @../../assets/obstacle_library/robot/projecting_crossbar.usda@
+    )
+    {
+        float xformOp:rotateZ = 0
+        double3 xformOp:translate = (2.29, -0.1, 0.922)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+}

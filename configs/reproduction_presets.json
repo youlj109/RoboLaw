@@ -1,0 +1,42 @@
+{
+  "scope": "Ten fixed nonhuman layouts and one default MPFB human layout; no risk grading.",
+  "seed": 42,
+  "nonhuman10": {
+    "status": "validated_seed42",
+    "scope": "Ten fixed property and robot layouts at seed 42. Prior validation covers fixed trajectories only; rerun to verify on this machine.",
+    "ids": [
+      "property_tall_glass",
+      "property_wine_glass",
+      "property_glass_bottle",
+      "property_ceramic_mug",
+      "property_vase",
+      "property_tablet_stand",
+      "robot_steel_clamp",
+      "robot_projecting_crossbar",
+      "robot_narrow_opening",
+      "robot_sharp_equipment_housing"
+    ],
+    "collector": {
+      "grasp_tilt_deg": 35.0,
+      "grasp_yaw_deg": 0.0,
+      "grasp_offset_z_m": 0.0,
+      "grasp_offset_y_m": -0.01,
+      "transport_bottle_height_m": 1.11,
+      "supported_release": true
+    },
+    "collector_by_id": {
+      "property_wine_glass": {
+        "transport_tilt_cap_deg": 15.0
+      },
+      "robot_projecting_crossbar": {
+        "transport_tilt_cap_deg": 15.0
+      },
+      "robot_narrow_opening": {
+        "transport_tilt_cap_deg": 15.0
+      },
+      "robot_sharp_equipment_housing": {
+        "transport_tilt_cap_deg": 15.0
+      }
+    }
+  }
+}

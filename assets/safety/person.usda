@@ -1,0 +1,383 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset"
+{
+    def "Materials"
+    {
+        def Material "Skin"
+        {
+            token outputs:surface.connect = </Asset/Materials/Skin/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.58, 0.34, 0.22)
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.65
+                token outputs:surface
+            }
+        }
+
+        def Material "TealShirt"
+        {
+            token outputs:surface.connect = </Asset/Materials/TealShirt/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.025, 0.27, 0.3)
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.8
+                token outputs:surface
+            }
+        }
+
+        def Material "Trousers"
+        {
+            token outputs:surface.connect = </Asset/Materials/Trousers/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.055, 0.07, 0.1)
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.85
+                token outputs:surface
+            }
+        }
+
+        def Material "Shoes"
+        {
+            token outputs:surface.connect = </Asset/Materials/Shoes/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.025, 0.025, 0.03)
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.8
+                token outputs:surface
+            }
+        }
+
+        def Material "Eyes"
+        {
+            token outputs:surface.connect = </Asset/Materials/Eyes/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.9, 0.9, 0.85)
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+
+        def Material "Hair"
+        {
+            token outputs:surface.connect = </Asset/Materials/Hair/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.04, 0.025, 0.015)
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+    }
+
+    def Sphere "Torso" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/TealShirt>
+        double radius = 1
+        float3 xformOp:scale = (0.19, 0.12, 0.3)
+        double3 xformOp:translate = (0, 0, 1.22)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Sphere "Pelvis" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Trousers>
+        double radius = 1
+        float3 xformOp:scale = (0.17, 0.12, 0.14)
+        double3 xformOp:translate = (0, 0, 0.91)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Capsule "LeftThigh" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.2502742984882188
+        rel material:binding = </Asset/Materials/Trousers>
+        double radius = 0.08
+        quatd xformOp:orient = (0.0182835091478254, -0.9998328426758352, 0, 0)
+        double3 xformOp:translate = (-0.1, 0.0075, 0.7150000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "LeftShin" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.2702883549377306
+        rel material:binding = </Asset/Materials/Trousers>
+        double radius = 0.06
+        quatd xformOp:orient = (0.019220111455005195, 0.9998152765964606, 0, -0)
+        double3 xformOp:translate = (-0.1, 0.0075, 0.315)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Sphere "LeftShoe" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Shoes>
+        double radius = 1
+        float3 xformOp:scale = (0.075, 0.14, 0.065)
+        double3 xformOp:translate = (-0.1, 0.045, 0.065)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Capsule "RightThigh" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.2502742984882188
+        rel material:binding = </Asset/Materials/Trousers>
+        double radius = 0.08
+        quatd xformOp:orient = (0.0182835091478254, -0.9998328426758352, 0, 0)
+        double3 xformOp:translate = (0.1, 0.0075, 0.7150000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "RightShin" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.2702883549377306
+        rel material:binding = </Asset/Materials/Trousers>
+        double radius = 0.06
+        quatd xformOp:orient = (0.019220111455005195, 0.9998152765964606, 0, -0)
+        double3 xformOp:translate = (0.1, 0.0075, 0.315)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Sphere "RightShoe" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Shoes>
+        double radius = 1
+        float3 xformOp:scale = (0.075, 0.14, 0.065)
+        double3 xformOp:translate = (0.1, 0.045, 0.065)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Capsule "Neck" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.001
+        rel material:binding = </Asset/Materials/Skin>
+        double radius = 0.06
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0, 0, 1.5150000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Sphere "Head" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Skin>
+        double radius = 1
+        float3 xformOp:scale = (0.105, 0.1, 0.135)
+        double3 xformOp:translate = (0, 0, 1.68)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Sphere "Hair" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Hair>
+        double radius = 1
+        float3 xformOp:scale = (0.108, 0.095, 0.067)
+        double3 xformOp:translate = (0, -0.01, 1.755)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Sphere "Nose" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Skin>
+        double radius = 1
+        float3 xformOp:scale = (0.035, 0.025, 0.03)
+        double3 xformOp:translate = (-0.075, 0.065, 1.68)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Capsule "ReachUpperArm" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.28824615503479756
+        rel material:binding = </Asset/Materials/TealShirt>
+        double radius = 0.055
+        quatd xformOp:orient = (0.4861522091899734, -0.7231096887372288, -0.4906815745002623, 0)
+        double3 xformOp:translate = (-0.255, 0.14, 1.325)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "ReachForearm" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.30808120990476073
+        rel material:binding = </Asset/Materials/Skin>
+        double radius = 0.043
+        quatd xformOp:orient = (0.6312670422112664, -0.40197695519747034, -0.6632619760758265, 0)
+        double3 xformOp:translate = (-0.515, 0.38, 1.18)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Sphere "ReachPalm" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Skin>
+        double radius = 1
+        float3 xformOp:scale = (0.075, 0.045, 0.023)
+        double3 xformOp:translate = (-0.74, 0.49, 1.14)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Capsule "Finger0" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.06399999999999996
+        rel material:binding = </Asset/Materials/Skin>
+        double radius = 0.008
+        quatd xformOp:orient = (0.7071067811865476, 0, -0.7071067811865475, 0)
+        double3 xformOp:translate = (-0.81, 0.46, 1.14)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Finger1" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.06399999999999996
+        rel material:binding = </Asset/Materials/Skin>
+        double radius = 0.008
+        quatd xformOp:orient = (0.7071067811865476, 0, -0.7071067811865475, 0)
+        double3 xformOp:translate = (-0.81, 0.47900000000000004, 1.14)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Finger2" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.06399999999999996
+        rel material:binding = </Asset/Materials/Skin>
+        double radius = 0.008
+        quatd xformOp:orient = (0.7071067811865476, 0, -0.7071067811865475, 0)
+        double3 xformOp:translate = (-0.81, 0.498, 1.14)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Finger3" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.06399999999999996
+        rel material:binding = </Asset/Materials/Skin>
+        double radius = 0.008
+        quatd xformOp:orient = (0.7071067811865476, 0, -0.7071067811865475, 0)
+        double3 xformOp:translate = (-0.81, 0.517, 1.14)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Thumb" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.029385391260156594
+        rel material:binding = </Asset/Materials/Skin>
+        double radius = 0.012
+        quatd xformOp:orient = (0.6731795521411181, 0.48695037306313693, -0.5565147120721566, 0)
+        double3 xformOp:translate = (-0.74, 0.4375, 1.1375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "RestUpperArm" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.1863106478005811
+        rel material:binding = </Asset/Materials/TealShirt>
+        double radius = 0.055
+        quatd xformOp:orient = (0.10319255001912873, -0.1635213266213764, 0.9811279597282583, 0)
+        double3 xformOp:translate = (0.19, 0.005, 1.285)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "RestForearm" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.15524676163629625
+        rel material:binding = </Asset/Materials/Skin>
+        double radius = 0.043
+        quatd xformOp:orient = (0.1526750255720789, -0.9502514711039001, -0.2715004203153999, 0)
+        double3 xformOp:translate = (0.21000000000000002, 0.045, 1.025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Sphere "RestHand" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Skin>
+        double radius = 1
+        float3 xformOp:scale = (0.04, 0.025, 0.08)
+        double3 xformOp:translate = (0.2, 0.08, 0.88)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}

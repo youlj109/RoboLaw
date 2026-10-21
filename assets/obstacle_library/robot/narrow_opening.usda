@@ -1,0 +1,808 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset" (
+    doc = "Static anchored equipment; materials are visual only. No damage model is authored."
+)
+{
+    def "Materials"
+    {
+        def Material "CoatedSteel"
+        {
+            token outputs:surface.connect = </Asset/Materials/CoatedSteel/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.1, 0.16, 0.2)
+                float inputs:metallic = 0.72
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "MachinedSteel"
+        {
+            token outputs:surface.connect = </Asset/Materials/MachinedSteel/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.55, 0.6, 0.64)
+                float inputs:metallic = 0.95
+                float inputs:roughness = 0.22
+                token outputs:surface
+            }
+        }
+
+        def Material "WarningYellow"
+        {
+            token outputs:surface.connect = </Asset/Materials/WarningYellow/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.97, 0.68, 0.025)
+                float inputs:metallic = 0.1
+                float inputs:roughness = 0.42
+                token outputs:surface
+            }
+        }
+
+        def Material "WarningBlack"
+        {
+            token outputs:surface.connect = </Asset/Materials/WarningBlack/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.012, 0.015, 0.018)
+                float inputs:metallic = 0.1
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "ControlPanel"
+        {
+            token outputs:surface.connect = </Asset/Materials/ControlPanel/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.045, 0.055, 0.06)
+                float inputs:metallic = 0.3
+                float inputs:roughness = 0.38
+                token outputs:surface
+            }
+        }
+
+        def Material "StopButton"
+        {
+            token outputs:surface.connect = </Asset/Materials/StopButton/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.55, 0.025, 0.015)
+                float inputs:metallic = 0.1
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "Foot0" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/CoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.14, 0.085, 0.024)
+        double3 xformOp:translate = (0, -0.0975, 0.012)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "Foot0Bolt00Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (-0.052000000000000005, -0.12200000000000001, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot0Bolt00Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (-0.052000000000000005, -0.12200000000000001, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot0Bolt01Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (-0.052000000000000005, -0.073, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot0Bolt01Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (-0.052000000000000005, -0.073, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot0Bolt10Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (0.052000000000000005, -0.12200000000000001, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot0Bolt10Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (0.052000000000000005, -0.12200000000000001, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot0Bolt11Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (0.052000000000000005, -0.073, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot0Bolt11Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (0.052000000000000005, -0.073, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "Upright0" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/CoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.045, 0.045, 0.362)
+        double3 xformOp:translate = (0, -0.0975, 0.205)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "InsideWearPlate0" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.048, 0.002, 0.3)
+        double3 xformOp:translate = (0, -0.074, 0.205)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "Foot1" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/CoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.14, 0.085, 0.024)
+        double3 xformOp:translate = (0, 0.0975, 0.012)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "Foot1Bolt00Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (-0.052000000000000005, 0.073, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot1Bolt00Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (-0.052000000000000005, 0.073, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot1Bolt01Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (-0.052000000000000005, 0.12200000000000001, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot1Bolt01Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (-0.052000000000000005, 0.12200000000000001, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot1Bolt10Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (0.052000000000000005, 0.073, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot1Bolt10Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (0.052000000000000005, 0.073, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot1Bolt11Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (0.052000000000000005, 0.12200000000000001, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "Foot1Bolt11Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (0.052000000000000005, 0.12200000000000001, 0.026000000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "Upright1" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/CoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.045, 0.045, 0.362)
+        double3 xformOp:translate = (0, 0.0975, 0.205)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "InsideWearPlate1" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.048, 0.002, 0.3)
+        double3 xformOp:translate = (0, 0.074, 0.205)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "UpperBeam" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/CoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.045, 0.24, 0.04)
+        double3 xformOp:translate = (0, 0, 0.366)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "LowerBeam" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/CoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.045, 0.24, 0.028)
+        double3 xformOp:translate = (0, 0, 0.061)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "UpperBeamWarningYellow" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/WarningYellow>
+        double size = 1
+        float3 xformOp:scale = (0.048, 0.238, 0.0005)
+        double3 xformOp:translate = (0, 0, 0.3865)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "UpperBeamWarningBlack1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3]
+        int[] faceVertexIndices = [0, 1, 2]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(-0.0065, 0.119, 0.3869), (-0.024, 0.119, 0.3869), (-0.024, 0.1015, 0.3869)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "UpperBeamWarningBlack2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [5]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.024, 0.1145, 0.3869), (0.024, 0.119, 0.3869), (0.011, 0.119, 0.3869), (-0.024, 0.084, 0.3869), (-0.024, 0.0665, 0.3869)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "UpperBeamWarningBlack3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.024, 0.0795, 0.3869), (0.024, 0.097, 0.3869), (-0.024, 0.049, 0.3869), (-0.024, 0.0315, 0.3869)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "UpperBeamWarningBlack4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.024, 0.0445, 0.3869), (0.024, 0.062, 0.3869), (-0.024, 0.014, 0.3869), (-0.024, -0.0035, 0.3869)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "UpperBeamWarningBlack5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.024, 0.0095, 0.3869), (0.024, 0.027, 0.3869), (-0.024, -0.021, 0.3869), (-0.024, -0.0385, 0.3869)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "UpperBeamWarningBlack6" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.024, -0.0255, 0.3869), (0.024, -0.008, 0.3869), (-0.024, -0.056, 0.3869), (-0.024, -0.0735, 0.3869)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "UpperBeamWarningBlack7" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.024, -0.0605, 0.3869), (0.024, -0.043, 0.3869), (-0.024, -0.091, 0.3869), (-0.024, -0.1085, 0.3869)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "UpperBeamWarningBlack8" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(-0.017, -0.119, 0.3869), (0.0005, -0.119, 0.3869), (0.024, -0.0955, 0.3869), (0.024, -0.078, 0.3869)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "UpperBeamWarningBlack9" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3]
+        int[] faceVertexIndices = [0, 1, 2]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.018, -0.119, 0.3869), (0.024, -0.119, 0.3869), (0.024, -0.113, 0.3869)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cube "LowerBeamWarningYellow" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/WarningYellow>
+        double size = 1
+        float3 xformOp:scale = (0.048, 0.238, 0.0005)
+        double3 xformOp:translate = (0, 0, 0.0755)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "LowerBeamWarningBlack1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3]
+        int[] faceVertexIndices = [0, 1, 2]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(-0.0065, 0.119, 0.0759), (-0.024, 0.119, 0.0759), (-0.024, 0.1015, 0.0759)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "LowerBeamWarningBlack2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [5]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.024, 0.1145, 0.0759), (0.024, 0.119, 0.0759), (0.011, 0.119, 0.0759), (-0.024, 0.084, 0.0759), (-0.024, 0.0665, 0.0759)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "LowerBeamWarningBlack3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.024, 0.0795, 0.0759), (0.024, 0.097, 0.0759), (-0.024, 0.049, 0.0759), (-0.024, 0.0315, 0.0759)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "LowerBeamWarningBlack4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.024, 0.0445, 0.0759), (0.024, 0.062, 0.0759), (-0.024, 0.014, 0.0759), (-0.024, -0.0035, 0.0759)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "LowerBeamWarningBlack5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.024, 0.0095, 0.0759), (0.024, 0.027, 0.0759), (-0.024, -0.021, 0.0759), (-0.024, -0.0385, 0.0759)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "LowerBeamWarningBlack6" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.024, -0.0255, 0.0759), (0.024, -0.008, 0.0759), (-0.024, -0.056, 0.0759), (-0.024, -0.0735, 0.0759)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "LowerBeamWarningBlack7" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.024, -0.0605, 0.0759), (0.024, -0.043, 0.0759), (-0.024, -0.091, 0.0759), (-0.024, -0.1085, 0.0759)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "LowerBeamWarningBlack8" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(-0.017, -0.119, 0.0759), (0.0005, -0.119, 0.0759), (0.024, -0.0955, 0.0759), (0.024, -0.078, 0.0759)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "LowerBeamWarningBlack9" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3]
+        int[] faceVertexIndices = [0, 1, 2]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.018, -0.119, 0.0759), (0.024, -0.119, 0.0759), (0.024, -0.113, 0.0759)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cylinder "FrameFastener000Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (-0.024, -0.0975, 0.061)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener000Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (-0.024, -0.0975, 0.061)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener001Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (-0.024, -0.0975, 0.366)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener001Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (-0.024, -0.0975, 0.366)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener010Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (-0.024, 0.0975, 0.061)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener010Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (-0.024, 0.0975, 0.061)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener011Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (-0.024, 0.0975, 0.366)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener011Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (-0.024, 0.0975, 0.366)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener100Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (0.024, -0.0975, 0.061)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener100Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (0.024, -0.0975, 0.061)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener101Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (0.024, -0.0975, 0.366)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener101Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (0.024, -0.0975, 0.366)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener110Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (0.024, 0.0975, 0.061)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener110Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (0.024, 0.0975, 0.061)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener111Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (0.024, 0.0975, 0.366)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "FrameFastener111Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (0.024, 0.0975, 0.366)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}

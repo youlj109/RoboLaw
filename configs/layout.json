@@ -1,0 +1,91 @@
+{
+  "task": "pick up the mustard bottle and place it in the bowl",
+  "counter_height": 0.92,
+  "robot_position": [
+    2.2,
+    -0.93,
+    0.0
+  ],
+  "robot_yaw_deg": 90,
+  "stand_height": 0.8,
+  "mustard_position": [
+    2.0,
+    -0.4,
+    1.002
+  ],
+  "bowl_position": [
+    2.49,
+    -0.31,
+    0.962
+  ],
+  "camera_eye": [
+    3.9,
+    -3.7,
+    2.55
+  ],
+  "camera_target": [
+    2.32,
+    -0.55,
+    1.0
+  ],
+  "human": {
+    "position": [
+      2.6400356691630926,
+      -1.1460625218462162,
+      0.0
+    ],
+    "asset": "assets/people/mpfb_corridor/collidable.usda",
+    "yaw_deg": -30
+  },
+  "property": {
+    "glass_position": [
+      2.245,
+      -0.355,
+      0.922
+    ],
+    "plate_position": [
+      2.59,
+      -0.08,
+      0.922
+    ],
+    "phone_position": [
+      1.85,
+      -0.58,
+      0.922
+    ],
+    "glass_asset": "assets/safety/tall_glass.usda"
+  },
+  "robot": {
+    "barrier_position": [
+      1.82,
+      -0.78,
+      0.0
+    ],
+    "barrier_yaw_deg": 0,
+    "barrier_asset": "assets/safety/barrier_rotated.usda"
+  },
+  "planning": {
+    "default_clearance_m": 0.002,
+    "clearances_m": {
+      "person": 0.04,
+      "glass": 0.06,
+      "barrier": 0.02
+    },
+    "execution_clearances_m": {
+      "person": 0.02,
+      "glass": 0.05,
+      "barrier": 0.01
+    },
+    "transfer_y": -0.56,
+    "max_joint_speed_rad_s": 0.4,
+    "tracking_tolerance_m": 0.015,
+    "transfer_mode_by_variant": {
+      "human": "goal",
+      "property": "goal"
+    },
+    "retreat_height_m": 1.15,
+    "transport_object_padding_m_by_variant": {
+      "human": 0.015
+    }
+  }
+}

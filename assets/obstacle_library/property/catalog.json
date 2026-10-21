@@ -1,0 +1,242 @@
+{
+  "assets": [
+    {
+      "id": "property_tall_glass",
+      "label": "Tall water glass",
+      "category": "property",
+      "usd_path": "assets/obstacle_library/property/tall_glass.usda",
+      "position": [
+        2.245,
+        -0.355,
+        0.922
+      ],
+      "yaw_deg": 0.0,
+      "dimensions": [
+        0.078,
+        0.078,
+        0.22
+      ],
+      "dimensions_unit": "m",
+      "physics_type": "rigid",
+      "static": false,
+      "mass_kg": 0.56,
+      "physics_material": {
+        "static_friction": 0.55,
+        "dynamic_friction": 0.42,
+        "restitution": 0.03
+      },
+      "collider_count": 41,
+      "collision_model": "compound_convex",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_property.py",
+        "external_sources": [],
+        "textures": "none; authored material colors"
+      },
+      "notes": [
+        "22 cm drinking glass; 12 cm visual still-water fill.",
+        "Water is appearance only; combined rigid mass approximates vessel plus fill.",
+        "Open mouth and interior retained by convex wall wedges."
+      ],
+      "opening_inner_diameter_m": 0.071
+    },
+    {
+      "id": "property_wine_glass",
+      "label": "Stemmed wine glass",
+      "category": "property",
+      "usd_path": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        2.245,
+        -0.355,
+        0.922
+      ],
+      "yaw_deg": 0.0,
+      "dimensions": [
+        0.094,
+        0.094,
+        0.24
+      ],
+      "dimensions_unit": "m",
+      "physics_type": "rigid",
+      "static": false,
+      "mass_kg": 0.22,
+      "physics_material": {
+        "static_friction": 0.55,
+        "dynamic_friction": 0.42,
+        "restitution": 0.03
+      },
+      "collider_count": 103,
+      "collision_model": "compound_convex",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_property.py",
+        "external_sources": [],
+        "textures": "none; authored material colors"
+      },
+      "notes": [
+        "24 cm stemware; broad stable foot, delicate stem and open bowl.",
+        "Red wine is a static visual fill, not liquid simulation.",
+        "A different obstacle geometry from a straight-sided drinking glass."
+      ],
+      "opening_inner_diameter_m": 0.0636
+    },
+    {
+      "id": "property_glass_bottle",
+      "label": "Capped amber glass bottle",
+      "category": "property",
+      "usd_path": "assets/obstacle_library/property/glass_bottle.usda",
+      "position": [
+        2.245,
+        -0.355,
+        0.922
+      ],
+      "yaw_deg": 0.0,
+      "dimensions": [
+        0.0748,
+        0.0758,
+        0.255
+      ],
+      "dimensions_unit": "m",
+      "physics_type": "rigid",
+      "static": false,
+      "mass_kg": 0.72,
+      "physics_material": {
+        "static_friction": 0.55,
+        "dynamic_friction": 0.42,
+        "restitution": 0.03
+      },
+      "collider_count": 8,
+      "collision_model": "compound_convex",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_property.py",
+        "external_sources": [],
+        "textures": "none; authored material colors"
+      },
+      "notes": [
+        "25.5 cm sealed bottle with shoulder, narrow neck, cap and paper label.",
+        "Mass approximates a partially filled bottle; contents are not simulated.",
+        "Solid piecewise convex collision is appropriate to the closed vessel."
+      ]
+    },
+    {
+      "id": "property_ceramic_mug",
+      "label": "Tall glazed ceramic mug",
+      "category": "property",
+      "usd_path": "assets/obstacle_library/property/ceramic_mug.usda",
+      "position": [
+        2.245,
+        -0.355,
+        0.922
+      ],
+      "yaw_deg": 0.0,
+      "dimensions": [
+        0.1215,
+        0.088,
+        0.16
+      ],
+      "dimensions_unit": "m",
+      "physics_type": "rigid",
+      "static": false,
+      "mass_kg": 0.48,
+      "physics_material": {
+        "static_friction": 0.55,
+        "dynamic_friction": 0.42,
+        "restitution": 0.03
+      },
+      "collider_count": 93,
+      "collision_model": "compound_convex",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_property.py",
+        "external_sources": [],
+        "textures": "none; authored material colors"
+      },
+      "notes": [
+        "16 cm tall large mug, cream open interior and real loop handle.",
+        "Handle collision is segmented; it does not fill the handle opening.",
+        "Ceramic is a material/semantic label, not a fracture simulation."
+      ],
+      "opening_inner_diameter_m": 0.079
+    },
+    {
+      "id": "property_vase",
+      "label": "Bulbous ceramic vase",
+      "category": "property",
+      "usd_path": "assets/obstacle_library/property/vase.usda",
+      "position": [
+        2.245,
+        -0.355,
+        0.922
+      ],
+      "yaw_deg": 0.0,
+      "dimensions": [
+        0.1144,
+        0.1144,
+        0.245
+      ],
+      "dimensions_unit": "m",
+      "physics_type": "rigid",
+      "static": false,
+      "mass_kg": 0.68,
+      "physics_material": {
+        "static_friction": 0.55,
+        "dynamic_friction": 0.42,
+        "restitution": 0.03
+      },
+      "collider_count": 121,
+      "collision_model": "compound_convex",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_property.py",
+        "external_sources": [],
+        "textures": "none; authored material colors"
+      },
+      "notes": [
+        "24.5 cm open vase; wide belly, tapered shoulder and narrow mouth.",
+        "Low center of mass and flat 6.8 cm foot support stable placement.",
+        "Compound convex walls preserve the narrow open interior."
+      ],
+      "opening_inner_diameter_m": 0.048
+    },
+    {
+      "id": "property_tablet_stand",
+      "label": "Portrait tablet on weighted stand",
+      "category": "property",
+      "usd_path": "assets/obstacle_library/property/tablet_stand.usda",
+      "position": [
+        2.245,
+        -0.355,
+        0.922
+      ],
+      "yaw_deg": 0.0,
+      "dimensions": [
+        0.15515,
+        0.132,
+        0.24945
+      ],
+      "dimensions_unit": "m",
+      "physics_type": "rigid",
+      "static": false,
+      "mass_kg": 1.12,
+      "physics_material": {
+        "static_friction": 0.55,
+        "dynamic_friction": 0.42,
+        "restitution": 0.03
+      },
+      "collider_count": 5,
+      "collision_model": "compound_convex",
+      "provenance": {
+        "type": "procedural_local",
+        "generator": "scripts/build_library_property.py",
+        "external_sources": [],
+        "textures": "none; authored material colors"
+      },
+      "notes": [
+        "21.8 \u00d7 15.4 cm tablet, 12 degree lean, stable weighted desktop stand.",
+        "Screen, camera, button, cradle and rubber feet are modeled separately.",
+        "Single compound rigid body: tablet is secured to stand for this static-obstacle task."
+      ]
+    }
+  ]
+}

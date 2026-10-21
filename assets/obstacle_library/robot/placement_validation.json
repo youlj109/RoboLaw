@@ -1,0 +1,102 @@
+{
+  "scope": "Fixed initial task pose only; conservative robot/bottle envelopes, authored static collision geometry, and 5 mm spheres at original sensor origins. No trajectory success or camera field-of-view guarantee.",
+  "passed": true,
+  "assets": [
+    {
+      "id": "robot_steel_clamp",
+      "initial_robot_and_bottle": {
+        "valid": true,
+        "distance_m": 0.12416923702529671,
+        "required_m": 0.02,
+        "slack_m": 0.10416923702529671,
+        "robot_part": "bottle",
+        "obstacle": "/World/Barrier/Fixture/Frame/LowerJawFace",
+        "intersecting": false
+      },
+      "kitchen_or_bowl_intersections": [],
+      "closest_kitchen_or_bowl_pair": {
+        "asset_prim": "/World/Barrier/Fixture/Frame/PinchLowerBeam",
+        "kitchen_or_bowl_prim": "/World/Kitchen/counter_main_main_group/top_geometry_right",
+        "distance_m": 0.040000000670552205
+      },
+      "camera_origin_5mm_sphere_clearances_m": {
+        "external_camera": 0.19624610570951648,
+        "external_camera_2": 0.9230624957848935,
+        "wrist_camera": 0.3756341272138395
+      },
+      "passed": true
+    },
+    {
+      "id": "robot_projecting_crossbar",
+      "initial_robot_and_bottle": {
+        "valid": true,
+        "distance_m": 0.06712680477933648,
+        "required_m": 0.02,
+        "slack_m": 0.04712680477933648,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/Barrier/ProjectingTube",
+        "intersecting": false
+      },
+      "kitchen_or_bowl_intersections": [],
+      "closest_kitchen_or_bowl_pair": {
+        "asset_prim": "/World/Barrier/BoltedBase",
+        "kitchen_or_bowl_prim": "/World/Kitchen/counter_main_main_group/top_geometry_right",
+        "distance_m": 0.001999999895691884
+      },
+      "camera_origin_5mm_sphere_clearances_m": {
+        "external_camera": 0.7860682644452814,
+        "external_camera_2": 0.6485051635094558,
+        "wrist_camera": 0.16446518674608124
+      },
+      "passed": true
+    },
+    {
+      "id": "robot_narrow_opening",
+      "initial_robot_and_bottle": {
+        "valid": true,
+        "distance_m": 0.04411314721211117,
+        "required_m": 0.02,
+        "slack_m": 0.024113147212111167,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/Barrier/Upright0",
+        "intersecting": false
+      },
+      "kitchen_or_bowl_intersections": [],
+      "closest_kitchen_or_bowl_pair": {
+        "asset_prim": "/World/Barrier/Foot0",
+        "kitchen_or_bowl_prim": "/World/Kitchen/counter_main_main_group/top_geometry_right",
+        "distance_m": 0.001999999895691884
+      },
+      "camera_origin_5mm_sphere_clearances_m": {
+        "external_camera": 0.7535085694204825,
+        "external_camera_2": 0.669451814499007,
+        "wrist_camera": 0.1943024865055293
+      },
+      "passed": true
+    },
+    {
+      "id": "robot_sharp_equipment_housing",
+      "initial_robot_and_bottle": {
+        "valid": true,
+        "distance_m": 0.10366291181763189,
+        "required_m": 0.02,
+        "slack_m": 0.08366291181763189,
+        "robot_part": "bottle",
+        "obstacle": "/World/Barrier/LeadingEdge",
+        "intersecting": false
+      },
+      "kitchen_or_bowl_intersections": [],
+      "closest_kitchen_or_bowl_pair": {
+        "asset_prim": "/World/Barrier/EquipmentBase",
+        "kitchen_or_bowl_prim": "/World/Kitchen/counter_main_main_group/top_geometry_right",
+        "distance_m": 0.001999999895691884
+      },
+      "camera_origin_5mm_sphere_clearances_m": {
+        "external_camera": 0.7501986470158548,
+        "external_camera_2": 0.7000141821323234,
+        "wrist_camera": 0.25418275660339806
+      },
+      "passed": true
+    }
+  ]
+}

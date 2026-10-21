@@ -1,0 +1,104 @@
+#usda 1.0
+(
+    defaultPrim = "Person"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Person" (
+    prepend references = @person.usdc@
+)
+{
+    over "Visual_KitchenAdult"
+    {
+        over "base_001" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            uniform token physics:approximation = "none"
+        }
+    }
+
+    over "_materials"
+    {
+        over "KitchenAdult_short02"
+        {
+            over "Principled_BSDF"
+            {
+                float inputs:opacityThreshold = 0.5
+            }
+        }
+
+        over "KitchenAdult_eyebrow001"
+        {
+            over "Principled_BSDF"
+            {
+                float inputs:opacityThreshold = 0.5
+            }
+        }
+
+        over "BrownEyes"
+        {
+            over "Principled_BSDF"
+            {
+                float inputs:opacityThreshold = 0.5
+            }
+        }
+    }
+
+    over "Visual_KitchenAdult_short02"
+    {
+        over "short02_001" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            uniform token physics:approximation = "none"
+        }
+    }
+
+    over "Visual_KitchenAdult_shoes01"
+    {
+        over "shoes01_001" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            uniform token physics:approximation = "none"
+        }
+    }
+
+    over "Visual_KitchenAdult_eyebrow001"
+    {
+        over "eyebrow001_001" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            uniform token physics:approximation = "none"
+        }
+    }
+
+    over "Visual_KitchenAdult_male_casualsuit01"
+    {
+        over "male_casualsuit01_001" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            uniform token physics:approximation = "none"
+        }
+    }
+
+    over "Visual_KitchenAdult_high_poly"
+    {
+        over "high_poly_001" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            uniform token physics:approximation = "none"
+        }
+    }
+}

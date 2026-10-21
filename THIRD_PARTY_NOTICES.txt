@@ -1,0 +1,57 @@
+Third-party notices for the RoboLaw eleven-scene release
+======================================================
+This repository combines independently licensed source and assets. The root
+MIT LICENSE does not relicense third-party assets, dependencies, or their
+recorded outputs. Consult upstream terms before redistribution or commercial
+use.
+
+Arena and Isaac Lab
+-------------------
+IsaacLab-Arena, Apache-2.0, from https://github.com/isaac-sim/IsaacLab-Arena
+Isaac Lab, BSD-3-Clause for its main code, from https://github.com/isaac-sim/IsaacLab
+Their pinned source trees are fetched by scripts/fetch_arena_source.sh rather
+than redistributed. Component notices in those source trees remain effective.
+
+cuRobo
+------
+NVIDIA cuRobo, NVIDIA License (including noncommercial research/evaluation
+limitations in the source revision used here), from
+https://github.com/NVlabs/curobo
+The source is fetched and built by scripts/install_curobo.sh. Its license and
+LICENSE_ASSETS apply; this repository does not include cuRobo binaries.
+
+Kitchen
+-------
+Lightwheel AI kitchen assets, CC BY-NC 4.0, from Lightwheel's RoboCasa
+one-wall coastal kitchen, layout 1, style 1.
+Source and terms: https://lightwheel.ai/protocol
+License: https://creativecommons.org/licenses/by-nc/4.0/
+These files are downloaded from the linked ModelScope asset bundle into
+assets/kitchen for noncommercial research reproduction. Individual asset or RoboCasa terms may also apply.
+
+Default human
+-------------
+MPFB / MakeHuman Community code is GPL-3.0-or-later; the generated/base mesh
+and bundled system assets have their own CC0 asset notice. The included static
+posed human USD, textures and pose source were generated from those assets.
+See assets/people/SOURCES.txt and
+https://static.makehumancommunity.org/assets/assetpacks/makehuman_system_assets.html
+The MPFB code is not included in this repository.
+
+NVIDIA assets and runtime
+-------------------------
+The DROID robot, stand and materials, mustard bottle, bowl, and cuRobo
+YAML/URDF are downloaded directly from NVIDIA using
+scripts/restore_downloaded_assets.py and configs/external_assets.json. They
+are not committed here. NVIDIA Isaac Sim/Kit and container runtime are likewise
+obtained from upstream.
+Terms: https://www.nvidia.com/en-us/agreements/enterprise-software/isaac-sim-additional-software-and-materials-license/
+FAQ: https://docs.isaacsim.omniverse.nvidia.com/6.2.0/common/license-faq.html
+
+Project-created obstacles
+-------------------------
+The ten property and robot workspace obstacle meshes under
+assets/obstacle_library were authored for this project. The steel clamp
+references the project-created barrier under assets/safety. Source geometry
+and scene manifests are included. No historical recorded videos, trajectories,
+or risk grades are included.

@@ -1,0 +1,68 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    float physics:mass = 0.19
+
+    def "Materials"
+    {
+        def Material "Frame"
+        {
+            token outputs:surface.connect = </Asset/Materials/Frame/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.13, 0.15)
+                float inputs:metallic = 0.8
+                float inputs:opacity = 1
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+
+        def Material "Screen"
+        {
+            token outputs:surface.connect = </Asset/Materials/Screen/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.008, 0.018, 0.025)
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.12
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "Body" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Frame>
+        double size = 1
+        float3 xformOp:scale = (0.072, 0.15, 0.008)
+        double3 xformOp:translate = (0, 0, 0.004)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "Screen" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Screen>
+        double size = 1
+        float3 xformOp:scale = (0.066, 0.138, 0.0006)
+        double3 xformOp:translate = (0, 0, 0.0083)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
