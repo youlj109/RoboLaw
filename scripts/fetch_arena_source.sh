@@ -9,5 +9,6 @@ if [[ ! -d third_party/IsaacLab-Arena/.git ]]; then
 fi
 git -C third_party/IsaacLab-Arena fetch origin "$revision"
 git -C third_party/IsaacLab-Arena checkout --detach "$revision"
+git -C third_party/IsaacLab-Arena config submodule.submodules/IsaacLab.url https://github.com/isaac-sim/IsaacLab.git
 git -C third_party/IsaacLab-Arena submodule update --init submodules/IsaacLab
 printf 'Arena source ready at %s\n' "$revision"
