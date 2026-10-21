@@ -21,6 +21,6 @@ docker exec -i -w /workspace \
     uv pip install --python /workspace/.venv-arena/bin/python --no-deps -r requirements-collection.txt
     mkdir -p reports
   '
-bash scripts/arena_python.sh scripts/restore_downloaded_assets.py
+bash scripts/arena_python.sh scripts/restore_downloaded_assets.py --source "${ROBOLAW_DOWNLOAD_SOURCE:-official}"
 bash scripts/install_curobo.sh
 bash scripts/arena_python.sh scripts/check_runtime.py

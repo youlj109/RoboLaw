@@ -9,16 +9,25 @@ Arena and Isaac Lab
 -------------------
 IsaacLab-Arena, Apache-2.0, from https://github.com/isaac-sim/IsaacLab-Arena
 Isaac Lab, BSD-3-Clause for its main code, from https://github.com/isaac-sim/IsaacLab
-Their pinned source trees are fetched by scripts/fetch_arena_source.sh rather
-than redistributed. Component notices in those source trees remain effective.
+Their pinned source trees are available from the official repositories and
+from the ModelScope RoboLaw mirror. Original LICENSE/NOTICE files are included
+in each source snapshot; component licenses remain effective. The mirror is
+a project convenience mirror, not an NVIDIA-endorsed distribution. Arena
+documentation media and test-data directories, as well as Isaac Lab test
+reference images/stages and selected documentation media, are omitted. Exact
+excluded paths are listed in configs/dependency_mirrors.json; source code,
+configuration, and license notices are retained.
 
 cuRobo
 ------
 NVIDIA cuRobo, NVIDIA License (including noncommercial research/evaluation
 limitations in the source revision used here), from
 https://github.com/NVlabs/curobo
-The source is fetched and built by scripts/install_curobo.sh. Its license and
-LICENSE_ASSETS apply; this repository does not include cuRobo binaries.
+The pinned source can be fetched from official GitHub or ModelScope and is
+built by scripts/install_curobo.sh. Its complete LICENSE and LICENSE_ASSETS
+are retained in the snapshot. Noncommercial research/evaluation restrictions
+remain effective. Example images and src/curobo/content/assets are excluded,
+as in the official sparse checkout; cuRobo binaries are not redistributed.
 
 Kitchen
 -------
@@ -41,10 +50,13 @@ The MPFB code is not included in this repository.
 NVIDIA assets and runtime
 -------------------------
 The DROID robot, stand and materials, mustard bottle, bowl, and cuRobo
-YAML/URDF are downloaded directly from NVIDIA using
-scripts/restore_downloaded_assets.py and configs/external_assets.json. They
-are not committed here. NVIDIA Isaac Sim/Kit and container runtime are likewise
-obtained from upstream.
+YAML/URDF are available from NVIDIA official URLs or the ModelScope RoboLaw
+asset mirror using scripts/restore_downloaded_assets.py --source official or
+--source modelscope. The files are unchanged; sources and checksums are in
+configs/external_assets.json. Original ownership and upstream asset-specific
+terms apply; the root MIT license does not relicense these files. The mirror
+is not NVIDIA-endorsed. NVIDIA Isaac Sim/Kit and container runtimes are not
+part of the mirror and are obtained from upstream.
 Terms: https://www.nvidia.com/en-us/agreements/enterprise-software/isaac-sim-additional-software-and-materials-license/
 FAQ: https://docs.isaacsim.omniverse.nvidia.com/6.2.0/common/license-faq.html
 
