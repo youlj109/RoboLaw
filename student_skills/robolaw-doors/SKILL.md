@@ -7,7 +7,7 @@ description: 为RoboLaw学生C独立扩展Lightwheel 全部8个开门环境，�
 
 独立负责 **8个原始环境**；新分支 **ylj-doors**。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界、现有缺口和验收要求。本技能自包含，不依赖其他技能或学生产出。
 
-首个 one-wall `open_fridge` 已于2026-10-21完成无障碍基线及人体、财产、横杆各1条真实采集。开发或复现首任务时，继续读 [physical-trial.md](references/physical-trial.md)：包含现有入口、实际验证结果和开门接触阶段的关键修正。只验证了1个原任务的固定布局，**其余7个任务仍未验证**。
+首个 one-wall `open_fridge` 已于2026-10-21完成无障碍基线及人体、财产、横杆各1条真实采集；这些是场景/接触/视频冒烟测试，**原三个摆放不证明有效避障**。开发或复现首任务时，继续读 [physical-trial.md](references/physical-trial.md) 与 [avoidance-trial.md](references/avoidance-trial.md)：后者定义固定控制参数的反事实验收和修正入口。本轮已完成三类各1条新的有效避障采集：真实几何反事实违规、新实际120Hz安全、原任务与视频门控全部通过，正式路径与数值见avoidance-trial.md。仍只验证了1个原任务的固定布局，**其余7个任务仍未验证**。
 
 ## 首次执行
 
@@ -58,7 +58,7 @@ python3 /path/to/robolaw-doors/scripts/preflight.py --repo /path/to/RoboLaw --ta
 - `third_party/IsaacLab-Arena/isaaclab_arena/tasks/rotate_revolute_joint_task.py`
 - `third_party/IsaacLab-Arena/isaaclab_arena/affordances/openable.py`
 
-首个冰箱的真实入口为 `scripts/extensions/doors/collect.py`，配置为 `configs/extensions/doors/open_fridge_variants.json`；先确认当前源码包含这些文件，ZIP本身不含采集器和大资产。该入口尚不支持其余7个任务、resume或批量成功配额；这些接口仍需本组实现，不能把设计目标当现有功能。无GPU时可先完成清单、资产引用核对、配置与CPU级测试，但标记新的物理采集未验证。最终按用户当前要求与workflow中的小规模验收标准提交自己的分支。
+首个冰箱的真实入口为 `scripts/extensions/doors/collect.py`，旧smoke配置为 `configs/extensions/doors/open_fridge_variants.json`；有效避障配置为 `configs/extensions/doors/avoidance_variants.json`，必须同时恢复其中的原基线布局、支座和同源人体资产；先确认当前源码包含这些文件，ZIP本身不含采集器和大资产。该入口尚不支持其余7个任务、resume或批量成功配额；这些接口仍需本组实现，不能把设计目标当现有功能。无GPU时可先完成清单、资产引用核对、配置与CPU级测试，但标记新的物理采集未验证。最终按用户当前要求与workflow中的小规模验收标准提交自己的分支。
 
 关节比例与限位读取还须阅读 `third_party/IsaacLab-Arena/isaaclab_arena/utils/joint_utils.py` 和 `third_party/IsaacLab-Arena/isaaclab_arena/tasks/predicates/articulations.py`，实际路径先用rg核对。
 

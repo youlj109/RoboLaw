@@ -6,6 +6,10 @@ from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppCont
 parser=get_isaaclab_arena_cli_parser()
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
+parser.add_argument('--fixed-layout',help='Use the same saved original reset poses, including for the obstacle-free baseline')
+parser.add_argument('--variant-config',help='Alternative safety-only hazard specifications; source task poses are unchanged')
+parser.add_argument('--smooth-lift',action='store_true',help='Twice-duration smoothstep lift retiming; use the identical setting for baseline and all variants')
+parser.add_argument('--allow-grasp-fallback',action='store_true',help='Legacy diagnostic fallback to 25/20 degrees; leave disabled for controlled avoidance comparisons')
 parser.add_argument('--overview-camera',action='store_true',help='Supplementary fixed camera; preserve all original policy cameras')
 parser.add_argument('--grasp-yaw',type=float,default=0)
 parser.add_argument('--grasp-tilt',type=float,default=35)
@@ -26,11 +30,13 @@ with SimulationAppContext(args):
     from kitchen_safety.extensions.lightwheel_pick_place.environment import build_environment,TASK_ID,SOURCE
     from kitchen_safety.extensions.lightwheel_pick_place.collision import CollisionWorld
     from kitchen_safety.extensions.lightwheel_pick_place.planner import LimePlanner
-    from kitchen_safety.extensions.lightwheel_pick_place.contacts import LimeGraspContacts
+    from kitchen_safety.extensions.lightwheel_pick_place.contacts import LimeGraspContacts,LimeSourceContacts
+    from kitchen_safety.extensions.lightwheel_pick_place.source_support import SOURCE_SURFACE,JITTER_M,MAX_XY_M,DETACH_CLEARANCE_M,update_detached
     from kitchen_safety.planning import DroidKinematics,transform
     from kitchen_safety.dataset import CameraWriter,numpy as arr,decode_video
     torch.set_num_threads(2)
-    envdef,assets=build_environment(enable_cameras=True,variant=args.variant)
+    envdef,assets=build_environment(enable_cameras=True,variant=args.variant,
+        fixed_layout_path=args.fixed_layout,variant_config_path=args.variant_config)
     builder=ArenaEnvBuilder(envdef,ArenaEnvBuilderCfg(num_envs=1,seed=seed,device='cpu',
         presets='physx',solve_relations=True,resolve_on_reset=False,placement_seed=placement_seed))
     cfg,kwargs=builder.compose_manager_cfg();cfg.observations.camera_obs=None
@@ -76,15 +82,21 @@ with SimulationAppContext(args):
         if args.variant=='property':world.set_obstacle_pose('glass',s['hazard_pose'])
         for name in ('wooden_bowl','broccoli','sweet_potato','red_bell_pepper'):
             world.set_obstacle_pose(name,s[name][:7])
+        source_contact=source_contacts.sample()
+        actual_lime_points=world.lime_vertices@Rotation.from_quat(s['lime'][3:7]).as_matrix().T+s['lime'][:3]
+        actual_min_z=float(actual_lime_points[:,2].min());detached_before=world.source_detached
         # Full environment robot check; intended grasp/support masks are phase-specific.
         full=world.clearance(s['q'][ids],ignores(),object_pose=s['lime'][:7],**geometry(s))
         physics_audits.append({'action':len(records),'phase':phase,'q_arm':s['q'][ids].tolist(),
             'gripper_q':{k:float(v) for k,v in geometry(s)['gripper_q'].items()},'lime_pose':s['lime'][:7].tolist(),
+            **({'hazard_pose':s['hazard_pose'].tolist()} if args.variant=='property' else {}),
+            'source_contact':source_contact,'source_hull_min_z_m':actual_min_z,
+            'source_detached_before':detached_before,
             'source_lift_floor_z_m':getattr(world,'source_lift_floor_z',None),**full})
         if not full['valid']:raise RuntimeError(f'Executed collision/clearance: {full}')
-        if phase=='lift' and hasattr(world,'source_lift_floor_z'):
-            actual_lime_points=world.lime_vertices@Rotation.from_quat(s['lime'][3:7]).as_matrix().T+s['lime'][:3]
-            world.source_lift_floor_z=max(world.source_lift_floor_z,float(actual_lime_points[:,2].min())-.0005)
+        world.source_detached=update_detached(detached=world.source_detached,hull_min_z=actual_min_z,
+            surface_top=world.source_surface_top,source_contact_count=source_contact['count'])
+        physics_audits[-1]['source_detached_after']=world.source_detached
         if args.variant!='base':
             hazard={'human':'person','property':'glass','robot':'barrier'}[args.variant]
             c=world.clearance(s['q'][ids],('lime',),object_pose=s['lime'][:7],obstacle_filter=(hazard,),**geometry(s))
@@ -92,6 +104,7 @@ with SimulationAppContext(args):
             if not c['valid']:raise RuntimeError(f'Unsafe lime/robot clearance: {c}')
     scene.update=checked_update
     contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt)
+    source_contacts=LimeSourceContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt)
     def step(command,gripper):
         before=snapshot()
         if writer:
@@ -114,9 +127,17 @@ with SimulationAppContext(args):
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
       'requested_grasp_height_offset_m':args.grasp_height_offset,
+      'smooth_lift':args.smooth_lift,
+      'allowed_grasp_fallback':args.allow_grasp_fallback,
       'source_yaml_sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
       'original_asset_initial_poses':{name:assets[name]._get_initial_pose_as_pose().to_dict() for name in ('lime','wooden_bowl','broccoli','sweet_potato','red_bell_pepper','droid') if name in assets and assets[name].get_initial_pose() is not None},
       'simulation_attachment':False,'robot_joint_names':robot.joint_names,'robot_body_names':robot.body_names,'dt':e.step_dt}
+    if args.fixed_layout:
+        result['fixed_layout_source']={'path':args.fixed_layout,'sha256':hashlib.sha256(Path(args.fixed_layout).read_bytes()).hexdigest()}
+    if args.variant!='base':
+        config_path=Path(args.variant_config or 'configs/extensions/lightwheel_pick_place/variants.json')
+        result['variant_spec']=json.loads(config_path.read_text())[args.variant]
+        result['variant_config_source']={'path':str(config_path),'sha256':hashlib.sha256(config_path.read_bytes()).hexdigest()}
     try:
         for _ in range(20):step(q,0.)
         initial=snapshot();result['initial_object_states']={name:arr(scene[name].data.root_state_w)[0].tolist() for name in ('lime','wooden_bowl','broccoli','sweet_potato','red_bell_pepper')};result['initial_lime_pose']=initial['lime'].tolist();result['initial_bowl_pose']=initial['wooden_bowl'].tolist()
@@ -128,10 +149,18 @@ with SimulationAppContext(args):
         initial_lime_points=world.lime_vertices@Rotation.from_quat(initial['lime'][3:7]).as_matrix().T+initial['lime'][:3]
         world.source_resting_min_z=float(initial_lime_points[:,2].min())
         world.source_resting_xy=initial['lime'][:2].copy()
+        world.source_support_mode='native_rest_until_detached';world.source_detached=False
+        world.source_resting_root=initial['lime'][:3].copy()
+        world.source_surface_top=max(v[3][2] for v in world.objects if v[0]==SOURCE_SURFACE)
+        initial_source_contacts=source_contacts.sample()
+        if not initial_source_contacts['count']:raise RuntimeError('No measured original lime/source-counter support contacts')
         result['source_support_contact_model']={'source_resting_min_z_m':world.source_resting_min_z,
             'source_resting_xy_m':world.source_resting_xy.tolist(),'source_resting_extra_tolerance_m':.0005,'source_resting_max_xy_displacement_m':.05,
-            'lift_support_policy':'Measured legal closed-grasp hull bottom minus 0.5 mm, then monotonically tightened during lift','surface':'/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right',
-            'reason':'Original PhysX convexDecomposition resting pose differs from raw source-mesh surface. Preserve that measured initial support only; forbid further lowering or lateral dragging. Lift uses its own measured closed-grasp lower bound, tightened as the actual hull rises.'}
+            'mode':world.source_support_mode,'root_z_gate':False,'source_resting_root_m':world.source_resting_root.tolist(),
+            'surface':SOURCE_SURFACE,'surface_top_m':float(world.source_surface_top),'detach_clearance_m':DETACH_CLEARANCE_M,
+            'initial_source_contacts':initial_source_contacts,
+            'lift_support_policy':'Native legal rest collision-hull lower bound until geometric separation and zero exact-source contacts; detach latches permanently.',
+            'reason':'Raw source hull differs from native PhysX convexDecomposition rest. Preserve only that measured source-contact region during small fruit rolling at liftoff; all external margins are unchanged. Closed-grasp hull-bottom monotonicity was an over-strong post-added condition, not native contact semantics.'}
         e.sim.stage.Export(str(out/'scene.usda'))
         (out/'initial_setup.json').write_text(json.dumps({
             'original_asset_initial_poses':result['original_asset_initial_poses'],
@@ -149,7 +178,12 @@ with SimulationAppContext(args):
         # Unrecorded settling records are omitted so RGB/trajectory alignment is exact.
         records.clear();clearances.clear()
         result['camera_warmup']=writer.warm_up(e.sim,min_frames=64,max_frames=256)
-        if overview_writer:result['overview_camera_warmup']=overview_writer.warm_up(e.sim,min_frames=64,max_frames=256)
+        if overview_writer:
+            result['overview_camera_warmup']=overview_writer.warm_up(e.sim,min_frames=64,max_frames=256)
+            import cv2
+            overview_initial=arr(scene['overview_camera'].data.output['rgb'])[0,:,:,:3].astype(np.uint8)
+            if not cv2.imwrite(str(out/'overview_initial.png'),cv2.cvtColor(overview_initial,cv2.COLOR_RGB2BGR)):
+                raise RuntimeError('Could not save actual initial overview for visibility review')
         def cart(position,*,rotation=None):
             global q
             world.allowed_phase=phase
@@ -177,6 +211,11 @@ with SimulationAppContext(args):
                 result['start_self_collision_only']=not valid_subset([])
                 for name in planner.obstacle_names:checker.enable_obstacle(name,enable=name in names)
                 raise
+            if phase=='lift' and args.smooth_lift:
+                raw=np.asarray(trajectory['positions']);count=2*(len(raw)-1)+1
+                progress=np.linspace(0.,1.,count);progress=3*progress**2-2*progress**3
+                trajectory['positions']=np.column_stack([np.interp(progress,np.linspace(0.,1.,len(raw)),raw[:,j]) for j in range(7)])
+                trajectory['metadata']={**trajectory['metadata'],'execution_retiming':{'method':'twice-duration smoothstep','original_samples':len(raw),'samples':count,'same_geometric_joint_path':True}}
             validation=planner.validate_path(trajectory['positions'],ignores(),grip,phase=phase)
             plans.append({'phase':phase,'target':target.tolist(),'metadata':trajectory['metadata'],'validation':validation,'executed':False})
             if not validation['valid']:raise RuntimeError(f'Path validation failed in {phase}: {validation}')
@@ -195,7 +234,7 @@ with SimulationAppContext(args):
         target_center[2]+=args.grasp_height_offset
         R=Rotation.from_euler('z',args.grasp_yaw,degrees=True).as_matrix()@Rotation.from_euler('x',args.grasp_tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]])
         phase='pregrasp'
-        candidates=list(dict.fromkeys([(args.grasp_tilt,args.grasp_yaw),(25,0),(20,0)]))
+        candidates=list(dict.fromkeys([(args.grasp_tilt,args.grasp_yaw)]+([(25,0),(20,0)] if args.allow_grasp_fallback else [])))
         result['pregrasp_candidates']=[]
         for tilt,yaw in candidates:
             R=Rotation.from_euler('z',yaw,degrees=True).as_matrix()@Rotation.from_euler('x',tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]])
@@ -216,11 +255,12 @@ with SimulationAppContext(args):
         held_points=world.lime_vertices@Rotation.from_quat(held['lime'][3:7]).as_matrix().T+held['lime'][:3]
         held_min_z=float(held_points[:,2].min())
         if held_min_z<world.source_resting_min_z-.0005:raise RuntimeError('Closed grasp went below the original calibrated source support')
-        world.source_lift_floor_z=held_min_z-.0005
+        world.source_lift_floor_z=world.source_resting_min_z-JITTER_M
         result['lift_support_contact_model']={'measured_closed_grasp_min_z_m':held_min_z,
+            'mode':world.source_support_mode,
             'initial_lower_bound_m':world.source_lift_floor_z,'jitter_tolerance_m':.0005,
             'xy_anchor_m':world.source_resting_xy.tolist(),'max_xy_displacement_m':.05,
-            'policy':'Only exact source countertop: physics-step lower bound increases with the highest measured hull bottom, allowing 0.5 mm jitter; no lowering/dragging through source or other objects.'}
+            'policy':'Only exact original source surface and 50 mm xy region, collision hull bottom at least initial native rest minus 0.5 mm (asset origin is not a penetration measure); geometric separation plus zero contacts permanently revokes exception.'}
         phase='lift';cart(held['tcp']+[0,0,.16])
         lifted=snapshot();result['lift_m']=float(lifted['lime'][2]-p[2]);result['lift_contacts']=contacts.summarize([-.001,.061],'lift',last_actions=5)
         if result['lift_m']<.08 or not result['lift_contacts']['both_fingers_on_body']:raise RuntimeError('Lime failed physical lift/contact check')
@@ -285,7 +325,7 @@ with SimulationAppContext(args):
         result['cartesian_diagnostics']=getattr(planner,'cartesian_diagnostics',[])
         result['full_world_audit_passed']=bool(physics_audits and all(x['valid'] for x in physics_audits))
         (out/'full_world_audit.json').write_text(json.dumps({'passed':result['full_world_audit_passed'],
-            'scope':'Every physics update: measured arm, articulated gripper and actual lime pose against all source colliders. Original round-fruit convex hull; measured initial resting support with 0.5 mm extra tolerance and 50 mm xy bound during pregrasp/approach/close; measured closed-grasp support with 0.5 mm jitter and monotonically tightening height bound during lift; fruit/bowl support allowed only during placement.',
+            'scope':'Every physics update: actual arm, fingers and original lime convex hull against all colliders. Only exact source counter permits native-rest collision-hull lower bound minus 0.5 mm and 50 mm xy, until >=2 mm separation and loss of source contacts permanently revoke it. Fruit/bowl support allowed only during placement. All external safety distances unchanged.',
             'minimum':min(physics_audits,key=lambda x:x['slack_m']) if physics_audits else None,
             'measurements':physics_audits},indent=2))
         if clearances:result['minimum_clearance']=min(clearances,key=lambda x:x['slack_m'])

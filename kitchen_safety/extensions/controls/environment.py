@@ -12,7 +12,7 @@ SOURCE = ROOT / 'third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_
 KITCHEN = Path.home() / '.cache/lightwheel_sdk/floorplan/robocasa-robocasakitchen-9-8/scene.usd'
 
 
-def build_environment(enable_cameras=True, variant='base', fixed_pose=None):
+def build_environment(enable_cameras=True, variant='base', fixed_pose=None, trial_config=None):
     # cuRobo 0.7 imports Warp's pre-1.16 torch namespace. This compatibility
     # alias restores that namespace without changing any kernel or algorithm.
     import warp as wp
@@ -77,7 +77,8 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None):
         assets[spec.embodiment.id].set_initial_pose(Pose(tuple(fixed_pose[:3]),tuple(fixed_pose[3:7])))
     if variant != 'base':
         import math
-        entry=json.loads((ROOT/'configs/extensions/controls/left_button_trial.json').read_text())['variants'][variant]
+        config = trial_config if trial_config is not None else json.loads((ROOT/'configs/extensions/controls/left_button_trial.json').read_text())
+        entry=config['variants'][variant]
         name={'human':'person','property':'glass','robot':'barrier'}[variant]
         path,xyz,yaw,static=entry['asset'],entry['position'],entry['yaw_deg'],variant!='property'
         a=math.radians(yaw)/2

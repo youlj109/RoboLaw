@@ -1,0 +1,38 @@
+Replicator G型 mustard→red bowl：真实有效避障 3/3
+
+2026-10-22 完成。只覆盖1/14个Replicator原始任务；其余13个、200条批采、随机化和最大并行速度未验证。
+
+正式样本（前缀 datasets/avoidance_trials/replicator/）：
+human/attempt_04   配对 base/baseline_human_03   515动作帧 / 3880物理子步
+property/attempt_02 配对 base/baseline_01       525动作帧 / 3960物理子步
+robot/attempt_01   配对 base/baseline_01         512动作帧 / 3856物理子步
+
+每条都是真实原任务成功、双指瓶身抓取、碗内释放并稳定支撑、完整厨房物理安全、上游全部7条源关系、固定台架、真实未clamp自碰撞、RGB/overview同步检查通过。当前runner 10个阶段退出码全部0，所有独立gate通过。正式计数由 scripts/extensions/replicator/summarize_avoidance.py 读取实际sidecar；summary为3/3，不是仅看Kit exit(0)。
+
+有效避障证据：同名义源布局、同seed/抓取参数/实际抓放目标和有效规划配置，回放真实无危险物体baseline的全部3848个物理子步，在新增物体场景中只作离线几何查询、不执行危险轨迹：
+人体：33个子步低于原20mm执行间隙，最小15.381528mm；重规划实际最小40.478707mm。
+财产：102个子步低于原50mm执行间隙，最小37.400177mm；重规划实际最小111.670336mm。
+障碍：165个子步低于原10mm执行间隙，最小0mm（安全模型包络相交）；重规划实际最小45.352289mm。
+新轨迹表中最小值来自动作状态独立复核；全部物理子步另通过同阈值检查。数据频率为动作/RGB 15Hz、物理120Hz。模型含机械臂capsule、机器人/夹爪/携物包络；包络相交不等于已执行真实表面碰撞，不宣称伤害或损坏模型。
+
+只改新增物体的初始姿态：
+human [1.60,-0.55,0], yaw40°；property [0.625,-0.59,0.896899501], yaw0°；robot [0.61,-0.84,0.896899501], yaw180°。
+原厨房、DROID默认支座及朝向、瓶、碗、相机不改变。robot y=0与bowl y=-0.475是此前经上游原验证器证明合法的统一源布局，不是本轮为制造绕行移动目标。
+人体保留默认pregrasp高度、原垂直lift和原抓放目标，只在自由转运中绕开伸出的手/前臂。v2障碍感知策略同时用于baseline_human03与human04；备选横向lift分支未在最终样本触发，不能宣称其已物理验证。人体原有携物padding=15mm，专用baseline也用同值；其他两类对照padding=0。全部原安全阈值保持。
+
+名义源布局相等不代替实际物理态一致：
+机器人与目标位姿按实际H5初始/settled状态核对。human机器人/瓶完全一致，碗角差约0.000005°；property瓶位姿差<2微米/0.003°，已显式记录公差，未写成比特相同。
+104动态背景独立审计：human与robot初始任务物理状态一致（浮点旋转舍入仅数值级）。property 8体超0.1mm/0.01°统计阈值；双轨迹×双背景全部物理历史的保守扫掠AABB检查全过，最近245.374mm，远大于原2mm要求，排除背景settling引起路线失效。
+动态花瓶全部3960子步平移最大0.680微米、旋转0.000407°，同时验证竖直位移和直立角。人体/横杆是静态非RigidBody USD，检查静态结构、无动画采样与真实settled根变换；零pose占位不作动态观测。
+
+每条有原三路 external_camera.mp4、external_camera_2.mp4、wrist_camera.mp4、all_cameras.mp4、独立overview_camera.mp4，以及overview原始JPEG/pose/time同步证据。human04完整人体、机器人、瓶/碗同框；已目视原三路初始/转运/末态与overview，视频完整解码。path_comparison.png显示真实路径和间隙曲线；根汇总负责追加同视角原时间速度comparison.mp4，本组不覆盖已生成对照视频。
+
+必须交接的独立报告：
+result.json；source_relation_audit.json；fixed_base_hazard_audit.json；self_collision_audit.json；overview_validation.json；background_consistency_audit.json；avoidance_audit.json；对应reports的summary/validation/audit/videos。
+avoidance_audit schema v3 accepted=true。baseline_counterfactual.passed=false表示原轨迹不安全，violates_safety_margin=true表示确实触发约束；新轨迹passed=true。旧v1/v2、修订记录及所有失败完整保留。
+
+失败：human01/02悬停规划拒绝，未执行任务动作；human03仅取消尚未获得GPU锁的等待任务，0动作；property01抓取后lift被拒，未执行拒绝路径。旧skill_trials仅是第一轮物理场景，不当作本轮有效避障证据；更早非法NextTo布局及旧diagnostic_05仍排除。
+
+复现命令、源资产恢复、当前默认入口与三类候选配置见 student_skills/robolaw-replicator/references/avoidance-trial.md。必须新采配对baseline，不能把旧pre-v1控制与当前v2策略混用。
+CPU回归：bash scripts/arena_python.sh -m unittest discover -s tests/extensions/replicator -v
+6项全部实际通过；需要FCL/Usd但不启动GPU。技能格式/静态预检通过；所有Kit/cuRobo程序用统一reports/skill_trials/gpu.lock串行，不终止他人任务。

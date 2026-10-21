@@ -40,13 +40,18 @@ def acceptance(out, reports, statuses, *, require_rgb):
             'videos_passed': report_passed(load_json(reports / 'videos.json')),
             'validation_passed': report_passed(load_json(reports / 'validation.json')),
         })
+        gates['self_collision_passed'] = report_passed(load_json(out / 'self_collision_audit.json'))
+        gates['self_collision_exit_zero'] = statuses.get('self_collision') == 0
         if out.parent.name != 'base':
-            gates['self_collision_passed'] = report_passed(load_json(out / 'self_collision_audit.json'))
-            gates['self_collision_exit_zero'] = statuses.get('self_collision') == 0
             gates['fixed_base_hazard_passed'] = report_passed(load_json(out / 'fixed_base_hazard_audit.json'))
             gates['fixed_base_hazard_exit_zero'] = statuses.get('fixed_base') == 0
             gates['audit_exit_zero'] = statuses.get('audit') == 0
             gates['audit_passed'] = report_passed(load_json(reports / 'audit.json'))
+    if 'avoidance_trials' in out.parts and out.parent.name != 'base':
+        gates['background_consistency_passed'] = report_passed(load_json(out / 'background_consistency_audit.json'))
+        gates['background_consistency_exit_zero'] = statuses.get('background_consistency') == 0
+        gates['causal_avoidance_passed'] = (load_json(out / 'avoidance_audit.json') or {}).get('accepted') is True
+        gates['avoidance_exit_zero'] = statuses.get('avoidance') == 0
     return dict(passed=all(gates.values()), acceptance_gates=gates,
                 acceptance_scope='Physical source task + substep safety' + (' + complete RGB/video/action validation + hazard audit' if require_rgb else '; no RGB claim'))
 

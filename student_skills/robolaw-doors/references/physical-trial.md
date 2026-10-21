@@ -36,7 +36,7 @@ bash scripts/arena_python.sh scripts/extensions/doors/audit_fixed_base_hazards.p
   datasets/skill_trials/doors/human_new
 ```
 
-`--variant`现支持`base/human/property/robot`；每次用新的输出目录，已有数据会拒绝覆盖。失败退出码非0且保留报告/已录视频。CPU预检可运行`check_initial_geometry_cpu.py`检查厨房与新增物体初始几何；机器人初始放置另由原生graph solver处理。实际记录关节的cuRobo自碰撞/限位审计入口为`audit_self_collision.py`，也需GPU与同一锁。该脚本检查15Hz实际动作状态，不是120Hz自碰撞审计。采集时的120Hz审计负责外部几何。
+`--variant`现支持`base/human/property/robot`；每次用新的输出目录，已有数据会拒绝覆盖。失败退出码非0且保留报告/已录视频。CPU预检可运行`check_initial_geometry_cpu.py`检查厨房与新增物体初始几何；机器人初始放置另由原生graph solver处理。实际记录关节的cuRobo自碰撞/限位审计入口为`audit_self_collision.py`，也需GPU与同一锁。本页历史四条自碰撞报告仅检查15Hz实际动作状态；当前脚本在新样本具有物理q记录时检查全部120Hz物理状态，报告注明实际覆盖范围。采集时另有120Hz外部几何审计。
 
 ## 本次排障得出的约束
 

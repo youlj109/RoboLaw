@@ -1,0 +1,18 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset"
+{
+    def Xform "Geometry" (
+        prepend references = @../../obstacle_library/robot/projecting_crossbar.usda@
+    )
+    {
+        float xformOp:rotateZ = 60
+        uniform token[] xformOpOrder = ["xformOp:rotateZ"]
+    }
+}
+

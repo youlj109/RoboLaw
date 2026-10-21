@@ -456,6 +456,16 @@ class CollisionWorld:
             if label=='carried_lime':
                 if self._matches(name,'wooden_bowl') and self.allowed_phase in ('lower','release','retreat','settle_final'):continue
                 source_surface=name.endswith('/counter_main_main_group/top_geometry_right')
+                if source_surface and getattr(self,'source_support_mode',None)=='native_rest_until_detached':
+                    from .source_support import support_allowed
+                    actual_root=self._object_pose(q,object_pose)[:3,3]
+                    if support_allowed(phase=self.allowed_phase,detached=self.source_detached,
+                        hull_min_z=lo[2],root=actual_root,initial_hull_min_z=self.source_resting_min_z,
+                        initial_root=self.source_resting_root):continue
+                    # This model has one bounded exception. Do not fall through
+                    # to the historical closed-grasp/monotonic alternatives.
+                    margin=float(margins[k]);bound=float(bounds[shape_index,k])
+                    pairs.append((bound-margin,label,name,shape,obj,margin));continue
                 if (source_surface and self.allowed_phase in ('pregrasp','approach','close')
                     and hasattr(self,'source_resting_min_z') and object_pose is not None):
                     actual_root=self._object_pose(q,object_pose)[:3,3]

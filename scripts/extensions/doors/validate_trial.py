@@ -19,7 +19,8 @@ for i,row in enumerate(rows):
     if away and row['native_open'] and success_index is None:success_index=i
     away=away or row['native_away']
 require(success_index is not None,'native predicate sequence never completed')
-pull=[x for x in rows if x['phase']=='pull_door'];require(bool(pull),'no physical pulling stage')
+require(bool(rows[-1]['native_open']),'final original door-open predicate is false')
+pull=[x for x in rows if x['phase'] in ('pull_door','recover_open')];require(bool(pull),'no physical pulling stage')
 require(all(np.array(x['contacts']['counts']).reshape(-1).min()>0 for x in pull),'lost either finger-door contact while pulling')
 checks['source_success_index']=success_index;checks['pull_frames']=len(pull);checks['physical_audit_samples']=len(audit['checks']);checks['door_q_range_rad']=[min(x['next_obs']['door_q'] for x in rows),max(x['next_obs']['door_q'] for x in rows)] if rows else None
 cams=json.loads((root/'cameras.json').read_text())

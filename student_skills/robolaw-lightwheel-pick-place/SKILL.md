@@ -7,7 +7,7 @@ description: 为RoboLaw学生B独立扩展Lightwheel 剩余5个抓放环境，�
 
 独立负责 **5个原始环境**；新分支 **ylj-lightwheel-pick-place**。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界、现有缺口和验收要求。本技能自包含，不依赖其他技能或学生产出。
 
-本仓库已实现青柠任务的本组场景、cuRobo/物理执行与采集入口，并完成human/property/robot固定布局各1条真实采集。继续该任务前读 [physical-trial.md](references/physical-trial.md)：它给出最终目录与验收证据，记录本厨房资产、抓取高度、真实携物凸包、源支持接触和额外人体总览问题。技能 ZIP 只含指导与预检脚本；需使用包含本组实现的 RoboLaw 源码，不能仅安装技能就声称执行器可用。其余4个任务尚未完成物理验证。
+本仓库已实现青柠任务的本组场景、cuRobo/物理执行与采集入口。 本轮新 `datasets/avoidance_trials/lightwheel_pick_place/` 已完成同一严格基线下human/property/robot各1条有效避障采集，具体样本、距离与完整门控见下述avoidance-trial参考。旧human/property/robot各1条只证明场景与采集流程跑通，其无障碍基线在新增物体下仍安全，**不计为有效避障增广**。继续前读 [physical-trial.md](references/physical-trial.md) 的物理边界，以及 [avoidance-trial.md](references/avoidance-trial.md) 的强制避障验收。有效样本必须证明：同一成功基线的实测臂/指爪/携物轨迹在该新增物体下违反原安全距离，而实际重规划采集安全且原任务成功；初态、目标与原厨房/固定台架合法。仅摆了物体、路径随机不同或视频中物体可见不能通过。技能ZIP只含指导与预检脚本，需配套RoboLaw源码。其余4个任务仍未物理验证。
 
 ## 首次执行
 

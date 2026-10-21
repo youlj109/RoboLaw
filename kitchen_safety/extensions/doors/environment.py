@@ -4,7 +4,7 @@ from dataclasses import replace
 ROOT = Path(__file__).resolve().parents[3]
 TASK = ROOT/'third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_fridge.yaml'
 
-def build(variant='base', enable_cameras=True):
+def build(variant='base', enable_cameras=True, variant_config=None):
     from isaaclab_arena.environment_spec.arena_env_graph_spec import ArenaEnvGraphSpec
     from isaaclab_arena.environment_spec.arena_env_graph_conversion_utils import instantiate_assets_from_spec, _attach_spatial_relations_to_assets, _ensure_scene_lighting
     from isaaclab_arena.environment_spec.arena_env_graph_task_conversion_utils import build_task_from_spec
@@ -50,12 +50,24 @@ def build(variant='base', enable_cameras=True):
     assets=instantiate_assets_from_spec(graph,LocalRegistry(),enable_cameras=enable_cameras)
     _ensure_scene_lighting(graph,assets)
     _attach_spatial_relations_to_assets(graph.relations,assets)
+    import json
+    variant_data=json.loads(Path(variant_config or ROOT/'configs/extensions/doors/open_fridge_variants.json').read_text())
+    if variant_data.get('_fixed_source_layout'):
+        from isaaclab_arena.relations.relations import IsAnchor,RotateAroundSolution
+        fixed=json.loads((ROOT/variant_data['_fixed_source_layout']).read_text())
+        pose=fixed['robot_asset_pose']
+        assets[graph.embodiment.id].set_initial_pose(Pose(tuple(pose['position']),tuple(pose['rotation'])))
+        assets[graph.embodiment.id].relations=[r for r in assets[graph.embodiment.id].relations if not isinstance(r,RotateAroundSolution)]
+        assets[graph.embodiment.id].add_relation(IsAnchor())
     objects=[v for k,v in assets.items() if k!=graph.embodiment.id]
     if variant!='base':
         import json, math
-        spec=json.loads((ROOT/'configs/extensions/doors/open_fridge_variants.json').read_text())[variant]
+        spec=variant_data[variant]
         yaw=math.radians(spec.get('yaw_deg',0))
         objects.append(Object(name=spec['name'], usd_path=str(ROOT/spec['asset']),object_type=ObjectType.BASE if spec['static'] else ObjectType.RIGID, initial_pose=Pose(tuple(spec['position']),(0.,0.,math.sin(yaw/2),math.cos(yaw/2)))))
+        if spec.get('support'):
+            support=spec['support']
+            objects.append(Object(name=support['name'],usd_path=str(ROOT/support['asset']),object_type=ObjectType.BASE,initial_pose=Pose(tuple(support['position']),(0.,0.,0.,1.))))
     task=build_task_from_spec(graph.task,assets)
     task.episode_length_s=120.
     env=IsaacLabArenaEnvironment(name=graph.env_name+'_'+variant,scene=Scene(assets=objects),embodiment=assets[graph.embodiment.id],task=task)

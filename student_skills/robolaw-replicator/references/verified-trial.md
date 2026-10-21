@@ -1,4 +1,6 @@
-# G 型 mustard → red bowl：真实入口和验证边界
+# G 型 mustard → red bowl：第一轮物理场景记录
+
+后续用户指出“物体摆放”不等于有效避障。本页三条保留为物理执行证据，不作为有效避障验收。新增强制因果对照与修正实测见 [avoidance-trial.md](avoidance-trial.md)。
 
 2026-10-21 完成 `kitchen_bench_replicator_g_shape_mustard_bowl` 的人体、财产、机器人周边障碍三个固定变体，每类选取 1 条真实成功轨迹及视频。本次按用户要求只做小样本；覆盖 **1/14 个 Replicator 原始任务，其余 13 个未验证**，没有随机化、200 条或多环境速度结论。
 
@@ -41,7 +43,7 @@ bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --varian
 bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --variant human --attempt repro_01 --overview-camera
 bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --variant property --attempt repro_01
 bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --variant robot --attempt repro_01
-python3 -m unittest discover -s tests/extensions/replicator -v
+bash scripts/arena_python.sh -m unittest discover -s tests/extensions/replicator -v
 ```
 
 入口自动设置 `HEADLESS=1`；当前 Arena CLI 不接受 `--headless`。所有 Kit/cuRobo 工作使用 `reports/skill_trials/gpu.lock`，每次运行有界 episode，CPU 导出检查在采集释放 GPU 后执行。其他 GPU 任务必须遵循同一锁；不终止他人训练。支持 `--seed`、`--max-steps` 诊断和 `--dry-run`，尚无多任务队列、成功配额、resume、随机化规格或多环境采集接口。
@@ -54,7 +56,7 @@ python3 -m unittest discover -s tests/extensions/replicator -v
 
 - 全厨房碰撞读取不沿用原一字型场景的固定裁剪。原厨房 104 个动态背景体使用 PhysX 递归路径 `/World/envs/env_0/kitchen/**`；单 `*` 漏嵌套对象。保存动作率/物理率姿态，规划前同步、逐物理子步复查，保留原非均匀 scale。
 - 瓶底必要支持接触只适配源精确台面 `/World/envs/env_0/kitchen/CapSurface_03` 的原 6 mm 支持带，不因此豁免机械臂、其他面或深穿透。
-- Kit 关闭可能直接 exit(0)，不能只看进程状态。runner 同时读真实物理结果、全部必要 sidecar、RGB 报告与各退出码；验收门槛有 3 个 CPU 回归测试。
+- Kit 关闭可能直接 exit(0)，不能只看进程状态。runner 同时读真实物理结果、全部必要 sidecar、RGB 报告与各退出码；第一轮验收门槛有 3 个 CPU 回归测试；当前扩展至 6 项，新增几何检查需 arena 解释器的 FCL/Usd，不启动 GPU。
 - 旧 human/attempt_01、property/attempt_03、robot/attempt_02 和无障碍 base/diagnostic_05 虽有物理完成记录，但上游 NextTo 和碗 On 边距不合格。原数据保留，各 `source_relation_audit.json` 标为 false，正式汇总排除。只修改 reset 的 robot y=0.183→0、bowl y=-0.43→-0.475，经过 CPU IK/FCL 预检后重采。旧无障碍反事实不适用于当前合法布局，不能沿用旧“19 帧违规”等结论。本轮没有新合法布局的无障碍实采，不能声称完成新的基线轨迹对照。
 - 合法 property/attempt_04 在已释放后，额外退手规划被 cuRobo 拒绝；没有执行拒绝轨迹，样本计失败。CPU 复核定位为覆盖球对膨胀花瓶 AABB 的约 0.849 mm 侵入，实际 FCL 间距约 102 mm。只把花瓶 y=-0.59→-0.61，保留全部间隙，property/attempt_05 正常完成退手；未使用退手跳过策略。诊断源代码是 `diagnose_property_retreat.py` / `diagnose_property_spheres.py`。
 - human/attempt_02 已物理/RGB通过，保留为早期合法样本。为增强人体可辨认度加独立 overview；human/attempt_03 因初版外观收敛硬判定在 0 动作时退出，保留失败。最终 human/attempt_04 记录 1024 帧有界纯渲染 warmup，物理步 64→64；外观低幅像素差诊断仍为 false，未伪称收敛。该诊断不属于物理成功门槛，实际图像完整解码、可见性、位姿/时间同步和所有安全门槛均通过。

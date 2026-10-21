@@ -9,7 +9,48 @@ class LimePlanner(CuroboPlanner):
 
     def plan_pose(self,q_arm7,target,ignore_names=(),grip_binary=0,phase=None):
         self.query_start_q=np.asarray(q_arm7).copy()
-        return super().plan_pose(q_arm7,target,ignore_names,grip_binary,phase)
+        if phase!='pregrasp':return super().plan_pose(q_arm7,target,ignore_names,grip_binary,phase)
+        # A collision-free pregrasp endpoint alone does not guarantee the
+        # contact column is feasible. Keep the original TCP pose/orientation;
+        # search only redundant arm IK postures when a hazard blocks the column.
+        contact_target=np.asarray(target).copy();contact_target[2,3]-=.125
+        attempts=[];nominal=None
+        def column(q_goal):
+            self._prepare_path_query(ignore_names,grip_binary,'approach')
+            local=CuroboPlanner._cartesian_vertical(self,q_goal,contact_target,'approach')
+            checked=self.validate_path(local['positions'],ignore_names,grip_binary,phase='approach')
+            if not checked['valid']:raise RuntimeError('Full pregrasp contact column rejected: '+str(checked))
+            return checked
+        try:
+            nominal=super().plan_pose(q_arm7,target,ignore_names,grip_binary,phase)
+            lookahead=column(nominal['positions'][-1])
+            nominal['metadata']['contact_column_validation']=lookahead
+            self._prepare_path_query(ignore_names,grip_binary,'pregrasp')
+            self.query_start_q=np.asarray(q_arm7).copy()
+            return nominal
+        except RuntimeError as exc:attempts.append({'candidate':'nominal','error':str(exc)})
+        seed=(nominal['positions'][-1] if nominal is not None else self.kin.ik(target,q_arm7,attempts=12))
+        rng=np.random.default_rng(self.seed)
+        for i,scale in enumerate([.2]*16+[.4]*16+[.7]*16+[1.]*16):
+            try:
+                candidate=self.kin.ik(target,seed+rng.normal(0,scale,7),attempts=1)
+                self._prepare_path_query(ignore_names,grip_binary,'pregrasp')
+                if not bool(self.motion_gen.ik_solver.check_valid(self.args.to_device(candidate[None])).all()):
+                    raise RuntimeError('Pregrasp IK violates cuRobo world/self/limits')
+                if not self.world.valid(candidate,ignore_names):raise RuntimeError('Pregrasp IK violates full FCL world')
+                lookahead=column(candidate)
+                path=self.plan_joint_goal(q_arm7,candidate,ignore_names,grip_binary,phase='pregrasp')
+                checked=self.validate_path(path['positions'],ignore_names,grip_binary,phase='pregrasp')
+                if not checked['valid']:raise RuntimeError('Pregrasp joint path rejected: '+str(checked))
+                path['metadata']['pregrasp_redundancy_search']={'same_tcp_goal':np.asarray(target).tolist(),
+                    'selected_q_goal':candidate.tolist(),'failed_candidates':attempts,'contact_column_validation':lookahead,
+                    'policy':'Obstacle-aware redundant IK only; original source object, TCP grasp point and orientation unchanged.'}
+                self.query_start_q=np.asarray(q_arm7).copy()
+                return path
+            except RuntimeError as exc:attempts.append({'candidate':i,'seed_scale':scale,'error':str(exc)})
+        self.pregrasp_redundancy_failures=attempts
+        self._prepare_path_query(ignore_names,grip_binary,'pregrasp')
+        raise RuntimeError('No collision-free pregrasp/contact column at unchanged TCP target: '+str(attempts[-3:]))
 
     def _cartesian_vertical(self,q_arm7,target,phase):
         try:
@@ -71,7 +112,7 @@ class LimePlanner(CuroboPlanner):
                 'policy':'interior spheres for MotionGen search; full source convex hull checked separately by dense and physics-rate FCL',
                 'sphere_count':len(centers),'full_surface_coverage':False,
                 'maximum_source_vertex_distance_outside_proxy_m':float(gap.max()),
-                'source_support_contact_policy':'Full source hull uses the episode measured legal grasp support and monotonic lift lower bound; this proxy alone is not a surface certificate'}
+                'source_support_contact_policy':'Full source hull uses the episode source_support_contact_model (native rest hull bound, exact source surface/XY scope and permanent detach for avoidance trials); this proxy alone is not a surface certificate'}
         centers,radii=self.lime_proxy
         radii=radii.copy()
         if self.active_phase=='lift':

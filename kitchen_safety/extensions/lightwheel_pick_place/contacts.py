@@ -165,3 +165,21 @@ class LimeGraspContacts:
                 'body_local_z_range_m': list(body_z_range), 'loaded_contact_count': loaded_count,
                 'loaded_z_range_by_finger_m': extrema, 'outside_body_contacts': outside,
                 'passed': bool(loaded_count and not outside)}
+
+
+class LimeSourceContacts:
+    """Raw PhysX lime/exact-source-counter contact observations, without forces."""
+    def __init__(self,physics_sim_view,physics_dt):
+        from .source_support import SOURCE_SURFACE
+        self.physics_dt=physics_dt
+        self.view=physics_sim_view.create_rigid_contact_view(['/World/envs/env_0/lime'],
+            filter_patterns=[[SOURCE_SURFACE]],max_contact_data_count=4096)
+
+    def sample(self):
+        force,point,normal,separation,count,start=map(_numpy,self.view.get_contact_data(dt=self.physics_dt))
+        count=int(count.reshape(-1)[0]);start=int(start.reshape(-1)[0]);end=start+count
+        if end>len(point):raise RuntimeError('Source contact buffer truncated')
+        return {'count':count,'points_world_m':point[start:end].reshape(-1,3).tolist(),
+            'normals_world':normal[start:end].reshape(-1,3).tolist(),
+            'normal_forces_n':force[start:end].reshape(-1).tolist(),
+            'separations_m':separation[start:end].reshape(-1).tolist()}

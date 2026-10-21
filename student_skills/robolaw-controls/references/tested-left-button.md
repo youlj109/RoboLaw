@@ -1,5 +1,7 @@
 # 左取消按钮：真实试用所得的实现约束
 
+> 以下记录保留首轮物理/采集试用及其历史限制，不能据其中三条成功认定避障有效。后续新增场景必须采用同源无障碍基线、原间隙反事实违例、新轨迹安全成功的成对验收；技能参考 `references/avoidance-design.md`，新配置为 `configs/extensions/controls/avoidance_left_button.json`，新数据位于 `datasets/avoidance_trials/controls/`。
+
 本轮用户要求每个技能选择一个原任务，构建人体、财产、机器人周边障碍三个变体，每变体一条真实采集并保存视频；这是对 workflow 默认三条要求的本轮覆盖，不是批采成功率结论。
 
 选用 `kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian`，保留原 PressButtonTask、原 YAML 关系、DROID 相机/动作空间。Lightwheel 官方厨房为 layout 9 / style 8，恢复版本 UUID 为 `1a892eee-c6c7-4077-9791-bfa3686b3cf7`。
@@ -63,7 +65,7 @@ bash scripts/arena_python.sh scripts/extensions/controls/audit_augmentation.py d
 
 机械臂运动碰撞检查不自动覆盖原 DROID 固定台架。必须额外检查完整组合 USD 中 `panda_link0` 及其台架碰撞体与新增实体在初始和已记录实际位姿下是否相交。人体旧样本 `human_attempt02` 的鞋子与台架相交，已撤销验收；保留旧结果和 `fixed_base_hazard_audit.json` 的失败证据，不能继续计入成功样本。
 
-人体移到 `[2.85, -0.9, 0]`、yaw=-30°后重采为 `human_attempt03`，283 帧、2264 次物理步检查，原按钮位移 2.0345 mm。两路原外部相机实际画面中人体可见。新人体、花瓶、横杆与固定台架最小距离分别为 38.780 / 416.030 / 382.040 mm，均无交叠。人体/横杆不要求旧轨迹一定失效，不能把实体可见、参与碰撞检查等同于强制绕行。
+人体移到 `[2.85, -0.9, 0]`、yaw=-30°后重采为 `human_attempt03`，283 帧、2264 次物理步检查，原按钮位移 2.0345 mm。两路原外部相机实际画面中人体可见。新人体、花瓶、横杆与固定台架最小距离分别为 38.780 / 416.030 / 382.040 mm，均无交叠。首轮人体/横杆只验证物理流程，未要求旧轨迹失效，因此不能计入本轮有效避障验收。不能把实体可见、参与碰撞检查等同于有效避障。
 
 ```bash
 bash scripts/arena_python.sh scripts/extensions/controls/audit_fixed_base.py /workspace/datasets/skill_trials/controls/human_attempt03

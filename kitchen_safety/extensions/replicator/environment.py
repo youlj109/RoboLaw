@@ -18,6 +18,7 @@ class KitchenSafetyCfg(ArenaEnvironmentCfg):
     collection_seed: int = 0
     obstacle_id: str = ''
     episode_spec: Optional[dict] = None
+    fixed_layout: Optional[dict] = None
     episode_length_s: float = 120.0
 
 class KitchenSafetyEnvironment(ArenaEnvironmentFactory[KitchenSafetyCfg]):
@@ -42,6 +43,8 @@ class KitchenSafetyEnvironment(ArenaEnvironmentFactory[KitchenSafetyCfg]):
             if cfg.episode_spec['obstacle_id'] != cfg.obstacle_id:
                 raise ValueError('Episode specification and environment obstacle IDs differ')
             layout = copy.deepcopy(cfg.episode_spec['layout'])
+        elif cfg.fixed_layout is not None:
+            layout = copy.deepcopy(cfg.fixed_layout)
         else:
             layout = resolve_layout(cfg.obstacle_id, cfg.object_jitter_m, cfg.collection_seed)
         assert cfg.variant in ('base','human','property','robot')

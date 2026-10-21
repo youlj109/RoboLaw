@@ -11,7 +11,7 @@ SOURCE = ROOT / 'third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_
 KITCHEN = Path.home() / '.cache/lightwheel_sdk/floorplan/robocasa-robocasakitchen-3-8/scene.usd'
 
 
-def build_environment(enable_cameras=True, variant="base"):
+def build_environment(enable_cameras=True, variant="base", *, fixed_layout_path=None, variant_config_path=None):
     # cuRobo 0.7 imports Warp's pre-1.16 torch namespace. This compatibility
     # alias restores that namespace without changing any kernel or algorithm.
     import warp as wp
@@ -82,9 +82,9 @@ def build_environment(enable_cameras=True, variant="base"):
         [math.radians(x) for x in (0,-60,0,-150,0,90,0)]+[0.]*6)
     _ensure_scene_lighting(spec, assets)
     _attach_spatial_relations_to_assets(spec.relations, assets)
-    if variant != 'base':
+    if variant != 'base' or fixed_layout_path is not None:
         from isaaclab_arena.relations.relations import IsAnchor, RotateAroundSolution
-        layout_path = ROOT / 'configs/extensions/lightwheel_pick_place/fixed_layout.json'
+        layout_path = Path(fixed_layout_path) if fixed_layout_path is not None else ROOT / 'configs/extensions/lightwheel_pick_place/fixed_layout.json'
         if not layout_path.exists():
             raise FileNotFoundError('First collect and verify a base rollout, then save its original_asset_initial_poses to '+str(layout_path))
         layout = json.loads(layout_path.read_text())
@@ -97,9 +97,12 @@ def build_environment(enable_cameras=True, variant="base"):
             # solved pose; anchors must not carry/apply that marker again.
             assets[name].relations=[r for r in assets[name].relations if not isinstance(r,RotateAroundSolution)]
             assets[name].add_relation(IsAnchor())
+    if variant != 'base':
+        from isaaclab_arena.relations.relations import IsAnchor
         from isaaclab_arena.assets.object_type import ObjectType
         from math import sin, cos, radians
-        row = json.loads((ROOT / 'configs/extensions/lightwheel_pick_place/variants.json').read_text())[variant]
+        variant_path=Path(variant_config_path) if variant_config_path is not None else ROOT / 'configs/extensions/lightwheel_pick_place/variants.json'
+        row = json.loads(variant_path.read_text())[variant]
         yaw=radians(row.get('yaw_deg',0))
         assets[row['name']]=Object(name=row['name'],usd_path=str(ROOT/row['asset']),
             object_type=ObjectType.RIGID if variant=='property' else ObjectType.BASE,

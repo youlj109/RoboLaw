@@ -24,6 +24,8 @@ parser.add_argument('--overview-camera', action='store_true', help='Add a separa
 parser.add_argument('--record-rgb', action='store_true', help='Record original three cameras without live MP4 encoding')
 parser.add_argument('--background-rgb', action='store_true',
                     help='Encode and write RGB on the existing bounded CPU worker; requires --record-rgb without --video')
+parser.add_argument('--control-profile', choices=['base','human','property','robot'], help='For a no-hazard baseline only, retain this variant-specific planning profile')
+parser.add_argument('--layout-json', help='Fixed source-preserving layout with an explicitly searched hazard')
 parser.add_argument('--episode-spec', help='Resolved augmentation episode JSON shared by scene, planner and recorder')
 parser.add_argument('--physics-threads', type=int, default=None,
                     help='PhysX CPU worker count; 0 runs on the main thread. Does not change solver accuracy.')
@@ -67,6 +69,9 @@ parser.add_argument('--placement-strategy', choices=['pose', 'lower-first'], def
 parser.add_argument('--placement-tcp-height-m', type=float, default=argparse.SUPPRESS,
                     help='Independent lower-first placement TCP height in world coordinates')
 args = parser.parse_args()
+if args.control_profile is not None and args.variant != 'base' and args.control_profile != args.variant:
+    parser.error('A control-profile override is only allowed for no-hazard baselines')
+control_variant = args.control_profile or args.variant
 if not args.obstacle_id:
     args.obstacle_id = {'base': '', 'human': 'human_default_mpfb', 'property': 'property_vase',
                         'robot': 'robot_projecting_crossbar'}[args.variant]
@@ -100,6 +105,17 @@ if args.placement_tcp_height_m is not None and args.placement_strategy != 'lower
     parser.error('--placement-tcp-height-m requires lower-first placement')
 if args.transport_tilt_cap_deg is not None and not 5 < args.transport_tilt_cap_deg < 27:
     parser.error('--transport-tilt-cap-deg must be between 5 and 27 degrees')
+fixed_layout = None
+if args.layout_json:
+    from kitchen_safety.extensions.replicator.layout import resolve_layout
+    fixed_layout = json.loads(Path(args.layout_json).read_text())
+    reference_layout = resolve_layout(args.obstacle_id)
+    if {k:v for k,v in fixed_layout.items() if k != 'obstacle'} != {k:v for k,v in reference_layout.items() if k != 'obstacle'}:
+        parser.error('Fixed hazard layout must preserve all original source and planning settings')
+    if fixed_layout.get('obstacle',{}).get('id','') != args.obstacle_id:
+        parser.error('Fixed hazard ID mismatch')
+    if args.episode_spec:
+        parser.error('Choose fixed layout or randomized episode specification')
 episode_spec = None
 if args.episode_spec:
     if args.planner != 'curobo':
@@ -150,7 +166,7 @@ with SimulationAppContext(args):
 
     environment = KitchenSafetyEnvironment().build(KitchenSafetyCfg(
         variant=args.variant, enable_cameras=args.enable_cameras, object_jitter_m=args.jitter,
-        collection_seed=args.seed or 0, obstacle_id=args.obstacle_id, episode_spec=episode_spec,
+        collection_seed=args.seed or 0, obstacle_id=args.obstacle_id, episode_spec=episode_spec, fixed_layout=fixed_layout,
         episode_length_s=args.episode_length_s))
     out = Path('/workspace') / (args.output or (
         f'datasets/kitchen_auto/{args.variant}/episode_{datetime.now():%Y%m%d_%H%M%S}'))
@@ -194,7 +210,7 @@ with SimulationAppContext(args):
     def arr(v):
         return (v.torch if hasattr(v, 'torch') else v).detach().cpu().numpy().copy()
 
-    layout = episode_spec['layout'] if episode_spec else resolve_layout(args.obstacle_id, args.jitter, args.seed or 0)
+    layout = episode_spec['layout'] if episode_spec else (fixed_layout if fixed_layout is not None else resolve_layout(args.obstacle_id, args.jitter, args.seed or 0))
     dynamic_hazard = bool(args.obstacle_id and not layout['obstacle']['static'])
     planner_hazard_pose = None
     settings = layout.get('planning', {})
@@ -524,7 +540,7 @@ with SimulationAppContext(args):
                     if not check_planned_path(world, path, ignore):
                         raise RuntimeError(f'Independent geometry check rejected cuRobo path: {world.last_collision}')
                     if (phase == 'above_bowl' and
-                            settings.get('transfer_mode_by_variant', {}).get(args.variant) == 'goal'):
+                            settings.get('transfer_mode_by_variant', {}).get(control_variant) == 'goal'):
                         # A collision-free pose over the bowl may still put an
                         # elbow against the person when lowering. Check that
                         # the placement column is reachable before transporting.
@@ -973,6 +989,8 @@ with SimulationAppContext(args):
     result = dict(task_id='kitchen_bench_replicator_g_shape_mustard_bowl', variant=args.variant, layout=layout, seed=args.seed or 0,
                   jitter_m=args.jitter, success=False, planner=args.planner, physics_grasp=True,
                   placement_strategy=args.placement_strategy)
+    result['planning_strategy']='replicator_obstacle_aware_hover_lift_v2'
+    result['effective_controls'] = dict(collector_options=collector_options, seed=args.seed or 0, planner_seed=planner_seed, transport_object_padding_m=settings.get('transport_object_padding_m_by_variant', {}).get(control_variant,0.), transfer_mode=settings.get('transfer_mode_by_variant',{}).get(control_variant,'front_waypoints'), profile=control_variant)
     if overview_spec is not None:result['overview_camera'] = overview_spec
     if episode_spec:
         result.update(episode_spec=episode_spec, appearance=appearance_report, augmentation_eligible=False)
@@ -1025,7 +1043,7 @@ with SimulationAppContext(args):
         result['background_rigid_paths']=background_paths
         if dynamic_hazard:
             world.set_obstacle_pose('glass', snapshot()['hazard_pose'])
-        if episode_spec:
+        if episode_spec or fixed_layout:
             settled = snapshot()
             # Fabric need not write dynamic root poses back to USD. Explicitly
             # synchronize movable task objects before constructing cuRobo.
@@ -1056,7 +1074,7 @@ with SimulationAppContext(args):
                 raise RuntimeError(f"Invalid sampled layout: {result['initial_layout_check']}")
             grasp_rotation_delta = Rotation.from_quat(settled['mustard'][3:7]).as_matrix()
         if args.planner == 'curobo':
-            from kitchen_safety.curobo_backend import CuroboPlanner
+            from kitchen_safety.extensions.replicator.curobo_backend import CuroboPlanner
             def new_motion_planner():
                 global planner_hazard_pose
                 if dynamic_hazard:
@@ -1064,7 +1082,7 @@ with SimulationAppContext(args):
                 return CuroboPlanner(world, kin, dt=e.step_dt, seed=planner_seed,
                                      max_joint_speed=settings.get('max_joint_speed_rad_s', .4),
                                      transport_object_padding_m=settings.get(
-                                         'transport_object_padding_m_by_variant', {}).get(args.variant, 0.))
+                                         'transport_object_padding_m_by_variant', {}).get(control_variant, 0.))
             motion_planner = new_motion_planner()
         camera_seconds = camera_caller_seconds(cameras) + camera_caller_seconds(overview_writer)
         timings['initialization_s'] = time.perf_counter() - collection_started - timings['physics_s'] - camera_seconds
@@ -1134,7 +1152,7 @@ with SimulationAppContext(args):
             measured[:3, 3] = carried['mustard'][:3]
             world.attachment = np.linalg.inv(kin.fk(carried['q'][ids])) @ measured
             result['attachment_after_lift'] = world.attachment.tolist()
-        transfer_mode = settings.get('transfer_mode_by_variant', {}).get(args.variant, 'front_waypoints')
+        transfer_mode = settings.get('transfer_mode_by_variant', {}).get(control_variant, 'front_waypoints')
         result['transfer_mode'] = transfer_mode
         if transfer_mode == 'front_waypoints':
             front_y = settings.get('transfer_y', -.56)

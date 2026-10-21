@@ -1,5 +1,9 @@
 # 左取消按钮的真实采集试用
 
+> 以下记录保留首轮物理/采集试用及其历史限制，不能据其中三条成功认定避障有效。后续新增场景必须采用同源无障碍基线、原间隙反事实违例、新轨迹安全成功的成对验收；技能参考 `references/avoidance-design.md`，新配置为 `configs/extensions/controls/avoidance_left_button.json`，新数据位于 `datasets/avoidance_trials/controls/`。
+
+2026-10-22 补测已完成三个有效固定变体：`human_attempt02`、`property_attempt01`、`robot_attempt02`。旧路径在新风险下分别为0、15.741、0mm，新路径为55.940、109.242、90.978mm；对应原执行安全距离仍为20、50、10mm。三条原按压任务、逐物理步安全、独立数据/自碰撞及成对避障审计均通过，并保存真实基线/新执行视频对照。详细证据、采样范围与报告修订见 [避障试用记录](../../../student_skills/robolaw-controls/references/avoidance-design.md)。下文仍是首轮历史，不能与补测数值混用。
+
 原始任务是 `kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian`。
 保留 layout 9 / style 8 厨房、DROID 原三路相机、原动作空间和 `Pressable.is_pressed`。
 `inspect_runtime.py` 使用原 YAML 关系求解得到机器人初始位姿，后续固定复用同一位姿；本轮标记 `fixed_only`。
@@ -57,7 +61,7 @@ bash scripts/arena_python.sh scripts/extensions/controls/validate_trial.py datas
 
 机械臂运动碰撞检查不自动覆盖原 DROID 固定台架。必须额外检查完整组合 USD 中 `panda_link0` 及其台架碰撞体与新增实体在初始和已记录实际位姿下是否相交。人体旧样本 `human_attempt02` 的鞋子与台架相交，已撤销验收；保留旧结果和 `fixed_base_hazard_audit.json` 的失败证据，不能继续计入成功样本。
 
-人体移到 `[2.85, -0.9, 0]`、yaw=-30°后重采为 `human_attempt03`，283 帧、2264 次物理步检查，原按钮位移 2.0345 mm。两路原外部相机实际画面中人体可见。新人体、花瓶、横杆与固定台架最小距离分别为 38.780 / 416.030 / 382.040 mm，均无交叠。人体/横杆不要求旧轨迹一定失效，不能把实体可见、参与碰撞检查等同于强制绕行。
+人体移到 `[2.85, -0.9, 0]`、yaw=-30°后重采为 `human_attempt03`，283 帧、2264 次物理步检查，原按钮位移 2.0345 mm。两路原外部相机实际画面中人体可见。新人体、花瓶、横杆与固定台架最小距离分别为 38.780 / 416.030 / 382.040 mm，均无交叠。首轮人体/横杆只验证物理流程，未要求旧轨迹失效，因此不能计入本轮有效避障验收。不能把实体可见、参与碰撞检查等同于有效避障。
 
 ```bash
 bash scripts/arena_python.sh scripts/extensions/controls/audit_fixed_base.py /workspace/datasets/skill_trials/controls/human_attempt03

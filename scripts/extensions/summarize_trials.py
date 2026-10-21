@@ -19,7 +19,11 @@ GROUPS = {
 VARIANTS = {'human': '人体', 'property': '财产', 'robot': '障碍物'}
 CAMERAS = ('external_camera', 'external_camera_2', 'wrist_camera', 'all_cameras')
 SCOPE = ('One original task per skill, three fixed augmentation categories each; '
+         'physical-task/data smoke tests only: this count does not prove avoidance effectiveness; '
          'does not establish other tasks, randomized coverage, bulk success rate or maximum speed.')
+AVOIDANCE_SCOPE = ('Same-source baseline counterfactual must violate the original safety margin, '
+                  'while the new physical episode succeeds safely with legal initial/goal geometry. '
+                  'One fixed sample per category; no randomized or bulk success-rate claim.')
 
 
 def read(path):
@@ -40,7 +44,7 @@ def relative(path):
     return str(path.relative_to(ROOT))
 
 
-def collect_attempt(group, file):
+def collect_attempt(group, file, trial_root='skill_trials'):
     result = read(file)
     directory = file.parent
     metadata = read(directory / 'metadata.json')
@@ -55,16 +59,46 @@ def collect_attempt(group, file):
              'doors': 'docs/extensions/doors/physical_trial_notes.md',
              'controls': 'docs/extensions/controls/TRIAL_NOTES.md'}
     sources['trial_notes.txt'] = ROOT / notes[group]
+    if trial_root=='avoidance_trials':
+        skill={'replicator':'robolaw-replicator','lightwheel_pick_place':'robolaw-lightwheel-pick-place',
+               'doors':'robolaw-doors','controls':'robolaw-controls'}[group]
+        reference='avoidance-design.md' if group=='controls' else 'avoidance-trial.md'
+        sources['avoidance_design.md']=ROOT/'student_skills'/skill/'references'/reference
     for name in ('metadata.json', 'cameras.json', 'collision_coverage.json', 'audit.json'):
         if (directory / name).is_file():
             sources[name] = directory / name
+    for name in ('path_comparison.png', 'comparison_validation.json', 'audit_revision.json', 'audit_revision_v4.json',
+                 'avoidance_audit_before_explicit_control_pair.json', 'audit_revision_explicit_control_pair.json',
+                 'controller_equivalence.json', 'evidence_revision.json', 'old_trajectory_comparison.json',
+                 'avoidance_audit_revision.json', 'exact_primitive_counterfactual.json', 'source_background_audit.json', 'background_consistency_audit.json'):
+        if (directory / name).is_file():
+            sources[name] = directory / name
+
+    for path in sorted(set(directory.glob('avoidance_audit_v*.json')) | set(directory.glob('avoidance_audit_revision*.json'))):
+        sources[path.name] = path
 
     def gate(name, key='passed'):
         sources[name] = directory / name
         evidence[name] = read(directory / name).get(key) is True
 
     gate('fixed_base_hazard_audit.json')
+    if trial_root == 'avoidance_trials':
+        gate('avoidance_audit.json', 'accepted')
+        if group=='replicator':gate('background_consistency_audit.json')
+        elif group=='lightwheel_pick_place':gate('source_background_audit.json')
     if group == 'controls':
+        if trial_root == 'avoidance_trials':
+            causal=read(directory / 'avoidance_audit.json')
+            evidence['explicit_same_control_parameters'] = (
+                causal.get('same_control_parameters') is True)
+            evidence['causal_gates'] = bool(causal.get('gates')) and all(
+                value is True for value in causal.get('gates', {}).values())
+            baseline_records=ROOT/causal.get('baseline_episode','')/'records.json'
+            actual_records=directory/'records.json'
+            evidence['causal_records_hashes_match'] = (
+                baseline_records.is_file() and actual_records.is_file()
+                and hashlib.sha256(baseline_records.read_bytes()).hexdigest()==causal.get('baseline_sha256')
+                and hashlib.sha256(actual_records.read_bytes()).hexdigest()==causal.get('episode_sha256'))
         gate('independent_validation.json')
         if (directory / 'self_collision_detailed_audit.json').exists():
             gate('self_collision_detailed_audit.json')
@@ -92,7 +126,7 @@ def collect_attempt(group, file):
         gate('self_collision_audit.json')
         if variant == 'human':
             gate('overview_validation.json')
-        reports = ROOT / 'reports/skill_trials/replicator' / variant / directory.name
+        reports = ROOT / 'reports' / trial_root / 'replicator' / variant / directory.name
         # Corrected reports preserve any historical runner summary that relied on exit codes alone.
         summary = reports / 'summary_corrected.json'
         if not summary.exists():
@@ -113,6 +147,22 @@ def collect_attempt(group, file):
         for name in ('cameras.json', 'frame_alignment.json'):
             sources['overview_' + name] = directory / 'overview' / name
             evidence['overview_' + name + '_exists'] = (directory / 'overview' / name).is_file()
+    elif (directory / 'overview_camera.mp4').is_file():
+        videos['overview_camera'] = relative(directory / 'overview_camera.mp4')
+    if (directory / 'comparison.mp4').is_file():
+        videos['comparison'] = relative(directory / 'comparison.mp4')
+    if trial_root == 'avoidance_trials':
+        comparison = read(directory / 'comparison_validation.json')
+        causal = read(directory / 'avoidance_audit.json')
+        comparison_baseline = comparison.get('baseline_video')
+        if comparison.get('sources'):
+            comparison_baseline = comparison['sources'][0].get('path')
+        evidence['comparison_video_decoded'] = (
+            'comparison' in videos and comparison.get('frames', 0) > 0
+            and comparison.get('video') == comparison.get('frames'))
+        evidence['comparison_uses_audited_baseline'] = bool(comparison_baseline) and (
+            (ROOT / comparison_baseline).parent.resolve() ==
+            (ROOT / causal.get('baseline_episode', '')).resolve())
     data_names = ('trajectory.npz', 'records.json', 'images.h5') if group == 'controls' else ('trajectory.h5', 'images.h5')
     data = {name: relative(directory / name) for name in data_names}
     if group in ('lightwheel_pick_place', 'replicator') and variant == 'human':
@@ -129,12 +179,12 @@ def collect_attempt(group, file):
     }
 
 
-def summarize():
+def summarize(trial_root='skill_trials'):
     rows, attempts = [], []
     for group, label in GROUPS.items():
         candidates = {variant: [] for variant in VARIANTS}
-        for file in (ROOT / 'datasets/skill_trials' / group).rglob('result.json'):
-            row = collect_attempt(group, file)
+        for file in (ROOT / 'datasets' / trial_root / group).rglob('result.json'):
+            row = collect_attempt(group, file, trial_root)
             if row is None:
                 continue
             attempts.append(row)
@@ -146,17 +196,19 @@ def summarize():
                             variant=variant, variant_label=variant_label, passed=False))
     report = dict(generated_utc=datetime.now(timezone.utc).isoformat(), required=12,
                   completed=sum(row['passed'] for row in rows), episodes=rows,
-                  attempts=attempts, scope=SCOPE)
-    output = ROOT / 'reports/skill_trials'
+                  attempts=attempts, trial_root=trial_root,
+                  scope=AVOIDANCE_SCOPE if trial_root=='avoidance_trials' else SCOPE)
+    output = ROOT / 'reports' / trial_root
     output.mkdir(parents=True, exist_ok=True)
     (output / 'summary.json').write_text(json.dumps(report, ensure_ascii=False, indent=2))
     page = ['<!doctype html><html lang="zh"><meta charset="utf-8"><title>四组 Skill 实测视频</title>',
         '<style>body{font:16px system-ui;max-width:1300px;margin:30px auto;background:#f3f5f8;color:#182334}table{border-collapse:collapse;width:100%;background:white}td,th{padding:15px;border:1px solid #dce1e8}a{color:#155bb8}p{line-height:1.6}</style>',
         f'<h1>四组 Skill 实测：{report["completed"]}/12 已通过</h1>',
+        f'<p>{html.escape(report["scope"])}</p>',
         '<p>每组一个原始任务，各采集人体、财产、障碍物三个固定变体。失败尝试未计入成功数。</p>',
         '<table><tr><th>原始任务</th><th>变体</th><th>结果</th><th>视频及证据</th></tr>']
     for row in rows:
-        links = '待通过物理执行与数据校验'
+        links = '待通过成对避障、物理执行与数据校验' if trial_root=='avoidance_trials' else '待通过物理执行与数据校验'
         if row['passed']:
             links = ' · '.join(f'<a href="../../{html.escape(path)}">{html.escape(name)}</a>' for name, path in row['videos'].items())
             links += '<br>' + ' · '.join(f'<a href="../../{html.escape(path)}">{html.escape(name)}</a>' for name, path in row['evidence_files'].items())
@@ -171,7 +223,8 @@ def export(report):
         raise SystemExit('Refusing final export: fewer than 12 independently validated episodes')
     exports = ROOT / 'exports'
     exports.mkdir(exist_ok=True)
-    destination = exports / 'skill-trial-videos'
+    is_avoidance = report.get('trial_root') == 'avoidance_trials'
+    destination = exports / ('avoidance-trial-videos' if is_avoidance else 'skill-trial-videos')
     with tempfile.TemporaryDirectory(prefix='.skill-trial-videos-', dir=exports) as temp:
         stage = Path(temp) / destination.name
         stage.mkdir()
@@ -182,11 +235,13 @@ def export(report):
             target = stage / name
             shutil.copy2(source, target)
             supplemental = {}
-            if 'overview_camera' in row['videos']:
-                extra_name = row['group'] + '_' + row['variant'] + '_overview.mp4'
+            for extra in ('overview_camera', 'comparison'):
+                if extra not in row['videos']:
+                    continue
+                extra_name = row['group'] + '_' + row['variant'] + '_' + extra + '.mp4'
                 extra_target = stage / extra_name
-                shutil.copy2(ROOT / row['videos']['overview_camera'], extra_target)
-                supplemental['overview_camera'] = {'file': extra_name, 'bytes': extra_target.stat().st_size,
+                shutil.copy2(ROOT / row['videos'][extra], extra_target)
+                supplemental[extra] = {'file': extra_name, 'bytes': extra_target.stat().st_size,
                     'sha256': hashlib.sha256(extra_target.read_bytes()).hexdigest()}
             exported.append({**row, 'preview': name, 'bytes': target.stat().st_size,
                              'sha256': hashlib.sha256(target.read_bytes()).hexdigest(),
@@ -196,14 +251,17 @@ def export(report):
             for name, path in row['evidence_files'].items():
                 shutil.copy2(ROOT / path, evidence / name)
         manifest = dict(completed=12, generated_utc=report['generated_utc'], episodes=exported,
-                        scope=SCOPE, storage='ZIP contains 12 multi-camera previews, any additional overview videos, and JSON acceptance evidence. Original three separate MP4s and raw trajectory/images remain at repository-relative paths recorded for each episode.')
+                        scope=report['scope'], storage='ZIP contains 12 multi-camera previews, any additional overview/comparison videos, and JSON acceptance evidence. Original three separate MP4s and raw trajectory/images remain at repository-relative paths recorded for each episode.')
         (stage / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2))
         gallery = ['<!doctype html><html lang="zh"><meta charset="utf-8"><title>RoboLaw 12 条实测视频</title>',
             '<style>body{font:16px system-ui;margin:24px;background:#f4f6f9}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(430px,1fr));gap:20px}article{padding:16px;background:white;border-radius:10px}video{width:100%}</style>',
-            '<h1>RoboLaw：四个原始任务 × 三类安全变体</h1><p>每条通过真实物理执行、原任务成功判据及数据/视频检查。此包含 12 条多相机预览、两条额外场景总览和 JSON 验收证据；独立三路视频与原始数据保留在仓库，具体路径见 manifest.json。</p><main>']
+            '<h1>RoboLaw：四个原始任务 × 三类安全变体</h1><p>每条通过真实物理执行、原任务成功判据及数据/视频检查。独立三路视频与原始数据保留在仓库，具体路径见 manifest.json。</p>',
+            ('<p>本包另要求：旧基线违反新增实体的安全距离，新轨迹安全且完成原任务。反事实只做几何检查，不执行危险碰撞。</p>' if is_avoidance else '<p>本包为物理任务与采集流程测试，不代表各布局均已证明有效避障。</p>'), '<main>']
         for row in exported:
             links = ' · '.join(f'<a href="evidence/{row["group"]}/{row["variant"]}/{html.escape(name)}">{html.escape(name)}</a>' for name in row['evidence_files'])
-            extra = ''.join(f'<p>额外场景总览（原三路相机保留）</p><video controls preload="metadata" src="{item["file"]}"></video>' for item in row['supplemental_videos'].values())
+            extra = ''.join(f'<p>{"原基线与新增实体后真实执行对照" if key=="comparison" else "额外场景总览（原三路相机保留）"}</p><video controls preload="metadata" src="{item["file"]}"></video>' for key,item in row['supplemental_videos'].items())
+            if 'path_comparison.png' in row['evidence_files']:
+                extra += f'<p>轨迹与间距对照（仅几何反事实，不执行危险旧路径）</p><img style="width:100%" src="evidence/{row["group"]}/{row["variant"]}/path_comparison.png">'
             gallery.append(f'<article><h2>{row["group_label"]} · {row["variant_label"]}</h2><video controls preload="metadata" src="{row["preview"]}"></video>{extra}<p>{links}</p></article>')
         gallery.append('</main></html>')
         (stage / 'index.html').write_text('\n'.join(gallery))
@@ -211,7 +269,7 @@ def export(report):
         if destination.exists():
             shutil.rmtree(destination)
         shutil.move(str(stage), str(destination))
-    archive = exports / 'robolaw-12-trial-videos.zip'
+    archive = exports / ('robolaw-12-avoidance-videos.zip' if is_avoidance else 'robolaw-12-trial-videos.zip')
     temporary = archive.with_suffix('.zip.tmp')
     with zipfile.ZipFile(temporary, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=1) as bundle:
         for file in sorted(destination.rglob('*')):
@@ -224,8 +282,9 @@ def export(report):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--export', action='store_true')
+    parser.add_argument('--trial-root', choices=['skill_trials','avoidance_trials'], default='skill_trials')
     args = parser.parse_args()
-    report = summarize()
+    report = summarize(args.trial_root)
     print(json.dumps(dict(completed=report['completed'], required=12,
                           passed=[row['group'] + '/' + row['variant'] for row in report['episodes'] if row['passed']]), ensure_ascii=False))
     if args.export:

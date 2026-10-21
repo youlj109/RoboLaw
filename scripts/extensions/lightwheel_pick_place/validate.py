@@ -175,11 +175,12 @@ def validate(out):
             'maximum_checks_per_action': int(audit_counts.max()) if n else 0,
             'scope': audit.get('scope')}
         if 'lift_support_contact_model' in result:
-            from audit_source_support import audit as audit_source_support
+            from audit_source_support import audit as audit_source_support, save_report
             support = audit_source_support(out)
-            (out / 'source_support_audit.json').write_text(json.dumps(support, indent=2))
+            support_path = save_report(support, out / 'source_support_audit.json')
             checks['measured_source_support_bounds'] = support.get('passed') is True
             details['source_support'] = {key: value for key, value in support.items() if key != 'measurements'}
+            details['source_support']['report_path'] = str(support_path)
         plans = [item for item in result.get('plans', []) if item.get('executed', True)]
         checks['all_plans_valid'] = bool(plans) and all(
             item.get('validation', {}).get('valid') is True
@@ -273,7 +274,7 @@ def validate(out):
             tilt = float(np.rad2deg(np.arccos(np.clip(ups @ initial_up, -1, 1))).max())
             details['property_max_displacement_m'] = displacement
             details['property_max_tilt_deg'] = tilt
-            checks['property_stable'] = displacement < .01 and tilt < 5.
+            checks['property_stable'] = displacement <= .005 and tilt <= 2.
 
     if result['variant'] != 'base':
         clearances = json.loads((out / 'clearances.json').read_text())

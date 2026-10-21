@@ -9,6 +9,7 @@ from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppCont
 parser=get_isaaclab_arena_cli_parser()
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
+parser.add_argument('--config',default='configs/extensions/controls/left_button_trial.json')
 parser.add_argument('--max-steps',type=int,default=300)
 parser.add_argument('--roll-deg',type=float,default=0)
 parser.add_argument('--tcp-z-offset',type=float,default=-.006)
@@ -33,9 +34,9 @@ with SimulationAppContext(args):
     from kitchen_safety.curobo_backend import CuroboPlanner
     from kitchen_safety.grasp_contacts import _numpy as contact_array
     torch.set_num_threads(4)
-    trial_config=json.loads(Path('configs/extensions/controls/left_button_trial.json').read_text())
+    trial_config=json.loads(Path(args.config).read_text())
     original_pose=trial_config['robot_pose_xyzw']
-    envdef,assets=build_environment(variant=args.variant,fixed_pose=original_pose)
+    envdef,assets=build_environment(variant=args.variant,fixed_pose=original_pose,trial_config=trial_config)
     envdef.task.episode_length_s=120.
     builder=ArenaEnvBuilder(envdef,ArenaEnvBuilderCfg(num_envs=1,seed=args.seed or 42,
         device=args.device,presets='physx',solve_relations=False))
@@ -108,6 +109,7 @@ with SimulationAppContext(args):
         physics_audits.append(entry)
         if not valid:raise RuntimeError('Physics-step clearance violation: '+json.dumps(entry))
     e.scene.update=checked_scene_update
+    initial_state=snapshot()
     def step(command,grip=1):
         global success_step
         if len(records)>=args.max_steps:raise RuntimeError('Bounded diagnostic step budget reached')
@@ -152,6 +154,7 @@ with SimulationAppContext(args):
         plan=planner.plan_pose(q,target,grip_binary=1,phase='prepress')
         validation=planner.validate_path(plan['positions'],grip_binary=1,phase='prepress')
         plan['metadata']['dense_path_validation']=validation
+        plan['metadata']['requested_tcp_pose']=target.tolist()
         plans.append(plan['metadata'])
         if not validation['valid']:raise RuntimeError('Prepress path failed complete cuRobo/FCL validation: '+json.dumps(validation))
         for command in plan['positions']:step(command)
@@ -211,6 +214,11 @@ with SimulationAppContext(args):
             'button_joint_limits_m':[0.,.0030166050419211388],
             'original_predicate':'Pressable.is_pressed(normalized_joint_position > 0.5)',
             'variant_spec':trial_config['variants'].get(args.variant),
+            'config_sha256':hashlib.sha256(Path(args.config).read_bytes()).hexdigest(),
+            'initial_state':initial_state,
+            'control_parameters':{'planner_seed':args.seed or 42,'max_joint_speed_rad_s':.4,
+                'roll_deg':args.roll_deg,'tcp_z_offset_m':args.tcp_z_offset,'tcp_x_offset_m':args.tcp_x_offset,
+                'press_y_increment_m':.0005,'physics_actions_per_press_increment':2},
             'final':snapshot(),'initial_robot_pose':original_pose,
             'physical_object_setters_after_reset':False,'fixed_only':True,'dt':e.step_dt,
             'robot_body_names':robot.body_names,'robot_joint_names':robot.joint_names,

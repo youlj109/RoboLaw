@@ -5,7 +5,7 @@ description: 为RoboLaw学生A独立扩展Replicator 全部14个抓放环境，�
 
 # 学生A：Replicator 全部14个抓放环境
 
-独立负责 **14个原始环境**；新分支 **ylj-replicator**。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界、现有缺口和验收要求。本技能自包含，不依赖其他技能或学生产出。已存在的 G 型首任务入口、正式 human04/property05/robot03 三类各1条真实成功与复现命令见 [verified-trial.md](references/verified-trial.md)；开发首任务前先读它，优先复用实际入口。人体另有同步的独立 overview 视频，不改变原三路相机。其余13个原始任务未实测。
+独立负责 **14个原始环境**；新分支 **ylj-replicator**。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界和验收要求；优先按 [avoidance-trial.md](references/avoidance-trial.md) 的真实入口、无障碍控制和强制因果验收复现 G 型 mustard→red bowl 首任务。本技能自包含，不依赖其他学生产出。本轮 human/attempt_04、property/attempt_02、robot/attempt_01 各1条已通过完整因果避障验收；baseline、实际参数和全部独立门禁见该实测页与 coverage。其余13个原始任务未实测。[verified-trial.md](references/verified-trial.md) 仅保留第一轮 skill_trials 三条物理场景历史，不能将它们当作有效避障样本。
 
 ## 首次执行
 

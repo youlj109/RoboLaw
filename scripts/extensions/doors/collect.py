@@ -3,7 +3,7 @@ import argparse,json,time,hashlib,traceback
 from pathlib import Path
 from isaaclab_arena.cli.isaaclab_arena_cli import get_isaaclab_arena_cli_parser
 from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppContext
-p=get_isaaclab_arena_cli_parser();p.add_argument('--variant',choices=['base','human','property','robot'],default='base');p.add_argument('--output',required=True);p.add_argument('--max-steps',type=int,default=500);p.add_argument('--handle-offset-y',type=float,default=0.);p.add_argument('--handle-offset-z',type=float,default=.12)
+p=get_isaaclab_arena_cli_parser();p.add_argument('--variant',choices=['base','human','property','robot'],default='base');p.add_argument('--output',required=True);p.add_argument('--max-steps',type=int,default=500);p.add_argument('--handle-offset-y',type=float,default=0.);p.add_argument('--handle-offset-z',type=float,default=.12);p.add_argument('--variant-config',default='configs/extensions/doors/open_fridge_variants.json');p.add_argument('--adaptive-handle-height',action='store_true')
 a=p.parse_args();a.enable_cameras=True
 out=Path(a.output)
 if (out/'result.json').exists() or (out/'images.h5').exists():raise SystemExit('Output already has trial data; use a new attempt directory')
@@ -26,7 +26,7 @@ with SimulationAppContext(a):
     from kitchen_safety.grasp_contacts import _numpy as contact_arr
     from kitchen_safety.curobo_backend import CuroboPlanner
     from pxr import UsdGeom,UsdPhysics,Usd
-    environment,graph=build(a.variant,True)
+    environment,graph=build(a.variant,True,a.variant_config)
     builder=ArenaEnvBuilder(environment,ArenaEnvBuilderCfg(device='cpu',seed=a.seed or 42,presets='physx',num_envs=1,solve_relations=True,resolve_on_reset=False,recorder_dataset_export_dir_path=str(out/'arena')))
     cfg,kw=builder.compose_manager_cfg();cfg.observations.camera_obs=None;cfg.sim.render_interval=cfg.decimation
     # Keep native progress tracking, but avoid automatic reset erasing the success frame.
@@ -41,6 +41,10 @@ with SimulationAppContext(a):
     def body_T():return transform(arr(fridge.data.body_pos_w)[0,door_id],arr(fridge.data.body_quat_w)[0,door_id])
     for _ in range(8):env.step(torch.tensor(np.r_[q,0.][None],dtype=torch.float32,device=e.device))
     base=arr(robot.data.root_pos_w)[0];yaw=Rotation.from_quat(arr(robot.data.root_quat_w)[0]).as_euler('xyz',degrees=True)[2]
+    variant_data=json.loads(Path(a.variant_config).read_text())
+    if variant_data.get('_fixed_source_layout'):
+        fixed=json.loads(Path(variant_data['_fixed_source_layout']).read_text())
+        if not np.allclose(base,fixed['expected_robot_base'],atol=2e-6,rtol=0) or abs(yaw-fixed['expected_robot_yaw_deg'])>1e-5:raise RuntimeError('Original solved source robot layout changed')
     kin=DroidKinematics(base,yaw);initial_door_T=body_T();cache=UsdGeom.XformCache()
     handle_prim=e.sim.stage.GetPrimAtPath(door_path+'/Collisions/fridge_door_handle_main')
     handle_T=np.array(cache.GetLocalToWorldTransform(handle_prim)).T
@@ -54,7 +58,14 @@ with SimulationAppContext(a):
     metadata={'task':graph.env_name,'variant':a.variant,'seed':a.seed or 42,'source_yaml_sha256':hashlib.sha256(TASK.read_bytes()).hexdigest(),'robot_base':base.tolist(),'robot_yaw_deg':float(yaw),'handle_initial':handle0.tolist(),'hinge':hinge.tolist(),'axis':axis.tolist(),'dt':e.step_dt,'physics_dt':cfg.sim.dt,'robot_body_names':robot.body_names,'robot_joint_names':robot.joint_names,'fridge_joint_names':fridge.joint_names,'initial_door_pose':np.r_[initial_door_T[:3,3],Rotation.from_matrix(initial_door_T[:3,:3]).as_quat()].tolist(),'task_success_rule':'native OpenDoorTask predicate_sequence; move >0.05 before open >0.2','episode_mode':'fixed_only','door_state_writes':'source reset only','camera_alignment':'obs[t] before action[t], next_obs[t] after action[t]'}
     from importlib.metadata import version
     metadata['software_versions']={name:version(name) for name in ('isaacsim','isaaclab','isaaclab-arena','nvidia-curobo','torch','warp-lang')}
-    metadata['implementation_sha256']={str(path):hashlib.sha256(Path(path).read_bytes()).hexdigest() for path in (__file__,'kitchen_safety/extensions/doors/environment.py','kitchen_safety/extensions/doors/collision.py','configs/extensions/doors/open_fridge_variants.json')}
+    metadata['variant_config']=a.variant_config;metadata['variant_spec']=None if a.variant=='base' else json.loads(Path(a.variant_config).read_text())[a.variant]
+    if a.variant!='base':
+        hazard_prim=e.sim.stage.GetPrimAtPath('/World/envs/env_0/'+metadata['variant_spec']['name'])
+        hazard_matrix=np.array(UsdGeom.XformCache().GetLocalToWorldTransform(hazard_prim)).T
+        metadata['actual_hazard_initial_pose']=[*hazard_matrix[:3,3],*Rotation.from_matrix(hazard_matrix[:3,:3]).as_quat()]
+    metadata['controller_parameters']={'seed':a.seed or 42,'handle_offset_y':a.handle_offset_y,'handle_offset_z':a.handle_offset_z,'max_joint_speed':.5}
+    if a.adaptive_handle_height:metadata['controller_parameters']['handle_height_candidates_m']=[a.handle_offset_z,a.handle_offset_z+.06,a.handle_offset_z+.10]
+    metadata['implementation_sha256']={str(path):hashlib.sha256(Path(path).read_bytes()).hexdigest() for path in (__file__,'kitchen_safety/extensions/doors/environment.py','kitchen_safety/extensions/doors/collision.py',a.variant_config)}
     (out/'metadata.json').write_text(json.dumps(metadata,indent=2))
     contact_view=scene['robot_contacts']._physics_sim_view.create_rigid_contact_view(['/World/envs/env_0/Robot/Gripper/Robotiq_2F_85/left_inner_finger','/World/envs/env_0/Robot/Gripper/Robotiq_2F_85/right_inner_finger'],filter_patterns=[[door_path],[door_path]],max_contact_data_count=4096)
     def snapshot():
@@ -78,19 +89,21 @@ with SimulationAppContext(a):
     def audit():
         state=snapshot();sync();angles=dict(zip(robot.joint_names,state['q']))
         ok=world.valid(np.array(state['q'])[ids],mode='execution',gripper_q={k:angles[k] for k in world.GRIPPER_JOINT_NAMES})
-        row={'action_index':len(rows),'phase':phase,'valid':ok,'failure':world.last_clearance}
+        row={'action_index':len(rows),'phase':phase,'valid':ok,'failure':world.last_clearance,'q':state['q'],'door_body_pose':state['door_body_pose'],'hazard_pose':state['hazard_pose'],'door_q':state['door_q']}
         hazard_key={'human':'person','property':'glass','robot':'barrier'}.get(a.variant)
         if hazard_key:
             distances=[]
+            support_spec=metadata['variant_spec'].get('support')
             for dn,do,dl,dh in world.objects:
                 if not dn.startswith(door_path+'/'):continue
                 for hn,ho,hl,hh in world.objects:
-                    if not world._matches(hn,hazard_key):continue
+                    if not world._matches(hn,hazard_key) and not (support_spec and world._matches(hn,support_spec['name'])):continue
                     bound=np.linalg.norm(np.maximum(np.maximum(hl-dh,dl-hh),0))
                     if bound>.15:continue
                     raw=float(world.fcl.distance(do,ho,world.fcl.DistanceRequest(),world.fcl.DistanceResult()))
                     distances.append({'door_shape':dn,'hazard_shape':hn,'distance_m':max(raw,0.),'intersecting':raw<0})
-                    if raw<world.execution_clearances[hazard_key]:ok=False
+                    required=world.execution_clearances[hazard_key] if world._matches(hn,hazard_key) else world.default_clearance
+                    if raw<required:ok=False
             row['door_hazard_pairs_near_15cm']=distances;row['valid']=ok
         checks.append(row)
         if not ok:raise RuntimeError('EXECUTION_COLLISION '+json.dumps(row))
@@ -118,9 +131,19 @@ with SimulationAppContext(a):
         step(q,0.)
         planner=CuroboPlanner(world,kin,dt=e.step_dt,seed=a.seed or 42,max_joint_speed=.5)
         handles=tuple(n.rsplit('/',1)[-1] for n,*_ in world.objects if '/fridge_door_handle' in n)
-        target=np.eye(4);target[:3,:3]=R0;target[:3,3]=handle0+[0,-.13,0]
-        phase='pregrasp';print('DOOR_PLAN',phase,target.tolist(),flush=True)
-        plan=planner.plan_pose(q,target,phase='door_pregrasp');plans.append(plan['metadata'])
+        target=np.eye(4);target[:3,:3]=R0;default_handle=handle0.copy();candidate_failures=[];plan=None;candidate_queries=[]
+        phase='pregrasp'
+        for offset in ([0.,.06,.10] if a.adaptive_handle_height else [0.]):
+            handle0=default_handle+[0.,0.,offset];target[:3,3]=handle0+[0,-.13,0]
+            candidate_queries.append({'offset_z_m':a.handle_offset_z+offset,'requested_handle_point_world':handle0.tolist(),'requested_pregrasp_pose_world':target.tolist()})
+            print('DOOR_PLAN',phase,target.tolist(),flush=True)
+            try:plan=planner.plan_pose(q,target,phase='door_pregrasp')
+            except RuntimeError as exc:
+                candidate_failures.append({'handle_offset_z_m':a.handle_offset_z+offset,'reason':str(exc),'executed_actions':0});continue
+            metadata['selected_handle_initial']=handle0.tolist();metadata['selected_handle_offset_z_m']=a.handle_offset_z+offset;break
+        metadata['handle_candidate_failures']=candidate_failures;metadata['handle_candidate_queries']=candidate_queries;metadata['handle_selection_policy']='First feasible collision-aware cuRobo plan from the same ordered source-handle height candidates; no variant-label branch.';(out/'metadata.json').write_text(json.dumps(metadata,indent=2))
+        if plan is None:raise RuntimeError('All unchanged-task handle-height candidates rejected: '+json.dumps(candidate_failures))
+        plans.append(plan['metadata'])
         for command in plan['positions']:step(command,0.)
         phase='approach_handle';world.allow_handle_contact=True
         for alpha in np.linspace(0,1,50)[1:]:
@@ -152,6 +175,20 @@ with SimulationAppContext(a):
         if not source_success:raise RuntimeError('Original OpenDoorTask predicate sequence not achieved')
         phase='success_hold'
         for _ in range(5):step(q,1.)
+        if not bool(predicate[1](e)[0]):
+            # A threshold crossing can settle back by a fraction of a degree.
+            # Recover through the same real handle contact, never a door-state
+            # write. The original strict native threshold remains unchanged.
+            phase='recover_open';stable=0
+            for _ in range(45):
+                measured=rows[-1]['next_obs']['door_q'];angle=min(measured+.018,.40)
+                rr=Rotation.from_rotvec(axis*angle).as_matrix();target[:3,:3]=rr@R0;target[:3,3]=hinge+rr@(handle0-hinge)
+                command=kin.ik(target,q,attempts=1);delta_q=command-q;command=q+delta_q/max(1.,float(np.max(np.abs(delta_q)))/.025)
+                world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')]);sync(update_planner=True);planner._prepare_path_query(handles,1.,phase)
+                if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(command[None])).all()):raise RuntimeError('cuRobo rejected recovery pull')
+                step(command,1.);stable=stable+1 if bool(predicate[1](e)[0]) else 0
+                if stable>=5:break
+            if stable<5:raise RuntimeError('Final original door-open predicate did not stabilize')
     except Exception as exc:
         failure=f'{type(exc).__name__}: {exc}';traceback.print_exc()
     finally:

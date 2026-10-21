@@ -74,38 +74,41 @@ def hazard_colliders(entry,pose,visible=False):
  assert rows
  return rows
 
-parser=argparse.ArgumentParser();parser.add_argument('--episode',action='append');parser.add_argument('--report',default=str(ROOT/'reports/skill_trials/replicator/fixed_base_audit.json'));args=parser.parse_args()
-paths=[Path(x) for x in args.episode] if args.episode else [ROOT/'datasets/skill_trials/replicator'/v/a for v,a in [('human','attempt_01'),('property','attempt_03'),('robot','attempt_02')]]
-records=[]
-for out in paths:
- variant,attempt=out.parent.name,out.name;result=json.loads((out/'result.json').read_text());entry=result['obstacle']
- with h5py.File(out/'trajectory.h5') as f:
-  names=json.loads(f.attrs['robot_body_names']);base_pose=f['obs/robot_body_pose_w'][0,names.index('panda_link0')]
-  measured_hazard=f['obs/hazard_pose'][0] if 'hazard_pose' in f['obs'] else None
- fixed=fixed_colliders(base_pose)
- authored=np.r_[entry['position'],Rotation.from_euler('z',entry.get('yaw_deg',0),degrees=True).as_quat()]
- pose_sets=[('authored_initial',authored)]
- if measured_hazard is not None:pose_sets.append(('first_recorded_physics_pose',measured_hazard))
- audits=[]
- geometries={}
- for mode in ('authored_collision','visible_surface'):
-  fixed=fixed_colliders(base_pose,visible=mode=='visible_surface')
-  geometries[mode]=[x[1] for x in fixed]
-  for pose_source,pose in pose_sets:
-   hazard=hazard_colliders(entry,pose,visible=mode=='visible_surface');pairs=[]
-   for body,body_info in fixed:
-    for item,item_info in hazard:
-     contacts=fcl.CollisionResult();count=fcl.collide(body,item,fcl.CollisionRequest(num_max_contacts=1,enable_contact=True),contacts)
-     raw=float(fcl.distance(body,item,fcl.DistanceRequest(),fcl.DistanceResult()))
-     pairs.append(dict(fixed=body_info['path'],hazard=item_info['path'],intersecting=bool(count),distance_m=max(0.,raw),raw_fcl_distance=raw))
-   audits.append(dict(geometry_mode=mode,pose_source=pose_source,hazard_pose=pose.tolist(),hazard_colliders=len(hazard),pairs_checked=len(pairs),intersecting_pair_count=sum(x['intersecting'] for x in pairs),minimum_pair=min(pairs,key=lambda x:x['distance_m']),intersections=[x for x in pairs if x['intersecting']],hazard_geometry=[x[1] for x in hazard]))
- records.append(dict(variant=variant,attempt=attempt,base_pose_world_xyz_xyzw=base_pose.tolist(),fixed_geometry=geometries,checks=audits,passed=all(x['intersecting_pair_count']==0 for x in audits)))
-report=dict(passed=all(x['passed'] for x in records),scope='Read-only CPU initial hazard versus actual composed DROID stand and fixed panda_link0 collider geometry. No moving-arm replay. Collision audit: solid convexHull according to USD, exact primitives, triangle meshes; no PhysX cooked-hull tolerance claim. Additional visible geometry audit: all non-proxy visible primitives and actual mesh triangles, checking surface intersection; solid collision checks cover containment where colliders have solid semantics.',assembly=str(ASSEMBLY.relative_to(ROOT)),assembly_sha256=hashlib.sha256(ASSEMBLY.read_bytes()).hexdigest(),episodes=records)
-p=Path(args.report);p.write_text(json.dumps(report,indent=2)+'\n')
-for record in records:
- sidecar={k:v for k,v in report.items() if k not in ('episodes','passed')}
- sidecar.update(record)
- target=ROOT/'datasets/skill_trials/replicator'/record['variant']/record['attempt']/'fixed_base_hazard_audit.json'
- target.write_text(json.dumps(sidecar,indent=2)+'\n')
-print(json.dumps(dict(passed=report['passed'],episodes=[dict(variant=x['variant'],passed=x['passed'],checks=[{k:c[k] for k in ['geometry_mode','pose_source','pairs_checked','intersecting_pair_count','minimum_pair']} for c in x['checks']]) for x in records]),indent=2))
-raise SystemExit(0 if report['passed'] else 1)
+def main():
+ parser=argparse.ArgumentParser();parser.add_argument('--episode',action='append');parser.add_argument('--report',default=str(ROOT/'reports/skill_trials/replicator/fixed_base_audit.json'));args=parser.parse_args()
+ paths=[Path(x) for x in args.episode] if args.episode else [ROOT/'datasets/skill_trials/replicator'/v/a for v,a in [('human','attempt_01'),('property','attempt_03'),('robot','attempt_02')]]
+ records=[]
+ for out in paths:
+  variant,attempt=out.parent.name,out.name;result=json.loads((out/'result.json').read_text());entry=result['obstacle']
+  with h5py.File(out/'trajectory.h5') as f:
+   names=json.loads(f.attrs['robot_body_names']);base_pose=f['obs/robot_body_pose_w'][0,names.index('panda_link0')]
+   measured_hazard=f['obs/hazard_pose'][0] if 'hazard_pose' in f['obs'] else None
+  fixed=fixed_colliders(base_pose)
+  authored=np.r_[entry['position'],Rotation.from_euler('z',entry.get('yaw_deg',0),degrees=True).as_quat()]
+  pose_sets=[('authored_initial',authored)]
+  if measured_hazard is not None:pose_sets.append(('first_recorded_physics_pose',measured_hazard))
+  audits=[]
+  geometries={}
+  for mode in ('authored_collision','visible_surface'):
+   fixed=fixed_colliders(base_pose,visible=mode=='visible_surface')
+   geometries[mode]=[x[1] for x in fixed]
+   for pose_source,pose in pose_sets:
+    hazard=hazard_colliders(entry,pose,visible=mode=='visible_surface');pairs=[]
+    for body,body_info in fixed:
+     for item,item_info in hazard:
+      contacts=fcl.CollisionResult();count=fcl.collide(body,item,fcl.CollisionRequest(num_max_contacts=1,enable_contact=True),contacts)
+      raw=float(fcl.distance(body,item,fcl.DistanceRequest(),fcl.DistanceResult()))
+      pairs.append(dict(fixed=body_info['path'],hazard=item_info['path'],intersecting=bool(count),distance_m=max(0.,raw),raw_fcl_distance=raw))
+    audits.append(dict(geometry_mode=mode,pose_source=pose_source,hazard_pose=pose.tolist(),hazard_colliders=len(hazard),pairs_checked=len(pairs),intersecting_pair_count=sum(x['intersecting'] for x in pairs),minimum_pair=min(pairs,key=lambda x:x['distance_m']),intersections=[x for x in pairs if x['intersecting']],hazard_geometry=[x[1] for x in hazard]))
+  records.append(dict(variant=variant,attempt=attempt,base_pose_world_xyz_xyzw=base_pose.tolist(),fixed_geometry=geometries,checks=audits,passed=all(x['intersecting_pair_count']==0 for x in audits)))
+ report=dict(passed=all(x['passed'] for x in records),scope='Read-only CPU initial hazard versus actual composed DROID stand and fixed panda_link0 collider geometry. No moving-arm replay. Collision audit: solid convexHull according to USD, exact primitives, triangle meshes; no PhysX cooked-hull tolerance claim. Additional visible geometry audit: all non-proxy visible primitives and actual mesh triangles, checking surface intersection; solid collision checks cover containment where colliders have solid semantics.',assembly=str(ASSEMBLY.relative_to(ROOT)),assembly_sha256=hashlib.sha256(ASSEMBLY.read_bytes()).hexdigest(),episodes=records)
+ p=Path(args.report);p.write_text(json.dumps(report,indent=2)+'\n')
+ for episode_path,record in zip(paths,records):
+  sidecar={k:v for k,v in report.items() if k not in ('episodes','passed')}
+  sidecar.update(record)
+  target=episode_path/'fixed_base_hazard_audit.json'
+  target.write_text(json.dumps(sidecar,indent=2)+'\n')
+ print(json.dumps(dict(passed=report['passed'],episodes=[dict(variant=x['variant'],passed=x['passed'],checks=[{k:c[k] for k in ['geometry_mode','pose_source','pairs_checked','intersecting_pair_count','minimum_pair']} for c in x['checks']]) for x in records]),indent=2))
+ raise SystemExit(0 if report['passed'] else 1)
+
+if __name__=='__main__':main()

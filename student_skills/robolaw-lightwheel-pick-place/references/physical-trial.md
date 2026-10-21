@@ -1,4 +1,6 @@
-# 青柠入木碗：实际执行参考
+# 青柠入木碗：历史物理流程验证参考
+
+**本页旧三条不是有效避障样本。** 原基线在这些新增物体下仍安全，仅用于复用物理执行、数据和相机的已验证机制。最新强制验收见 [avoidance-trial.md](avoidance-trial.md)，不得把本页3条计为障碍迫使绕行的成果。
 
 本参考对应 `kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian`，源 YAML SHA256 为 `c49ae7320caaa136df9aa6e25194e862b555379ae4fc3f5b4e1f559093005598`。这是 Lightwheel L 型 Scandinavian 厨房，不是原 one-wall 芥末瓶任务。读取本组实现时使用本文件；其他4个任务仍需分别实现与物理验证。
 
@@ -28,7 +30,7 @@ bash scripts/arena_python.sh student_skills/robolaw-lightwheel-pick-place/script
 mkdir -p reports/skill_trials/lightwheel_pick_place
 bash scripts/arena_python.sh scripts/extensions/lightwheel_pick_place/restore_assets.py
 bash scripts/arena_python.sh scripts/extensions/lightwheel_pick_place/restore_lightwheel.py
-bash scripts/extensions/lightwheel_pick_place/run.sh collect.py --device cpu --variant base --seed 42 --placement-seed 42 --output /workspace/datasets/skill_trials/lightwheel_pick_place/base_new
+bash scripts/extensions/lightwheel_pick_place/run.sh collect.py --device cpu --variant base --seed 42 --placement_seed 42 --output /workspace/datasets/skill_trials/lightwheel_pick_place/base_new
 bash scripts/arena_python.sh scripts/extensions/lightwheel_pick_place/validate.py /workspace/datasets/skill_trials/lightwheel_pick_place/base_new
 bash scripts/extensions/lightwheel_pick_place/run.sh audit_self_collision.py /workspace/datasets/skill_trials/lightwheel_pick_place/base_new
 ```
