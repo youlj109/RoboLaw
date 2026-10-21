@@ -1,0 +1,75 @@
+# Lift2 robot configuration
+# Dual-arm 6-DOF robot with lift joint
+
+# Robot info
+target_class: Lift2
+path: "lift2/robot_invisible.usd"
+
+# CuRobo file
+robot_file:
+  - workflows/simbox/curobo/src/curobo/content/configs/robot/r5a_left_arm.yml
+  - workflows/simbox/curobo/src/curobo/content/configs/robot/r5a_right_arm.yml
+
+# Gripper parameters
+gripper_max_width: 0.088
+gripper_min_width: 0.0
+tcp_offset: 0.125
+
+# Solver parameters
+solver_position_iteration_count: 128
+solver_velocity_iteration_count: 4
+stabilization_threshold: 0.005
+
+# Joint indices
+left_joint_indices: [10, 12, 14, 16, 18, 20]
+right_joint_indices: [9, 11, 13, 15, 17, 19]
+left_gripper_indices: [23]
+right_gripper_indices: [21]
+lift_indices: [6]
+
+# Paths
+fl_ee_path: "lift2/lift2/fl/link6"
+fr_ee_path: "lift2/lift2/fr/link6"
+fl_base_path: "lift2/lift2/fl/base_link"
+fr_base_path: "lift2/lift2/fr/base_link"
+
+# Gripper keypoints
+fl_gripper_keypoints:
+  tool_head: [0.135, 0.0, 0.0, 1]
+  tool_tail: [0.085, 0.0, 0.0, 1]
+  tool_side: [0.135, -0.044, 0.0, 1]
+fr_gripper_keypoints:
+  tool_head: [0.135, 0.0, 0.0, 1]
+  tool_tail: [0.085, 0.0, 0.0, 1]
+  tool_side: [0.135, -0.044, 0.0, 1]
+
+# Collision paths
+fl_filter_paths:
+  - "lift2/lift2/fl/link7"
+  - "lift2/lift2/fl/link8"
+fr_filter_paths:
+  - "lift2/lift2/fr/link7"
+  - "lift2/lift2/fr/link8"
+fl_forbid_collision_paths:
+  - "lift2/lift2/fl/link2"
+  - "lift2/lift2/fl/link3"
+  - "lift2/lift2/fl/link4"
+  - "lift2/lift2/fl/link5"
+fr_forbid_collision_paths:
+  - "lift2/lift2/fr/link2"
+  - "lift2/lift2/fr/link3"
+  - "lift2/lift2/fr/link4"
+  - "lift2/lift2/fr/link5"
+
+# Pose processing (X-axis gripper)
+R_ee_graspnet: [[1.0, 0.0, 0.0], [0.0, -1.0, 0.0], [0.0, 0.0, -1.0]]
+ee_axis: "x"
+
+# Default joint home positions
+left_joint_home: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+right_joint_home: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+left_joint_home_std: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+right_joint_home_std: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+left_gripper_home: [0.044]
+right_gripper_home: [0.044]
+lift_home: [0.46]

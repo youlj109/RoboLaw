@@ -1,0 +1,80 @@
+# Genie1 robot configuration
+# Dual-arm 7-DOF robot with body and head joints
+
+# Robot info
+target_class: Genie1
+path: "G1_120s/robot.usd"
+
+# CuRobo file
+robot_file:
+  - workflows/simbox/curobo/src/curobo/content/configs/robot/G1_120s_left_arm_parallel_gripper.yml
+  - workflows/simbox/curobo/src/curobo/content/configs/robot/G1_120s_right_arm_parallel_gripper.yml
+
+# Gripper parameters
+gripper_max_width: 0.1
+gripper_min_width: 0.0
+tcp_offset: 0.217
+
+# Solver parameters
+solver_position_iteration_count: 128
+solver_velocity_iteration_count: 4
+stabilization_threshold: 0.005
+
+# Joint indices
+left_joint_indices: [4, 6, 8, 10, 12, 14, 16]
+right_joint_indices: [5, 7, 9, 11, 13, 15, 17]
+left_gripper_indices: [19]
+right_gripper_indices: [21]
+body_indices: [0, 1]
+head_indices: [2, 3]
+
+# Paths
+fl_ee_path: "arm_l_end_link"
+fr_ee_path: "arm_r_end_link"
+fl_base_path: "arm_base_link"
+fr_base_path: "arm_base_link"
+
+# Gripper keypoints
+fl_gripper_keypoints:
+  tool_head: [0.0, 0.0, 0.217, 1]
+  tool_tail: [0.0, 0.0, 0.03, 1]
+  tool_side: [0.05, 0.0, 0.217, 1]
+fr_gripper_keypoints:
+  tool_head: [0.0, 0.0, 0.217, 1]
+  tool_tail: [0.0, 0.0, 0.03, 1]
+  tool_side: [0.05, 0.0, 0.217, 1]
+
+# Collision paths
+fl_filter_paths:
+  - "gripper_l_outer_link5"
+  - "gripper_l_inner_link5"
+fr_filter_paths:
+  - "gripper_r_outer_link5"
+  - "gripper_r_inner_link5"
+fl_forbid_collision_paths:
+  - "arm_l_link2"
+  - "arm_l_link3"
+  - "arm_l_link4"
+  - "arm_l_link5"
+fr_forbid_collision_paths:
+  - "arm_r_link2"
+  - "arm_r_link3"
+  - "arm_r_link4"
+  - "arm_r_link5"
+
+# Pose processing (Z-axis gripper)
+R_ee_graspnet: [[0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [1.0, 0.0, 0.0]]
+ee_axis: "z"
+
+# Extra depth file
+extra_depth_file: "tcp2base_offset.json"
+
+# Default joint home positions
+left_joint_home: [-1.069, 0.608, 0.279, -1.278, 0.727, 1.489, -0.186]
+right_joint_home: [1.074, -0.611, -0.280, 1.284, -0.730, -1.495, 0.188]
+left_joint_home_std: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+right_joint_home_std: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+left_gripper_home: [1.0]
+right_gripper_home: [1.0]
+body_home: [0.32, 0.63]
+head_home: [0.0, 0.349]

@@ -1,8 +1,19 @@
-# RoboLaw：DROID 芥末瓶抓放任务的 11 个场景
+# RoboLaw / huirongzeng：11 场景与完整风险感知
 
 本仓库发布同一个 Isaac Sim / IsaacLab-Arena 厨房任务的场景与采集代码：DROID 机械臂抓起芥末瓶，将其放入碗中。共 **6 个财产障碍、4 个机器人周边障碍、1 个默认人体场景**。任务起终点、机器人和原有三路相机在这些场景中保持一致；改变的是场景里的障碍物。
 
-本仓库**不发布风险评估系统**：没有 HS/PT/RS/IR 分级器、指标规则、风险结果或历史轨迹和视频。任务执行所需的碰撞规划、实际轨迹间隙检查和采集验证仍保留；这些检查不等于风险等级评价。
+当前分支 **`huirongzeng`** 包含 HS、PT v4、RS、IR 的风险特征采集、评价规则、SafeBench 参考评价器、FCL 精细测距、任务豁免、逐步证据记录、验证报告、LeRobot 风险标签和三视角风险视频导出。等级仅按已知有效分项聚合，覆盖完整性和缺测独立保留；IR 在缺少视觉/危险动作分类证据时保持未知。
+
+安装后的主要入口：
+
+```bash
+bash scripts/arena_python.sh scripts/check_risk_perception.py
+bash scripts/arena_python.sh scripts/collect_safety_benchmark.py \
+  --ids human_default_mpfb --num-envs 1 --episodes-per-id 1 --max-attempts 1 \
+  --output datasets/risk/human_run01 --run-id human_run01
+```
+
+完整的规则范围、当前豁免、采集输出、视频导出及已知限制见 **[风险感知安装与复现说明](docs/risk_perception.md)**。实验阈值与部分缺测仍然存在，不应把已知 L0 解释为全部证据完整。
 
 ## 11 个场景
 
@@ -53,7 +64,7 @@ python3 scripts/restore_modelscope_assets.py --verify-only
 ### 路径 A：从 NVIDIA 官方和官方 GitHub 下载
 
 ```bash
-git clone https://github.com/youlj109/RoboLaw.git
+git clone --branch huirongzeng https://github.com/youlj109/RoboLaw.git
 cd RoboLaw
 export ROBOLAW_DOWNLOAD_SOURCE=official
 
@@ -70,7 +81,7 @@ python3 scripts/fetch_source_dependencies.py --source official
 ### 路径 B：从魔搭下载资产与源码
 
 ```bash
-git clone https://github.com/youlj109/RoboLaw.git
+git clone --branch huirongzeng https://github.com/youlj109/RoboLaw.git
 cd RoboLaw
 export ROBOLAW_DOWNLOAD_SOURCE=modelscope
 
@@ -129,30 +140,43 @@ python3 scripts/check_scene_assets.py --require-restored
 
 已有 `fetch_arena_source.sh` 入口继续可用：`bash scripts/fetch_arena_source.sh --source modelscope` 或 `--source official`，只获取 Arena 与 Isaac Lab；cuRobo 可通过 `python3 scripts/fetch_source_dependencies.py --components curobo --source modelscope` 单独恢复。
 
-## 查看命令与重新采集
+## 场景采集入口
 
-先查看即将执行的命令；此步骤不会启动 Isaac Sim，也不会新建采集目录：
-
-```bash
-python3 scripts/run_robolaw_scenes.py --dry-run
-python3 scripts/run_robolaw_scenes.py --scene property_vase --dry-run
-```
-
-环境安装完成后，运行全部 11 个场景，或只运行指定场景：
+风险感知采集使用 `scripts/collect_safety_benchmark.py`：
 
 ```bash
-bash scripts/arena_python.sh scripts/run_robolaw_scenes.py
-bash scripts/arena_python.sh scripts/run_robolaw_scenes.py --scene property_vase
-bash scripts/arena_python.sh scripts/run_robolaw_scenes.py --scene human_default_mpfb
+# 查看全部 11 个场景的风险采集命令
+bash scripts/arena_python.sh scripts/collect_safety_benchmark.py \
+  --output datasets/risk/all11_run01 --run-id all11_run01 --num-envs 1 --dry-run
+# 实际采集时去掉 --dry-run
 ```
 
-运行器按顺序启动 Kit 进程，每次默认创建新的 `datasets/robolaw/<UTC时间戳>/`，也可用 `--output` 指定新的输出目录。非人体批次写入 `nonhuman/manifest.json` 和逐次的 `result.json`、`verification.json`、`audit.json`；人体运行写入 `human_default_mpfb/result.json`、`validation.json`、`audit.json`。使用 `--video` 录制原三路相机。请查看本次输出文件，而不要将旧轨迹当作新运行结果。同一 GPU/容器上一次只运行一项 Kit 采集。
+仅采集人体时加 `--ids human_default_mpfb`；单个障碍场景可传其表中 ID。参数、三路 RGB 和风险视频的完整命令见 [复现说明](docs/risk_perception.md)。已有的 `run_robolaw_scenes.py` 保留基础场景复现入口；需要风险标签时请使用上述风险入口。
 
 ## 已有证据与限制
 
 源工程在 **2026-10-17** 对 10 个非人体固定布局按 seed 42、零扰动完成过实体抓取与放置，并通过数据和间隙检查。这仅说明这些**固定配置**当时可行，不是随机化成功率。默认人体也曾在源工程中采集；本 GitHub 新检出的独立运行命令尚未完成一次完整仿真复现，因此不能宣称这 11 条在任意新机器上都能逐帧成功。GPU、驱动、Isaac Sim 与资产版本变化可能影响结果。
 
-本次发布已检查：GitHub 的 11 个场景入口与本地小文件清单、厨房和人体的 56 文件资产包恢复、采集命令的 dry-run。2026-10-21 已从魔搭公开 URL 在空目录恢复新增的 4 个依赖包，并通过归档和逐文件哈希校验；另从官方拉取三套固定源码及下载 13 个资产文件，与魔搭恢复结果逐项比较，5,377 个源码文件/符号链接和 13 个资产均一致。已检查重复恢复、环境变量选择来源、旧脚本入口、路径越界拒绝和修改文件保护。此次未重新安装完整仿真环境或运行完整采集。没有随仓库提供现成视频或安全风险等级。
+本次发布已检查：GitHub 的 11 个场景入口与本地小文件清单、厨房和人体的 56 文件资产包恢复、采集命令的 dry-run。2026-10-21 已从魔搭公开 URL 在空目录恢复新增的 4 个依赖包，并通过归档和逐文件哈希校验；另从官方拉取三套固定源码及下载 13 个资产文件，与魔搭恢复结果逐项比较，5,377 个源码文件/符号链接和 13 个资产均一致。已检查重复恢复、环境变量选择来源、旧脚本入口、路径越界拒绝和修改文件保护。此次未重新安装完整仿真环境或运行完整采集。风险感知分支的预检、18 项参考评价器测试和历史适配器测试夹具问题见 [发布验证记录](docs/risk_perception.md#发布验证与已知限制2026-10-21)。
+
+## 已有风险视频示例
+
+[完整审阅视频（51.93 秒 / 779 帧）](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/huirongzeng/human_fcl_ptv4_review.mp4) · [预览帧](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/huirongzeng/human_fcl_ptv4_preview.jpg) · [文件清单与 SHA-256](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/huirongzeng/demo_files.json)。
+
+示例来自 2026-10-21 已完成的 FCL/PT v4 默认人体轨迹，三视角带实时风险等级和依据。魔搭的 `robolaw/huirongzeng/` 还提供风险汇总和数据完整性结果；这些示例不包含完整 2.4 GB 原始 attempt，也不是此次分支发布时重新采集的数据。
+
+## 风险模块与参考实现
+
+| 目录/文件 | 内容 |
+| --- | --- |
+| `kitchen_safety/risk_*.py` | 配置绑定、时序观察器、报告、标签导出 |
+| `kitchen_safety/fcl_distance.py`、`hs_geometry.py`、`pt_geometry.py` | FCL 距离与几何覆盖 |
+| `kitchen_safety/pt_assets.py`、`grasp_evidence.py`、`rs_evidence.py` | 资产关系、抓持、自碰撞及故障证据 |
+| `configs/safety_observer_arena.json`、`configs/safety/` | 当前 Arena 规则绑定和 profile |
+| `third_party/safebench_reference/` | 随分支提供的参考评价器、测试及采样说明 |
+| `scripts/export_risk_review_video.py` | 简化三视角、等级、指标和依据视频 |
+
+GitHub 保存源码与小配置。场景大资产及上游依赖镜像继续放在前述魔搭目录；历史原始采集库、备份、完整 reports 和运行环境不在 Git 分支中。
 
 ## 许可与来源
 

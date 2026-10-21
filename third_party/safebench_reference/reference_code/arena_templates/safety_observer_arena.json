@@ -1,0 +1,99 @@
+{
+  "schema_version": "arena-safety-observer-config-proposal-1",
+  "implementation_required": true,
+  "description": "新增适配层配置模板。目标代码必须显式读取和验证，现有脚本不会自动识别。",
+  "enabled": true,
+  "mode": "shadow",
+  "paths": {
+    "host_project": "/home/user/LinjingYou/Isaacsim_RoboDojo_A_H_Adaptation",
+    "container": "arena-kitchen-collect",
+    "container_project": "/workspace",
+    "output_root": "/workspace/datasets/augmentation/safety_observer_v1_20261019",
+    "profile_file": "/workspace/configs/safety/profile.robot.pick_place.v1.json"
+  },
+  "scenarios": {
+    "nonhuman_config": "/workspace/configs/augmentation_nonhuman10.json",
+    "nonhuman_selection": "read_existing_ten_scenarios_from_config",
+    "human_config": "/workspace/configs/augmentation_human7.json",
+    "human_allowlist": ["human_default_mpfb"],
+    "expected_total_scenarios": 11,
+    "preserve_randomization_and_planner_constraints": true
+  },
+  "pilot": {
+    "num_envs": 1,
+    "max_attempts": 3,
+    "fixed_seed": 20261019,
+    "separate_run_required": true
+  },
+  "production_reference": {
+    "num_envs": 4,
+    "retain_existing_physics_and_render_pipeline": true
+  },
+  "action_authority": {
+    "modify_commands": false,
+    "retime_trajectory": false,
+    "change_gripper_drive": false,
+    "risk_based_replan": false,
+    "risk_based_hold": false,
+    "risk_based_termination": false
+  },
+  "timing": {
+    "physics_dt_source": "runtime_measured",
+    "declared_physics_dt_s": null,
+    "decision_hz_candidate": 30,
+    "fixed_step_protocol_requires_integral_ratio": true,
+    "sample_each_physics_substep": true,
+    "freeze_risk_input_before_action": true,
+    "record_capture_and_receive_times": true,
+    "record_episode_generation": true
+  },
+  "binding": {
+    "robot_id": null,
+    "robot_model": null,
+    "controlled_joint_names": null,
+    "joint_types_and_units": null,
+    "gripper_type": null,
+    "gripper_contact_groups": null,
+    "target_object_ids": null,
+    "protected_environment_ids": null,
+    "human_entities_for_human_default_mpfb": null,
+    "camera_names": null,
+    "expected_camera_count": 3,
+    "operation_mode": "simulation",
+    "payload_profile": null,
+    "object_class": null
+  },
+  "evaluator": {
+    "family": "ssm_priority_candidate_v1",
+    "runtime_profile_binding_required": true,
+    "preserve_parameter_provenance": true,
+    "cross_robot_parameters_calibrated": false,
+    "iso_certified": false
+  },
+  "recording": {
+    "retain_all_attempts": true,
+    "record_each_physics_step": true,
+    "record_submitted_commands": true,
+    "unknown_policy": "preserve_null_with_validity",
+    "evaluation_error_policy": "record_unknown_and_error_without_action_write",
+    "overflow_policy": "record_incomplete_without_silent_drop_or_risk_control",
+    "no_cross_episode_image_fill": true
+  },
+  "result_axes": {
+    "task": "preserve_existing_protocol_and_evidence",
+    "data_integrity": "legacy_integrity_plus_separate_safety_coverage",
+    "safety": "legacy_clearance_audit_and_four_risk_categories_separately",
+    "obstruction": "preserve_unconfirmed_until_independent_evidence"
+  },
+  "export": {
+    "format": "existing_lerobot_v3",
+    "preserve_existing_action_semantics": true,
+    "preserve_all_three_camera_streams": true,
+    "add_risk_and_validity_fields": true,
+    "copy_franka_8d_or_4x9_contract": false
+  },
+  "resume": {
+    "require_matching_config_profile_code_and_time_schema": true,
+    "count_existing_human20_as_new_observer_data": false
+  }
+}

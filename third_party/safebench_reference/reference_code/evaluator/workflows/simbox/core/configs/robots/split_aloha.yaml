@@ -1,0 +1,74 @@
+# SplitAloha robot configuration
+# Dual-arm 6-DOF robot
+
+# Robot info
+target_class: SplitAloha
+path: "split_aloha_mid_360/robot.usd"
+
+# CuRobo file
+robot_file:
+  # Isaac Sim 5 bundles CuRobo without the upstream repository's submodule layout.
+  - workflows/simbox/isaac50_curobo_configs/piper100_left_arm.yml
+  - workflows/simbox/isaac50_curobo_configs/piper100_right_arm.yml
+
+# Gripper parameters
+gripper_max_width: 0.10
+gripper_min_width: 0.0
+tcp_offset: 0.12
+
+# Solver parameters
+solver_position_iteration_count: 128
+solver_velocity_iteration_count: 4
+stabilization_threshold: 0.005
+
+# Joint indices
+left_joint_indices: [12, 14, 16, 18, 20, 22]
+right_joint_indices: [13, 15, 17, 19, 21, 23]
+left_gripper_indices: [24]
+right_gripper_indices: [26]
+
+# Paths
+fl_ee_path: "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fl/link6"
+fr_ee_path: "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fr/link6"
+fl_base_path: "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fl/arm_base"
+fr_base_path: "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fr/arm_base"
+
+# Gripper keypoints
+fl_gripper_keypoints:
+  tool_head: [0.0, 0.0, 0.12, 1]
+  tool_tail: [0.0, 0.0, 0.06, 1]
+  tool_side: [-0.05, 0.0, 0.12, 1]
+fr_gripper_keypoints:
+  tool_head: [0.0, 0.0, 0.12, 1]
+  tool_tail: [0.0, 0.0, 0.06, 1]
+  tool_side: [-0.05, 0.0, 0.12, 1]
+
+# Collision paths
+fl_filter_paths:
+  - "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fl/link7"
+  - "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fl/link8"
+fr_filter_paths:
+  - "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fr/link7"
+  - "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fr/link8"
+fl_forbid_collision_paths:
+  - "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fl/link2"
+  - "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fl/link3"
+  - "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fl/link4"
+  - "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fl/link5"
+fr_forbid_collision_paths:
+  - "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fr/link2"
+  - "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fr/link3"
+  - "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fr/link4"
+  - "split_aloha_mid_360_with_piper/split_aloha_mid_360_with_piper/fr/link5"
+
+# Pose processing (Z-axis gripper)
+R_ee_graspnet: [[0.0, -1.0, 0.0], [0.0, 0.0, -1.0], [1.0, 0.0, 0.0]]
+ee_axis: "z"
+
+# Default joint home positions
+left_joint_home: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+right_joint_home: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+left_joint_home_std: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+right_joint_home_std: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+left_gripper_home: [0.05]
+right_gripper_home: [0.05]

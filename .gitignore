@@ -8,7 +8,8 @@
 /runtime/curobo_build_deps/
 /runtime/curobo_wheels/
 /.venv*/
-/third_party/
+/third_party/*
+!/third_party/safebench_reference/
 
 # Assets restored from NVIDIA on the recipient machine
 /assets/nvidia/
@@ -17,17 +18,6 @@
 /assets/curobo/droid/franka_robotiq_2f_85_zero_curobo.yml
 /assets/curobo/droid/urdf/
 /assets/people/nvidia/
-
-# Source-project safety rating system (not part of this release)
-/configs/safety*/
-/kitchen_safety/risk_*.py
-/kitchen_safety/hs_geometry.py
-/kitchen_safety/pt_*.py
-/kitchen_safety/rs_evidence.py
-/kitchen_safety/fcl_distance.py
-/scripts/*safety*.py
-/scripts/*risk*.py
-/assets/obstacle_library/people/
 
 __pycache__/
 *.pyc

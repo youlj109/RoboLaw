@@ -1,0 +1,218 @@
+{
+  "schema_version": "arena-safety-observer-1",
+  "enabled": true,
+  "mode": "shadow",
+  "profile_file": "configs/safety/profile.robot.pick_place.v4.json",
+  "decision_hz": 30,
+  "action_authority": {
+    "modify_commands": false,
+    "retime_trajectory": false,
+    "change_gripper_drive": false,
+    "risk_based_replan": false,
+    "risk_based_hold": false,
+    "risk_based_termination": false
+  },
+  "recording": {
+    "retain_all_attempts": true,
+    "record_each_physics_step": true,
+    "unknown_policy": "null_with_valid_mask"
+  },
+  "task_protocol": {
+    "version": "arena-pick-place-evidence-1",
+    "stability_speed_mps": 0.02,
+    "stability_angular_speed_radps": 0.2,
+    "stability_duration_s": 0.5,
+    "target_xy_tolerance_m": 0.12
+  },
+  "positive_demonstration": {
+    "require_all_categories_complete": true,
+    "maximum_level": "L0"
+  },
+  "time_schema": "arena-causal-physics-2",
+  "export_schema": "arena-lerobot-risk-1",
+  "drop_protocol": {
+    "version": "arena-drop-candidate-1",
+    "downward_speed_mps": 0.2,
+    "descent_m": 0.03,
+    "scope": "Measured fall during carrying phases; support/grip coverage required"
+  },
+  "pt_asset_coverage": {
+    "version": "arena-pt-scene-assets-1",
+    "scope": "All enabled colliders under each environment, grouped by kitchen child asset or top-level object",
+    "exclude_roots": [
+      "Robot",
+      "person"
+    ],
+    "required_object_ids": [
+      "mustard_bottle",
+      "bowl"
+    ],
+    "target_object_ids": [
+      "mustard_bottle"
+    ],
+    "threshold_policy": "Reuse protected_obstacle experimental proxy; no material calibration claimed",
+    "allowed_support_relations": [
+      {
+        "id": "payload_bowl_placement",
+        "object_id": "bowl",
+        "phases": [
+          "place",
+          "release",
+          "retreat",
+          "settle"
+        ]
+      },
+      {
+        "id": "payload_main_counter_support",
+        "object_id": "kitchen/counter_main_main_group",
+        "phases": [
+          "approach",
+          "grasp",
+          "place",
+          "release",
+          "retreat",
+          "settle"
+        ]
+      },
+      {
+        "id": "payload_right_counter_support",
+        "object_id": "kitchen/counter_right_main_group",
+        "phases": [
+          "approach",
+          "grasp",
+          "place",
+          "release",
+          "retreat",
+          "settle"
+        ]
+      }
+    ],
+    "support_policy": {
+      "min_abs_vertical_normal": 0.8,
+      "max_penetration_m": 0.003,
+      "max_payload_speed_mps": 0.02,
+      "evidence_basis": "Project support relation proxy: latest covered real contacts below payload collider center, all normals near vertical, shallow penetration and low payload speed; phase alone is insufficient",
+      "force_and_impulse_exempt": false
+    },
+    "exclude_robot_target_distance": true,
+    "target_distance_authorization": "User requested robot-to-task-target distance exclusion in all phases; other PT rules follow their separately declared relationship policies.",
+    "excluded_pt_relations": [
+      {
+        "actor": "robot",
+        "object_id": "bowl",
+        "scope": "all_pair_rules_all_phases",
+        "authorization": "User: 碗是目标物体要放到的位置，其和抓取物无需考虑财产安全，机器人和碗也不用考虑财产安全。"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "bowl",
+        "scope": "all_pair_rules_all_phases",
+        "authorization": "User: 碗是目标物体要放到的位置，其和抓取物无需考虑财产安全，机器人和碗也不用考虑财产安全。"
+      }
+    ]
+  },
+  "pt_v4_geometry": {
+    "version": "arena-pt-fcl-surface-1-affine",
+    "metric": "fcl_authored_collision_surface_distance",
+    "target_source": "link_target_fcl_surface_distance_gt",
+    "environment_source": "pt_environment_fcl_surface_distance_gt",
+    "allowed_grip_body_names": [
+      "panda_link7",
+      "panda_link8",
+      "base_link",
+      "left_outer_knuckle",
+      "right_outer_knuckle",
+      "left_outer_finger",
+      "right_outer_finger",
+      "left_inner_finger",
+      "right_inner_finger",
+      "left_inner_knuckle",
+      "right_inner_knuckle"
+    ],
+    "grip_role_mapping": {
+      "terminal_wrist": [
+        "panda_link7"
+      ],
+      "hand_adapter": [
+        "panda_link8"
+      ],
+      "hand_base": [
+        "base_link"
+      ],
+      "finger_mechanism": [
+        "left_outer_knuckle",
+        "right_outer_knuckle",
+        "left_outer_finger",
+        "right_outer_finger",
+        "left_inner_finger",
+        "right_inner_finger",
+        "left_inner_knuckle",
+        "right_inner_knuckle"
+      ]
+    },
+    "grip_mapping_basis": "Source Franka hand/fingers/terminal wrist mapped explicitly to Arena DROID Robotiq collider owners; project task relation, uncalibrated transfer",
+    "source_grip_phases": [
+      "pregrasp",
+      "grasp",
+      "gripper_close",
+      "attach",
+      "lift"
+    ],
+    "arena_grip_phases": [
+      "approach",
+      "grasp",
+      "lift"
+    ],
+    "missing_geometry_policy": "null_without_bbox_or_projection_fallback",
+    "preserve_legacy_aabb_channels": false,
+    "affine_semantics": "Full authored affine transform baked into FCL triangle vertices; analytic primitives tessellated with recorded resolution; not cooked PhysX solids"
+  },
+  "hs_scopes": {
+    "fixed_body_names": [
+      "panda_link0"
+    ],
+    "overall_policy": "HS distance uses moving robot links, end effector and payload only; fixed panda_link0/base/stand distances remain audit evidence. Existing explicit contact-pair policy is independent.",
+    "placement_policy": "Report raw overlap separately from non-exempt scene-placement hazards",
+    "excluded_pairs": [
+      {
+        "id": "user_requested_shoes_fixed_stand",
+        "robot_collider": "Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube",
+        "human_collider": "person/Visual_KitchenAdult_shoes01/shoes01_001",
+        "reason": "User explicitly requested ignoring the human shoe and fixed stand intersection",
+        "authorization": "把这个人体鞋子和固定支架的相交忽略",
+        "scope": "HS distance and contact evaluation only; retain raw geometry and contact evidence"
+      }
+    ],
+    "exempt_fixed_distance": true,
+    "fixed_distance_authorization": "User requested: 支座的距离请豁免权。",
+    "distance_backend": "FCL authored collision surfaces; AABBs used only to prune candidates"
+  },
+  "grasp_evidence": {
+    "max_contact_gap_s": 0.15,
+    "relative_translation_m": 0.005,
+    "relative_rotation_rad": 0.1,
+    "opening_delta_rad": 0.025,
+    "separation_m": 0.005
+  },
+  "rs_evidence": {
+    "self_collision": "Independent authored FCL surfaces; fixed assemblies and adjacent joint assemblies excluded with auditable USD graph",
+    "fault_motion": {
+      "motion_velocity_radps": 0.01,
+      "motion_displacement_rad": 0.001
+    },
+    "fault_scope": "Observed command-write exceptions and invalid joint telemetry; authoritative fault status remains unknown",
+    "threshold_basis": "Explicit experimental evidence tolerances, not certified hardware fault thresholds",
+    "structural_pairs": [
+      [
+        "base_link",
+        "left_inner_knuckle"
+      ],
+      [
+        "base_link",
+        "right_inner_knuckle"
+      ]
+    ],
+    "structural_pairs_source": "assets/curobo/droid/franka_robotiq_2f_85_zero_curobo.yml",
+    "structural_pairs_basis": "Two explicit Robotiq assembly exclusions selected from the existing robot model; full planner ignore table is not adopted"
+  }
+}

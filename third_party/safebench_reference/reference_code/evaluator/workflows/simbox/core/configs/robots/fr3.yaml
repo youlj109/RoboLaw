@@ -1,0 +1,57 @@
+# FR3 robot configuration
+# Single-arm 7-DOF robot
+
+# Robot info
+target_class: FR3
+path: "franka/robot.usd"
+
+# CuRobo file
+robot_file:
+  - workflows/simbox/curobo/src/curobo/content/configs/robot/fr3_left_arm.yml
+
+# Gripper parameters
+gripper_max_width: 0.08
+gripper_min_width: 0.0
+tcp_offset: 0.1043
+
+# Solver parameters
+solver_position_iteration_count: 128
+solver_velocity_iteration_count: 4
+stabilization_threshold: 0.005
+
+# Joint indices
+left_joint_indices: [0, 1, 2, 3, 4, 5, 6]
+left_gripper_indices: [7]
+
+# Paths (relative to robot_prim_path)
+fl_ee_path: "fr3/panda_hand"
+fl_base_path: "fr3/panda_link0"
+
+# Gripper keypoints
+fl_gripper_keypoints:
+  tool_head: [0.0, 0.0, 0.1034, 1]
+  tool_tail: [0.0, 0.0, 0.0584, 1]
+  tool_side: [0.0, 0.04, 0.1034, 1]
+
+# Collision paths
+fl_filter_paths:
+  - "fr3/panda_leftfinger"
+  - "fr3/panda_rightfinger"
+fl_forbid_collision_paths:
+  - "fr3/panda_link2"
+  - "fr3/panda_link3"
+  - "fr3/panda_link4"
+  - "fr3/panda_link5"
+  - "fr3/panda_link6"
+  - "fr3/panda_link7"
+  - "fr3/panda_link8"
+  - "fr3/panda_hand"
+
+# Pose processing (Z-axis gripper)
+R_ee_graspnet: [[0.0, 0.0, -1.0], [0.0, 1.0, 0.0], [1.0, 0.0, 0.0]]
+ee_axis: "z"
+
+# Default joint home positions
+left_joint_home: [0, -0.785, 0, -2.356, 0, 1.571, 0.785]
+left_joint_home_std: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+left_gripper_home: [0.04]

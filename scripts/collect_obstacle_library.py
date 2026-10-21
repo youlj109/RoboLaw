@@ -53,7 +53,7 @@ def add_runtime_arguments(parser):
     parser.add_argument('--run-id', help='New safety observer batch identity')
     parser.add_argument('--episode-length-s', type=float, default=120.0,
                         help='Arena task timeout in simulation seconds, including initialization; default 120')
-    parser.add_argument('--execution-backend', choices=['single'], default='single',
+    parser.add_argument('--execution-backend', choices=['single', 'vectorized'], default='single',
                         help='Optional same-ID batched physics plus recorded-state RGB rendering')
     parser.add_argument('--num-envs', type=int, default=4, help='Maximum environments per vectorized physics batch')
     parser.add_argument('--validation-workers', type=int, default=4,
@@ -595,8 +595,8 @@ def _main(argv=None, *, resources):
     parser.add_argument('--placement-tcp-height-m', type=float, default=argparse.SUPPRESS,
                         help='Independent placement TCP height; requires --placement-strategy lower-first')
     args = parser.parse_args(argv)
-    if args.observer_config:
-        parser.error('Risk evaluation is excluded from this release')
+    if args.observer_config and args.execution_backend != 'vectorized':
+        parser.error('--observer-config currently requires --execution-backend vectorized')
     if args.num_envs < 1 or args.validation_workers < 1:
         parser.error('--num-envs and --validation-workers must be positive')
     if args.pipeline and args.execution_backend != 'vectorized':

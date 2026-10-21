@@ -1,0 +1,40 @@
+{
+  "branch": "huirongzeng",
+  "date": "2026-10-21",
+  "preflight": {
+    "passed": true,
+    "scope": "CPU imports, current profile, analytical FCL clearance and known-result aggregation",
+    "adapter_version": "arena-risk-observer-11-fcl-surface-distances",
+    "evaluator_version": "ssm-priority-four-category-candidate-1.7-hs-pre-skill-relation",
+    "profile_file_sha256": "2b1abf509d39b64cab17f7c6b2713acba967ef51ba79804bca88d5adcd6b06b6",
+    "packages": {
+      "python-fcl": "0.7.0.11",
+      "numpy": "2.3.1",
+      "PyYAML": "6.0.3"
+    },
+    "analytical_distance_m": 0.25,
+    "simulation_started": false
+  },
+  "reference_evaluator_tests": {
+    "tests": 18,
+    "passed": true
+  },
+  "legacy_adapter_tests": {
+    "tests_run": 16,
+    "passed": false,
+    "errors": 29,
+    "reason": "Historical fixtures lack current required runtime bindings; retained for future migration."
+  },
+  "dry_run": {
+    "human": true,
+    "all_11": true,
+    "simulation_started": false
+  },
+  "video_export": {
+    "frames": 3,
+    "decoded_frames": 3,
+    "passed": true,
+    "source": "Existing FCL human episode; no new simulation"
+  },
+  "new_machine_full_simulation_reproduced": false
+}
