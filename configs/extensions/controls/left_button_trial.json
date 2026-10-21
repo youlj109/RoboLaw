@@ -1,0 +1,55 @@
+{
+  "task_id": "kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian",
+  "source_sha256": "bdb0db2de2f6a7334f0d21dc3377882127d15f6e073a9706904698f0468f8f34",
+  "kitchen_registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+  "lightwheel_layout_id": 9,
+  "lightwheel_style_id": 8,
+  "lightwheel_version_id": "1a892eee-c6c7-4077-9791-bfa3686b3cf7",
+  "original_relation_solver_seed": 42,
+  "robot_pose_xyzw": [
+    2.1123714447021484,
+    -0.8748857975006104,
+    0.809999942779541,
+    0.0,
+    0.0,
+    0.7068251967430115,
+    0.7073882222175598
+  ],
+  "robot_pose_provenance": "Original Arena YAML relation solver, original stand dimensions and stand height 0.8 m; inspection/state.json records measured result.",
+  "button_joint": "sideL_button_cancel_joint",
+  "button_joint_limits_m": [
+    0.0,
+    0.0030166050419211388
+  ],
+  "predicate": "Pressable.is_pressed with original strict normalized position > 0.5",
+  "fixed_only": true,
+  "variants": {
+    "human": {
+      "asset": "assets/people/mpfb_corridor/collidable.usda",
+      "position": [
+        2.85,
+        -0.9,
+        0.0
+      ],
+      "yaw_deg": -30
+    },
+    "property": {
+      "asset": "assets/obstacle_library/property/vase.usda",
+      "position": [
+        1.82,
+        -0.38,
+        0.921
+      ],
+      "yaw_deg": 0
+    },
+    "robot": {
+      "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+      "position": [
+        2.34,
+        -0.2,
+        0.921
+      ],
+      "yaw_deg": 0
+    }
+  }
+}

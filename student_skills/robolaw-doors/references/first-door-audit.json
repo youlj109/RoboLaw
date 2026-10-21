@@ -1,0 +1,707 @@
+{
+  "source": "local authored USD; not live physics",
+  "joint_path": "/world/fridge_main_group/Refrigerator032_fridge_door/fridge_door_joint",
+  "axis_in_joint_frame": "X",
+  "axis_world": [
+    1.3642080103622738e-07,
+    0.0,
+    0.9616840562773905
+  ],
+  "origin_world_m": [
+    4.954614215459582,
+    -0.7625535118003961,
+    1.2094958277304677
+  ],
+  "limits_authored_degrees": [
+    0.0,
+    90.0
+  ],
+  "success_openness": {
+    "move_away_strictly_greater_than": 0.05,
+    "final_strictly_greater_than": 0.2,
+    "reset": 0.0
+  },
+  "derived_angle_threshold_degrees": 18.0,
+  "handle_collision_geometry": [
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_main",
+      "collision_api": true,
+      "world_aabb_min_m": [
+        4.348012137895224,
+        -0.8651077861986456,
+        1.1128341043623928
+      ],
+      "world_aabb_max_m": [
+        4.349054036894743,
+        -0.8647340027085499,
+        1.1535197870090044
+      ]
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_1",
+      "collision_api": true,
+      "world_aabb_min_m": [
+        4.342882719669207,
+        -0.8171039131876783,
+        0.886565066931624
+      ],
+      "world_aabb_max_m": [
+        4.343197857998247,
+        -0.8160119514935484,
+        0.8869003710962816
+      ]
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_2",
+      "collision_api": true,
+      "world_aabb_min_m": [
+        4.342882719669207,
+        -0.8171037851560321,
+        1.3807749982345265
+      ],
+      "world_aabb_max_m": [
+        4.343197857998247,
+        -0.8160118234619023,
+        1.3811103027776015
+      ]
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_3",
+      "collision_api": true,
+      "world_aabb_min_m": [
+        4.348012163105989,
+        -0.8543526038612627,
+        1.3480813551550344
+      ],
+      "world_aabb_max_m": [
+        4.349054072203349,
+        -0.8530568243281816,
+        1.3575614288739
+      ]
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_4",
+      "collision_api": true,
+      "world_aabb_min_m": [
+        4.348012108080956,
+        -0.855421829587978,
+        0.9130114163972447
+      ],
+      "world_aabb_max_m": [
+        4.349054006189641,
+        -0.8541260471723958,
+        0.9224914888974094
+      ]
+    }
+  ],
+  "axis_world_normalized": [
+    1.4185615342766632e-07,
+    0.0,
+    0.99999999999999
+  ],
+  "axis_world_note": "Authored body transform includes scale; normalize direction. Validate live articulation frame before control.",
+  "handle_bounds_warning": "handle_collision_geometry records USD authored BBox only. door_collider_bounds uses shape parameters and must be used instead for the CPU crop check.",
+  "door_collider_bounds": [
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C001",
+      "type": "Cube",
+      "world_min_m": [
+        4.364241257781939,
+        -0.7142771350891546,
+        1.5361567909499005
+      ],
+      "world_max_m": [
+        4.862061190805963,
+        -0.6108948055665062,
+        1.541596011704313
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C002",
+      "type": "Cube",
+      "world_min_m": [
+        4.36405638339889,
+        -0.7144824658417741,
+        1.3579739987340578
+      ],
+      "world_max_m": [
+        4.861876316422914,
+        -0.6111001363191257,
+        1.3634134433979879
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C003",
+      "type": "Cube",
+      "world_min_m": [
+        4.36405638339889,
+        -0.7144824658417741,
+        1.1459944772052264
+      ],
+      "world_max_m": [
+        4.861876316422914,
+        -0.6111001363191257,
+        1.1514336128740221
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C004",
+      "type": "Cube",
+      "world_min_m": [
+        4.3642538136600315,
+        -0.6149553814891772,
+        1.5393427349929452
+      ],
+      "world_max_m": [
+        4.8620496902343895,
+        -0.607741149811787,
+        1.5931373656508199
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C005",
+      "type": "Cube",
+      "world_min_m": [
+        4.364069382770492,
+        -0.6151607304963087,
+        1.3621394403366116
+      ],
+      "world_max_m": [
+        4.861865652720756,
+        -0.6079464943178059,
+        1.4159339527702608
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C006",
+      "type": "Cube",
+      "world_min_m": [
+        4.364068530771233,
+        -0.615160732746865,
+        1.1493391430925264
+      ],
+      "world_max_m": [
+        4.861865224357089,
+        -0.6079464920672496,
+        1.203133687769146
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C007",
+      "type": "Cube",
+      "world_min_m": [
+        4.364240153303432,
+        -0.7135223208929896,
+        1.5376229755504174
+      ],
+      "world_max_m": [
+        4.86206229528447,
+        -0.7109566939842739,
+        1.5914192505997906
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C008",
+      "type": "Cube",
+      "world_min_m": [
+        4.364055278920383,
+        -0.7134280896013743,
+        1.3604198492740411
+      ],
+      "world_max_m": [
+        4.861877420901421,
+        -0.7108624626926585,
+        1.4142161279059668
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C009",
+      "type": "Cube",
+      "world_min_m": [
+        4.364055278920383,
+        -0.7136705175234851,
+        1.1476195717339934
+      ],
+      "world_max_m": [
+        4.861877420901421,
+        -0.7111048906147693,
+        1.2014158432008146
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C010",
+      "type": "Cube",
+      "world_min_m": [
+        4.858089433614373,
+        -0.7133210747749894,
+        1.539341902049539
+      ],
+      "world_max_m": [
+        4.8627265232683685,
+        -0.6103533757386128,
+        1.5931381985942261
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C011",
+      "type": "Cube",
+      "world_min_m": [
+        4.8579045771980125,
+        -0.7135264375355205,
+        1.362138893997388
+      ],
+      "world_max_m": [
+        4.862541666852008,
+        -0.6105587384991439,
+        1.4159351869595227
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C012",
+      "type": "Cube",
+      "world_min_m": [
+        4.8579045771980125,
+        -0.7135264375355205,
+        1.149338611083512
+      ],
+      "world_max_m": [
+        4.862541666852008,
+        -0.6105587384991439,
+        1.2031349076281992
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C013",
+      "type": "Cube",
+      "world_min_m": [
+        4.362049647369515,
+        -0.7136550813330453,
+        1.539341902049539
+      ],
+      "world_max_m": [
+        4.366130927600144,
+        -0.6106872142551332,
+        1.5931381985942261
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C014",
+      "type": "Cube",
+      "world_min_m": [
+        4.361864775823311,
+        -0.7138604120856649,
+        1.362138893997388
+      ],
+      "world_max_m": [
+        4.36594605605394,
+        -0.6108925450077527,
+        1.4159351869595227
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C015",
+      "type": "Cube",
+      "world_min_m": [
+        4.361864775823311,
+        -0.7138604120856649,
+        1.149338611083512
+      ],
+      "world_max_m": [
+        4.36594605605394,
+        -0.6108925450077527,
+        1.2031349076281992
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C021",
+      "type": "Cube",
+      "world_min_m": [
+        4.252258507283332,
+        -0.774959924354861,
+        0.6947064799325731
+      ],
+      "world_max_m": [
+        4.933923396433937,
+        -0.72627220597026,
+        1.7425846806378151
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C023",
+      "type": "Cube",
+      "world_min_m": [
+        4.364241257781939,
+        -0.7142771350891546,
+        1.5361567909499005
+      ],
+      "world_max_m": [
+        4.862061190805963,
+        -0.6108948055665062,
+        1.541596011704313
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C024",
+      "type": "Cube",
+      "world_min_m": [
+        4.36405638339889,
+        -0.7144824658417741,
+        1.3579739987340578
+      ],
+      "world_max_m": [
+        4.861876316422914,
+        -0.6111001363191257,
+        1.3634134433979879
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C025",
+      "type": "Cube",
+      "world_min_m": [
+        4.36405638339889,
+        -0.7144824658417741,
+        1.1459944772052264
+      ],
+      "world_max_m": [
+        4.861876316422914,
+        -0.6111001363191257,
+        1.1514336128740221
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C026",
+      "type": "Cube",
+      "world_min_m": [
+        4.3642538136600315,
+        -0.6149553814891772,
+        1.5393427349929452
+      ],
+      "world_max_m": [
+        4.8620496902343895,
+        -0.607741149811787,
+        1.5931373656508199
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C027",
+      "type": "Cube",
+      "world_min_m": [
+        4.364069382770492,
+        -0.6151607304963087,
+        1.3621394403366116
+      ],
+      "world_max_m": [
+        4.861865652720756,
+        -0.6079464943178059,
+        1.4159339527702608
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C028",
+      "type": "Cube",
+      "world_min_m": [
+        4.364068530771233,
+        -0.615160732746865,
+        1.1493391430925264
+      ],
+      "world_max_m": [
+        4.861865224357089,
+        -0.6079464920672496,
+        1.203133687769146
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C029",
+      "type": "Cube",
+      "world_min_m": [
+        4.364240153303432,
+        -0.7135223208929896,
+        1.5376229755504174
+      ],
+      "world_max_m": [
+        4.86206229528447,
+        -0.7109566939842739,
+        1.5914192505997906
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C030",
+      "type": "Cube",
+      "world_min_m": [
+        4.364055278920383,
+        -0.7134280896013743,
+        1.3604198492740411
+      ],
+      "world_max_m": [
+        4.861877420901421,
+        -0.7108624626926585,
+        1.4142161279059668
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C031",
+      "type": "Cube",
+      "world_min_m": [
+        4.364055278920383,
+        -0.7136705175234851,
+        1.1476195717339934
+      ],
+      "world_max_m": [
+        4.861877420901421,
+        -0.7111048906147693,
+        1.2014158432008146
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C032",
+      "type": "Cube",
+      "world_min_m": [
+        4.858089433614373,
+        -0.7133210747749894,
+        1.539341902049539
+      ],
+      "world_max_m": [
+        4.8627265232683685,
+        -0.6103533757386128,
+        1.5931381985942261
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C033",
+      "type": "Cube",
+      "world_min_m": [
+        4.8579045771980125,
+        -0.7135264375355205,
+        1.362138893997388
+      ],
+      "world_max_m": [
+        4.862541666852008,
+        -0.6105587384991439,
+        1.4159351869595227
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C034",
+      "type": "Cube",
+      "world_min_m": [
+        4.8579045771980125,
+        -0.7135264375355205,
+        1.149338611083512
+      ],
+      "world_max_m": [
+        4.862541666852008,
+        -0.6105587384991439,
+        1.2031349076281992
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C035",
+      "type": "Cube",
+      "world_min_m": [
+        4.362049647369515,
+        -0.7136550813330453,
+        1.539341902049539
+      ],
+      "world_max_m": [
+        4.366130927600144,
+        -0.6106872142551332,
+        1.5931381985942261
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C036",
+      "type": "Cube",
+      "world_min_m": [
+        4.361864775823311,
+        -0.7138604120856649,
+        1.362138893997388
+      ],
+      "world_max_m": [
+        4.36594605605394,
+        -0.6108925450077527,
+        1.4159351869595227
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/Refrigerator032_fridge_door_C037",
+      "type": "Cube",
+      "world_min_m": [
+        4.361864775823311,
+        -0.7138604120856649,
+        1.149338611083512
+      ],
+      "world_max_m": [
+        4.36594605605394,
+        -0.6108925450077527,
+        1.2031349076281992
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_main",
+      "type": "Cube",
+      "world_min_m": [
+        4.252258507283332,
+        -0.7952257015474269,
+        0.694705448157515
+      ],
+      "world_max_m": [
+        4.933923396433937,
+        -0.776799351015063,
+        1.7425857124128732
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_main",
+      "type": "Cube",
+      "world_min_m": [
+        4.3255342988294805,
+        -0.879088572348744,
+        0.993307770525465
+      ],
+      "world_max_m": [
+        4.371531875960486,
+        -0.8507532165584515,
+        1.2730461208459323
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_1",
+      "type": "Cube",
+      "world_min_m": [
+        4.33039167993672,
+        -0.8407733697902755,
+        0.8740351470185942
+      ],
+      "world_max_m": [
+        4.355688897730734,
+        -0.7923424948909512,
+        0.8994302910093114
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_2",
+      "type": "Cube",
+      "world_min_m": [
+        4.33039167993672,
+        -0.8407732417586293,
+        1.368245071345601
+      ],
+      "world_max_m": [
+        4.355688897730734,
+        -0.792342366859305,
+        1.3936402296665271
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_3",
+      "type": "Cube",
+      "world_min_m": [
+        4.325534270443286,
+        -0.8743925651268246,
+        1.2844319958221417
+      ],
+      "world_max_m": [
+        4.371531964866052,
+        -0.8330168630626197,
+        1.4212107882067926
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    },
+    {
+      "path": "/world/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_4",
+      "type": "Cube",
+      "world_min_m": [
+        4.325534287108121,
+        -0.8754618102860584,
+        0.8493620786244622
+      ],
+      "world_max_m": [
+        4.371531827162477,
+        -0.8340860664743154,
+        0.9861408266701919
+      ],
+      "excluded_by_baseline_crop": true,
+      "bounds_verified": true
+    }
+  ],
+  "door_collider_bounds_method": "Read-only execution of baseline _primitive_world_bounds on USD authored primitive parameters and transformed body poses, independent of authored extent.",
+  "baseline_crop_excludes_all_door_colliders": true,
+  "provenance": {
+    "repository_commit": "cce14d656a2a449e3f04846748025c80adfbc829",
+    "kitchen_asset": "assets/kitchen/scene.usd",
+    "kitchen_usd_sha256": "616b33e8cc5b39865e6a12c9e668823ea534f08638b9d24c99ba9fd9811023d3",
+    "coordinate_scope": "Authored asset stage, not the eventual spawned environment frame. Recompute using live scene transforms.",
+    "axis_note": "axis_world is a raw transformed vector, not a unit direction; resolve joint frames/scales and normalize before using it for control."
+  }
+}

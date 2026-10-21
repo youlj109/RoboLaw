@@ -1,0 +1,44 @@
+Replicator skill 实测：G 型 mustard → red bowl（2026-10-21 最终记录）
+
+仅验证 kitchen_bench_replicator_g_shape_mustard_bowl，即 1/14 个 Replicator 原任务。
+最终正式三条：
+  human/attempt_04：512 动作/3856 物理子步，动作率最小人体间距 0.173601 m。
+  property/attempt_05：522 动作/3936 物理子步，动作率最小花瓶间距 0.110868 m。
+  robot/attempt_03：512 动作/3856 物理子步，动作率最小横杆间距 0.045664 m。
+以上目录前缀 datasets/skill_trials/replicator/；相应日志与验收报告在 reports/skill_trials/replicator/。
+
+三条均通过原任务谓词、真实双指接触/携带、终态碗支撑、全厨房逐物理子步安全、真实未 clamp 关节自碰撞、固定台架/基座实际 USD 几何独立检查、源 YAML 全部 7 个关系验证及原三路 RGB/视频验证。human 8 阶段、其余各 7 阶段退出码全 0，summary 的全部 acceptance_gates 为 true。source_relation_audit.json、fixed_base_hazard_audit.json、self_collision_audit.json 是每条不可缺的证据；验收不是只看进程退出码。
+
+共同合法 reset：robot [0.61,0,0] 加 0.8 m 原支座；原 yaw=-1.57 与原默认支座足迹；mustard [0.77,-0.43,0.976899501]；bowl [0.45,-0.475,0.936899501]。完整原厨房/杂物和原三路相机不改。上游真实 OnRelationValidator/NextToValidator 验证：台架到岛台相向边距 0.27961 m，在 0.15±0.15 m 内；碗前侧 0.05737 m，高于原 0.05 m 边距。台架原点不等于几何中心。仅设置初始 reset，执行中不传送、焊接或写物体状态伪造成功。
+
+每条原三路 MP4 为 1280x720，all_cameras.mp4 为 1920x360，所有 JPEG 和 MP4 逐帧解码。
+human04 额外 overview_camera.mp4 为 1280x720，人物脸/躯干/双臂、机械臂、红碗、黄瓶可辨，真实台架自然遮住部分下腿；原三相机不改。overview/images.h5、cameras.json、frame_alignment.json 独立保存，512 帧同物理步、同动作索引，overview_validation.json passed=true。起始/转运/终态真实抽帧已目视查看，图像不代替几何/接触证据。
+
+输出总表 reports/skill_trials/replicator/summary.json；覆盖表 docs/extensions/replicator/coverage.json。
+重建总表：python3 scripts/extensions/replicator/summarize_trials.py。
+固定布局每变体 1 条，不宣称其他 13 任务、随机化、200 条或多环境速度已验证。
+
+实际复现（确认自己的容器挂载与解释器，换未使用 attempt 名）：
+  python3 student_skills/robolaw-replicator/scripts/preflight.py --repo .
+  python3 scripts/extensions/replicator/restore_assets.py
+  python3 scripts/extensions/replicator/verify_assets.py
+  bash scripts/arena_python.sh scripts/extensions/replicator/audit_source_relation.py --layout configs/extensions/replicator/g_shape_mustard.json --report /tmp/replicator-relations.json
+  bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --variant human --attempt repro_01 --overview-camera --dry-run
+  bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --variant human --attempt repro_01 --overview-camera
+  bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --variant property --attempt repro_01
+  bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --variant robot --attempt repro_01
+  python3 -m unittest discover -s tests/extensions/replicator -v
+入口设置 HEADLESS=1，不支持 --headless；Kit/cuRobo 使用 reports/skill_trials/gpu.lock 串行。已有输出拒绝覆盖，不结束其他任务。没有批采 resume/配额/多环境 CLI。
+
+关键修复：
+- 原 104 个动态背景体用 kitchen/** 递归匹配，动作/物理率记录并同步真实姿态，保留原 scale；读取完整厨房。
+- 仅源 CapSurface_03 瓶底必要支持带 6 mm，未禁用整件对象或机械臂碰撞。
+- 源资产 manifest 固定 248 文件 URL/字节/SHA；MDL using import 依赖跟踪，来源字符串不误当引用；大资产不放技能包。
+- 旧 human01/property03/robot02/base diagnostic05 被真实源关系审计撤销，sidecar false，数据不改写。只修 reset robot y 与 bowl y 后重采。旧基线和旧反事实不能用于当前合法布局；没有新无障碍实采对照。
+- property04 退手被覆盖球/膨胀花瓶拒绝，0 条被拒轨迹动作执行；真实 FCL 复核安全。只把花瓶 y=-0.59 改 -0.61，property05 正常退手完成，未放宽间隙或跳过退手。
+- human02 合法成功保留；human03 因外观收敛判定在 0 动作失败。human04 有界 1024 帧纯渲染 warmup、物理步不变；低幅 RGB 差异诊断 false 如实保留。实际完整解码、可见性与位姿/时间同步硬验收通过。
+- 花瓶稳定后最大位移 5.53e-7 m，无破碎模型。当前实体确实参与约束，但没有新合法基线来证明每个障碍必然改变路线。
+
+技能和完整说明：student_skills/robolaw-replicator/references/verified-trial.md。
+从含实测入口的 ylj 统一提交分出 ylj-replicator；assignment 原 base_commit 仅来源追溯。
+所有失败保留。数据/运行报告忽略 Git，交接需单独打包或复采。

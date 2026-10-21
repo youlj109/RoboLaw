@@ -1,0 +1,94 @@
+RoboLaw 四位学生独立原始任务分工（2026-10-21）
+
+一、分工原则
+每个人独立完成自己原始任务的场景、11类候选安全增广、cuRobo执行、少量真实采集、验证与Git分支交付。四组从同一源码基线出发，没有“先等A做框架”或“先等C做接触控制”的串联依赖。
+原始参考基线：RoboLaw cce14d656a2a449e3f04846748025c80adfbc829；Arena固定版本记录在各skill的assignment.json。本轮实测执行器与修订技能位于ylj分支。复用实测实现时，先获取同一个ylj提交，再各自创建ylj-组名分支；不要为匹配旧base_commit而回退并丢掉新增执行器。base_commit保留来源追溯意义，预检仍按各原任务YAML哈希核对。
+现有Lightwheel mustard→bowl任务是共同只读参考，不在新增30任务分工中。任务数不同是因为接触控制与新物体抓取难度不同。
+
+二、协作和合并
+四人在自己的checkout/工作树中创建各自ylj-开头分支；不要四个人在同一个工作目录切换分支。每组完整目录互不重叠，既有公共基线默认不改，组内适配实现放本组目录；没有等待他人的公共模块。
+导师/集成人员在各组提交可运行版本后统一合并到ylj，再决定是否抽取重复能力；这不是学生开工前置条件。先独立跑通可审查代码，再做公共抽象，避免四个人同时改environment.py、collect_kitchen.py等大文件。
+每组首任务已有本轮实测的局部入口，见各skill的实测参考及docs/extensions/SKILL_TRIALS.md；其他任务继续在组内扩展，不能假设已有通用task参数、向量化执行或人体批采。
+所有31环境都沿用DROID，但基座/支座高度/厨房坐标不同；每组继承原始YAML和原始任务成功条件。
+本轮导师试用按用户要求：每技能选1个原任务，人体/财产/障碍物各1条成功轨迹并保存视频。后续学生的一般小样本流程仍是：1条无新增障碍基线，再财产/机器人周边/人体各一个代表变体，每个3条成功轨迹；具体用户配额优先。随后推广本组全部任务和适用变体；全部任务无需等待其他组验收。
+每配置初始最多10次尝试；连续3次同类失败先修复；不直接启动每变体200条。数据采集人员在交付后扩充配额。
+若共用一张GPU，只串行安排GPU资源时段，开发和CPU检查仍可四人同时进行。不要停止其他人的训练或采集。
+
+三、把技能交给学生的方法（不依赖编辑器自动发现技能）
+1. 每位学生只拿自己对应的完整文件夹/zip；不要只复制SKILL.md，references和scripts也要保留。
+2. 在自己的RoboLaw checkout中解压到student_skills/<技能名>/，或放其他位置；实际路径传给AI即可。
+3. 在Cursor或Codex聊天中粘贴下面本组启动提示。该方式要求AI读取文件，不需要安装编辑器插件或修改全局规则。
+4. 新机器先按仓库README恢复固定依赖源码/资产和运行时；本技能预检不自动下载，也不启动GPU。
+5. skill预检用Python标准库，运行包级validate_bundle.py需PyYAML；二者都不是物理采集成功测试。
+
+学生A：Replicator 全部14个抓放环境
+分支：ylj-replicator
+技能：robolaw-replicator/SKILL.md
+首任务：kitchen_bench_replicator_g_shape_mustard_bowl
+完整负责范围：
+  kitchen_bench_replicator_g_shape_banana_bowl
+  kitchen_bench_replicator_g_shape_bowl_sink
+  kitchen_bench_replicator_g_shape_mustard_bowl
+  kitchen_bench_replicator_l_island_banana_bowl
+  kitchen_bench_replicator_l_island_bowl_sink
+  kitchen_bench_replicator_l_island_mustard_bowl
+  kitchen_bench_replicator_l_shape_banana_bowl
+  kitchen_bench_replicator_l_shape_bowl_sink
+  kitchen_bench_replicator_l_shape_mustard_bowl
+  kitchen_bench_replicator_peninsula_bowl_sink
+  kitchen_bench_replicator_peninsula_mustard_bowl
+  kitchen_bench_replicator_u_shape_banana_bowl
+  kitchen_bench_replicator_u_shape_bowl_sink
+  kitchen_bench_replicator_u_shape_mustard_bowl
+
+可直接粘贴的启动提示：
+请读取并按 student_skills/robolaw-replicator/SKILL.md 执行。我负责学生A这组原始任务。先运行技能预检，检查源YAML和资产，然后在新分支 ylj-replicator 独立完成本组场景安全增广、cuRobo执行、少量真实采集和验证，不等待其他同学的代码。先跑通首任务及三类代表变体，再推广到清单内其他任务。每个变体只做少量验证，不跑200条。遵守技能的独立目录和原始任务判定；记录所有失败和未验证项。完成后提交并推送自己的分支，给出可复制复现命令和验证证据。如果GPU被其他任务占用，先继续CPU工作，不结束其他进程。
+
+学生B：Lightwheel 剩余5个抓放环境
+分支：ylj-lightwheel-pick-place
+技能：robolaw-lightwheel-pick-place/SKILL.md
+首任务：kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian
+完整负责范围：
+  kitchen_bench_lightwheel_pick_lemon_shelf_on_plate_u_shaped_with_island_farmhouse2
+  kitchen_bench_lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2
+  kitchen_bench_lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian
+  kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian
+  kitchen_bench_lightwheel_place_pepsi_in_basket_u_shaped_with_island_farmhouse2
+
+可直接粘贴的启动提示：
+请读取并按 student_skills/robolaw-lightwheel-pick-place/SKILL.md 执行。我负责学生B这组原始任务。先运行技能预检，检查源YAML和资产，然后在新分支 ylj-lightwheel-pick-place 独立完成本组场景安全增广、cuRobo执行、少量真实采集和验证，不等待其他同学的代码。先跑通首任务及三类代表变体，再推广到清单内其他任务。每个变体只做少量验证，不跑200条。遵守技能的独立目录和原始任务判定；记录所有失败和未验证项。完成后提交并推送自己的分支，给出可复制复现命令和验证证据。如果GPU被其他任务占用，先继续CPU工作，不结束其他进程。
+
+学生C：Lightwheel 全部8个开门环境
+分支：ylj-doors
+技能：robolaw-doors/SKILL.md
+首任务：kitchen_bench_lightwheel_open_fridge
+完整负责范围：
+  kitchen_bench_lightwheel_open_cabinet_u_shaped_with_island_farmhouse2
+  kitchen_bench_lightwheel_open_freezer_g_shaped_large_scandinavian
+  kitchen_bench_lightwheel_open_fridge
+  kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian
+  kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2
+  kitchen_bench_lightwheel_open_microwave
+  kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian
+  kitchen_bench_lightwheel_open_oven_g_shaped_large_scandinavian
+
+可直接粘贴的启动提示：
+请读取并按 student_skills/robolaw-doors/SKILL.md 执行。我负责学生C这组原始任务。先运行技能预检，检查源YAML和资产，然后在新分支 ylj-doors 独立完成本组场景安全增广、cuRobo执行、少量真实采集和验证，不等待其他同学的代码。先跑通首任务及三类代表变体，再推广到清单内其他任务。每个变体只做少量验证，不跑200条。遵守技能的独立目录和原始任务判定；记录所有失败和未验证项。完成后提交并推送自己的分支，给出可复制复现命令和验证证据。如果GPU被其他任务占用，先继续CPU工作，不结束其他进程。
+
+学生D：Lightwheel 左右按钮与温度旋钮3个环境
+分支：ylj-controls
+技能：robolaw-controls/SKILL.md
+首任务：kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian
+完整负责范围：
+  kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian
+  kitchen_bench_lightwheel_press_right_toaster_cancel_button_g_shaped_large_scandinavian
+  kitchen_bench_lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian
+
+可直接粘贴的启动提示：
+请读取并按 student_skills/robolaw-controls/SKILL.md 执行。我负责学生D这组原始任务。先运行技能预检，检查源YAML和资产，然后在新分支 ylj-controls 独立完成本组场景安全增广、cuRobo执行、少量真实采集和验证，不等待其他同学的代码。先跑通首任务及三类代表变体，再推广到清单内其他任务。每个变体只做少量验证，不跑200条。遵守技能的独立目录和原始任务判定；记录所有失败和未验证项。完成后提交并推送自己的分支，给出可复制复现命令和验证证据。如果GPU被其他任务占用，先继续CPU工作，不结束其他进程。
+
+四、交付检查
+首个任务的小样本验收通过即可提交/推送本组分支，之后按原始任务增量提交；不必等待本组全部任务完成或等待其他组。
+每组交付环境/变体覆盖表、代码配置、资产恢复说明、可复现命令、真实小样本验证结果、失败日志、已知限制。图像展示、规划成功、场景成功加载，都不能替代物理执行和数据校验。
+原始任务成功 + 执行/接触/间隙检查 + RGB/动作/状态对齐三层都通过，才记accepted。按accepted数达到200条的批采交给后续人员。
+技能测试与真实采集记录见VALIDATION.txt、各skill实测参考和docs/extensions/SKILL_TRIALS.md；完成矩阵从reports/skill_trials/summary.json读取。本轮4个原任务的固定样本不代表其余26个新增任务已实现或已采集成功。

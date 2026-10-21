@@ -1,0 +1,444 @@
+{
+  "schema_version": 1,
+  "student": "D",
+  "group": "controls",
+  "status": "cpu_preparation_complete_physical_execution_blocked",
+  "scope": {
+    "allowed": "Read-only source review and CPU checks; generated files only under /tmp/robolaw-skill-test-d/",
+    "no_repository_writes": true,
+    "no_branch_switch": true,
+    "no_network_download": true,
+    "no_gpu_started": true,
+    "other_students_required": false,
+    "training_still_running": "User-reported; no GPU probes or interference"
+  },
+  "task_count": 3,
+  "task_ids": [
+    "kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian",
+    "kitchen_bench_lightwheel_press_right_toaster_cancel_button_g_shaped_large_scandinavian",
+    "kitchen_bench_lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian"
+  ],
+  "task_order": [
+    "kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian",
+    "kitchen_bench_lightwheel_press_right_toaster_cancel_button_g_shaped_large_scandinavian",
+    "kitchen_bench_lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian"
+  ],
+  "representative_task": "kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian",
+  "branch": {
+    "expected": "ylj-controls",
+    "actual": "ylj",
+    "expected_branch_already_exists": false,
+    "changed": false,
+    "later_action": "After this restricted test, inspect status again and create ylj-controls only if still absent; never reset another branch"
+  },
+  "base_commit": "cce14d656a2a449e3f04846748025c80adfbc829",
+  "actual_commit": "cce14d656a2a449e3f04846748025c80adfbc829",
+  "remote": "https://github.com/youlj109/RoboLaw",
+  "git_status_before_and_after": "?? student_skills/",
+  "owned_paths": [
+    "kitchen_safety/extensions/controls/",
+    "configs/extensions/controls/",
+    "scripts/extensions/controls/",
+    "tests/extensions/controls/",
+    "assets/extensions/controls/",
+    "docs/extensions/controls/"
+  ],
+  "artifacts": {
+    "all_tasks_preflight": "/tmp/robolaw-skill-test-d/preflight_all.json",
+    "first_task_preflight": "/tmp/robolaw-skill-test-d/preflight_first.json",
+    "first_task_manifest": "/tmp/robolaw-skill-test-d/first_task_manifest.json",
+    "manifest_status": "planning_only; not a runnable environment or implemented collection CLI",
+    "predicate_cpu_evidence": "/tmp/robolaw-skill-test-d/predicate_cpu_evidence.json"
+  },
+  "actual_commands": [
+    {
+      "command": "python3 student_skills/robolaw-controls/scripts/preflight.py --repo /home/oem/Code/RoboLaw --report /tmp/robolaw-skill-test-d/preflight_all.json",
+      "exit_code": 0,
+      "result": "static_pass, 3/3 source hashes and env IDs match"
+    },
+    {
+      "command": "python3 student_skills/robolaw-controls/scripts/preflight.py --repo /home/oem/Code/RoboLaw --task kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian --report /tmp/robolaw-skill-test-d/preflight_first.json --emit-skeleton /tmp/robolaw-skill-test-d/first_task_manifest.json",
+      "exit_code": 0,
+      "result": "static_pass; one-task planning manifest emitted"
+    },
+    {
+      "command": "python3 scripts/check_scene_assets.py --require-restored",
+      "exit_code": 0,
+      "result": {
+        "scene_count": 11,
+        "external_files_to_restore": 13,
+        "missing_files": [],
+        "passed": true
+      },
+      "scope": "Original example assets only, does not establish layout=9/style=8 readiness"
+    },
+    {
+      "command": "git status --short",
+      "exit_code": 0,
+      "result": "?? student_skills/",
+      "when": "Before and after checks"
+    },
+    {
+      "command": "git remote -v",
+      "exit_code": 0,
+      "result": "origin https://github.com/youlj109/RoboLaw (fetch and push)"
+    },
+    {
+      "command": "git rev-parse HEAD",
+      "exit_code": 0,
+      "result": "cce14d656a2a449e3f04846748025c80adfbc829"
+    },
+    {
+      "command": "git branch --show-current",
+      "exit_code": 0,
+      "result": "ylj"
+    },
+    {
+      "command": "git branch --list ylj-controls",
+      "exit_code": 0,
+      "result": "empty"
+    },
+    {
+      "command": "docker ps --format '{{.Names}}\\t{{.Status}}\\t{{.Image}}'",
+      "exit_code": 0,
+      "result": "arena-kitchen-dev; running; robolaw-runtime:local-2026-10-21"
+    },
+    {
+      "command": "docker inspect arena-kitchen-dev --format '{{json .Mounts}}'",
+      "exit_code": 0,
+      "result": "/home/oem/Code/RoboLaw -> /workspace; runtime/home -> /home/user; host uv cache also mounted"
+    },
+    {
+      "command": "docker exec -i -w /workspace -e PYTHONDONTWRITEBYTECODE=1 arena-kitchen-dev /workspace/.venv-arena/bin/python -B -c 'import sys,json,importlib.metadata as m; names=[\"isaaclab-arena\",\"isaaclab\",\"isaacsim\",\"torch\",\"warp-lang\",\"numpy\",\"python-fcl\",\"nvidia-curobo\",\"lightwheel-sdk\"]; packages={};\nfor name in names:\n try: packages[name]=m.version(name)\n except m.PackageNotFoundError: packages[name]=None\nprint(json.dumps({\"executable\":sys.executable,\"python\":sys.version,\"packages\":packages,\"gpu_imported\":False},indent=2))'",
+      "exit_code": 0,
+      "result": {
+        "isaaclab-arena": "0.3.0",
+        "isaaclab": "17.0.2",
+        "isaacsim": "6.1.0.0",
+        "torch": "2.11.0+cu128",
+        "warp-lang": "1.16.0",
+        "numpy": "2.3.1",
+        "python-fcl": "0.7.0.11",
+        "nvidia-curobo": "0.7.7.post1.dev5",
+        "lightwheel-sdk": "1.0.3"
+      },
+      "scope": "Read-only package metadata; neither imports torch nor initializes CUDA/Kit"
+    },
+    {
+      "command": "python3 -B -c 'import sys,json,importlib.util; print(json.dumps({\"executable\":sys.executable,\"modules_found\":{n:importlib.util.find_spec(n) is not None for n in [\"yaml\",\"torch\",\"fcl\",\"pxr\"]}},indent=2))'",
+      "exit_code": 0,
+      "result": {
+        "executable": "/home/oem/miniconda3/bin/python3",
+        "yaml": true,
+        "torch": false,
+        "fcl": false,
+        "pxr": true
+      }
+    }
+  ],
+  "asset_readiness": {
+    "original_example": "Entry-point and required-file presence check passed; no repeated dependency hashes",
+    "assigned_background_registry": "lightwheel_kitchen_g_shaped_large_scandinavian",
+    "layout_id": 9,
+    "style_id": 8,
+    "scene": "robocasakitchen",
+    "backend": "robocasa",
+    "source_api": "LightwheelKitchenBackground -> acquire_lightwheel_asset(floorplan_loader, floorplan_loader.get_usd, scene=\"robocasakitchen\", layout_id=9, style_id=8, backend=\"robocasa\")",
+    "source_evidence": [
+      "third_party/IsaacLab-Arena/isaaclab_arena/assets/lightwheel_kitchen_factory.py:13",
+      "third_party/IsaacLab-Arena/isaaclab_arena/assets/background_library.py:170",
+      ".venv-arena/lib/python3.12/site-packages/lightwheel_sdk/loader/floorplan.py:32"
+    ],
+    "checked_container_cache_host_path": "runtime/home/.cache/lightwheel_sdk/floorplan/robocasa-robocasakitchen-9-8/scene.usd",
+    "checked_container_cache_exists": false,
+    "cache_version_manifest_exists": false,
+    "assigned_extension_asset_directory_exists": false,
+    "conclusion": "Assigned kitchen is not restored in the verified default cache or controls-owned assets; other arbitrary external asset locations were not exhaustively searched",
+    "next": "Implement a group-local restoration manifest from this source API, record returned version and asset/reference hashes and applicable license; then validate nested toaster and oven prims and every referenced layer/texture locally. Do not substitute the one-wall coastal assets/kitchen/scene.usd.",
+    "network_note": "The SDK get_usd contacts its service even before checking cached version, and importing floorplan.py creates its cache directory. Do not instantiate the background or import the loader in a read-only offline dry-run.",
+    "obstacle_catalog_ids": [
+      "property_tall_glass",
+      "property_wine_glass",
+      "property_glass_bottle",
+      "property_ceramic_mug",
+      "property_vase",
+      "property_tablet_stand",
+      "robot_steel_clamp",
+      "robot_projecting_crossbar",
+      "robot_narrow_opening",
+      "robot_sharp_equipment_housing"
+    ],
+    "mpfb": "Present via assets/people/mpfb_corridor/collidable.usda and person.usdc; needs group-local human_default_mpfb registration, not an invented people catalog"
+  },
+  "runtime_readiness": {
+    "host_python": "/home/oem/miniconda3/bin/python3",
+    "container_python": "/workspace/.venv-arena/bin/python",
+    "container_python_version": "3.12.13",
+    "package_metadata": {
+      "isaaclab-arena": "0.3.0",
+      "isaaclab": "17.0.2",
+      "isaacsim": "6.1.0.0",
+      "torch": "2.11.0+cu128",
+      "warp-lang": "1.16.0",
+      "numpy": "2.3.1",
+      "python-fcl": "0.7.0.11",
+      "nvidia-curobo": "0.7.7.post1.dev5",
+      "lightwheel-sdk": "1.0.3"
+    },
+    "metadata_matches_pinned_runtime": true,
+    "functional_runtime_verified": false,
+    "cuda_verified": false,
+    "kit_started": false,
+    "training_resources_touched": false,
+    "check_runtime_not_run_reason": "It queries CUDA and writes reports/runtime_check.json; incompatible with this read-only no-GPU test",
+    "later": "Use an independent ARENA_CONTAINER and output location after resource availability; verify /workspace mapping and interpreter first, do not blindly create or reuse an occupied container"
+  },
+  "source_semantics": {
+    "left_button": {
+      "object": "toaster",
+      "prim": "toaster_main_group",
+      "joint": "sideL_button_cancel_joint",
+      "stand_height_m": 0.8,
+      "robot_relation": "on floor; next_to toaster negative_y 0.4m; rotate_around_solution yaw 1.57rad",
+      "predicate": "Pressable.is_pressed: normalized joint position > 0.5 (strict); preserve original termination and reset",
+      "threshold_at_half": "False",
+      "hold_duration": "YAML says press and hold; upstream predicate specifies no temporal dwell. Record dwell as extra diagnostic, without claiming it is an upstream requirement or relaxing predicate.",
+      "normalized_direction": "get_normalized_joint_position uses (q-min)/(max-min), then reverses with 1-normalized if joint_min<0. Derive pressing direction from actual USD limits/axis."
+    },
+    "right_button": {
+      "object": "toaster",
+      "prim": "toaster_main_group",
+      "joint": "sideR_button_cancel_joint",
+      "stand_height_m": 0.8,
+      "robot_relation": "same as left",
+      "predicate": "same strict is_pressed predicate"
+    },
+    "temperature_knob": {
+      "object": "oven_temperature_knob",
+      "prim": "oven_right_group",
+      "joint": "knob_temp_joint",
+      "stand_height_m": 0.7,
+      "robot_relation": "on floor; next_to knob negative_x 0.45m; yaw 0rad",
+      "target_level": 3,
+      "reset_level": -1,
+      "min_angle_deg": 30.0,
+      "max_angle_deg": 150.0,
+      "num_levels": 5,
+      "predicate": "get_turning_level uses floor of normalized angle times 4; is_at_level checks integer equality to 3",
+      "ideal_level3_interval_deg": "[120,150), subject to real tensor numerical boundaries",
+      "interior_reference_angle_deg": 135,
+      "reset_angle_deg": 0,
+      "execution": "135 degrees is a geometric interior reference only, not a permission to call turn_to_level or write joint state during execution. Grasp and rotate physically, then read actual joint angle and original predicate."
+    },
+    "mimic": "Both PressButtonTask and TurnKnobTask get_mimic_env_cfg raise NotImplementedError; implement own recorder",
+    "predicate_evidence": [
+      "third_party/IsaacLab-Arena/isaaclab_arena/affordances/pressable.py:18",
+      "third_party/IsaacLab-Arena/isaaclab_arena/affordances/pressable.py:34",
+      "third_party/IsaacLab-Arena/isaaclab_arena/affordances/turnable.py:82",
+      "third_party/IsaacLab-Arena/isaaclab_arena/affordances/turnable.py:98",
+      "third_party/IsaacLab-Arena/isaaclab_arena/affordances/turnable.py:138"
+    ],
+    "camera_and_action": {
+      "enable_cameras_required": true,
+      "default_enable_cameras": false,
+      "camera_names": [
+        "external_camera",
+        "external_camera_2",
+        "wrist_camera"
+      ],
+      "camera_resolution": [
+        1280,
+        720
+      ],
+      "external_mount": "Robot/panda_link0",
+      "wrist_mount": "Robotiq base_link",
+      "camera_format": "RGB, normalize=False; preserve original intrinsics and offsets",
+      "arm_action": "7 absolute panda joint position targets, radians; use_default_offset=False",
+      "gripper_action": "binary; >0.5 closes, otherwise opens; not continuous opening width",
+      "evidence": [
+        "third_party/IsaacLab-Arena/isaaclab_arena/embodiments/droid/droid.py:334",
+        "third_party/IsaacLab-Arena/isaaclab_arena/embodiments/droid/droid.py:515",
+        "third_party/IsaacLab-Arena/isaaclab_arena/embodiments/droid/droid.py:567",
+        "third_party/IsaacLab-Arena/isaaclab_arena/embodiments/droid/actions.py:13"
+      ]
+    },
+    "completion_tracking": "Original progress tracker advances and remembers predicate completion; save the observed predicate success while pressed and do not invent a dwell requirement."
+  },
+  "existing_gaps": [
+    {
+      "gap": "No group-owned environment, collection CLI, planner adapter, validator or audit yet",
+      "evidence": "controls extension paths absent; no other student output is required"
+    },
+    {
+      "gap": "CollisionWorld excludes geometry outside old kitchen bounds [1,-1.5,.7]..[3.5,.5,2.5]",
+      "evidence": "kitchen_safety/collision_planner.py:109",
+      "action": "Implement complete group-local world extraction and motion/sweep coverage tests"
+    },
+    {
+      "gap": "Base environment and collector are mustard/bowl specific",
+      "evidence": [
+        "kitchen_safety/environment.py:55",
+        "kitchen_safety/environment.py:102",
+        "scripts/collect_kitchen.py:259"
+      ],
+      "action": "Use a local task environment and measured button/knob states; no global monkeypatch"
+    },
+    {
+      "gap": "Clearance audit assumes mustard and carry phases",
+      "evidence": [
+        "scripts/audit_collection_clearance.py:30",
+        "scripts/audit_collection_clearance.py:104"
+      ],
+      "action": "Implement task-aware dynamic articulation and contact audit; retain safety requirements"
+    },
+    {
+      "gap": "Data validator checks alignment/RGB but does not establish button/knob task success",
+      "evidence": "scripts/validate_collection.py:48",
+      "action": "Reuse valid data invariants, add original predicates and actual task state checks; do not call data validation physical success"
+    },
+    {
+      "gap": "cuRobo API is not a force controller and has bottle-oriented grip/carry defaults",
+      "evidence": [
+        "kitchen_safety/curobo_backend.py:1",
+        "kitchen_safety/curobo_backend.py:249"
+      ],
+      "action": "Use free-space and segmented IK plus actual contact/joint feedback; transform with actual DROID base"
+    },
+    {
+      "gap": "No parallel or persistent sequence implementation",
+      "evidence": {
+        "parallel_collection_module_present": false,
+        "persistent_sequence_script_present": false,
+        "human_catalog_present": false
+      },
+      "action": "First collector is single-environment; no unsupported num-envs/persistent claims"
+    }
+  ],
+  "next_implementation_and_validation": [
+    {
+      "order": 1,
+      "paths": [
+        "configs/extensions/controls/",
+        "assets/extensions/controls/"
+      ],
+      "work": "Create task schema from exact YAML, recover layout9/style8 source with provenance; preserve relations, support heights, source hashes and three original camera definitions. Keep all stage construction out of CPU list/dry-run paths.",
+      "cpu_validation": "Three-task selection, source config parity, offline missing-asset diagnostics; USD reference/prim/joint-axis and joint-limit checks after assets are restored"
+    },
+    {
+      "order": 2,
+      "paths": [
+        "kitchen_safety/extensions/controls/",
+        "tests/extensions/controls/"
+      ],
+      "work": "Implement environment adapter and complete collision world using actual robot base transform and all swept articulated geometry. Define permitted fingertip-button contacts by phase, forbid other robot-to-toaster contacts.",
+      "cpu_validation": "Synthetic geometry outside old crop, dynamic collider updates, transforms, contact allowlist and joint-limit regression checks"
+    },
+    {
+      "order": 3,
+      "paths": [
+        "kitchen_safety/extensions/controls/",
+        "scripts/extensions/controls/"
+      ],
+      "work": "Implement left-button executor: reset, approach with clearance, align true USD press axis, advance in bounded steps with joint-travel feedback, hold and capture predicate success before any diagnostic retraction. Add right button then knob grasp/rotation feedback.",
+      "cpu_validation": "State-machine limits, no direct success-state assignment, command units; physical contact not yet verified"
+    },
+    {
+      "order": 4,
+      "paths": [
+        "scripts/extensions/controls/",
+        "configs/extensions/controls/",
+        "tests/extensions/controls/"
+      ],
+      "work": "Implement independent CLI with task/variant listing, dry-run, seed, output, accepted-success quota, max attempts and resume; separate planning/execution/data evidence and store failures.",
+      "cpu_validation": "Only after implementation run real --help and dry-run; then issue copyable acquisition commands. No executable command is claimed now."
+    },
+    {
+      "order": 5,
+      "paths": [
+        "kitchen_safety/extensions/controls/",
+        "scripts/extensions/controls/",
+        "docs/extensions/controls/"
+      ],
+      "work": "Recorder and validator save original three RGB cameras, action units, q/qd, joint positions/velocities/limits, TCP/body and dynamic obstacle poses, phases, timestamps, predicate trajectory, contacts and clearances.",
+      "cpu_validation": "Synthetic malformed/alignment cases plus every frame decode and saved final next_obs; keep real result/validation/audit contents and exit codes"
+    },
+    {
+      "order": 6,
+      "paths": [
+        "configs/extensions/controls/",
+        "docs/extensions/controls/"
+      ],
+      "work": "Place property_vase, robot_projecting_crossbar and human_default_mpfb relative to task anchors; check support/no intersection and feasible avoidance; record actual randomized geometry/appearance specs.",
+      "validation": "Baseline trajectory comparison or constraint/geometry evidence without executing a dangerous counterfactual; coverage table distinguishes passed, unverified and not applicable"
+    }
+  ],
+  "first_real_capture_plan": {
+    "task_id": "kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian",
+    "variant": "base_without_added_obstacle",
+    "accepted_quota": 1,
+    "maximum_attempts": 10,
+    "stop_and_diagnose_after_identical_failures": 3,
+    "proposed_seed": 42,
+    "execution_backend": "single",
+    "group_dataset_root": "datasets/controls/",
+    "group_report_root": "reports/controls/",
+    "command_status": "UNAVAILABLE: group collection CLI does not exist; do not fabricate an executable command. Implement it, verify --help and CPU dry-run, then record the exact supported command.",
+    "prerequisites": [
+      "Assigned kitchen and nested references restored with source/version/hash and license records",
+      "Actual joint axes, limits and fingertip target geometry verified",
+      "Complete collision extraction and base conversion validated",
+      "Independent container/interpreter/mount and output verified; GPU available without affecting ongoing training",
+      "Task-aware collector, validation and audit implemented; CPU tests and dry-run pass"
+    ],
+    "physical_stages": [
+      "Use upstream reset, verify button starts unpressed and scene supported",
+      "cuRobo free-space precontact approach with full world checks",
+      "Align fingertip and advance in bounded contact steps along measured press axis; monitor allowed contacts, prohibited contacts, travel and time limits",
+      "Record original is_pressed while pressed, preserve original success semantics; keep optional hold duration evidence separate",
+      "Save actual result, validation and audit with command exit codes; inspect a first successful video preview"
+    ],
+    "acceptance_gates": [
+      "Original task predicate completed physically without teleportation/joint-state writing",
+      "Measured contact and execution clearance pass separately from planned path clearance",
+      "Three original RGB streams and action/state timestamps/chain align; actual image content inspected"
+    ],
+    "after_baseline": "For each of property_vase, robot_projecting_crossbar, human_default_mpfb collect 3 accepted examples: fixed plus 2 genuinely perturbed specs. At most 10 initial attempts/config and diagnose after 3 identical failures. Then apply same 3-sample validation to remaining tasks and applicable variants. No automatic 200-episode batch.",
+    "randomization_claim": "Until different sampled geometry/appearance is recorded and validated, report fixed_only"
+  },
+  "verified_results": [
+    "All 3 assigned YAMLs exist, exact env IDs and recorded SHA256 hashes match the fixed assignment",
+    "Repository commit matches documented base; branch stayed ylj and tracked files were not changed",
+    "First task planning manifest generated from actual preflight successfully",
+    "Original 11 scene entry-point assets and 13 required external files exist (presence, not full hash/physics validation)",
+    "Actual running container mounts and Python/package metadata inspected without CUDA/Kit import",
+    "Assigned layout/style traced to factory and SDK; default container cache and controls-owned asset location absent",
+    "Button strict threshold, knob level mapping and Mimic omissions read in original code",
+    "Original predicate AST logic tested with scalar dependencies: strict half threshold and positive/negative limits; knob interval mapping and reset/reference setter targets pass (no tensor/physical claim)."
+  ],
+  "unverified_results": [
+    "Assigned kitchen complete USD resolution and actual press/knob axes/limits",
+    "Native runtime functional imports, CUDA, Isaac physics, cuRobo planning and physical execution",
+    "Actual permitted/prohibited contacts and clearances",
+    "Three-camera image capture/alignment or successful physical episode",
+    "Randomization effectiveness and any 200-episode throughput or success rate"
+  ],
+  "skill_evaluation": {
+    "can_start_independently": true,
+    "can_collect_now": false,
+    "reason": "Scope, IDs, branch, ownership and implementation order are complete enough for independent CPU development; real acquisition waits for local task implementation, correct assets and available resources, not for other students.",
+    "blocking_instruction_errors": [],
+    "ambiguities_or_caveats": [
+      "Button YAML says press and hold, but upstream is_pressed is instantaneous and gives no dwell duration. State explicit extra dwell diagnostics and original predicate separately; success must be captured before any retraction releases the button.",
+      "Turnable source comment says rounding but executable code uses floor. Skill correctly directs reading actual affordance; implementing from comment or treating target_level=3 as radians would be wrong.",
+      "The skill intentionally specifies future CLI requirements, not an existing entrypoint. Physical acquisition cannot yet be represented by a verified runnable new-task command.",
+      "Source preflight validates assignment/source consistency, not all physics assets/runtime. Its explicit warnings are necessary; passing it must not imply acquisition readiness.",
+      "Shared README check_runtime writes inside repo and queries CUDA; the restricted CPU-only forward test must use package metadata inspection instead."
+    ],
+    "constraints_followed": "Only /tmp/robolaw-skill-test-d/ generated files; no branch creation, downloads, GPU processes, training changes or repository edits",
+    "revised_skill_review": {
+      "reviewed_file": "student_skills/robolaw-controls/SKILL.md:59",
+      "result": "Parent-added hold-duration, floor-vs-rounding and reset-only setter clarification is accurate; required affordance/joint_utils reading is appropriate. The earlier two major semantic ambiguities are now addressed.",
+      "remaining_nonblocking_note": "The collector must explicitly enable all 3 cameras and document binary gripper action; these details were verified from DROID code and are included in this plan."
+    }
+  }
+}

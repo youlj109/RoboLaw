@@ -1,0 +1,1599 @@
+{
+  "schema_version": 1,
+  "student": "A",
+  "group": "replicator",
+  "skill": "robolaw-replicator",
+  "label": "Replicator 全部14个抓放环境",
+  "branch": "ylj-replicator",
+  "base_repository": "https://github.com/youlj109/RoboLaw",
+  "base_commit": "cce14d656a2a449e3f04846748025c80adfbc829",
+  "arena_revision": "7050ecbc9b3fc689df51ea7cc7f9a64b18294bf6",
+  "representative_task": "kitchen_bench_replicator_g_shape_mustard_bowl",
+  "owned_paths": [
+    "kitchen_safety/extensions/replicator/",
+    "configs/extensions/replicator/",
+    "scripts/extensions/replicator/",
+    "tests/extensions/replicator/",
+    "assets/extensions/replicator/",
+    "docs/extensions/replicator/"
+  ],
+  "environment_count": 14,
+  "tasks": [
+    {
+      "id": "kitchen_bench_replicator_g_shape_banana_bowl",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_g_shape_banana_bowl.yaml",
+      "source_sha256": "fc9747cbd4c9cf99f5b79713c30b6e6687509d3f655e3c60a4317892831d8efc",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_g_shape",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "banana",
+          "registry_name": "banana_ycb_robolab",
+          "params": {}
+        },
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "corner_counter",
+          "parent_id": "kitchen",
+          "prim_path": "CornerCounter_00_0",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the banana and place it in the red bowl",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "banana",
+              "destination_location": "bowl",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "corner_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "corner_counter",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "banana",
+          "reference": "corner_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "corner_counter",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_g_shape_bowl_sink",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_g_shape_bowl_sink.yaml",
+      "source_sha256": "9dac17bf176237b9dafb60f6bbce010da11e2344ec01468ba5cd30b55f5243dc",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_g_shape",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "sink",
+          "parent_id": "kitchen",
+          "prim_path": "Sink/BasinBottom",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "sink_counter",
+          "parent_id": "kitchen",
+          "prim_path": "CapSurface_02",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the bowl and place it in the sink",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "bowl",
+              "destination_location": "sink",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "sink",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "sink_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "sink",
+          "params": {
+            "side": "negative_x",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 0.0
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "sink_counter",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "bowl",
+          "reference": "sink",
+          "params": {
+            "side": "positive_y",
+            "distance_m": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_g_shape_mustard_bowl",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_g_shape_mustard_bowl.yaml",
+      "source_sha256": "cc781d2eadbfa2a3d3b884938f92a453ce09cf76db73590700eafcf15c9a69c1",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_g_shape",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "mustard_bottle",
+          "registry_name": "mustard_bottle_hope_robolab",
+          "params": {}
+        },
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "island_top",
+          "parent_id": "kitchen",
+          "prim_path": "CapSurface_03",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the mustard bottle and place it in the red bowl",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "mustard_bottle",
+              "destination_location": "bowl",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "island_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "island_top",
+          "params": {
+            "side": "positive_y",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": -1.57
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "mustard_bottle",
+          "reference": "island_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "island_top",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_l_island_banana_bowl",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_l_island_banana_bowl.yaml",
+      "source_sha256": "ee3254cbd0b5edde6d85a82a5716743e89e9f344e47283cd40125a3f8d196f1c",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_l_island",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "banana",
+          "registry_name": "banana_ycb_robolab",
+          "params": {}
+        },
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "corner_counter",
+          "parent_id": "kitchen",
+          "prim_path": "CornerCounter_00_0",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the banana and place it in the red bowl",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "banana",
+              "destination_location": "bowl",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "corner_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "corner_counter",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "banana",
+          "reference": "corner_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "corner_counter",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_l_island_bowl_sink",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_l_island_bowl_sink.yaml",
+      "source_sha256": "8c227b147f4eeafa64f4a179d4663863236c0cea11b1eedc9bc6a7b540f85045",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_l_island",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "sink",
+          "parent_id": "kitchen",
+          "prim_path": "Sink/BasinBottom",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "sink_counter",
+          "parent_id": "kitchen",
+          "prim_path": "CapSurface",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the bowl and place it in the sink",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "bowl",
+              "destination_location": "sink",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "sink",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "sink_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "sink",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "sink_counter",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "bowl",
+          "reference": "sink",
+          "params": {
+            "side": "negative_x",
+            "distance_m": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_l_island_mustard_bowl.yaml",
+      "source_sha256": "32dc636f77f7ed8dc28ad36fe8be440a114665a2526d219f955488365b3b29e3",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_l_island",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "mustard_bottle",
+          "registry_name": "mustard_bottle_hope_robolab",
+          "params": {}
+        },
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "island_top",
+          "parent_id": "kitchen",
+          "prim_path": "CapSurface_03",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the mustard bottle and place it in the red bowl",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "mustard_bottle",
+              "destination_location": "bowl",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "island_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "island_top",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "mustard_bottle",
+          "reference": "island_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "island_top",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_l_shape_banana_bowl",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_l_shape_banana_bowl.yaml",
+      "source_sha256": "141bbe3c46f7d6bf279759374b8d1e19380d21e103519391738a8d5c92aff9e3",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_l_shape",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "banana",
+          "registry_name": "banana_ycb_robolab",
+          "params": {}
+        },
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "corner_counter",
+          "parent_id": "kitchen",
+          "prim_path": "CornerCounter_00_0",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the banana and place it in the red bowl",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "banana",
+              "destination_location": "bowl",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "corner_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "corner_counter",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "banana",
+          "reference": "corner_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "corner_counter",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_l_shape_bowl_sink",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_l_shape_bowl_sink.yaml",
+      "source_sha256": "82e118e48a6b67f3241770cb91da2e26db108781bb41262c4605083053189ea8",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_l_shape",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "sink",
+          "parent_id": "kitchen",
+          "prim_path": "Sink/BasinBottom",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "sink_counter",
+          "parent_id": "kitchen",
+          "prim_path": "CapSurface_02",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the bowl and place it in the sink",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "bowl",
+              "destination_location": "sink",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "sink",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "sink_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "sink",
+          "params": {
+            "side": "positive_x",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 3.14
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "sink_counter",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "bowl",
+          "reference": "sink",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_l_shape_mustard_bowl",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_l_shape_mustard_bowl.yaml",
+      "source_sha256": "26b947afa84cdc712ff89e8440a323e39c7bb16303f5a2f8ac836d7df31adfab",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_l_shape",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "mustard_bottle",
+          "registry_name": "mustard_bottle_hope_robolab",
+          "params": {}
+        },
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "counter_top",
+          "parent_id": "kitchen",
+          "prim_path": "CapSurface",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the mustard bottle and place it in the red bowl",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "mustard_bottle",
+              "destination_location": "bowl",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "counter_top",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "mustard_bottle",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "counter_top",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_peninsula_bowl_sink",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_peninsula_bowl_sink.yaml",
+      "source_sha256": "f79b0bab94dac1cbb4311f4b9535f0c38025f65c49610f791f952d4d986de979",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_peninsula",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "sink",
+          "parent_id": "kitchen",
+          "prim_path": "Sink/BasinBottom",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "sink_counter",
+          "parent_id": "kitchen",
+          "prim_path": "CapSurface_01",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the bowl and place it in the sink",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "bowl",
+              "destination_location": "sink",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "sink",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "sink_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "sink",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "sink_counter",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "bowl",
+          "reference": "sink",
+          "params": {
+            "side": "negative_x",
+            "distance_m": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_peninsula_mustard_bowl",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_peninsula_mustard_bowl.yaml",
+      "source_sha256": "261cd78cdcf50094319743772fecd644e87120b95e6eb5e3799bbc4fbde70fae",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_peninsula",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "mustard_bottle",
+          "registry_name": "mustard_bottle_hope_robolab",
+          "params": {}
+        },
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "island_top",
+          "parent_id": "kitchen",
+          "prim_path": "CapSurface_02",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the mustard bottle and place it in the red bowl",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "mustard_bottle",
+              "destination_location": "bowl",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "island_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "island_top",
+          "params": {
+            "side": "positive_y",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": -1.57
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "mustard_bottle",
+          "reference": "island_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "island_top",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_u_shape_banana_bowl",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_u_shape_banana_bowl.yaml",
+      "source_sha256": "d6d81a3a5cc88b83e084d90a2a74f2eff1bc2f47e90cb1a865f8a2d9f6717bbb",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_u_shape",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "banana",
+          "registry_name": "banana_ycb_robolab",
+          "params": {}
+        },
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "corner_counter",
+          "parent_id": "kitchen",
+          "prim_path": "CornerCounter_00_0",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the banana and place it in the red bowl",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "banana",
+              "destination_location": "bowl",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "corner_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "corner_counter",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "banana",
+          "reference": "corner_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "corner_counter",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_u_shape_bowl_sink",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_u_shape_bowl_sink.yaml",
+      "source_sha256": "0129dabb4423934c8df13b0289f086fc0b4205422f34285f6e12d5524639410b",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_u_shape",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "sink",
+          "parent_id": "kitchen",
+          "prim_path": "Sink/BasinBottom",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "sink_counter",
+          "parent_id": "kitchen",
+          "prim_path": "CapSurface_01",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the bowl and place it in the sink",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "bowl",
+              "destination_location": "sink",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "sink",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "sink_counter",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "sink",
+          "params": {
+            "side": "positive_x",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 3.14
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "sink_counter",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "bowl",
+          "reference": "sink",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.1
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_u_shape_mustard_bowl.yaml",
+      "source_sha256": "6816c1598be1c1267fa54c235db5c5e1820dbeb77f6e9d216874b0d4168087b0",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "replicator_kitchen_u_shape",
+        "params": {
+          "collision_mode": "mesh"
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true
+        }
+      },
+      "objects": [
+        {
+          "id": "mustard_bottle",
+          "registry_name": "mustard_bottle_hope_robolab",
+          "params": {}
+        },
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "KitchenRoom/Floor",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "counter_top",
+          "parent_id": "kitchen",
+          "prim_path": "CapSurface_03",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "pick up the mustard bottle and place it in the red bowl",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "mustard_bottle",
+              "destination_location": "bowl",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "counter_top",
+          "params": {
+            "side": "negative_x",
+            "distance_m": 0.15,
+            "tolerance_m": 0.15
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 0.0
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "mustard_bottle",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "counter_top",
+          "params": {}
+        }
+      ]
+    }
+  ]
+}

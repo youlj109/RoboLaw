@@ -1,0 +1,378 @@
+{
+  "schema_version": 1,
+  "student": "C",
+  "group": "doors",
+  "status": "cpu_preparation_complete_physical_execution_not_implemented",
+  "repo": "/home/oem/Code/RoboLaw",
+  "task_count": 8,
+  "task_ids": [
+    "kitchen_bench_lightwheel_open_cabinet_u_shaped_with_island_farmhouse2",
+    "kitchen_bench_lightwheel_open_freezer_g_shaped_large_scandinavian",
+    "kitchen_bench_lightwheel_open_fridge",
+    "kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian",
+    "kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2",
+    "kitchen_bench_lightwheel_open_microwave",
+    "kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian",
+    "kitchen_bench_lightwheel_open_oven_g_shaped_large_scandinavian"
+  ],
+  "first_task_id": "kitchen_bench_lightwheel_open_fridge",
+  "branch": {
+    "expected": "ylj-doors",
+    "actual": "ylj",
+    "head": "cce14d656a2a449e3f04846748025c80adfbc829",
+    "created": false,
+    "reason": "Test instruction explicitly prohibits branch changes"
+  },
+  "owned_paths": [
+    "kitchen_safety/extensions/doors/",
+    "configs/extensions/doors/",
+    "scripts/extensions/doors/",
+    "tests/extensions/doors/",
+    "assets/extensions/doors/",
+    "docs/extensions/doors/"
+  ],
+  "scope_respected": {
+    "writes_only_under": "/tmp/robolaw-skill-test-c",
+    "repository_edited_by_this_test": false,
+    "branch_changed": false,
+    "network_download_started": false,
+    "gpu_started": false,
+    "other_training_touched": false,
+    "other_student_dependency": false
+  },
+  "actual_commands": [
+    {
+      "command": "python3 student_skills/robolaw-doors/scripts/preflight.py --repo /home/oem/Code/RoboLaw --report /tmp/robolaw-skill-test-c/preflight_all.json",
+      "exit_code": 0,
+      "evidence": "preflight_all.json"
+    },
+    {
+      "command": "python3 student_skills/robolaw-doors/scripts/preflight.py --repo /home/oem/Code/RoboLaw --task kitchen_bench_lightwheel_open_fridge --report /tmp/robolaw-skill-test-c/preflight_first.json --emit-skeleton /tmp/robolaw-skill-test-c/first_task_manifest.json",
+      "exit_code": 0,
+      "evidence": "preflight_first.json",
+      "note": "Executed while target absent. Exclusive-create skeleton output intentionally cannot be overwritten; then enriched locally from actual YAML."
+    },
+    {
+      "command": "python3 -B scripts/restore_modelscope_assets.py --verify-only",
+      "exit_code": 0,
+      "evidence": "asset_bundle_verification.log",
+      "verified": "56 files, SHA-256"
+    },
+    {
+      "command": "python3 -B scripts/restore_downloaded_assets.py --source official --verify-only",
+      "exit_code": 0,
+      "evidence": "nvidia_asset_verification.json",
+      "verified": "13 required files, sizes and SHA-256"
+    },
+    {
+      "command": "python3 -B scripts/fetch_source_dependencies.py --source official --verify-only",
+      "exit_code": 0,
+      "evidence": "source_verification.log",
+      "verified": "arena 1126 + isaaclab 3952 + curobo 299 pinned entries"
+    },
+    {
+      "command": "python3 -B scripts/check_scene_assets.py --require-restored",
+      "exit_code": 0,
+      "evidence": "scene_asset_check.json",
+      "scope": "original eleven scene entries only"
+    },
+    {
+      "command": "git status --short; git branch --show-current; git rev-parse HEAD; git remote -v; git branch --list ylj-doors",
+      "exit_code": 0,
+      "verified": "branch ylj; head matches base; origin matches assignment; ylj-doors absent; student_skills/ untracked at test start; no branch changed"
+    },
+    {
+      "command": "python3 -B student_skills/robolaw-doors/scripts/preflight.py --repo /home/oem/Code/RoboLaw --task kitchen_bench_lightwheel_open_fridge --report /tmp/robolaw-skill-test-c/preflight_retest.json --emit-skeleton /tmp/robolaw-skill-test-c/first_task_manifest_retest.json",
+      "exit_code": 0,
+      "relations_match": true
+    }
+  ],
+  "first_task": {
+    "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_fridge.yaml",
+    "source_sha256": "679575de18414f7ccb49a5d43bcb2e1b952eb4c82c680ab79c55734aa638d3ee",
+    "relations": [
+      {
+        "kind": "is_anchor",
+        "subject": "floor",
+        "params": {}
+      },
+      {
+        "kind": "is_anchor",
+        "subject": "fridge",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "droid",
+        "reference": "floor",
+        "params": {}
+      },
+      {
+        "kind": "next_to",
+        "subject": "droid",
+        "reference": "fridge",
+        "params": {
+          "side": "negative_y",
+          "distance_m": 0.1
+        }
+      },
+      {
+        "kind": "rotate_around_solution",
+        "subject": "droid",
+        "params": {
+          "yaw_rad": 1.57
+        }
+      }
+    ],
+    "stand_height_m": 0.8,
+    "background_registry": "lightwheel_kitchen_one_wall_coastal",
+    "object": "fridge",
+    "joint": "fridge_door_joint",
+    "reset_openness": 0.0,
+    "min_openness_change_strict": 0.05,
+    "threshold_strict": 0.2,
+    "source_predicate": "sequential movement-from-rest then Openable.is_open; live normalized q, never direct state setting during episode",
+    "joint_limit_authored_degrees": [
+      0,
+      90
+    ],
+    "derived_success_angle_degrees_strict": 18.0,
+    "axis_world_normalized": [
+      1.4185615342766632e-07,
+      0.0,
+      0.99999999999999
+    ],
+    "axis_origin_world_m_authored": [
+      4.954614215459582,
+      -0.7625535118003961,
+      1.2094958277304677
+    ],
+    "geometry_is_live_physics": false,
+    "camera_names": [
+      "external_camera",
+      "external_camera_2",
+      "wrist_camera"
+    ],
+    "camera_resolution": [
+      1280,
+      720
+    ],
+    "camera_definition": "DroidCameraCfg in upstream embodiments/droid/droid.py:567; preserve mounting, intrinsic values, and action-state-image alignment"
+  },
+  "asset_inventory": {
+    "one_wall": "56-file bundle and actual scene USD inspected; local schema and door joints available",
+    "g_shaped_large_scandinavian": "No restored mapping in repository asset manifest; must acquire and verify, not proven absent from all host caches",
+    "u_shaped_with_island_farmhouse2": "No restored mapping in repository asset manifest; must acquire and verify, not proven absent from all host caches",
+    "authoritative_acquisition": "LightwheelKitchenBackground -> lightwheel_sdk.loader.floorplan_loader.get_usd(scene=robocasakitchen, layout_id, style_id, backend=robocasa); source reviewed but call not executed",
+    "layout_style_ids": {
+      "one_wall_coastal": [
+        1,
+        1
+      ],
+      "g_shaped_large_scandinavian": [
+        9,
+        8
+      ],
+      "u_shaped_with_island_farmhouse2": [
+        7,
+        10
+      ]
+    },
+    "obstacle_catalog_nonhuman_count": 10,
+    "human_default_mpfb": "Available separate entry; people/catalog.json absent; register locally without inventing asset IDs"
+  },
+  "runtime": {
+    "python": "3.14.6 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:37:38) [GCC 14.3.0]",
+    "executable": "/home/oem/miniconda3/bin/python3",
+    "top_level_module_spec_presence": {
+      "yaml": true,
+      "pxr": true,
+      "torch": false,
+      "curobo": false,
+      "isaaclab": false,
+      "isaaclab_arena": false,
+      "numpy": true,
+      "fcl": false,
+      "trimesh": false
+    },
+    "owned_path_presence": {
+      "kitchen_safety/extensions/doors": false,
+      "configs/extensions/doors": false,
+      "scripts/extensions/doors": false,
+      "tests/extensions/doors": false,
+      "assets/extensions/doors": false,
+      "docs/extensions/doors": false
+    }
+  },
+  "existing_gaps": [
+    {
+      "id": "door_pipeline_absent",
+      "evidence": "All six owned paths absent",
+      "impact": "No runnable door collection CLI, task environment adapter, semantic obstacle sampler, door executor, validator or audit currently exists."
+    },
+    {
+      "id": "collision_crop_omits_first_door",
+      "evidence": "collision_planner.py:120 and first_door_geometry.json",
+      "impact": "CPU calculation using primitive parameters finds all 37 fridge-door colliders outside fixed x<=3.5 crop. Must implement uncropped complete world locally, not only for other kitchens."
+    },
+    {
+      "id": "rigid_root_updates_not_articulation_updates",
+      "evidence": "CollisionWorld.set_obstacle_pose operates on rigid roots; does not update cuRobo automatically",
+      "impact": "Door panel/handle transforms must follow measured articulation q at every control step and both collision engines must refresh; moving door vs hazards must also be audited."
+    },
+    {
+      "id": "bottle_specific_semantics",
+      "evidence": "environment.py constructs PickAndPlaceTask; collect_kitchen.py records mustard and bowl; audit_collection_clearance.py fields and CARRY_PHASES are bottle-specific",
+      "impact": "Do not pass task_id to baseline runner or remove mandatory checks to force a pass. Reuse proven camera/alignment helpers under a task-aware schema."
+    },
+    {
+      "id": "runtime_and_resource_gate",
+      "evidence": "Host Python 3.14 has pxr/yaml/numpy specs but lacks torch/curobo/isaaclab/isaaclab_arena/fcl/trimesh; arena_python.sh invokes /workspace/.venv-arena in default arena-kitchen-dev",
+      "impact": "Module presence is host-only, not proof container unavailable. Verify a doors-specific container and its /workspace mount without interrupting training before running."
+    },
+    {
+      "id": "unrestored_other_kitchens",
+      "evidence": "Published asset bundle covers one_wall only; upstream source acquisition API identified",
+      "impact": "Recover G and U assets into owned paths with provenance and hashes before those tasks; no fabricated URLs."
+    },
+    {
+      "id": "parallel_missing",
+      "evidence": "parallel_collection.py and collect_kitchen_sequence.py absent; collect_obstacle_library.py exposes execution-backend choices single",
+      "impact": "Use single-env collection. --num-envs is not evidence of parallel readiness."
+    }
+  ],
+  "next_implementation_and_validation": [
+    {
+      "order": 1,
+      "path": "kitchen_safety/extensions/doors/ + configs/extensions/doors/",
+      "work": "Build local task/config loader preserving YAML relations, exact OpenDoorTask, polarity-aware normalized q, source/config hashes and original DROID configuration. Resolve original robot pose; allow local asset URI injection without global monkeypatch.",
+      "cpu_validation": "Reject out-of-assignment ID, altered source hash, missing local assets, nonfinite/zero joint ranges, missing relations; compare source predicates and all eight task configs."
+    },
+    {
+      "order": 2,
+      "path": "assets/extensions/doors/ + kitchen_safety/extensions/doors/",
+      "work": "Build full-workspace collider traversal and per-link measured articulation update; recover unsupported kitchen assets from actual registry; define pair-specific finger-handle allowance only.",
+      "cpu_validation": "Regression fixture must include all 37 observed first-door colliders; verify joint-frame-to-world direction and rotated handle trajectory; moving panel swept geometry vs hazards; no name-based door type inference."
+    },
+    {
+      "order": 3,
+      "path": "kitchen_safety/extensions/doors/",
+      "work": "Implement approach/grasp/contact/open/release/retreat executor with cuRobo approach and constrained segmented IK, measured q feedback, contact-loss and slip failure, synchronized articulated collision world. No object teleports or joint writes after reset.",
+      "validation": "Offline phase machine and normalization boundary tests first, then isolated GPU baseline when available. Contact force fields only from actual sensors with units."
+    },
+    {
+      "order": 4,
+      "path": "scripts/extensions/doors/ + tests/extensions/doors/",
+      "work": "Implement task/variant listing, dry-run, seed, output, success quota, max-attempts, resume; task-aware result/validation/audit with exit codes and complete dynamic state; preserve three original cameras.",
+      "cpu_validation": "--help and dry-run must avoid GPU imports; check resume dedup, metadata, finite state, order, image/action/state indices, malformed data rejection. First actual launch command may be published as runnable only after these checks pass."
+    },
+    {
+      "order": 5,
+      "path": "configs/extensions/doors/ + docs/extensions/doors/",
+      "work": "Add semantic obstacle placements for property_vase, robot_projecting_crossbar and human_default_mpfb, then 11-category applicability matrix.",
+      "validation": "Supported initial geometry, no interpenetration, actual motion relevance, feasible alternate path or pose, actual randomized geometry recorded; no dangerous counterfactual execution."
+    }
+  ],
+  "first_physical_collection_execution_plan": {
+    "current_launch_status": "not_ready; no actual door collection command exists yet",
+    "unblocking_requirements": [
+      "Complete independent door implementation and CPU checks",
+      "Resolve source relations to DROID base transform using actual kitchen geometry",
+      "Verify target asset graph including collider geometry and contact sensing",
+      "Confirm doors-specific runtime mount and idle or separately allocated GPU without touching running training",
+      "Validate local CLI --help and --dry-run and then record exact concrete command"
+    ],
+    "proposed_entrypoint": "scripts/extensions/doors/collect.py (design target, not an existing executable)",
+    "proposed_arguments": {
+      "task": "kitchen_bench_lightwheel_open_fridge",
+      "variant": "base",
+      "seed": 42,
+      "success_quota": 1,
+      "max_attempts": 10,
+      "resume": true,
+      "record_rgb": true,
+      "execution_backend": "single",
+      "output": "datasets/doors/kitchen_bench_lightwheel_open_fridge/base"
+    },
+    "steps": [
+      "Create/check ylj-doors when branch operations are authorized; preserve dirty files",
+      "Set independent ARENA_CONTAINER after verifying /workspace mount and runtime; do not create or reuse another project container blindly",
+      "Run one no-obstacle physical baseline with original reset and sequential predicate; record all attempts",
+      "Require original task success, physical contact/clearance audit, and three-camera trajectory alignment independently before accepting",
+      "Inspect preview of first successful episode; preserve result.json, validation.json, audit.json content and exit codes",
+      "For each of three representative variants, accept 3 episodes: one fixed and two actual randomized specs with different seeds; max 10 attempts/config; diagnose after three identical failures",
+      "Do not launch 200-episode collection; mark fixed_only if layout did not vary"
+    ],
+    "recorded_fields": [
+      "environment_id",
+      "variant_id",
+      "seed",
+      "source_yaml_sha256",
+      "config_sha256",
+      "software_versions",
+      "robot_joint_position_and_velocity",
+      "action_7_arm_targets_plus_gripper_with_units",
+      "door_joint_q_qdot_and_normalized_openness",
+      "door_panel_and_handle_world_poses",
+      "dynamic_obstacle_world_poses",
+      "phase",
+      "predicate_progress",
+      "contact_and_clearance_evidence",
+      "failure_reason",
+      "timing",
+      "three_camera_frames_and_timestamps"
+    ],
+    "acceptance": "No stage is accepted using a planner success flag alone. No success, RGB, physical clearance or contact evidence has yet been generated."
+  },
+  "verified_results": {
+    "all_eight_task_yaml_hashes_and_ids": true,
+    "first_manifest_generated_and_source_relations_checked": true,
+    "asset_bundle_56_hashes": true,
+    "external_assets_13_hashes": true,
+    "source_entries_5377": true,
+    "original_11_scene_asset_presence": true,
+    "first_usd_door_and_handle_parameters": true,
+    "all_37_door_colliders_outside_baseline_crop": true,
+    "host_module_presence": true,
+    "container_runtime": false,
+    "robot_final_world_placement": false,
+    "other_two_kitchens_asset_restore": false,
+    "physics_or_contact_success": false,
+    "curobo_runtime": false,
+    "three_camera_rgb": false,
+    "safety_validation": false
+  },
+  "skill_evaluation": {
+    "independent_start_feasible": true,
+    "other_student_code_required": false,
+    "skill_itself_forces_stop": false,
+    "actual_stop_reasons": [
+      "Explicit test scope forbids repository edits, branches, downloads and GPU",
+      "Physical implementation and runtime validation are still required"
+    ],
+    "no_observed_fabricated_current_cli": true,
+    "highest_impact_revisions": [
+      {
+        "priority": 1,
+        "issue": "Door CPU onboarding could miss source openness normalization/polarity and sequential threshold details because joint_utils.py and predicates/articulations.py are absent from required reading.",
+        "revision": "Add these two files and an explicit strict > boundary/negative lower-limit test requirement; do not infer normalized q or world axis from joint names."
+      },
+      {
+        "priority": 2,
+        "issue": "The collision crop warning describes changing kitchens, but it already drops every collider of the representative door in the same one-wall kitchen.",
+        "revision": "State this first-task failure explicitly and add CPU asset probe/report checking required target colliders are included, not only YAML hashes."
+      },
+      {
+        "priority": 3,
+        "issue": "Preflight emits only a planning skeleton; implementation remains broad without an offline first-door fixture or a precise validated runtime readiness interface.",
+        "revision": "Provide a documented CPU fixture/schema with source relations, joint/handle transform and unresolved world placement fields, plus no-GPU CLI smoke checklist and exact container-mount verification. Label all proposed execution commands as unavailable until implemented."
+      }
+    ],
+    "manifest_relations_note": "Original emitted skeleton omitted relations. I read actual YAML and enriched the temporary manifest. Parent reports skill has now been revised to include relations; re-test latest generator rather than counting this as still unresolved.",
+    "manifest_relations_retest": {
+      "passed": true,
+      "report": "preflight_retest.json",
+      "manifest": "first_task_manifest_retest.json"
+    }
+  }
+}

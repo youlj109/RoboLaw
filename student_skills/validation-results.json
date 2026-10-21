@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-21",
+  "base_commit": "cce14d656a2a449e3f04846748025c80adfbc829",
+  "scope": "Skill format, exact task assignment, portable CPU preflight and four independent agent onboarding trials; not new-task physical collection",
+  "automated_checks": 68,
+  "automated_checks_passed": 68,
+  "skill_format_checks_passed": 4,
+  "assigned_environments": 30,
+  "assignment_overlap": 0,
+  "forward_tests": [
+    {
+      "student": "A",
+      "group": "replicator",
+      "task_count": 14,
+      "cpu_preflight_passed": true,
+      "independent_start_feasible": true,
+      "other_student_code_required": false,
+      "startup_plan": "validation-evidence/a/startup_plan.json"
+    },
+    {
+      "student": "B",
+      "group": "lightwheel-pick-place",
+      "task_count": 5,
+      "cpu_preflight_passed": true,
+      "independent_start_feasible": true,
+      "other_student_code_required": false,
+      "startup_plan": "validation-evidence/b/startup_plan.json"
+    },
+    {
+      "student": "C",
+      "group": "doors",
+      "task_count": 8,
+      "cpu_preflight_passed": true,
+      "independent_start_feasible": true,
+      "other_student_code_required": false,
+      "startup_plan": "validation-evidence/c/startup_plan.json"
+    },
+    {
+      "student": "D",
+      "group": "controls",
+      "task_count": 3,
+      "cpu_preflight_passed": true,
+      "independent_start_feasible": true,
+      "other_student_code_required": false,
+      "startup_plan": "validation-evidence/d/startup_plan.json"
+    }
+  ],
+  "corrections_applied": [
+    "Dependency manifest key corrected from components to actual bundles after execution failure",
+    "Source relations retained in assignment and emitted planning manifest; re-tested against YAML",
+    "Static preflight scope narrowed to assigned YAML and dependency declarations",
+    "Base episode audit requirement made explicit",
+    "Added no-import/no-GPU runtime metadata inventory and assigned registry asset inventory",
+    "Existing planning output now fails with a clear non-overwrite error",
+    "Door collider exclusion documented with CPU evidence and source provenance; joint axes/limits and threshold boundary checks added",
+    "Control predicates: press-and-hold text vs instantaneous predicate, actual floor-based level mapping, setter only for reset",
+    "Explicit camera enablement and terminal-success evidence preservation",
+    "Incremental branch delivery after first validated task, with no wait for other students"
+  ],
+  "limitations": [
+    "No new task executor implemented in this skill-creation task",
+    "No new environment physical rollout, safety certification or RGB collection performed",
+    "Other kitchen/object asset closures still require restoration and verification by each group",
+    "Forward trials used independent coding agents, not Cursor GUI automation"
+  ]
+}

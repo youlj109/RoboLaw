@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "student": "D",
+  "group": "controls",
+  "skill": "robolaw-controls",
+  "label": "Lightwheel 左右按钮与温度旋钮3个环境",
+  "branch": "ylj-controls",
+  "base_repository": "https://github.com/youlj109/RoboLaw",
+  "base_commit": "cce14d656a2a449e3f04846748025c80adfbc829",
+  "arena_revision": "7050ecbc9b3fc689df51ea7cc7f9a64b18294bf6",
+  "representative_task": "kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian",
+  "owned_paths": [
+    "kitchen_safety/extensions/controls/",
+    "configs/extensions/controls/",
+    "scripts/extensions/controls/",
+    "tests/extensions/controls/",
+    "assets/extensions/controls/",
+    "docs/extensions/controls/"
+  ],
+  "environment_count": 3,
+  "tasks": [
+    {
+      "id": "kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian.yaml",
+      "source_sha256": "bdb0db2de2f6a7334f0d21dc3377882127d15f6e073a9706904698f0468f8f34",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "toaster",
+          "parent_id": "kitchen",
+          "prim_path": "toaster_main_group",
+          "object_type": "articulation",
+          "params": {
+            "pressable_joint_name": "sideL_button_cancel_joint"
+          }
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Press and hold the left cancel button on the toaster.",
+        "subtasks": [
+          {
+            "kind": "PressButtonTask",
+            "params": {
+              "pressable_object": "toaster"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "toaster",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "toaster",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.4
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_press_right_toaster_cancel_button_g_shaped_large_scandinavian",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_press_right_toaster_cancel_button_g_shaped_large_scandinavian.yaml",
+      "source_sha256": "1a538061a73bbd21c40d1ab63c62960c2f90beeec547e459d6e2c8e4d6c0400e",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "toaster",
+          "parent_id": "kitchen",
+          "prim_path": "toaster_main_group",
+          "object_type": "articulation",
+          "params": {
+            "pressable_joint_name": "sideR_button_cancel_joint"
+          }
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Press and hold the right cancel button on the toaster.",
+        "subtasks": [
+          {
+            "kind": "PressButtonTask",
+            "params": {
+              "pressable_object": "toaster"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "toaster",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "toaster",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.4
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian.yaml",
+      "source_sha256": "549c26d6e4f6bad3a4a985384a3c0483ebb3c68e20e776e5e089c5e4701ebd0e",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.7,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "oven_temperature_knob",
+          "parent_id": "kitchen",
+          "prim_path": "oven_right_group",
+          "object_type": "articulation",
+          "params": {
+            "turnable_joint_name": "knob_temp_joint",
+            "min_level_angle_deg": 30.0,
+            "max_level_angle_deg": 150.0,
+            "num_levels": 5
+          }
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Turn the large temperature knob on the right side of the oven below the microwave to level 3.",
+        "subtasks": [
+          {
+            "kind": "TurnKnobTask",
+            "params": {
+              "turnable_object": "oven_temperature_knob",
+              "target_level": 3,
+              "reset_level": -1
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "oven_temperature_knob",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "oven_temperature_knob",
+          "params": {
+            "side": "negative_x",
+            "distance_m": 0.45
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 0.0
+          }
+        }
+      ]
+    }
+  ]
+}
