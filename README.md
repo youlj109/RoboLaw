@@ -159,12 +159,6 @@ bash scripts/arena_python.sh scripts/collect_safety_benchmark.py \
 
 本次发布已检查：GitHub 的 11 个场景入口与本地小文件清单、厨房和人体的 56 文件资产包恢复、采集命令的 dry-run。2026-10-21 已从魔搭公开 URL 在空目录恢复新增的 4 个依赖包，并通过归档和逐文件哈希校验；另从官方拉取三套固定源码及下载 13 个资产文件，与魔搭恢复结果逐项比较，5,377 个源码文件/符号链接和 13 个资产均一致。已检查重复恢复、环境变量选择来源、旧脚本入口、路径越界拒绝和修改文件保护。此次未重新安装完整仿真环境或运行完整采集。风险感知分支的预检、18 项参考评价器测试和历史适配器测试夹具问题见 [发布验证记录](docs/risk_perception.md#发布验证与已知限制2026-10-21)。
 
-## 已有风险视频示例
-
-[完整审阅视频（51.93 秒 / 779 帧）](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/huirongzeng/human_fcl_ptv4_review.mp4) · [预览帧](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/huirongzeng/human_fcl_ptv4_preview.jpg) · [文件清单与 SHA-256](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/huirongzeng/demo_files.json)。
-
-示例来自 2026-10-21 已完成的 FCL/PT v4 默认人体轨迹，三视角带实时风险等级和依据。魔搭的 `robolaw/huirongzeng/` 还提供风险汇总和数据完整性结果；这些示例不包含完整 2.4 GB 原始 attempt，也不是此次分支发布时重新采集的数据。
-
 ## 风险模块与参考实现
 
 | 目录/文件 | 内容 |
