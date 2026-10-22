@@ -17,9 +17,35 @@ bash scripts/arena_python.sh scripts/risk_capture_workflow.py evaluate \
   --output datasets/risk/my_run
 ```
 
-审计、三路 RGB 渲染和视频导出也作为单独离线阶段运行，见 **[通用在线/离线工作流](docs/offline_risk_workflow.md)**。原始采集完成保持 pending_offline，不能当作风险标注或生产准入已经完成。
+风险审计、三路 RGB 渲染和视频导出作为单独离线阶段运行，见 **[通用在线/离线工作流](docs/offline_risk_workflow.md)**。原始采集完成保持 pending_offline，不能当作风险标注或生产准入已经完成。历史独立 clearance `audit` 不默认启动，它可能重新查询已明确移除的距离。
 
 完整的规则范围、当前豁免、采集输出、视频导出及已知限制见 **[风险感知安装与复现说明](docs/risk_perception.md)**。实验阈值与部分缺测仍然存在，不应把已知 L0 解释为全部证据完整。
+
+## 可移植 Skill 与数据规范
+
+三份完整 Skill 目录位于 [`skills/`](skills/使用说明.md)，可复制到其他 agent。需要保留各目录的 `references`、`assets`、`scripts` 和元数据；不只复制 `SKILL.md`。
+
+| 内容 | 入口 |
+| --- | --- |
+| HS/PT 资产范围与正常任务关系 | [robot-risk-asset-scope](skills/robot-risk-asset-scope/SKILL.md) |
+| 必要原始证据在线采集与 gDist 离线流水线 | [robot-risk-offline-pipeline](skills/robot-risk-offline-pipeline/SKILL.md) |
+| HS 动态规则、PT v4、RS 与已知结果聚合 | [robot-risk-hs-pt-rs-rules](skills/robot-risk-hs-pt-rs-rules/SKILL.md) |
+| 数据输出标准格式 | [在线阅读](docs/standards/机器人风险数据输出标准格式.md) · [Word](docs/standards/机器人风险数据输出标准格式.docx) · [PDF](docs/standards/机器人风险数据输出标准格式.pdf) |
+| 原始数据采集与离线安全评估规范 | [在线阅读](docs/standards/机器人原始数据采集与离线安全评估规范.md) · [Word](docs/standards/机器人原始数据采集与离线安全评估规范.docx) · [PDF](docs/standards/机器人原始数据采集与离线安全评估规范.pdf) |
+
+通用规范覆盖 pick-and-place、开门、抽屉等 articulation 任务的适配要求。每个任务建立自己的角色、碰撞候选、正常操作关系、动态连杆和规则绑定，不能照搬当前厨房的资产排除。数据输出文档定义的是通用交换契约，现有工程 schema 的对应关系需通过适配器实现；这不表示所有新任务和字段已经实测支持。
+
+Skill 包含冻结规则源、58 个既有边界案例和 gDist 参考构建材料。上游 gDist 从固定提交获取，新硬件重新构建；不包含仿真器、GPU 二进制、密码、视频或原始轨迹。
+
+## 当前人体案例的范围与已有验证
+
+2026年10月23日用户确认的新范围：
+
+- **HS**：移除指定休闲服和固定底座/支座的 HS 计算与保存；17 个运动部件及芥末瓶对剩余 5 个人体网格，共 90 个动态关系。见 [HS 数据排除](docs/hs_data_omissions.md)。
+- **PT**：停止 81 项距离关系的查询和保存，保留 6 项几何关系；其中机器人到芥末瓶仅供抓持证据，5 项可参与 PT 距离判级。接触、力、冲量、掉落及共享重建证据按自身范围保留。见 [PT 距离排除](docs/pt_distance_omissions.md)。
+- **RS**：独立完整机器人几何不随 HS 裁剪。IR 关闭，缺测仍未知。
+
+最新已有案例模拟 76.4 秒、9,168 个物理步、2,292 帧，任务成功；在线风险几何和等级调用均为 0。HS/PT/RS 几何完整，但类别证据完整性仍有缺口。采集墙钟 321.85 秒，离线处理 131.98 秒，其中 geometry 38.66 秒。完整性、等级分布、缺测和分阶段计时见 [轻量验证记录](validation/hs_pt_latest_review_20261023/README.md)。本次发布没有重新运行仿真；视频和原始数据仅保存在远端与本地。
 
 ## 默认 gDist 后端
 
@@ -27,9 +53,9 @@ bash scripts/arena_python.sh scripts/risk_capture_workflow.py evaluate \
 
 ## 当前 HS 距离规则
 
-默认已启用 `arena-hs-dynamic-ssm-1`：按每个运动部件／搬运物与人体网格的完整表面距离、真实 COM 线速度和角速度，离线计算动态保护距离 S 与安全余量 D−S，再汇总已知关系的最高等级。主导关系取最小余量，固定支座距离继续豁免，TTC 只作诊断。详见 **[动态 HS 公式、参数和缺测策略](docs/hs_dynamic_distance.md)**。
+默认已启用 `arena-hs-dynamic-ssm-1`：按每个运动部件／搬运物与人体网格的完整表面距离、真实 COM 线速度和角速度，离线计算动态保护距离 S 与安全余量 D−S，再汇总已知关系的最高等级。主导关系取最小余量；当前人体案例已进一步停止固定支座和指定休闲服的 HS 查询、接触点提取与逐帧审计，RS 仍保留独立完整机器人几何，TTC 只作诊断。详见 **[动态 HS 公式、参数和缺测策略](docs/hs_dynamic_distance.md)**。
 
-停止减速度等目前是**未标定实验参数**；本系统用于离线标注，不是认证的在线 SSM 安全控制。当前人体短段验证含 64 个动作／256 个物理步，主导关系保护距离随速度从 2.50 cm 变至 3.165 cm，在线几何与风险判级次数均为 0；102/108 个关系有已知结果，未受控瓶子的 6 个人体关系缺少停止模型，仍保留未知。该短段不是完整任务成功验证。旧归档继续用各自冻结的历史规则。
+停止减速度等目前是**未标定实验参数**；本系统用于离线标注，不是认证的在线 SSM 安全控制。较早的人体短段验证含 64 个动作／256 个物理步，主导关系保护距离随速度从 2.50 cm 变至 3.165 cm，在线几何与风险判级次数均为 0；102/108 个关系有已知结果，未受控瓶子的 6 个人体关系缺少停止模型，仍保留未知。该短段不是完整任务成功验证；其 108 对范围已经由下述新范围取代。最新完整案例为 2,292 帧，见 [已有验证记录](validation/hs_pt_latest_review_20261023/README.md)。旧归档继续用各自冻结的历史规则。
 
 ## 11 个场景
 

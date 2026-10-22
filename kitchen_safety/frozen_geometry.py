@@ -18,13 +18,16 @@ def load_geometry(episode,cache,frozen=None):
     backend=get_backend(configured_name(frozen['resolved_config']),options)
     human=bool(b['human_inventory']['observed_human_paths'])
     hs=HumanDistanceGeometry.__new__(HumanDistanceGeometry) if human else None
-    robot_geometry=hs or HumanDistanceGeometry.__new__(HumanDistanceGeometry)
-    robot_meta=b['hs_geometry'] if human else b.get('rs_authored_geometry')
+    independent=b.get('rs_geometry_independent_from_hs',False)
+    robot_geometry=(hs if human and not independent else HumanDistanceGeometry.__new__(HumanDistanceGeometry))
+    robot_meta=b['hs_geometry'] if human and not independent else b.get('rs_authored_geometry')
     if robot_meta is None:
         raise ValueError('Nonhuman raw binding lacks rs_authored_geometry; recapture with the general raw workflow')
     pt=PropertyDistanceGeometry.__new__(PropertyDistanceGeometry)
     models={}
-    for geometry,meta in ((robot_geometry,robot_meta),(pt,b['pt_geometry'])):
+    loads=[(robot_geometry,robot_meta),(pt,b['pt_geometry'])]
+    if hs is not None and hs is not robot_geometry:loads.append((hs,b['hs_geometry']))
+    for geometry,meta in loads:
         geometry.fcl=backend;geometry.root=b['robot_prim_path'].rsplit('/',1)[0]
         geometry.errors=[];geometry.entries=[];geometry.metadata=meta
         for original in meta['geometry']:
@@ -42,14 +45,17 @@ def load_geometry(episode,cache,frozen=None):
                 e['last_pose']=None
                 e['key']=(e['actor'].rsplit('/',1)[-1] if e['group']=='robot' else e['actor'][len(geometry.root)+1:]) if e['actor'] else None
             geometry.entries.append(e)
-    robot_geometry.ee_names=set(robot_meta['ee_body_names'])
-    robot_geometry.fixed_body_names=set(robot_meta['fixed_body_names'])
-    robot_geometry.dynamic_pairs_enabled=robot_meta.get('dynamic_pairs_enabled',False)
-    robot_geometry.exempt_fixed_distance=robot_meta.get('exempt_fixed_distance',False)
-    audit_keys={'matched','resolved_robot_collider','resolved_human_collider'}
-    robot_geometry.excluded_pairs={(e['resolved_robot_collider'],e['resolved_human_collider']):
-        {k:v for k,v in e.items() if k not in audit_keys}
-        for e in robot_meta.get('excluded_pairs',[]) if e['matched']}
+    for geometry,meta in loads:
+        if geometry is pt:continue
+        geometry.ee_names=set(meta['ee_body_names'])
+        geometry.fixed_body_names=set(meta['fixed_body_names'])
+        geometry.dynamic_pairs_enabled=meta.get('dynamic_pairs_enabled',False)
+        geometry.exempt_fixed_distance=meta.get('exempt_fixed_distance',False)
+        geometry.data_omissions=meta.get('data_omissions',{})
+        audit_keys={'matched','resolved_robot_collider','resolved_human_collider'}
+        geometry.excluded_pairs={(e['resolved_robot_collider'],e['resolved_human_collider']):
+            {k:v for k,v in e.items() if k not in audit_keys}
+            for e in meta.get('excluded_pairs',[]) if e['matched']}
     inventory=b['pt_asset_inventory'];pt.assets=inventory['objects'];pt.target=inventory['target_object_ids'][0]
     from kitchen_safety.pt_distance_policy import omitted_keys
     pt.omitted_distance_relations=omitted_keys(inventory)

@@ -1,2 +1,7 @@
 # Preserve supplied reference snapshots byte for byte, including CRLF.
 third_party/safebench_reference/** -text -whitespace
+
+# Portable skill hashes refer to exact bytes, including supplied CRLF.
+skills/** -text
+skills/robot-risk-hs-pt-rs-rules/assets/frozen-implementation/** -whitespace
+skills/robot-risk-offline-pipeline/assets/gdist-reference/** -whitespace

@@ -1,0 +1,455 @@
+--- a/CudaBase/helper_cuda.h
++++ b/CudaBase/helper_cuda.h
+@@ -38,7 +38,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
+-#include <cudaBase/helper_string.h>
++#include <CudaBase/helper_string.h>
+ 
+ #ifndef EXIT_WAIVED
+ #define EXIT_WAIVED 2
+--- a/CudaBase/helper_math.h
++++ b/CudaBase/helper_math.h
+@@ -1709,7 +1709,7 @@
+ }
+ 
+ inline __host__ __device__ float3x3 operator- (const float3x3& a) {
+-	return make_float3x3(-a.c0(), -a.c1(), -a.c2());
++	return make_float3x3(a.c0()*-1.f, a.c1()*-1.f, a.c2()*-1.f);
+ }
+ 
+ 
+--- a/MyCuda/MainCodeDistanceQuery.cu
++++ b/MyCuda/MainCodeDistanceQuery.cu
+@@ -5,6 +5,10 @@
+ #include "Type.cuh"
+ #include <cub/block/block_reduce.cuh>
+ #include <cub/block/block_scan.cuh>
++#ifndef GD_CAP
++#define GD_CAP (1<<22)
++#endif
++__device__ int gd_overflow=0;
+ 
+ __host__ __device__ void getStartAndEnd(int tid, int deep, int numTri, int& start, int& end)
+ {
+@@ -506,9 +510,7 @@
+ 	if (cnt != 0) {
+ 		//int bias = start + scan[threadIdx.x] - 1;
+ 		int bias = start + temp - 1;
+-		bvtt_out.a[bias] = newA;
+-		bvtt_out.b[bias] = newB;
+-		bvtt_out.min[bias] = newMin;
++		if (bias < GD_CAP) { bvtt_out.a[bias] = newA; bvtt_out.b[bias] = newB; bvtt_out.min[bias] = newMin; } else { atomicExch(&gd_overflow,1); }
+ 	}
+ 	if (threadIdx.x == 0)
+ 	{
+@@ -606,9 +608,7 @@
+ 	if (cnt != 0) {
+ 		//int bias = start + scan[threadIdx.x] - 1;
+ 		int bias = start + temp - 1;
+-		bvtt_out.a[bias] = newA;
+-		bvtt_out.b[bias] = newB;
+-		bvtt_out.min[bias] = newMin;
++		if (bias < GD_CAP) { bvtt_out.a[bias] = newA; bvtt_out.b[bias] = newB; bvtt_out.min[bias] = newMin; } else { atomicExch(&gd_overflow,1); }
+ 	}
+ 	if (threadIdx.x == 0)
+ 	{
+@@ -678,9 +678,7 @@
+ 	__syncthreads();
+ 	if (cnt != 0) {
+ 		int bias = start + temp - 1;
+-		bvtt_out.a[bias] = newA;
+-		bvtt_out.b[bias] = newB;
+-		bvtt_out.min[bias] = newMin;
++		if (bias < GD_CAP) { bvtt_out.a[bias] = newA; bvtt_out.b[bias] = newB; bvtt_out.min[bias] = newMin; } else { atomicExch(&gd_overflow,1); }
+ 	}
+ 	if (threadIdx.x == 0)
+ 	{
+@@ -771,9 +769,7 @@
+ 	if (cnt != 0) {
+ 		//int bias = start + scan[threadIdx.x] - 1;
+ 		int bias = start + temp - 1;
+-		bvtt_out.a[bias] = newA;
+-		bvtt_out.b[bias] = newB;
+-		bvtt_out.min[bias] = newMin;
++		if (bias < GD_CAP) { bvtt_out.a[bias] = newA; bvtt_out.b[bias] = newB; bvtt_out.min[bias] = newMin; } else { atomicExch(&gd_overflow,1); }
+ 	}
+ 	if (threadIdx.x == 0)
+ 	{
+@@ -1195,375 +1191,6 @@
+ 	printf("%d %f\n", g_length[0], g_minDist[0]);
+ }
+ 
+-void DistanceQuery::MainProcess(int numTriA, int numTriB, int deepA, int deepB, const g_transf rigids, const float initDis, TempData* data, bool isMin, DistanceResult& result)
+-{
+-	static bool once = true;
+-	g_box* g_bvhA_nodes = data->get<g_box>("bvhA_nodes");
+-	g_box* g_bvhB_nodes = data->get<g_box>("bvhB_nodes");
+-	float3* g_bvhA_vtxs = data->get<float3>("bvhA_vtxs");
+-	float3* g_bvhB_vtxs = data->get<float3>("bvhB_vtxs");
+-	float3* g_bvhA_vtxsUpdate = data->get<float3>("bvhA_vtxsUpdate");
+-	float* g_outDis = data->getLarge<float>("outDis");
+-	float3* g_outP1 = data->getLarge<float3>("outP1");
+-	float3* g_outP2 = data->getLarge<float3>("outP2");
+-	int* g_mutex = data->get<int>("mutex");
+-	g_bvtt_SoA g_bvtt_buffer1, g_bvtt_buffer2;
+-	
+-	g_bvtt_buffer1.a = data->getLarge<int>("bvtt1_a");
+-	g_bvtt_buffer1.b = data->getLarge<int>("bvtt1_b");
+-	g_bvtt_buffer1.min = data->getLarge<float>("bvtt1_min");
+-
+-	g_bvtt_buffer2.a = data->getLarge<int>("bvtt2_a");
+-	g_bvtt_buffer2.b = data->getLarge<int>("bvtt2_b");
+-	g_bvtt_buffer2.min = data->getLarge<float>("bvtt2_min");
+-
+-	float* g_minDist;
+-	int* g_minId1;
+-	int* g_minId2;
+-	int* g_length;
+-	utils::malloc(g_minDist, 1);
+-	utils::malloc(g_minId1, 1);
+-	utils::malloc(g_minId2, 1);
+-	utils::malloc(g_length, 1);
+-	
+-	int deepNow = 1;
+-	
+-	if (isMin) {
+-		utils::kernel(kernel_updateVtx, numTriA * 3, 1024, g_bvhA_vtxs, g_bvhA_vtxsUpdate, rigids, numTriA * 3);
+-		result.times.push_back(utils::kernel("kernel_updataBV", kernel_updateBV, 1 << (deepA - 1), 128, g_bvhA_nodes, g_bvhA_vtxsUpdate, g_mutex, deepA, numTriA));
+-		if (once) {
+-			result.times.push_back(utils::kernel("kernel_updataBV_B", kernel_updateBV, 1 << (deepB - 1), 128, g_bvhB_nodes, g_bvhB_vtxs, g_mutex, deepB, numTriB));
+-			once = false;
+-		}
+-	}
+-	else
+-	{
+-		utils::kernel(kernel_updateVtx, numTriA, 1024, g_bvhA_vtxs, g_bvhA_vtxsUpdate, rigids, numTriA);
+-		result.times.push_back(utils::kernel("kernel_updataBV", kernel_updateBV_ForMax, 1 << (deepA - 1), 128, g_bvhA_nodes, g_bvhA_vtxsUpdate, g_mutex, deepA, numTriA));
+-		if (once) {
+-			result.times.push_back(utils::kernel("kernel_updataBV_B", kernel_updateBV_ForMax, 1 << (deepB - 1), 128, g_bvhB_nodes, g_bvhB_vtxs, g_mutex, deepB, numTriB));
+-			once = false;
+-		}
+-	}
+-
+-
+-	
+-	//utils::kernel(kernel_updateBV, 1 << (deepA - 1), 128, g_bvhA_nodes, g_bvhA_vtxsUpdate, g_mutex, deepA, numTriA);
+-	
+-	if (isMin) {
+-		result.times.push_back(utils::kernel("kernel_gpu_init", kernel_gpu_init, 1, 1, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer1, g_length, g_length, result.id1, result.id2, g_minDist, initDis));
+-	}
+-	else {
+-		result.times.push_back(utils::kernel("kernel_gpu_init", kernel_gpu_init_formax, 1, 1, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer1, g_length, g_length, g_minDist, initDis));
+-	}
+-	utils::memset(g_length, 1);
+-	int length_cpu = 1;
+-	
+-	int proDeep = calProDeep(deepA, deepB, 1, deepNow);
+-	result.proDeeps.push_back(proDeep);
+-	result.bvtts.push_back(1);
+-	printf("%d\n", proDeep);
+-	if (isMin)
+-	{
+-		result.times.push_back(utils::kernel("kernel_fast_traversal", kernel_fast_traversal, (1 << (proDeep << 1)), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepNow, g_bvtt_buffer1, g_bvtt_buffer2, g_length, g_minDist, 1, proDeep));
+-	}
+-	else {
+-		result.times.push_back(utils::kernel("kernel_fast_traversal", kernel_fast_traversal_formax, (1 << (proDeep << 1)), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepNow, g_bvtt_buffer1, g_bvtt_buffer2, g_length, g_minDist, 1, proDeep));
+-	}
+-
+-	cudaMemcpy(&length_cpu, g_length, sizeof(int), cudaMemcpyDeviceToHost);
+-	printf("%d\n", length_cpu);
+-	//result.times.push_back(utils::minReduce("cub reduce bvtt\n", g_bvtt_buffer2.max, g_minDist, length_cpu));
+-	bool flag = false;
+-	bool earlyExit = false;
+-	deepNow += proDeep;
+-	int deepMax = max(deepA, deepB);
+-	while (deepNow < deepMax)
+-	{
+-		utils::memset(g_length, 1);
+-		proDeep = calProDeep(deepA, deepB, length_cpu, deepNow);
+-		result.proDeeps.push_back(proDeep);
+-		result.bvtts.push_back(length_cpu);
+-		printf("%d %d %d\n", length_cpu, deepNow, proDeep);
+-		utils::memcpy(&result.min, g_minDist, 1, cudaMemcpyDeviceToHost);
+-		printf("now min %f\n", result.min);
+-		if (deepNow < deepA && deepNow < deepB) {
+-			if (flag)
+-			{
+-				if (isMin) {
+-					result.times.push_back(utils::kernel("kernel_fast_traversal", kernel_fast_traversal,
+-						length_cpu * (1 << (proDeep << 1)), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepNow, g_bvtt_buffer1, g_bvtt_buffer2, g_length, g_minDist, length_cpu, proDeep));
+-				}
+-				else {
+-					result.times.push_back(utils::kernel("kernel_fast_traversal", kernel_fast_traversal_formax,
+-						length_cpu * (1 << (proDeep << 1)), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepNow, g_bvtt_buffer1, g_bvtt_buffer2, g_length, g_minDist, length_cpu, proDeep));
+-				}
+-				cudaMemcpy(&length_cpu, g_length, sizeof(int), cudaMemcpyDeviceToHost);
+-				//result.times.push_back(utils::minReduce("cub reduce bvtt", g_bvtt_buffer2.max, g_minDist, length_cpu));
+-				utils::memset(g_length, 1);
+-				flag = false;
+-			}
+-			else {
+-				if (isMin) {
+-					result.times.push_back(utils::kernel("kernel_fast_traversal", kernel_fast_traversal,
+-						length_cpu * (1 << (proDeep << 1)), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepNow, g_bvtt_buffer2, g_bvtt_buffer1, g_length, g_minDist, length_cpu, proDeep));
+-				}
+-				else {
+-					result.times.push_back(utils::kernel("kernel_fast_traversal", kernel_fast_traversal_formax,
+-						length_cpu * (1 << (proDeep << 1)), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepNow, g_bvtt_buffer2, g_bvtt_buffer1, g_length, g_minDist, length_cpu, proDeep));
+-				}
+-				cudaMemcpy(&length_cpu, g_length, sizeof(int), cudaMemcpyDeviceToHost);
+-				//result.times.push_back(utils::minReduce("cub reduce bvtt\n", g_bvtt_buffer1.max, g_minDist, length_cpu));
+-				utils::memset(g_length, 1);
+-				flag = true;
+-			}
+-		}
+-		else {
+-			if (flag)
+-			{
+-				result.times.push_back(utils::kernel("kernel_fast_traversal_onlyB", kernel_fast_traversal_onlyB, 
+-					length_cpu * (1 << proDeep), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepA, deepNow, g_bvtt_buffer1, g_bvtt_buffer2, g_length, g_minDist, length_cpu, proDeep));
+-				cudaMemcpy(&length_cpu, g_length, sizeof(int), cudaMemcpyDeviceToHost);
+-				utils::memset(g_length, 1);
+-				flag = false;
+-			}
+-			else {
+-				result.times.push_back(utils::kernel("kernel_fast_traversal_onlyB", kernel_fast_traversal_onlyB, 
+-					length_cpu * (1 << proDeep), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepA, deepNow, g_bvtt_buffer2, g_bvtt_buffer1, g_length, g_minDist, length_cpu, proDeep));
+-				cudaMemcpy(&length_cpu, g_length, sizeof(int), cudaMemcpyDeviceToHost);
+-				utils::memset(g_length, 1);
+-				flag = true;
+-			}
+-		}
+-		deepNow += proDeep;
+-
+-		if (length_cpu > (1 << 23))
+-		{
+-			earlyExit = true;
+-			break;
+-		}
+-	}
+-
+-	printf("%d\n", length_cpu);
+-	if (earlyExit)
+-	{
+-		if (flag) {
+-			result.times.push_back(utils::kernel("kernel_slow_narrow_test", kernel_slow_narrow_test, length_cpu, 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer1, g_outDis, g_minDist, deepNow, deepNow, numTriA, numTriB, length_cpu));
+-		}
+-		else {
+-			result.times.push_back(utils::kernel("kernel_slow_narrow_test", kernel_slow_narrow_test, length_cpu, 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer2, g_outDis, g_minDist, deepNow, deepNow, numTriA, numTriB, length_cpu));
+-		}
+-		result.times.push_back(utils::minReduce("name", g_outDis, g_minDist, length_cpu));
+-	}
+-	else {
+-		if (flag)
+-		{
+-			if (isMin) {
+-				result.times.push_back(utils::kernel("kernel_narrow_test", kernel_narrow_test, length_cpu * 4, 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer1, g_outDis, g_minId1, g_minId2, g_minDist, deepA, deepB, numTriA, numTriB, length_cpu * 4));
+-			}
+-			else {
+-				result.times.push_back(utils::kernel("kernel_narrow_test_formax", kernel_narrow_test_formax, length_cpu * 4, 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer1, g_outDis, g_minDist, deepA, deepB, numTriA, numTriB, length_cpu * 4));
+-			}
+-		}
+-		else {
+-			if (isMin) {
+-				result.times.push_back(utils::kernel("kernel_narrow_test", kernel_narrow_test, length_cpu * 4, 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer2, g_outDis, g_minId1, g_minId2, g_minDist, deepA, deepB, numTriA, numTriB, length_cpu * 4));
+-			}
+-			else {
+-				result.times.push_back(utils::kernel("kernel_narrow_test_formax", kernel_narrow_test_formax, length_cpu * 4, 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer2, g_outDis, g_minDist, deepA, deepB, numTriA, numTriB, length_cpu * 4));
+-			}
+-		}
+-
+-		if (isMin) {
+-			result.times.push_back(utils::minReduce("name", g_outDis, g_minDist, length_cpu * 4));
+-		}
+-		else {
+-			result.times.push_back(utils::maxReduce("name", g_outDis, g_minDist, length_cpu * 4));
+-		}
+-	}
+-	
+-	
+-
+-	utils::memcpy(&result.min, g_minDist, 1, cudaMemcpyDeviceToHost);
+-	utils::memcpy(&result.id1, g_minId1, 1, cudaMemcpyDeviceToHost);
+-	utils::memcpy(&result.id2, g_minId2, 1, cudaMemcpyDeviceToHost);
+-	cudaFree(g_minDist);
+-	cudaFree(g_length);
+-	cudaFree(g_minId1);
+-	cudaFree(g_minId2);
+-	getLastCudaError("kernel_RigidRigidDistance");
+-
+-	result.sum_time = 0;
+-	for (auto t : result.times)
+-	{
+-		result.sum_time += t;
+-	}
+-}
+-
+-#include <chrono>
+-
+-void DistanceQuery::MainProcessAllTime(int numTriA, int numTriB, int deepA, int deepB, const g_transf rigids, const float initDis, TempData* data, bool isMin, DistanceResult& result)
+-{
+-	static bool once = true;
+-	g_box* g_bvhA_nodes = data->get<g_box>("bvhA_nodes");
+-	g_box* g_bvhB_nodes = data->get<g_box>("bvhB_nodes");
+-	float3* g_bvhA_vtxs = data->get<float3>("bvhA_vtxs");
+-	float3* g_bvhB_vtxs = data->get<float3>("bvhB_vtxs");
+-	float3* g_bvhA_vtxsUpdate = data->get<float3>("bvhA_vtxsUpdate");
+-	float* g_outDis = data->getLarge<float>("outDis");
+-	int* g_mutex = data->get<int>("mutex");
+-	g_bvtt_SoA g_bvtt_buffer1, g_bvtt_buffer2;
+-
+-	g_bvtt_buffer1.a = data->getLarge<int>("bvtt1_a");
+-	g_bvtt_buffer1.b = data->getLarge<int>("bvtt1_b");
+-	g_bvtt_buffer1.min = data->getLarge<float>("bvtt1_min");
+-
+-	g_bvtt_buffer2.a = data->getLarge<int>("bvtt2_a");
+-	g_bvtt_buffer2.b = data->getLarge<int>("bvtt2_b");
+-	g_bvtt_buffer2.min = data->getLarge<float>("bvtt2_min");
+-
+-	float* g_minDist;
+-	int* g_minId1;
+-	int* g_minId2;
+-	int* g_length;
+-	utils::malloc(g_minDist, 1);
+-	utils::malloc(g_minId1, 1);
+-	utils::malloc(g_minId2, 1);
+-	utils::malloc(g_length, 1);
+-
+-	int deepNow = 1;
+-
+-	utils::kernel(kernel_updateVtx, numTriA * 3, 1024, g_bvhA_vtxs, g_bvhA_vtxsUpdate, rigids, numTriA * 3);
+-
+-	
+-	utils::kernel(kernel_updateBV, 1 << (deepA - 1), 128, g_bvhA_nodes, g_bvhA_vtxsUpdate, g_mutex, deepA, numTriA);
+-	//utils::kernel(kernel_updateBV, 1 << (deepA - 1), 128, g_bvhA_nodes, g_bvhA_vtxsUpdate, g_mutex, deepA, numTriA);
+-	if (once) {
+-		utils::kernel(kernel_updateBV, 1 << (deepB - 1), 128, g_bvhB_nodes, g_bvhB_vtxs, g_mutex, deepB, numTriB);
+-		once = false;
+-	}
+-
+-	cudaEvent_t start, stop;
+-	float elapsedTime = 0.0;
+-
+-	cudaEventCreate(&start);
+-	cudaEventCreate(&stop);
+-	cudaEventRecord(start, 0);
+-	utils::kernel(kernel_gpu_init, 1, 1, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer1, g_length, g_length, result.id1, result.id2, g_minDist, initDis);
+-	
+-	
+-
+-	utils::memset(g_length, 1);
+-	int length_cpu = 1;
+-
+-	int proDeep = calProDeep(deepA, deepB, 1, deepNow);
+-	utils::kernel(kernel_fast_traversal, (1 << (proDeep << 1)), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepNow, g_bvtt_buffer1, g_bvtt_buffer2, g_length, g_minDist, 1, proDeep);
+-	cudaMemcpy(&length_cpu, g_length, sizeof(int), cudaMemcpyDeviceToHost);
+-	//result.times.push_back(utils::minReduce("cub reduce bvtt\n", g_bvtt_buffer2.max, g_minDist, length_cpu));
+-	bool flag = false;
+-	bool earlyExit = false;
+-	deepNow += proDeep;
+-	int deepMax = max(deepA, deepB);
+-	while (deepNow < deepMax)
+-	{
+-		utils::memset(g_length, 1);
+-		proDeep = calProDeep(deepA, deepB, length_cpu, deepNow);
+-		if (deepNow < deepA && deepNow < deepB) {
+-			if (flag)
+-			{
+-				utils::kernel(kernel_fast_traversal,
+-					length_cpu * (1 << (proDeep << 1)), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepNow, g_bvtt_buffer1, g_bvtt_buffer2, g_length, g_minDist, length_cpu, proDeep);
+-				cudaMemcpy(&length_cpu, g_length, sizeof(int), cudaMemcpyDeviceToHost);
+-				//result.times.push_back(utils::minReduce("cub reduce bvtt", g_bvtt_buffer2.max, g_minDist, length_cpu));
+-				utils::memset(g_length, 1);
+-				flag = false;
+-			}
+-			else {
+-				utils::kernel(kernel_fast_traversal,
+-					length_cpu * (1 << (proDeep << 1)), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepNow, g_bvtt_buffer2, g_bvtt_buffer1, g_length, g_minDist, length_cpu, proDeep);
+-				cudaMemcpy(&length_cpu, g_length, sizeof(int), cudaMemcpyDeviceToHost);
+-				//result.times.push_back(utils::minReduce("cub reduce bvtt\n", g_bvtt_buffer1.max, g_minDist, length_cpu));
+-				utils::memset(g_length, 1);
+-				flag = true;
+-			}
+-		}
+-		else {
+-			if (flag)
+-			{
+-				utils::kernel(kernel_fast_traversal_onlyB,
+-					length_cpu * (1 << proDeep), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepA, deepNow, g_bvtt_buffer1, g_bvtt_buffer2, g_length, g_minDist, length_cpu, proDeep);
+-				cudaMemcpy(&length_cpu, g_length, sizeof(int), cudaMemcpyDeviceToHost);
+-				utils::memset(g_length, 1);
+-				flag = false;
+-			}
+-			else {
+-				utils::kernel(kernel_fast_traversal_onlyB,
+-					length_cpu * (1 << proDeep), 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, numTriA, numTriB, deepA, deepNow, g_bvtt_buffer2, g_bvtt_buffer1, g_length, g_minDist, length_cpu, proDeep);
+-				cudaMemcpy(&length_cpu, g_length, sizeof(int), cudaMemcpyDeviceToHost);
+-				utils::memset(g_length, 1);
+-				flag = true;
+-			}
+-		}
+-		deepNow += proDeep;
+-
+-		if (length_cpu > (1 << 23))
+-		{
+-			earlyExit = true;
+-			break;
+-		}
+-	}
+-	printf("cpu length %d\n", length_cpu);
+-	if (earlyExit)
+-	{
+-		if (flag) {
+-			utils::kernel(kernel_slow_narrow_test, length_cpu, 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer1, g_outDis, g_minDist, deepNow, deepNow, numTriA, numTriB, length_cpu);
+-		}
+-		else {
+-			utils::kernel(kernel_slow_narrow_test, length_cpu, 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer2, g_outDis, g_minDist, deepNow, deepNow, numTriA, numTriB, length_cpu);
+-		}
+-		utils::minReduce(g_outDis, g_minDist, length_cpu);
+-	}
+-	else {
+-		if (flag)
+-		{
+-			utils::kernel(kernel_narrow_test, length_cpu * 4, 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer1, g_outDis, g_minId1, g_minId2, g_minDist, deepA, deepB, numTriA, numTriB, length_cpu * 4);
+-		}
+-		else {
+-			utils::kernel(kernel_narrow_test, length_cpu * 4, 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer2, g_outDis, g_minId1, g_minId2, g_minDist, deepA, deepB, numTriA, numTriB, length_cpu * 4);
+-		}
+-		utils::minReduce(g_outDis, g_minDist, length_cpu * 4);
+-	}
+-	utils::memcpy(&result.min, g_minDist, 1, cudaMemcpyDeviceToHost);
+-
+-	cudaEventRecord(stop, 0);
+-	cudaEventSynchronize(stop);
+-
+-	cudaEventElapsedTime(&elapsedTime, start, stop);
+-	//printf("%s time: %f ms\n", name.c_str(), elapsedTime);
+-	cudaEventDestroy(start);
+-	cudaEventDestroy(stop);
+-
+-	if (flag)
+-	{
+-		utils::kernel(kernel_findId, length_cpu * 4, 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer1, g_outDis, g_minId1, g_minId2, g_minDist, deepA, deepB, numTriA, numTriB, length_cpu * 4);
+-	}
+-	else {
+-		utils::kernel(kernel_findId, length_cpu * 4, 128, g_bvhA_nodes, g_bvhB_nodes, g_bvhA_vtxsUpdate, g_bvhB_vtxs, g_bvtt_buffer2, g_outDis, g_minId1, g_minId2, g_minDist, deepA, deepB, numTriA, numTriB, length_cpu * 4);
+-	}
+-
+-	utils::memcpy(&result.id1, g_minId1, 1, cudaMemcpyDeviceToHost);
+-	utils::memcpy(&result.id2, g_minId2, 1, cudaMemcpyDeviceToHost);
+-
+-	
+-	cudaFree(g_minDist);
+-	cudaFree(g_length);
+-	cudaFree(g_minId1);
+-	cudaFree(g_minId2);
+-	getLastCudaError("kernel_RigidRigidDistance");
+-
+-	result.sum_time = elapsedTime;
+-}
+-
+ //--------------------------------------------------------------------------
+ // SegPoints() 
+ //

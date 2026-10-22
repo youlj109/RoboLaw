@@ -64,7 +64,7 @@ class RawSink:
             schema_version='arena-raw-capture-binding-1',identity=identity,binding=binding,
             physics_dt_s=dt,action_dt_s=action_dt,decision_stride=self.stride,
             resolved_config=settings['config'],resolved_profile=profile,profile_sha256=digest(profile),
-            adapter_version='arena-raw-capture-4-gdist-frozen',evaluation_status='pending_offline',
+            adapter_version='arena-raw-capture-5-hs-data-scope',evaluation_status='pending_offline',
             capture_workflow=settings_policy(settings),
             implementation_files_sha256=settings.get('implementation_files_sha256',{}),
             mesh_backend_runtime=settings.get('mesh_backend_runtime',{})))
@@ -142,7 +142,8 @@ class RawCaptureRuntime(ArenaRiskRuntime):
                 frame='world_m for physics packets; environment_local for action observations; origin in binding',
                 quaternion_order='xyzw',physics_hz=1/self.dt,observation_hz=1/sink.action_dt,
                 observation_policy='Copied measured obs[t], before action[t]; source_physics_step=4*t-1',
-                contacts='Original actor/collider identities, point positions, normals, impulse vectors and separations; aggregate later',
+                contacts='Original actor/collider identities, point positions, normals, impulse vectors and separations within the frozen contact acquisition scope; aggregate later',
+                hs_contact_acquisition_omissions=(self.hs_geometries[i].metadata.get('data_omissions',{}) if self.hs_geometries[i] else {}),
                 frozen_kitchen_metadata=self.kitchen_state.metadata,
                 limits_policy='Runtime effort and position limits retained per physics packet',
                 rigid_actor_paths_120hz=sorted(actor_paths),
@@ -152,6 +153,7 @@ class RawCaptureRuntime(ArenaRiskRuntime):
                     semantics='Measured current PhysX COM telemetry at 120Hz; surface velocities are derived offline; missing channels remain unknown'),
                 workflow_policy=settings_policy(self.settings),
                 mesh_semantics='Authored collision surfaces with original scale baked into vertices; body poses provide measured rigid transforms'))
+            if self.hs_geometries[i] is not None and self.hs_geometries[i].fixed_data_omitted():continue
             write_json(sink.directory/'safety_scene_placement.json',dict(evaluation_status='pending_offline',
                 policy='No online placement verdict; recompute using frozen meshes and initial measured poses'))
 

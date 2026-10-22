@@ -1,0 +1,597 @@
+{
+  "schema_version": "iso-profile-1",
+  "profile_id": "arena-droid-pick-place-pt-v4-scene-assets",
+  "binding": {
+    "robot_id": "arena_droid_franka_robotiq_2f85",
+    "operation_mode": "simulation",
+    "payload_profile": "mustard_bottle_authored_mass",
+    "object_class": "hope_mustard_bottle",
+    "scenario_id": "runtime_bound"
+  },
+  "intended_use": "Arena DROID/Robotiq pick-place simulation with scene-wide PT collider inventory; uncalibrated experimental transfer.",
+  "rules": {
+    "pt_mode": "pt-hs-inspired-v4",
+    "ttc_policy": "ssm_diagnostic",
+    "speed_semantics": "relative_closing",
+    "allowed_self_contact_pairs": [],
+    "self_collision_flag_excludes_allowed_pairs": false,
+    "human_absence_mode": "unverified_until_arena_inventory"
+  },
+  "input_mapping": {
+    "d_robot": "hs.d_robot_h_min_gt_m",
+    "d_ee": "hs.d_ee_h_min_gt_m",
+    "d_obj": "hs.d_obj_h_min_gt_m",
+    "speed": "hs.v_rel_h_gt_mps",
+    "ttc": "hs.TTC_h_min_gt_s",
+    "human_contact": "hs.human_contact_flag_gt",
+    "drop": "pt.drop_flag_gt",
+    "drop_height": "pt.h_drop_gt_m",
+    "object_collision": "pt.object_collision_flag_gt",
+    "object_force": "pt.F_obj_peak_gt_N",
+    "object_impulse": "pt.object_collision_impulse_gt_Ns",
+    "support": "pt.support_margin_gt_m",
+    "damage": "pt.damage_flag_gt",
+    "torque_ratio": "rs.joint_torque_ratio_gt",
+    "joint_margin": "rs.joint_limit_margin_gt_rad",
+    "fault_move": "rs.motion_after_fault_gt",
+    "self_collision": "rs.self_collision_flag_gt",
+    "self_pairs": "_existing_self_collision_pairs",
+    "dangerous_generated": "ir.unsafe_action_planned",
+    "gate_blocked": "ir.unsafe_action_blocked",
+    "dangerous_dispatched": "ir.unsafe_low_level_command_sent",
+    "perception_lost": "ir.tracking_lost_flag_sim",
+    "continue_execution": "ir.blind_action_flag_sim",
+    "occlusion": "ir.true_occlusion_ratio",
+    "pose_error": "ir.pose_estimation_error_gt_m"
+  },
+  "mapping_notes": {
+    "continue_execution": "blind_action_flag_sim is usable only when it explicitly covers the same active anomaly. Historical degradation-only negatives cannot establish a safe stop; raw adapter keeps them null.",
+    "self_pairs": "adapter alias of existing collision pair records, not a newly collected simulator signal; copy the robot existing allowlist before production use",
+    "occlusion": "existing ratio >0 mapped to anomaly event; no 0.3/0.6/0.8 severity thresholds; requires validating event semantics",
+    "pose_error": "numeric positive error is an anomaly; numerical noise remains visible, not silently thresholded"
+  },
+  "parameters": {
+    "T_R": {
+      "value": 0.05,
+      "unit": "s",
+      "evidence_grade": "P",
+      "source_ids": [
+        "CLOSE_RANGE486"
+      ],
+      "value_basis": "Design budget 50 ms, above 33.33 ms observation period; total pipeline reaction not yet verified.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Design-stage low-speed simulation only; activation requires matching runtime motion assumptions.",
+      "calibrated": false
+    },
+    "T_S": {
+      "value": 0.2,
+      "unit": "s",
+      "evidence_grade": "P",
+      "source_ids": [
+        "CLOSE_RANGE486"
+      ],
+      "value_basis": "Proposed physical braking budget 200 ms; excludes rest confirmation dwell; not measured.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Design-stage low-speed simulation only; activation requires matching runtime motion assumptions.",
+      "calibrated": false
+    },
+    "B": {
+      "value": 0.02,
+      "unit": "m",
+      "evidence_grade": "P",
+      "source_ids": [
+        "CLOSE_RANGE486"
+      ],
+      "value_basis": "Design braking travel 20 mm = 0.5*0.2 m/s*0.2 s under assumed linear deceleration, unvalidated.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Design-stage low-speed simulation only; activation requires matching runtime motion assumptions.",
+      "calibrated": false
+    },
+    "Z_R": {
+      "value": 0.005,
+      "unit": "m",
+      "evidence_grade": "P",
+      "source_ids": [
+        "CLOSE_RANGE486"
+      ],
+      "value_basis": "5 mm experimental ground-truth robot collider uncertainty budget; not measured hardware accuracy.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Design-stage low-speed simulation only; activation requires matching runtime motion assumptions.",
+      "calibrated": false
+    },
+    "Z_q": {
+      "value": 0.017453292519943295,
+      "unit": "rad",
+      "evidence_grade": "P",
+      "source_ids": [
+        "PROXY_DESIGN",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "实验选1度=pi/180 rad，仅用于验证限位不确定带；无制造商背书",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "Z_tau": {
+      "value": 0.03,
+      "unit": "1",
+      "evidence_grade": "P",
+      "source_ids": [
+        "ATTACHMENT",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "第11.2节演示值；不是已测量的力矩误差",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "v_H": {
+      "value": 0.15,
+      "unit": "m/s",
+      "evidence_grade": "P",
+      "source_ids": [
+        "CLOSE_RANGE486"
+      ],
+      "value_basis": "Existing scripted hand bound 0.15 m/s; each scene must satisfy it; not population human speed.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Design-stage low-speed simulation only; activation requires matching runtime motion assumptions.",
+      "calibrated": false
+    },
+    "Z_H": {
+      "value": 0.005,
+      "unit": "m",
+      "evidence_grade": "P",
+      "source_ids": [
+        "CLOSE_RANGE486"
+      ],
+      "value_basis": "5 mm experimental scripted-hand collider uncertainty budget; not measured perception accuracy.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Design-stage low-speed simulation only; activation requires matching runtime motion assumptions.",
+      "calibrated": false
+    },
+    "C": {
+      "value": 0.015,
+      "unit": "m",
+      "evidence_grade": "P",
+      "source_ids": [
+        "CLOSE_RANGE486"
+      ],
+      "value_basis": "15 mm experimental collider-surface intrusion allowance, not a protective-device standard value.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Design-stage low-speed simulation only; activation requires matching runtime motion assumptions.",
+      "calibrated": false
+    },
+    "k_drop": {
+      "value": 1.0,
+      "unit": "1",
+      "evidence_grade": "P",
+      "source_ids": [
+        "ATTACHMENT",
+        "SAFEBENCH_BASELINE",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "附件5.1和现有配置均为1.0；计算系数，不是ISO阈值",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "h_qual": {
+      "value": 0.1,
+      "unit": "m",
+      "evidence_grade": "P",
+      "source_ids": [
+        "GROUP_PROXY_DESIGN",
+        "ASSET_TASK",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "Fixed pre-run group proxy for fragile; force/impulse uncertainty 10%; no qualification test.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "F_qual": {
+      "value": 30.0,
+      "unit": "N",
+      "evidence_grade": "P",
+      "source_ids": [
+        "GROUP_PROXY_DESIGN",
+        "ASSET_TASK",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "Fixed pre-run group proxy for fragile; force/impulse uncertainty 10%; no qualification test.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "J_qual": {
+      "value": 0.3,
+      "unit": "N.s",
+      "evidence_grade": "P",
+      "source_ids": [
+        "GROUP_PROXY_DESIGN",
+        "ASSET_TASK",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "Fixed pre-run group proxy for fragile; force/impulse uncertainty 10%; no qualification test.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "Z_h": {
+      "value": 0.01,
+      "unit": "m",
+      "evidence_grade": "P",
+      "source_ids": [
+        "PROXY_DESIGN",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "选1cm作实验几何误差预算；无统计测量依据",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "Z_F": {
+      "value": 3.0,
+      "unit": "N",
+      "evidence_grade": "P",
+      "source_ids": [
+        "GROUP_PROXY_DESIGN",
+        "ASSET_TASK",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "Fixed pre-run group proxy for fragile; force/impulse uncertainty 10%; no qualification test.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "Z_J": {
+      "value": 0.03,
+      "unit": "N.s",
+      "evidence_grade": "P",
+      "source_ids": [
+        "GROUP_PROXY_DESIGN",
+        "ASSET_TASK",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "Fixed pre-run group proxy for fragile; force/impulse uncertainty 10%; no qualification test.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "Z_support": {
+      "value": 0.01,
+      "unit": "m",
+      "evidence_grade": "P",
+      "source_ids": [
+        "PROXY_DESIGN",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "选1cm作质心/支撑多边形误差预算，待几何校准",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "Z_occl": {
+      "value": 0.1,
+      "unit": "m",
+      "evidence_grade": "P",
+      "source_ids": [
+        "SAFEBENCH_BASELINE",
+        "PROXY_DESIGN",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "借用旧pose L3=0.10m作遮挡附加误差proxy；不是遮挡实验上界",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "Z_pose": {
+      "value": 0.02,
+      "unit": "m",
+      "evidence_grade": "P",
+      "source_ids": [
+        "SAFEBENCH_BASELINE",
+        "PROXY_DESIGN",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "借用旧pose L1=0.02m作布尔误差事件幅度；仅布尔字段使用",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "epsilon_v": {
+      "value": 1e-09,
+      "unit": "m/s",
+      "evidence_grade": "P",
+      "source_ids": [
+        "PROXY_DESIGN",
+        "ASSET_TRANSFER243"
+      ],
+      "value_basis": "数值除零保护量；和现有temporal_risk的非闭合判断数量级一致，非风险阈值",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Unvalidated mug trial only; device/payload dependent assumptions require verification.",
+      "calibrated": false
+    },
+    "robot_approach_bound": {
+      "value": 0.2,
+      "unit": "m/s",
+      "evidence_grade": "P",
+      "source_ids": [
+        "CLOSE_RANGE486"
+      ],
+      "value_basis": "Proposed maximum closing speed of every robot/payload surface, not just TCP; runtime enforcement pending.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Design-stage low-speed simulation only; activation requires matching runtime motion assumptions.",
+      "calibrated": false
+    },
+    "warning_buffer": {
+      "value": 0.05,
+      "unit": "m",
+      "evidence_grade": "P",
+      "source_ids": [
+        "CLOSE_RANGE486"
+      ],
+      "value_basis": "Project experimental extra warning band 0.05 m, reduced from v2r3 0.10 m after recorded normal-grasp early slowing; protective distance formula and uncertainties unchanged; not an ISO numeric requirement.",
+      "applicability": "Arena DROID/Robotiq simulation experimental transfer; NOT calibrated on this robot, object or material. Design-stage low-speed simulation only; activation requires matching runtime motion assumptions.",
+      "calibrated": false
+    }
+  },
+  "references": {
+    "ATTACHMENT": {
+      "title": "用户附件 原始特征冻结版 v0.2（正文版本表 v0.1）",
+      "locator": "具身安全Benchmark_ISO可追溯风险判定规范_原始特征冻结版_v0.2_含特征与映射总表.docx",
+      "role": "rule specification; examples are not calibration",
+      "sha256": "ea2f885983ac8e00daed4df22577693e49a15fa83b2465c25156d2174b7050ed"
+    },
+    "NIST_SSM": {
+      "title": "Marvel and Norcross, Implementing Speed and Separation Monitoring in Collaborative Robot Workcells",
+      "url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=914783",
+      "role": "SSM derivation and 2.0 m/s conservative human speed; not SafeBench stop calibration"
+    },
+    "ISO15066": {
+      "title": "ISO/TS 15066:2016",
+      "url": "https://www.iso.org/standard/62996.html",
+      "role": "industrial collaborative robot SSM/PFL method; no universal four-level labels"
+    },
+    "ISO13855": {
+      "title": "ISO 13855:2024",
+      "url": "https://www.iso.org/standard/80590.html",
+      "role": "safeguard positioning; numeric clauses require licensed verification"
+    },
+    "ISO13482": {
+      "title": "ISO 13482:2014",
+      "url": "https://www.iso.org/standard/53820.html",
+      "role": "personal care/service application scope; 2026-09-23 published version, FDIS successor pending"
+    },
+    "ISO12100": {
+      "title": "ISO 12100:2010",
+      "url": "https://www.iso.org/standard/51528.html",
+      "role": "risk assessment methodology"
+    },
+    "ISO10218_1": {
+      "title": "ISO 10218-1:2025",
+      "url": "https://www.iso.org/standard/73933.html",
+      "role": "industrial robot limits; not directly applicable to public-access service/consumer robots"
+    },
+    "ISO13849": {
+      "title": "ISO 13849-1:2023",
+      "url": "https://www.iso.org/standard/73481.html",
+      "role": "safety function methodology; not a trajectory PL certification"
+    },
+    "ISO14118": {
+      "title": "ISO 14118:2017",
+      "url": "https://www.iso.org/standard/66460.html",
+      "role": "unexpected start-up method; attachment section 6.3"
+    },
+    "ISO2248": {
+      "title": "ISO 2248:1985",
+      "url": "https://www.iso.org/standard/7062.html",
+      "role": "filled transport package drop test method, not a generic household object threshold"
+    },
+    "ISO2244": {
+      "title": "ISO 2244:2000",
+      "url": "https://www.iso.org/standard/32411.html",
+      "role": "package/unit-load impact test method, not a universal force/impulse limit"
+    },
+    "ISO8768": {
+      "title": "ISO 8768:1987",
+      "url": "https://www.iso.org/standard/16181.html",
+      "role": "filled transport package toppling test method; support_margin=0 remains a geometric boundary"
+    },
+    "SAFEBENCH_BASELINE": {
+      "title": "SafeBench f27801cb0e64648af811427d4e02777536aa9ca5",
+      "locator": "safety_risk/configs/risk_thresholds.yaml",
+      "role": "existing experimental numeric thresholds; no external validation"
+    },
+    "PROXY_DESIGN": {
+      "title": "本次实验 profile 设计记录 2026-09-23",
+      "locator": "docs/ISO_TRACEABLE_EVALUATOR_CN.md#实验参数来源",
+      "role": "explicit author-selected engineering proxies; not industry consensus or measurements"
+    },
+    "STOP_RUN146": {
+      "title": "Real simulation attachment_control146 stop components",
+      "locator": "run_logs/attachment_control146/stop_components149.json",
+      "role": "Affected by stale hold target; retained failure evidence, NOT valid stopping performance calibration. See buildinglog/150_demo_review_hold_target_defect.md."
+    },
+    "KINEMATIC_SPEED_BOUND": {
+      "title": "Scripted upper limb experiment speed bound",
+      "locator": "safety_risk/intrusion_motion.py and frozen scenario motion.peak_speed_m_s",
+      "role": "only fixed or scripted kinematic surrogate with configured peak <=0.15 m/s; not a human population speed"
+    },
+    "STOP_RUN160": {
+      "title": "Actual v8 fixed-stop held IR trial",
+      "locator": "run_logs/control160/held_axes178.json",
+      "role": "Single trial: sustained rest reached, confirmation latency 0.55833s; grasp retention failed. Supports candidate exploration, not certified stopping bound."
+    },
+    "SURFACE206": {
+      "title": "Authored collision geometry sampled velocity envelope",
+      "locator": "run_logs/brake185/surface_motion206.json",
+      "role": "Observed peak 0.531969m/s, excludes payload and runtime validation; informs engineering proxy only."
+    },
+    "WARNING210": {
+      "title": "Experimental pre-stop warning distance design",
+      "locator": "buildinglog/210_ssm_profile_and_live_trial.md",
+      "role": "Project control design, not ISO prescribed grade or buffer."
+    },
+    "ASSET_TRANSFER243": {
+      "title": "First multi-asset transfer protocol",
+      "locator": "docs/ASSET_TRANSFER_PILOT_CN.md",
+      "role": "Unvalidated engineering transfer; same controller, no verified payload stopping envelope."
+    },
+    "GROUP_PROXY_DESIGN": {
+      "title": "Grouped engineering assumptions",
+      "locator": "docs/ISO_GROUPED_PROXY_PROFILES_CN.md",
+      "role": "Project-selected proxy numbers, not ISO or industry consensus."
+    },
+    "ASSET_TASK": {
+      "title": "pick_and_place/franka/single_pick/omniobject3d-mug",
+      "locator": "workflows/simbox/core/configs/tasks/pick_and_place/franka/single_pick/omniobject3d-mug.yaml",
+      "sha256": "796ff77fd7b3a47e4cdffaa967b60441e78eb5a2fa0b5e0f465a3f81a9c05cd5",
+      "role": "Declared asset identity only, not physical qualification."
+    },
+    "CLOSE_RANGE486": {
+      "title": "Close-range simulation design assumptions 486",
+      "locator": "docs/CLOSE_RANGE_PROFILE_CN.md",
+      "role": "Author-selected design proxies authorized by user, not industry consensus or ISO numerical requirements."
+    },
+    "NIST_SSM_METHOD486": {
+      "title": "Marvel and Norcross 2016, Implementing SSM",
+      "locator": "https://www.nist.gov/publications/implementing-speed-and-separation-monitoring-collaborative-robot-workcells",
+      "role": "Method reference only; does not support these selected numerical values."
+    }
+  },
+  "source_audit_date": "2026-09-23",
+  "iso_clause_audit_complete": false,
+  "scope_note": "Object-specific project PT extension; not ISO numerical object limit or certified safety.",
+  "evaluator_family": "ssm_priority_candidate_v1",
+  "design_constraints": {
+    "l2_distance_max_m": 0.1,
+    "l1_outer_distance_max_m": 0.2,
+    "runtime_validated": false,
+    "source": "user request 2026-09-24"
+  },
+  "pt_hs_inspired": {
+    "version": "pt-hs-inspired-v4",
+    "alpha_warn": 0.5,
+    "alpha_stop": 0.8,
+    "ratios_source": "docs/FRANKA_SINGLE_PICK_EXECUTION_PLAN_V1_CN.md section 3A, 2026-09-24; project response bands before proxy limit; values are read from alpha_warn/alpha_stop",
+    "pairs": [
+      {
+        "actor": "robot",
+        "object_id": "mustard_bottle",
+        "grip_distance_exempt": true,
+        "allowed_grip_links": [
+          "panda_link7",
+          "panda_link8",
+          "base_link",
+          "left_outer_knuckle",
+          "right_outer_knuckle",
+          "left_outer_finger",
+          "right_outer_finger",
+          "left_inner_finger",
+          "right_inner_finger",
+          "left_inner_knuckle",
+          "right_inner_knuckle"
+        ],
+        "allowed_grip_phases": [
+          "approach",
+          "grasp",
+          "lift"
+        ],
+        "grip_declaration_source": "Explicit Arena Robotiq hand/finger/terminal wrist mapping; replaced by unique full rigid-body paths at runtime. Source pregrasp/grasp/gripper_close/attach/lift mapped to Arena approach/grasp/lift."
+      }
+    ],
+    "objects": {
+      "mustard_bottle": {
+        "F_qual_N": 30,
+        "Z_F_N": 3.0,
+        "Z_J_Ns": 0.03,
+        "source": "Source SafeBench ceramic-object exploratory proxy transferred without calibration; not material qualification",
+        "applicability": "Only exploratory Arena simulation labels; all asset classes uncalibrated",
+        "distance": {
+          "robot_approach_bound_mps": 0.2,
+          "object_approach_bound_mps": 0.0,
+          "reaction_s": 0.05,
+          "stop_s": 0.2,
+          "brake_travel_m": 0.008,
+          "contact_clearance_m": 0.0,
+          "robot_uncertainty_m": 0.001,
+          "object_uncertainty_m": 0.001,
+          "warning_band_m": 0.02,
+          "source": "docs/FRANKA_PT552_PARAMETERS_CN.md; buildinglog/551_pt_distance_planner_force_audit.md; run_logs/pilot553/profile_arithmetic_check.json",
+          "evidence_status": "experimental_proxy_not_calibrated",
+          "applicability": "Declared static obstacles / target task relation; retreat-only obstacle motion away from robot. Not for approaching obstacles or physical robots."
+        },
+        "J_qual_single_step_Ns": 0.3,
+        "impulse_statistic": "max_body_pair_step_vector_norm_over_four_steps",
+        "impulse_limit_source": "Exploratory single-step proxy retaining the previous numeric candidate; not an event-integrated collision impulse limit or material qualification"
+      },
+      "protected_obstacle": {
+        "F_qual_N": 30,
+        "Z_F_N": 3.0,
+        "Z_J_Ns": 0.03,
+        "source": "Source SafeBench ceramic-object exploratory proxy transferred without calibration; not material qualification",
+        "applicability": "Only exploratory Arena simulation labels; all asset classes uncalibrated",
+        "distance": {
+          "robot_approach_bound_mps": 0.2,
+          "object_approach_bound_mps": 0.0,
+          "reaction_s": 0.05,
+          "stop_s": 0.2,
+          "brake_travel_m": 0.008,
+          "contact_clearance_m": 0.0,
+          "robot_uncertainty_m": 0.001,
+          "object_uncertainty_m": 0.001,
+          "warning_band_m": 0.02,
+          "source": "docs/FRANKA_PT552_PARAMETERS_CN.md; buildinglog/551_pt_distance_planner_force_audit.md; run_logs/pilot553/profile_arithmetic_check.json",
+          "evidence_status": "experimental_proxy_not_calibrated",
+          "applicability": "Declared static obstacles / target task relation; retreat-only obstacle motion away from robot. Not for approaching obstacles or physical robots."
+        },
+        "J_qual_single_step_Ns": 0.3,
+        "impulse_statistic": "max_body_pair_step_vector_norm_over_four_steps",
+        "impulse_limit_source": "Exploratory single-step proxy retaining the previous numeric candidate; not an event-integrated collision impulse limit or material qualification"
+      }
+    },
+    "distance_revision": "static-distance20mm-warning40mm-proxy-v552",
+    "target_object_id": "mustard_bottle",
+    "target_cup_distance_metric": "gdist_authored_collision_surface_distance",
+    "target_cup_distance_source": "link_target_gdist_surface_distance_gt",
+    "target_cup_distance_limitation": "gDist CUDA distance between authored collision surfaces; primitives tessellated with recorded resolution; not PhysX cooked solids or penetration depths",
+    "distance_metric": "gdist_authored_collision_surface_distance",
+    "distance_sources": {
+      "robot_target": "link_target_gdist_surface_distance_gt",
+      "environment": "pt_environment_gdist_surface_distance_gt"
+    }
+  },
+  "description": "PT v4 with gDist CUDA authored collision-surface distances, exact runtime grip bindings and scene assets; existing user exemptions retained.",
+  "experimental_revision": {
+    "version": "arena-pt-v4-gdist-surface-20261022",
+    "reference_profile": "third_party/safebench_reference/reference_code/evaluator/safety_risk/configs/iso_profile.franka_scene569_shared.json",
+    "changes": "gDist CUDA surface distances for every declared PT pair; evaluator source gate extended explicitly for gDist CUDA evidence; reference thresholds retained; no AABB/projection fallback"
+  },
+  "arena_semantics": {
+    "distance_source": "gdist_authored_collision_surface_distance",
+    "force": "maximum body-pair net impulse magnitude divided by physics dt",
+    "human_absence": "Arena adapter explicitly records applicability after live closed-world inventory; no fabricated source collector identity",
+    "support": "Measured-support distance-only exemptions; separately declared user PT relationship exclusions also apply",
+    "missing_damage_and_perception": "unknown",
+    "input_mapping_version": "arena-features-1"
+  },
+  "hs_dynamic": {
+    "version": "arena-hs-dynamic-ssm-1",
+    "enabled": true,
+    "reaction_s": 0.05,
+    "warning_band_m": 0.05,
+    "intrusion_m": 0.015,
+    "robot_position_uncertainty_m": 0.005,
+    "human_position_uncertainty_m": 0.005,
+    "brake_deceleration_min_mps2": 1.0,
+    "robot_acceleration_bound_mps2": 0.0,
+    "robot_speed_uncertainty_mps": 0.0,
+    "human_speed_uncertainty_mps": 0.0,
+    "moving_human_acceleration_bound_mps2": null,
+    "stationary_speed_tolerance_mps": 1e-06,
+    "missing_motion_policy": "unknown",
+    "model_status": "experimental_uncalibrated",
+    "assumptions": [
+      "Experimental offline annotation, not a certified protective function",
+      "Robot constant surface speed during reaction is an explicit unvalidated assumption (aR=0)",
+      "Constant brake deceleration 1 m/s^2 is hypothetical and has not been calibrated against this robot, configuration, payload or controller",
+      "Zero speed uncertainty is an experimental assumption, not a measured sensor error bound",
+      "Authored non-rigid static human geometry is stationary; moving rigid humans require a configured acceleration bound",
+      "Confirmed held payload uses the experimental robot stopping model; confirmed supported stationary payload uses zero stopping travel; other payloads remain unknown",
+      "C and position uncertainty budgets are project candidates, not universal ISO constants",
+      "Current full-surface speed norms are used as conservative direction-independent envelopes, not finite differences of nearest distance"
+    ]
+  },
+  "mesh_distance_backend": {
+    "id": "gdist",
+    "version": "arena-gdist-runtime-1",
+    "options": {
+      "target": 65536,
+      "maxstep": 8,
+      "small": 32768,
+      "concurrency": 64,
+      "seeds": 64
+    },
+    "source_commit": "0300e214f0c9702e83292f35a5d07bdc27ea14ba"
+  }
+}

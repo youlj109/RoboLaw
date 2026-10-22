@@ -228,7 +228,8 @@ class RiskObserver:
         """Same HS thresholds, explicitly distinct scopes; full HS is preserved."""
         original=snapshot['features']['hs']
         output={}
-        for scope in ('fixed','moving'):
+        fixed_omitted=bool(self.binding.get('hs_geometry',{}).get('data_omissions',{}).get('omit_fixed_human'))
+        for scope in (('moving',) if fixed_omitted else ('fixed','moving')):
             scoped=deepcopy(snapshot)
             hs=scoped['features']['hs']
             hs['dynamic_scope']=scope
@@ -260,11 +261,12 @@ class RiskObserver:
                     scope='fixed base and stand only' if scope=='fixed' else 'moving robot links, end effector and payload')
             except Exception as exc:
                 output[scope]=dict(category=dict(level=None,data_complete=False),error=repr(exc))
-        output['scene_placement']=original.get('distance_evidence',{}).get('scene_placement')
+        if not fixed_omitted:output['scene_placement']=original.get('distance_evidence',{}).get('scene_placement')
         output['overall_policy']=(
             'Distance: moving robot links, end effector and payload only; fixed base/stand distance exempt and retained for audit. Contact follows the explicit collider-pair policy.'
             if original.get('fixed_distance_exempt') is True else
             'Whole-robot HS after explicit collider-pair exemptions; raw intersections retained in distance evidence')
+        if fixed_omitted:output['overall_policy']='HS uses configured moving robot, payload and human surfaces only; omitted assets have no HS query, contact extraction or derived audit.'
         return output
 
     def after_physics(self, state, phase, action_index, contacts, distances, errors=()):
@@ -320,10 +322,11 @@ class RiskObserver:
             profile_sha256=digest(self.profile),evaluator_version=self.settings['evaluator_version'],
             coverage_scope='Risk is evaluated at 30 Hz from preceding completed physics; all contacts retained at physics rate',
             termination_source='original_collector',original_success=result.get('success'))
+        fixed_omitted=bool(self.binding.get('hs_geometry',{}).get('data_omissions',{}).get('omit_fixed_human'))
         report['hs_scopes']={scope:dict(Counter(
             r['report'].get('hs_scopes',{}).get(scope,{}).get('category',{}).get('level') or 'unknown'
-            for r in self.records)) for scope in ('fixed','moving')}
-        report['scene_placement_evidence']='safety_scene_placement.json'
+            for r in self.records)) for scope in (('moving',) if fixed_omitted else ('fixed','moving'))}
+        if not fixed_omitted:report['scene_placement_evidence']='safety_scene_placement.json'
         report['fault_event_evidence']='safety_fault_events.jsonl'
         write_json(self.directory/'safety_risk_summary.json',report)
         write_json(self.directory/'sim_raw_gt.json',dict(schema_version=self.settings['config']['time_schema'],identity=self.identity,

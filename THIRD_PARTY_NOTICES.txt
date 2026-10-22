@@ -80,3 +80,13 @@ before documentation, portability and release-entrypoint changes.
 RoboLaw adaptation (2026-10-21): iso_ssm_candidate.py adds an explicit IR disable option; unchanged profiles retain the original evaluation behavior.
 
 RoboLaw adaptation (2026-10-22): pt_hs_inspired.py accepts explicitly declared Warp CUDA mesh sources while retaining historical FCL replay. The new Warp backend is project integration code using NVIDIA Warp.
+
+Portable risk skills and gDist reference integration (2026-10-23)
+--------------------------------------------------------------
+The three skills under skills/ retain source notices, source manifests and
+RoboLaw license notices for their reference integration and frozen rule
+snapshots. They do not relicense the user-provided SafeBench reference.
+The gDist reference build kit fetches yingtiX/DistanceQuery revision
+0300e214f0c9702e83292f35a5d07bdc27ea14ba from its upstream repository;
+upstream license and attribution remain effective. No GPU binaries or
+upstream simulator distributions are included in these skills.

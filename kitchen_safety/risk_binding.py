@@ -62,7 +62,7 @@ class ContactMonitor:
         from omni.physx import get_physx_simulation_interface
         from omni.physx.scripts import physicsUtils
         self.status=deepcopy(status);self.dt=dt;self.pending=defaultdict(list);self.errors=[]
-        self.active=set()
+        self.active=set();self.hs_data_omissions={}
         def callback(headers,data):
             try:
                 for header in headers:
@@ -74,6 +74,8 @@ class ContactMonitor:
                         continue
                     i=next(iter(envs))
                     if i not in self.active:continue
+                    from kitchen_safety.hs_data_policy import omitted_contact
+                    if omitted_contact(paths,self.hs_data_omissions.get(i,{})):continue
                     points=[]
                     for idx in range(int(header.contact_data_offset),int(header.contact_data_offset+header.num_contact_data)):
                         d=data[idx]
@@ -168,10 +170,13 @@ class ArenaRiskRuntime:
                 fixed_body_names=settings['config']['hs_scopes']['fixed_body_names'],
                 dynamic_pairs_enabled=settings['profile'].get('hs_dynamic',{}).get('enabled',False),
                 exempt_fixed_distance=settings['config']['hs_scopes'].get('exempt_fixed_distance',False),
-                excluded_pairs=settings['config']['hs_scopes'].get('excluded_pairs',[]),backend=backend) if human else None
+                excluded_pairs=settings['config']['hs_scopes'].get('excluded_pairs',[]),backend=backend,
+                data_omissions=settings['config']['hs_scopes'].get('data_omissions')) if human else None
             self.hs_geometries.append(hs_geometry)
+            if hs_geometry:self.monitor.hs_data_omissions[i]=deepcopy(hs_geometry.data_omissions)
             rs_config=settings['config']['rs_evidence']
-            rs_geometry=SelfCollisionGeometry(stage,geometry.root,body_names,hs_geometry,
+            shared_rs_geometry=hs_geometry if hs_geometry is not None and not hs_geometry.fixed_data_omitted() else None
+            rs_geometry=SelfCollisionGeometry(stage,geometry.root,body_names,shared_rs_geometry,
                 structural_pairs=rs_config['structural_pairs'],
                 structural_source=Path(__file__).resolve().parents[1]/rs_config['structural_pairs_source'],backend=backend)
             self.rs_geometries.append(rs_geometry)
@@ -214,6 +219,7 @@ class ArenaRiskRuntime:
                 hs_distance_policy=deepcopy(settings['config']['hs_scopes']),
                 rs_self_geometry=rs_geometry.metadata,
                 rs_authored_geometry=rs_geometry.geometry.metadata,
+                rs_geometry_independent_from_hs=rs_geometry.geometry is not hs_geometry,
                 rs_fault_protocol=settings['config']['rs_evidence'],
                 human_inventory=dict(complete=True,verified_absent=not human,observed_human_paths=humanpaths,
                     loaded_collision_paths=[e['path'] for e in geometry.entries],source='Arena stage collision inventory'),
@@ -230,6 +236,7 @@ class ArenaRiskRuntime:
             self.observers.append(self.observer_class(outputs[i],settings,binding,identity,dt,action_dt))
         self.refresh(initial=True)
         for i, observer in enumerate(self.observers):
+            if self.hs_geometries[i] is not None and self.hs_geometries[i].fixed_data_omitted():continue
             placement=self.distances[i].get('hs_geometry',{}).get('scene_placement')
             write_json(observer.directory/'safety_scene_placement.json',
                 dict(schema_version='arena-scene-placement-1',identity=observer.identity,
@@ -382,22 +389,26 @@ class ArenaRiskRuntime:
         ee=hf.get('d_ee_h_min_gt_m')
         hs=dict(d_robot_h_min_gt_m=robot_h if human else None,d_ee_h_min_gt_m=ee if human else None,
             d_obj_h_min_gt_m=object_h if human else None,human_contact_flag_gt=human_contact if human else False)
+        fixed_omitted=bool(human and self.hs_geometries[i].fixed_data_omitted())
         if human:
             hs['distance_evidence']=deepcopy(hs_measurement)
-            hs['raw_human_contact_flag_gt']=any(relevant(p,'person') for p in pairs) if covered else None
-            hs['exempted_contact_evidence']=exempt_contacts
             hs.update(hs_measurement.get('scoped_features',{}))
-            fixed_contacts=[p for p in hs_pairs if relevant(p,'person') and
-                any(p[k].rsplit('/',1)[-1] in self.settings['config']['hs_scopes']['fixed_body_names']
-                    and '/Robot/' in p[k] for k in ('bodyA','bodyB'))]
-            moving_contacts=[p for p in hs_pairs if relevant(p,'person') and p not in fixed_contacts]
-            hs['fixed_human_contact_flag_gt']=bool(fixed_contacts) if covered else None
+            if not fixed_omitted:
+                hs['raw_human_contact_flag_gt']=any(relevant(p,'person') for p in pairs) if covered else None
+                hs['exempted_contact_evidence']=exempt_contacts
+                fixed_contacts=[p for p in hs_pairs if relevant(p,'person') and
+                    any(p[k].rsplit('/',1)[-1] in self.settings['config']['hs_scopes']['fixed_body_names']
+                        and '/Robot/' in p[k] for k in ('bodyA','bodyB'))]
+                moving_contacts=[p for p in hs_pairs if relevant(p,'person') and p not in fixed_contacts]
+                hs['fixed_human_contact_flag_gt']=bool(fixed_contacts) if covered else None
+            else:
+                moving_contacts=[p for p in hs_pairs if relevant(p,'person')]
             hs['moving_human_contact_flag_gt']=bool(moving_contacts) if covered else None
             hs['moving_v_rel_h_gt_mps']=self.motion_approach_speed[i]
         speed=getattr(self,'approach_speed',[None]*len(self.latest))[i]
         hs['fixed_distance_exempt']=bool(
             self.settings['config']['hs_scopes'].get('exempt_fixed_distance',False))
-        if human and hs['fixed_distance_exempt']:
+        if human and hs['fixed_distance_exempt'] and not fixed_omitted:
             # Exclude the stationary base from distance grading, without
             # discarding its measured geometry or changing contact evaluation.
             hs['d_whole_robot_h_min_audit_m']=robot_h

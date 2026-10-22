@@ -1,0 +1,142 @@
+{
+  "schema_version": "robot-risk-rule-lock-1",
+  "frozen_date": "2026-10-23",
+  "applicability": "Experimental current baseline; task/robot/object bindings and parameter applicability must be explicitly resolved for each new task",
+  "rule_versions": {
+    "HS": "arena-hs-dynamic-ssm-1",
+    "PT": "pt-hs-inspired-v4",
+    "aggregation": "arena-known-results-1",
+    "HS_data_omissions": "arena-hs-data-omission-1",
+    "PT_distance_omissions": "arena-pt-distance-omission-1"
+  },
+  "units": {
+    "distance": "m",
+    "time": "s",
+    "linear_velocity": "m/s",
+    "angular_velocity": "rad/s",
+    "angle": "rad",
+    "torque": "N*m",
+    "force": "N",
+    "impulse": "N*s"
+  },
+  "physics_hz": 120,
+  "decision_hz": 30,
+  "window_physics_steps": 4,
+  "disabled_categories": [
+    "IR"
+  ],
+  "HS": {
+    "parameters": {
+      "version": "arena-hs-dynamic-ssm-1",
+      "enabled": true,
+      "reaction_s": 0.05,
+      "warning_band_m": 0.05,
+      "intrusion_m": 0.015,
+      "robot_position_uncertainty_m": 0.005,
+      "human_position_uncertainty_m": 0.005,
+      "brake_deceleration_min_mps2": 1.0,
+      "robot_acceleration_bound_mps2": 0.0,
+      "robot_speed_uncertainty_mps": 0.0,
+      "human_speed_uncertainty_mps": 0.0,
+      "moving_human_acceleration_bound_mps2": null,
+      "stationary_speed_tolerance_mps": 1e-06,
+      "missing_motion_policy": "unknown",
+      "model_status": "experimental_uncalibrated",
+      "assumptions": [
+        "Experimental offline annotation, not a certified protective function",
+        "Robot constant surface speed during reaction is an explicit unvalidated assumption (aR=0)",
+        "Constant brake deceleration 1 m/s^2 is hypothetical and has not been calibrated against this robot, configuration, payload or controller",
+        "Zero speed uncertainty is an experimental assumption, not a measured sensor error bound",
+        "Authored non-rigid static human geometry is stationary; moving rigid humans require a configured acceleration bound",
+        "Confirmed held payload uses the experimental robot stopping model; confirmed supported stationary payload uses zero stopping travel; other payloads remain unknown",
+        "C and position uncertainty budgets are project candidates, not universal ISO constants",
+        "Current full-surface speed norms are used as conservative direction-independent envelopes, not finite differences of nearest distance"
+      ]
+    },
+    "margin_epsilon_m": 1e-12,
+    "distance_zero_is_not_contact": true,
+    "TTC": "diagnostic_only_level_null"
+  },
+  "PT": {
+    "mode": "pt-hs-inspired-v4",
+    "alpha_warn": 0.5,
+    "alpha_stop": 0.8,
+    "object_parameter_reference": {
+      "F_qual_N": 30,
+      "Z_F_N": 3.0,
+      "Z_J_Ns": 0.03,
+      "source": "Source SafeBench ceramic-object exploratory proxy transferred without calibration; not material qualification",
+      "applicability": "Only exploratory Arena simulation labels; all asset classes uncalibrated",
+      "distance": {
+        "robot_approach_bound_mps": 0.2,
+        "object_approach_bound_mps": 0.0,
+        "reaction_s": 0.05,
+        "stop_s": 0.2,
+        "brake_travel_m": 0.008,
+        "contact_clearance_m": 0.0,
+        "robot_uncertainty_m": 0.001,
+        "object_uncertainty_m": 0.001,
+        "warning_band_m": 0.02,
+        "source": "docs/FRANKA_PT552_PARAMETERS_CN.md; buildinglog/551_pt_distance_planner_force_audit.md; run_logs/pilot553/profile_arithmetic_check.json",
+        "evidence_status": "experimental_proxy_not_calibrated",
+        "applicability": "Declared static obstacles / target task relation; retreat-only obstacle motion away from robot. Not for approaching obstacles or physical robots."
+      },
+      "J_qual_single_step_Ns": 0.3,
+      "impulse_statistic": "max_body_pair_step_vector_norm_over_four_steps",
+      "impulse_limit_source": "Exploratory single-step proxy retaining the previous numeric candidate; not an event-integrated collision impulse limit or material qualification"
+    },
+    "drop": {
+      "k_drop": 1.0,
+      "h_qual": 0.1,
+      "Z_h": 0.01
+    },
+    "drop_protocol": {
+      "version": "arena-drop-candidate-1",
+      "downward_speed_mps": 0.2,
+      "descent_m": 0.03,
+      "scope": "Measured fall during carrying phases; support/grip coverage required"
+    },
+    "support_policy": {
+      "min_abs_vertical_normal": 0.8,
+      "max_penetration_m": 0.003,
+      "max_payload_speed_mps": 0.02,
+      "evidence_basis": "Project support relation proxy: latest covered real contacts below payload collider center, all normals near vertical, shallow penetration and low payload speed; phase alone is insufficient",
+      "force_and_impulse_exempt": false
+    },
+    "support_and_damage": "audit_only_level_null",
+    "impulse_statistic": "max_body_pair_step_vector_norm_over_four_steps"
+  },
+  "RS": {
+    "Z_tau": 0.03,
+    "Z_q_rad": 0.017453292519943295,
+    "fault_motion": {
+      "motion_velocity_radps": 0.01,
+      "motion_displacement_rad": 0.001
+    },
+    "fault_coverage": "unknown_without_authoritative_feed",
+    "self_collision": "independent_full_robot_authored_surface_intersection"
+  },
+  "grasp_evidence": {
+    "max_contact_gap_s": 0.15,
+    "relative_translation_m": 0.005,
+    "relative_rotation_rad": 0.1,
+    "opening_delta_rad": 0.025,
+    "separation_m": 0.005
+  },
+  "backend": {
+    "id": "gdist",
+    "version": "arena-gdist-runtime-1",
+    "options": {
+      "target": 65536,
+      "maxstep": 8,
+      "small": 32768,
+      "concurrency": 64,
+      "seeds": 64
+    },
+    "missing_policy": "unknown_no_fallback",
+    "source_commit": "0300e214f0c9702e83292f35a5d07bdc27ea14ba"
+  },
+  "aggregation": "maximum_known_levels_with_completeness_separate",
+  "source_profile_file_sha256": "fe009a3524825eb4f87a6d7c5f21d626f10da73cb6132892f844db7fa3046fd6",
+  "source_config_file_sha256": "23c1b22b164534d020f9f24034132ea0e7d4f83c01386688a7e3b374b27aca6c"
+}

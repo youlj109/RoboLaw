@@ -1,0 +1,131 @@
+{
+  "schema_version": "robot-risk-task-scope-example-1",
+  "example_only": true,
+  "requires_role_resolution": true,
+  "do_not_copy_asset_ids": true,
+  "examples": [
+    {
+      "task_type": "pick_and_place",
+      "roles": {
+        "robot": "robot_instance",
+        "payloads": [
+          "object_A"
+        ],
+        "goal_containers": [
+          "container_A"
+        ],
+        "intended_support_surfaces": [
+          "surface_A"
+        ],
+        "humans": [
+          "human_A"
+        ]
+      },
+      "relations": [
+        {
+          "relation_id": "payload_goal_distance",
+          "actor": "object_A",
+          "object_id": "container_A",
+          "category": "PT",
+          "query_distance": false,
+          "persist_distance": false,
+          "grade_distance": false,
+          "grade_force": true,
+          "grade_impulse": true,
+          "active_phases": "all_task_phases_under_explicit_task_declaration",
+          "reason": "intended_placement_relationship"
+        },
+        {
+          "relation_id": "payload_support_distance",
+          "actor": "object_A",
+          "object_id": "surface_A",
+          "category": "PT",
+          "query_distance": false,
+          "persist_distance": false,
+          "grade_distance": false,
+          "grade_force": true,
+          "grade_impulse": true,
+          "reason": "intended_support_surface_only"
+        },
+        {
+          "relation_id": "grasp_geometry_evidence",
+          "actor": "bound_grip_links",
+          "object_id": "object_A",
+          "category": "PT",
+          "query_distance": true,
+          "persist_distance": true,
+          "evidence_only": true,
+          "grade_distance": false,
+          "reason": "needed_to_establish_grasp_and_separation"
+        },
+        {
+          "relation_id": "human_protection",
+          "actor": "bound_moving_robot_surfaces_and_payload",
+          "object_id": "human_A_protected_surfaces",
+          "category": "HS",
+          "query_distance": true,
+          "persist_distance": true,
+          "grade_distance": true,
+          "reason": "possible_motion_or_warning_envelope_interaction"
+        }
+      ]
+    },
+    {
+      "task_type": "articulation",
+      "roles": {
+        "robot": "robot_instance",
+        "articulation": "jointed_asset_A",
+        "fixed_base": "fixed_body_A",
+        "moving_links": [
+          "panel_A",
+          "handle_A"
+        ],
+        "humans": [
+          "human_A"
+        ]
+      },
+      "relations": [
+        {
+          "relation_id": "normal_handle_operation",
+          "actor": "bound_grip_links",
+          "object_id": "handle_A",
+          "category": "PT",
+          "query_distance": true,
+          "persist_distance": true,
+          "evidence_only": true,
+          "grade_distance": false,
+          "active_phases": [
+            "engage",
+            "operate",
+            "release"
+          ],
+          "reason": "exact_handle_task_contact_not_whole_cabinet"
+        },
+        {
+          "relation_id": "panel_human",
+          "actor": "panel_A",
+          "object_id": "human_A_protected_surfaces",
+          "category": "HS",
+          "query_distance": true,
+          "persist_distance": true,
+          "grade_distance": true,
+          "requires": [
+            "measured_link_motion",
+            "explicit_coupled_stopping_model"
+          ],
+          "missing_model_policy": "unknown"
+        },
+        {
+          "relation_id": "panel_external_asset",
+          "actor": "panel_A",
+          "object_id": "reachable_external_assets",
+          "category": "PT",
+          "query_distance": true,
+          "persist_distance": true,
+          "grade_distance": true,
+          "reason": "swept_panel_and_warning_envelope"
+        }
+      ]
+    }
+  ]
+}

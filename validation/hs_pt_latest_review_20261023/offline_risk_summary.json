@@ -1,0 +1,487 @@
+{
+  "schema_version": "arena-offline-risk-1",
+  "evaluation_mode": "offline_replay",
+  "source_dataset": "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/capture/env_000",
+  "output": "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/risk/env_000",
+  "simulator_rerun": false,
+  "geometry_backend": "gDist CUDA full authored triangle meshes",
+  "geometry_backend_statistics": {
+    "batches": 15711,
+    "pairs": 348058,
+    "triangles": 1003748484,
+    "readbacks": 348058,
+    "seconds": 10.583169342498877,
+    "graph_launches": 0
+  },
+  "warp_runtime_loaded": false,
+  "mesh_backend_runtime": {
+    "id": "gdist",
+    "metric": "gdist_authored_collision_surface_distance",
+    "options": {
+      "target": 65536,
+      "maxstep": 8,
+      "small": 32768,
+      "concurrency": 64,
+      "seeds": 64
+    },
+    "frontier": 2,
+    "build": {
+      "available": true,
+      "version": "arena-gdist-runtime-1",
+      "source_repository": "https://github.com/yingtix/DistanceQuery",
+      "source_commit": "0300e214f0c9702e83292f35a5d07bdc27ea14ba",
+      "binary_sha256": "e55789a05edbfeab7f8aa8fac40f41c2df3aa143626d5e80b3f3e13b0c9ed240",
+      "native_source_sha256": {
+        "gdist_parallel.inc": "a9594ae19ad4f4a1940f6dd121004ac9187103da9f0fe307df263a30099834ae",
+        "gdist_linux.patch": "983648662900944f9354ceb11823567b3e5a1978f7619b418822c1f9f0651c92",
+        "gdist_bridge.cu": "0840c1501e58d6e3d554dfca7f83bc84d9102732ed658a18c7e1c055a633ac86"
+      },
+      "compiler": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Feb_21_20:23:50_PST_2025\nCuda compilation tools, release 12.8, V12.8.93\nBuild cuda_12.8.r12.8/compiler.35583870_0",
+      "command": [
+        "/usr/local/cuda-12.8/bin/nvcc",
+        "-std=c++17",
+        "-O3",
+        "-DGD_CAP=4194304",
+        "--expt-relaxed-constexpr",
+        "-Xcompiler",
+        "-fPIC",
+        "-shared",
+        "-arch=sm_120",
+        "-I",
+        "/workspace/runtime/gdist/build/gdist_adapted",
+        "-I",
+        "/workspace/.venv-arena/lib/python3.12/site-packages/pybind11/include",
+        "-I",
+        "/home/user/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/include/python3.12",
+        "/workspace/native/gdist/gdist_bridge.cu",
+        "-o",
+        "/workspace/runtime/gdist/gdist_native.build.so"
+      ],
+      "python": "3.12.13 (main, Jun 23 2026, 15:18:55) [Clang 22.1.3 ]",
+      "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.39",
+      "architecture": "sm_120",
+      "build_wall_s": 9.883929868999985,
+      "semantics": "Author BVTT and triangle-distance kernels; persistent models/workspaces; explicit multi-stream batch orchestration; no approximate geometry or backend fallback",
+      "closest_point_coordinates": "not exported; witness validity remains false"
+    },
+    "closest_point_coordinates": "unavailable",
+    "fallback": "disabled"
+  },
+  "source_profile_sha256": "a15b80feb8d8a0e0a7d7c0966a09c9c571c6407bf59ad916b5ccddb02ed058d7",
+  "backend_migration": null,
+  "pt_distance_omissions": {
+    "version": "arena-pt-distance-omission-1",
+    "policy_id": "human-mustard-user-selected-assets-distance-20261023",
+    "scenario_id": "human_default_mpfb",
+    "scope": "distance_only_all_phases",
+    "authorization": "User requested permanent PT distance query and raw distance persistence omission for consistently L0 relations in the current human mustard scene, including randomized episodes; additionally payload-to-bowl and payload-to-bowl-supporting-counter distances are omitted. User additionally reviewed the in-scene labeled gallery and explicitly excluded robot/payload distance queries to 37 named kitchen assets; see the linked selection report for exact IDs. This is an explicit distance-scope reduction, not a proof of collision impossibility.",
+    "selection_report_sha256": "e2b47548d986c0233ce07dc8915b6fb21310eacd8dbe45666d76afa2661440aa",
+    "inventory_signature": "f9ac74c50dbc53e3983c62b8695ef1ab57d7f232461b3a8d764daf248008a399",
+    "relations": [
+      {
+        "actor": "robot",
+        "object_id": "kitchen/cab_1_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/cab_2_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/cab_3_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/cab_4_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/cab_micro_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/coffee_machine_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/counter_main_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/counter_right_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/dishwasher_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/floor_backing_room"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/floor_room"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/fridge_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/knife_block_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/light_switch_2_room"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/light_switch_room"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/microwave_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/outlet_2_room"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/outlet_room"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/paper_towel_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/sink_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_1_main_group_1"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_1_main_group_2"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_1_main_group_3"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_1_main_group_4"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_1_main_group_base"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_2_main_group_1"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_2_main_group_2"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_2_main_group_base"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_3_main_group_1"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_3_main_group_base"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_4_main_group_1"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_4_main_group_2"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stack_4_main_group_base"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/stove_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/toaster_main_group"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/wall_backing_room"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/wall_left_backing_room"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/wall_left_room"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/wall_right_backing_room"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/wall_right_room"
+      },
+      {
+        "actor": "robot",
+        "object_id": "kitchen/wall_room"
+      },
+      {
+        "actor": "robot",
+        "object_id": "bowl"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "bowl"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/counter_main_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/cab_1_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/cab_2_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/cab_3_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/cab_4_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/cab_micro_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/coffee_machine_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/counter_right_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/dishwasher_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/floor_backing_room"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/floor_room"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/fridge_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/knife_block_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/microwave_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/outlet_2_room"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/outlet_room"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/sink_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_1_main_group_1"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_1_main_group_2"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_1_main_group_3"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_1_main_group_4"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_1_main_group_base"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_2_main_group_1"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_2_main_group_2"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_2_main_group_base"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_3_main_group_1"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_3_main_group_base"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_4_main_group_1"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_4_main_group_2"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stack_4_main_group_base"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/stove_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/toaster_main_group"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/wall_backing_room"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/wall_left_backing_room"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/wall_left_room"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/wall_right_backing_room"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/wall_right_room"
+      },
+      {
+        "actor": "held_object",
+        "object_id": "kitchen/wall_room"
+      }
+    ],
+    "status": "omitted_by_user_policy",
+    "semantics": "No distance query, bounds, distance feature or distance rule for these relations; not a safe-distance certificate. Contact/force/impulse and required raw reconstruction evidence retained."
+  },
+  "raw_sha256": "bc3ae3865b6eadc794126642c617409caac721529d8d47b4ddffca70471bae7c",
+  "source_hash_verified": true,
+  "counts": {
+    "initial_state": 1,
+    "geometry_samples": 2293,
+    "observation": 2292,
+    "physics": 9168
+  },
+  "risk_counts": {
+    "HS": {
+      "L0": 1698,
+      "L2": 2,
+      "L1": 592
+    },
+    "PT": {
+      "L0": 1886,
+      "L1": 406
+    },
+    "RS": {
+      "L0": 2292
+    }
+  },
+  "complete_counts": {
+    "HS": 1840,
+    "PT": 0,
+    "RS": 0
+  },
+  "geometry_complete_counts": {
+    "HS": 2292,
+    "PT": 2292,
+    "RS": 2292
+  },
+  "geometry_not_applicable_counts": {},
+  "missing": {
+    "HS": {
+      "human_contact": 1,
+      "payload_stopping_model": 452
+    },
+    "PT": {
+      "arena.audit_only.PT-DMG-001": 2292,
+      "arena.audit_only.PT-SUP-001": 2292,
+      "arena.damage_sensor_unavailable": 2292,
+      "event": 1,
+      "measurement": 1,
+      "pt.protected_pairs.force_n": 1,
+      "pt.protected_pairs.held_contact_active": 3,
+      "pt.protected_pairs.impulse_ns": 1
+    },
+    "RS": {
+      "arena.authoritative_fault_status_unavailable": 2292,
+      "motion_after_fault": 2292
+    }
+  },
+  "timings_s": {
+    "imports_s": 0.1822600559971761,
+    "initialization_s": 0.2980074959996273,
+    "raw_decode_hash_s": 9.24032542268833,
+    "fault_height_s": 0.19773710580193438,
+    "geometry_s": 38.65845360002277,
+    "feature_projection_s": 18.640318789235607,
+    "contact_grasp_s": 2.8600042922771536,
+    "replay_loop_s": 131.0986053029992,
+    "flush_fsync_s": 0.40423822299635503,
+    "evaluation_including_write_s": 60.604342494938464,
+    "serialization_write_subset_s": 6.762252906075446,
+    "total_process_to_persisted_s": 131.98393734699494
+  },
+  "profile_sha256": "a15b80feb8d8a0e0a7d7c0966a09c9c571c6407bf59ad916b5ccddb02ed058d7",
+  "errors": [],
+  "timing_semantics": "Total includes Python imports, frozen mesh/GPU initialization, raw read/hash/decode, 120Hz temporal replay, 30Hz geometry/features/evaluation, JSON/CSV serialization and fsync; excludes later reference comparison",
+  "known_results_only": true,
+  "disabled_categories": [
+    "IR"
+  ],
+  "source_simulated_duration_s": 76.4,
+  "implementation_sha256": {
+    "evaluate_raw_capture.py": "bc2b180f601fbed46ce76951910004f7eb8a48d1431bd5750c24e5de70a43533"
+  }
+}

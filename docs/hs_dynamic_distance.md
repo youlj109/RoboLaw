@@ -60,3 +60,7 @@
 - [NIST: Implementing Speed and Separation Monitoring in Collaborative Robot Workcells](https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=914783)
 
 当前人体案例只是验证场景。其他场景使用自己的绑定和冻结几何；动态人体、形变人体及其他制动工况仍需相应运动测量、模型标定与独立验证。形变/动画网格不能冒充静态网格，当前采集器未提供其逐顶点速度重建。
+
+## 当前资产范围更新（2026-10-23）
+
+以上 108 对统计属于原验证归档。用户随后明确移除人体休闲服和固定底座/支座的 HS 计算与保存：新数据保留 17 个机器人运动部件与芥末瓶，对剩余 5 个人体网格建立 90 个动态关系；固定支座审计查询也停止。对应接触在提取接触点前跳过。规则公式不变，新数据冻结自己的清单，旧数据不自动修改。详见 [HS 数据排除](hs_data_omissions.md)。随后已完成 2,292 帧完整新采集及离线回放，三类几何完整，缺测仍独立保留。见 [已有验证记录](../validation/hs_pt_latest_review_20261023/README.md)；本次提交没有重跑仿真。

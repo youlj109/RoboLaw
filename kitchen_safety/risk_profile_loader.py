@@ -32,6 +32,8 @@ def load_config(path):
         raise ValueError('Observer must be enabled with no action authority')
     from kitchen_safety.pt_assets import validate_policy
     validate_policy(config.get('pt_asset_coverage', {}))
+    from kitchen_safety.hs_data_policy import validate as validate_hs_data_policy
+    validate_hs_data_policy(config.get('hs_scopes',{}).get('data_omissions'))
     profile_path = ROOT / config['profile_file']
     profile = json.loads(profile_path.read_text())
     if profile.get('rules',{}).get('pt_mode') != 'pt-hs-inspired-v4' or profile.get('pt_hs_inspired',{}).get('version') != 'pt-hs-inspired-v4':
@@ -82,7 +84,7 @@ def load_config(path):
     scene_definition=dict(layout=json.loads((ROOT/'configs/layout.json').read_text()),
                           assets=sorted(assets,key=lambda a:a['id']))
     return dict(config=config, profile=profile, mesh_backend_runtime=backend.runtime_info() if hasattr(backend,'runtime_info') else spec, implementation_files_sha256=code, profile_file_sha256=hashlib.sha256(profile_path.read_bytes()).hexdigest(),
-                scene_definition=scene_definition,adapter_version='arena-risk-observer-16-scoped-pt-distance-omissions', evaluator_version=VERSION)
+                scene_definition=scene_definition,adapter_version='arena-risk-observer-17-hs-data-omissions', evaluator_version=VERSION)
 
 
 def bind_profile(settings, binding):

@@ -118,7 +118,7 @@ def surface_mesh(prim, cache):
 class HumanDistanceGeometry:
     def __init__(self, stage, env_root, body_names, target_ids=('mustard_bottle',),
                  human_ids=('person',), ee_names=None, fixed_body_names=('panda_link0',),
-                 excluded_pairs=(), dynamic_pairs_enabled=False, exempt_fixed_distance=False, backend=None):
+                 excluded_pairs=(), dynamic_pairs_enabled=False, exempt_fixed_distance=False, backend=None, data_omissions=None):
         from kitchen_safety.geometry_backend import get_backend,descriptor
         fcl=backend or get_backend()
         spec=descriptor(fcl.BACKEND_ID)
@@ -132,6 +132,8 @@ class HumanDistanceGeometry:
         self.dynamic_pairs_enabled = dynamic_pairs_enabled
         self.exempt_fixed_distance = exempt_fixed_distance
         self.fixed_body_names = set(fixed_body_names)
+        from kitchen_safety.hs_data_policy import resolve
+        self.data_omissions = resolve(data_omissions, self.root, human_ids, fixed_body_names)
         self.ee_names = set(ee_names if ee_names is not None else
                             (n for n in body_names if not n.startswith('panda_link')))
         cache = UsdGeom.XformCache(Usd.TimeCode.Default())
@@ -149,6 +151,18 @@ class HumanDistanceGeometry:
                 continue
             if not UsdPhysics.CollisionAPI(prim).GetCollisionEnabledAttr().Get():
                 continue
+            if self.data_omissions:
+                if path in self.data_omissions['human_collider_paths']:
+                    continue
+                if group == 'robot':
+                    owner = prim
+                    while owner and owner != root and not owner.HasAPI(UsdPhysics.RigidBodyAPI):
+                        owner = owner.GetParent()
+                    if owner and owner != root and owner.GetName() in self.data_omissions['robot_body_names']:
+                        actor_path = str(owner.GetPath())
+                        if actor_path not in self.data_omissions['robot_actor_paths']:
+                            self.data_omissions['robot_actor_paths'].append(actor_path)
+                        continue
             inventory.append(path)
             try:
                 vertices, faces, approximation = surface_mesh(prim, cache)
@@ -219,7 +233,8 @@ class HumanDistanceGeometry:
             motion_body_names=motion_body_names,
             dynamic_pairs_enabled=dynamic_pairs_enabled, exempt_fixed_distance=exempt_fixed_distance,
             fixed_body_names=sorted(self.fixed_body_names),
-            scoped_distance_policy='HS excludes only explicitly bound collider pairs; raw minima and exclusions retained',
+            scoped_distance_policy=('HS explicitly omitted assets are absent from mesh queries, motion features and contact evidence' if self.data_omissions else 'HS excludes only explicitly bound collider pairs; raw minima and exclusions retained'),
+            data_omissions=self.data_omissions,
             excluded_pairs=declarations,
             target_ids=list(target_ids), human_ids=list(human_ids),
             inventoried_paths=inventory, complete=not self.errors, errors=self.errors,
@@ -280,8 +295,8 @@ class HumanDistanceGeometry:
         try:
             groups=self.update_objects(body_poses,object_poses)
             requests={key:batch.minimum(groups[key],groups['human'],exclude=self.excluded_pairs,hs=True)
-                      for key in ('robot','ee','object','fixed','moving')}
-            raw={key:batch.minimum(groups[key],groups['human'],hs=True) for key in ('robot','fixed')}
+                      for key in self.query_keys()}
+            raw={key:batch.minimum(groups[key],groups['human'],hs=True) for key in (() if self.fixed_data_omitted() else ('robot','fixed'))}
             by_path={e['path']:e for e in self.entries}
             exemptions=[(declaration,batch.minimum([by_path[a]],[by_path[b]],hs=True))
                         for (a,b),declaration in self.excluded_pairs.items()]
@@ -303,19 +318,7 @@ class HumanDistanceGeometry:
                         item.update(distance_m=measured['distance_m'],nearest_geometry=measured)
                     except Exception as exc:item.update(distance_m=None,error=str(exc))
                     dynamic_results.append(item)
-                return dict(version=self.metadata['version'], source=self.metadata['source'], complete=True, errors=[],
-                            features=dict(zip(FIELDS, (results[k]['distance_m'] for k in ('robot','ee','object')))),
-                            scoped_features=dict(d_fixed_h_min_gt_m=results['fixed']['distance_m'],
-                                                 d_moving_h_min_gt_m=results['moving']['distance_m']),
-                            scene_placement=dict(fixed_human_mesh_intersection=results['fixed']['mesh_intersection'],
-                                valid=not results['fixed']['mesh_intersection'],
-                                evidence=results['fixed'],
-                                raw_fixed_human_mesh_intersection=raw_results['fixed']['mesh_intersection'],
-                                raw_geometry_valid=not raw_results['fixed']['mesh_intersection'],
-                                raw_evidence=raw_results['fixed'],
-                                semantics='valid concerns non-exempt pairs; raw_geometry_valid preserves actual overlap'),
-                            nearest=results, raw_nearest=raw_results, exempted_pairs=exempted,
-                            dynamic_relations=dynamic_results)
+                return self.pack_results(results,raw_results,exempted,dynamic_results)
             except Exception as exc:return self.unknown([dict(error=str(exc))])
         return finish
 
@@ -327,27 +330,43 @@ class HumanDistanceGeometry:
             # Cache exact pairs shared between robot-wide and EE minima.
             cache = {}
             results = {key:self.minimum(groups[key], groups['human'], cache)
-                       for key in ('robot','ee','object','fixed','moving')}
+                       for key in self.query_keys()}
             raw_results = {key:self.minimum(groups[key], groups['human'], cache, apply_exemptions=False)
-                           for key in ('robot','fixed')}
+                           for key in (() if self.fixed_data_omitted() else ('robot','fixed'))}
             by_path = {e['path']:e for e in self.entries}
             exempted = [dict(declaration=declaration,
                             measurement=self.minimum([by_path[a]],[by_path[b]],cache,apply_exemptions=False))
                         for (a,b),declaration in self.excluded_pairs.items()]
-            return dict(version=self.metadata['version'], source=self.metadata['source'], complete=True, errors=[],
-                        features=dict(zip(FIELDS, (results[k]['distance_m'] for k in ('robot','ee','object')))),
-                        scoped_features=dict(d_fixed_h_min_gt_m=results['fixed']['distance_m'],
-                                             d_moving_h_min_gt_m=results['moving']['distance_m']),
-                        scene_placement=dict(fixed_human_mesh_intersection=results['fixed']['mesh_intersection'],
-                            valid=not results['fixed']['mesh_intersection'],
-                            evidence=results['fixed'],
-                            raw_fixed_human_mesh_intersection=raw_results['fixed']['mesh_intersection'],
-                            raw_geometry_valid=not raw_results['fixed']['mesh_intersection'],
-                            raw_evidence=raw_results['fixed'],
-                            semantics='valid concerns non-exempt pairs; raw_geometry_valid preserves actual overlap'),
-                        nearest=results, raw_nearest=raw_results, exempted_pairs=exempted)
+            dynamic=[]
+            for p in self.dynamic_groups():
+                measured=self.minimum(p['left'],p['right'],cache)
+                item={k:v for k,v in p.items() if k not in ('left','right')}
+                item.update(distance_m=measured['distance_m'],nearest_geometry=measured)
+                dynamic.append(item)
+            return self.pack_results(results,raw_results,exempted,dynamic)
         except Exception as exc:
             return self.unknown([dict(error=str(exc))])
+
+    def fixed_data_omitted(self):
+        return bool(getattr(self,'data_omissions',{}).get('omit_fixed_human'))
+
+    def query_keys(self):
+        return ('robot','ee','object','moving') if self.fixed_data_omitted() else ('robot','ee','object','fixed','moving')
+
+    def pack_results(self,results,raw_results,exempted,dynamic_results):
+        result=dict(version=self.metadata['version'],source=self.metadata['source'],complete=True,errors=[],
+            features=dict(zip(FIELDS,(results[k]['distance_m'] for k in ('robot','ee','object')))),
+            scoped_features=dict(d_moving_h_min_gt_m=results['moving']['distance_m']),
+            nearest=results,dynamic_relations=dynamic_results)
+        if not self.fixed_data_omitted():
+            result['scoped_features']['d_fixed_h_min_gt_m']=results['fixed']['distance_m']
+            result.update(raw_nearest=raw_results,exempted_pairs=exempted,
+                scene_placement=dict(fixed_human_mesh_intersection=results['fixed']['mesh_intersection'],
+                    valid=not results['fixed']['mesh_intersection'],evidence=results['fixed'],
+                    raw_fixed_human_mesh_intersection=raw_results['fixed']['mesh_intersection'],
+                    raw_geometry_valid=not raw_results['fixed']['mesh_intersection'],raw_evidence=raw_results['fixed'],
+                    semantics='valid concerns non-exempt pairs; raw_geometry_valid preserves actual overlap'))
+        return result
 
     @staticmethod
     def unknown(errors):
@@ -365,11 +384,20 @@ class HumanDistanceGeometry:
             records = pair.get('contacts')
             if not records:
                 # Missing collider identity cannot authorize an exemption.
-                applicable.append(pair)
+                from kitchen_safety.hs_data_policy import omitted_contact
+                if not omitted_contact(dict(actor0=pair.get('bodyA'),actor1=pair.get('bodyB')),
+                                       getattr(self,'data_omissions',{})):
+                    applicable.append(pair)
                 continue
             kept = []
             for record in records:
                 a,b = record.get('collider0'),record.get('collider1')
+                from kitchen_safety.hs_data_policy import omitted_contact
+                identities=dict(record)
+                identities.setdefault('actor0',pair.get('bodyA'))
+                identities.setdefault('actor1',pair.get('bodyB'))
+                if omitted_contact(identities,getattr(self,'data_omissions',{})):
+                    continue
                 if self.excluded_contact(a,b):
                     exempted.append(dict(collider0=a,collider1=b,points=record.get('points',[])))
                 else:

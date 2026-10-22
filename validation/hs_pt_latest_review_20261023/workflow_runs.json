@@ -1,0 +1,151 @@
+[
+  {
+    "stage": "capture",
+    "started_wall_ns": 1792693565081450440,
+    "status": "completed",
+    "commands": [
+      {
+        "name": "capture",
+        "command": [
+          "/workspace/.venv-arena/bin/python",
+          "/workspace/scripts/collect_kitchen_vectorized.py",
+          "--episode-specs",
+          "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/episode_specs.json",
+          "--num-envs",
+          "1",
+          "--output",
+          "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/capture",
+          "--collection-purpose",
+          "diagnostic",
+          "--observer-config",
+          "/workspace/configs/safety_observer_arena.json",
+          "--run-id",
+          "hs_pt_latest_review_20261023_022548",
+          "--capture-workflow-policy",
+          "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/workflow_policy.json",
+          "--risk-capture-mode",
+          "raw-only",
+          "--record-render-state",
+          "--defer-post-collection-checks",
+          "--defer-clearance-diagnostics",
+          "--device",
+          "cpu",
+          "--physics-threads",
+          "0",
+          "--torch-threads",
+          "1",
+          "--episode-length-s",
+          "180",
+          "--max-steps",
+          "2400",
+          "--collector-overrides",
+          "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/collector_overrides.json"
+        ],
+        "exit_code": 0,
+        "wall_s": 321.84982741800195
+      }
+    ],
+    "entrypoint_sha256": "13248cea6199e90fe83a99188670da6da62cdedd5596cb9ea7ad9d0391e660c5",
+    "workflow_policy_sha256": "910a0cbd25fdb33fa51a3c78a0b12a09cce882dfdb95e81f3a8b20e8bee243c9",
+    "completed_wall_ns": 1792693886931688258,
+    "risk_evaluation_status": "pending_offline",
+    "production_acceptance": "not_inferred"
+  },
+  {
+    "stage": "evaluate",
+    "started_wall_ns": 1792693895187507129,
+    "status": "completed",
+    "commands": [
+      {
+        "name": "env_000_raw_integrity",
+        "command": [
+          "/workspace/.venv-arena/bin/python",
+          "/workspace/scripts/validate_raw_capture.py",
+          "--episode",
+          "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/capture/env_000",
+          "--output",
+          "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/env_000_raw_integrity.json"
+        ],
+        "exit_code": 0,
+        "wall_s": 14.380151523000677
+      },
+      {
+        "name": "env_000_risk",
+        "command": [
+          "/workspace/.venv-arena/bin/python",
+          "/workspace/scripts/evaluate_raw_capture.py",
+          "--episode",
+          "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/capture/env_000",
+          "--output",
+          "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/risk/env_000",
+          "--geometry-backend",
+          "frozen"
+        ],
+        "exit_code": 0,
+        "wall_s": 132.12127611100004
+      }
+    ],
+    "entrypoint_sha256": "13248cea6199e90fe83a99188670da6da62cdedd5596cb9ea7ad9d0391e660c5",
+    "workflow_policy_sha256": "910a0cbd25fdb33fa51a3c78a0b12a09cce882dfdb95e81f3a8b20e8bee243c9",
+    "completed_wall_ns": 1792694041689690132,
+    "risk_evaluation_status": "see_per_episode_reports",
+    "production_acceptance": "not_inferred"
+  },
+  {
+    "stage": "render",
+    "started_wall_ns": 1792694051958598558,
+    "status": "completed",
+    "commands": [
+      {
+        "name": "env_000_render",
+        "command": [
+          "/workspace/.venv-arena/bin/python",
+          "/workspace/scripts/render_recorded_episode.py",
+          "--source-episode",
+          "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/capture/env_000",
+          "--output",
+          "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/rendered/env_000",
+          "--num_envs",
+          "1",
+          "--device",
+          "cpu",
+          "--camera-device",
+          "cuda:0",
+          "--background-rgb"
+        ],
+        "exit_code": 0,
+        "wall_s": 134.5425571550004
+      }
+    ],
+    "entrypoint_sha256": "13248cea6199e90fe83a99188670da6da62cdedd5596cb9ea7ad9d0391e660c5",
+    "workflow_policy_sha256": "910a0cbd25fdb33fa51a3c78a0b12a09cce882dfdb95e81f3a8b20e8bee243c9",
+    "completed_wall_ns": 1792694186502040515,
+    "risk_evaluation_status": "see_per_episode_reports",
+    "production_acceptance": "not_inferred"
+  },
+  {
+    "stage": "video",
+    "started_wall_ns": 1792694195378199765,
+    "status": "completed",
+    "commands": [
+      {
+        "name": "env_000_video",
+        "command": [
+          "/workspace/.venv-arena/bin/python",
+          "/workspace/scripts/export_risk_review_video.py",
+          "--episode",
+          "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/review_input/env_000",
+          "--output",
+          "/media/user/新加卷/RoboLaw-runtime/hs_pt_latest_review_20261023_022548/run/video/env_000"
+        ],
+        "exit_code": 0,
+        "wall_s": 132.2065181079961
+      }
+    ],
+    "entrypoint_sha256": "13248cea6199e90fe83a99188670da6da62cdedd5596cb9ea7ad9d0391e660c5",
+    "workflow_policy_sha256": "910a0cbd25fdb33fa51a3c78a0b12a09cce882dfdb95e81f3a8b20e8bee243c9",
+    "completed_wall_ns": 1792694327589938449,
+    "risk_evaluation_status": "see_per_episode_reports",
+    "production_acceptance": "not_inferred"
+  }
+]
