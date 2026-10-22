@@ -1,3 +1,5 @@
+> 2026-10-22 当前默认：所有场景采用原始证据在线采集，网格距离、风险特征、HS/PT/RS、审计和 RGB/视频离线处理。人体场景仅为验证样例，场景与资产清单从各条数据读取。启动方式见 [offline_risk_workflow.md](offline_risk_workflow.md)。以下旧在线流程和 FCL 说明保留为历史复现记录。
+
 > 2026-10-22 更新：默认后端改为纯 Warp CUDA 完整三角网格查询；采集、动作、风险标签、RGB 时间轴为 30 Hz，物理为 120 Hz。下文 FCL 描述记录此前版本。当前实现说明见 [warp_mesh_30hz.md](warp_mesh_30hz.md)。
 
 # huirongzeng：完整风险感知与复现

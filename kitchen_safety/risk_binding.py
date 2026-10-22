@@ -184,6 +184,7 @@ class ArenaRiskRuntime:
                 hs_geometry=hs_geometry.metadata if hs_geometry else {'applicable':False},
                 hs_distance_policy=deepcopy(settings['config']['hs_scopes']),
                 rs_self_geometry=rs_geometry.metadata,
+                rs_authored_geometry=rs_geometry.geometry.metadata,
                 rs_fault_protocol=settings['config']['rs_evidence'],
                 human_inventory=dict(complete=True,verified_absent=not human,observed_human_paths=humanpaths,
                     loaded_collision_paths=[e['path'] for e in geometry.entries],source='Arena stage collision inventory'),

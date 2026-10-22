@@ -1,3 +1,5 @@
+> 当前通用默认采集策略见 [offline_risk_workflow.md](offline_risk_workflow.md)：源状态和接触在线保存，本文的 Warp 几何与风险计算在离线阶段执行；源时刻与实际处理时刻分别记录。
+
 # Warp GPU 完整网格测距与 30 Hz 采集
 
 当前人体芥末瓶场景使用 Warp 1.16.0、CUDA GPU 查询。物理仍为 120 Hz；动作/轨迹、几何采样、HS/PT/RS 标签及离线 RGB 来源状态为 30 Hz。每四个物理步进行一次几何采样与风险评价，物理接触和关节状态仍逐物理步记录。RGB 按实测状态离线渲染，不作为实时视觉感知输入。IR 保持 disabled。

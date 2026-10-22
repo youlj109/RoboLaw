@@ -1,5 +1,7 @@
 # 只采原始证据，离线计算风险
 
+当前通用默认入口为 `scripts/risk_capture_workflow.py`，策略见 `configs/risk_capture_workflow.json`；所有场景读取自己的规格与资产绑定。在线/离线边界、分阶段命令及验证状态见 [offline_risk_workflow.md](offline_risk_workflow.md)。低层兼容命令需要显式传入 raw-only 参数。
+
 `collect_kitchen_vectorized.py --risk-capture-mode raw-only` 是显式选择的新模式，默认 `online` 模式保持原有行为。raw-only 不输出 L 等级，不执行逐帧网格测距、HS/PT/RS 判级或场景摆放判定。结果的 `evaluation_status` 为 `pending_offline`。
 
 ## 同步保留与异步写出

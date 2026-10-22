@@ -1,0 +1,322 @@
+{
+  "scope": "General scene workflow; current human scene used for validation only",
+  "full_prior_validation": {
+    "status": "passed",
+    "test": "Current human mustard-bottle raw-only episode, offline HS/PT/RS reconstruction",
+    "source_simulated_duration_s": 76.4,
+    "decisions": 2292,
+    "physics_steps": 9168,
+    "source_hash_verified": true,
+    "risk_counts": {
+      "HS": {
+        "L2": 2061,
+        "L1": 231
+      },
+      "PT": {
+        "L0": 1722,
+        "L1": 482,
+        "L2": 88
+      },
+      "RS": {
+        "L0": 2292
+      }
+    },
+    "geometry_complete_counts": {
+      "HS": 2292,
+      "PT": 2292,
+      "RS": 2292
+    },
+    "complete_counts": {
+      "HS": 2291,
+      "PT": 0,
+      "RS": 0
+    },
+    "missing": {
+      "HS": {
+        "human_contact": 1
+      },
+      "PT": {
+        "arena.audit_only.PT-DMG-001": 2292,
+        "arena.audit_only.PT-SUP-001": 2292,
+        "arena.damage_sensor_unavailable": 2292,
+        "event": 1,
+        "measurement": 1,
+        "pt.protected_pairs.force_n": 1,
+        "pt.protected_pairs.held_contact_active": 3,
+        "pt.protected_pairs.impulse_ns": 1
+      },
+      "RS": {
+        "arena.authoritative_fault_status_unavailable": 2292,
+        "motion_after_fault": 2292
+      }
+    },
+    "offline_processing_timings_s": {
+      "imports_s": 0.5785587749996921,
+      "initialization_s": 0.45338310199804255,
+      "raw_decode_hash_s": 11.01522147803189,
+      "fault_height_s": 0.21616538088346715,
+      "geometry_s": 492.5582898390385,
+      "feature_projection_s": 7.584945265029091,
+      "contact_grasp_s": 3.6884700013506517,
+      "replay_loop_s": 584.0379109780006,
+      "flush_fsync_s": 0.008658343002025504,
+      "evaluation_including_write_s": 67.92904358907617,
+      "serialization_write_subset_s": 5.146045530986157,
+      "total_process_to_persisted_s": 585.078629014999
+    },
+    "reference_validation": {
+      "passed": true,
+      "offline": "datasets/diagnostic/offline_risk_full_20261022/safety_decisions.jsonl",
+      "reference": "datasets/augmentation/safety_observer_v1_20261019/human_warp_batch_speed_20261022/human_default/human_default_mpfb/attempt_0000_seed_4089898052/safety_decisions.jsonl",
+      "counts": {
+        "HS_grade_equal": 2292,
+        "PT_grade_equal": 2292,
+        "RS_grade_equal": 2292,
+        "support_pair_list_order_differences": 204,
+        "features_equal": 2292,
+        "rules_equal": 2292,
+        "coverage_equal": 2292,
+        "scope_reports_equal": 2292,
+        "records": 2292
+      },
+      "numeric_values_compared": 8311900,
+      "max_numeric_absolute_difference": 0.0,
+      "absolute_tolerance": 1e-07,
+      "relative_tolerance": 1e-07,
+      "differences": {},
+      "examples": [],
+      "comparison_wall_s": 18.4372549840009,
+      "unordered_fields": [
+        "features.pt.support_contact_evidence.pairs"
+      ],
+      "scope": "All HS/PT/RS feature leaves, all rule fields, category coverage and HS scoped reports at identical causal source steps; support contact pair collections compared as multisets, identity/profile metadata/processing clocks are deliberately separate"
+    },
+    "csv_export": {
+      "records": 2292,
+      "export_wall_s": 4.694352114998765
+    },
+    "csv_review_validation": {
+      "passed": true,
+      "rows": 2292,
+      "columns": 31,
+      "pt_nearest_semantics": "Report effective PT nearest pair after all current exemptions; not raw pair minimum"
+    },
+    "raw_collector_process_s": 321.1221089140017,
+    "raw_collector_plus_offline_serial_s": 906.2007379290008,
+    "raw_loop_flush_plus_offline_serial_s": 893.2594035699949,
+    "evaluation_mode": "offline_replay",
+    "simulator_rerun": false,
+    "IR": "disabled",
+    "known_results_only": true,
+    "video_rendering_included": false,
+    "scope": "Single full measured episode on RTX5090; cached Warp kernels; collection/processing/correctness-audit timings separate",
+    "remote_source": "/home/user/LinjingYou/Isaacsim_RoboDojo_A_H_Adaptation/datasets/diagnostic/raw_capture_only_full_20261022/env_000",
+    "remote_output": "/home/user/LinjingYou/Isaacsim_RoboDojo_A_H_Adaptation/datasets/diagnostic/offline_risk_full_20261022",
+    "artifacts": {
+      "risk_features.csv": {
+        "bytes": 677414,
+        "sha256": "9c7df7ec87bf338243c541c806e624a90881703f4cf6637f914c23ed97648cb4"
+      },
+      "offline_risk_summary.json": {
+        "bytes": 2561,
+        "sha256": "c3609e5df6f336191544d78f484dfc7162d419eb5d74fc37fa4b10e94168c5e8"
+      }
+    }
+  },
+  "new_geometry_adapter_validation": {
+    "passed": true,
+    "human_frames": [
+      {
+        "frame": 0,
+        "numeric_features": 110,
+        "maximum_difference_m": 0.0
+      },
+      {
+        "frame": 573,
+        "numeric_features": 110,
+        "maximum_difference_m": 0.0
+      },
+      {
+        "frame": 1146,
+        "numeric_features": 110,
+        "maximum_difference_m": 0.0
+      },
+      {
+        "frame": 1719,
+        "numeric_features": 110,
+        "maximum_difference_m": 0.0
+      },
+      {
+        "frame": 2291,
+        "numeric_features": 110,
+        "maximum_difference_m": 0.0
+      }
+    ],
+    "max_numeric_difference_m": 0.0,
+    "synthetic_nonhuman_geometry_branch": true,
+    "scope": "Five recorded human poses against the previous validated geometry adapter, plus a synthetic absent-human binding branch; not an end-to-end test of other scenes",
+    "wall_s": 3.850675115998456
+  },
+  "new_capture_short_diagnostic": {
+    "successful_full_task": false,
+    "action_budget": 4,
+    "raw": {
+      "schema_version": "arena-raw-capture-1",
+      "identity": {
+        "run_id": "general_raw_workflow_short_20261022",
+        "attempt_id": "env_000",
+        "env_id": 0,
+        "episode_generation": 0
+      },
+      "physics_steps": 16,
+      "evaluation_status": "pending_offline",
+      "risk_levels": null,
+      "physics_hz": 120.0,
+      "observation_hz": 30.0,
+      "raw_writer": {
+        "passed": true,
+        "counts": {
+          "initial_state": 1,
+          "observation": 4,
+          "physics": 16
+        },
+        "bytes": 1073759,
+        "sha256": "86a6a07d9fbfd61a294bfc8e229a1ec3deb92759aef956ca03b91891efa63c3d",
+        "writer_wall_s": 0.4560123810006189,
+        "fsync_completed": true
+      },
+      "enqueue_s": 0.0006491790081781801,
+      "queue_full_wait_s": 0.0,
+      "final_writer_drain_s": 0.027149364999786485,
+      "raw_semantics": "Original state, actual command submissions, unaggregated contact events and measured action observations; no online mesh queries or risk grades",
+      "online_geometry_scalar_calls": 0,
+      "online_geometry_batch_calls": 0,
+      "online_risk_evaluations": 0
+    },
+    "raw_integrity": {
+      "passed": true,
+      "errors": [],
+      "physics_steps": 16,
+      "action_observations": 4,
+      "frozen_meshes": 564,
+      "contact_reports": 32,
+      "contact_points": 3856,
+      "actual_command_calls": 48,
+      "raw_file_bytes": 1073759,
+      "online_geometry_calls": 0,
+      "online_risk_evaluations": 0,
+      "evaluation_status": "pending_offline",
+      "scope": "Raw completeness, contact identities, actual commands, mesh hashes and exact HDF5 alignment; does not claim evaluated risk levels"
+    },
+    "offline": {
+      "schema_version": "arena-offline-risk-1",
+      "evaluation_mode": "offline_replay",
+      "source_dataset": "/workspace/datasets/diagnostic/general_raw_workflow_short_20261022/capture/env_000",
+      "output": "/workspace/datasets/diagnostic/general_raw_workflow_short_20261022/risk/env_000",
+      "simulator_rerun": false,
+      "geometry_backend": "Warp CUDA full authored triangle meshes",
+      "raw_sha256": "86a6a07d9fbfd61a294bfc8e229a1ec3deb92759aef956ca03b91891efa63c3d",
+      "source_hash_verified": true,
+      "counts": {
+        "initial_state": 1,
+        "geometry_samples": 5,
+        "observation": 4,
+        "physics": 16
+      },
+      "risk_counts": {
+        "HS": {
+          "L2": 4
+        },
+        "PT": {
+          "L0": 4
+        },
+        "RS": {
+          "L0": 4
+        }
+      },
+      "complete_counts": {
+        "HS": 3,
+        "PT": 0,
+        "RS": 0
+      },
+      "geometry_complete_counts": {
+        "HS": 4,
+        "PT": 4,
+        "RS": 4
+      },
+      "geometry_not_applicable_counts": {},
+      "missing": {
+        "HS": {
+          "human_contact": 1
+        },
+        "PT": {
+          "arena.audit_only.PT-DMG-001": 4,
+          "arena.audit_only.PT-SUP-001": 4,
+          "arena.damage_sensor_unavailable": 4,
+          "event": 1,
+          "measurement": 1,
+          "pt.protected_pairs.force_n": 1,
+          "pt.protected_pairs.held_contact_active": 1,
+          "pt.protected_pairs.impulse_ns": 1
+        },
+        "RS": {
+          "arena.authoritative_fault_status_unavailable": 4,
+          "motion_after_fault": 4
+        }
+      },
+      "timings_s": {
+        "imports_s": 0.5597252619991195,
+        "initialization_s": 0.5227430550003191,
+        "raw_decode_hash_s": 0.008159406985214446,
+        "fault_height_s": 0.0003777210004045628,
+        "geometry_s": 0.8816604870007723,
+        "feature_projection_s": 0.004804937001608778,
+        "contact_grasp_s": 0.0036636579970945604,
+        "replay_loop_s": 1.0116629420008394,
+        "flush_fsync_s": 0.004756040001666406,
+        "evaluation_including_write_s": 0.11167084500266355,
+        "serialization_write_subset_s": 0.008786812002654187,
+        "total_process_to_persisted_s": 2.098992486997304
+      },
+      "profile_sha256": "d90a19a55adfa9e083a224c012ae7d6c1f0af7b93b685d692cd9d459eaca0132",
+      "errors": [],
+      "timing_semantics": "Total includes Python imports, frozen mesh/GPU initialization, raw read/hash/decode, 120Hz temporal replay, 30Hz geometry/features/evaluation, JSON/CSV serialization and fsync; excludes later reference comparison",
+      "known_results_only": true,
+      "disabled_categories": [
+        "IR"
+      ],
+      "source_simulated_duration_s": 0.13333333333333333,
+      "implementation_sha256": {
+        "evaluate_raw_capture.py": "01f67d8d7357e4312251e9046ac0fb08496a8e021557551c0e95c02fe9e50ad6"
+      }
+    },
+    "online_reference_comparison": {
+      "passed": true,
+      "offline": "datasets/diagnostic/general_raw_workflow_short_20261022/risk/env_000/safety_decisions.jsonl",
+      "reference": "datasets/augmentation/safety_observer_v1_20261019/human_warp_batch_speed_20261022/human_default/human_default_mpfb/attempt_0000_seed_4089898052/safety_decisions.jsonl",
+      "counts": {
+        "HS_grade_equal": 4,
+        "PT_grade_equal": 4,
+        "RS_grade_equal": 4,
+        "support_pair_list_order_differences": 0,
+        "features_equal": 4,
+        "rules_equal": 4,
+        "coverage_equal": 4,
+        "scope_reports_equal": 4,
+        "records": 4
+      },
+      "numeric_values_compared": 14252,
+      "max_numeric_absolute_difference": 0.0,
+      "absolute_tolerance": 1e-07,
+      "relative_tolerance": 1e-07,
+      "differences": {},
+      "examples": [],
+      "comparison_wall_s": 0.03493617300046026,
+      "unordered_fields": [
+        "features.pt.support_contact_evidence.pairs"
+      ],
+      "scope": "All HS/PT/RS feature leaves, all rule fields, category coverage and HS scoped reports at identical causal source steps; support contact pair collections compared as multisets, identity/profile metadata/processing clocks are deliberately separate"
+    }
+  },
+  "other_actual_scenes": "not rerun for this generalization"
+}

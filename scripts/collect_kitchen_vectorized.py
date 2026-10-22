@@ -96,6 +96,7 @@ def main():
                         help='raw-only records original evidence for later evaluation; emits no risk grades')
     parser.add_argument('--defer-post-collection-checks', action='store_true',
                         help='raw-only: archive post-execution clearance inputs instead of evaluating them')
+    parser.add_argument('--capture-workflow-policy', type=Path, help='Freeze the saved online/offline workflow in raw evidence')
     parser.add_argument('--run-id', help='Observer run identity; defaults to collection source/output')
     parser.add_argument('--record-rgb', action='store_true')
     parser.add_argument('--record-render-state', action='store_true',
@@ -149,6 +150,19 @@ def main():
     if args.observer_config:
         from kitchen_safety.risk_profile_loader import load_config
         observer_settings = load_config(args.observer_config)
+    if args.capture_workflow_policy:
+        if args.risk_capture_mode!='raw-only' or observer_settings is None or args.record_rgb:
+            parser.error('Saved workflow requires raw-only observer capture and offline RGB')
+        policy=json.loads(args.capture_workflow_policy.read_text())
+        if policy.get('schema_version')!='arena-risk-capture-workflow-1' or policy.get('capture_mode')!='raw-only':
+            parser.error('Unsupported capture workflow policy')
+        if not (args.record_render_state and args.defer_post_collection_checks and args.defer_clearance_diagnostics):
+            parser.error('Saved workflow requires render-state capture and all report-only checks deferred')
+        if observer_settings['config']['decision_hz']!=policy['decision_hz'] or observer_settings['config'].get('collection_hz')!=policy['observation_hz']:
+            parser.error('Observer frequencies differ from the saved workflow')
+        if observer_settings['config'].get('disabled_categories',[])!=policy['disabled_categories']:
+            parser.error('Disabled risk categories differ from saved workflow')
+        observer_settings['capture_workflow']=policy
     specs = json.loads(args.episode_specs.read_text())
     if not isinstance(specs, list) or len(specs) != args.num_envs:
         parser.error('episode-specs must contain exactly num-envs entries')
@@ -237,6 +251,8 @@ def main():
                 cfg.decimation = round(1.0 / (hz * cfg.sim.dt))
                 if cfg.decimation < 1 or abs(cfg.decimation * cfg.sim.dt - 1.0/hz) > 1.e-9:
                     raise ValueError('Collection frequency must divide physics frequency')
+            if args.capture_workflow_policy and abs(1/cfg.sim.dt-policy['physics_hz'])>1.e-8:
+                raise ValueError('Physics frequency differs from saved capture workflow')
             cfg.sim.render_interval = cfg.decimation
             cfg.scene.replicate_physics = args.replicate_physics
             cfg.scene.robot_contacts = ContactSensorCfg(

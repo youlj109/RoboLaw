@@ -14,8 +14,8 @@ def main():
     require(binding['evaluation_status']=='pending_offline','Wrong label provenance')
     require(summary['online_geometry_scalar_calls']==summary['online_geometry_batch_calls']==summary['online_risk_evaluations']==0,'Online risk computation was not disabled')
     fingerprints=set()
-    for key in ('pt_geometry','hs_geometry'):
-        fingerprints.update(e['fingerprint'] for e in binding['binding'][key]['geometry'])
+    for key in ('pt_geometry','hs_geometry','rs_authored_geometry'):
+        fingerprints.update(e['fingerprint'] for e in binding['binding'].get(key,{}).get('geometry',[]))
     for fingerprint in fingerprints:
         with np.load(ep/'raw_meshes'/(fingerprint+'.npz')) as d:
             actual=hashlib.sha256(d['vertices'].tobytes()+d['faces'].tobytes()).hexdigest()
@@ -31,7 +31,7 @@ def main():
             if r['kind']=='observation':
                 index=len(observations)
                 require(r['action_index']==index and r['physics_step']==index*stride and r['source_physics_step']==index*stride-1,'Observation/action chronology mismatch')
-                require(math.isclose(r['time_s'],index/30,abs_tol=1e-8),'Observation time mismatch')
+                require(math.isclose(r['time_s'],index*binding['action_dt_s'],abs_tol=1e-8),'Observation time mismatch')
                 observation=r['observation']
                 require(np.shape(observation['kitchen_link_pose'])==(schema['frozen_kitchen_metadata']['link_count'],7),'Kitchen pose inventory mismatch')
                 observations.append(r);continue
@@ -40,6 +40,13 @@ def main():
             require(r['physics_step']==physics and r['action_index']==physics//stride,'Physical stream gap')
             require(math.isclose(r['end_time_s'],(physics+1)*dt,abs_tol=1e-8),'Physical time mismatch')
             require(np.shape(r['state']['body_pose'])==(body_count,7),'Robot body pose coverage mismatch')
+            required_actors=schema.get('rigid_actor_paths_120hz')
+            if required_actors is not None:
+                actors=r['state'].get('rigid_actor_states_world',{})
+                require(set(actors)==set(required_actors),'Rigid actor pose channel inventory mismatch')
+                for state in actors.values():
+                    astate=np.asarray(state)
+                    require(astate.shape==(13,) and np.isfinite(astate).all() and np.linalg.norm(astate[3:7])>1.e-8,'Invalid rigid actor state')
             require(len(r['state']['q'])==len(r['state']['dq'])==joint_count,'Joint state coverage mismatch')
             require(r['contact_coverage'] and not r['contact_errors'],'Contact reporting incomplete')
             require(not r['errors'],'Capture errors present')

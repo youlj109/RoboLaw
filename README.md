@@ -4,14 +4,20 @@
 
 当前分支 **`huirongzeng`** 包含 HS、PT v4、RS、IR 的风险特征采集、评价规则、SafeBench 参考评价器、Warp CUDA 完整三角网格测距、任务豁免、逐步证据记录、验证报告、LeRobot 风险标签和三视角风险视频导出。等级仅按已知有效分项聚合，覆盖完整性和缺测独立保留；当前暂不启用 IR：仅 HS/PT/RS 参与评价、汇总和视频展示，IR 保留为可恢复模块。
 
-安装后的主要入口：
+默认采用 **必要证据在线采集、风险与媒体离线处理**，适用于全部已配置场景。每批传入自己的场景规格和采集参数，当前人体场景只作为验证案例。策略保存于 [`configs/risk_capture_workflow.json`](configs/risk_capture_workflow.json)。
 
 ```bash
-bash scripts/arena_python.sh scripts/check_risk_perception.py
-bash scripts/arena_python.sh scripts/collect_safety_benchmark.py \
-  --ids human_default_mpfb --num-envs 1 --episodes-per-id 1 --max-attempts 1 \
-  --output datasets/risk/human_run01 --run-id human_run01
+# 场景文件由本次场景生成器提供；不固定人体场景 ID
+bash scripts/arena_python.sh scripts/risk_capture_workflow.py capture \
+  --episode-specs datasets/my_scene_specs.json \
+  --collector-overrides datasets/my_collector_overrides.json \
+  --output datasets/risk/my_run --run-id my_run
+# 采集后，单独校验并提取特征、评价 HS/PT/RS
+bash scripts/arena_python.sh scripts/risk_capture_workflow.py evaluate \
+  --output datasets/risk/my_run
 ```
+
+审计、三路 RGB 渲染和视频导出也作为单独离线阶段运行，见 **[通用在线/离线工作流](docs/offline_risk_workflow.md)**。原始采集完成保持 pending_offline，不能当作风险标注或生产准入已经完成。
 
 完整的规则范围、当前豁免、采集输出、视频导出及已知限制见 **[风险感知安装与复现说明](docs/risk_perception.md)**。实验阈值与部分缺测仍然存在，不应把已知 L0 解释为全部证据完整。
 
@@ -142,16 +148,7 @@ python3 scripts/check_scene_assets.py --require-restored
 
 ## 场景采集入口
 
-风险感知采集使用 `scripts/collect_safety_benchmark.py`：
-
-```bash
-# 查看全部 11 个场景的风险采集命令
-bash scripts/arena_python.sh scripts/collect_safety_benchmark.py \
-  --output datasets/risk/all11_run01 --run-id all11_run01 --num-envs 1 --dry-run
-# 实际采集时去掉 --dry-run
-```
-
-仅采集人体时加 `--ids human_default_mpfb`；单个障碍场景可传其表中 ID。参数、三路 RGB 和风险视频的完整命令见 [复现说明](docs/risk_perception.md)。已有的 `run_robolaw_scenes.py` 保留基础场景复现入口；需要风险标签时请使用上述风险入口。
+风险采集使用 [`scripts/risk_capture_workflow.py`](scripts/risk_capture_workflow.py)。输入各场景自己的 episode specs，可选传入 collector overrides；同一批次为同资产拓扑，不同场景分别使用运行目录。物理与不可重建证据在线保存，后续 evaluate / audit / render / video 全部离线执行。完整步骤和各场景验证边界见 [通用工作流说明](docs/offline_risk_workflow.md)。
 
 ## 已有证据与限制
 
@@ -164,7 +161,7 @@ bash scripts/arena_python.sh scripts/collect_safety_benchmark.py \
 | 目录/文件 | 内容 |
 | --- | --- |
 | `kitchen_safety/risk_*.py` | 配置绑定、时序观察器、报告、标签导出 |
-| `kitchen_safety/fcl_distance.py`、`hs_geometry.py`、`pt_geometry.py` | FCL 距离与几何覆盖 |
+| `kitchen_safety/fcl_distance.py`、`hs_geometry.py`、`pt_geometry.py` | Warp 完整网格距离与几何覆盖（保留历史适配文件名） |
 | `kitchen_safety/pt_assets.py`、`grasp_evidence.py`、`rs_evidence.py` | 资产关系、抓持、自碰撞及故障证据 |
 | `configs/safety_observer_arena.json`、`configs/safety/` | 当前 Arena 规则绑定和 profile |
 | `third_party/safebench_reference/` | 随分支提供的参考评价器、测试及采样说明 |

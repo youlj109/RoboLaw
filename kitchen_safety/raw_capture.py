@@ -13,7 +13,7 @@ import queue
 import time
 import traceback
 import numpy as np
-from kitchen_safety.risk_binding import ArenaRiskRuntime
+from kitchen_safety.risk_binding import ArenaRiskRuntime, numpy
 from kitchen_safety.risk_profile_loader import bind_profile,digest
 from kitchen_safety.risk_observer import write_json,finite_json
 
@@ -46,6 +46,10 @@ def _writer(directory,incoming):
     if not result['passed']:raise RuntimeError(result['error'])
 
 
+def settings_policy(settings):
+    return settings.get('capture_workflow',{'mode':'raw-only','processing':'offline'})
+
+
 class RawSink:
     def __init__(self,directory,settings,binding,identity,dt,action_dt):
         self.directory=Path(directory);self.binding=binding;self.identity=identity
@@ -60,7 +64,8 @@ class RawSink:
             schema_version='arena-raw-capture-binding-1',identity=identity,binding=binding,
             physics_dt_s=dt,action_dt_s=action_dt,decision_stride=self.stride,
             resolved_config=settings['config'],resolved_profile=profile,profile_sha256=digest(profile),
-            adapter_version='arena-raw-capture-1',evaluation_status='pending_offline',
+            adapter_version='arena-raw-capture-2',evaluation_status='pending_offline',
+            capture_workflow=settings_policy(settings),
             implementation_files_sha256=settings.get('implementation_files_sha256',{})))
 
     def submit(self,row):
@@ -118,6 +123,18 @@ class RawCaptureRuntime(ArenaRiskRuntime):
                 actual=hashlib.sha256(model.vertices.tobytes()+model.faces.tobytes()).hexdigest()
                 if actual!=fingerprint:raise ValueError('Frozen mesh fingerprint mismatch')
                 np.savez_compressed(folder/(fingerprint+'.npz'),vertices=model.vertices,faces=model.faces)
+            actor_paths=set(self.latest[i].get('rigid_actor_states_world',{}))
+            kitchen_paths={self.geometries[i].root+'/'+name for name in self.kitchen_state.metadata['link_paths']}
+            for geometry in (self.pt_geometries[i],self.hs_geometries[i]):
+                if geometry is None:continue
+                for entry in geometry.entries:
+                    if entry['group']=='robot' or not entry.get('actor'):continue
+                    actor=entry['actor']
+                    if not actor.startswith('/'):
+                        actor=self.geometries[i].root+'/'+actor
+                    if geometry is self.pt_geometries[i] and not entry.get('dynamic'):continue
+                    if actor not in actor_paths|kitchen_paths:
+                        raise ValueError('Dynamic collider has no saved pose channel: '+actor)
             write_json(sink.directory/'raw_capture_schema.json',dict(
                 schema_version='arena-raw-capture-1',evaluation_status='pending_offline',
                 mesh_count=len(models),mesh_files='raw_meshes/<fingerprint>.npz',
@@ -127,15 +144,33 @@ class RawCaptureRuntime(ArenaRiskRuntime):
                 contacts='Original actor/collider identities, point positions, normals, impulse vectors and separations; aggregate later',
                 frozen_kitchen_metadata=self.kitchen_state.metadata,
                 limits_policy='Runtime effort and position limits retained per physics packet',
+                rigid_actor_paths_120hz=sorted(actor_paths),
+                rigid_actor_state_semantics='PhysX get_transforms actor xyz/xyzw and get_velocities COM linear/angular velocity in world frame, all registered scene rigid_objects at 120Hz',
+                workflow_policy=settings_policy(self.settings),
                 mesh_semantics='Authored collision surfaces with original scale baked into vertices; body poses provide measured rigid transforms'))
             write_json(sink.directory/'safety_scene_placement.json',dict(evaluation_status='pending_offline',
                 policy='No online placement verdict; recompute using frozen meshes and initial measured poses'))
 
     def refresh(self,initial=False):
+        # Snapshot each rigid-body view once per step, preserving its actual
+        # row/path mapping across environments. Kitchen articulation links are
+        # separately saved in each measured 30 Hz render observation.
+        actors={}
+        for asset in self.scene.rigid_objects.values():
+            view=asset.root_view
+            poses=numpy(view.get_transforms());velocities=numpy(view.get_velocities())
+            paths=list(view.prim_paths)
+            if len(paths)!=len(poses) or len(paths)!=len(velocities):
+                raise ValueError('Rigid actor path/state row count differs')
+            for path,pose,velocity in zip(paths,poses,velocities):
+                actors[str(path)]=np.r_[pose,velocity].tolist()
         self.latest=[];self.distances=[]
         for i,sink in enumerate(self.observers):
             if not initial:self.sample_steps[i]+=1
-            self.latest.append(self.state(i));self.distances.append({})
+            row=self.state(i)
+            root=self.geometries[i].root+'/'
+            row['rigid_actor_states_world']={path:state for path,state in actors.items() if path.startswith(root)}
+            self.latest.append(row);self.distances.append({})
             if initial:sink.submit(dict(kind='initial_state',physics_step=-1,time_s=0.,state=self.latest[-1],
                                         receive_wall_ns=time.time_ns()))
 
