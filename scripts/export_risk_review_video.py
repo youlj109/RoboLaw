@@ -189,7 +189,7 @@ def render_stream(job,out,painter,max_frames=None):
  return result
 
 def find_font(requested=None):
- candidates = [requested, os.environ.get('ROBOLAW_CJK_FONT'),
+ candidates = [requested, os.environ.get('ROBOLAW_CJK_FONT'),Path(__file__).resolve().parents[1]/'runtime/fonts/NotoSansCJK-Regular.ttc',
   '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',
   '/usr/share/fonts/google-noto-cjk/NotoSansCJK-Regular.ttc',
   '/System/Library/Fonts/PingFang.ttc']

@@ -64,9 +64,10 @@ class RawSink:
             schema_version='arena-raw-capture-binding-1',identity=identity,binding=binding,
             physics_dt_s=dt,action_dt_s=action_dt,decision_stride=self.stride,
             resolved_config=settings['config'],resolved_profile=profile,profile_sha256=digest(profile),
-            adapter_version='arena-raw-capture-3-exact-com-motion',evaluation_status='pending_offline',
+            adapter_version='arena-raw-capture-4-gdist-frozen',evaluation_status='pending_offline',
             capture_workflow=settings_policy(settings),
-            implementation_files_sha256=settings.get('implementation_files_sha256',{})))
+            implementation_files_sha256=settings.get('implementation_files_sha256',{}),
+            mesh_backend_runtime=settings.get('mesh_backend_runtime',{})))
 
     def submit(self,row):
         if self.closed:raise RuntimeError('Raw evidence arrived after writer close')
@@ -198,13 +199,13 @@ class RawCaptureRuntime(ArenaRiskRuntime):
     def flush_capture(self):
         for name,original in self.original_setters.items():setattr(self.command_sink,name,original)
         self.monitor.close()
-        from kitchen_safety import warp_mesh_backend
-        from kitchen_safety.warp_batch import RUNNER
+        backend=self.pt_geometries[0].fcl
+        stats=backend.batch_stats()
         for sink in self.observers:
             sink.finish()
             p=sink.directory/'raw_capture_summary.json';r=json.loads(p.read_text())
-            r['online_geometry_scalar_calls']=warp_mesh_backend.STATS['calls']
-            r['online_geometry_batch_calls']=RUNNER.stats['batches']
+            r['online_geometry_scalar_calls']=backend.STATS['calls']
+            r['online_geometry_batch_calls']=stats['batches']
             r['online_risk_evaluations']=0
             write_json(p,r)
 

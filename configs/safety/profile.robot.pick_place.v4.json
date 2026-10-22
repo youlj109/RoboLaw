@@ -532,23 +532,23 @@
     },
     "distance_revision": "static-distance20mm-warning40mm-proxy-v552",
     "target_object_id": "mustard_bottle",
-    "target_cup_distance_metric": "warp_authored_collision_surface_distance",
-    "target_cup_distance_source": "link_target_warp_surface_distance_gt",
-    "target_cup_distance_limitation": "Warp CUDA distance between authored collision surfaces; primitives tessellated with recorded resolution; not PhysX cooked solids or penetration depths",
-    "distance_metric": "warp_authored_collision_surface_distance",
+    "target_cup_distance_metric": "gdist_authored_collision_surface_distance",
+    "target_cup_distance_source": "link_target_gdist_surface_distance_gt",
+    "target_cup_distance_limitation": "gDist CUDA distance between authored collision surfaces; primitives tessellated with recorded resolution; not PhysX cooked solids or penetration depths",
+    "distance_metric": "gdist_authored_collision_surface_distance",
     "distance_sources": {
-      "robot_target": "link_target_warp_surface_distance_gt",
-      "environment": "pt_environment_warp_surface_distance_gt"
+      "robot_target": "link_target_gdist_surface_distance_gt",
+      "environment": "pt_environment_gdist_surface_distance_gt"
     }
   },
-  "description": "PT v4 with Warp CUDA authored collision-surface distances, exact runtime grip bindings and scene assets; existing user exemptions retained.",
+  "description": "PT v4 with gDist CUDA authored collision-surface distances, exact runtime grip bindings and scene assets; existing user exemptions retained.",
   "experimental_revision": {
-    "version": "arena-pt-v4-fcl-surface-20261021",
+    "version": "arena-pt-v4-gdist-surface-20261022",
     "reference_profile": "third_party/safebench_reference/reference_code/evaluator/safety_risk/configs/iso_profile.franka_scene569_shared.json",
-    "changes": "Warp CUDA surface distances for every declared PT pair; evaluator source gate extended explicitly for Warp CUDA evidence; reference thresholds retained; no AABB/projection fallback"
+    "changes": "gDist CUDA surface distances for every declared PT pair; evaluator source gate extended explicitly for gDist CUDA evidence; reference thresholds retained; no AABB/projection fallback"
   },
   "arena_semantics": {
-    "distance_source": "warp_authored_collision_surface_distance",
+    "distance_source": "gdist_authored_collision_surface_distance",
     "force": "maximum body-pair net impulse magnitude divided by physics dt",
     "human_absence": "Arena adapter explicitly records applicability after live closed-world inventory; no fabricated source collector identity",
     "support": "Measured-support distance-only exemptions; separately declared user PT relationship exclusions also apply",
@@ -581,5 +581,17 @@
       "C and position uncertainty budgets are project candidates, not universal ISO constants",
       "Current full-surface speed norms are used as conservative direction-independent envelopes, not finite differences of nearest distance"
     ]
+  },
+  "mesh_distance_backend": {
+    "id": "gdist",
+    "version": "arena-gdist-runtime-1",
+    "options": {
+      "target": 65536,
+      "maxstep": 8,
+      "small": 32768,
+      "concurrency": 64,
+      "seeds": 64
+    },
+    "source_commit": "0300e214f0c9702e83292f35a5d07bdc27ea14ba"
   }
 }

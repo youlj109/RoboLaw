@@ -11,10 +11,12 @@ import csv
 import hashlib
 import json
 import os
+import sys
 from pathlib import Path
 from types import SimpleNamespace
 import time
 
+EXECUTED_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 START = time.perf_counter()
 import h5py
 import numpy as np
@@ -24,6 +26,7 @@ from kitchen_safety.risk_profile_loader import create_evaluator, digest
 from kitchen_safety.grasp_evidence import GraspEvidence
 from kitchen_safety.rs_evidence import FaultEvidence
 from kitchen_safety.frozen_geometry import load_geometry, run_frame
+from kitchen_safety.geometry_backend import get_backend,configured_name,descriptor,migrate_frozen
 from scripts.export_offline_risk_features import FIELDS, project
 
 
@@ -86,6 +89,7 @@ class OfflineObserver(RiskObserver):
             source_state_semantics='Initial state or last completed physics step; no future dynamic evidence',
             source_raw_dataset=str(self.source_directory))
         record['input']['metadata']['evaluation_mode'] = 'offline_replay'
+        record['input']['metadata']['mesh_distance_backend'] = configured_name(self.settings['config'])
         record['input_sha256'] = digest(record['input'])
         f, report = record['input']['features'], record['report']
         h, p, r = (f[x] for x in ('hs', 'pt', 'rs'))
@@ -109,12 +113,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--episode', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--geometry-backend',choices=['frozen','gdist','warp'],default='frozen',help='Default preserves frozen backend; explicit override writes a derived binding/profile without modifying source')
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
-    frozen = json.loads((args.episode/'safety_observer_binding.json').read_text())
+    original_frozen = json.loads((args.episode/'safety_observer_binding.json').read_text())
+    if digest(original_frozen['resolved_profile'])!=original_frozen['profile_sha256']:raise ValueError('Source frozen profile hash mismatch')
+    frozen = original_frozen if args.geometry_backend=='frozen' else migrate_frozen(original_frozen,args.geometry_backend)
+    write_json(args.output/'safety_observer_binding.json',frozen)
     times = Counter(imports_s=time.perf_counter()-START)
     tick = time.perf_counter()
-    b, hs, pt, rs = load_geometry(args.episode, args.episode/'raw_meshes')
+    b, hs, pt, rs = load_geometry(args.episode, args.episode/'raw_meshes',frozen=frozen)
+    if hasattr(pt.fcl,'ensure_available'):pt.fcl.ensure_available()
     observer = OfflineObserver(args.output, frozen)
     observer.source_directory = args.episode.resolve()
     runtime = ArenaRiskRuntime.__new__(ArenaRiskRuntime)
@@ -242,7 +251,10 @@ def main():
     times['total_process_to_persisted_s'] = time.perf_counter()-START
     summary = dict(schema_version='arena-offline-risk-1', evaluation_mode='offline_replay',
         source_dataset=str(args.episode.resolve()), output=str(args.output.resolve()),
-        simulator_rerun=False, geometry_backend='Warp CUDA full authored triangle meshes',
+        simulator_rerun=False, geometry_backend=descriptor(configured_name(frozen['resolved_config']))['label']+' full authored triangle meshes',
+        geometry_backend_statistics=pt.fcl.batch_stats(),warp_runtime_loaded='kitchen_safety.warp_mesh_backend' in sys.modules,
+        mesh_backend_runtime=pt.fcl.runtime_info() if hasattr(pt.fcl,'runtime_info') else descriptor('warp'),
+        source_profile_sha256=original_frozen['profile_sha256'],backend_migration=frozen.get('geometry_backend_migration'),
         raw_sha256=source_hash.hexdigest(), source_hash_verified=expected is not None,
         counts=dict(counts), risk_counts={k:dict(v) for k,v in observer.counts.items()},
         complete_counts=dict(observer.complete), geometry_complete_counts=dict(observer.geometry_complete),
@@ -252,7 +264,7 @@ def main():
         timing_semantics='Total includes Python imports, frozen mesh/GPU initialization, raw read/hash/decode, 120Hz temporal replay, 30Hz geometry/features/evaluation, JSON/CSV serialization and fsync; excludes later reference comparison',
         known_results_only=True, disabled_categories=observer.disabled_categories,
         source_simulated_duration_s=counts['physics']*runtime.dt,
-        implementation_sha256={str(Path(__file__).name):hashlib.sha256(Path(__file__).read_bytes()).hexdigest()})
+        implementation_sha256={str(Path(__file__).name):EXECUTED_SOURCE_SHA256})
     write_json(args.output/'offline_risk_summary.json', summary)
     print(json.dumps(summary, ensure_ascii=False), flush=True)
 

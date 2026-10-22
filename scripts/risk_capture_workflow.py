@@ -63,7 +63,7 @@ def run(args):
                 jobs.extend([(name+'_raw_integrity',[sys.executable,str(ROOT/'scripts/validate_raw_capture.py'),
                     '--episode',str(episode),'--output',str(base/(name+'_raw_integrity.json'))]),
                     (name+'_risk',[sys.executable,str(ROOT/'scripts/evaluate_raw_capture.py'),
-                    '--episode',str(episode),'--output',str(base/'risk'/name)])])
+                    '--episode',str(episode),'--output',str(base/'risk'/name),'--geometry-backend',args.geometry_backend])])
                 (base/'risk').mkdir(exist_ok=True)
             elif stage=='render':
                 (base/'rendered').mkdir(exist_ok=True)
@@ -95,12 +95,14 @@ def run(args):
                 if not report.get('complete_trajectory') or Path(report['source_episode']).resolve()!=episode.resolve():
                     raise ValueError('RGB must be a completed rendering of this exact raw episode')
                 view=base/'review_input'/name;view.mkdir(parents=True,exist_ok=False)
-                for file in ('trajectory.h5','result.json','episode_spec.json','camera_config.json','render_state_metadata.json','safety_observer_binding.json'):
+                for file in ('trajectory.h5','result.json','episode_spec.json','camera_config.json','render_state_metadata.json'):
                     (view/file).symlink_to(episode/file)
+                effective_binding=risk/'safety_observer_binding.json'
+                (view/'safety_observer_binding.json').symlink_to(effective_binding if effective_binding.exists() else episode/'safety_observer_binding.json')
                 (view/'safety_decisions.jsonl').symlink_to(risk/'safety_decisions.jsonl')
                 (view/'rendered').symlink_to(render)
                 write(view/'result_axes.json',dict(task=dict(legacy_success=read(episode/'result.json').get('success')),source='Raw task result only; no risk or quota acceptance inferred'))
-                write(view/'composition_manifest.json',dict(evaluation_mode='offline_replay',raw_episode=str(episode),risk_output=str(risk),rgb_output=str(render)))
+                write(view/'composition_manifest.json',dict(geometry_backend=read(risk/'offline_risk_summary.json').get('geometry_backend'),evaluation_mode='offline_replay',raw_episode=str(episode),risk_output=str(risk),rgb_output=str(render)))
                 (base/'video').mkdir(exist_ok=True)
                 jobs.append((name+'_video',[sys.executable,str(ROOT/'scripts/export_risk_review_video.py'),
                     '--episode',str(view),'--output',str(base/'video'/name)]))
@@ -142,6 +144,7 @@ def main():
     p.add_argument('--collector-overrides',type=Path)
     p.add_argument('--policy',type=Path,default=ROOT/'configs/risk_capture_workflow.json')
     p.add_argument('--run-id')
+    p.add_argument('--geometry-backend',choices=['frozen','gdist','warp'],default='frozen',help='Evaluation only: explicit historical backend migration; new captures freeze gDist by default')
     args=p.parse_args()
     return run(args)
 

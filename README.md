@@ -2,7 +2,7 @@
 
 本仓库发布同一个 Isaac Sim / IsaacLab-Arena 厨房任务的场景与采集代码：DROID 机械臂抓起芥末瓶，将其放入碗中。共 **6 个财产障碍、4 个机器人周边障碍、1 个默认人体场景**。任务起终点、机器人和原有三路相机在这些场景中保持一致；改变的是场景里的障碍物。
 
-当前分支 **`huirongzeng`** 包含 HS、PT v4、RS、IR 的风险特征采集、评价规则、SafeBench 参考评价器、Warp CUDA 完整三角网格测距、任务豁免、逐步证据记录、验证报告、LeRobot 风险标签和三视角风险视频导出。等级仅按已知有效分项聚合，覆盖完整性和缺测独立保留；当前暂不启用 IR：仅 HS/PT/RS 参与评价、汇总和视频展示，IR 保留为可恢复模块。
+当前分支 **`huirongzeng`** 包含 HS、PT v4、RS、IR 的风险特征采集、评价规则、SafeBench 参考评价器、gDist CUDA 完整三角网格测距、任务豁免、逐步证据记录、验证报告、LeRobot 风险标签和三视角风险视频导出。等级仅按已知有效分项聚合，覆盖完整性和缺测独立保留；当前暂不启用 IR：仅 HS/PT/RS 参与评价、汇总和视频展示，IR 保留为可恢复模块。
 
 默认采用 **必要证据在线采集、风险与媒体离线处理**，适用于全部已配置场景。每批传入自己的场景规格和采集参数，当前人体场景只作为验证案例。策略保存于 [`configs/risk_capture_workflow.json`](configs/risk_capture_workflow.json)。
 
@@ -20,6 +20,10 @@ bash scripts/arena_python.sh scripts/risk_capture_workflow.py evaluate \
 审计、三路 RGB 渲染和视频导出也作为单独离线阶段运行，见 **[通用在线/离线工作流](docs/offline_risk_workflow.md)**。原始采集完成保持 pending_offline，不能当作风险标注或生产准入已经完成。
 
 完整的规则范围、当前豁免、采集输出、视频导出及已知限制见 **[风险感知安装与复现说明](docs/risk_perception.md)**。实验阈值与部分缺测仍然存在，不应把已知 L0 解释为全部证据完整。
+
+## 默认 gDist 后端
+
+默认 HS/PT/RS 距离后端已更新为 **gDist CUDA**。新数据冻结真实后端、参数与构建哈希；历史数据保留原后端，显式重算写入独立目录。安装与迁移命令见 **[gDist 后端说明](docs/gdist_backend.md)**。当前批量接口提供完整网格距离和最近碰撞体路径，最近点坐标明确标为不可用；当前风险等级和视频距离依据不依赖这些坐标。
 
 ## 当前 HS 距离规则
 

@@ -1,16 +1,16 @@
-"""Warp CUDA surface queries; legacy module name retained for shared topology helpers. Bounds prune candidates; never replace final distances."""
+"""CUDA surface queries; legacy module name retained for shared topology helpers. Bounds prune candidates; never replace final distances."""
 import numpy as np
-METRIC = 'warp_authored_collision_surface_distance'
+METRIC = 'gdist_authored_collision_surface_distance'
 
 
-def pair_measurement(left,right,distance,points,intersects=False):
+def pair_measurement(left,right,distance,points,intersects=False,metric=None):
     points=np.asarray(points,dtype=float)
     valid=(distance>0 and points.shape==(2,3) and np.isfinite(points).all()
            and abs(float(np.linalg.norm(points[0]-points[1]))-distance)<1e-5)
     return dict(distance_m=float(distance),source_collider=left['path'],
                 destination_collider=right['path'],mesh_intersection=bool(intersects),
                 nearest_points_world_m=points.tolist() if valid else None,
-                nearest_points_valid=bool(valid),metric=METRIC)
+                nearest_points_valid=bool(valid),metric=metric or METRIC)
 
 
 class GeometryBatch:
@@ -22,7 +22,7 @@ class GeometryBatch:
     def __init__(self,backend,frontier=None):
         import os
         self.backend=backend;self.requests=[];self.collisions=[];self.cache={}
-        self.frontier=max(1,int(frontier if frontier is not None else os.environ.get('ROBOLAW_WARP_BATCH_FRONTIER','8')))
+        self.frontier=max(1,int(frontier if frontier is not None else os.environ.get('ROBOLAW_WARP_BATCH_FRONTIER',str(getattr(backend,'DEFAULT_FRONTIER',8)))))
         self.stats=dict(waves=0,requested_pairs=0,frontier=self.frontier)
 
     def minimum(self,left,right,exclude=None,hs=False):
@@ -53,8 +53,7 @@ class GeometryBatch:
 
     def execute(self):
         import time
-        from kitchen_safety.warp_batch import RUNNER
-        started=time.perf_counter();before=dict(RUNNER.stats)
+        started=time.perf_counter();before=self.backend.batch_stats()
         collision_pending=list(self.collisions)
         while True:
             jobs={};waiting=[]
@@ -91,7 +90,7 @@ class GeometryBatch:
                 values=dict(zip(keys,self.backend.batch_queries(list(jobs.values()))))
                 for request,a,b,key in waiting:
                     value,points=values[(key,False)]
-                    self.cache[key]=pair_measurement(a,b,value,points,intersects=value==0)
+                    self.cache[key]=pair_measurement(a,b,value,points,intersects=value==0,metric=self.backend.METRIC)
                 for request in collision_pending:
                     request['value']=values[(self.key(request['left'],request['right']),True)]
             except Exception as exc:
@@ -99,10 +98,11 @@ class GeometryBatch:
                 for request in collision_pending:request['error']=repr(exc)
             collision_pending=[]
             self.stats['waves']+=1;self.stats['requested_pairs']+=len(jobs)
-        self.stats.update(wall_seconds=time.perf_counter()-started,
-                          gpu_pairs=RUNNER.stats['pairs']-before['pairs'],
-                          gpu_readbacks=RUNNER.stats['readbacks']-before['readbacks'],
-                          gpu_graph_launches=RUNNER.stats['graph_launches']-before['graph_launches'])
+        after=self.backend.batch_stats()
+        self.stats.update(wall_seconds=time.perf_counter()-started,backend=self.backend.METRIC,
+                          gpu_pairs=after['pairs']-before['pairs'],
+                          gpu_readbacks=after['readbacks']-before['readbacks'],
+                          gpu_graph_launches=after['graph_launches']-before['graph_launches'])
 
 
 def pair_distance(fcl, left, right):
@@ -125,7 +125,7 @@ def pair_distance(fcl, left, right):
     return dict(distance_m=distance, source_collider=left['path'],
                 destination_collider=right['path'], mesh_intersection=intersects,
                 nearest_points_world_m=points.tolist() if valid else None,
-                nearest_points_valid=bool(valid), metric=METRIC)
+                nearest_points_valid=bool(valid), metric=getattr(fcl,'METRIC',METRIC))
 
 
 def minimum_distance(fcl, left, right, cache=None):

@@ -363,3 +363,11 @@ def batch_queries(jobs):
                 # under the scalar collision routine's 1e-10 contact tolerance.
                 if value[0]==0:_COLLISION_CACHE[key]=(signature,True)
     return output
+
+# Legacy frozen archives retain their original backend identity and kernels.
+BACKEND_ID='warp'
+METRIC='warp_authored_collision_surface_distance'
+DEFAULT_FRONTIER=8
+def batch_stats():
+    from kitchen_safety.warp_batch import RUNNER
+    return dict(RUNNER.stats)

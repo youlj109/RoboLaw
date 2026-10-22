@@ -112,10 +112,10 @@
     ]
   },
   "pt_v4_geometry": {
-    "version": "arena-pt-warp-triangle-surface-1",
-    "metric": "warp_authored_collision_surface_distance",
-    "target_source": "link_target_warp_surface_distance_gt",
-    "environment_source": "pt_environment_warp_surface_distance_gt",
+    "version": "arena-pt-gdist-triangle-surface-1",
+    "metric": "gdist_authored_collision_surface_distance",
+    "target_source": "link_target_gdist_surface_distance_gt",
+    "environment_source": "pt_environment_gdist_surface_distance_gt",
     "allowed_grip_body_names": [
       "panda_link7",
       "panda_link8",
@@ -165,7 +165,7 @@
     ],
     "missing_geometry_policy": "null_without_bbox_or_projection_fallback",
     "preserve_legacy_aabb_channels": false,
-    "affine_semantics": "Full authored affine transform baked into FCL triangle vertices; analytic primitives tessellated with recorded resolution; not cooked PhysX solids"
+    "affine_semantics": "Full authored affine transform baked into complete triangle vertices; primitives tessellated with recorded resolution; not cooked PhysX solids"
   },
   "hs_scopes": {
     "fixed_body_names": [
@@ -185,7 +185,7 @@
     ],
     "exempt_fixed_distance": true,
     "fixed_distance_authorization": "User requested: 支座的距离请豁免权。",
-    "distance_backend": "Warp CUDA full triangle-surface queries; conservative AABB pruning only"
+    "distance_backend": "gDist CUDA full triangle-surface queries; conservative AABB pruning only"
   },
   "grasp_evidence": {
     "max_contact_gap_s": 0.15,
@@ -195,7 +195,7 @@
     "separation_m": 0.005
   },
   "rs_evidence": {
-    "self_collision": "Independent authored Warp CUDA surfaces; fixed assemblies and adjacent joint assemblies excluded with auditable USD graph",
+    "self_collision": "Independent authored gDist CUDA surfaces; fixed assemblies and adjacent joint assemblies excluded with auditable USD graph",
     "fault_motion": {
       "motion_velocity_radps": 0.01,
       "motion_displacement_rad": 0.001
@@ -218,5 +218,18 @@
   "disabled_categories": [
     "IR"
   ],
-  "collection_hz": 30
+  "collection_hz": 30,
+  "mesh_distance_backend": {
+    "id": "gdist",
+    "version": "arena-gdist-runtime-1",
+    "options": {
+      "target": 65536,
+      "maxstep": 8,
+      "small": 32768,
+      "concurrency": 64,
+      "seeds": 64
+    },
+    "missing_policy": "unknown_no_fallback",
+    "source_commit": "0300e214f0c9702e83292f35a5d07bdc27ea14ba"
+  }
 }

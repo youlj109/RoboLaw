@@ -12,10 +12,10 @@ from kitchen_safety.hs_geometry import HumanDistanceGeometry, bounds_distance
 
 class SelfCollisionGeometry:
     def __init__(self, stage, root, body_names, shared_geometry=None,
-                 structural_pairs=(), structural_source=None):
+                 structural_pairs=(), structural_source=None, backend=None):
         from pxr import Usd, UsdPhysics
         self.geometry = shared_geometry or HumanDistanceGeometry(
-            stage, root, body_names, human_ids=(), target_ids=())
+            stage, root, body_names, human_ids=(), target_ids=(),backend=backend)
         self.errors = [e for e in self.geometry.errors if e.get('group') == 'robot']
         owners = {}
         for entry in self.geometry.entries:
@@ -77,8 +77,9 @@ class SelfCollisionGeometry:
         if not joints or not self.pairs:
             self.errors.append(dict(error='Missing robot joint graph or independent link pairs'))
         self.metadata = dict(version='arena-rs-authored-self-1',
-            query_execution='frame-wide Warp CUDA triangle batches; shared HS/PT/RS queue and CUDA graphs',
-            source='Independent Warp CUDA authored collision-surface intersection at measured link poses',
+            query_execution=self.geometry.metadata['query_execution'],
+            mesh_backend=self.geometry.fcl.BACKEND_ID,
+            source='Independent '+('gDist CUDA' if self.geometry.fcl.BACKEND_ID=='gdist' else 'Warp CUDA')+' authored collision-surface intersection at measured link poses',
             coverage_scope='All enabled robot collision surfaces; surface intersections, not solid containment or cooked PhysX contacts',
             geometry_fingerprints=[dict(path=e['path'],fingerprint=e['fingerprint'])
                                    for entries in owners.values() for e in entries],

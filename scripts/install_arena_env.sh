@@ -19,8 +19,10 @@ docker exec -i -w /workspace \
     uv pip install --python /workspace/.venv-arena/bin/python --no-deps \
       "openpi-client @ https://github.com/Physical-Intelligence/openpi/archive/c23745b5ad24e98f66967ea795a07b2588ed6c79.tar.gz#subdirectory=packages/openpi-client"
     uv pip install --python /workspace/.venv-arena/bin/python --no-deps -r requirements-collection.txt
+    uv pip install --python /workspace/.venv-arena/bin/python -r requirements-gdist.txt
+    /workspace/.venv-arena/bin/python scripts/build_gdist_backend.py
     mkdir -p reports
   '
-bash scripts/arena_python.sh scripts/restore_downloaded_assets.py --source "${ROBOLAW_DOWNLOAD_SOURCE:-official}"
+bash scripts/arena_python.sh scripts/restore_downloaded_assets.py
 bash scripts/install_curobo.sh
 bash scripts/arena_python.sh scripts/check_runtime.py

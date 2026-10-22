@@ -20,7 +20,7 @@
     "exact_robot_and_rigid_actor_COM_position_linear_and_angular_velocity_120hz"
   ],
   "offline": [
-    "Warp_CUDA_full_mesh_distances",
+    "gDist_CUDA_full_mesh_distances",
     "HS_PT_RS_risk_features",
     "HS_PT_RS_evaluation",
     "grasp_dropout_and_drop_evidence_projection",
@@ -60,7 +60,8 @@
     "offline_processing_wall_s": 585.078629014999,
     "all_numeric_features_and_grades_equal_to_online": true,
     "other_scenes": "Generic support; not claimed to have passed this end-to-end validation",
-    "scope": "Previous complete 2292-frame fixed-HS workflow validation; dynamic HS validation is separate"
+    "scope": "Historical Warp workflow validation; gDist migration validation is recorded separately"
   },
-  "hs_distance_rule": "arena-hs-dynamic-ssm-1"
+  "hs_distance_rule": "arena-hs-dynamic-ssm-1",
+  "mesh_distance_backend": "gdist"
 }

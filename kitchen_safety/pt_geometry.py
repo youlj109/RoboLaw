@@ -1,4 +1,4 @@
-"""PT v4 Warp CUDA authored collision-surface distances in world metres.
+"""PT v4 gDist CUDA authored collision-surface distances in world metres.
 
 Scale/shear is baked into vertices; runtime transforms are rigid. AABBs prune
 candidates only. These are surface distances, not PhysX cooked-solid depths.
@@ -10,14 +10,16 @@ from kitchen_safety.hs_geometry import transform, surface_mesh
 from kitchen_safety.pt_assets import under
 from kitchen_safety.fcl_distance import METRIC, minimum_distance
 
-VERSION = 'arena-pt-warp-triangle-surface-1'
-TARGET_SOURCE = 'link_target_warp_surface_distance_gt'
-ENV_SOURCE = 'pt_environment_warp_surface_distance_gt'
+VERSION = 'arena-pt-gdist-triangle-surface-1'
+TARGET_SOURCE = 'link_target_gdist_surface_distance_gt'
+ENV_SOURCE = 'pt_environment_gdist_surface_distance_gt'
 
 
 class PropertyDistanceGeometry:
-    def __init__(self, stage, env_root, body_names, asset_inventory, grip_names):
-        from kitchen_safety import warp_mesh_backend as fcl
+    def __init__(self, stage, env_root, body_names, asset_inventory, grip_names, backend=None):
+        from kitchen_safety.geometry_backend import get_backend,descriptor
+        fcl=backend or get_backend()
+        spec=descriptor(fcl.BACKEND_ID)
         from pxr import Usd, UsdGeom, UsdPhysics
         self.fcl = fcl
         self.root = env_root.rstrip('/')
@@ -85,12 +87,12 @@ class PropertyDistanceGeometry:
             self.grip_paths.extend(paths)
         if not self.grip_paths:
             raise ValueError('PT v4 requires exact grip paths')
-        self.metadata = dict(version=VERSION, metric=METRIC,
-            query_execution='frame-wide Warp CUDA triangle batches; shared HS/PT/RS queue and CUDA graphs',
-            target_source=TARGET_SOURCE, environment_source=ENV_SOURCE,
-            formula='min_collider_pairs(Warp CUDA_triangle_surface_distance)',
+        self.metadata = dict(version=spec['pt_version'], metric=spec['metric'], mesh_backend=fcl.BACKEND_ID,
+            query_execution=spec['query_execution'],
+            target_source=spec['target_source'], environment_source=spec['environment_source'],
+            formula='min_collider_pairs('+spec['label']+'_triangle_surface_distance)',
             broad_phase='Conservative AABB pruning only; no AABB/projection fallback',
-            query_strategy='Exact complete-actor Warp CUDA minimum for environment pairs; per-link Warp CUDA minima retained for robot-target grasp evidence',
+            query_strategy='Complete-actor authored triangle minima for environment pairs; per-link minima retained for robot-target grasp evidence',
             affine_support='Full authored affine transform baked into mesh vertices',
             geometry_semantics='Authored collision surfaces; analytic primitives tessellated with recorded resolution; not PhysX cooked solids',
             topology='Frozen at observer construction; measured rigid poses updated each sample',
@@ -156,11 +158,11 @@ class PropertyDistanceGeometry:
                     nearest=nearest,link_distance_evidence=evidence if per_link else {},
                     distance_query_scope='per_link' if per_link else 'complete_actor_surface',
                     coverage_complete=complete,missing_geometry=missing,
-                    distance_source=TARGET_SOURCE if per_link else ENV_SOURCE,
-                    metric=METRIC,source_collider_count=len(source),destination_collider_count=len(destination)))
+                    distance_source=self.metadata['target_source'] if per_link else self.metadata['environment_source'],
+                    metric=self.metadata['metric'],source_collider_count=len(source),destination_collider_count=len(destination)))
             payload=[] if any(e['group']==self.target for e in errors) else groups.get(self.target,[])
             center=((np.min([e['lo'] for e in payload],axis=0)+np.max([e['hi'] for e in payload],axis=0))*.5).tolist() if payload else None
-            return dict(version=VERSION,metric=METRIC,pairs=pairs,errors=errors,
+            return dict(version=self.metadata['version'],metric=self.metadata['metric'],pairs=pairs,errors=errors,
                         payload_geometry_center_world_m=center,complete=all(p['coverage_complete'] for p in pairs))
         return finish
 
@@ -220,10 +222,10 @@ class PropertyDistanceGeometry:
                     nearest=nearest, link_distance_evidence=evidence if actor == 'robot' and object_id == self.target else {},
                     distance_query_scope='per_link' if actor == 'robot' and object_id == self.target else 'complete_actor_surface',
                     coverage_complete=complete, missing_geometry=missing,
-                    distance_source=TARGET_SOURCE if actor == 'robot' and object_id == self.target else ENV_SOURCE,
-                    metric=METRIC, source_collider_count=len(source), destination_collider_count=len(destination)))
+                    distance_source=self.metadata['target_source'] if actor == 'robot' and object_id == self.target else self.metadata['environment_source'],
+                    metric=self.metadata['metric'], source_collider_count=len(source), destination_collider_count=len(destination)))
         payload = [] if any(e['group'] == self.target for e in errors) else groups.get(self.target, [])
         center = ((np.min([e['lo'] for e in payload], axis=0)+np.max([e['hi'] for e in payload], axis=0))*.5).tolist() if payload else None
-        return dict(version=VERSION, metric=METRIC, pairs=pairs, errors=errors,
+        return dict(version=self.metadata['version'], metric=self.metadata['metric'], pairs=pairs, errors=errors,
                     payload_geometry_center_world_m=center,
                     complete=all(p['coverage_complete'] for p in pairs))

@@ -147,6 +147,8 @@ class ArenaRiskRuntime:
         self.approach_speed=[None for _ in specs]
         self.highest_bottle_z=[None for _ in specs]
         self.grip_ever=[False for _ in specs]
+        from kitchen_safety.geometry_backend import get_backend,configured_name
+        backend=get_backend(configured_name(settings['config']),settings['config'].get('mesh_distance_backend',{}).get('options'))
         joint_names=list(robot.joint_names);body_names=list(robot.body_names)
         sink_rows={int(re.search(r'/env_(\d+)',p).group(1)):j for j,p in enumerate(robot.root_view.prim_paths)}
         self.command_names={i:[p.rsplit('/',1)[-1] for p in robot.root_view.dof_paths[row]] for i,row in sink_rows.items()}
@@ -156,19 +158,19 @@ class ArenaRiskRuntime:
             asset_inventory=pt_inventory(geometry.inventory_entries,geometry.root,settings['config']['pt_asset_coverage'])
             self.pt_inventories.append(asset_inventory)
             grip_names=settings['config']['pt_v4_geometry']['allowed_grip_body_names']
-            pt_geometry=PropertyDistanceGeometry(stage,geometry.root,body_names,asset_inventory,grip_names)
+            pt_geometry=PropertyDistanceGeometry(stage,geometry.root,body_names,asset_inventory,grip_names,backend=backend)
             self.pt_geometries.append(pt_geometry)
             human=spec['layout']['obstacle']['category']=='human'
             hs_geometry=HumanDistanceGeometry(stage,geometry.root,body_names,
                 fixed_body_names=settings['config']['hs_scopes']['fixed_body_names'],
                 dynamic_pairs_enabled=settings['profile'].get('hs_dynamic',{}).get('enabled',False),
                 exempt_fixed_distance=settings['config']['hs_scopes'].get('exempt_fixed_distance',False),
-                excluded_pairs=settings['config']['hs_scopes'].get('excluded_pairs',[])) if human else None
+                excluded_pairs=settings['config']['hs_scopes'].get('excluded_pairs',[]),backend=backend) if human else None
             self.hs_geometries.append(hs_geometry)
             rs_config=settings['config']['rs_evidence']
             rs_geometry=SelfCollisionGeometry(stage,geometry.root,body_names,hs_geometry,
                 structural_pairs=rs_config['structural_pairs'],
-                structural_source=Path(__file__).resolve().parents[1]/rs_config['structural_pairs_source'])
+                structural_source=Path(__file__).resolve().parents[1]/rs_config['structural_pairs_source'],backend=backend)
             self.rs_geometries.append(rs_geometry)
             hazard={'human':'person','property':'glass','robot':'barrier'}[spec['layout']['obstacle']['category']]
             humanpaths=[e['path'] for e in geometry.entries if '/person/' in e['path']]
@@ -204,7 +206,7 @@ class ArenaRiskRuntime:
                 target_object_ids=asset_inventory['target_object_ids'],pt_asset_inventory=asset_inventory,
                 pt_geometry=pt_geometry.metadata,pt_grip_link_paths=pt_geometry.grip_paths,
                 camera_names=list(cameras),geometry_source='Category-specific measured authored collision geometry; see geometry_sources',
-                geometry_sources={'HS':HS_GEOMETRY_SOURCE,'PT':PT_METRIC},
+                geometry_sources={'HS':hs_geometry.metadata['source'] if hs_geometry else None,'PT':pt_geometry.metadata['metric']},
                 hs_geometry=hs_geometry.metadata if hs_geometry else {'applicable':False},
                 hs_distance_policy=deepcopy(settings['config']['hs_scopes']),
                 rs_self_geometry=rs_geometry.metadata,
@@ -488,8 +490,8 @@ class ArenaRiskRuntime:
             geometry_complete=measured_pair.get('coverage_complete') is True
             pt['protected_pairs'].append(dict(actor=actor,object_id=name,
                 distance_m=measured_pair.get('distance_m') if geometry_complete else None,
-                distance_source=TARGET_SOURCE if actor=='robot' and name=='mustard_bottle' else ENV_SOURCE,
-                distance_metric=PT_METRIC,
+                distance_source=measured_pair.get('distance_source',observer.profile['pt_hs_inspired']['distance_sources']['robot_target' if actor=='robot' and name=='mustard_bottle' else 'environment']),
+                distance_metric=measured_pair.get('metric',observer.profile['pt_hs_inspired']['distance_metric']),
                 link_distances_m=measured_pair.get('link_distances_m',{}) if geometry_complete else {},
                 distance_coverage_complete=geometry_complete,distance_geometry_evidence=measured_pair,
                 object_prim_path=object_root,actor_prim_path=actor_root,

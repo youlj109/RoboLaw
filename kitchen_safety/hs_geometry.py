@@ -10,8 +10,8 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 from kitchen_safety.fcl_distance import pair_distance, primitive_mesh, triangulate_polygon
 
-VERSION = 'arena-hs-warp-triangle-surface-1'
-SOURCE = 'Warp CUDA separation of USD collision surfaces (polygon/primitive surface tessellation); world_m; xyzw'
+VERSION = 'arena-hs-gdist-triangle-surface-1'
+SOURCE = 'gDist CUDA separation of USD collision surfaces (polygon/primitive surface tessellation); world_m; xyzw'
 FIELDS = ('d_robot_h_min_gt_m', 'd_ee_h_min_gt_m', 'd_obj_h_min_gt_m')
 
 
@@ -118,8 +118,10 @@ def surface_mesh(prim, cache):
 class HumanDistanceGeometry:
     def __init__(self, stage, env_root, body_names, target_ids=('mustard_bottle',),
                  human_ids=('person',), ee_names=None, fixed_body_names=('panda_link0',),
-                 excluded_pairs=(), dynamic_pairs_enabled=False, exempt_fixed_distance=False):
-        from kitchen_safety import warp_mesh_backend as fcl
+                 excluded_pairs=(), dynamic_pairs_enabled=False, exempt_fixed_distance=False, backend=None):
+        from kitchen_safety.geometry_backend import get_backend,descriptor
+        fcl=backend or get_backend()
+        spec=descriptor(fcl.BACKEND_ID)
         from pxr import Usd, UsdGeom, UsdPhysics
         self.fcl = fcl
         self.root = env_root.rstrip('/')
@@ -211,8 +213,8 @@ class HumanDistanceGeometry:
                 self.excluded_pairs[(a,b)] = dict(declaration)
             declarations.append(dict(declaration, matched=matched,
                                      resolved_robot_collider=a, resolved_human_collider=b))
-        self.metadata = dict(version=VERSION, source=SOURCE, coordinate_frame='world_m',
-            query_execution='frame-wide Warp CUDA triangle batches; shared HS/PT/RS queue and CUDA graphs',
+        self.metadata = dict(version=spec['hs_version'], source=spec['hs_source'], mesh_backend=fcl.BACKEND_ID, coordinate_frame='world_m',
+            query_execution=spec['query_execution'],
             quaternion_order='xyzw', ee_body_names=sorted(self.ee_names),
             motion_body_names=motion_body_names,
             dynamic_pairs_enabled=dynamic_pairs_enabled, exempt_fixed_distance=exempt_fixed_distance,
@@ -301,7 +303,7 @@ class HumanDistanceGeometry:
                         item.update(distance_m=measured['distance_m'],nearest_geometry=measured)
                     except Exception as exc:item.update(distance_m=None,error=str(exc))
                     dynamic_results.append(item)
-                return dict(version=VERSION, source=SOURCE, complete=True, errors=[],
+                return dict(version=self.metadata['version'], source=self.metadata['source'], complete=True, errors=[],
                             features=dict(zip(FIELDS, (results[k]['distance_m'] for k in ('robot','ee','object')))),
                             scoped_features=dict(d_fixed_h_min_gt_m=results['fixed']['distance_m'],
                                                  d_moving_h_min_gt_m=results['moving']['distance_m']),
@@ -332,7 +334,7 @@ class HumanDistanceGeometry:
             exempted = [dict(declaration=declaration,
                             measurement=self.minimum([by_path[a]],[by_path[b]],cache,apply_exemptions=False))
                         for (a,b),declaration in self.excluded_pairs.items()]
-            return dict(version=VERSION, source=SOURCE, complete=True, errors=[],
+            return dict(version=self.metadata['version'], source=self.metadata['source'], complete=True, errors=[],
                         features=dict(zip(FIELDS, (results[k]['distance_m'] for k in ('robot','ee','object')))),
                         scoped_features=dict(d_fixed_h_min_gt_m=results['fixed']['distance_m'],
                                              d_moving_h_min_gt_m=results['moving']['distance_m']),

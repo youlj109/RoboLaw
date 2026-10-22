@@ -1,0 +1,68 @@
+{
+  "passed": true,
+  "scope": "CUDA imports, current profile, full-triangle analytical clearance",
+  "backend": "gdist_cuda_full_triangle_surface_v1",
+  "device": "cuda:0",
+  "runtime": {
+    "id": "gdist",
+    "metric": "gdist_authored_collision_surface_distance",
+    "options": {
+      "target": 65536,
+      "maxstep": 8,
+      "small": 32768,
+      "concurrency": 64,
+      "seeds": 64
+    },
+    "frontier": 2,
+    "build": {
+      "available": true,
+      "version": "arena-gdist-runtime-1",
+      "source_repository": "https://github.com/yingtix/DistanceQuery",
+      "source_commit": "0300e214f0c9702e83292f35a5d07bdc27ea14ba",
+      "binary_sha256": "e55789a05edbfeab7f8aa8fac40f41c2df3aa143626d5e80b3f3e13b0c9ed240",
+      "native_source_sha256": {
+        "gdist_parallel.inc": "a9594ae19ad4f4a1940f6dd121004ac9187103da9f0fe307df263a30099834ae",
+        "gdist_linux.patch": "983648662900944f9354ceb11823567b3e5a1978f7619b418822c1f9f0651c92",
+        "gdist_bridge.cu": "0840c1501e58d6e3d554dfca7f83bc84d9102732ed658a18c7e1c055a633ac86"
+      },
+      "compiler": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Feb_21_20:23:50_PST_2025\nCuda compilation tools, release 12.8, V12.8.93\nBuild cuda_12.8.r12.8/compiler.35583870_0",
+      "command": [
+        "/usr/local/cuda-12.8/bin/nvcc",
+        "-std=c++17",
+        "-O3",
+        "-DGD_CAP=4194304",
+        "--expt-relaxed-constexpr",
+        "-Xcompiler",
+        "-fPIC",
+        "-shared",
+        "-arch=sm_120",
+        "-I",
+        "/workspace/runtime/gdist/build/gdist_adapted",
+        "-I",
+        "/workspace/.venv-arena/lib/python3.12/site-packages/pybind11/include",
+        "-I",
+        "/home/user/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/include/python3.12",
+        "/workspace/native/gdist/gdist_bridge.cu",
+        "-o",
+        "/workspace/runtime/gdist/gdist_native.build.so"
+      ],
+      "python": "3.12.13 (main, Jun 23 2026, 15:18:55) [Clang 22.1.3 ]",
+      "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.39",
+      "architecture": "sm_120",
+      "build_wall_s": 9.883929868999985,
+      "semantics": "Author BVTT and triangle-distance kernels; persistent models/workspaces; explicit multi-stream batch orchestration; no approximate geometry or backend fallback",
+      "closest_point_coordinates": "not exported; witness validity remains false"
+    },
+    "closest_point_coordinates": "unavailable",
+    "fallback": "disabled"
+  },
+  "nearest_points_valid": false,
+  "analytical_distance_m": 0.25,
+  "adapter_version": "arena-risk-observer-15-gdist-offline",
+  "collection_hz": 30,
+  "decision_hz": 30,
+  "disabled_categories": [
+    "IR"
+  ],
+  "simulation_started": false
+}

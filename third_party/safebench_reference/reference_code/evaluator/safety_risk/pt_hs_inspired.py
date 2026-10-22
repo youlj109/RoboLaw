@@ -45,8 +45,8 @@ def evaluate_pairs(pairs, profile):
         distance = number(raw.get('distance_m'))
         required_source = ('link_target_mesh_aabb_distance_gt' if settings.get('version') == 'pt-hs-inspired-v3'
             else 'link_target_projected_clearance_gt' if settings.get('version') == VERSION else None)
-        mesh_backend = 'warp' if settings.get('distance_metric') == 'warp_authored_collision_surface_distance' else 'fcl'
-        fcl_mode = settings.get('distance_metric') in ('fcl_authored_collision_surface_distance', 'warp_authored_collision_surface_distance')
+        mesh_backend = {'warp_authored_collision_surface_distance':'warp', 'gdist_authored_collision_surface_distance':'gdist'}.get(settings.get('distance_metric'),'fcl')
+        fcl_mode = settings.get('distance_metric') in ('fcl_authored_collision_surface_distance', 'warp_authored_collision_surface_distance', 'gdist_authored_collision_surface_distance')
         distance_missing_override = []
         if fcl_mode:
             expected = ('link_target_'+mesh_backend+'_surface_distance_gt' if actor == 'robot' and object_id == target_object_id
@@ -54,7 +54,7 @@ def evaluate_pairs(pairs, profile):
             declared_sources = settings.get('distance_sources', {})
             if declared_sources != {'robot_target':'link_target_'+mesh_backend+'_surface_distance_gt',
                                     'environment':'pt_environment_'+mesh_backend+'_surface_distance_gt'}:
-                raise ValueError('FCL PT profile must explicitly declare both distance sources')
+                raise ValueError('Mesh PT profile must explicitly declare both distance sources')
             geometry = raw.get('distance_geometry_evidence') or {}
             if (raw.get('distance_source') != expected or geometry.get('distance_source') != expected
                     or raw.get('distance_metric') != settings['distance_metric']

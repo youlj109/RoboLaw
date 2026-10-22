@@ -37,13 +37,15 @@ def load_config(path):
     if profile.get('rules',{}).get('pt_mode') != 'pt-hs-inspired-v4' or profile.get('pt_hs_inspired',{}).get('version') != 'pt-hs-inspired-v4':
         raise ValueError('This Arena adapter requires a PT v4 profile')
     geometry=config.get('pt_v4_geometry',{})
-    from kitchen_safety.pt_geometry import VERSION as PT_VERSION, METRIC as PT_METRIC, TARGET_SOURCE, ENV_SOURCE
-    if (geometry.get('version') != PT_VERSION or geometry.get('metric') != PT_METRIC
-            or geometry.get('target_source') != TARGET_SOURCE or geometry.get('environment_source') != ENV_SOURCE
-            or profile['pt_hs_inspired'].get('distance_metric') != PT_METRIC
-            or profile['pt_hs_inspired'].get('distance_sources') != {'robot_target':TARGET_SOURCE,'environment':ENV_SOURCE}
+    from kitchen_safety.geometry_backend import descriptor,configured_name,get_backend
+    backend_name=configured_name(config);spec=descriptor(backend_name)
+    backend=get_backend(backend_name,config.get('mesh_distance_backend',{}).get('options'))
+    if (geometry.get('version') != spec['pt_version'] or geometry.get('metric') != spec['metric']
+            or geometry.get('target_source') != spec['target_source'] or geometry.get('environment_source') != spec['environment_source']
+            or profile['pt_hs_inspired'].get('distance_metric') != spec['metric']
+            or profile['pt_hs_inspired'].get('distance_sources') != {'robot_target':spec['target_source'],'environment':spec['environment_source']}
             or not geometry.get('allowed_grip_body_names')):
-        raise ValueError('PT v4 Warp CUDA surface geometry, matching sources and explicit grip body bindings are required')
+        raise ValueError('PT v4 backend identity, profile evidence sources and explicit grip bindings must match')
     import math
     for section in (config['grasp_evidence'],config['rs_evidence']['fault_motion']):
         if not section or any(isinstance(v,bool) or not isinstance(v,(int,float)) or
@@ -64,6 +66,8 @@ def load_config(path):
          'render_recorded_episode.py','render_recorded_batch.py','validate_collection.py',
          'audit_collection_clearance.py')]
     files += sorted((REFERENCE/'safety_risk').glob('*.py'))
+    files += sorted((ROOT/'native/gdist').glob('*'))+[ROOT/'scripts/build_gdist_backend.py']
+    files=[p for p in files if p.is_file()]
     code = {str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
     # These are ordinary configuration values in the existing resume comparison.
     # Editing a catalog pose/USD identity or the base layout must not silently
@@ -77,8 +81,8 @@ def load_config(path):
             assets.extend(a for a in json.loads(catalog.read_text())['assets'] if a['id'] in scene_ids)
     scene_definition=dict(layout=json.loads((ROOT/'configs/layout.json').read_text()),
                           assets=sorted(assets,key=lambda a:a['id']))
-    return dict(config=config, profile=profile, implementation_files_sha256=code, profile_file_sha256=hashlib.sha256(profile_path.read_bytes()).hexdigest(),
-                scene_definition=scene_definition,adapter_version='arena-risk-observer-14-dynamic-hs', evaluator_version=VERSION)
+    return dict(config=config, profile=profile, mesh_backend_runtime=backend.runtime_info() if hasattr(backend,'runtime_info') else spec, implementation_files_sha256=code, profile_file_sha256=hashlib.sha256(profile_path.read_bytes()).hexdigest(),
+                scene_definition=scene_definition,adapter_version='arena-risk-observer-15-gdist-offline', evaluator_version=VERSION)
 
 
 def bind_profile(settings, binding):

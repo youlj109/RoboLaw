@@ -5,14 +5,17 @@ not a hard-coded scenario ID. No missing geometry is replaced by a bbox.
 """
 import hashlib,itertools,json
 import numpy as np
-from kitchen_safety import warp_mesh_backend as backend
+from kitchen_safety.geometry_backend import get_backend,configured_name
 from kitchen_safety.hs_geometry import HumanDistanceGeometry
 from kitchen_safety.pt_geometry import PropertyDistanceGeometry
 from kitchen_safety.rs_evidence import SelfCollisionGeometry
 from kitchen_safety.fcl_distance import GeometryBatch
 
-def load_geometry(episode,cache):
-    b=json.loads((episode/'safety_observer_binding.json').read_text())['binding']
+def load_geometry(episode,cache,frozen=None):
+    frozen=frozen or json.loads((episode/'safety_observer_binding.json').read_text())
+    b=frozen['binding']
+    options=frozen['resolved_config'].get('mesh_distance_backend',{}).get('options')
+    backend=get_backend(configured_name(frozen['resolved_config']),options)
     human=bool(b['human_inventory']['observed_human_paths'])
     hs=HumanDistanceGeometry.__new__(HumanDistanceGeometry) if human else None
     robot_geometry=hs or HumanDistanceGeometry.__new__(HumanDistanceGeometry)
@@ -57,7 +60,7 @@ def load_geometry(episode,cache):
     return b,hs,pt,rs
 
 def run_frame(hs,pt,rs,poses,objects):
-    batch=GeometryBatch(backend)
+    batch=GeometryBatch(pt.fcl)
     p=pt.prepare(poses,objects,batch)
     h=hs.prepare(poses,objects,batch) if hs is not None else None
     r=rs.prepare(poses,objects,batch)
