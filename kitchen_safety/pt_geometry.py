@@ -86,6 +86,7 @@ class PropertyDistanceGeometry:
         if not self.grip_paths:
             raise ValueError('PT v4 requires exact grip paths')
         self.metadata = dict(version=VERSION, metric=METRIC,
+            query_execution='frame-wide Warp CUDA triangle batches; shared HS/PT/RS queue and CUDA graphs',
             target_source=TARGET_SOURCE, environment_source=ENV_SOURCE,
             formula='min_collider_pairs(Warp CUDA_triangle_surface_distance)',
             broad_phase='Conservative AABB pruning only; no AABB/projection fallback',
@@ -98,6 +99,72 @@ class PropertyDistanceGeometry:
             geometry=[{k:e[k] for k in ('path','group','actor','dynamic','fingerprint','vertices','triangles','approximation')} for e in self.entries])
 
     def sample(self, body_poses, object_poses):
+        from kitchen_safety.fcl_distance import GeometryBatch
+        batch=GeometryBatch(self.fcl)
+        finish=self.prepare(body_poses,object_poses,batch)
+        batch.execute()
+        return finish()
+
+    def prepare(self,body_poses,object_poses,batch):
+        groups, errors = {}, list(self.errors)
+        for entry in self.entries:
+            try:
+                if entry['dynamic']:
+                    poses = body_poses if entry['group'] == 'robot' else object_poses
+                    if entry['key'] not in poses:
+                        raise ValueError('Unmeasured rigid actor: ' + str(entry['actor']))
+                    pose = transform(poses[entry['key']])
+                else:
+                    pose = np.eye(4)
+                if entry['last_pose'] is None or not np.array_equal(pose, entry['last_pose']):
+                    entry['object'].setTransform(self.fcl.Transform(pose[:3, :3], pose[:3, 3]))
+                    corners = entry['corners'] @ pose[:3, :3].T + pose[:3, 3]
+                    entry['lo'], entry['hi'] = corners.min(0), corners.max(0)
+                    entry['last_pose'] = pose.copy()
+                groups.setdefault(entry['group'], []).append(entry)
+            except Exception as exc:
+                errors.append(dict(path=entry['path'], group=entry['group'], error=str(exc)))
+        links = {}
+        for entry in groups.get('robot', []):
+            links.setdefault(entry['actor'], []).append(entry)
+
+        planned=[]
+        for object_id in self.assets:
+            destination=groups.get(object_id,[])
+            for actor in (('robot',) if object_id==self.target else ('robot','held_object')):
+                source_group='robot' if actor=='robot' else self.target
+                source=groups.get(source_group,[])
+                missing=[e for e in errors if e['group'] in (source_group,object_id)]
+                if not source or not destination:missing=missing+[dict(error='Empty declared source or destination geometry')]
+                per_link=actor=='robot' and object_id==self.target
+                query_groups=links.items() if per_link else [(self.root+('/Robot' if actor=='robot' else '/'+self.target),source)]
+                queries={name:batch.minimum(entries,destination) for name,entries in query_groups} if not missing else {}
+                planned.append((actor,object_id,source,destination,missing,queries,per_link))
+        def finish():
+            pairs=[]
+            for actor,object_id,source,destination,initial_missing,queries,per_link in planned:
+                missing=list(initial_missing);evidence={}
+                if not missing:
+                    try:evidence={name:batch.result(q) for name,q in queries.items()}
+                    except Exception as exc:missing=[dict(error=str(exc))]
+                complete=not missing and bool(evidence)
+                values={name:e['distance_m'] for name,e in evidence.items()} if complete else {}
+                nearest=min(evidence.values(),key=lambda e:e['distance_m']) if complete else None
+                pairs.append(dict(actor=actor,object_id=object_id,
+                    distance_m=nearest['distance_m'] if nearest else None,
+                    link_distances_m=values if per_link else {},source_distances_m=values,
+                    nearest=nearest,link_distance_evidence=evidence if per_link else {},
+                    distance_query_scope='per_link' if per_link else 'complete_actor_surface',
+                    coverage_complete=complete,missing_geometry=missing,
+                    distance_source=TARGET_SOURCE if per_link else ENV_SOURCE,
+                    metric=METRIC,source_collider_count=len(source),destination_collider_count=len(destination)))
+            payload=[] if any(e['group']==self.target for e in errors) else groups.get(self.target,[])
+            center=((np.min([e['lo'] for e in payload],axis=0)+np.max([e['hi'] for e in payload],axis=0))*.5).tolist() if payload else None
+            return dict(version=VERSION,metric=METRIC,pairs=pairs,errors=errors,
+                        payload_geometry_center_world_m=center,complete=all(p['coverage_complete'] for p in pairs))
+        return finish
+
+    def _sample_scalar(self, body_poses, object_poses):
         groups, errors = {}, list(self.errors)
         for entry in self.entries:
             try:

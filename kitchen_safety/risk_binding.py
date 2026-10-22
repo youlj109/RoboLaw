@@ -288,12 +288,20 @@ class ArenaRiskRuntime:
             try:
                 hazard={'human':'person','property':'glass','robot':'barrier'}[self.specs[i]['layout']['obstacle']['category']]
                 measurement={'rs_fault':fault_evidence,'geometry_sample_physics_step':self.sample_steps[i],'geometry_fresh':True,'geometry_hz':self.settings['config']['decision_hz']}
-                try:
-                    measurement['pt_v4']=self.pt_geometries[i].sample(poses,objects)
-                    measurement['payload_geometry_center_world_m']=measurement['pt_v4'].get('payload_geometry_center_world_m')
-                except Exception as exc:measurement['pt_v4']={'complete':False,'errors':[repr(exc)],'pairs':[]}
+                from kitchen_safety.fcl_distance import GeometryBatch
+                batch=GeometryBatch(self.pt_geometries[i].fcl)
+                try:pt_finish=self.pt_geometries[i].prepare(poses,objects,batch)
+                except Exception as exc:
+                    pt_error={'complete':False,'errors':[repr(exc)],'pairs':[]}
+                    pt_finish=lambda:pt_error
+                hs_finish=self.hs_geometries[i].prepare(poses,objects,batch) if hazard=='person' else None
+                rs_finish=self.rs_geometries[i].prepare(poses,objects,batch)
+                batch.execute()
+                measurement['pt_v4']=pt_finish()
+                measurement['payload_geometry_center_world_m']=measurement['pt_v4'].get('payload_geometry_center_world_m')
+                measurement['gpu_batch']=dict(batch.stats)
                 if hazard=='person':
-                    hs_measurement=self.hs_geometries[i].sample(poses,objects)
+                    hs_measurement=hs_finish()
                     measurement['hs_geometry']=hs_measurement
                     values=list(hs_measurement['features'].values())
                     current=min(values) if all(v is not None for v in values) else None
@@ -308,7 +316,7 @@ class ArenaRiskRuntime:
                     self.motion_approach_speed[i]=(max(0.,(motion_previous-motion_current)/sample_dt)
                         if motion_current is not None and motion_previous is not None else None)
                     self.motion_previous_distance[i]=motion_current
-                measurement['rs_self_geometry']=self.rs_geometries[i].sample(poses,objects)
+                measurement['rs_self_geometry']=rs_finish()
                 z=row['mustard'][2]
                 self.highest_bottle_z[i]=max(z,self.highest_bottle_z[i]) if self.highest_bottle_z[i] is not None else z
                 self.distances.append(measurement)

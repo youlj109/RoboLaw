@@ -31,3 +31,5 @@ bash scripts/arena_python.sh scripts/collect_safety_benchmark.py --ids human_def
 2026-10-22 的 `human_warp30_review_20261022_f` 完成任务，记录 2,292 组 30 Hz 动作/标签，物理 9,168 步；三路离线实测状态画面各 2,292 帧，视频 76.4 秒。完整轨迹因果回放、几何来源、时间对齐和 RGB 验证通过。采集循环实际耗时 4,200.34 秒（约 70 分钟），其中物理执行 4,070.03 秒、规划 126.70 秒；尚未达到实时，不代表优于 FCL。HS 为 L1–L2，PT 为 L0–L2，RS 已知分项为 L0；损伤和权威故障状态仍缺测，不能视为完整安全证明。该次复现属于 review 数据，未通过生产配额准入。详见 `validation_warp30_episode_20261022.json`。
 
 相机写入器原有 15 Hz 硬限制已扩展到 15/30 Hz。原物理与同步标签保持不变，修复后独立渲染成功，旧失败记录归档保留。视频仅导出本地，不上传模型库。
+
+整帧并行执行与性能测量见 [warp_frame_batch.md](warp_frame_batch.md)。当前正式采集共享 HS/PT/RS 查询队列，采用 CUDA Graph 和候选前沿宽度 8。

@@ -17,7 +17,7 @@ if not wp.is_cuda_available():
 _CACHE={}
 _COLLISION_CACHE={}
 _NEXT_ID=0
-STATS={'cache_hits':0,'calls':0,'seconds':0.,'triangles':0,'backend':'warp_cuda_full_triangle_surface_v1'}
+STATS={'cache_hits':0,'calls':0,'seconds':0.,'triangles':0,'readbacks':0,'collision_calls':0,'backend':'warp_cuda_full_triangle_surface_batch_v2'}
 
 @wp.func
 def clamp01(x:wp.float32):
@@ -306,6 +306,7 @@ def distance(left,right,request,result):
     wp.launch(reduce_chunks,dim=256,inputs=[m.dist,m.reduced,m.rindex],device=DEVICE)
     wp.launch(gather_min,dim=1,inputs=[m.reduced,m.rindex,m.pa,m.pb,m.output],device=DEVICE)
     packed=m.output.numpy()
+    STATS['readbacks']+=1
     value=float(np.sqrt(max(0.,float(packed[0]))))
     if not np.isfinite(value) or value>=1.e14:raise ValueError('Warp exhaustive query found no candidate')
     if value>0:
@@ -328,5 +329,37 @@ def collide(left,right,request,result):
     a,b,rot,tr,_=_inputs(left,right);m=a.model;n=b.model
     wp.launch(full_intersection,dim=m.n,inputs=[m.v,m.idx,n.mesh.id,n.v,n.idx,rot,tr,n.pad+m.pad,m.hit],device=DEVICE)
     result.is_collision=bool(m.hit.numpy().any())
+    STATS['readbacks']+=1;STATS['collision_calls']+=1
     _COLLISION_CACHE[key]=(signature,result.is_collision)
     return int(result.is_collision)
+
+
+def batch_queries(jobs):
+    """Distance/collision jobs share one CUDA launch sequence and one readback.
+
+    Jobs are (left, right, collision_only). Preserve pose-exact scalar caches,
+    including results needed by compatibility callers after a frame batch.
+    """
+    from kitchen_safety.warp_batch import RUNNER
+    output=[None]*len(jobs);pending=[];indices=[]
+    for i,(left,right,collision) in enumerate(jobs):
+        key=(left.uid,right.uid)
+        signature=(left.pose.rotation.tobytes(),left.pose.translation.tobytes(),
+                   right.pose.rotation.tobytes(),right.pose.translation.tobytes())
+        cache=(_COLLISION_CACHE if collision else _CACHE).get(key)
+        if cache and cache[0]==signature:
+            output[i]=cache[1] if collision else (cache[1],[p.copy() for p in cache[2]])
+            STATS['cache_hits']+=1
+        else:
+            pending.append((left,right,collision));indices.append((i,key,signature))
+    if pending:
+        results=RUNNER.run(pending)
+        for (i,key,signature),value,(_,_,collision) in zip(indices,results,pending):
+            output[i]=value
+            if collision:_COLLISION_CACHE[key]=(signature,value)
+            else:
+                _CACHE[key]=(signature,value[0],[p.copy() for p in value[1]])
+                # A zero squared primitive distance is also an intersection
+                # under the scalar collision routine's 1e-10 contact tolerance.
+                if value[0]==0:_COLLISION_CACHE[key]=(signature,True)
+    return output

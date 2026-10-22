@@ -209,6 +209,7 @@ class HumanDistanceGeometry:
             declarations.append(dict(declaration, matched=matched,
                                      resolved_robot_collider=a, resolved_human_collider=b))
         self.metadata = dict(version=VERSION, source=SOURCE, coordinate_frame='world_m',
+            query_execution='frame-wide Warp CUDA triangle batches; shared HS/PT/RS queue and CUDA graphs',
             quaternion_order='xyzw', ee_body_names=sorted(self.ee_names),
             fixed_body_names=sorted(self.fixed_body_names),
             scoped_distance_policy='HS excludes only explicitly bound collider pairs; raw minima and exclusions retained',
@@ -242,6 +243,46 @@ class HumanDistanceGeometry:
         return groups
 
     def sample(self, body_poses, object_poses):
+        from kitchen_safety.fcl_distance import GeometryBatch
+        batch=GeometryBatch(self.fcl)
+        finish=self.prepare(body_poses,object_poses,batch)
+        batch.execute()
+        return finish()
+
+    def prepare(self,body_poses,object_poses,batch):
+        if self.errors:return lambda:self.unknown(self.errors)
+        try:
+            groups=self.update_objects(body_poses,object_poses)
+            requests={key:batch.minimum(groups[key],groups['human'],exclude=self.excluded_pairs,hs=True)
+                      for key in ('robot','ee','object','fixed','moving')}
+            raw={key:batch.minimum(groups[key],groups['human'],hs=True) for key in ('robot','fixed')}
+            by_path={e['path']:e for e in self.entries}
+            exemptions=[(declaration,batch.minimum([by_path[a]],[by_path[b]],hs=True))
+                        for (a,b),declaration in self.excluded_pairs.items()]
+        except Exception as exc:
+            errors=[dict(error=str(exc))]
+            return lambda:self.unknown(errors)
+        def finish():
+            try:
+                results={key:batch.result(q) for key,q in requests.items()}
+                raw_results={key:batch.result(q) for key,q in raw.items()}
+                exempted=[dict(declaration=d,measurement=batch.result(q)) for d,q in exemptions]
+                return dict(version=VERSION, source=SOURCE, complete=True, errors=[],
+                            features=dict(zip(FIELDS, (results[k]['distance_m'] for k in ('robot','ee','object')))),
+                            scoped_features=dict(d_fixed_h_min_gt_m=results['fixed']['distance_m'],
+                                                 d_moving_h_min_gt_m=results['moving']['distance_m']),
+                            scene_placement=dict(fixed_human_mesh_intersection=results['fixed']['mesh_intersection'],
+                                valid=not results['fixed']['mesh_intersection'],
+                                evidence=results['fixed'],
+                                raw_fixed_human_mesh_intersection=raw_results['fixed']['mesh_intersection'],
+                                raw_geometry_valid=not raw_results['fixed']['mesh_intersection'],
+                                raw_evidence=raw_results['fixed'],
+                                semantics='valid concerns non-exempt pairs; raw_geometry_valid preserves actual overlap'),
+                            nearest=results, raw_nearest=raw_results, exempted_pairs=exempted)
+            except Exception as exc:return self.unknown([dict(error=str(exc))])
+        return finish
+
+    def _sample_scalar(self, body_poses, object_poses):
         if self.errors:
             return self.unknown(self.errors)
         try:

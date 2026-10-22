@@ -77,6 +77,7 @@ class SelfCollisionGeometry:
         if not joints or not self.pairs:
             self.errors.append(dict(error='Missing robot joint graph or independent link pairs'))
         self.metadata = dict(version='arena-rs-authored-self-1',
+            query_execution='frame-wide Warp CUDA triangle batches; shared HS/PT/RS queue and CUDA graphs',
             source='Independent Warp CUDA authored collision-surface intersection at measured link poses',
             coverage_scope='All enabled robot collision surfaces; surface intersections, not solid containment or cooked PhysX contacts',
             geometry_fingerprints=[dict(path=e['path'],fingerprint=e['fingerprint'])
@@ -89,7 +90,37 @@ class SelfCollisionGeometry:
             evaluated_pair_count=len(self.pairs),errors=self.errors,
             physics_self_collision_setting_changed=False)
 
-    def sample(self, body_poses, object_poses):
+    def sample(self,body_poses,object_poses):
+        from kitchen_safety.fcl_distance import GeometryBatch
+        batch=GeometryBatch(self.geometry.fcl)
+        finish=self.prepare(body_poses,object_poses,batch)
+        batch.execute()
+        return finish()
+
+    def prepare(self,body_poses,object_poses,batch):
+        errors=list(self.errors);requests=[]
+        try:
+            self.geometry.update_objects(body_poses,object_poses)
+            for a,b in self.pairs:
+                for left,right in itertools.product(self.owners[a],self.owners[b]):
+                    if bounds_distance(left,right)>0:continue
+                    requests.append((a,b,left,right,batch.collision(left,right)))
+        except Exception as exc:errors.append(dict(error=repr(exc)))
+        def finish():
+            hits=[];all_errors=list(errors)
+            for a,b,left,right,q in requests:
+                if q['error']:all_errors.append(dict(error=q['error']))
+                elif q['value'] is True:hits.append(dict(pair=[a,b],colliders=[left['path'],right['path']]))
+                elif q['value'] is None:all_errors.append(dict(error='Unexecuted collision query'))
+            pairs=sorted({tuple(h['pair']) for h in hits})
+            return dict(version=self.metadata['version'],coverage_complete=not all_errors,
+                        self_collision_flag_gt=True if hits else None if all_errors else False,
+                        pairs=[list(p) for p in pairs],intersections=hits,errors=all_errors,
+                        allowed_pair_count=len(self.allowed),evaluated_pair_count=len(self.pairs),
+                        source=self.metadata['source'])
+        return finish
+
+    def _sample_scalar(self, body_poses, object_poses):
         hits, errors = [], list(self.errors)
         try:
             self.geometry.update_objects(body_poses, object_poses)

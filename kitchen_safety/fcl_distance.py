@@ -3,6 +3,108 @@ import numpy as np
 METRIC = 'warp_authored_collision_surface_distance'
 
 
+def pair_measurement(left,right,distance,points,intersects=False):
+    points=np.asarray(points,dtype=float)
+    valid=(distance>0 and points.shape==(2,3) and np.isfinite(points).all()
+           and abs(float(np.linalg.norm(points[0]-points[1]))-distance)<1e-5)
+    return dict(distance_m=float(distance),source_collider=left['path'],
+                destination_collider=right['path'],mesh_intersection=bool(intersects),
+                nearest_points_world_m=points.tolist() if valid else None,
+                nearest_points_valid=bool(valid),metric=METRIC)
+
+
+class GeometryBatch:
+    """Conservative branch-and-bound waves across HS, PT and RS together.
+
+    Bounds select candidates only. Every returned distance comes from the full
+    triangle narrow phase. Requests retain their original stable tie ordering.
+    """
+    def __init__(self,backend,frontier=None):
+        import os
+        self.backend=backend;self.requests=[];self.collisions=[];self.cache={}
+        self.frontier=max(1,int(frontier if frontier is not None else os.environ.get('ROBOLAW_WARP_BATCH_FRONTIER','8')))
+        self.stats=dict(waves=0,requested_pairs=0,frontier=self.frontier)
+
+    def minimum(self,left,right,exclude=None,hs=False):
+        candidates=[]
+        for i,a in enumerate(left):
+            for j,b in enumerate(right):
+                if exclude and (a['path'],b['path']) in exclude:continue
+                lower=float(np.linalg.norm(np.maximum(0,np.maximum(a['lo']-b['hi'],b['lo']-a['hi']))))
+                candidates.append((lower,i,j,a,b))
+        request=dict(candidates=sorted(candidates,key=lambda r:r[:3]),index=0,
+                     best=None,error=None,hs=hs)
+        if not candidates:request['error']='Empty declared non-exempt mesh distance geometry'
+        self.requests.append(request)
+        return request
+
+    def collision(self,left,right):
+        request=dict(left=left,right=right,value=None,error=None)
+        self.collisions.append(request);return request
+
+    @staticmethod
+    def result(request):
+        if request['error']:raise ValueError(request['error'])
+        if request['best'] is None:raise ValueError('Unexecuted mesh minimum')
+        return dict(request['best'])
+
+    @staticmethod
+    def key(a,b):return (a['object'].uid,b['object'].uid)
+
+    def execute(self):
+        import time
+        from kitchen_safety.warp_batch import RUNNER
+        started=time.perf_counter();before=dict(RUNNER.stats)
+        collision_pending=list(self.collisions)
+        while True:
+            jobs={};waiting=[]
+            for request in self.requests:
+                if request['error']:continue
+                candidates=request['candidates']
+                while request['index']<len(candidates):
+                    lower,_,_,a,b=candidates[request['index']]
+                    best=request['best']
+                    if best is not None and (best['distance_m']==0 or lower>best['distance_m']+1e-12):
+                        request['index']=len(candidates);break
+                    key=self.key(a,b)
+                    if key not in self.cache:
+                        # Query a small frontier concurrently. Results are still
+                        # consumed in the original sorted order, preserving ties.
+                        for bound,_,_,la,lb in candidates[request['index']:request['index']+self.frontier]:
+                            if best is not None and bound>best['distance_m']+1e-12:break
+                            pair_key=self.key(la,lb)
+                            if pair_key not in self.cache:
+                                jobs[(pair_key,False)]=(la['object'],lb['object'],False)
+                                waiting.append((request,la,lb,pair_key))
+                        break
+                    measured=dict(self.cache[key])
+                    if request['hs']:
+                        measured.update(robot_or_object_path=a['path'],human_path=b['path'],body=a['actor'])
+                    if best is None or measured['distance_m']<best['distance_m']:request['best']=measured
+                    request['index']+=1
+            for request in collision_pending:
+                a,b=request['left'],request['right'];key=self.key(a,b)
+                jobs[(key,True)]=(a['object'],b['object'],True)
+            if not jobs:break
+            keys=list(jobs)
+            try:
+                values=dict(zip(keys,self.backend.batch_queries(list(jobs.values()))))
+                for request,a,b,key in waiting:
+                    value,points=values[(key,False)]
+                    self.cache[key]=pair_measurement(a,b,value,points,intersects=value==0)
+                for request in collision_pending:
+                    request['value']=values[(self.key(request['left'],request['right']),True)]
+            except Exception as exc:
+                for request,_,_,_ in waiting:request['error']=repr(exc)
+                for request in collision_pending:request['error']=repr(exc)
+            collision_pending=[]
+            self.stats['waves']+=1;self.stats['requested_pairs']+=len(jobs)
+        self.stats.update(wall_seconds=time.perf_counter()-started,
+                          gpu_pairs=RUNNER.stats['pairs']-before['pairs'],
+                          gpu_readbacks=RUNNER.stats['readbacks']-before['readbacks'],
+                          gpu_graph_launches=RUNNER.stats['graph_launches']-before['graph_launches'])
+
+
 def pair_distance(fcl, left, right):
     result = fcl.DistanceResult()
     distance = float(fcl.distance(left['object'], right['object'],
