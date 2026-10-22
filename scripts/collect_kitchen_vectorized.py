@@ -92,6 +92,10 @@ def main():
     parser.add_argument('--collection-purpose', choices=['diagnostic', 'production'], default='diagnostic')
     parser.add_argument('--collection-source', help='Originating collection batch/run; metadata only, never acceptance')
     parser.add_argument('--observer-config', type=Path, help='Read-only SafeBench observer configuration')
+    parser.add_argument('--risk-capture-mode', choices=['online', 'raw-only'], default='online',
+                        help='raw-only records original evidence for later evaluation; emits no risk grades')
+    parser.add_argument('--defer-post-collection-checks', action='store_true',
+                        help='raw-only: archive post-execution clearance inputs instead of evaluating them')
     parser.add_argument('--run-id', help='Observer run identity; defaults to collection source/output')
     parser.add_argument('--record-rgb', action='store_true')
     parser.add_argument('--record-render-state', action='store_true',
@@ -137,6 +141,10 @@ def main():
         parser.error('warmup-window-frames is configurable only with --warmup-mode temporal_mean')
     if args.warmup_window_frames < 1 or args.warmup_max_frames < max(128, 4 * args.warmup_window_frames):
         parser.error('Warm-up requires a positive window and at least max(128, 4 * window) render frames')
+    if args.risk_capture_mode == 'raw-only' and (not args.observer_config or not args.record_render_state):
+        parser.error('raw-only requires --observer-config and --record-render-state for complete offline inputs')
+    if args.defer_post_collection_checks and args.risk_capture_mode != 'raw-only':
+        parser.error('--defer-post-collection-checks requires --risk-capture-mode raw-only')
     observer_settings = None
     if args.observer_config:
         from kitchen_safety.risk_profile_loader import load_config
@@ -499,7 +507,11 @@ def main():
 
             if observer_settings:
                 from kitchen_safety.risk_binding import ArenaRiskRuntime
-                risk_runtime = ArenaRiskRuntime(e.sim.stage, robot, scene, specs, outputs, collection_jobs,
+                runtime_class = ArenaRiskRuntime
+                if args.risk_capture_mode == 'raw-only':
+                    from kitchen_safety.raw_capture import RawCaptureRuntime
+                    runtime_class = RawCaptureRuntime
+                risk_runtime = runtime_class(e.sim.stage, robot, scene, specs, outputs, collection_jobs,
                     observer_settings, cfg.sim.dt, e.step_dt, origins, contact_report_status,
                     args.run_id or args.collection_source or str(out), environment.embodiment.camera_config.camera_names())
             active = {}
@@ -602,6 +614,8 @@ def main():
                         timings['camera_s'] += time.perf_counter() - tick
                     if risk_runtime:
                         risk_runtime.set_actions(active, controllers, action_batch)
+                        if args.risk_capture_mode == 'raw-only':
+                            risk_runtime.record_action_observations(states, active)
                     tick = time.perf_counter()
                     _, _, terminated, truncated, _ = env.step(
                         torch.as_tensor(action_batch, dtype=torch.float32, device=e.device))
@@ -633,6 +647,17 @@ def main():
                 scene.write_data_to_sim = original_scene_write
                 sample_torch_memory(memory_step, active, 'loop_finally')
 
+            if risk_runtime and args.risk_capture_mode == 'raw-only':
+                tick = time.perf_counter()
+                risk_runtime.flush_capture()
+                timings['raw_capture_flush_s'] = time.perf_counter() - tick
+                timings['raw_capture_loop_and_flush_s'] = timings['collection_loop_s'] + timings['raw_capture_flush_s']
+                timings['raw_capture_ready_since_process_start_s'] = time.perf_counter() - started
+                (out/'raw_capture_ready.json').write_text(json.dumps(dict(
+                    status='raw_evidence_persisted',evaluation_status='pending_offline',
+                    time_ns=time.time_ns(),timings_seconds=dict(timings),
+                    scope='All mandatory physics/contact/command/action-observation packets and frozen meshes persisted; no risk labels generated'),indent=2))
+
             camera_episode_timings = {}
             if cameras:
                 try:
@@ -649,7 +674,7 @@ def main():
             # authored scene, including per-env static obstacles, not a proxy
             # containing only the target hazard.
             safety_results = None
-            if args.validation_workers > 1 and len(controllers) > 1:
+            if not args.defer_post_collection_checks and args.validation_workers > 1 and len(controllers) > 1:
                 from concurrent.futures import ProcessPoolExecutor
                 import multiprocessing
                 from kitchen_safety.vectorized_validation import validate_physics_archive
@@ -682,7 +707,16 @@ def main():
             for i, controller in enumerate(controllers):
                 result = controller.result
                 result['terminations'] = {name: bool(value[i]) for name, value in termination_seen.items()}
-                if safety_results is None:
+                if args.defer_post_collection_checks:
+                    tick = time.perf_counter()
+                    buffers[i].write_npz(outputs[i] / 'physics_states.npz', arm_ids=ids, joint_names=robot.joint_names)
+                    if i == 0:
+                        e.sim.stage.Export(str(out/'validation_scene.usdc'))
+                    safety = dict(passed=None, checks=0, status='pending_offline',
+                        physics_states_path='physics_states.npz', stage_path='../validation_scene.usdc')
+                    result['validation_status'] = 'pending_offline'
+                    timings['offline_check_archive_s'] = timings.get('offline_check_archive_s', 0.) + time.perf_counter()-tick
+                elif safety_results is None:
                     tick = time.perf_counter()
                     try:
                         buffers[i].write_npz(outputs[i] / 'physics_states.npz', arm_ids=ids, joint_names=robot.joint_names)
@@ -695,7 +729,10 @@ def main():
                 if args.defer_clearance_diagnostics:
                     tick = time.perf_counter()
                     try:
-                        if safety_results is None:
+                        if args.defer_post_collection_checks:
+                            controller.write_clearance_archive(outputs[i] / 'action_clearance_states.npz')
+                            result['action_clearance_diagnostics'] = dict(completed=False, status='pending_offline')
+                        elif safety_results is None:
                             controller.write_clearance_archive(outputs[i] / 'action_clearance_states.npz')
                             controller.finalize_clearance_diagnostics()
                         else:
@@ -711,7 +748,7 @@ def main():
                     timings['deferred_validation_s'] += time.perf_counter() - tick
                 result['deferred_safety'] = safety
                 result['physics_clearance_checks'] = safety['checks']
-                if not safety['passed']:
+                if not safety['passed'] and (safety['passed'] is not None or not args.defer_post_collection_checks):
                     result.update(success=False,
                         failure_kind='data_validation_failed' if safety.get('error') else 'physical_failed',
                         error='Deferred safety validation failed')
@@ -756,7 +793,8 @@ def main():
                     physics_dt=cfg.sim.dt, action_dt=e.step_dt,
                     episode_length_s=cfg.episode_length_s, max_steps=args.max_steps,
                     initialization_action_steps=8,
-                    execution_checks='deferred', camera_owner='batched_writer',
+                    execution_checks='pending_offline' if args.defer_post_collection_checks else 'deferred',
+                    risk_capture_mode=args.risk_capture_mode, camera_owner='batched_writer',
                     action_clearance_diagnostics='deferred' if args.defer_clearance_diagnostics else 'online',
                     replicate_physics=cfg.scene.replicate_physics,
                     solver_position_iterations=cfg.scene.robot.spawn.articulation_props.solver_position_iteration_count)

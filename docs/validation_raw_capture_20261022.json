@@ -1,0 +1,149 @@
+{
+  "status": "completed",
+  "started_at": "2026-10-22T09:03:12.121985+00:00",
+  "mode": "raw-only",
+  "evaluation_status": "pending_offline",
+  "chat_waits_included": false,
+  "collector_process_wall_s": 321.1221089140017,
+  "collector_exit_code": 0,
+  "timings_seconds": {
+    "app_startup_s": 5.022054959001252,
+    "planning_dispatch_s": 126.88389362599264,
+    "physics_execution_s": 177.74684394797077,
+    "camera_s": 0.0,
+    "state_capture_s": 2.9353890230377147,
+    "deferred_validation_s": 0.006453625999711221,
+    "data_write_s": 1.8434578470005363,
+    "render_state_capture_s": 1.6564610740097123,
+    "initialization_s": 9.89622451499963,
+    "collection_loop_s": 308.1411339039987,
+    "raw_capture_flush_s": 0.03964065099717118,
+    "raw_capture_loop_and_flush_s": 308.1807745549959,
+    "raw_capture_ready_since_process_start_s": 318.07744270200055,
+    "offline_check_archive_s": 0.23991297300017322,
+    "total_before_close_s": 320.1676145849997
+  },
+  "task_success": true,
+  "steps": 2292,
+  "raw_capture": {
+    "schema_version": "arena-raw-capture-1",
+    "identity": {
+      "run_id": "raw_capture_only_full_20261022",
+      "attempt_id": "human_default_mpfb/attempt_0000_seed_4089898052",
+      "env_id": 0,
+      "episode_generation": 0
+    },
+    "physics_steps": 9168,
+    "evaluation_status": "pending_offline",
+    "risk_levels": null,
+    "physics_hz": 120.0,
+    "observation_hz": 30.0,
+    "raw_writer": {
+      "passed": true,
+      "counts": {
+        "initial_state": 1,
+        "observation": 2292,
+        "physics": 9168
+      },
+      "bytes": 1128493393,
+      "sha256": "22c20ec6e36c6e61c071018a2881a2670a57f1e1a0a4f92cd43d817707e9d9af",
+      "writer_wall_s": 308.426921743001,
+      "fsync_completed": true
+    },
+    "enqueue_s": 0.13928918110832456,
+    "queue_full_wait_s": 0.0,
+    "final_writer_drain_s": 0.033495573999971384,
+    "raw_semantics": "Original state, actual command submissions, unaggregated contact events and measured action observations; no online mesh queries or risk grades",
+    "online_geometry_scalar_calls": 0,
+    "online_geometry_batch_calls": 0,
+    "online_risk_evaluations": 0
+  },
+  "raw_data_ready": {
+    "status": "raw_evidence_persisted",
+    "evaluation_status": "pending_offline",
+    "time_ns": 1792660110484107415,
+    "timings_seconds": {
+      "app_startup_s": 5.022054959001252,
+      "planning_dispatch_s": 126.88389362599264,
+      "physics_execution_s": 177.74684394797077,
+      "camera_s": 0.0,
+      "state_capture_s": 2.9353890230377147,
+      "deferred_validation_s": 0.0,
+      "data_write_s": 0.0,
+      "render_state_capture_s": 1.6564610740097123,
+      "initialization_s": 9.89622451499963,
+      "collection_loop_s": 308.1411339039987,
+      "raw_capture_flush_s": 0.03964065099717118,
+      "raw_capture_loop_and_flush_s": 308.1807745549959,
+      "raw_capture_ready_since_process_start_s": 318.07744270200055
+    },
+    "scope": "All mandatory physics/contact/command/action-observation packets and frozen meshes persisted; no risk labels generated"
+  },
+  "validation_wall_s": 11.098306134001177,
+  "validation": {
+    "passed": true,
+    "errors": [],
+    "physics_steps": 9168,
+    "action_observations": 2292,
+    "frozen_meshes": 564,
+    "contact_reports": 48753,
+    "contact_points": 4484170,
+    "actual_command_calls": 27504,
+    "raw_file_bytes": 1128493393,
+    "online_geometry_calls": 0,
+    "online_risk_evaluations": 0,
+    "evaluation_status": "pending_offline",
+    "scope": "Raw completeness, contact identities, actual commands, mesh hashes and exact HDF5 alignment; does not claim evaluated risk levels"
+  },
+  "total_measured_wall_s": 332.22096667799997,
+  "finished_at": "2026-10-22T09:08:44.342982+00:00",
+  "trajectory_comparison": {
+    "action": {
+      "shape_equal": true,
+      "exactly_equal": true,
+      "max_abs_difference": 0.0
+    },
+    "obs/q": {
+      "shape_equal": true,
+      "exactly_equal": true,
+      "max_abs_difference": 0.0
+    },
+    "obs/dq": {
+      "shape_equal": true,
+      "exactly_equal": true,
+      "max_abs_difference": 0.0
+    },
+    "obs/robot_body_pose_w": {
+      "shape_equal": true,
+      "exactly_equal": true,
+      "max_abs_difference": 0.0
+    },
+    "obs/mustard": {
+      "shape_equal": true,
+      "exactly_equal": true,
+      "max_abs_difference": 0.0
+    },
+    "obs/bowl": {
+      "shape_equal": true,
+      "exactly_equal": true,
+      "max_abs_difference": 0.0
+    },
+    "obs/kitchen_link_pose": {
+      "shape_equal": true,
+      "exactly_equal": true,
+      "max_abs_difference": 0.0
+    },
+    "phase": {
+      "shape_equal": true,
+      "exactly_equal": true
+    },
+    "time": {
+      "shape_equal": true,
+      "exactly_equal": true,
+      "max_abs_difference": 0.0
+    }
+  },
+  "online_labelled_loop_s": 1215.1812407910002,
+  "raw_vs_online_speedup": 3.943079325910861,
+  "raw_vs_online_time_reduction_percent": 74.6391102651987
+}

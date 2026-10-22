@@ -103,6 +103,7 @@ class ColliderGeometry:
 
 
 class ArenaRiskRuntime:
+    observer_class = RiskObserver
     def __init__(self,stage,robot,scene,specs,outputs,jobs,settings,dt,action_dt,origin,contact_status,run_id,cameras):
         self.robot,self.scene,self.dt=robot,scene,dt
         self.capture_seconds=0.;self.feature_seconds=0.
@@ -196,7 +197,7 @@ class ArenaRiskRuntime:
             if any(n not in joint_names for n in binding['controlled_joint_names']):raise ValueError('Runtime controlled DOF binding differs')
             if any(n not in body_names for n in binding['gripper_contact_groups']):raise ValueError('Runtime gripper binding differs')
             identity=dict(run_id=run_id,attempt_id=jobs[i].get('attempt_path',f'env_{i:03d}'),env_id=i,episode_generation=0)
-            self.observers.append(RiskObserver(outputs[i],settings,binding,identity,dt,action_dt))
+            self.observers.append(self.observer_class(outputs[i],settings,binding,identity,dt,action_dt))
         self.refresh(initial=True)
         for i, observer in enumerate(self.observers):
             placement=self.distances[i].get('hs_geometry',{}).get('scene_placement')
