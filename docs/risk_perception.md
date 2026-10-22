@@ -1,3 +1,5 @@
+> 2026-10-22 更新：默认后端改为纯 Warp CUDA 完整三角网格查询；采集、动作、风险标签、RGB 时间轴为 30 Hz，物理为 120 Hz。下文 FCL 描述记录此前版本。当前实现说明见 [warp_mesh_30hz.md](warp_mesh_30hz.md)。
+
 # huirongzeng：完整风险感知与复现
 
 本分支发布 5090 当前的风险采集与评价代码，覆盖原有 10 个非人体场景和 1 个默认人体场景。采集在 shadow 模式下记录安全特征、HS/PT/RS 等级和证据；评价器不获得动作修改权限。当前适配器版本是 `arena-risk-observer-12-ir-disabled`，PT profile 为 `pt-hs-inspired-v4`，聚合策略为 `arena-known-results-1`。

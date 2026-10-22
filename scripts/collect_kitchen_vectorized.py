@@ -224,6 +224,11 @@ def main():
                 recorder_dataset_export_dir_path=str(out / 'arena_recorder')))
             cfg, kwargs = builder.compose_manager_cfg()
             cfg.sim.log_dir = str(out / 'isaaclab_logs')
+            if observer_settings and observer_settings['config'].get('collection_hz'):
+                hz = observer_settings['config']['collection_hz']
+                cfg.decimation = round(1.0 / (hz * cfg.sim.dt))
+                if cfg.decimation < 1 or abs(cfg.decimation * cfg.sim.dt - 1.0/hz) > 1.e-9:
+                    raise ValueError('Collection frequency must divide physics frequency')
             cfg.sim.render_interval = cfg.decimation
             cfg.scene.replicate_physics = args.replicate_physics
             cfg.scene.robot_contacts = ContactSensorCfg(

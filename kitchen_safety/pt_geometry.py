@@ -1,4 +1,4 @@
-"""PT v4 FCL authored collision-surface distances in world metres.
+"""PT v4 Warp CUDA authored collision-surface distances in world metres.
 
 Scale/shear is baked into vertices; runtime transforms are rigid. AABBs prune
 candidates only. These are surface distances, not PhysX cooked-solid depths.
@@ -10,14 +10,14 @@ from kitchen_safety.hs_geometry import transform, surface_mesh
 from kitchen_safety.pt_assets import under
 from kitchen_safety.fcl_distance import METRIC, minimum_distance
 
-VERSION = 'arena-pt-fcl-surface-1-affine'
-TARGET_SOURCE = 'link_target_fcl_surface_distance_gt'
-ENV_SOURCE = 'pt_environment_fcl_surface_distance_gt'
+VERSION = 'arena-pt-warp-triangle-surface-1'
+TARGET_SOURCE = 'link_target_warp_surface_distance_gt'
+ENV_SOURCE = 'pt_environment_warp_surface_distance_gt'
 
 
 class PropertyDistanceGeometry:
     def __init__(self, stage, env_root, body_names, asset_inventory, grip_names):
-        import fcl
+        from kitchen_safety import warp_mesh_backend as fcl
         from pxr import Usd, UsdGeom, UsdPhysics
         self.fcl = fcl
         self.root = env_root.rstrip('/')
@@ -87,9 +87,9 @@ class PropertyDistanceGeometry:
             raise ValueError('PT v4 requires exact grip paths')
         self.metadata = dict(version=VERSION, metric=METRIC,
             target_source=TARGET_SOURCE, environment_source=ENV_SOURCE,
-            formula='min_collider_pairs(FCL_triangle_surface_distance)',
+            formula='min_collider_pairs(Warp CUDA_triangle_surface_distance)',
             broad_phase='Conservative AABB pruning only; no AABB/projection fallback',
-            query_strategy='Exact complete-actor FCL minimum for environment pairs; per-link FCL minima retained for robot-target grasp evidence',
+            query_strategy='Exact complete-actor Warp CUDA minimum for environment pairs; per-link Warp CUDA minima retained for robot-target grasp evidence',
             affine_support='Full authored affine transform baked into mesh vertices',
             geometry_semantics='Authored collision surfaces; analytic primitives tessellated with recorded resolution; not PhysX cooked solids',
             topology='Frozen at observer construction; measured rigid poses updated each sample',
@@ -135,7 +135,7 @@ class PropertyDistanceGeometry:
                         # Environment rules consume min over the complete robot surface:
                         # min_link(min_collider(distance)) == min_all_colliders(distance).
                         # One global query can prune links unable to win, while returning
-                        # the same FCL minimum and nearest collider/points.
+                        # the same Warp CUDA minimum and nearest collider/points.
                         per_link = actor == 'robot' and object_id == self.target
                         query_groups = (links.items() if per_link else
                             [(self.root+('/Robot' if actor == 'robot' else '/'+self.target), source)])

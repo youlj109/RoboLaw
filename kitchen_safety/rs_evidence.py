@@ -77,7 +77,7 @@ class SelfCollisionGeometry:
         if not joints or not self.pairs:
             self.errors.append(dict(error='Missing robot joint graph or independent link pairs'))
         self.metadata = dict(version='arena-rs-authored-self-1',
-            source='Independent FCL authored collision-surface intersection at measured link poses',
+            source='Independent Warp CUDA authored collision-surface intersection at measured link poses',
             coverage_scope='All enabled robot collision surfaces; surface intersections, not solid containment or cooked PhysX contacts',
             geometry_fingerprints=[dict(path=e['path'],fingerprint=e['fingerprint'])
                                    for entries in owners.values() for e in entries],

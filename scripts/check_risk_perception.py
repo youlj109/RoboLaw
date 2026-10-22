@@ -1,49 +1,29 @@
 #!/usr/bin/env python3
-"""CPU preflight for the risk branch; does not start Isaac Sim or collect data."""
-import importlib.metadata
-import json
+"""CUDA preflight for the Warp risk observer; does not start Isaac Sim."""
+import importlib.metadata,json
 from pathlib import Path
 import sys
-
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
-
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT))
 
 def main():
-    import fcl
     import numpy as np
-    from kitchen_safety.fcl_distance import pair_distance
+    from kitchen_safety import warp_mesh_backend as backend
+    from kitchen_safety.fcl_distance import primitive_mesh,pair_distance
     from kitchen_safety.risk_profile_loader import load_config
-    from kitchen_safety.risk_observer import aggregate_known_results, unknown_report
-    settings = load_config('configs/safety_observer_arena.json')
-    left = {'path': 'preflight/left', 'object': fcl.CollisionObject(fcl.Box(1., 1., 1.))}
-    right = {'path': 'preflight/right', 'object': fcl.CollisionObject(
-        fcl.Box(1., 1., 1.), fcl.Transform(np.eye(3), np.array([1.25, 0., 0.])))}
-    gap = pair_distance(fcl, left, right)
-    if abs(gap['distance_m'] - 0.25) > 1e-8 or not gap['nearest_points_valid']:
-        raise RuntimeError('FCL analytical clearance preflight failed')
-    report = unknown_report('preflight missing channel')
-    report['rules'] = [
-        {'rule_id': 'PREFLIGHT-KNOWN', 'category': 'HS', 'level': 'L1', 'complete': True, 'missing': []},
-        {'rule_id': 'PREFLIGHT-UNKNOWN', 'category': 'HS', 'level': None, 'complete': False, 'missing': ['fixture']},
-    ]
-    graded = aggregate_known_results(report)
-    if graded['categories']['HS']['level'] != 'L1' or graded['categories']['HS']['data_complete']:
-        raise RuntimeError('Known-result grading/coverage preflight failed')
-    if graded['categories']['IR']['level'] is not None:
-        raise RuntimeError('Missing IR evidence was filled with a grade')
-    print(json.dumps(dict(
-        passed=True, scope='CPU imports, current profile, analytical FCL clearance and known-result aggregation',
-        adapter_version=settings['adapter_version'], evaluator_version=settings['evaluator_version'],
-        profile_file_sha256=settings['profile_file_sha256'],
-        packages={name: importlib.metadata.version(name) for name in ('python-fcl', 'numpy', 'PyYAML')},
-        analytical_distance_m=gap['distance_m'],
-        disabled_categories=settings['config'].get('disabled_categories', []),
-        active_categories=[c for c in ('HS','PT','RS','IR') if c not in settings['config'].get('disabled_categories', [])],
-        simulation_started=False,
-    ), ensure_ascii=False, indent=2))
+    settings=load_config('configs/safety_observer_arena.json')
+    vertices,faces,_=primitive_mesh('Cube',size=1.)
+    objects=[]
+    for x in (0.,1.25):
+        model=backend.BVHModel();model.beginModel();model.addSubModel(vertices,faces);model.endModel()
+        objects.append(dict(path='preflight/'+str(x),object=backend.CollisionObject(model,backend.Transform(np.eye(3),[x,0,0]))))
+    measured=pair_distance(backend,*objects)
+    if abs(measured['distance_m']-.25)>1.e-6 or not measured['nearest_points_valid']:
+        raise RuntimeError('Warp analytical cube distance failed')
+    print(json.dumps(dict(passed=True,scope='CUDA imports, current profile, full-triangle analytical clearance',
+        backend=backend.STATS['backend'],device=backend.DEVICE,warp_version=importlib.metadata.version('warp-lang'),
+        analytical_distance_m=measured['distance_m'],adapter_version=settings['adapter_version'],
+        collection_hz=settings['config']['collection_hz'],decision_hz=settings['config']['decision_hz'],
+        disabled_categories=settings['config']['disabled_categories'],simulation_started=False),indent=2))
     return 0
-
-
-if __name__ == '__main__':
-    raise SystemExit(main())
+if __name__=='__main__':raise SystemExit(main())

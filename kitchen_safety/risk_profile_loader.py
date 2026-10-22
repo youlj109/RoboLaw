@@ -35,7 +35,7 @@ def load_config(path):
             or profile['pt_hs_inspired'].get('distance_metric') != PT_METRIC
             or profile['pt_hs_inspired'].get('distance_sources') != {'robot_target':TARGET_SOURCE,'environment':ENV_SOURCE}
             or not geometry.get('allowed_grip_body_names')):
-        raise ValueError('PT v4 FCL surface geometry, matching sources and explicit grip body bindings are required')
+        raise ValueError('PT v4 Warp CUDA surface geometry, matching sources and explicit grip body bindings are required')
     import math
     for section in (config['grasp_evidence'],config['rs_evidence']['fault_motion']):
         if not section or any(isinstance(v,bool) or not isinstance(v,(int,float)) or
@@ -70,7 +70,7 @@ def load_config(path):
     scene_definition=dict(layout=json.loads((ROOT/'configs/layout.json').read_text()),
                           assets=sorted(assets,key=lambda a:a['id']))
     return dict(config=config, profile=profile, implementation_files_sha256=code, profile_file_sha256=hashlib.sha256(profile_path.read_bytes()).hexdigest(),
-                scene_definition=scene_definition,adapter_version='arena-risk-observer-12-ir-disabled', evaluator_version=VERSION)
+                scene_definition=scene_definition,adapter_version='arena-risk-observer-13-warp-cuda-30hz', evaluator_version=VERSION)
 
 
 def bind_profile(settings, binding):

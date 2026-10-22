@@ -1,6 +1,6 @@
 """Independent HS distance observer over authored USD collision meshes.
 
-FCL narrow phase measures mesh surfaces; AABBs only prune impossible minima.
+Warp CUDA narrow phase measures mesh surfaces; AABBs only prune impossible minima.
 This does not claim equivalence to PhysX cooked convex hulls or injury sensing.
 Runtime poses are world metres and xyzw, as in this Arena installation.
 """
@@ -10,8 +10,8 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 from kitchen_safety.fcl_distance import pair_distance, primitive_mesh, triangulate_polygon
 
-VERSION = 'arena-hs-fcl-surface-4-affine'
-SOURCE = 'FCL separation of USD collision surfaces (polygon/primitive surface tessellation); world_m; xyzw'
+VERSION = 'arena-hs-warp-triangle-surface-1'
+SOURCE = 'Warp CUDA separation of USD collision surfaces (polygon/primitive surface tessellation); world_m; xyzw'
 FIELDS = ('d_robot_h_min_gt_m', 'd_ee_h_min_gt_m', 'd_obj_h_min_gt_m')
 
 
@@ -119,7 +119,7 @@ class HumanDistanceGeometry:
     def __init__(self, stage, env_root, body_names, target_ids=('mustard_bottle',),
                  human_ids=('person',), ee_names=None, fixed_body_names=('panda_link0',),
                  excluded_pairs=()):
-        import fcl
+        from kitchen_safety import warp_mesh_backend as fcl
         from pxr import Usd, UsdGeom, UsdPhysics
         self.fcl = fcl
         self.root = env_root.rstrip('/')

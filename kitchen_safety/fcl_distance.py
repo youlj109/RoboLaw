@@ -1,6 +1,6 @@
-"""FCL surface queries. Bounds prune candidates; never replace final distances."""
+"""Warp CUDA surface queries; legacy module name retained for shared topology helpers. Bounds prune candidates; never replace final distances."""
 import numpy as np
-METRIC = 'fcl_authored_collision_surface_distance'
+METRIC = 'warp_authored_collision_surface_distance'
 
 
 def pair_distance(fcl, left, right):

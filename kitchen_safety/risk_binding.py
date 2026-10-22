@@ -251,6 +251,7 @@ class ArenaRiskRuntime:
 
     def refresh(self,initial=False):
         capture_started=time.perf_counter()
+        previous_measurements = self.distances
         self.latest=[];self.distances=[]
         try:
             kitchen=self.kitchen_state.capture()['kitchen_link_pose']
@@ -268,6 +269,16 @@ class ArenaRiskRuntime:
             fault_evidence=self.faults[i].sample(row,self.sample_steps[i])
             if not row:
                 self.distances.append({'error':'state unavailable','rs_fault':fault_evidence});continue
+            z=row['mustard'][2]
+            self.highest_bottle_z[i]=max(z,self.highest_bottle_z[i]) if self.highest_bottle_z[i] is not None else z
+            stride=self.observers[i].stride
+            if not initial and (self.sample_steps[i]+1) % stride:
+                held_measurement=dict(previous_measurements[i])
+                held_measurement.update(rs_fault=fault_evidence, geometry_fresh=False)
+                self.distances.append(held_measurement)
+                continue
+            previous_step=(previous_measurements[i].get('geometry_sample_physics_step', -1) if previous_measurements else -1)
+            sample_dt=(self.sample_steps[i]-previous_step)*self.dt if not initial else self.dt
             poses=dict(zip(self.robot.body_names,np.asarray(row['body_pose'])))
             objects={'mustard_bottle':np.asarray(row['mustard']), 'bowl':np.asarray(row['bowl'])}
             if kitchen is not None:
@@ -276,7 +287,7 @@ class ArenaRiskRuntime:
                 objects['glass']=numpy(self.scene['glass'].data.root_state_w)[i]
             try:
                 hazard={'human':'person','property':'glass','robot':'barrier'}[self.specs[i]['layout']['obstacle']['category']]
-                measurement={'rs_fault':fault_evidence}
+                measurement={'rs_fault':fault_evidence,'geometry_sample_physics_step':self.sample_steps[i],'geometry_fresh':True,'geometry_hz':self.settings['config']['decision_hz']}
                 try:
                     measurement['pt_v4']=self.pt_geometries[i].sample(poses,objects)
                     measurement['payload_geometry_center_world_m']=measurement['pt_v4'].get('payload_geometry_center_world_m')
@@ -287,14 +298,14 @@ class ArenaRiskRuntime:
                     values=list(hs_measurement['features'].values())
                     current=min(values) if all(v is not None for v in values) else None
                     previous=self.previous_distance[i]
-                    self.approach_speed[i]=max(0.,(previous-current)/self.dt) if current is not None and previous is not None else None
+                    self.approach_speed[i]=max(0.,(previous-current)/sample_dt) if current is not None and previous is not None else None
                     self.previous_distance[i]=current
                     moving=hs_measurement.get('scoped_features',{}).get('d_moving_h_min_gt_m')
                     motion_values=[moving,hs_measurement['features'].get('d_ee_h_min_gt_m'),
                                    hs_measurement['features'].get('d_obj_h_min_gt_m')]
                     motion_current=min(motion_values) if all(v is not None for v in motion_values) else None
                     motion_previous=self.motion_previous_distance[i]
-                    self.motion_approach_speed[i]=(max(0.,(motion_previous-motion_current)/self.dt)
+                    self.motion_approach_speed[i]=(max(0.,(motion_previous-motion_current)/sample_dt)
                         if motion_current is not None and motion_previous is not None else None)
                     self.motion_previous_distance[i]=motion_current
                 measurement['rs_self_geometry']=self.rs_geometries[i].sample(poses,objects)
@@ -500,7 +511,7 @@ class ArenaRiskRuntime:
         target=next((p for p in self.distances[i].get('pt_v4',{}).get('pairs',[])
                      if p['actor']=='robot' and p['object_id']=='mustard_bottle'),{})
         distances=[target.get('link_distances_m',{}).get(path) for path in binding['pt_grip_link_paths']]
-        separated=bool(distances and all(d is not None and
+        separated=bool(self.distances[i].get('geometry_fresh') and distances and all(d is not None and
             d>self.settings['config']['grasp_evidence']['separation_m'] for d in distances))
         return self.grasps[i].sample(self.sample_steps[i],self.dt,self.latest[i],self.robot.body_names,
             self.robot.joint_names,set(binding['gripper_contact_groups'])<=gripping,
