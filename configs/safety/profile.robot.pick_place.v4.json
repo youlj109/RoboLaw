@@ -554,5 +554,32 @@
     "support": "Measured-support distance-only exemptions; separately declared user PT relationship exclusions also apply",
     "missing_damage_and_perception": "unknown",
     "input_mapping_version": "arena-features-1"
+  },
+  "hs_dynamic": {
+    "version": "arena-hs-dynamic-ssm-1",
+    "enabled": true,
+    "reaction_s": 0.05,
+    "warning_band_m": 0.05,
+    "intrusion_m": 0.015,
+    "robot_position_uncertainty_m": 0.005,
+    "human_position_uncertainty_m": 0.005,
+    "brake_deceleration_min_mps2": 1.0,
+    "robot_acceleration_bound_mps2": 0.0,
+    "robot_speed_uncertainty_mps": 0.0,
+    "human_speed_uncertainty_mps": 0.0,
+    "moving_human_acceleration_bound_mps2": null,
+    "stationary_speed_tolerance_mps": 1e-06,
+    "missing_motion_policy": "unknown",
+    "model_status": "experimental_uncalibrated",
+    "assumptions": [
+      "Experimental offline annotation, not a certified protective function",
+      "Robot constant surface speed during reaction is an explicit unvalidated assumption (aR=0)",
+      "Constant brake deceleration 1 m/s^2 is hypothetical and has not been calibrated against this robot, configuration, payload or controller",
+      "Zero speed uncertainty is an experimental assumption, not a measured sensor error bound",
+      "Authored non-rigid static human geometry is stationary; moving rigid humans require a configured acceleration bound",
+      "Confirmed held payload uses the experimental robot stopping model; confirmed supported stationary payload uses zero stopping travel; other payloads remain unknown",
+      "C and position uncertainty budgets are project candidates, not universal ISO constants",
+      "Current full-surface speed norms are used as conservative direction-independent envelopes, not finite differences of nearest distance"
+    ]
   }
 }

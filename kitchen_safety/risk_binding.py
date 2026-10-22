@@ -11,7 +11,7 @@ import time
 import numpy as np
 
 from kitchen_safety.risk_observer import RiskObserver, PHASE_MAP, write_json
-from kitchen_safety.hs_geometry import HumanDistanceGeometry, SOURCE as HS_GEOMETRY_SOURCE
+from kitchen_safety.hs_geometry import HumanDistanceGeometry, SOURCE as HS_GEOMETRY_SOURCE, transform
 from kitchen_safety.pt_assets import inventory as pt_inventory, selected_contacts, support_evidence
 from kitchen_safety.pt_geometry import PropertyDistanceGeometry, METRIC as PT_METRIC, TARGET_SOURCE, ENV_SOURCE
 from kitchen_safety.rs_evidence import SelfCollisionGeometry, FaultEvidence
@@ -21,6 +21,28 @@ from kitchen_safety.grasp_evidence import GraspEvidence
 def numpy(value):
     value=value.torch if hasattr(value,'torch') else value
     return value.detach().cpu().numpy().copy() if hasattr(value,'detach') else np.asarray(value.numpy() if hasattr(value,'numpy') else value).copy()
+
+
+def capture_rigid_actor_motion(scene):
+    """One read per registered PhysX view; retain actor/COM frame distinction."""
+    actors,motion={},{}
+    for asset in scene.rigid_objects.values():
+        view=asset.root_view
+        poses=numpy(view.get_transforms());velocities=numpy(view.get_velocities())
+        paths=list(view.prim_paths)
+        if len(paths)!=len(poses) or len(paths)!=len(velocities):
+            raise ValueError('Rigid actor path/state row count differs')
+        try:
+            coms=numpy(view.get_coms()).reshape(len(paths),7)
+            error=None
+        except Exception as exc:coms=None;error=repr(exc)
+        for j,(path,pose,velocity) in enumerate(zip(paths,poses,velocities)):
+            path=str(path);actors[path]=np.r_[pose,velocity].tolist()
+            t=transform(pose)
+            motion[path]=dict(com_position_world_m=(t[:3,:3]@coms[j,:3]+t[:3,3]).tolist() if coms is not None else None,
+                com_linear_velocity_mps=velocity[:3].tolist(),angular_velocity_radps=velocity[3:].tolist(),
+                source='PhysX get_transforms/get_coms/get_velocities',error=error)
+    return actors,motion
 
 
 def enable_contact_reports(stage):
@@ -139,6 +161,8 @@ class ArenaRiskRuntime:
             human=spec['layout']['obstacle']['category']=='human'
             hs_geometry=HumanDistanceGeometry(stage,geometry.root,body_names,
                 fixed_body_names=settings['config']['hs_scopes']['fixed_body_names'],
+                dynamic_pairs_enabled=settings['profile'].get('hs_dynamic',{}).get('enabled',False),
+                exempt_fixed_distance=settings['config']['hs_scopes'].get('exempt_fixed_distance',False),
                 excluded_pairs=settings['config']['hs_scopes'].get('excluded_pairs',[])) if human else None
             self.hs_geometries.append(hs_geometry)
             rs_config=settings['config']['rs_evidence']
@@ -249,11 +273,17 @@ class ArenaRiskRuntime:
         for attr in ('applied_torque','joint_pos_limits','joint_effort_limits'):
             try:row[attr]=numpy(getattr(d,attr))[i].tolist()
             except (AttributeError,RuntimeError):row[attr]=None
+        for key,attr in (('body_com_position_w','body_com_pos_w'),
+                         ('body_com_linear_velocity_w','body_com_lin_vel_w'),
+                         ('body_com_angular_velocity_w','body_com_ang_vel_w')):
+            try:row[key]=numpy(getattr(d,attr))[i].tolist()
+            except (AttributeError,RuntimeError):row[key]=None
         return row
 
     def refresh(self,initial=False):
         capture_started=time.perf_counter()
         previous_measurements = self.distances
+        actors,actor_motion=capture_rigid_actor_motion(self.scene)
         self.latest=[];self.distances=[]
         try:
             kitchen=self.kitchen_state.capture()['kitchen_link_pose']
@@ -265,6 +295,9 @@ class ArenaRiskRuntime:
             if not initial:self.sample_steps[i]+=1
             try:
                 row=self.state(i)
+                root=geometry.root+'/'
+                row['rigid_actor_states_world']={p:s for p,s in actors.items() if p.startswith(root)}
+                row['rigid_actor_motion_world']={p:s for p,s in actor_motion.items() if p.startswith(root)}
             except Exception as exc:
                 self.errors[i].append('state sampling: '+repr(exc));row={}
             self.latest.append(row)
@@ -283,6 +316,7 @@ class ArenaRiskRuntime:
             sample_dt=(self.sample_steps[i]-previous_step)*self.dt if not initial else self.dt
             poses=dict(zip(self.robot.body_names,np.asarray(row['body_pose'])))
             objects={'mustard_bottle':np.asarray(row['mustard']), 'bowl':np.asarray(row['bowl'])}
+            objects.update({p[len(geometry.root)+1:]:np.asarray(s) for p,s in row['rigid_actor_states_world'].items()})
             if kitchen is not None:
                 objects.update(dict(zip(self.kitchen_state.metadata['link_paths'], kitchen[i])))
             if self.specs[i]['layout']['obstacle']['category']=='property':
@@ -423,6 +457,10 @@ class ArenaRiskRuntime:
             grasp=self.grasps[i].sample(self.sample_steps[i],self.dt,row,self.robot.body_names,self.robot.joint_names,
                 held is True,current_covered,supported,gripping,phase,separated)
         held=grasp['held']
+        if human and observer.profile.get('hs_dynamic',{}).get('enabled'):
+            from kitchen_safety.hs_dynamic import features as dynamic_hs_features
+            hs['dynamic_distance']=dynamic_hs_features(self.hs_geometries[i],row,hs_measurement,grasp,
+                                                       observer.profile['hs_dynamic'])
         pt['grasp_evidence']=grasp
         pt['support_contact_evidence']=dict(supported=supported,pairs=[(p['bodyA'],p['bodyB']) for p in support_pairs],
             task_phase=PHASE_MAP.get(phase,phase),expected_place_support=bool(support_pairs and phase in ('lower','release','retreat','settle')),

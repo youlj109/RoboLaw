@@ -13,7 +13,7 @@ import queue
 import time
 import traceback
 import numpy as np
-from kitchen_safety.risk_binding import ArenaRiskRuntime, numpy
+from kitchen_safety.risk_binding import ArenaRiskRuntime, numpy, capture_rigid_actor_motion
 from kitchen_safety.risk_profile_loader import bind_profile,digest
 from kitchen_safety.risk_observer import write_json,finite_json
 
@@ -64,7 +64,7 @@ class RawSink:
             schema_version='arena-raw-capture-binding-1',identity=identity,binding=binding,
             physics_dt_s=dt,action_dt_s=action_dt,decision_stride=self.stride,
             resolved_config=settings['config'],resolved_profile=profile,profile_sha256=digest(profile),
-            adapter_version='arena-raw-capture-2',evaluation_status='pending_offline',
+            adapter_version='arena-raw-capture-3-exact-com-motion',evaluation_status='pending_offline',
             capture_workflow=settings_policy(settings),
             implementation_files_sha256=settings.get('implementation_files_sha256',{})))
 
@@ -146,6 +146,9 @@ class RawCaptureRuntime(ArenaRiskRuntime):
                 limits_policy='Runtime effort and position limits retained per physics packet',
                 rigid_actor_paths_120hz=sorted(actor_paths),
                 rigid_actor_state_semantics='PhysX get_transforms actor xyz/xyzw and get_velocities COM linear/angular velocity in world frame, all registered scene rigid_objects at 120Hz',
+                exact_motion_channels=dict(robot=['body_com_position_w','body_com_linear_velocity_w','body_com_angular_velocity_w'],
+                    rigid_actors='rigid_actor_motion_world: COM world position, COM linear velocity and world angular velocity',
+                    semantics='Measured current PhysX COM telemetry at 120Hz; surface velocities are derived offline; missing channels remain unknown'),
                 workflow_policy=settings_policy(self.settings),
                 mesh_semantics='Authored collision surfaces with original scale baked into vertices; body poses provide measured rigid transforms'))
             write_json(sink.directory/'safety_scene_placement.json',dict(evaluation_status='pending_offline',
@@ -155,21 +158,14 @@ class RawCaptureRuntime(ArenaRiskRuntime):
         # Snapshot each rigid-body view once per step, preserving its actual
         # row/path mapping across environments. Kitchen articulation links are
         # separately saved in each measured 30 Hz render observation.
-        actors={}
-        for asset in self.scene.rigid_objects.values():
-            view=asset.root_view
-            poses=numpy(view.get_transforms());velocities=numpy(view.get_velocities())
-            paths=list(view.prim_paths)
-            if len(paths)!=len(poses) or len(paths)!=len(velocities):
-                raise ValueError('Rigid actor path/state row count differs')
-            for path,pose,velocity in zip(paths,poses,velocities):
-                actors[str(path)]=np.r_[pose,velocity].tolist()
+        actors,actor_motion=capture_rigid_actor_motion(self.scene)
         self.latest=[];self.distances=[]
         for i,sink in enumerate(self.observers):
             if not initial:self.sample_steps[i]+=1
             row=self.state(i)
             root=self.geometries[i].root+'/'
             row['rigid_actor_states_world']={path:state for path,state in actors.items() if path.startswith(root)}
+            row['rigid_actor_motion_world']={path:state for path,state in actor_motion.items() if path.startswith(root)}
             self.latest.append(row);self.distances.append({})
             if initial:sink.submit(dict(kind='initial_state',physics_step=-1,time_s=0.,state=self.latest[-1],
                                         receive_wall_ns=time.time_ns()))

@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "scope": "64-action/256-physics-step partial human-scene diagnostic including pregrasp motion, not complete task success or brake calibration",
+  "rule_version": "arena-hs-dynamic-ssm-1",
+  "observations": 64,
+  "physics_steps": 256,
+  "simulated_duration_s": 2.1333333333333333,
+  "comparisons": {
+    "PT": 64,
+    "RS": 64,
+    "known_relation_formulas": 6528
+  },
+  "dominant_surface_speed_mps": [
+    0.0,
+    0.07570341325089083
+  ],
+  "dominant_protective_distance_m": [
+    0.025,
+    0.031650674051462116
+  ],
+  "known_relations": {
+    "102/108": 64
+  },
+  "HS_grades": {
+    "L0": 64
+  },
+  "risk_counts": {
+    "HS": {
+      "L0": 64
+    },
+    "PT": {
+      "L0": 64
+    },
+    "RS": {
+      "L0": 64
+    }
+  },
+  "missing": {
+    "HS": {
+      "human_contact": 1,
+      "payload_stopping_model": 64
+    },
+    "PT": {
+      "arena.audit_only.PT-DMG-001": 64,
+      "arena.audit_only.PT-SUP-001": 64,
+      "arena.damage_sensor_unavailable": 64,
+      "event": 1,
+      "measurement": 1,
+      "pt.protected_pairs.force_n": 1,
+      "pt.protected_pairs.held_contact_active": 1,
+      "pt.protected_pairs.impulse_ns": 1
+    },
+    "RS": {
+      "arena.authoritative_fault_status_unavailable": 64,
+      "motion_after_fault": 64
+    }
+  },
+  "online_geometry_scalar_calls": 0,
+  "online_geometry_batch_calls": 0,
+  "online_risk_evaluations": 0,
+  "offline_wall_s": 16.790056416997686,
+  "raw_integrity": {
+    "passed": true,
+    "errors": [],
+    "physics_steps": 256,
+    "action_observations": 64,
+    "frozen_meshes": 564,
+    "contact_reports": 512,
+    "contact_points": 61696,
+    "actual_command_calls": 768,
+    "raw_file_bytes": 17879867,
+    "online_geometry_calls": 0,
+    "online_risk_evaluations": 0,
+    "evaluation_status": "pending_offline",
+    "scope": "Raw completeness, contact identities, actual commands, mesh hashes and exact HDF5 alignment; does not claim evaluated risk levels"
+  },
+  "model_status": "experimental_uncalibrated",
+  "overlay_cards_checked": [
+    0,
+    63
+  ]
+}

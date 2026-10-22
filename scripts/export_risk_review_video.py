@@ -63,6 +63,21 @@ class ReviewPainter(overlay.Painter):
    card['reason']=f'HS-DIST：{who}→{humanpart} {overlay.num(de["D_m"],2,100)} cm；保护/警戒边界 {overlay.num(protect,2,100)}/{overlay.num(warning,2,100)} cm。'
   card['reason']+=f' 有效人体接触：{overlay.yn(hs.get("human_contact_flag_gt"))}。'
   card['note']='运动等级含末端与目标物'
+  if hs.get('dynamic_distance',{}).get('enabled'):
+   dominant=de.get('dominant_pair') or {};actor=dominant.get('source_actor') or '未知'
+   card['lines']=[f'风险关系：{actor.rsplit("/",1)[-1]}→人体',
+    f'该对距离：{overlay.num(dominant.get("distance_m"),2,100)} cm',
+    f'动态保护距离：{overlay.num(dominant.get("protective_distance_m"),2,100)} cm',
+    f'安全余量 D−S：{overlay.num(dominant.get("margin_m"),2,100)} cm',
+    f'机器人表面速度界：{overlay.num(dominant.get("robot_speed_bound_mps"),2,100)} cm/s',
+    f'人体表面速度界：{overlay.num(dominant.get("human_speed_bound_mps"),2,100)} cm/s',
+    f'候选停止：{overlay.num(dominant.get("stop_s"),3)} s / {overlay.num(dominant.get("brake_travel_m"),2,100)} cm']
+   if hs.get('human_contact_flag_gt') is not True:
+    card['reason']=(f'动态 HS-DIST：D−S={overlay.num(dominant.get("margin_m"),2,100)} cm；警戒带 {overlay.num(de.get("warning_buffer_m"),2,100)} cm。'
+       if dominant else '动态距离证据不足；缺少速度、几何或停止模型的关系保持未知。')
+    card['reason']+=f' 有效人体接触：{overlay.yn(hs.get("human_contact_flag_gt"))}。'
+   card['reason']+=' 试算停止模型未标定。'
+   card['note']='动态停止模型为实验参数，尚未标定'
   pt=cards['PT'];p=features.get('pt',{});pairs=p.get('protected_pairs',[]);summary=report.get('arena_pt_distance_summary',{});near=summary.get('nearest_pair')
   complete=sum(x.get('distance_coverage_complete') is True for x in pairs);count=summary.get('configured_object_count',0)
   rules=[r for r in report['rules'] if r['category']=='PT']

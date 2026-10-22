@@ -7,19 +7,60 @@
   "observation_hz": 30,
   "decision_hz": 30,
   "observer_config": "configs/safety_observer_arena.json",
-  "online": ["physics_execution", "controller_planning_and_action_dependent_task_state", "actual_submitted_actions_and_commands", "joint_position_velocity_torque_and_limits", "robot_link_poses", "registered_rigid_actor_states", "original_physx_contacts_and_fault_events", "measured_kitchen_and_render_source_states", "initial_frozen_meshes_asset_inventory_rules_exemptions_and_camera_configuration"],
-  "offline": ["Warp_CUDA_full_mesh_distances", "HS_PT_RS_risk_features", "HS_PT_RS_evaluation", "grasp_dropout_and_drop_evidence_projection", "contact_force_and_impulse_aggregation", "self_collision_geometry", "closing_speed_and_TTC", "full_archive_and_clearance_audits", "recorded_state_RGB_rendering", "video_encoding_and_risk_overlay", "dataset_exports"],
+  "online": [
+    "physics_execution",
+    "controller_planning_and_action_dependent_task_state",
+    "actual_submitted_actions_and_commands",
+    "joint_position_velocity_torque_and_limits",
+    "robot_link_poses",
+    "registered_rigid_actor_states",
+    "original_physx_contacts_and_fault_events",
+    "measured_kitchen_and_render_source_states",
+    "initial_frozen_meshes_asset_inventory_rules_exemptions_and_camera_configuration",
+    "exact_robot_and_rigid_actor_COM_position_linear_and_angular_velocity_120hz"
+  ],
+  "offline": [
+    "Warp_CUDA_full_mesh_distances",
+    "HS_PT_RS_risk_features",
+    "HS_PT_RS_evaluation",
+    "grasp_dropout_and_drop_evidence_projection",
+    "contact_force_and_impulse_aggregation",
+    "self_collision_geometry",
+    "closing_speed_and_TTC",
+    "full_archive_and_clearance_audits",
+    "recorded_state_RGB_rendering",
+    "video_encoding_and_risk_overlay",
+    "dataset_exports"
+  ],
   "live_rgb_required": false,
   "live_rgb_reason": "Current planners use simulator state; RGB is a measured-state offline render. A future visual policy must record its live inputs online.",
   "record_render_state": true,
   "defer_post_collection_checks": true,
   "defer_clearance_diagnostics": true,
-  "disabled_categories": ["IR"],
+  "disabled_categories": [
+    "IR"
+  ],
   "missing_evidence_policy": "Retain unknown; aggregate only known applicable rule results",
   "capture_status": "pending_offline",
   "evaluator_mode": "offline_replay",
   "source_immutable": true,
   "raw_write_policy": "bounded asynchronous writer, no dropped snapshots, drain and fsync at completion",
-  "default_runtime": {"device": "cpu", "physics_threads": 0, "torch_threads": 1, "episode_length_s": 180, "max_steps": 2400},
-  "validation": {"validated_example": "human_default_mpfb", "observations": 2292, "physics_steps": 9168, "simulated_duration_s": 76.4, "offline_processing_wall_s": 585.078629014999, "all_numeric_features_and_grades_equal_to_online": true, "other_scenes": "Generic support; not claimed to have passed this end-to-end validation"}
+  "default_runtime": {
+    "device": "cpu",
+    "physics_threads": 0,
+    "torch_threads": 1,
+    "episode_length_s": 180,
+    "max_steps": 2400
+  },
+  "validation": {
+    "validated_example": "human_default_mpfb",
+    "observations": 2292,
+    "physics_steps": 9168,
+    "simulated_duration_s": 76.4,
+    "offline_processing_wall_s": 585.078629014999,
+    "all_numeric_features_and_grades_equal_to_online": true,
+    "other_scenes": "Generic support; not claimed to have passed this end-to-end validation",
+    "scope": "Previous complete 2292-frame fixed-HS workflow validation; dynamic HS validation is separate"
+  },
+  "hs_distance_rule": "arena-hs-dynamic-ssm-1"
 }

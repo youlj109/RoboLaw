@@ -231,6 +231,7 @@ class RiskObserver:
         for scope in ('fixed','moving'):
             scoped=deepcopy(snapshot)
             hs=scoped['features']['hs']
+            hs['dynamic_scope']=scope
             distance=original.get('d_'+scope+'_h_min_gt_m')
             hs['d_robot_h_min_gt_m']=distance
             hs['human_contact_flag_gt']=original.get(scope+'_human_contact_flag_gt')

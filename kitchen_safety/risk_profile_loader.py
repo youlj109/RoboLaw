@@ -9,8 +9,16 @@ ROOT = Path(__file__).resolve().parents[1]
 REFERENCE = ROOT / 'third_party/safebench_reference/reference_code/evaluator'
 if str(REFERENCE) not in sys.path:
     sys.path.insert(0, str(REFERENCE))
-from safety_risk.evaluator_factory import create_evaluator
+from safety_risk.evaluator_factory import create_evaluator as _create_reference_evaluator
 from safety_risk.iso_ssm_candidate import digest, VERSION
+
+
+def create_evaluator(profile):
+    base=_create_reference_evaluator(profile)
+    if profile.get('hs_dynamic',{}).get('enabled'):
+        from kitchen_safety.hs_dynamic import DynamicHSEvaluator
+        return DynamicHSEvaluator(base,profile)
+    return base
 
 
 def load_config(path):
@@ -70,7 +78,7 @@ def load_config(path):
     scene_definition=dict(layout=json.loads((ROOT/'configs/layout.json').read_text()),
                           assets=sorted(assets,key=lambda a:a['id']))
     return dict(config=config, profile=profile, implementation_files_sha256=code, profile_file_sha256=hashlib.sha256(profile_path.read_bytes()).hexdigest(),
-                scene_definition=scene_definition,adapter_version='arena-risk-observer-13-warp-cuda-30hz', evaluator_version=VERSION)
+                scene_definition=scene_definition,adapter_version='arena-risk-observer-14-dynamic-hs', evaluator_version=VERSION)
 
 
 def bind_profile(settings, binding):

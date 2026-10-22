@@ -8,6 +8,10 @@ import time
 FIELDS = ['action_index', 'time_s', 'source_physics_step', 'phase', 'HS', 'PT', 'RS',
     'hs_robot_distance_m', 'hs_ee_distance_m', 'hs_payload_distance_m',
     'hs_closing_speed_mps', 'hs_ttc_s', 'hs_effective_contact',
+    'hs_dominant_distance_m','hs_protective_distance_m','hs_warning_outer_m','hs_margin_m',
+    'hs_robot_surface_speed_bound_mps','hs_human_surface_speed_bound_mps','hs_stop_s','hs_brake_travel_m',
+    'hs_dominant_actor','hs_dominant_human_mesh','hs_dynamic_known_pairs','hs_dynamic_expected_pairs',
+    'hs_dynamic_model_status',
     'pt_min_included_distance_m', 'pt_nearest_actor', 'pt_nearest_asset',
     'pt_max_applicable_force_n', 'pt_max_applicable_impulse_ns',
     'pt_held', 'pt_drop', 'pt_drop_height_m', 'pt_support_margin_m', 'pt_damage_flag',
@@ -20,6 +24,8 @@ def project(record):
     f, report = record['input']['features'], record['report']
     h, p, r = (f[x] for x in ('hs', 'pt', 'rs'))
     nearest = report.get('arena_pt_distance_summary', {}).get('nearest_pair') or {}
+    hd=next((q.get('evidence',{}) for q in report['rules'] if q['rule_id']=='HS-DIST-001'),{})
+    dominant=hd.get('dominant_pair') or {}
     def measured_max(rule_id):
         values = [q['evidence'].get('measured') for q in report['rules']
                   if q['rule_id'] == rule_id and q.get('counted_in_grade')]
@@ -31,6 +37,14 @@ def project(record):
         hs_robot_distance_m=h.get('d_robot_h_min_gt_m'), hs_ee_distance_m=h.get('d_ee_h_min_gt_m'),
         hs_payload_distance_m=h.get('d_obj_h_min_gt_m'), hs_closing_speed_mps=h.get('v_rel_h_gt_mps'),
         hs_ttc_s=h.get('TTC_h_min_gt_s'), hs_effective_contact=h.get('human_contact_flag_gt'),
+        hs_dominant_distance_m=dominant.get('distance_m'),hs_protective_distance_m=dominant.get('protective_distance_m'),
+        hs_warning_outer_m=dominant.get('warning_outer_m'),hs_margin_m=dominant.get('margin_m'),
+        hs_robot_surface_speed_bound_mps=dominant.get('robot_speed_bound_mps'),
+        hs_human_surface_speed_bound_mps=dominant.get('human_speed_bound_mps'),
+        hs_stop_s=dominant.get('stop_s'),hs_brake_travel_m=dominant.get('brake_travel_m'),
+        hs_dominant_actor=dominant.get('source_actor'),hs_dominant_human_mesh=dominant.get('human_collider'),
+        hs_dynamic_known_pairs=hd.get('known_pair_count'),hs_dynamic_expected_pairs=hd.get('expected_pair_count'),
+        hs_dynamic_model_status=hd.get('model_status'),
         pt_min_included_distance_m=nearest.get('distance_m'),
         pt_nearest_actor=nearest.get('actor'), pt_nearest_asset=nearest.get('object_id'),
         pt_max_applicable_force_n=measured_max('PT-FORCE-002'),

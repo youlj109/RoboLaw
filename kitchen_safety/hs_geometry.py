@@ -118,14 +118,17 @@ def surface_mesh(prim, cache):
 class HumanDistanceGeometry:
     def __init__(self, stage, env_root, body_names, target_ids=('mustard_bottle',),
                  human_ids=('person',), ee_names=None, fixed_body_names=('panda_link0',),
-                 excluded_pairs=()):
+                 excluded_pairs=(), dynamic_pairs_enabled=False, exempt_fixed_distance=False):
         from kitchen_safety import warp_mesh_backend as fcl
         from pxr import Usd, UsdGeom, UsdPhysics
         self.fcl = fcl
         self.root = env_root.rstrip('/')
         self.entries = []
         self.errors = []
+        motion_body_names = list(body_names)
         body_names = set(body_names)
+        self.dynamic_pairs_enabled = dynamic_pairs_enabled
+        self.exempt_fixed_distance = exempt_fixed_distance
         self.fixed_body_names = set(fixed_body_names)
         self.ee_names = set(ee_names if ee_names is not None else
                             (n for n in body_names if not n.startswith('panda_link')))
@@ -211,6 +214,8 @@ class HumanDistanceGeometry:
         self.metadata = dict(version=VERSION, source=SOURCE, coordinate_frame='world_m',
             query_execution='frame-wide Warp CUDA triangle batches; shared HS/PT/RS queue and CUDA graphs',
             quaternion_order='xyzw', ee_body_names=sorted(self.ee_names),
+            motion_body_names=motion_body_names,
+            dynamic_pairs_enabled=dynamic_pairs_enabled, exempt_fixed_distance=exempt_fixed_distance,
             fixed_body_names=sorted(self.fixed_body_names),
             scoped_distance_policy='HS excludes only explicitly bound collider pairs; raw minima and exclusions retained',
             excluded_pairs=declarations,
@@ -220,6 +225,25 @@ class HumanDistanceGeometry:
                       for e in self.entries],
             contact_semantics='Mesh intersection is not a PhysX contact event',
             geometry_semantics='Tessellated authored collision surfaces; cylinder error recorded; not PhysX cooked convex hulls')
+        self.metadata['dynamic_relation_ids']=[p['relation_id'] for p in self.dynamic_groups()]
+
+    def dynamic_groups(self):
+        if not self.dynamic_pairs_enabled:return []
+        sources={}
+        for e in self.entries:
+            if e['group'] not in ('robot','object'):continue
+            if e['group']=='robot' and self.exempt_fixed_distance and e['actor'] in self.fixed_body_names:continue
+            key=(e['group'],e['actor'] or e['path'])
+            sources.setdefault(key,[]).append(e)
+        result=[]
+        for (group,actor),entries in sorted(sources.items()):
+            for h in sorted((e for e in self.entries if e['group']=='human'),key=lambda e:e['path']):
+                active=[e for e in entries if (e['path'],h['path']) not in self.excluded_pairs]
+                if not active:continue
+                result.append(dict(relation_id='|'.join((group,actor,h['path'])),
+                    source_group=group,source_actor=actor,source_colliders=[e['path'] for e in active],
+                    human_collider=h['path'],left=active,right=[h]))
+        return result
 
     def update_objects(self, body_poses, object_poses):
         groups = {name:[] for name in ('robot','ee','object','human','fixed','moving')}
@@ -259,6 +283,8 @@ class HumanDistanceGeometry:
             by_path={e['path']:e for e in self.entries}
             exemptions=[(declaration,batch.minimum([by_path[a]],[by_path[b]],hs=True))
                         for (a,b),declaration in self.excluded_pairs.items()]
+            dynamic=[(p,batch.minimum(p['left'],p['right'],exclude=self.excluded_pairs,hs=True))
+                     for p in self.dynamic_groups()]
         except Exception as exc:
             errors=[dict(error=str(exc))]
             return lambda:self.unknown(errors)
@@ -267,6 +293,14 @@ class HumanDistanceGeometry:
                 results={key:batch.result(q) for key,q in requests.items()}
                 raw_results={key:batch.result(q) for key,q in raw.items()}
                 exempted=[dict(declaration=d,measurement=batch.result(q)) for d,q in exemptions]
+                dynamic_results=[]
+                for p,q in dynamic:
+                    item={k:v for k,v in p.items() if k not in ('left','right')}
+                    try:
+                        measured=batch.result(q)
+                        item.update(distance_m=measured['distance_m'],nearest_geometry=measured)
+                    except Exception as exc:item.update(distance_m=None,error=str(exc))
+                    dynamic_results.append(item)
                 return dict(version=VERSION, source=SOURCE, complete=True, errors=[],
                             features=dict(zip(FIELDS, (results[k]['distance_m'] for k in ('robot','ee','object')))),
                             scoped_features=dict(d_fixed_h_min_gt_m=results['fixed']['distance_m'],
@@ -278,7 +312,8 @@ class HumanDistanceGeometry:
                                 raw_geometry_valid=not raw_results['fixed']['mesh_intersection'],
                                 raw_evidence=raw_results['fixed'],
                                 semantics='valid concerns non-exempt pairs; raw_geometry_valid preserves actual overlap'),
-                            nearest=results, raw_nearest=raw_results, exempted_pairs=exempted)
+                            nearest=results, raw_nearest=raw_results, exempted_pairs=exempted,
+                            dynamic_relations=dynamic_results)
             except Exception as exc:return self.unknown([dict(error=str(exc))])
         return finish
 

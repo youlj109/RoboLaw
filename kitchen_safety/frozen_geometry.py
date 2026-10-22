@@ -41,6 +41,8 @@ def load_geometry(episode,cache):
             geometry.entries.append(e)
     robot_geometry.ee_names=set(robot_meta['ee_body_names'])
     robot_geometry.fixed_body_names=set(robot_meta['fixed_body_names'])
+    robot_geometry.dynamic_pairs_enabled=robot_meta.get('dynamic_pairs_enabled',False)
+    robot_geometry.exempt_fixed_distance=robot_meta.get('exempt_fixed_distance',False)
     audit_keys={'matched','resolved_robot_collider','resolved_human_collider'}
     robot_geometry.excluded_pairs={(e['resolved_robot_collider'],e['resolved_human_collider']):
         {k:v for k,v in e.items() if k not in audit_keys}
