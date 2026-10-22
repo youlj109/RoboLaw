@@ -9,6 +9,7 @@ import numpy as np
 from kitchen_safety.hs_geometry import transform, surface_mesh
 from kitchen_safety.pt_assets import under
 from kitchen_safety.fcl_distance import METRIC, minimum_distance
+from kitchen_safety.pt_pruning import VERSION as BOUND_VERSION, NUMERICAL_MARGIN_M, finite_nonnegative
 
 VERSION = 'arena-pt-warp-triangle-surface-1'
 TARGET_SOURCE = 'link_target_warp_surface_distance_gt'
@@ -16,7 +17,7 @@ ENV_SOURCE = 'pt_environment_warp_surface_distance_gt'
 
 
 class PropertyDistanceGeometry:
-    def __init__(self, stage, env_root, body_names, asset_inventory, grip_names):
+    def __init__(self, stage, env_root, body_names, asset_inventory, grip_names, *, warning_thresholds=None):
         from kitchen_safety import warp_mesh_backend as fcl
         from pxr import Usd, UsdGeom, UsdPhysics
         self.fcl = fcl
@@ -24,6 +25,9 @@ class PropertyDistanceGeometry:
         self.entries, self.errors, self.robot_links = [], [], {}
         self.assets = asset_inventory['objects']
         self.target = asset_inventory['target_object_ids'][0]
+        self.warning_thresholds = dict(warning_thresholds or {})
+        if any(not finite_nonnegative(v) for v in self.warning_thresholds.values()):
+            raise ValueError('PT pruning thresholds must be finite and nonnegative')
         body_names = set(body_names)
         cache = UsdGeom.XformCache(Usd.TimeCode.Default())
         root = stage.GetPrimAtPath(self.root)
@@ -88,13 +92,16 @@ class PropertyDistanceGeometry:
         self.metadata = dict(version=VERSION, metric=METRIC,
             target_source=TARGET_SOURCE, environment_source=ENV_SOURCE,
             formula='min_collider_pairs(Warp CUDA_triangle_surface_distance)',
-            broad_phase='Conservative AABB pruning only; no AABB/projection fallback',
-            query_strategy='Exact complete-actor Warp CUDA minimum for environment pairs; per-link Warp CUDA minima retained for robot-target grasp evidence',
+            broad_phase='Conservative AABB pruning; far pairs may carry explicit lower bounds, never AABB values labelled as exact distances',
+            query_strategy='Exact complete-actor Warp CUDA minimum unless a configured warning bound excludes risk; per-link Warp CUDA minima retained for robot-target grasp evidence',
             affine_support='Full authored affine transform baked into mesh vertices',
             geometry_semantics='Authored collision surfaces; analytic primitives tessellated with recorded resolution; not PhysX cooked solids',
             topology='Frozen at observer construction; measured rigid poses updated each sample',
             coordinate_frame='world_m', quaternion_order='xyzw', complete=not self.errors,
             errors=self.errors, exact_grip_link_paths=self.grip_paths,
+            distance_pruning=dict(version=BOUND_VERSION, warning_thresholds_m=self.warning_thresholds,
+                numerical_margin_m=NUMERICAL_MARGIN_M,
+                semantics='Per-sample guarded AABB lower bounds; exact target/grip distances always retained'),
             geometry=[{k:e[k] for k in ('path','group','actor','dynamic','fingerprint','vertices','triangles','approximation')} for e in self.entries])
 
     def sample(self, body_poses, object_poses):
@@ -128,7 +135,7 @@ class PropertyDistanceGeometry:
                 missing = [e for e in errors if e['group'] in (source_group, object_id)]
                 if not source or not destination:
                     missing = missing + [dict(error='Empty declared source or destination geometry')]
-                evidence = {}
+                evidence, bound = {}, None
                 if not missing:
                     try:
                         # Only robot-to-target rules and grasp evidence need every link.
@@ -137,18 +144,29 @@ class PropertyDistanceGeometry:
                         # One global query can prune links unable to win, while returning
                         # the same Warp CUDA minimum and nearest collider/points.
                         per_link = actor == 'robot' and object_id == self.target
-                        query_groups = (links.items() if per_link else
-                            [(self.root+('/Robot' if actor == 'robot' else '/'+self.target), source)])
-                        evidence = {name:minimum_distance(self.fcl, entries, destination, query_cache)
-                            for name, entries in query_groups}
+                        threshold = self.warning_thresholds.get(object_id)
+                        if not per_link and threshold is not None:
+                            alo, ahi = np.min([e['lo'] for e in source], axis=0), np.max([e['hi'] for e in source], axis=0)
+                            blo, bhi = np.min([e['lo'] for e in destination], axis=0), np.max([e['hi'] for e in destination], axis=0)
+                            lower = max(0., float(np.linalg.norm(np.maximum(0, np.maximum(alo-bhi, blo-ahi)))) - NUMERICAL_MARGIN_M)
+                            if np.isfinite(lower) and lower > threshold:
+                                bound = dict(version=BOUND_VERSION, method='complete_actor_asset_union_aabb',
+                                    lower_bound_m=lower, warning_outer_m=threshold, numerical_margin_m=NUMERICAL_MARGIN_M)
+                        if bound is None:
+                            query_groups = (links.items() if per_link else
+                                [(self.root+('/Robot' if actor == 'robot' else '/'+self.target), source)])
+                            evidence = {name:minimum_distance(self.fcl, entries, destination, query_cache)
+                                for name, entries in query_groups}
                     except Exception as exc:
                         missing = [dict(error=str(exc))]
-                        evidence = {}
-                complete = not missing and bool(evidence)
-                values = {name:e['distance_m'] for name,e in evidence.items()} if complete else {}
-                nearest = min(evidence.values(), key=lambda e:e['distance_m']) if complete else None
+                        evidence, bound = {}, None
+                complete = not missing and (bool(evidence) or bound is not None)
+                values = {name:e['distance_m'] for name,e in evidence.items()}
+                nearest = min(evidence.values(), key=lambda e:e['distance_m']) if evidence else None
                 pairs.append(dict(actor=actor, object_id=object_id,
                     distance_m=nearest['distance_m'] if nearest else None,
+                    distance_status='lower_bound' if bound else 'exact' if complete else 'unavailable',
+                    distance_bound=bound,
                     link_distances_m=values if actor == 'robot' and object_id == self.target else {}, source_distances_m=values,
                     nearest=nearest, link_distance_evidence=evidence if actor == 'robot' and object_id == self.target else {},
                     distance_query_scope='per_link' if actor == 'robot' and object_id == self.target else 'complete_actor_surface',

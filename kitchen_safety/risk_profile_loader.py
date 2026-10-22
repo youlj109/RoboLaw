@@ -29,6 +29,8 @@ def load_config(path):
     if profile.get('rules',{}).get('pt_mode') != 'pt-hs-inspired-v4' or profile.get('pt_hs_inspired',{}).get('version') != 'pt-hs-inspired-v4':
         raise ValueError('This Arena adapter requires a PT v4 profile')
     geometry=config.get('pt_v4_geometry',{})
+    if not isinstance(geometry.get('prune_outside_warning', False), bool):
+        raise ValueError('PT prune_outside_warning must be a boolean')
     from kitchen_safety.pt_geometry import VERSION as PT_VERSION, METRIC as PT_METRIC, TARGET_SOURCE, ENV_SOURCE
     if (geometry.get('version') != PT_VERSION or geometry.get('metric') != PT_METRIC
             or geometry.get('target_source') != TARGET_SOURCE or geometry.get('environment_source') != ENV_SOURCE
@@ -70,7 +72,7 @@ def load_config(path):
     scene_definition=dict(layout=json.loads((ROOT/'configs/layout.json').read_text()),
                           assets=sorted(assets,key=lambda a:a['id']))
     return dict(config=config, profile=profile, implementation_files_sha256=code, profile_file_sha256=hashlib.sha256(profile_path.read_bytes()).hexdigest(),
-                scene_definition=scene_definition,adapter_version='arena-risk-observer-13-warp-cuda-30hz', evaluator_version=VERSION)
+                scene_definition=scene_definition,adapter_version='arena-risk-observer-14-pt-distance-bounds', evaluator_version=VERSION)
 
 
 def bind_profile(settings, binding):

@@ -8,6 +8,7 @@ from copy import deepcopy
 import math
 
 import numpy as np
+from kitchen_safety.pt_pruning import apply_distance_bound
 
 VERSION = 'arena-pt-scene-assets-1'
 
@@ -178,6 +179,7 @@ def apply_support_distance_rules(report, features, binding):
     changes = []
     target_changes = []
     relation_changes = []
+    bound_changes = []
     excluded_relations = {(r['actor'], r['object_id']): r
                           for r in inv.get('excluded_pt_relations', [])}
     distance_exempt_targets = (set(inv.get('target_object_ids', []))
@@ -217,6 +219,9 @@ def apply_support_distance_rules(report, features, binding):
             e.update(arena_target_distance_exempt=True, distance_applicable=False,
                      raw_target_distance_m=raw_pairs.get(key, {}).get('distance_m'))
             continue
+        if apply_distance_bound(rule, raw_pairs.get(key, {})):
+            bound_changes.append(dict(actor=key[0], object_id=key[1],
+                lower_bound_m=e['distance_lower_bound_m'], warning_outer_m=e['warning_outer_m']))
         support = raw_pairs.get(key, {}).get('allowed_support_evidence') or {}
         relation = next((r for r in inv['allowed_support_relations']
                          if r['id'] == support.get('relation_id')
@@ -235,7 +240,7 @@ def apply_support_distance_rules(report, features, binding):
                     mapping_origin='arena_measured_support_distance_relation',
                     note='Distance not applicable for proven allowed support; force/impulse retained')
         e.update(arena_support_distance_exempt=True, allowed_support_evidence=deepcopy(support))
-    if changes or target_changes or relation_changes:
+    if changes or target_changes or relation_changes or bound_changes:
         rr = [r for r in report['rules'] if r['category'] == 'PT']
         complete = all(r['complete'] for r in rr)
         known = max((r['level'] for r in rr if r['level'] is not None), default=None)
@@ -246,6 +251,7 @@ def apply_support_distance_rules(report, features, binding):
     report['arena_pt_support_overrides'] = changes
     report['arena_pt_target_distance_overrides'] = target_changes
     report['arena_pt_relation_overrides'] = relation_changes
+    report['arena_pt_distance_bounds'] = bound_changes
     active = []
     distance_rules = [r for r in report.get('rules', []) if r['rule_id'] == 'PT-DIST-001']
     for rule in distance_rules:
@@ -264,10 +270,16 @@ def apply_support_distance_rules(report, features, binding):
                 nearest = min(eligible,key=lambda v:v['distance_m']) if eligible else None
             active.append(dict(actor=e['actor'], object_id=e['object_id'], distance_m=d,
                                metric=geometry.get('metric'), nearest_geometry=deepcopy(nearest)))
+    nearest_exact = min(active, key=lambda p: p['distance_m']) if active else None
+    # A skipped distance can be the true minimum unless its lower bound is
+    # above the smallest exact measurement. Do not invent a nearest asset.
+    nearest_proven = nearest_exact if nearest_exact and all(
+        p['lower_bound_m'] >= nearest_exact['distance_m'] for p in bound_changes) else None
     report['arena_pt_distance_summary'] = dict(
         scope='configured PT assets; excludes declared PT relationships, robot-to-task-target distances, proven allowed support, inactive payload and exempt grip links',
         configured_object_count=len(inv['objects']), configured_pair_count=len(distance_rules),
-        valid_applicable_pair_count=len(active),
+        valid_applicable_pair_count=len(active)+len(bound_changes),
+        exact_pair_count=len(active), bounded_pair_count=len(bound_changes),
         incomplete_pair_count=sum(not r['complete'] for r in distance_rules),
-        nearest_pair=min(active, key=lambda p: p['distance_m']) if active else None,
+        nearest_pair=nearest_proven, nearest_exact_pair=nearest_exact,
         geometry_source=binding.get('geometry_sources', {}).get('PT'))

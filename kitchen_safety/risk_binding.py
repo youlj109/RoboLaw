@@ -133,7 +133,15 @@ class ArenaRiskRuntime:
             asset_inventory=pt_inventory(geometry.inventory_entries,geometry.root,settings['config']['pt_asset_coverage'])
             self.pt_inventories.append(asset_inventory)
             grip_names=settings['config']['pt_v4_geometry']['allowed_grip_body_names']
-            pt_geometry=PropertyDistanceGeometry(stage,geometry.root,body_names,asset_inventory,grip_names)
+            from kitchen_safety.pt_pruning import warning_outer_m
+            thresholds = {}
+            if settings['config']['pt_v4_geometry'].get('prune_outside_warning', False):
+                # bind_profile expands every environment asset from this prototype.
+                threshold = warning_outer_m(settings['profile']['pt_hs_inspired']['objects']['protected_obstacle'])
+                thresholds = {name: threshold for name in asset_inventory['objects']
+                              if name not in asset_inventory['target_object_ids']}
+            pt_geometry=PropertyDistanceGeometry(stage,geometry.root,body_names,asset_inventory,grip_names,
+                warning_thresholds=thresholds)
             self.pt_geometries.append(pt_geometry)
             human=spec['layout']['obstacle']['category']=='human'
             hs_geometry=HumanDistanceGeometry(stage,geometry.root,body_names,
