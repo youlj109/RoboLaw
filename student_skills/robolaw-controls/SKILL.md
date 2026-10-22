@@ -5,9 +5,11 @@ description: 为RoboLaw学生D独立扩展Lightwheel 左右按钮与温度旋钮
 
 # 学生D：Lightwheel 左右按钮与温度旋钮3个环境
 
+**开始开发、复现或验收前必读 [本次复查与验收要求](references/review-gates.md)。历史 12/12 不再作为交付验收；原任务成功、场景物理质量与避障必要性须分列。**
+
 独立负责 **3个原始环境**；新分支 **ylj-controls**。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界、现有缺口和验收要求。本技能自包含，不依赖其他技能或学生产出。
 
-左取消按钮已有真实 cuRobo/PhysX 试用入口；开始该任务时先读 [左按钮实测与复现](references/tested-left-button.md)，复用已核对的资产、接触、动态碰撞和相机对齐方法。右按钮与旋钮仍未验证，不能据左按钮结果宣称整组已通过。
+左取消按钮已有真实 cuRobo/PhysX 试用入口，但本轮三条发现未操作烤面包机旋钮在中性保持时自转，场景物理质量不合格，且避障设计偏弱，须修复并重验。开始该任务时读 [左按钮历史实测与复现](references/tested-left-button.md) 与 review-gates.md，不能按旧 accepted 直接交付。右按钮与旋钮任务仍未验证。
 
 原首轮三条成功只证明物理任务和采集流程；人体及横杆未使原路径失效，不得标记为有效避障增广。新增安全样本必须先读 [避障设计与对照验收](references/avoidance-design.md)，用同源布局、同控制参数的无障碍成功轨迹证明新增实体确实造成安全距离违规，再验证重规划后的真实执行。场景里出现实体、规划器成功或路径不同都不能替代这项证据。
 

@@ -1,5 +1,9 @@
 # One-wall 冰箱：有效避障修正
 
+**2026-10-22 复查：先读 [当前交付验收](review-gates.md)。下面保存旧单基线试验的参数和报告，历史 accepted 不等于当前交付通过。**
+
+本组冰箱三条保留原任务开门及单基线几何证据。human/property 使用同一合法把手候选策略，把接触高度从默认 +0.12 m 换到 +0.18 m；应归为“合法抓点适配并避让”，不能把这 60 mm 目标变化计成固定终点绕行。robot 保持固定抓点。三条尚未完成下述多规划 seed 成对验证，不作稳定必要性结论。
+
 2026-10-21 的 `datasets/skill_trials/doors/*` 三变体只证明原任务真实开门、物理安全和视频采集。旧障碍没有足够的必要性证据，不将它们计为有效避障。
 
 最初CPU候选搜索以已成功的 `datasets/skill_trials/doors/base_attempt_08` 为参考：330 个动作帧，seed 42、把手高偏移 +0.12 m、相同原始布局和动作控制。CPU 搜索只读取真实测量 q，不执行危险轨迹。物理新样本写 `datasets/avoidance_trials/doors`，不得覆盖旧样本。正式反事实统一采用本轮重新采集、显式记录控制参数的baseline，路径见下方最终实测表。
@@ -35,7 +39,7 @@
 - 原三相机保持。人体近处背部遮挡 external_camera，但 external_camera_2 可辨手、机器人和把手，是本轮原速动作对照视角；不能把补渲染全景当真实轨迹采集。
 - 正式验证顺序应为 `validate_trial.py` → 锁内 `audit_self_collision.py` → CPU `audit_avoidance.py --baseline <matching-baseline>`。审计对 baseline 与新样本的 result/validation_full/self_collision 各报告都要求通过；baseline必须显式记录controller_parameters，缺失时须补采，不能套用历史默认值。`baseline_counterfactual.passed=false` 表示旧路径在新增风险下失败，须同时 `violates_safety_margin=true`；整体 `accepted=true` 才是通过。审计拒绝覆盖已有报告，修订使用 `--report-name avoidance_audit_revisionNN.json` 并保留原报告。
 
-## 本轮最终实测（3/3有效避障）
+## 历史单基线实测（3条，抓点适配单列）
 
 | 变体 / 正式episode | 帧 / 物理记录 | 旧真实几何最近距离 | 新真实几何最近距离 | 原执行阈值 |
 |---|---:|---:|---:|---:|
@@ -45,7 +49,7 @@
 
 三条的 `result.accepted`、`validation_full.accepted`、`self_collision_audit.passed` 及选定固定台架/避障审计全true；每条原3路与合成视频解码/对齐通过。三条的统一入口均为 `avoidance_audit.json` 和 `path_comparison.png`。robot补采同版本baseline后的正式修订是 `avoidance_audit_v2.json`；原canonical报告/图先改名保留为v1，再将已通过v2复制为canonical，详见 `evidence_revision.json`。robot目录的 `controller_equivalence.json` 保存控制参数与实现哈希一致性证据，所有旧数据保持不变。human/property 使用实际 `datasets/avoidance_trials/doors/base_adaptive_attempt_01`（330帧、2970物理检查）；robot 使用本轮固定目标 `datasets/avoidance_trials/doors/base_fixed_attempt_01`（330帧、2970物理检查）。该baseline与robot样本均不传 `--adaptive-handle-height`，controller_parameters及collect/environment/collision/config四个实现SHA256全部一致，无需推断历史默认参数。所有baseline各自成功、RGB/物理/self报告通过。
 
-human/property 同一顺序候选策略因原+.12m点碰撞IK失败而自动选择+.18m；robot保持+.12m。自由段TCP最大变化依次124.76、101.15、122.09mm，必要性由真实几何旧路径违规决定，不由变化量决定。财产所有物理记录最大平移0.000862mm、旋转0.000350°、绝对竖直偏差0.000339°，远低于5mm/2°门槛；实测落座pose的旧路径最小41.707mm是最终证据，名义候选39.81mm不作为最终值。
+human/property 同一顺序候选策略因原+.12m点碰撞IK失败而自动选择+.18m；robot保持+.12m。自由段TCP最大变化依次124.76、101.15、122.09mm，这些数值只支持选定旧路径的真实几何违规；human/property 还改变了合法抓点，不构成固定终点绕行或多 seed 稳定必要性证明。财产所有物理记录最大平移0.000862mm、旋转0.000350°、绝对竖直偏差0.000339°，远低于5mm/2°门槛；实测落座pose的旧路径最小41.707mm是最终证据，名义候选39.81mm不作为最终值。
 
 首个物理成功但移动源机器人约0.403m的property02已拒绝；property03因cuRobo初态不可行拒绝；根yaw不符要求的初次human/robot初始化失败也保留。`avoidance_pre_self.json` 是self报告完成前的真实拒绝状态，正式证据为后来新写的 `avoidance_audit.json`，不覆盖历史。
 

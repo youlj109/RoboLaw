@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-10-21T17:11:23.311904+00:00",
-  "passed": true,
+  "generated_utc": "2026-10-22T04:07:13.967749+00:00",
+  "passed": false,
   "required": 12,
-  "accepted": 12,
+  "accepted": 8,
   "branch": "ylj",
-  "scope": "Same-source baseline counterfactual must violate the original safety margin, while the new physical episode succeeds safely with legal initial/goal geometry. One fixed sample per category; no randomized or bulk success-rate claim.",
+  "scope": "原12条任务成功证据保留；4类撤回安全增广验收，其余8条仅保留旧单轨迹几何/裕度证据，未通过新增完整质量验收。",
   "measurement_scope": "Read individual reports: counterfactual and stability sample rates differ; no unsafe baseline physically executed.",
   "episodes": [
     {
@@ -14,7 +14,7 @@
       "variant_label": "人体",
       "episode": "datasets/avoidance_trials/replicator/human/attempt_04",
       "frames": 515,
-      "passed": true,
+      "passed": false,
       "baseline": "datasets/avoidance_trials/replicator/base/baseline_human_03",
       "baseline_minimum_m": 0.01538152807869685,
       "actual_minimum_m": 0.04047870730107339,
@@ -37,7 +37,8 @@
         "overview_frame_alignment.json_exists": true,
         "comparison_video_decoded": true,
         "comparison_uses_audited_baseline": true,
-        "raw_data_exists": true
+        "raw_data_exists": true,
+        "quality_review": false
       },
       "raw_data": {
         "trajectory.h5": "datasets/avoidance_trials/replicator/human/attempt_04/trajectory.h5",
@@ -89,8 +90,8 @@
         },
         "avoidance_design.md": {
           "path": "student_skills/robolaw-replicator/references/avoidance-trial.md",
-          "bytes": 9972,
-          "sha256": "4a1099cdc5695f8587d9cab4f8a11ca5bd0b043c5bb152592cfe610d145cbe3a"
+          "bytes": 10761,
+          "sha256": "76c6a528dff6846bdc01b43ffe0f6e0fbcd87034320eaac71930db8d82a3668e"
         },
         "cameras.json": {
           "path": "datasets/avoidance_trials/replicator/human/attempt_04/cameras.json",
@@ -166,8 +167,17 @@
           "path": "datasets/avoidance_trials/replicator/human/attempt_04/overview/frame_alignment.json",
           "bytes": 125802,
           "sha256": "f9ff3378696a931ee172cfdd0dd7f55bff5492a747d3a6e49340d0da67ebd724"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
         }
-      }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "withheld",
+      "review_note": "真实源碰撞网格/整瓶凸包复核旧路径最近21.047mm，未违反20mm；历史15.382mm违规来自保守携物盒代理。必要性未证实。"
     },
     {
       "group": "replicator",
@@ -195,7 +205,8 @@
         "all_four_videos_exist": true,
         "comparison_video_decoded": true,
         "comparison_uses_audited_baseline": true,
-        "raw_data_exists": true
+        "raw_data_exists": true,
+        "quality_review": true
       },
       "raw_data": {
         "trajectory.h5": "datasets/avoidance_trials/replicator/property/attempt_02/trajectory.h5",
@@ -246,8 +257,8 @@
         },
         "avoidance_design.md": {
           "path": "student_skills/robolaw-replicator/references/avoidance-trial.md",
-          "bytes": 9972,
-          "sha256": "4a1099cdc5695f8587d9cab4f8a11ca5bd0b043c5bb152592cfe610d145cbe3a"
+          "bytes": 10761,
+          "sha256": "76c6a528dff6846bdc01b43ffe0f6e0fbcd87034320eaac71930db8d82a3668e"
         },
         "cameras.json": {
           "path": "datasets/avoidance_trials/replicator/property/attempt_02/cameras.json",
@@ -333,8 +344,17 @@
           "path": "reports/avoidance_trials/replicator/property/attempt_02/videos.json",
           "bytes": 362,
           "sha256": "b505a433bf86ba2bf6c662b1e2e516ef770a35222157a03d15bcb26966db0aa9"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
         }
-      }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
     },
     {
       "group": "replicator",
@@ -362,7 +382,8 @@
         "all_four_videos_exist": true,
         "comparison_video_decoded": true,
         "comparison_uses_audited_baseline": true,
-        "raw_data_exists": true
+        "raw_data_exists": true,
+        "quality_review": true
       },
       "raw_data": {
         "trajectory.h5": "datasets/avoidance_trials/replicator/robot/attempt_01/trajectory.h5",
@@ -413,8 +434,8 @@
         },
         "avoidance_design.md": {
           "path": "student_skills/robolaw-replicator/references/avoidance-trial.md",
-          "bytes": 9972,
-          "sha256": "4a1099cdc5695f8587d9cab4f8a11ca5bd0b043c5bb152592cfe610d145cbe3a"
+          "bytes": 10761,
+          "sha256": "76c6a528dff6846bdc01b43ffe0f6e0fbcd87034320eaac71930db8d82a3668e"
         },
         "cameras.json": {
           "path": "datasets/avoidance_trials/replicator/robot/attempt_01/cameras.json",
@@ -500,8 +521,17 @@
           "path": "reports/avoidance_trials/replicator/robot/attempt_01/videos.json",
           "bytes": 359,
           "sha256": "99061c10edf9355e07b0ebfdc20339996f24c8bd62fb39a7a5abdcc94fd6296a"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
         }
-      }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
     },
     {
       "group": "lightwheel_pick_place",
@@ -531,7 +561,8 @@
         "overview_frame_alignment.json_exists": true,
         "comparison_video_decoded": true,
         "comparison_uses_audited_baseline": true,
-        "raw_data_exists": true
+        "raw_data_exists": true,
+        "quality_review": true
       },
       "raw_data": {
         "trajectory.h5": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/trajectory.h5",
@@ -583,8 +614,8 @@
         },
         "avoidance_design.md": {
           "path": "student_skills/robolaw-lightwheel-pick-place/references/avoidance-trial.md",
-          "bytes": 9240,
-          "sha256": "0ffab3a172bd26f74dc90b6dff46fc8a70a71982b09725381f69a16cb6c6d928"
+          "bytes": 9870,
+          "sha256": "404f2936c131f195fd8d297e9a946288a2cc2fcb8f3553a4c819ec5ca4ba373e"
         },
         "cameras.json": {
           "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/cameras.json",
@@ -655,8 +686,17 @@
           "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/overview/frame_alignment.json",
           "bytes": 115765,
           "sha256": "179e09bc57b5173de2c20a982760a2e60c84eb5958dc962dbcd5ea229204affe"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
         }
-      }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
     },
     {
       "group": "lightwheel_pick_place",
@@ -683,7 +723,8 @@
         "all_four_videos_exist": true,
         "comparison_video_decoded": true,
         "comparison_uses_audited_baseline": true,
-        "raw_data_exists": true
+        "raw_data_exists": true,
+        "quality_review": true
       },
       "raw_data": {
         "trajectory.h5": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/trajectory.h5",
@@ -729,8 +770,8 @@
         },
         "avoidance_design.md": {
           "path": "student_skills/robolaw-lightwheel-pick-place/references/avoidance-trial.md",
-          "bytes": 9240,
-          "sha256": "0ffab3a172bd26f74dc90b6dff46fc8a70a71982b09725381f69a16cb6c6d928"
+          "bytes": 9870,
+          "sha256": "404f2936c131f195fd8d297e9a946288a2cc2fcb8f3553a4c819ec5ca4ba373e"
         },
         "cameras.json": {
           "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/cameras.json",
@@ -791,8 +832,17 @@
           "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/clearances.json",
           "bytes": 1147263,
           "sha256": "1a4cc20405fd7486ca9bc9b654d6d1c39d552e2f304ff73c6d6e76a750358275"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
         }
-      }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
     },
     {
       "group": "lightwheel_pick_place",
@@ -819,7 +869,8 @@
         "all_four_videos_exist": true,
         "comparison_video_decoded": true,
         "comparison_uses_audited_baseline": true,
-        "raw_data_exists": true
+        "raw_data_exists": true,
+        "quality_review": true
       },
       "raw_data": {
         "trajectory.h5": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/trajectory.h5",
@@ -865,8 +916,8 @@
         },
         "avoidance_design.md": {
           "path": "student_skills/robolaw-lightwheel-pick-place/references/avoidance-trial.md",
-          "bytes": 9240,
-          "sha256": "0ffab3a172bd26f74dc90b6dff46fc8a70a71982b09725381f69a16cb6c6d928"
+          "bytes": 9870,
+          "sha256": "404f2936c131f195fd8d297e9a946288a2cc2fcb8f3553a4c819ec5ca4ba373e"
         },
         "cameras.json": {
           "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/cameras.json",
@@ -927,8 +978,17 @@
           "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/clearances.json",
           "bytes": 1158254,
           "sha256": "c0fcb4330b5d7a28a05e28cf3f02e41ef6b837adbaa7c2e78ba8a7eb87386a76"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
         }
-      }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
     },
     {
       "group": "doors",
@@ -951,7 +1011,8 @@
         "all_four_videos_exist": true,
         "comparison_video_decoded": true,
         "comparison_uses_audited_baseline": true,
-        "raw_data_exists": true
+        "raw_data_exists": true,
+        "quality_review": true
       },
       "raw_data": {
         "trajectory.h5": "datasets/avoidance_trials/doors/human_attempt_02/trajectory.h5",
@@ -997,8 +1058,8 @@
         },
         "avoidance_design.md": {
           "path": "student_skills/robolaw-doors/references/avoidance-trial.md",
-          "bytes": 9873,
-          "sha256": "29c072f40a573186856c49222cc774863872847be7ce62f827d0672526ccfa46"
+          "bytes": 10535,
+          "sha256": "7932a8de79ca22fc9601b7e155d3443dc84ed64241492df7adadf1f19f5c456e"
         },
         "metadata.json": {
           "path": "datasets/avoidance_trials/doors/human_attempt_02/metadata.json",
@@ -1054,8 +1115,17 @@
           "path": "datasets/avoidance_trials/doors/human_attempt_02/hazard_clearance.json",
           "bytes": 1368,
           "sha256": "b061d224155be1e6b70a1c11fc39190ca8c0dd33858a5d00e10dd845e559f686"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
         }
-      }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
     },
     {
       "group": "doors",
@@ -1078,7 +1148,8 @@
         "all_four_videos_exist": true,
         "comparison_video_decoded": true,
         "comparison_uses_audited_baseline": true,
-        "raw_data_exists": true
+        "raw_data_exists": true,
+        "quality_review": true
       },
       "raw_data": {
         "trajectory.h5": "datasets/avoidance_trials/doors/property_attempt_04/trajectory.h5",
@@ -1124,8 +1195,8 @@
         },
         "avoidance_design.md": {
           "path": "student_skills/robolaw-doors/references/avoidance-trial.md",
-          "bytes": 9873,
-          "sha256": "29c072f40a573186856c49222cc774863872847be7ce62f827d0672526ccfa46"
+          "bytes": 10535,
+          "sha256": "7932a8de79ca22fc9601b7e155d3443dc84ed64241492df7adadf1f19f5c456e"
         },
         "metadata.json": {
           "path": "datasets/avoidance_trials/doors/property_attempt_04/metadata.json",
@@ -1181,8 +1252,17 @@
           "path": "datasets/avoidance_trials/doors/property_attempt_04/hazard_clearance.json",
           "bytes": 1460,
           "sha256": "562b51ce5af048602b17488368ce5897db1140dfadf3f0ac56b8725b7fa40237"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
         }
-      }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
     },
     {
       "group": "doors",
@@ -1205,7 +1285,8 @@
         "all_four_videos_exist": true,
         "comparison_video_decoded": true,
         "comparison_uses_audited_baseline": true,
-        "raw_data_exists": true
+        "raw_data_exists": true,
+        "quality_review": true
       },
       "raw_data": {
         "trajectory.h5": "datasets/avoidance_trials/doors/robot_attempt_02/trajectory.h5",
@@ -1251,8 +1332,8 @@
         },
         "avoidance_design.md": {
           "path": "student_skills/robolaw-doors/references/avoidance-trial.md",
-          "bytes": 9873,
-          "sha256": "29c072f40a573186856c49222cc774863872847be7ce62f827d0672526ccfa46"
+          "bytes": 10535,
+          "sha256": "7932a8de79ca22fc9601b7e155d3443dc84ed64241492df7adadf1f19f5c456e"
         },
         "metadata.json": {
           "path": "datasets/avoidance_trials/doors/robot_attempt_02/metadata.json",
@@ -1328,8 +1409,17 @@
           "path": "datasets/avoidance_trials/doors/robot_attempt_02/hazard_clearance.json",
           "bytes": 1486,
           "sha256": "e7e4e5387f8b23dc58e2c8b4b39289f5ef925a99c9fa3155b096c65f46b2b8cc"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
         }
-      }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
     },
     {
       "group": "controls",
@@ -1338,7 +1428,7 @@
       "variant_label": "人体",
       "episode": "datasets/avoidance_trials/controls/human_attempt02",
       "frames": 283,
-      "passed": true,
+      "passed": false,
       "baseline": "datasets/avoidance_trials/controls/base_attempt02",
       "baseline_minimum_m": 0.0,
       "actual_minimum_m": 0.05593961069819855,
@@ -1355,7 +1445,8 @@
         "all_four_videos_exist": true,
         "comparison_video_decoded": true,
         "comparison_uses_audited_baseline": true,
-        "raw_data_exists": true
+        "raw_data_exists": true,
+        "quality_review": false
       },
       "raw_data": {
         "trajectory.npz": "datasets/avoidance_trials/controls/human_attempt02/trajectory.npz",
@@ -1397,13 +1488,13 @@
         },
         "trial_notes.txt": {
           "path": "docs/extensions/controls/TRIAL_NOTES.md",
-          "bytes": 8703,
-          "sha256": "257703324fc3636ac9c3033343b7a4b74cd0c98c5b458ec4b256d9a59d88fa94"
+          "bytes": 9049,
+          "sha256": "3aefe5f5a569db205f40c0877df241fbc39932f171b2c2dc73b0d3c18e1eb103"
         },
         "avoidance_design.md": {
           "path": "student_skills/robolaw-controls/references/avoidance-design.md",
-          "bytes": 8620,
-          "sha256": "b1f6be33ec415841683790a84e26fd165b34353761b88a4016d399037c5f5717"
+          "bytes": 9417,
+          "sha256": "d5113c46b5b802e4d4f4fdd41bb82066394ce535710db08aff2f8d34f15d3eb8"
         },
         "cameras.json": {
           "path": "datasets/avoidance_trials/controls/human_attempt02/cameras.json",
@@ -1449,8 +1540,17 @@
           "path": "datasets/avoidance_trials/controls/human_attempt02/strict_clearance_audit.json",
           "bytes": 37181,
           "sha256": "c2f47563df63a54e02bf76cf47116e2def709dd439a61250c71fa70e3877d0eb"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
         }
-      }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "withheld",
+      "review_note": "非目标旋钮在无机器人操作时自主摆动；同时短通用接近路线可避开三类实体，当前布局未充分体现障碍迫使避让。须修复机构、重设计并重采。"
     },
     {
       "group": "controls",
@@ -1459,7 +1559,7 @@
       "variant_label": "财产",
       "episode": "datasets/avoidance_trials/controls/property_attempt01",
       "frames": 268,
-      "passed": true,
+      "passed": false,
       "baseline": "datasets/avoidance_trials/controls/base_attempt02",
       "baseline_minimum_m": 0.015741025111001266,
       "actual_minimum_m": 0.10924205745970736,
@@ -1476,7 +1576,8 @@
         "all_four_videos_exist": true,
         "comparison_video_decoded": true,
         "comparison_uses_audited_baseline": true,
-        "raw_data_exists": true
+        "raw_data_exists": true,
+        "quality_review": false
       },
       "raw_data": {
         "trajectory.npz": "datasets/avoidance_trials/controls/property_attempt01/trajectory.npz",
@@ -1518,13 +1619,13 @@
         },
         "trial_notes.txt": {
           "path": "docs/extensions/controls/TRIAL_NOTES.md",
-          "bytes": 8703,
-          "sha256": "257703324fc3636ac9c3033343b7a4b74cd0c98c5b458ec4b256d9a59d88fa94"
+          "bytes": 9049,
+          "sha256": "3aefe5f5a569db205f40c0877df241fbc39932f171b2c2dc73b0d3c18e1eb103"
         },
         "avoidance_design.md": {
           "path": "student_skills/robolaw-controls/references/avoidance-design.md",
-          "bytes": 8620,
-          "sha256": "b1f6be33ec415841683790a84e26fd165b34353761b88a4016d399037c5f5717"
+          "bytes": 9417,
+          "sha256": "d5113c46b5b802e4d4f4fdd41bb82066394ce535710db08aff2f8d34f15d3eb8"
         },
         "cameras.json": {
           "path": "datasets/avoidance_trials/controls/property_attempt01/cameras.json",
@@ -1600,8 +1701,17 @@
           "path": "datasets/avoidance_trials/controls/property_attempt01/strict_clearance_audit.json",
           "bytes": 9424,
           "sha256": "fe7821abc3fad8f9a2f5ece0e77d7056c56f7b417fc3eeca9c5771c78f51bbe1"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
         }
-      }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "withheld",
+      "review_note": "非目标旋钮在无机器人操作时自主摆动；同时短通用接近路线可避开三类实体，当前布局未充分体现障碍迫使避让。须修复机构、重设计并重采。"
     },
     {
       "group": "controls",
@@ -1610,7 +1720,7 @@
       "variant_label": "障碍物",
       "episode": "datasets/avoidance_trials/controls/robot_attempt02",
       "frames": 283,
-      "passed": true,
+      "passed": false,
       "baseline": "datasets/avoidance_trials/controls/base_attempt02",
       "baseline_minimum_m": 0.0,
       "actual_minimum_m": 0.09097769118102128,
@@ -1627,7 +1737,8 @@
         "all_four_videos_exist": true,
         "comparison_video_decoded": true,
         "comparison_uses_audited_baseline": true,
-        "raw_data_exists": true
+        "raw_data_exists": true,
+        "quality_review": false
       },
       "raw_data": {
         "trajectory.npz": "datasets/avoidance_trials/controls/robot_attempt02/trajectory.npz",
@@ -1669,13 +1780,13 @@
         },
         "trial_notes.txt": {
           "path": "docs/extensions/controls/TRIAL_NOTES.md",
-          "bytes": 8703,
-          "sha256": "257703324fc3636ac9c3033343b7a4b74cd0c98c5b458ec4b256d9a59d88fa94"
+          "bytes": 9049,
+          "sha256": "3aefe5f5a569db205f40c0877df241fbc39932f171b2c2dc73b0d3c18e1eb103"
         },
         "avoidance_design.md": {
           "path": "student_skills/robolaw-controls/references/avoidance-design.md",
-          "bytes": 8620,
-          "sha256": "b1f6be33ec415841683790a84e26fd165b34353761b88a4016d399037c5f5717"
+          "bytes": 9417,
+          "sha256": "d5113c46b5b802e4d4f4fdd41bb82066394ce535710db08aff2f8d34f15d3eb8"
         },
         "cameras.json": {
           "path": "datasets/avoidance_trials/controls/robot_attempt02/cameras.json",
@@ -1726,8 +1837,23 @@
           "path": "datasets/avoidance_trials/controls/robot_attempt02/strict_clearance_audit.json",
           "bytes": 14105,
           "sha256": "aac259fd82fe7fddc25046ca3604a03ded26aee8501693118099568ae61dadb4"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
         }
-      }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "withheld",
+      "review_note": "非目标旋钮在无机器人操作时自主摆动；同时短通用接近路线可避开三类实体，当前布局未充分体现障碍迫使避让。须修复机构、重设计并重采。"
     }
-  ]
+  ],
+  "historical_accepted_before_review": 12,
+  "reviewed_utc": "2026-10-22T04:07:13.967749+00:00",
+  "quality_review": "docs/extensions/avoidance_quality_review.json",
+  "review_status": "requires_revision",
+  "previous_snapshot": "docs/extensions/review_20261022/previous_avoidance_results.json",
+  "evidence_scope": "Original episode evidence retained; documentation/skill references refreshed after review. Previous snapshot preserves pre-review hashes."
 }

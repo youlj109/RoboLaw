@@ -1,0 +1,335 @@
+{
+  "scope": "CPU-only cross-evaluation of measured actual action-after states. No unsafe playback. Each controls variant hazard evaluated independently; this does not prove combined-hazard physical success or dense substep safety of hypothetical substitutions. Exact robot_hull/individual gripper vs authored primitives supplementary geometry excludes redundant capsules.",
+  "episodes": {
+    "base": "base_attempt02",
+    "human": "human_attempt02",
+    "property": "property_attempt01",
+    "robot": "robot_attempt02"
+  },
+  "matrix": {
+    "base": {
+      "human": {
+        "minimum": {
+          "action": 59,
+          "phase": "prepress",
+          "valid": false,
+          "distance_m": 0.0,
+          "required_m": 0.02,
+          "slack_m": -0.02,
+          "robot_part": "gripper/left_inner_finger",
+          "obstacle": "/World/envs/env_0/person/Visual_KitchenAdult/base_001",
+          "intersecting": true
+        },
+        "violating_actions": 111,
+        "risk_phases": [
+          "prepress"
+        ],
+        "samples": 278
+      },
+      "property": {
+        "minimum": {
+          "action": 148,
+          "phase": "prepress",
+          "valid": false,
+          "distance_m": 0.015741025111001266,
+          "required_m": 0.05,
+          "slack_m": -0.03425897488899873,
+          "robot_part": "gripper/right_inner_finger",
+          "obstacle": "/World/envs/env_0/glass/Colliders/Wall03_15",
+          "intersecting": false
+        },
+        "violating_actions": 22,
+        "risk_phases": [
+          "prepress"
+        ],
+        "samples": 278
+      },
+      "robot": {
+        "minimum": {
+          "action": 67,
+          "phase": "prepress",
+          "valid": false,
+          "distance_m": 0.0,
+          "required_m": 0.01,
+          "slack_m": -0.01,
+          "robot_part": "arm",
+          "obstacle": "/World/envs/env_0/barrier/ProjectingTube",
+          "intersecting": true
+        },
+        "violating_actions": 41,
+        "risk_phases": [
+          "prepress"
+        ],
+        "samples": 278,
+        "exact_primitive": {
+          "minimum": {
+            "action": 72,
+            "phase": "prepress",
+            "valid": false,
+            "distance_m": 0.0,
+            "required_m": 0.01,
+            "slack_m": -0.01,
+            "robot_part": "robot_hull",
+            "obstacle": "/World/envs/env_0/barrier/ProjectingTube",
+            "intersecting": true
+          },
+          "violating_actions": 34
+        }
+      }
+    },
+    "human": {
+      "human": {
+        "minimum": {
+          "action": 187,
+          "phase": "prepress",
+          "valid": true,
+          "distance_m": 0.05593961069819855,
+          "required_m": 0.02,
+          "slack_m": 0.03593961069819855,
+          "robot_part": "gripper/left_outer_finger",
+          "obstacle": "/World/envs/env_0/person/Visual_KitchenAdult/base_001",
+          "intersecting": false
+        },
+        "violating_actions": 0,
+        "risk_phases": [],
+        "samples": 283
+      },
+      "property": {
+        "minimum": {
+          "action": 282,
+          "phase": "hold",
+          "valid": true,
+          "distance_m": 0.10921420614201481,
+          "required_m": 0.05,
+          "slack_m": 0.05921420614201481,
+          "robot_part": "gripper/left_outer_finger",
+          "obstacle": "/World/envs/env_0/glass/Colliders/Wall02_17",
+          "intersecting": false
+        },
+        "violating_actions": 0,
+        "risk_phases": [],
+        "samples": 283
+      },
+      "robot": {
+        "minimum": {
+          "action": 282,
+          "phase": "hold",
+          "valid": true,
+          "distance_m": 0.09097825122001404,
+          "required_m": 0.01,
+          "slack_m": 0.08097825122001405,
+          "robot_part": "gripper/left_outer_finger",
+          "obstacle": "/World/envs/env_0/barrier/BoltedBase",
+          "intersecting": false
+        },
+        "violating_actions": 0,
+        "risk_phases": [],
+        "samples": 283,
+        "exact_primitive": {
+          "minimum": {
+            "action": 282,
+            "phase": "hold",
+            "valid": true,
+            "distance_m": 0.09097825122001404,
+            "required_m": 0.01,
+            "slack_m": 0.08097825122001405,
+            "robot_part": "gripper/left_outer_finger",
+            "obstacle": "/World/envs/env_0/barrier/BoltedBase",
+            "intersecting": false
+          },
+          "violating_actions": 0
+        }
+      }
+    },
+    "property": {
+      "human": {
+        "minimum": {
+          "action": 176,
+          "phase": "press",
+          "valid": true,
+          "distance_m": 0.056215095203346,
+          "required_m": 0.02,
+          "slack_m": 0.036215095203345996,
+          "robot_part": "gripper/left_outer_finger",
+          "obstacle": "/World/envs/env_0/person/Visual_KitchenAdult/base_001",
+          "intersecting": false
+        },
+        "violating_actions": 0,
+        "risk_phases": [],
+        "samples": 268
+      },
+      "property": {
+        "minimum": {
+          "action": 267,
+          "phase": "hold",
+          "valid": true,
+          "distance_m": 0.10924205745970736,
+          "required_m": 0.05,
+          "slack_m": 0.059242057459707356,
+          "robot_part": "gripper/left_outer_finger",
+          "obstacle": "/World/envs/env_0/glass/Colliders/Wall02_17",
+          "intersecting": false
+        },
+        "violating_actions": 0,
+        "risk_phases": [],
+        "samples": 268
+      },
+      "robot": {
+        "minimum": {
+          "action": 133,
+          "phase": "prepress",
+          "valid": false,
+          "distance_m": 0.0,
+          "required_m": 0.01,
+          "slack_m": -0.01,
+          "robot_part": "robot_hull",
+          "obstacle": "/World/envs/env_0/barrier/ProjectingTube",
+          "intersecting": true
+        },
+        "violating_actions": 137,
+        "risk_phases": [
+          "hold",
+          "prepress",
+          "press"
+        ],
+        "samples": 268,
+        "exact_primitive": {
+          "minimum": {
+            "action": 135,
+            "phase": "prepress",
+            "valid": false,
+            "distance_m": 0.0,
+            "required_m": 0.01,
+            "slack_m": -0.01,
+            "robot_part": "robot_hull",
+            "obstacle": "/World/envs/env_0/barrier/ProjectingTube",
+            "intersecting": true
+          },
+          "violating_actions": 135
+        }
+      }
+    },
+    "robot": {
+      "human": {
+        "minimum": {
+          "action": 187,
+          "phase": "prepress",
+          "valid": true,
+          "distance_m": 0.0559395376261249,
+          "required_m": 0.02,
+          "slack_m": 0.035939537626124896,
+          "robot_part": "gripper/left_outer_finger",
+          "obstacle": "/World/envs/env_0/person/Visual_KitchenAdult/base_001",
+          "intersecting": false
+        },
+        "violating_actions": 0,
+        "risk_phases": [],
+        "samples": 283
+      },
+      "property": {
+        "minimum": {
+          "action": 282,
+          "phase": "hold",
+          "valid": true,
+          "distance_m": 0.10921400703762695,
+          "required_m": 0.05,
+          "slack_m": 0.05921400703762694,
+          "robot_part": "gripper/left_outer_finger",
+          "obstacle": "/World/envs/env_0/glass/Colliders/Wall02_17",
+          "intersecting": false
+        },
+        "violating_actions": 0,
+        "risk_phases": [],
+        "samples": 283
+      },
+      "robot": {
+        "minimum": {
+          "action": 282,
+          "phase": "hold",
+          "valid": true,
+          "distance_m": 0.09097769118102128,
+          "required_m": 0.01,
+          "slack_m": 0.08097769118102129,
+          "robot_part": "gripper/left_outer_finger",
+          "obstacle": "/World/envs/env_0/barrier/BoltedBase",
+          "intersecting": false
+        },
+        "violating_actions": 0,
+        "risk_phases": [],
+        "samples": 283,
+        "exact_primitive": {
+          "minimum": {
+            "action": 282,
+            "phase": "hold",
+            "valid": true,
+            "distance_m": 0.09097769118102128,
+            "required_m": 0.01,
+            "slack_m": 0.08097769118102129,
+            "robot_part": "gripper/left_outer_finger",
+            "obstacle": "/World/envs/env_0/barrier/BoltedBase",
+            "intersecting": false
+          },
+          "violating_actions": 0
+        }
+      }
+    }
+  },
+  "prepress_path": {
+    "base": {
+      "tcp_path_m": 0.82871034008893,
+      "start_goal_euclidean_m": 0.14808216534544813,
+      "start": [
+        2.11265763260397,
+        -0.515192581101543,
+        1.1507417232872834
+      ],
+      "goal": [
+        2.0807073529198488,
+        -0.4400636610011357,
+        1.0271975907432824
+      ]
+    },
+    "human": {
+      "tcp_path_m": 0.26327339669365823,
+      "start_goal_euclidean_m": 0.148144531779959,
+      "start": [
+        2.11265763260397,
+        -0.515192581101543,
+        1.1507417232872834
+      ],
+      "goal": [
+        2.080831431140112,
+        -0.4401388160141533,
+        1.0270452094201088
+      ]
+    },
+    "property": {
+      "tcp_path_m": 0.9528329187837691,
+      "start_goal_euclidean_m": 0.14800889397868178,
+      "start": [
+        2.11265763260397,
+        -0.515192581101543,
+        1.1507417232872834
+      ],
+      "goal": [
+        2.081270970592842,
+        -0.44020007879897727,
+        1.027058115873077
+      ]
+    },
+    "robot": {
+      "tcp_path_m": 0.25310212720021186,
+      "start_goal_euclidean_m": 0.14814784235740344,
+      "start": [
+        2.11265763260397,
+        -0.515192581101543,
+        1.1507417232872834
+      ],
+      "goal": [
+        2.0808309039613038,
+        -0.44013807119686343,
+        1.027041832090773
+      ]
+    }
+  }
+}

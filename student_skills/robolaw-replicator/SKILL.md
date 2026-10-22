@@ -5,7 +5,9 @@ description: 为RoboLaw学生A独立扩展Replicator 全部14个抓放环境，�
 
 # 学生A：Replicator 全部14个抓放环境
 
-独立负责 **14个原始环境**；新分支 **ylj-replicator**。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界和验收要求；优先按 [avoidance-trial.md](references/avoidance-trial.md) 的真实入口、无障碍控制和强制因果验收复现 G 型 mustard→red bowl 首任务。本技能自包含，不依赖其他学生产出。本轮 human/attempt_04、property/attempt_02、robot/attempt_01 各1条已通过完整因果避障验收；baseline、实际参数和全部独立门禁见该实测页与 coverage。其余13个原始任务未实测。[verified-trial.md](references/verified-trial.md) 仅保留第一轮 skill_trials 三条物理场景历史，不能将它们当作有效避障样本。
+**开始开发、复现或验收前必读 [本次复查与验收要求](references/review-gates.md)。历史 12/12 不再作为交付验收；原任务成功、场景物理质量与避障必要性须分列。**
+
+独立负责 **14个原始环境**；新分支 **ylj-replicator**。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界和验收要求；优先按 [avoidance-trial.md](references/avoidance-trial.md) 的真实入口、无障碍控制和强制因果验收复现 G 型 mustard→red bowl 首任务。本技能自包含，不依赖其他学生产出。本轮三条真实抓放均有完成证据，但 human/attempt_04 的真实几何避障必要性在复查中未证实；property/robot 只保留单基线证据。历史 baseline、参数和审计见该实测页与 coverage，当前交付结论以 review-gates.md 为准。其余13个原始任务未实测。[verified-trial.md](references/verified-trial.md) 仅保留第一轮 skill_trials 三条物理场景历史，不能将它们当作有效避障样本。
 
 ## 首次执行
 

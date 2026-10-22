@@ -1,3 +1,5 @@
+2026-10-22 复审更正：本页保留历史过程，不能以其中 passed/accepted 或“通过”代替当前交付状态。A人体真实几何必要性未证实，D三条机构自转及避障设计待修；其余8条仅保留单轨迹证据。当前结论见 docs/extensions/AVOIDANCE_REVIEW_20261022.md 与 avoidance_quality_review.json。
+
 # 左取消按钮的真实采集试用
 
 > 以下记录保留首轮物理/采集试用及其历史限制，不能据其中三条成功认定避障有效。后续新增场景必须采用同源无障碍基线、原间隙反事实违例、新轨迹安全成功的成对验收；技能参考 `references/avoidance-design.md`，新配置为 `configs/extensions/controls/avoidance_left_button.json`，新数据位于 `datasets/avoidance_trials/controls/`。

@@ -1,0 +1,755 @@
+{
+  "review_date_local": "2026-10-22",
+  "scope": "Read-only independent raw-record and source inspection. No simulation run, source change, or new collection in this subtask.",
+  "doors": [
+    {
+      "episode": "datasets/avoidance_trials/doors/human_attempt_02",
+      "trajectory_sha256": "d4b7d172a1c8ae25b95ffefa8ead43c12587cbe94e4bd2fcf4a5b961de68909c",
+      "metadata_sha256": "faf11a6ac4e2c7f7d65d2984661dfcb59e9fabbba4867f8e66f2f444f97c9c2c",
+      "original_task": "kitchen_bench_lightwheel_open_fridge",
+      "original_success_rule": "First move >0.05 of joint range, then strict >0.2; range 0..90deg means strict >18deg.",
+      "threshold_rad": 0.3141592653589793,
+      "task_success_independently_recomputed": true,
+      "initial_q_rad": -1.5309218894753796e-17,
+      "precontact_max_abs_door_q_rad": 1.5309218894753796e-17,
+      "precontact_contact_count": 0,
+      "final_q_rad": 0.3146853744983673,
+      "final_deg": 18.030143833250193,
+      "final_margin_above_original_threshold_deg": 0.030143833250193097,
+      "first_native_open_index": 322,
+      "max_door_q_step_rad": 0.002073397859930992,
+      "max_record_discontinuity_rad": 0.0,
+      "phases": {
+        "settle": {
+          "frames": 1,
+          "start_index": 0,
+          "end_index": 0,
+          "start_door_rad": -1.5309218894753796e-17,
+          "end_door_rad": -1.5309218894753796e-17,
+          "bilateral_contacts": 0,
+          "bilateral_load_above_0_01N": 0,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ]
+        },
+        "pregrasp": {
+          "frames": 88,
+          "start_index": 1,
+          "end_index": 88,
+          "start_door_rad": -1.5309218894753796e-17,
+          "end_door_rad": -1.5309218894753796e-17,
+          "bilateral_contacts": 0,
+          "bilateral_load_above_0_01N": 0,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ]
+        },
+        "approach_handle": {
+          "frames": 49,
+          "start_index": 89,
+          "end_index": 137,
+          "start_door_rad": -1.5309218894753796e-17,
+          "end_door_rad": -1.5309218894753796e-17,
+          "bilateral_contacts": 0,
+          "bilateral_load_above_0_01N": 0,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ]
+        },
+        "grasp_handle": {
+          "frames": 20,
+          "start_index": 138,
+          "end_index": 157,
+          "start_door_rad": -1.5309218894753796e-17,
+          "end_door_rad": 1.5745429404745437e-09,
+          "bilateral_contacts": 20,
+          "bilateral_load_above_0_01N": 19,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0.0,
+            0.6324263215065002
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            1.0929383039474487,
+            2.2085962295532227
+          ]
+        },
+        "pull_door": {
+          "frames": 165,
+          "start_index": 158,
+          "end_index": 322,
+          "start_door_rad": 1.5745429404745437e-09,
+          "end_door_rad": 0.31456804275512695,
+          "bilateral_contacts": 165,
+          "bilateral_load_above_0_01N": 164,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0.0,
+            0.7713475227355957
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            1.0313303470611572,
+            1.5316460132598877
+          ]
+        },
+        "success_hold": {
+          "frames": 5,
+          "start_index": 323,
+          "end_index": 327,
+          "start_door_rad": 0.31456804275512695,
+          "end_door_rad": 0.3146853744983673,
+          "bilateral_contacts": 5,
+          "bilateral_load_above_0_01N": 5,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0.7639145255088806,
+            0.7531355619430542
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            1.0718460083007812,
+            1.1311130747199059
+          ]
+        }
+      },
+      "gates": {
+        "result.json": {
+          "value": true,
+          "sha256": "0b0af589dfd3f43e5209afb382ccc216a85598ddf6ef9fccfdab6c8cc49879cc"
+        },
+        "validation_full.json": {
+          "value": true,
+          "sha256": "9e3f614c13fb02190c811b5b216650a047d9a262c0edf77fe6230eb5d79fdd43"
+        },
+        "self_collision_audit.json": {
+          "value": true,
+          "sha256": "f2051b51ab728d7f28cd44bb99845bd8bd8515025d045e743df4894b433c06ea"
+        },
+        "avoidance_audit.json": {
+          "value": true,
+          "sha256": "c2635ab4aeba1bb955311240aed6668d22db624861896f18763c237196674d5a"
+        }
+      },
+      "avoidance_evidence_from_existing_audit": {
+        "old_min_m": 0.0,
+        "new_min_m": 0.04286365353961639,
+        "required_m": 0.02,
+        "old_has_actual_geometric_intersection": true,
+        "interpretation": "actual collision avoidance",
+        "handle_selection_z_offset_m": 0.18,
+        "path_comparison": {
+          "free_phase": "pregrasp",
+          "joint_max_deviation_rad": 1.2881547922067502,
+          "tcp_max_deviation_m": 0.12476061794729053,
+          "baseline_samples": 96,
+          "augmented_samples": 88,
+          "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+          "figure": "path_comparison.png"
+        }
+      },
+      "limitations": [
+        "Fixed sample only.",
+        "Door ends only 0.03..0.063 degrees over the original 18-degree threshold; this establishes original task success, not fully-open household usability.",
+        "Contact records are 15Hz action-end snapshots, while geometric safety checks are 120Hz; no claim of continuously measured force between action snapshots."
+      ]
+    },
+    {
+      "episode": "datasets/avoidance_trials/doors/property_attempt_04",
+      "trajectory_sha256": "693468714f3461d78850b6c03911df38d460bf8b550dac8f590a6d31d8871869",
+      "metadata_sha256": "272519df416c888d458a09d8135679529616e02424ab506a0843ef9cc82eae02",
+      "original_task": "kitchen_bench_lightwheel_open_fridge",
+      "original_success_rule": "First move >0.05 of joint range, then strict >0.2; range 0..90deg means strict >18deg.",
+      "threshold_rad": 0.3141592653589793,
+      "task_success_independently_recomputed": true,
+      "initial_q_rad": -1.5309218894753796e-17,
+      "precontact_max_abs_door_q_rad": 1.5309218894753796e-17,
+      "precontact_contact_count": 0,
+      "final_q_rad": 0.31488144397735596,
+      "final_deg": 18.04137778688757,
+      "final_margin_above_original_threshold_deg": 0.0413777868875691,
+      "first_native_open_index": 321,
+      "max_door_q_step_rad": 0.0020283572375774384,
+      "max_record_discontinuity_rad": 0.0,
+      "phases": {
+        "settle": {
+          "frames": 1,
+          "start_index": 0,
+          "end_index": 0,
+          "start_door_rad": -1.5309218894753796e-17,
+          "end_door_rad": -1.5309218894753796e-17,
+          "bilateral_contacts": 0,
+          "bilateral_load_above_0_01N": 0,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ]
+        },
+        "pregrasp": {
+          "frames": 88,
+          "start_index": 1,
+          "end_index": 88,
+          "start_door_rad": -1.5309218894753796e-17,
+          "end_door_rad": -1.5309218894753796e-17,
+          "bilateral_contacts": 0,
+          "bilateral_load_above_0_01N": 0,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ]
+        },
+        "approach_handle": {
+          "frames": 49,
+          "start_index": 89,
+          "end_index": 137,
+          "start_door_rad": -1.5309218894753796e-17,
+          "end_door_rad": -1.5309218894753796e-17,
+          "bilateral_contacts": 0,
+          "bilateral_load_above_0_01N": 0,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ]
+        },
+        "grasp_handle": {
+          "frames": 20,
+          "start_index": 138,
+          "end_index": 157,
+          "start_door_rad": -1.5309218894753796e-17,
+          "end_door_rad": 1.5368222250344843e-09,
+          "bilateral_contacts": 20,
+          "bilateral_load_above_0_01N": 19,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0.0,
+            0.6157945990562439
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            1.1075427532196045,
+            1.3721505403518677
+          ]
+        },
+        "pull_door": {
+          "frames": 164,
+          "start_index": 158,
+          "end_index": 321,
+          "start_door_rad": 1.5368222250344843e-09,
+          "end_door_rad": 0.31472310423851013,
+          "bilateral_contacts": 164,
+          "bilateral_load_above_0_01N": 164,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0.19571946561336517,
+            0.7569588422775269
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            0.9356344938278198,
+            1.6422953605651855
+          ]
+        },
+        "success_hold": {
+          "frames": 5,
+          "start_index": 322,
+          "end_index": 326,
+          "start_door_rad": 0.31472310423851013,
+          "end_door_rad": 0.31488144397735596,
+          "bilateral_contacts": 5,
+          "bilateral_load_above_0_01N": 5,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0.7754698395729065,
+            0.8581080436706543
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            1.0415266752243042,
+            1.0934135913848877
+          ]
+        }
+      },
+      "gates": {
+        "result.json": {
+          "value": true,
+          "sha256": "25d963a4e1e1da01a670399351442b8d54d693f7d2398a8a55ba50d19a3f5fd3"
+        },
+        "validation_full.json": {
+          "value": true,
+          "sha256": "b41e9043d5b6e5809a6b8e3fbdb0901628b01bcc36322b43c20bb81862cc1637"
+        },
+        "self_collision_audit.json": {
+          "value": true,
+          "sha256": "920d40a5d4f2996d4d552b5daf7259f5d46dad9e62f12d667fcb7341986f58a8"
+        },
+        "avoidance_audit.json": {
+          "value": true,
+          "sha256": "515eff921464f3bc645f987b0a94d8d14b96572e4b4d3e8720319379b831d6f4"
+        }
+      },
+      "avoidance_evidence_from_existing_audit": {
+        "old_min_m": 0.041706801991614514,
+        "new_min_m": 0.10048379026930221,
+        "required_m": 0.05,
+        "old_has_actual_geometric_intersection": false,
+        "interpretation": "safety-clearance avoidance; old path has no geometric intersection in sampled exact geometry",
+        "handle_selection_z_offset_m": 0.18,
+        "path_comparison": {
+          "free_phase": "pregrasp",
+          "joint_max_deviation_rad": 0.9769824629825644,
+          "tcp_max_deviation_m": 0.10115468657425972,
+          "baseline_samples": 96,
+          "augmented_samples": 88,
+          "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+          "figure": "path_comparison.png"
+        }
+      },
+      "limitations": [
+        "Fixed sample only.",
+        "Door ends only 0.03..0.063 degrees over the original 18-degree threshold; this establishes original task success, not fully-open household usability.",
+        "Contact records are 15Hz action-end snapshots, while geometric safety checks are 120Hz; no claim of continuously measured force between action snapshots."
+      ]
+    },
+    {
+      "episode": "datasets/avoidance_trials/doors/robot_attempt_02",
+      "trajectory_sha256": "fbf04836b1f7c0da96e43478815086c7e5d405fae415fa5775f20342d5f1b39e",
+      "metadata_sha256": "e39a9e0694245124d5eb05633dcd9c7e4555862edea64044c20e88b559547934",
+      "original_task": "kitchen_bench_lightwheel_open_fridge",
+      "original_success_rule": "First move >0.05 of joint range, then strict >0.2; range 0..90deg means strict >18deg.",
+      "threshold_rad": 0.3141592653589793,
+      "task_success_independently_recomputed": true,
+      "initial_q_rad": -1.5309218894753796e-17,
+      "precontact_max_abs_door_q_rad": 1.5309218894753796e-17,
+      "precontact_contact_count": 0,
+      "final_q_rad": 0.3152610957622528,
+      "final_deg": 18.06313023184677,
+      "final_margin_above_original_threshold_deg": 0.06313023184677036,
+      "first_native_open_index": 320,
+      "max_door_q_step_rad": 0.0020795930176973343,
+      "max_record_discontinuity_rad": 0.0,
+      "phases": {
+        "settle": {
+          "frames": 1,
+          "start_index": 0,
+          "end_index": 0,
+          "start_door_rad": -1.5309218894753796e-17,
+          "end_door_rad": -1.5309218894753796e-17,
+          "bilateral_contacts": 0,
+          "bilateral_load_above_0_01N": 0,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ]
+        },
+        "pregrasp": {
+          "frames": 93,
+          "start_index": 1,
+          "end_index": 93,
+          "start_door_rad": -1.5309218894753796e-17,
+          "end_door_rad": -1.5309218894753796e-17,
+          "bilateral_contacts": 0,
+          "bilateral_load_above_0_01N": 0,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ]
+        },
+        "approach_handle": {
+          "frames": 49,
+          "start_index": 94,
+          "end_index": 142,
+          "start_door_rad": -1.5309218894753796e-17,
+          "end_door_rad": -1.5309218894753796e-17,
+          "bilateral_contacts": 0,
+          "bilateral_load_above_0_01N": 0,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            0,
+            0
+          ]
+        },
+        "grasp_handle": {
+          "frames": 20,
+          "start_index": 143,
+          "end_index": 162,
+          "start_door_rad": -1.5309218894753796e-17,
+          "end_door_rad": 6.167537503642961e-05,
+          "bilateral_contacts": 20,
+          "bilateral_load_above_0_01N": 19,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0.0,
+            0.7641646862030029
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            1.036097764968872,
+            2.2311596870422363
+          ]
+        },
+        "pull_door": {
+          "frames": 158,
+          "start_index": 163,
+          "end_index": 320,
+          "start_door_rad": 6.167537503642961e-05,
+          "end_door_rad": 0.31494683027267456,
+          "bilateral_contacts": 158,
+          "bilateral_load_above_0_01N": 151,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0.0,
+            0.7477783560752869
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            0.9505893588066101,
+            1.78340744972229
+          ]
+        },
+        "success_hold": {
+          "frames": 5,
+          "start_index": 321,
+          "end_index": 325,
+          "start_door_rad": 0.31494683027267456,
+          "end_door_rad": 0.3152610957622528,
+          "bilateral_contacts": 5,
+          "bilateral_load_above_0_01N": 5,
+          "min_each_finger_sum_abs_normal_force_N": [
+            0.9291166067123413,
+            0.6141688227653503
+          ],
+          "max_each_finger_sum_abs_normal_force_N": [
+            1.1564342975616455,
+            1.0690091848373413
+          ]
+        }
+      },
+      "gates": {
+        "result.json": {
+          "value": true,
+          "sha256": "dbfb7a476d36b21621cf4d8b7ac37dab64d4e932b4be1f338d8508c23f6d393b"
+        },
+        "validation_full.json": {
+          "value": true,
+          "sha256": "e9e73ca0d5a03d3489aa5e3dea04725015fdd921c6868ac9747611298ca74cc5"
+        },
+        "self_collision_audit.json": {
+          "value": true,
+          "sha256": "aa693f749fceae2147033758fd29f220458482af0167eef94b96fe3227f72ed2"
+        },
+        "avoidance_audit.json": {
+          "value": true,
+          "sha256": "a263b32360e4c51a9b16eb1ff7dbb20fd7ed9da0358a368638b208abd550d504"
+        }
+      },
+      "avoidance_evidence_from_existing_audit": {
+        "old_min_m": 0.001206230229108864,
+        "new_min_m": 0.04255536347949833,
+        "required_m": 0.01,
+        "old_has_actual_geometric_intersection": false,
+        "interpretation": "safety-clearance avoidance; old path has no geometric intersection in sampled exact geometry",
+        "handle_selection_z_offset_m": 0.12,
+        "path_comparison": {
+          "free_phase": "pregrasp",
+          "joint_max_deviation_rad": 1.0031507718181651,
+          "tcp_max_deviation_m": 0.12208976705706338,
+          "baseline_samples": 96,
+          "augmented_samples": 93,
+          "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+          "figure": "path_comparison_avoidance_audit_v2.png"
+        }
+      },
+      "limitations": [
+        "Fixed sample only.",
+        "Door ends only 0.03..0.063 degrees over the original 18-degree threshold; this establishes original task success, not fully-open household usability.",
+        "Contact records are 15Hz action-end snapshots, while geometric safety checks are 120Hz; no claim of continuously measured force between action snapshots."
+      ]
+    }
+  ],
+  "source_review": {
+    "files_sha256": {
+      "scripts/extensions/doors/collect.py": "4f4370af8b578ec5ff62974250ab76bcfcf607f368e084add89a7670d7bfdfe5",
+      "kitchen_safety/extensions/doors/environment.py": "e1565bc62684e5fccd0e82ea9f75654da91287d5ac6d6dbd23a2a87932d7d9ab",
+      "scripts/extensions/controls/collect_trial.py": "a336b2527e509dae4d6feae03675cf747d362cfa01311466c669e1055f8fda84",
+      "kitchen_safety/extensions/controls/environment.py": "200329330dbd99616f97a30159370c13bf8482dc9fa118250b7bf0f8b1e6ca09",
+      "third_party/IsaacLab-Arena/isaaclab_arena/assets/object_reference.py": "ed1861ddd4649a85cc8f8097888852132b5450a5d14c8757791f54f563ba259b",
+      "third_party/IsaacLab-Arena/isaaclab_arena/affordances/pressable.py": "1c6f495d33bbebe49245b0398e70212d657f2db81fb8ff58e6c5cf3c05c5cd4d",
+      "third_party/IsaacLab-Arena/isaaclab_arena/tasks/press_button_task.py": "d2a74e184bc12036c37959b5da61850b733424bb7207645b1da443b91f1c3239",
+      "third_party/IsaacLab-Arena/isaaclab_arena/utils/joint_utils.py": "7c58ab07827dd2f7b98e313f3c7471815719574217b33d3813b8e301a41aadaa"
+    },
+    "door_collector": "Only robot env.step actions during execution. Door states are read; collision proxy transforms update separately. Original initialization reset can set door q. No execution-time door joint/root write or external attachment found. Automatic success reset disabled; 22s trajectories are below 120s timeout.",
+    "controls": "Only robot actions. Source PressButtonTask reset calls unpress once; subsequent predicate reads target prismatic button. ObjectReference articulation has actuators={}, so no project joint command drives appliance. Background reset_nested_physics=False does not freeze nested bodies or remove gravity."
+  },
+  "toaster_source_diagnosis": {
+    "actual_task": "Press and hold LEFT CANCEL BUTTON on TOASTER, not microwave or rotate knob.",
+    "target_joint": "sideL_button_cancel_joint",
+    "target_type": "PhysicsPrismaticJoint",
+    "target_limits_m": [
+      0,
+      0.0030166050419211388
+    ],
+    "target_success_strictly_greater_m": 0.0015083025209605694,
+    "target_drive": "linear stiffness100 damping1 targetPosition=-0.01m targetVelocity0; spring points toward unpressed lower limit, not pressed success.",
+    "moving_non_target_joint": "sideL_knob_doneness_joint",
+    "moving_type": "PhysicsRevoluteJoint",
+    "source_limits_deg": [
+      0,
+      265
+    ],
+    "source_drive_schema": "PhysicsDriveAPI:X only, no PhysicsDriveAPI:angular",
+    "source_drive_attributes": {
+      "X_stiffness": 0,
+      "X_damping": 0.05,
+      "X_target_velocity": 0,
+      "X_target_position": 0,
+      "joint_friction": 0.5,
+      "joint_armature": 0.001
+    },
+    "mass_kg": 0.2,
+    "com_and_inertia": "Unspecified/default COM -inf and inertia0 -> inferred by physics from colliders.",
+    "gravity": "No disableGravity authored; nonkinematic dynamic body, initial angularVelocity0.",
+    "cpu_source_geometry": [
+      {
+        "side": "L",
+        "hinge_world_m": [
+          2.0263766546614903,
+          -0.3879310396740973,
+          0.9951015281691554
+        ],
+        "axis_world": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "collision_shapes": [
+          {
+            "path": "/world/toaster_main_group/Toaster015_sideL_knob_doneness/Collisions/sideL_knob_doneness_main",
+            "shape": "Cube",
+            "center_world_m": [
+              2.0266718698087187,
+              -0.3937703810518227,
+              0.9949175646684832
+            ],
+            "volume_m3": 1.8689435352422568e-06,
+            "params": {
+              "size": 2.0
+            },
+            "world_transform": [
+              [
+                0.0025673089508003394,
+                0.0,
+                0.007723197809854508,
+                2.0266718698087187
+              ],
+              [
+                0.0,
+                0.005890099859524991,
+                0.0,
+                -0.3937703810518227
+              ],
+              [
+                -0.0025190328751352113,
+                0.0,
+                0.007871209249294447,
+                0.9949175646684832
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ]
+          },
+          {
+            "path": "/world/toaster_main_group/Toaster015_sideL_knob_doneness/Collisions/sideL_knob_doneness_Collider1",
+            "shape": "Cylinder",
+            "center_world_m": [
+              2.0263766246942123,
+              -0.38775473468590466,
+              0.9951577374178768
+            ],
+            "volume_m3": 1.2453931199785355e-06,
+            "params": {
+              "radius": 0.012285972945392132,
+              "height": 0.002583127934485674,
+              "axis": "Z"
+            },
+            "world_transform": [
+              [
+                1.0055349913009253,
+                0.0,
+                0.0,
+                2.0263766246942123
+              ],
+              [
+                0.0,
+                3.4417996124780536e-08,
+                -1.0055349913009248,
+                -0.38775473468590466
+              ],
+              [
+                0.0,
+                1.0055349913009248,
+                3.4417996124780536e-08,
+                0.9951577374178768
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ]
+          }
+        ],
+        "volume_weighted_com_world_m": [
+          2.0265538041417663,
+          -0.39136478222750193,
+          0.9950136074290498
+        ],
+        "com_offset_from_axis_m": 0.00019776752742246272,
+        "gravity_axis_torque_nm_using_primitive_com_estimate": 0.0003475672803015684,
+        "scope": "CPU geometry estimate only; overlap volumes counted separately; actual PhysX mass properties must be queried in neutral probe"
+      },
+      {
+        "side": "R",
+        "hinge_world_m": [
+          2.1986790184194454,
+          -0.38765387232003384,
+          0.9946021497029393
+        ],
+        "axis_world": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "collision_shapes": [
+          {
+            "path": "/world/toaster_main_group/Toaster015_sideR_knob_doneness/Collisions/sideR_knob_doneness_main",
+            "shape": "Cube",
+            "center_world_m": [
+              2.19863453199528,
+              -0.39377579014549857,
+              0.9950060018517204
+            ],
+            "volume_m3": 1.8689435352422568e-06,
+            "params": {
+              "size": 2.0
+            },
+            "world_transform": [
+              [
+                0.0025673089508003394,
+                0.0,
+                0.007723197809854508,
+                2.19863453199528
+              ],
+              [
+                0.0,
+                0.005890099859524991,
+                0.0,
+                -0.39377579014549857
+              ],
+              [
+                -0.0025190328751352113,
+                0.0,
+                0.007871209249294447,
+                0.9950060018517204
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ]
+          },
+          {
+            "path": "/world/toaster_main_group/Toaster015_sideR_knob_doneness/Collisions/sideR_knob_doneness_Collider1",
+            "shape": "Cylinder",
+            "center_world_m": [
+              2.1986146561981577,
+              -0.38750393853646614,
+              0.9948492486394567
+            ],
+            "volume_m3": 1.2453931199785355e-06,
+            "params": {
+              "radius": 0.012285972945392132,
+              "height": 0.002583127934485674,
+              "axis": "Z"
+            },
+            "world_transform": [
+              [
+                1.0055349913009253,
+                0.0,
+                0.0,
+                2.1986146561981577
+              ],
+              [
+                0.0,
+                3.4417996124780536e-08,
+                -1.0055349913009248,
+                -0.38750393853646614
+              ],
+              [
+                0.0,
+                1.0055349913009248,
+                3.4417996124780536e-08,
+                0.9948492486394567
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ]
+          }
+        ],
+        "volume_weighted_com_world_m": [
+          2.198626583856164,
+          -0.3912677373213695,
+          0.9949433177575777
+        ],
+        "com_offset_from_axis_m": 0.00034517390534673594,
+        "gravity_axis_torque_nm_using_primitive_com_estimate": -0.0001028766131583474,
+        "scope": "CPU geometry estimate only; overlap volumes counted separately; actual PhysX mass properties must be queried in neutral probe"
+      }
+    ],
+    "left_approximate_gravity_equilibrium_deg": 63.60441812664413,
+    "left_approximate_unforced_swing_max_from_zero_deg": 127.20883625328825,
+    "mechanism_assessment": "A passive, slightly off-axis center of mass can rotate under gravity. Authored X drive for a single revolute joint may not be its effective angular drive; actual PhysX stiffness/damping must be queried. The 0.198mm geometric COM offset predicts approximately 63.6deg equilibrium and 127deg swing, consistent with root observed 121.8deg autonomous left knob excursion. This source inspection does not by itself prove exact runtime drive mapping.",
+    "evidence_files": [
+      "reports/review_20261022/toaster_source_usd.json",
+      "reports/review_20261022/knob_mass_geometry.json"
+    ],
+    "recommended_checks": [
+      "Neutral robot hold: confirm knob evolves without robot contact.",
+      "Read effective articulation stiffness/damping and PhysX COM/inertia; gravity-off or COM-centered control if needed.",
+      "Do not count knob motion toward target task success; target prismatic displacement and loaded physical button contact are separate signals."
+    ]
+  }
+}

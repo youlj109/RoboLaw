@@ -1,0 +1,1825 @@
+{
+  "review": "Independent raw trajectory/contact and sampled RGB review of formal A/B episodes",
+  "scope": "CPU only; no simulation rerun; source-code audit and stored raw observations",
+  "episodes": [
+    {
+      "group": "replicator",
+      "variant": "human",
+      "episode": "datasets/avoidance_trials/replicator/human/attempt_04",
+      "raw_measurements": {
+        "frames": 515,
+        "duration_s": 34.333333333333336,
+        "phases": [
+          {
+            "phase": "settle",
+            "first": 0,
+            "last": 514,
+            "frames": 90,
+            "object_xyz_first": [
+              0.7679482102394104,
+              -0.4282604455947876,
+              0.9742106795310974
+            ],
+            "object_xyz_last": [
+              0.44988375902175903,
+              -0.46373307704925537,
+              0.976149320602417
+            ],
+            "speed_max_m_s": 0.00030755484476685524
+          },
+          {
+            "phase": "pregrasp",
+            "first": 30,
+            "last": 94,
+            "frames": 65,
+            "object_xyz_first": [
+              0.7679481506347656,
+              -0.4282607138156891,
+              0.9742105603218079
+            ],
+            "object_xyz_last": [
+              0.7679482102394104,
+              -0.42826077342033386,
+              0.9742105603218079
+            ],
+            "speed_max_m_s": 0.00047834054566919804
+          },
+          {
+            "phase": "approach",
+            "first": 95,
+            "last": 151,
+            "frames": 57,
+            "object_xyz_first": [
+              0.7679482102394104,
+              -0.42826077342033386,
+              0.9742105603218079
+            ],
+            "object_xyz_last": [
+              0.7679482102394104,
+              -0.42826080322265625,
+              0.9742105603218079
+            ],
+            "speed_max_m_s": 0.00038821162888780236
+          },
+          {
+            "phase": "close",
+            "first": 152,
+            "last": 181,
+            "frames": 30,
+            "object_xyz_first": [
+              0.7679482102394104,
+              -0.42826080322265625,
+              0.9742105603218079
+            ],
+            "object_xyz_last": [
+              0.7680656909942627,
+              -0.4280209243297577,
+              0.9742105603218079
+            ],
+            "speed_max_m_s": 0.06601779162883759
+          },
+          {
+            "phase": "lift",
+            "first": 182,
+            "last": 239,
+            "frames": 58,
+            "object_xyz_first": [
+              0.7680656909942627,
+              -0.4280209243297577,
+              0.9742105603218079
+            ],
+            "object_xyz_last": [
+              0.7669682502746582,
+              -0.42763110995292664,
+              1.112897515296936
+            ],
+            "speed_max_m_s": 0.06114823371171951
+          },
+          {
+            "phase": "above_bowl",
+            "first": 240,
+            "last": 308,
+            "frames": 69,
+            "object_xyz_first": [
+              0.7669682502746582,
+              -0.42763110995292664,
+              1.112897515296936
+            ],
+            "object_xyz_last": [
+              0.4509837031364441,
+              -0.4734264612197876,
+              1.0803508758544922
+            ],
+            "speed_max_m_s": 0.1707124561071396
+          },
+          {
+            "phase": "lower",
+            "first": 309,
+            "last": 366,
+            "frames": 58,
+            "object_xyz_first": [
+              0.4509837031364441,
+              -0.4734264612197876,
+              1.0803508758544922
+            ],
+            "object_xyz_last": [
+              0.4515782594680786,
+              -0.4715118408203125,
+              0.9782652258872986
+            ],
+            "speed_max_m_s": 0.024337895214557648
+          },
+          {
+            "phase": "release",
+            "first": 367,
+            "last": 396,
+            "frames": 30,
+            "object_xyz_first": [
+              0.4515782594680786,
+              -0.4715118408203125,
+              0.9782652258872986
+            ],
+            "object_xyz_last": [
+              0.4494204521179199,
+              -0.46401888132095337,
+              0.9762616157531738
+            ],
+            "speed_max_m_s": 0.111614890396595
+          },
+          {
+            "phase": "retreat",
+            "first": 397,
+            "last": 454,
+            "frames": 58,
+            "object_xyz_first": [
+              0.4494204521179199,
+              -0.46401888132095337,
+              0.9762616157531738
+            ],
+            "object_xyz_last": [
+              0.44988375902175903,
+              -0.46373307704925537,
+              0.976149320602417
+            ],
+            "speed_max_m_s": 0.0045200977474451065
+          }
+        ],
+        "object_lift_end_gain_m": 0.13868683576583862,
+        "maximum_object_height_gain_m": 0.22363442182540894,
+        "release_end_to_final_seconds": 7.866666666666666,
+        "final_object_xyz": [
+          0.44988375902175903,
+          -0.46373307704925537,
+          0.976149320602417
+        ],
+        "final_destination_xyz": [
+          0.4500265121459961,
+          -0.47502249479293823,
+          0.9222506880760193
+        ],
+        "final_object_minus_destination_xyz": [
+          -0.00014275312423706055,
+          0.011289417743682861,
+          0.053898632526397705
+        ],
+        "final_speed_m_s": 8.674800483277068e-05,
+        "final_finger_joint_rad": 4.124935256647616e-13,
+        "last_1s_object_position_diameter_upper_bound_m": 4.214684778958144e-08,
+        "last_1s_max_object_speed_m_s": 9.145351214101538e-05,
+        "last_1s_gripper_joint_max_abs_rad": 4.1332657240399084e-13,
+        "next_observation_to_next_frame_observation_position_error_m": 0.0,
+        "largest_recorded_step_object_displacement_m": 0.01298513449728489,
+        "final_support_force_world_n": [
+          -0.13777464628219604,
+          0.030106673017144203,
+          2.8320627212524414
+        ],
+        "support_force_angle_from_up_deg": 2.850753272626394,
+        "source_success": true,
+        "source_current_final_on_destination": true,
+        "raw_contact_recomputation": [
+          {
+            "phase": "close",
+            "recorded_contact_actions": 30,
+            "both_fingers_loaded_in_body_actions": 29,
+            "both_fingers_near_in_body_actions": 30,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "lift",
+            "recorded_contact_actions": 58,
+            "both_fingers_loaded_in_body_actions": 58,
+            "both_fingers_near_in_body_actions": 58,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "above_bowl",
+            "recorded_contact_actions": 69,
+            "both_fingers_loaded_in_body_actions": 69,
+            "both_fingers_near_in_body_actions": 69,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "lower",
+            "recorded_contact_actions": 58,
+            "both_fingers_loaded_in_body_actions": 58,
+            "both_fingers_near_in_body_actions": 58,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "release",
+            "recorded_contact_actions": 0,
+            "both_fingers_loaded_in_body_actions": 0,
+            "both_fingers_near_in_body_actions": 0,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": null
+          }
+        ],
+        "sampled_raw_frame_indices": [
+          0,
+          239,
+          303,
+          396,
+          514
+        ],
+        "sampled_raw_montage": "reports/review_20261022/replicator_human_raw_review.jpg"
+      },
+      "sha256": {
+        "trajectory.h5": "144dad93ae809198c501ba187626ca34902478e3c27c2d8b289f28565caf71cd",
+        "grasp_contacts.json": "5e692e69fc3ec44d9ad5b1bf0a5c957981bc35444b7e08cce17d717ea278ab65",
+        "result.json": "5e4b284762dde0e1274bdad34467396e96e52a2b23c9723cca05cb39da2df04f"
+      },
+      "video_raw_consistency": {
+        "video": "datasets/avoidance_trials/replicator/human/attempt_04/external_camera_2.mp4",
+        "fully_decoded_frames": 515,
+        "fps": 15.0,
+        "samples": [
+          {
+            "frame": 0,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6854040075231482
+          },
+          {
+            "frame": 239,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.7583047598379629
+          },
+          {
+            "frame": 303,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.7326370804398148
+          },
+          {
+            "frame": 396,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.7443728298611112
+          },
+          {
+            "frame": 514,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.7952625868055556
+          }
+        ],
+        "matches_raw_sequence": true
+      },
+      "task_outcome_review": {
+        "verdict": "confirmed_from_recorded_physics_contacts_and_sampled_RGB",
+        "bilateral_grasp_and_lift": true,
+        "released_into_original_target_container": true,
+        "finite_recorded_final_stability": true,
+        "video_raw_sequence_consistent": true,
+        "no_runtime_task_object_pose_setter_or_simulator_weld_found_in_inspected_source": true,
+        "caveats": [
+          "Grasp contact records end before release; open gripper joint, retreat and sampled RGB corroborate separation.",
+          "Filtered destination contact support is saved in the final result; the raw H5 does not retain the entire destination-specific support-force history.",
+          "This review confirms recorded task outcome, not visual salience or generalization of obstacle avoidance."
+        ]
+      }
+    },
+    {
+      "group": "replicator",
+      "variant": "property",
+      "episode": "datasets/avoidance_trials/replicator/property/attempt_02",
+      "raw_measurements": {
+        "frames": 525,
+        "duration_s": 35.0,
+        "phases": [
+          {
+            "phase": "settle",
+            "first": 0,
+            "last": 524,
+            "frames": 90,
+            "object_xyz_first": [
+              0.7679466605186462,
+              -0.4282605051994324,
+              0.9742105007171631
+            ],
+            "object_xyz_last": [
+              0.4493020474910736,
+              -0.45528823137283325,
+              0.9760819673538208
+            ],
+            "speed_max_m_s": 0.00024245043459814042
+          },
+          {
+            "phase": "pregrasp",
+            "first": 30,
+            "last": 93,
+            "frames": 64,
+            "object_xyz_first": [
+              0.7679470181465149,
+              -0.4282606244087219,
+              0.9742105007171631
+            ],
+            "object_xyz_last": [
+              0.7679470181465149,
+              -0.4282606840133667,
+              0.9742105007171631
+            ],
+            "speed_max_m_s": 0.0005886020371690392
+          },
+          {
+            "phase": "approach",
+            "first": 94,
+            "last": 150,
+            "frames": 57,
+            "object_xyz_first": [
+              0.7679470181465149,
+              -0.4282606840133667,
+              0.9742105007171631
+            ],
+            "object_xyz_last": [
+              0.7679470181465149,
+              -0.4282606244087219,
+              0.9742105603218079
+            ],
+            "speed_max_m_s": 0.0009281556122004986
+          },
+          {
+            "phase": "close",
+            "first": 151,
+            "last": 180,
+            "frames": 30,
+            "object_xyz_first": [
+              0.7679470181465149,
+              -0.4282606244087219,
+              0.9742105603218079
+            ],
+            "object_xyz_last": [
+              0.7680757641792297,
+              -0.4279915988445282,
+              0.9742104411125183
+            ],
+            "speed_max_m_s": 0.06797807663679123
+          },
+          {
+            "phase": "lift",
+            "first": 181,
+            "last": 238,
+            "frames": 58,
+            "object_xyz_first": [
+              0.7680757641792297,
+              -0.4279915988445282,
+              0.9742104411125183
+            ],
+            "object_xyz_last": [
+              0.7669169902801514,
+              -0.42740073800086975,
+              1.1134803295135498
+            ],
+            "speed_max_m_s": 0.06113199517130852
+          },
+          {
+            "phase": "above_bowl",
+            "first": 239,
+            "last": 319,
+            "frames": 81,
+            "object_xyz_first": [
+              0.7669169902801514,
+              -0.42740073800086975,
+              1.1134803295135498
+            ],
+            "object_xyz_last": [
+              0.45054110884666443,
+              -0.4735860824584961,
+              1.0784385204315186
+            ],
+            "speed_max_m_s": 0.25232499837875366
+          },
+          {
+            "phase": "lower",
+            "first": 320,
+            "last": 376,
+            "frames": 57,
+            "object_xyz_first": [
+              0.45054110884666443,
+              -0.4735860824584961,
+              1.0784385204315186
+            ],
+            "object_xyz_last": [
+              0.4511285424232483,
+              -0.4715786278247833,
+              0.9797131419181824
+            ],
+            "speed_max_m_s": 0.022248724475502968
+          },
+          {
+            "phase": "release",
+            "first": 377,
+            "last": 406,
+            "frames": 30,
+            "object_xyz_first": [
+              0.4511285424232483,
+              -0.4715786278247833,
+              0.9797131419181824
+            ],
+            "object_xyz_last": [
+              0.4544564485549927,
+              -0.4610477685928345,
+              0.9773738384246826
+            ],
+            "speed_max_m_s": 0.08446481078863144
+          },
+          {
+            "phase": "retreat",
+            "first": 407,
+            "last": 464,
+            "frames": 58,
+            "object_xyz_first": [
+              0.4544564485549927,
+              -0.4610477685928345,
+              0.9773738384246826
+            ],
+            "object_xyz_last": [
+              0.4493020474910736,
+              -0.45528823137283325,
+              0.9760819673538208
+            ],
+            "speed_max_m_s": 0.02869211696088314
+          }
+        ],
+        "object_lift_end_gain_m": 0.13926982879638672,
+        "maximum_object_height_gain_m": 0.35639190673828125,
+        "release_end_to_final_seconds": 7.866666666666666,
+        "final_object_xyz": [
+          0.4493020474910736,
+          -0.45528823137283325,
+          0.9760819673538208
+        ],
+        "final_destination_xyz": [
+          0.45002663135528564,
+          -0.47502249479293823,
+          0.9222506880760193
+        ],
+        "final_object_minus_destination_xyz": [
+          -0.0007245838642120361,
+          0.01973426342010498,
+          0.053831279277801514
+        ],
+        "final_speed_m_s": 4.6745670260861516e-05,
+        "final_finger_joint_rad": 5.036702391963965e-13,
+        "last_1s_object_position_diameter_upper_bound_m": 2.9802322387695312e-08,
+        "last_1s_max_object_speed_m_s": 4.870873090112582e-05,
+        "last_1s_gripper_joint_max_abs_rad": 5.109069634370855e-13,
+        "next_observation_to_next_frame_observation_position_error_m": 0.0,
+        "largest_recorded_step_object_displacement_m": 0.017847532406449318,
+        "final_support_force_world_n": [
+          -0.1708616465330124,
+          0.04117969051003456,
+          2.963085651397705
+        ],
+        "support_force_angle_from_up_deg": 3.3944945122964802,
+        "source_success": true,
+        "source_current_final_on_destination": true,
+        "raw_contact_recomputation": [
+          {
+            "phase": "close",
+            "recorded_contact_actions": 30,
+            "both_fingers_loaded_in_body_actions": 29,
+            "both_fingers_near_in_body_actions": 30,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "lift",
+            "recorded_contact_actions": 58,
+            "both_fingers_loaded_in_body_actions": 58,
+            "both_fingers_near_in_body_actions": 58,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "above_bowl",
+            "recorded_contact_actions": 81,
+            "both_fingers_loaded_in_body_actions": 81,
+            "both_fingers_near_in_body_actions": 81,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "lower",
+            "recorded_contact_actions": 57,
+            "both_fingers_loaded_in_body_actions": 57,
+            "both_fingers_near_in_body_actions": 57,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "release",
+            "recorded_contact_actions": 0,
+            "both_fingers_loaded_in_body_actions": 0,
+            "both_fingers_near_in_body_actions": 0,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": null
+          }
+        ],
+        "sampled_raw_frame_indices": [
+          0,
+          238,
+          308,
+          406,
+          524
+        ],
+        "sampled_raw_montage": "reports/review_20261022/replicator_property_raw_review.jpg"
+      },
+      "sha256": {
+        "trajectory.h5": "2bd5c467672f61b75150fa9fe7c9081935b37a0b532a333467e3a4a7477e8c1a",
+        "grasp_contacts.json": "1935860f22bfe6dfa13ff93eb00b1c19d0f3eaaa486fcdec3897aa54bb525b7c",
+        "result.json": "b2be0d0a0bdffbe6e4149a9e9f59bc3869380398886a634a92f98864107b59cc"
+      },
+      "video_raw_consistency": {
+        "video": "datasets/avoidance_trials/replicator/property/attempt_02/external_camera_2.mp4",
+        "fully_decoded_frames": 525,
+        "fps": 15.0,
+        "samples": [
+          {
+            "frame": 0,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.7078776041666666
+          },
+          {
+            "frame": 238,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.7925698061342592
+          },
+          {
+            "frame": 308,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.776693431712963
+          },
+          {
+            "frame": 406,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.757263816550926
+          },
+          {
+            "frame": 524,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.8227788628472221
+          }
+        ],
+        "matches_raw_sequence": true
+      },
+      "task_outcome_review": {
+        "verdict": "confirmed_from_recorded_physics_contacts_and_sampled_RGB",
+        "bilateral_grasp_and_lift": true,
+        "released_into_original_target_container": true,
+        "finite_recorded_final_stability": true,
+        "video_raw_sequence_consistent": true,
+        "no_runtime_task_object_pose_setter_or_simulator_weld_found_in_inspected_source": true,
+        "caveats": [
+          "Grasp contact records end before release; open gripper joint, retreat and sampled RGB corroborate separation.",
+          "Filtered destination contact support is saved in the final result; the raw H5 does not retain the entire destination-specific support-force history.",
+          "This review confirms recorded task outcome, not visual salience or generalization of obstacle avoidance."
+        ]
+      }
+    },
+    {
+      "group": "replicator",
+      "variant": "robot",
+      "episode": "datasets/avoidance_trials/replicator/robot/attempt_01",
+      "raw_measurements": {
+        "frames": 512,
+        "duration_s": 34.13333333333333,
+        "phases": [
+          {
+            "phase": "settle",
+            "first": 0,
+            "last": 511,
+            "frames": 90,
+            "object_xyz_first": [
+              0.7679482102394104,
+              -0.4282604455947876,
+              0.9742106795310974
+            ],
+            "object_xyz_last": [
+              0.4504970908164978,
+              -0.45813533663749695,
+              0.9761202931404114
+            ],
+            "speed_max_m_s": 0.00030755484476685524
+          },
+          {
+            "phase": "pregrasp",
+            "first": 30,
+            "last": 97,
+            "frames": 68,
+            "object_xyz_first": [
+              0.7679481506347656,
+              -0.4282607138156891,
+              0.9742105603218079
+            ],
+            "object_xyz_last": [
+              0.7679482102394104,
+              -0.4282607436180115,
+              0.9742105603218079
+            ],
+            "speed_max_m_s": 0.00047834054566919804
+          },
+          {
+            "phase": "approach",
+            "first": 98,
+            "last": 154,
+            "frames": 57,
+            "object_xyz_first": [
+              0.7679482102394104,
+              -0.4282607436180115,
+              0.9742105603218079
+            ],
+            "object_xyz_last": [
+              0.7679482102394104,
+              -0.42826077342033386,
+              0.9742105603218079
+            ],
+            "speed_max_m_s": 0.00038821162888780236
+          },
+          {
+            "phase": "close",
+            "first": 155,
+            "last": 184,
+            "frames": 30,
+            "object_xyz_first": [
+              0.7679482102394104,
+              -0.42826077342033386,
+              0.9742105603218079
+            ],
+            "object_xyz_last": [
+              0.7679740786552429,
+              -0.4283358156681061,
+              0.9742209315299988
+            ],
+            "speed_max_m_s": 0.046095818281173706
+          },
+          {
+            "phase": "lift",
+            "first": 185,
+            "last": 242,
+            "frames": 58,
+            "object_xyz_first": [
+              0.7679740786552429,
+              -0.4283358156681061,
+              0.9742209315299988
+            ],
+            "object_xyz_last": [
+              0.7671095728874207,
+              -0.4267435073852539,
+              1.1145402193069458
+            ],
+            "speed_max_m_s": 0.06291249394416809
+          },
+          {
+            "phase": "above_bowl",
+            "first": 243,
+            "last": 306,
+            "frames": 64,
+            "object_xyz_first": [
+              0.7671095728874207,
+              -0.4267435073852539,
+              1.1145402193069458
+            ],
+            "object_xyz_last": [
+              0.4509267210960388,
+              -0.4732697010040283,
+              1.080715298652649
+            ],
+            "speed_max_m_s": 0.23972217738628387
+          },
+          {
+            "phase": "lower",
+            "first": 307,
+            "last": 364,
+            "frames": 58,
+            "object_xyz_first": [
+              0.4509267210960388,
+              -0.4732697010040283,
+              1.080715298652649
+            ],
+            "object_xyz_last": [
+              0.45174628496170044,
+              -0.4709755778312683,
+              0.9784029126167297
+            ],
+            "speed_max_m_s": 0.020000863820314407
+          },
+          {
+            "phase": "release",
+            "first": 365,
+            "last": 394,
+            "frames": 30,
+            "object_xyz_first": [
+              0.45174628496170044,
+              -0.4709755778312683,
+              0.9784029126167297
+            ],
+            "object_xyz_last": [
+              0.4540104269981384,
+              -0.4669480323791504,
+              0.9776919484138489
+            ],
+            "speed_max_m_s": 0.10142785310745239
+          },
+          {
+            "phase": "retreat",
+            "first": 395,
+            "last": 451,
+            "frames": 57,
+            "object_xyz_first": [
+              0.4540104269981384,
+              -0.4669480323791504,
+              0.9776919484138489
+            ],
+            "object_xyz_last": [
+              0.4504970908164978,
+              -0.45813533663749695,
+              0.9761202931404114
+            ],
+            "speed_max_m_s": 0.12184476107358932
+          }
+        ],
+        "object_lift_end_gain_m": 0.1403295397758484,
+        "maximum_object_height_gain_m": 0.3637334704399109,
+        "release_end_to_final_seconds": 7.8,
+        "final_object_xyz": [
+          0.4504970908164978,
+          -0.45813533663749695,
+          0.9761202931404114
+        ],
+        "final_destination_xyz": [
+          0.4500265419483185,
+          -0.47502249479293823,
+          0.9222506880760193
+        ],
+        "final_object_minus_destination_xyz": [
+          0.0004705488681793213,
+          0.016887158155441284,
+          0.05386960506439209
+        ],
+        "final_speed_m_s": 4.546880882116966e-05,
+        "final_finger_joint_rad": 1.4838086271826145e-12,
+        "last_1s_object_position_diameter_upper_bound_m": 2.9802322387695312e-08,
+        "last_1s_max_object_speed_m_s": 5.3875668527325615e-05,
+        "last_1s_gripper_joint_max_abs_rad": 1.5302678828960081e-12,
+        "next_observation_to_next_frame_observation_position_error_m": 0.0,
+        "largest_recorded_step_object_displacement_m": 0.01764734275639057,
+        "final_support_force_world_n": [
+          -0.16171953082084656,
+          0.03240875154733658,
+          2.9384653568267822
+        ],
+        "support_force_angle_from_up_deg": 3.2126192282528643,
+        "source_success": true,
+        "source_current_final_on_destination": true,
+        "raw_contact_recomputation": [
+          {
+            "phase": "close",
+            "recorded_contact_actions": 30,
+            "both_fingers_loaded_in_body_actions": 30,
+            "both_fingers_near_in_body_actions": 30,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "lift",
+            "recorded_contact_actions": 58,
+            "both_fingers_loaded_in_body_actions": 58,
+            "both_fingers_near_in_body_actions": 58,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "above_bowl",
+            "recorded_contact_actions": 64,
+            "both_fingers_loaded_in_body_actions": 64,
+            "both_fingers_near_in_body_actions": 64,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "lower",
+            "recorded_contact_actions": 58,
+            "both_fingers_loaded_in_body_actions": 58,
+            "both_fingers_near_in_body_actions": 58,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "release",
+            "recorded_contact_actions": 0,
+            "both_fingers_loaded_in_body_actions": 0,
+            "both_fingers_near_in_body_actions": 0,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": null
+          }
+        ],
+        "sampled_raw_frame_indices": [
+          0,
+          242,
+          304,
+          394,
+          511
+        ],
+        "sampled_raw_montage": "reports/review_20261022/replicator_robot_raw_review.jpg"
+      },
+      "sha256": {
+        "trajectory.h5": "d79d8cafc4a063ceb1979a7cda21b7918c8a4b29d12e6f42f5a4f77502232ac1",
+        "grasp_contacts.json": "f901e9a74849591f9810297cffb2ccb3c2e4b980da9ed863f6c3d2fe7933d82f",
+        "result.json": "69b66d6d91fc437d73eacd616bfe401bc9729e2b6cc952e5d72e7309cb0d8107"
+      },
+      "video_raw_consistency": {
+        "video": "datasets/avoidance_trials/replicator/robot/attempt_01/external_camera_2.mp4",
+        "fully_decoded_frames": 512,
+        "fps": 15.0,
+        "samples": [
+          {
+            "frame": 0,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.7108445457175927
+          },
+          {
+            "frame": 242,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.8077166521990742
+          },
+          {
+            "frame": 304,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.748267505787037
+          },
+          {
+            "frame": 394,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.7616746238425927
+          },
+          {
+            "frame": 511,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.8252000144675926
+          }
+        ],
+        "matches_raw_sequence": true
+      },
+      "task_outcome_review": {
+        "verdict": "confirmed_from_recorded_physics_contacts_and_sampled_RGB",
+        "bilateral_grasp_and_lift": true,
+        "released_into_original_target_container": true,
+        "finite_recorded_final_stability": true,
+        "video_raw_sequence_consistent": true,
+        "no_runtime_task_object_pose_setter_or_simulator_weld_found_in_inspected_source": true,
+        "caveats": [
+          "Grasp contact records end before release; open gripper joint, retreat and sampled RGB corroborate separation.",
+          "Filtered destination contact support is saved in the final result; the raw H5 does not retain the entire destination-specific support-force history.",
+          "This review confirms recorded task outcome, not visual salience or generalization of obstacle avoidance."
+        ]
+      }
+    },
+    {
+      "group": "lightwheel_pick_place",
+      "variant": "human",
+      "episode": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01",
+      "raw_measurements": {
+        "frames": 474,
+        "duration_s": 31.6,
+        "phases": [
+          {
+            "phase": "pregrasp",
+            "first": 0,
+            "last": 90,
+            "frames": 91,
+            "object_xyz_first": [
+              3.836453437805176,
+              -0.34280261397361755,
+              0.9234713315963745
+            ],
+            "object_xyz_last": [
+              3.836453437805176,
+              -0.34280258417129517,
+              0.9234713315963745
+            ],
+            "speed_max_m_s": 0.00017359154298901558
+          },
+          {
+            "phase": "approach",
+            "first": 91,
+            "last": 153,
+            "frames": 63,
+            "object_xyz_first": [
+              3.836453437805176,
+              -0.34280258417129517,
+              0.9234713315963745
+            ],
+            "object_xyz_last": [
+              3.836453437805176,
+              -0.3428025543689728,
+              0.9234713315963745
+            ],
+            "speed_max_m_s": 0.00017430883599445224
+          },
+          {
+            "phase": "close",
+            "first": 154,
+            "last": 183,
+            "frames": 30,
+            "object_xyz_first": [
+              3.836453437805176,
+              -0.3428025543689728,
+              0.9234713315963745
+            ],
+            "object_xyz_last": [
+              3.8359215259552,
+              -0.34238049387931824,
+              0.9259403944015503
+            ],
+            "speed_max_m_s": 0.04582133889198303
+          },
+          {
+            "phase": "lift",
+            "first": 184,
+            "last": 250,
+            "frames": 67,
+            "object_xyz_first": [
+              3.8359215259552,
+              -0.34238049387931824,
+              0.9259403944015503
+            ],
+            "object_xyz_last": [
+              3.836216688156128,
+              -0.3428487479686737,
+              1.0841684341430664
+            ],
+            "speed_max_m_s": 0.08998692780733109
+          },
+          {
+            "phase": "transfer",
+            "first": 251,
+            "last": 321,
+            "frames": 71,
+            "object_xyz_first": [
+              3.836216688156128,
+              -0.3428487479686737,
+              1.0841684341430664
+            ],
+            "object_xyz_last": [
+              4.217462062835693,
+              -0.43378007411956787,
+              1.0986255407333374
+            ],
+            "speed_max_m_s": 0.15372833609580994
+          },
+          {
+            "phase": "lower",
+            "first": 322,
+            "last": 379,
+            "frames": 58,
+            "object_xyz_first": [
+              4.217462062835693,
+              -0.43378007411956787,
+              1.0986255407333374
+            ],
+            "object_xyz_last": [
+              4.21749210357666,
+              -0.43397966027259827,
+              1.0537822246551514
+            ],
+            "speed_max_m_s": 0.043674930930137634
+          },
+          {
+            "phase": "release",
+            "first": 380,
+            "last": 414,
+            "frames": 35,
+            "object_xyz_first": [
+              4.21749210357666,
+              -0.43397966027259827,
+              1.0537822246551514
+            ],
+            "object_xyz_last": [
+              4.216423511505127,
+              -0.4381105899810791,
+              0.9332015514373779
+            ],
+            "speed_max_m_s": 1.2728121280670166
+          },
+          {
+            "phase": "retreat",
+            "first": 415,
+            "last": 472,
+            "frames": 58,
+            "object_xyz_first": [
+              4.216423511505127,
+              -0.4381105899810791,
+              0.9332015514373779
+            ],
+            "object_xyz_last": [
+              4.216423511505127,
+              -0.4381106197834015,
+              0.9332016706466675
+            ],
+            "speed_max_m_s": 0.00014622713206335902
+          },
+          {
+            "phase": "settle_final",
+            "first": 473,
+            "last": 473,
+            "frames": 1,
+            "object_xyz_first": [
+              4.216423511505127,
+              -0.4381106197834015,
+              0.9332016706466675
+            ],
+            "object_xyz_last": [
+              4.216423511505127,
+              -0.4381105601787567,
+              0.9332014322280884
+            ],
+            "speed_max_m_s": 0.00011919011012651026
+          }
+        ],
+        "object_lift_end_gain_m": 0.1606971025466919,
+        "maximum_object_height_gain_m": 0.18976330757141113,
+        "release_end_to_final_seconds": 3.933333333333333,
+        "final_object_xyz": [
+          4.216423511505127,
+          -0.4381105601787567,
+          0.9332014322280884
+        ],
+        "final_destination_xyz": [
+          4.218209266662598,
+          -0.43350479006767273,
+          0.9197757840156555
+        ],
+        "final_object_minus_destination_xyz": [
+          -0.0017857551574707031,
+          -0.004605770111083984,
+          0.013425648212432861
+        ],
+        "final_speed_m_s": 0.00011919011012651026,
+        "final_finger_joint_rad": -3.770043166539949e-10,
+        "last_1s_object_position_diameter_upper_bound_m": 2.4575624024691933e-07,
+        "last_1s_max_object_speed_m_s": 0.00014622713206335902,
+        "last_1s_gripper_joint_max_abs_rad": 2.045532454530985e-08,
+        "next_observation_to_next_frame_observation_position_error_m": 0.0,
+        "largest_recorded_step_object_displacement_m": 0.06341811269521713,
+        "final_support_force_world_n": [
+          0.01252022571861744,
+          0.02865890972316265,
+          1.1035135984420776
+        ],
+        "support_force_angle_from_up_deg": 1.623371552257567,
+        "source_success": true,
+        "source_current_final_on_destination": true,
+        "raw_contact_recomputation": [
+          {
+            "phase": "close",
+            "recorded_contact_actions": 30,
+            "both_fingers_loaded_in_body_actions": 29,
+            "both_fingers_near_in_body_actions": 29,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "lift",
+            "recorded_contact_actions": 67,
+            "both_fingers_loaded_in_body_actions": 67,
+            "both_fingers_near_in_body_actions": 67,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "transfer",
+            "recorded_contact_actions": 71,
+            "both_fingers_loaded_in_body_actions": 71,
+            "both_fingers_near_in_body_actions": 71,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "lower",
+            "recorded_contact_actions": 58,
+            "both_fingers_loaded_in_body_actions": 58,
+            "both_fingers_near_in_body_actions": 58,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "release",
+            "recorded_contact_actions": 0,
+            "both_fingers_loaded_in_body_actions": 0,
+            "both_fingers_near_in_body_actions": 0,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": null
+          }
+        ],
+        "sampled_raw_frame_indices": [
+          0,
+          250,
+          286,
+          414,
+          473
+        ],
+        "sampled_raw_montage": "reports/review_20261022/lightwheel_pick_place_human_raw_review.jpg"
+      },
+      "sha256": {
+        "trajectory.h5": "ba7c173c4901f5bf61ecd07590a59c4a09aab0842d2d937424a4817b0b28bc82",
+        "contacts.json": "777257d755e35ed61932be61e7c9137db9667589d456a73418479914e9127975",
+        "result.json": "d63b3322a3022849ec585fa8620688e93f39f21d621b978bdcaf268ff838b28c"
+      },
+      "video_raw_consistency": {
+        "video": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/external_camera_2.mp4",
+        "fully_decoded_frames": 474,
+        "fps": 15.0,
+        "samples": [
+          {
+            "frame": 0,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6798972800925926
+          },
+          {
+            "frame": 250,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6137109375
+          },
+          {
+            "frame": 286,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6417762586805555
+          },
+          {
+            "frame": 414,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6674508101851853
+          },
+          {
+            "frame": 473,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6783333333333332
+          }
+        ],
+        "matches_raw_sequence": true
+      },
+      "task_outcome_review": {
+        "verdict": "confirmed_from_recorded_physics_contacts_and_sampled_RGB",
+        "bilateral_grasp_and_lift": true,
+        "released_into_original_target_container": true,
+        "finite_recorded_final_stability": true,
+        "video_raw_sequence_consistent": true,
+        "no_runtime_task_object_pose_setter_or_simulator_weld_found_in_inspected_source": true,
+        "caveats": [
+          "Grasp contact records end before release; open gripper joint, retreat and sampled RGB corroborate separation.",
+          "Filtered destination contact support is saved in the final result; the raw H5 does not retain the entire destination-specific support-force history.",
+          "This review confirms recorded task outcome, not visual salience or generalization of obstacle avoidance."
+        ]
+      }
+    },
+    {
+      "group": "lightwheel_pick_place",
+      "variant": "property",
+      "episode": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01",
+      "raw_measurements": {
+        "frames": 490,
+        "duration_s": 32.666666666666664,
+        "phases": [
+          {
+            "phase": "pregrasp",
+            "first": 0,
+            "last": 91,
+            "frames": 92,
+            "object_xyz_first": [
+              3.836510419845581,
+              -0.3428398668766022,
+              0.9234713912010193
+            ],
+            "object_xyz_last": [
+              3.836510419845581,
+              -0.34283989667892456,
+              0.9234713315963745
+            ],
+            "speed_max_m_s": 0.0001709799689706415
+          },
+          {
+            "phase": "approach",
+            "first": 92,
+            "last": 152,
+            "frames": 61,
+            "object_xyz_first": [
+              3.836510419845581,
+              -0.34283989667892456,
+              0.9234713315963745
+            ],
+            "object_xyz_last": [
+              3.836510419845581,
+              -0.34283989667892456,
+              0.9234713315963745
+            ],
+            "speed_max_m_s": 0.00017100248078349978
+          },
+          {
+            "phase": "close",
+            "first": 153,
+            "last": 182,
+            "frames": 30,
+            "object_xyz_first": [
+              3.836510419845581,
+              -0.34283989667892456,
+              0.9234713315963745
+            ],
+            "object_xyz_last": [
+              3.8364293575286865,
+              -0.34065884351730347,
+              0.9236595034599304
+            ],
+            "speed_max_m_s": 0.02898534946143627
+          },
+          {
+            "phase": "lift",
+            "first": 183,
+            "last": 245,
+            "frames": 63,
+            "object_xyz_first": [
+              3.8364293575286865,
+              -0.34065884351730347,
+              0.9236595034599304
+            ],
+            "object_xyz_last": [
+              3.8357887268066406,
+              -0.32517385482788086,
+              1.0740993022918701
+            ],
+            "speed_max_m_s": 0.09019552916288376
+          },
+          {
+            "phase": "transfer",
+            "first": 246,
+            "last": 337,
+            "frames": 92,
+            "object_xyz_first": [
+              3.8357887268066406,
+              -0.32517385482788086,
+              1.0740993022918701
+            ],
+            "object_xyz_last": [
+              4.217416763305664,
+              -0.43377041816711426,
+              1.0986335277557373
+            ],
+            "speed_max_m_s": 0.14920184016227722
+          },
+          {
+            "phase": "lower",
+            "first": 338,
+            "last": 395,
+            "frames": 58,
+            "object_xyz_first": [
+              4.217416763305664,
+              -0.43377041816711426,
+              1.0986335277557373
+            ],
+            "object_xyz_last": [
+              4.2173686027526855,
+              -0.43395501375198364,
+              1.0537309646606445
+            ],
+            "speed_max_m_s": 0.04199811816215515
+          },
+          {
+            "phase": "release",
+            "first": 396,
+            "last": 430,
+            "frames": 35,
+            "object_xyz_first": [
+              4.2173686027526855,
+              -0.43395501375198364,
+              1.0537309646606445
+            ],
+            "object_xyz_last": [
+              4.216209411621094,
+              -0.43670734763145447,
+              0.933648407459259
+            ],
+            "speed_max_m_s": 1.2751272916793823
+          },
+          {
+            "phase": "retreat",
+            "first": 431,
+            "last": 488,
+            "frames": 58,
+            "object_xyz_first": [
+              4.216209411621094,
+              -0.43670734763145447,
+              0.933648407459259
+            ],
+            "object_xyz_last": [
+              4.216209411621094,
+              -0.43670734763145447,
+              0.9336484670639038
+            ],
+            "speed_max_m_s": 0.0004015360027551651
+          },
+          {
+            "phase": "settle_final",
+            "first": 489,
+            "last": 489,
+            "frames": 1,
+            "object_xyz_first": [
+              4.216209411621094,
+              -0.43670734763145447,
+              0.9336484670639038
+            ],
+            "object_xyz_last": [
+              4.216209411621094,
+              -0.4367073178291321,
+              0.933648407459259
+            ],
+            "speed_max_m_s": 0.0003908306243829429
+          }
+        ],
+        "object_lift_end_gain_m": 0.15062791109085083,
+        "maximum_object_height_gain_m": 0.32327085733413696,
+        "release_end_to_final_seconds": 3.933333333333333,
+        "final_object_xyz": [
+          4.216209411621094,
+          -0.4367073178291321,
+          0.933648407459259
+        ],
+        "final_destination_xyz": [
+          4.218242645263672,
+          -0.43351536989212036,
+          0.9197758436203003
+        ],
+        "final_object_minus_destination_xyz": [
+          -0.002033233642578125,
+          -0.0031919479370117188,
+          0.01387256383895874
+        ],
+        "final_speed_m_s": 0.0003908306243829429,
+        "final_finger_joint_rad": -4.3044792730206893e-10,
+        "last_1s_object_position_diameter_upper_bound_m": 1.3328003944934608e-07,
+        "last_1s_max_object_speed_m_s": 0.0003970684192609042,
+        "last_1s_gripper_joint_max_abs_rad": 2.1169077157878746e-08,
+        "next_observation_to_next_frame_observation_position_error_m": 0.0,
+        "largest_recorded_step_object_displacement_m": 0.06330849975347519,
+        "final_support_force_world_n": [
+          -0.01975880190730095,
+          -0.03192106634378433,
+          1.1129341125488281
+        ],
+        "support_force_angle_from_up_deg": 1.9319693769608621,
+        "source_success": true,
+        "source_current_final_on_destination": true,
+        "raw_contact_recomputation": [
+          {
+            "phase": "close",
+            "recorded_contact_actions": 30,
+            "both_fingers_loaded_in_body_actions": 30,
+            "both_fingers_near_in_body_actions": 30,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "lift",
+            "recorded_contact_actions": 63,
+            "both_fingers_loaded_in_body_actions": 63,
+            "both_fingers_near_in_body_actions": 63,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "transfer",
+            "recorded_contact_actions": 92,
+            "both_fingers_loaded_in_body_actions": 92,
+            "both_fingers_near_in_body_actions": 92,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "lower",
+            "recorded_contact_actions": 58,
+            "both_fingers_loaded_in_body_actions": 58,
+            "both_fingers_near_in_body_actions": 58,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "release",
+            "recorded_contact_actions": 0,
+            "both_fingers_loaded_in_body_actions": 0,
+            "both_fingers_near_in_body_actions": 0,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": null
+          }
+        ],
+        "sampled_raw_frame_indices": [
+          0,
+          245,
+          292,
+          430,
+          489
+        ],
+        "sampled_raw_montage": "reports/review_20261022/lightwheel_pick_place_property_raw_review.jpg"
+      },
+      "sha256": {
+        "trajectory.h5": "ede928f76c5c4cbcc52ffaf3205ce0b1e247953290623ed2edd9c211a953bab9",
+        "contacts.json": "4c3ce092bc356ee56ce77deb754da16002fcc4d260255a2b54d101130acd3ebe",
+        "result.json": "83d0e7a3ff198a2e4a3906ccd27ada2b9f2ce4467d2aaeabb3864766a4c2ad05"
+      },
+      "video_raw_consistency": {
+        "video": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/external_camera_2.mp4",
+        "fully_decoded_frames": 490,
+        "fps": 15.0,
+        "samples": [
+          {
+            "frame": 0,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6582179542824074
+          },
+          {
+            "frame": 245,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6158076533564816
+          },
+          {
+            "frame": 292,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6292310474537037
+          },
+          {
+            "frame": 430,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6783275462962963
+          },
+          {
+            "frame": 489,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.694578269675926
+          }
+        ],
+        "matches_raw_sequence": true
+      },
+      "task_outcome_review": {
+        "verdict": "confirmed_from_recorded_physics_contacts_and_sampled_RGB",
+        "bilateral_grasp_and_lift": true,
+        "released_into_original_target_container": true,
+        "finite_recorded_final_stability": true,
+        "video_raw_sequence_consistent": true,
+        "no_runtime_task_object_pose_setter_or_simulator_weld_found_in_inspected_source": true,
+        "caveats": [
+          "Grasp contact records end before release; open gripper joint, retreat and sampled RGB corroborate separation.",
+          "Filtered destination contact support is saved in the final result; the raw H5 does not retain the entire destination-specific support-force history.",
+          "This review confirms recorded task outcome, not visual salience or generalization of obstacle avoidance."
+        ]
+      }
+    },
+    {
+      "group": "lightwheel_pick_place",
+      "variant": "robot",
+      "episode": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03",
+      "raw_measurements": {
+        "frames": 498,
+        "duration_s": 33.2,
+        "phases": [
+          {
+            "phase": "pregrasp",
+            "first": 0,
+            "last": 91,
+            "frames": 92,
+            "object_xyz_first": [
+              3.836510419845581,
+              -0.3428398668766022,
+              0.9234713912010193
+            ],
+            "object_xyz_last": [
+              3.836510419845581,
+              -0.34283989667892456,
+              0.9234713315963745
+            ],
+            "speed_max_m_s": 0.0001709799689706415
+          },
+          {
+            "phase": "approach",
+            "first": 92,
+            "last": 152,
+            "frames": 61,
+            "object_xyz_first": [
+              3.836510419845581,
+              -0.34283989667892456,
+              0.9234713315963745
+            ],
+            "object_xyz_last": [
+              3.836510419845581,
+              -0.34283989667892456,
+              0.9234713315963745
+            ],
+            "speed_max_m_s": 0.00017100248078349978
+          },
+          {
+            "phase": "close",
+            "first": 153,
+            "last": 182,
+            "frames": 30,
+            "object_xyz_first": [
+              3.836510419845581,
+              -0.34283989667892456,
+              0.9234713315963745
+            ],
+            "object_xyz_last": [
+              3.836510181427002,
+              -0.34036335349082947,
+              0.9235587120056152
+            ],
+            "speed_max_m_s": 0.11445033550262451
+          },
+          {
+            "phase": "lift",
+            "first": 183,
+            "last": 245,
+            "frames": 63,
+            "object_xyz_first": [
+              3.836510181427002,
+              -0.34036335349082947,
+              0.9235587120056152
+            ],
+            "object_xyz_last": [
+              3.8358449935913086,
+              -0.3247080445289612,
+              1.0740505456924438
+            ],
+            "speed_max_m_s": 0.0900343582034111
+          },
+          {
+            "phase": "transfer",
+            "first": 246,
+            "last": 345,
+            "frames": 100,
+            "object_xyz_first": [
+              3.8358449935913086,
+              -0.3247080445289612,
+              1.0740505456924438
+            ],
+            "object_xyz_last": [
+              4.217473983764648,
+              -0.43388521671295166,
+              1.0983481407165527
+            ],
+            "speed_max_m_s": 0.10177721083164215
+          },
+          {
+            "phase": "lower",
+            "first": 346,
+            "last": 403,
+            "frames": 58,
+            "object_xyz_first": [
+              4.217473983764648,
+              -0.43388521671295166,
+              1.0983481407165527
+            ],
+            "object_xyz_last": [
+              4.217319965362549,
+              -0.4340604543685913,
+              1.053480625152588
+            ],
+            "speed_max_m_s": 0.04271158203482628
+          },
+          {
+            "phase": "release",
+            "first": 404,
+            "last": 438,
+            "frames": 35,
+            "object_xyz_first": [
+              4.217319965362549,
+              -0.4340604543685913,
+              1.053480625152588
+            ],
+            "object_xyz_last": [
+              4.216442108154297,
+              -0.43713170289993286,
+              0.933661699295044
+            ],
+            "speed_max_m_s": 1.2748606204986572
+          },
+          {
+            "phase": "retreat",
+            "first": 439,
+            "last": 496,
+            "frames": 58,
+            "object_xyz_first": [
+              4.216442108154297,
+              -0.43713170289993286,
+              0.933661699295044
+            ],
+            "object_xyz_last": [
+              4.216442108154297,
+              -0.43713173270225525,
+              0.933661699295044
+            ],
+            "speed_max_m_s": 0.00014448970614466816
+          },
+          {
+            "phase": "settle_final",
+            "first": 497,
+            "last": 497,
+            "frames": 1,
+            "object_xyz_first": [
+              4.216442108154297,
+              -0.43713173270225525,
+              0.933661699295044
+            ],
+            "object_xyz_last": [
+              4.216442108154297,
+              -0.4371316730976105,
+              0.933661699295044
+            ],
+            "speed_max_m_s": 0.00014288019156083465
+          }
+        ],
+        "object_lift_end_gain_m": 0.15057915449142456,
+        "maximum_object_height_gain_m": 0.17487674951553345,
+        "release_end_to_final_seconds": 3.933333333333333,
+        "final_object_xyz": [
+          4.216442108154297,
+          -0.4371316730976105,
+          0.933661699295044
+        ],
+        "final_destination_xyz": [
+          4.218240737915039,
+          -0.43352556228637695,
+          0.9197757840156555
+        ],
+        "final_object_minus_destination_xyz": [
+          -0.0017986297607421875,
+          -0.0036061108112335205,
+          0.013885915279388428
+        ],
+        "final_speed_m_s": 0.00014288019156083465,
+        "final_finger_joint_rad": -2.772232166048383e-10,
+        "last_1s_object_position_diameter_upper_bound_m": 8.940696716308594e-08,
+        "last_1s_max_object_speed_m_s": 0.0001444178051315248,
+        "last_1s_gripper_joint_max_abs_rad": 1.6414297476785578e-08,
+        "next_observation_to_next_frame_observation_position_error_m": 0.0,
+        "largest_recorded_step_object_displacement_m": 0.06329700350761414,
+        "final_support_force_world_n": [
+          -0.006698448210954666,
+          -0.01209342572838068,
+          1.0918209552764893
+        ],
+        "support_force_angle_from_up_deg": 0.7254395727884027,
+        "source_success": true,
+        "source_current_final_on_destination": true,
+        "raw_contact_recomputation": [
+          {
+            "phase": "close",
+            "recorded_contact_actions": 30,
+            "both_fingers_loaded_in_body_actions": 30,
+            "both_fingers_near_in_body_actions": 30,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "lift",
+            "recorded_contact_actions": 63,
+            "both_fingers_loaded_in_body_actions": 63,
+            "both_fingers_near_in_body_actions": 63,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "transfer",
+            "recorded_contact_actions": 100,
+            "both_fingers_loaded_in_body_actions": 100,
+            "both_fingers_near_in_body_actions": 100,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "lower",
+            "recorded_contact_actions": 58,
+            "both_fingers_loaded_in_body_actions": 58,
+            "both_fingers_near_in_body_actions": 58,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": true
+          },
+          {
+            "phase": "release",
+            "recorded_contact_actions": 0,
+            "both_fingers_loaded_in_body_actions": 0,
+            "both_fingers_near_in_body_actions": 0,
+            "loaded_contacts_outside_body_count": 0,
+            "last_5_actions_bilateral_loaded": null
+          }
+        ],
+        "sampled_raw_frame_indices": [
+          0,
+          245,
+          296,
+          438,
+          497
+        ],
+        "sampled_raw_montage": "reports/review_20261022/lightwheel_pick_place_robot_raw_review.jpg"
+      },
+      "sha256": {
+        "trajectory.h5": "ddadf822ad749386f8faf4901cf44a608c11bf33259d57272b029e78bc283993",
+        "contacts.json": "56a59291d299c6009b8bfb48400078b68d6f6578163f29c81d930dfd852fe666",
+        "result.json": "5631cb36797bd5da25138dcf376bad181db6d51450792d1424491083484d6e7c"
+      },
+      "video_raw_consistency": {
+        "video": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/external_camera_2.mp4",
+        "fully_decoded_frames": 498,
+        "fps": 15.0,
+        "samples": [
+          {
+            "frame": 0,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6628837528935185
+          },
+          {
+            "frame": 245,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6187785734953704
+          },
+          {
+            "frame": 296,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6381401909722222
+          },
+          {
+            "frame": 438,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.6454763454861112
+          },
+          {
+            "frame": 497,
+            "shape_equal": true,
+            "mean_absolute_rgb_error_8bit": 1.7187981047453704
+          }
+        ],
+        "matches_raw_sequence": true
+      },
+      "task_outcome_review": {
+        "verdict": "confirmed_from_recorded_physics_contacts_and_sampled_RGB",
+        "bilateral_grasp_and_lift": true,
+        "released_into_original_target_container": true,
+        "finite_recorded_final_stability": true,
+        "video_raw_sequence_consistent": true,
+        "no_runtime_task_object_pose_setter_or_simulator_weld_found_in_inspected_source": true,
+        "caveats": [
+          "Grasp contact records end before release; open gripper joint, retreat and sampled RGB corroborate separation.",
+          "Filtered destination contact support is saved in the final result; the raw H5 does not retain the entire destination-specific support-force history.",
+          "This review confirms recorded task outcome, not visual salience or generalization of obstacle avoidance."
+        ]
+      }
+    }
+  ],
+  "visual_review": {
+    "all_six_sampled_raw_sequences_visually_consistent_with_grasp_lift_and_release_into_original_bowl": true,
+    "sampled_per_episode": 5,
+    "cameras": [
+      "external_camera_2",
+      "wrist_camera"
+    ],
+    "observation": "All final sampled frames show object remaining in original bowl with open withdrawn gripper. A carries bottle upright; B fruit drops/settles after opening. This is a sparse image review; raw trajectory and contact streams support the motion between these samples."
+  },
+  "source_code_findings": {
+    "no_runtime_object_pose_setter_or_simulator_weld_found": true,
+    "planning_attachment": "world.attachment only collision-planner geometry and cuRobo spheres; physical object is moved by gripper contacts",
+    "source_predicate": "objects settled, lifted, then container-footprint + upward filtered contact support + linear speed <0.003 m/s; final state re-evaluated, not only latched completion",
+    "source_predicate_default_required_steps": 1,
+    "limitation": "No long-duration post-episode stability test; finite recorded endpoint window only. Body contacts are recorded at control rate; collision geometry physics audits are separate.",
+    "inspected_file_sha256": {
+      "scripts/extensions/replicator/collect.py": "ccd42c3120939a1bca8461c11b65e53787f8f1a0e831125da4cc0e9e8d36466c",
+      "scripts/extensions/lightwheel_pick_place/collect.py": "7c27e709563fe1ce63b89a783d19c65c0292ed3754f4094e35bac6ff6d82f9e9",
+      "kitchen_safety/extensions/replicator/collision_planner.py": "7ce221c1e2e4c781385970767206902e94792142bc774ddb39b11461c89f35e2",
+      "kitchen_safety/extensions/lightwheel_pick_place/collision.py": "f2bde5b4278c6c98fa2407e5a9744e58f0f4d051b080b456bd6b5147551767c2",
+      "third_party/IsaacLab-Arena/isaaclab_arena/tasks/pick_and_place_task.py": "72f8255b188f309b04147967661cdcdf71a42bf005d6232ca1dc2cbaec7b3920",
+      "third_party/IsaacLab-Arena/isaaclab_arena/tasks/predicates/spatial.py": "2f99a7a2f16d9306223b6f19ee73011314c1b82ce77e99604f602a608b7eea45"
+    },
+    "setter_scope_note": "Inspected the current collector/environment/planner paths, not a full transitive binary audit. FCL set_obstacle_pose updates CPU planning-world observations, not simulation state."
+  },
+  "summary": {
+    "confirmed_task_success": 6,
+    "reviewed": 6,
+    "falsified_success_found": 0,
+    "claim_scope": "Stored fixed-seed single episodes support physical task completion. No new physics rerun or new long-horizon stability validation performed."
+  }
+}

@@ -21,9 +21,87 @@ CAMERAS = ('external_camera', 'external_camera_2', 'wrist_camera', 'all_cameras'
 SCOPE = ('One original task per skill, three fixed augmentation categories each; '
          'physical-task/data smoke tests only: this count does not prove avoidance effectiveness; '
          'does not establish other tasks, randomized coverage, bulk success rate or maximum speed.')
-AVOIDANCE_SCOPE = ('Same-source baseline counterfactual must violate the original safety margin, '
-                  'while the new physical episode succeeds safely with legal initial/goal geometry. '
+AVOIDANCE_SCOPE = ('Counts retain the previous single-baseline geometry, physical-task and data gates, '
+                  'subject to the current category quality review. Unwithheld entries are not a new '
+                  'certification of physically necessary or visibly meaningful avoidance. '
                   'One fixed sample per category; no randomized or bulk success-rate claim.')
+QUALITY_REVIEW = Path('docs/extensions/avoidance_quality_review.json')
+
+
+class QualityReviewError(ValueError):
+    """Avoidance evidence cannot be published without a valid current review."""
+
+
+def load_quality_review():
+    path = ROOT / QUALITY_REVIEW
+    try:
+        payload = path.read_bytes()
+        value = json.loads(payload)
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError) as exc:
+        raise QualityReviewError(f'Avoidance quality review missing or unreadable: {path}: {exc}') from exc
+    if (not isinstance(value, dict) or type(value.get('schema_version')) is not int
+            or value['schema_version'] != 1):
+        raise QualityReviewError(f'Malformed avoidance quality review: {path}: expected schema_version=1')
+
+    def invalid(reason):
+        raise QualityReviewError(f'Malformed avoidance quality review: {path}: {reason}')
+
+    for field in ('reviewed_utc', 'source_head', 'report'):
+        if not isinstance(value.get(field), str) or not value[field].strip():
+            invalid(f'{field} must be a nonempty string')
+    try:
+        reviewed = datetime.fromisoformat(value['reviewed_utc'].replace('Z', '+00:00'))
+    except ValueError:
+        invalid('reviewed_utc must be an ISO timestamp with a UTC timezone')
+    if reviewed.utcoffset() is None or reviewed.utcoffset().total_seconds() != 0:
+        invalid('reviewed_utc must have a UTC timezone')
+    if value.get('status') not in ('requires_revision', 'resolved'):
+        invalid('status must be requires_revision or resolved')
+    withheld = value.get('withheld_categories')
+    if not isinstance(withheld, list):
+        invalid('withheld_categories must be a list')
+    seen = set()
+    for item in withheld:
+        if not isinstance(item, dict):
+            invalid('each withheld category must be an object')
+        category = (item.get('group'), item.get('variant'))
+        if (not all(isinstance(part, str) for part in category)
+                or category[0] not in GROUPS or category[1] not in VARIANTS):
+            invalid(f'unknown withheld category: {category}')
+        if category in seen:
+            invalid(f'duplicate withheld category: {category}')
+        seen.add(category)
+        if not isinstance(item.get('reason'), str) or not item['reason'].strip():
+            invalid(f'{category} requires a nonempty reason')
+    if (value['status'] == 'requires_revision') != bool(withheld):
+        invalid('requires_revision needs blockers; resolved must have no blockers')
+
+    def evidence_file(name):
+        candidate = Path(name)
+        if candidate.is_absolute() or '..' in candidate.parts or not (ROOT / candidate).is_file():
+            invalid(f'evidence must be an existing repository-relative file: {name}')
+
+    evidence_file(value['report'])
+    # A new attempt name cannot clear a category-wide finding. Resolution must
+    # update this review and provide reviewable evidence, not select an older run.
+    if value['status'] == 'resolved':
+        resolution = value.get('resolution_evidence')
+        if not isinstance(resolution, list) or not resolution:
+            invalid('resolved requires nonempty resolution_evidence')
+        for name in resolution:
+            if not isinstance(name, str) or not name.strip():
+                invalid('resolution_evidence entries must be nonempty paths')
+            evidence_file(name)
+    return {**value, 'registry_file': str(QUALITY_REVIEW),
+            'registry_sha256': hashlib.sha256(payload).hexdigest()}
+
+
+def category_review(review, group, variant):
+    blocker = next((item for item in review['withheld_categories']
+                    if item['group'] == group and item['variant'] == variant), None)
+    return {'passed': blocker is None, 'status': review['status'],
+            'reason': blocker['reason'] if blocker else 'Retained under previous gates; strengthened avoidance quality is not established by this count.',
+            'registry_file': review['registry_file'], 'registry_sha256': review['registry_sha256']}
 
 
 def read(path):
@@ -44,7 +122,9 @@ def relative(path):
     return str(path.relative_to(ROOT))
 
 
-def collect_attempt(group, file, trial_root='skill_trials'):
+def collect_attempt(group, file, trial_root='skill_trials', *, quality_review=None):
+    if trial_root == 'avoidance_trials' and quality_review is None:
+        quality_review = load_quality_review()
     result = read(file)
     directory = file.parent
     metadata = read(directory / 'metadata.json')
@@ -54,6 +134,11 @@ def collect_attempt(group, file, trial_root='skill_trials'):
     accepted = result.get('accepted', result.get('success')) is True
     evidence = {}
     sources = {'result.json': file}
+    review_gate = None
+    if trial_root == 'avoidance_trials':
+        review_gate = category_review(quality_review, group, variant)
+        evidence['quality_review'] = review_gate['passed']
+        sources['avoidance_quality_review.json'] = ROOT / QUALITY_REVIEW
     notes = {'replicator': 'docs/extensions/replicator/SKILL_TRIAL.txt',
              'lightwheel_pick_place': 'docs/extensions/lightwheel_pick_place/TRIAL_NOTES.md',
              'doors': 'docs/extensions/doors/physical_trial_notes.md',
@@ -176,34 +261,43 @@ def collect_attempt(group, file, trial_root='skill_trials'):
         'passed': accepted and all(evidence.values()), 'videos': videos,
         'raw_data': data, 'result_mtime_ns': file.stat().st_mtime_ns,
         'error': result.get('failure', result.get('error')),
+        **({'quality_review': review_gate,
+            'acceptance_scope': 'previous_gates_subject_to_quality_review'} if review_gate is not None else {}),
     }
 
 
 def summarize(trial_root='skill_trials'):
+    review = load_quality_review() if trial_root == 'avoidance_trials' else None
     rows, attempts = [], []
     for group, label in GROUPS.items():
         candidates = {variant: [] for variant in VARIANTS}
         for file in (ROOT / 'datasets' / trial_root / group).rglob('result.json'):
-            row = collect_attempt(group, file, trial_root)
+            row = collect_attempt(group, file, trial_root, quality_review=review)
             if row is None:
                 continue
             attempts.append(row)
             if row['passed']:
                 candidates[row['variant']].append(row)
         for variant, variant_label in VARIANTS.items():
-            rows.append(max(candidates[variant], key=lambda item: item['result_mtime_ns'])
-                        if candidates[variant] else dict(group=group, group_label=label,
-                            variant=variant, variant_label=variant_label, passed=False))
+            row = (max(candidates[variant], key=lambda item: item['result_mtime_ns'])
+                   if candidates[variant] else dict(group=group, group_label=label,
+                       variant=variant, variant_label=variant_label, passed=False))
+            if review is not None and 'quality_review' not in row:
+                row['quality_review'] = category_review(review, group, variant)
+            rows.append(row)
     report = dict(generated_utc=datetime.now(timezone.utc).isoformat(), required=12,
                   completed=sum(row['passed'] for row in rows), episodes=rows,
                   attempts=attempts, trial_root=trial_root,
                   scope=AVOIDANCE_SCOPE if trial_root=='avoidance_trials' else SCOPE)
+    if review is not None:
+        report['quality_review'] = review
+        report['strengthened_avoidance_acceptance_established'] = False
     output = ROOT / 'reports' / trial_root
     output.mkdir(parents=True, exist_ok=True)
     (output / 'summary.json').write_text(json.dumps(report, ensure_ascii=False, indent=2))
     page = ['<!doctype html><html lang="zh"><meta charset="utf-8"><title>四组 Skill 实测视频</title>',
         '<style>body{font:16px system-ui;max-width:1300px;margin:30px auto;background:#f3f5f8;color:#182334}table{border-collapse:collapse;width:100%;background:white}td,th{padding:15px;border:1px solid #dce1e8}a{color:#155bb8}p{line-height:1.6}</style>',
-        f'<h1>四组 Skill 实测：{report["completed"]}/12 已通过</h1>',
+        f'<h1>四组 Skill 实测：{report["completed"]}/12 {"旧门槛结果保留" if review is not None else "已通过"}</h1>',
         f'<p>{html.escape(report["scope"])}</p>',
         '<p>每组一个原始任务，各采集人体、财产、障碍物三个固定变体。失败尝试未计入成功数。</p>',
         '<table><tr><th>原始任务</th><th>变体</th><th>结果</th><th>视频及证据</th></tr>']
@@ -212,18 +306,29 @@ def summarize(trial_root='skill_trials'):
         if row['passed']:
             links = ' · '.join(f'<a href="../../{html.escape(path)}">{html.escape(name)}</a>' for name, path in row['videos'].items())
             links += '<br>' + ' · '.join(f'<a href="../../{html.escape(path)}">{html.escape(name)}</a>' for name, path in row['evidence_files'].items())
-        page.append(f'<tr><td>{row["group_label"]}</td><td>{row["variant_label"]}</td><td>{"通过" if row["passed"] else "待完成"}</td><td>{links}</td></tr>')
+        if review is not None and not row['quality_review']['passed']:
+            links = html.escape(row['quality_review']['reason']) + f' · <a href="../../{QUALITY_REVIEW}">quality review</a>'
+        status = ('旧门槛保留' if review is not None else '通过') if row['passed'] else '待完成'
+        page.append(f'<tr><td>{row["group_label"]}</td><td>{row["variant_label"]}</td><td>{status}</td><td>{links}</td></tr>')
     page.append('</table><p>本轮仅代表这 12 条样本及固定配置，其余原始任务、随机化及 200 条批采未验证。</p></html>')
     (output / 'index.html').write_text('\n'.join(page))
     return report
 
 
 def export(report):
+    is_avoidance = report.get('trial_root') == 'avoidance_trials'
+    if is_avoidance:
+        # Re-read at publication time: a historical 12/12 summary must not bypass
+        # a later quality finding, and changing attempt names cannot unblock it.
+        review = load_quality_review()
+        if review['status'] != 'resolved' or review['withheld_categories']:
+            raise SystemExit('Refusing final avoidance export: unresolved quality review blockers')
+        if report.get('quality_review', {}).get('registry_sha256') != review['registry_sha256']:
+            raise SystemExit('Refusing final avoidance export: stale or missing quality review snapshot; summarize again')
     if report['completed'] != 12:
         raise SystemExit('Refusing final export: fewer than 12 independently validated episodes')
     exports = ROOT / 'exports'
     exports.mkdir(exist_ok=True)
-    is_avoidance = report.get('trial_root') == 'avoidance_trials'
     destination = exports / ('avoidance-trial-videos' if is_avoidance else 'skill-trial-videos')
     with tempfile.TemporaryDirectory(prefix='.skill-trial-videos-', dir=exports) as temp:
         stage = Path(temp) / destination.name
@@ -252,6 +357,8 @@ def export(report):
                 shutil.copy2(ROOT / path, evidence / name)
         manifest = dict(completed=12, generated_utc=report['generated_utc'], episodes=exported,
                         scope=report['scope'], storage='ZIP contains 12 multi-camera previews, any additional overview/comparison videos, and JSON acceptance evidence. Original three separate MP4s and raw trajectory/images remain at repository-relative paths recorded for each episode.')
+        if is_avoidance:
+            manifest['quality_review'] = review
         (stage / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2))
         gallery = ['<!doctype html><html lang="zh"><meta charset="utf-8"><title>RoboLaw 12 条实测视频</title>',
             '<style>body{font:16px system-ui;margin:24px;background:#f4f6f9}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(430px,1fr));gap:20px}article{padding:16px;background:white;border-radius:10px}video{width:100%}</style>',

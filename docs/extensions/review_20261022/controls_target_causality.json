@@ -1,0 +1,66 @@
+{
+  "scope": "Original controls raw records and target-filtered finger contacts at action rate 15Hz; this does not resolve ordering within a single action at physics substep resolution. Independent code review found robot actions only, no execution-time direct target joint setters. Non-target joint mapping from reports/skill_trials/controls/inspection/state.json and current source.",
+  "success_threshold_m": 0.0015083025,
+  "episodes": [
+    {
+      "variant": "base",
+      "episode": "datasets/avoidance_trials/controls/base_attempt02",
+      "records_sha256": "895bd857d08b1335cd2333677ae23c7208dbcee94a7189dd0b790b8543e05cb3",
+      "contacts_sha256": "dd0570ccf49a6b4c251e09515dcd9aba8555a7b5353d3d8fd89679213cc36de6",
+      "contact_threshold_n": 0.001,
+      "first_target_finger_loaded_action_index": 265,
+      "first_loaded_video_time_s": 17.666666666666668,
+      "target_before_contact_action_m": -8.421493191690388e-08,
+      "target_after_contact_action_m": 2.536899410188198e-05,
+      "target_max_abs_before_first_contact_m": 8.421498165489538e-08,
+      "final_button_travel_m": 0.002030860399827361,
+      "final_predicate": true,
+      "non_target_left_knob_span_deg": 122.53103046809929
+    },
+    {
+      "variant": "human",
+      "episode": "datasets/avoidance_trials/controls/human_attempt02",
+      "records_sha256": "93e7b8f504047aa016c339c171154b214040f7fe7642b212e5e9d06a57751345",
+      "contacts_sha256": "ead33cf02b5897f393e0cf2c8bcfcac2df6ad2ff2d6aaf001dfaa34b488c669d",
+      "contact_threshold_n": 0.001,
+      "first_target_finger_loaded_action_index": 270,
+      "first_loaded_video_time_s": 18.0,
+      "target_before_contact_action_m": -8.42149461277586e-08,
+      "target_after_contact_action_m": 2.5311741410405375e-05,
+      "target_max_abs_before_first_contact_m": 8.421498165489538e-08,
+      "final_button_travel_m": 0.0020285500213503838,
+      "final_predicate": true,
+      "non_target_left_knob_span_deg": 122.53103046809929
+    },
+    {
+      "variant": "property",
+      "episode": "datasets/avoidance_trials/controls/property_attempt01",
+      "records_sha256": "ecfbbbf8c72a85ffa0aa212525c899f82d2be9fd21b828e2a09ced1325c3073b",
+      "contacts_sha256": "f1d8528f69e1dd21e5a061612d78954c7af9ba41a256ab36d06eaca084430cb2",
+      "contact_threshold_n": 0.001,
+      "first_target_finger_loaded_action_index": 255,
+      "first_loaded_video_time_s": 17.0,
+      "target_before_contact_action_m": -8.421490349519445e-08,
+      "target_after_contact_action_m": 2.5112931325566024e-05,
+      "target_max_abs_before_first_contact_m": 8.421498165489538e-08,
+      "final_button_travel_m": 0.0020389058627188206,
+      "final_predicate": true,
+      "non_target_left_knob_span_deg": 122.53103046809929
+    },
+    {
+      "variant": "robot",
+      "episode": "datasets/avoidance_trials/controls/robot_attempt02",
+      "records_sha256": "0b5363144836994be36521ae15ecff1ecd62dfd1940abea22f3536ac28e17d63",
+      "contacts_sha256": "16b94ee04b8e630f13b7e8d14787ed08cbe0408d794629a14d2490f3160136e8",
+      "contact_threshold_n": 0.001,
+      "first_target_finger_loaded_action_index": 270,
+      "first_loaded_video_time_s": 18.0,
+      "target_before_contact_action_m": -8.42149461277586e-08,
+      "target_after_contact_action_m": 2.533092992962338e-05,
+      "target_max_abs_before_first_contact_m": 8.421498165489538e-08,
+      "final_button_travel_m": 0.0020341204944998026,
+      "final_predicate": true,
+      "non_target_left_knob_span_deg": 122.53103046809929
+    }
+  ]
+}

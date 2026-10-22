@@ -1,5 +1,9 @@
 # 有效避障：强制因果对照与修正记录
 
+**2026-10-22 复查：先读 [当前交付验收](review-gates.md)。下面保存旧单基线试验的参数和报告，历史 accepted 不等于当前交付通过。**
+
+本组芥末瓶三条的真实抓放完成仍有记录支持。但 human/attempt_04 的“必要性”未证实：盒代理给出 15.382 mm，而独立整瓶源顶点凸包加机器人/夹爪碰撞网格复核，原基线全部 3848 个物理子步最小 21.047 mm，高于原 20 mm 要求，33 个代理违规消失。没有校验 PhysX cooked shape/contact offsets，不能反向称其绝对无风险。该人体摆位须重设计、重采；property/robot 仍保留单基线的安全裕度/几何相交证据，不能升级为稳定必要性。
+
 第一轮 skill_trials 的三条只证明场景/真实物理/RGB完成，不能当成有效避障。当前修正试验在 `datasets/avoidance_trials/replicator/`，失败与旧数据全部保留。本轮仍只覆盖 G 型 mustard→red bowl，即 1/14 个源任务；其余13个未验证。
 
 有效性门槛必须同时成立：
@@ -15,7 +19,7 @@ G型已实现入口：`run_trial.py --trial-root avoidance_trials --layout-json 
 
 规划内部路点与任务目标要分清。本组局部 `curobo_backend.py` 对所有场景使用同一规则：优先原pregrasp高度/垂直lift；原路点不安全时，搜索内部悬停高度并检查到原抓取点的完整approach，或先验证25mm垂直脱离台面，再从固定的横向/高度候选集合自动选择内部lift目标并由cuRobo绕行。保留原35°/180°抓取、抓放目标、28°携物姿态约束和全部间隙。保存被拒候选、选中路点、0条被拒动作执行；无障碍baseline须使用同策略。没有放宽碰撞检查或以FCL-RRT替代cuRobo路径。
 
-最终修正状态：human/attempt_04、property/attempt_02、robot/attempt_01三类各1条全部通过独立因果审计和完整物理/RGB门禁，accepted=3/3。覆盖仍为1/14个原始任务。不得把第一轮物理样本补作缺失的有效避障样本。
+历史审计状态：human/attempt_04、property/attempt_02、robot/attempt_01 曾记录 accepted=3/3；复查已撤回 human 的真实几何必要性结论，其余两条限于单基线证据。覆盖仍为1/14个原始任务。不得把第一轮物理样本补作缺失的有效避障样本。
 
 对照距离来自原有安全模型：机械臂capsule、机器人mesh包络、夹爪和携物包络，以及原障碍几何。模型间隙不足/包络相交不得夸大为真实精确表面必然接触。最终数据另外必须通过实际PhysX接触与独立物理检查。旋转primitive候选须从最终姿态重建CollisionWorld，避免先原点建world-AABB再旋转造成与live建模不一致。
 
@@ -27,7 +31,7 @@ bash scripts/arena_python.sh -m unittest discover -s tests/extensions/replicator
 ```
 不要使用缺少FCL的host python运行新增measurement tests。6项回归已实际通过。
 
-## 当前有效样本与复现
+## 历史单基线样本与复现
 
 正式目录均位于 `datasets/avoidance_trials/replicator/`，对应独立报告位于 `reports/avoidance_trials/replicator/`。原三路视频、all_cameras和单独overview都保留；根汇总额外生成同视角、原时间速度的comparison.mp4，不以加速/同步错位制造效果。
 
@@ -63,4 +67,4 @@ bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --trial-
 
 独立审计修订保留 `avoidance_audit_v1.json`、v2、v3和revision记录；v2纠正unsafe baseline的passed语义，并增加实际初态/旋转检查；v3增加源背景差异排除。没有覆盖原视频、图或物理记录。有效性只针对本次固定单样本；不能扩展成总体成功率、人体伤害/器物破碎模型、200条批采、其他13原任务或多环境最大速度结论。
 
-最终正式名单与全部门禁：`docs/extensions/replicator/avoidance_coverage.json`、`reports/avoidance_trials/replicator/summary.json`。每条当前summary包含collection/source_relations/fixed_base/export/validation/audit/self_collision/overview/background_consistency/avoidance共10个退出码全0；两条有效控制的完整RGB/物理/源关系/self/overview同样通过。human04全子步反事实最小15.381528mm，新轨迹动作率最小40.478707mm；原pregrasp高度与lift仍是默认目标，无需使用横向lift备选分支。
+历史名单与当时门禁（不代表本次新增验收已通过）：`docs/extensions/replicator/avoidance_coverage.json`、`reports/avoidance_trials/replicator/summary.json`。每条当前summary包含collection/source_relations/fixed_base/export/validation/audit/self_collision/overview/background_consistency/avoidance共10个退出码全0；两条有效控制的完整RGB/物理/源关系/self/overview同样通过。human04全子步反事实最小15.381528mm，新轨迹动作率最小40.478707mm；原pregrasp高度与lift仍是默认目标，无需使用横向lift备选分支。

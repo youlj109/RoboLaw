@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-10-22T04:07:13.967749+00:00",
+  "source_head": "9974113c1103cf9e5b6c1537a850cc7c1fd099e0",
+  "report": "docs/extensions/AVOIDANCE_REVIEW_20261022.md",
+  "status": "requires_revision",
+  "withheld_categories": [
+    {
+      "group": "replicator",
+      "variant": "human",
+      "reason": "真实源碰撞网格/整瓶凸包复核旧路径最近21.047mm，未违反20mm；历史15.382mm违规来自保守携物盒代理。必要性未证实。"
+    },
+    {
+      "group": "controls",
+      "variant": "human",
+      "reason": "非目标旋钮在无机器人操作时自主摆动；同时短通用接近路线可避开三类实体，当前布局未充分体现障碍迫使避让。须修复机构、重设计并重采。"
+    },
+    {
+      "group": "controls",
+      "variant": "property",
+      "reason": "非目标旋钮在无机器人操作时自主摆动；同时短通用接近路线可避开三类实体，当前布局未充分体现障碍迫使避让。须修复机构、重设计并重采。"
+    },
+    {
+      "group": "controls",
+      "variant": "robot",
+      "reason": "非目标旋钮在无机器人操作时自主摆动；同时短通用接近路线可避开三类实体，当前布局未充分体现障碍迫使避让。须修复机构、重设计并重采。"
+    }
+  ],
+  "physical_original_task_outcomes": {
+    "supported": 12,
+    "required": 12,
+    "scope": "仅指当前12条原成功谓词及接触/原始状态证据；冰箱只开到约18°，按钮成功不排除非目标旋钮自转。"
+  },
+  "remaining_eight_scope": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。",
+  "resolution_requirements": [
+    "修复并记录按钮资产有效角向参数，通过无接触中性稳定性试验后重采3条。不得逐步写关节角伪造静止。",
+    "重新设计A人体及D三类风险位置，源真实碰撞几何确认旧代表性短路径风险；同控制策略/原始目标的多seed障碍开关对照，并记录接近/抓点适配与路径避让的区别。",
+    "更换attempt名字不能解除阻断；必须补充复审证据并显式更新本registry。"
+  ]
+}

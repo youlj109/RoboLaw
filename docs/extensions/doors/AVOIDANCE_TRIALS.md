@@ -1,3 +1,5 @@
+2026-10-22 复审更正：本页保留历史过程，不能以其中 passed/accepted 或“通过”代替当前交付状态。A人体真实几何必要性未证实，D三条机构自转及避障设计待修；其余8条仅保留单轨迹证据。当前结论见 docs/extensions/AVOIDANCE_REVIEW_20261022.md 与 avoidance_quality_review.json。
+
 # One-wall 原冰箱任务的有效避障修正
 
 旧 `datasets/skill_trials/doors` 三类样本只作真实开门/相机/数采 smoke test，不能算有效避障。新输出独立在 `datasets/avoidance_trials/doors`，每条须通过 `avoidance_audit.json.accepted`，且原任务/native最终角度/双指真实接触/原三路RGB与视频/120Hz完整碰撞/自碰撞均独立通过。

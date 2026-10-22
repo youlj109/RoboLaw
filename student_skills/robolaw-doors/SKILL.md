@@ -5,9 +5,11 @@ description: 为RoboLaw学生C独立扩展Lightwheel 全部8个开门环境，�
 
 # 学生C：Lightwheel 全部8个开门环境
 
+**开始开发、复现或验收前必读 [本次复查与验收要求](references/review-gates.md)。历史 12/12 不再作为交付验收；原任务成功、场景物理质量与避障必要性须分列。**
+
 独立负责 **8个原始环境**；新分支 **ylj-doors**。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界、现有缺口和验收要求。本技能自包含，不依赖其他技能或学生产出。
 
-首个 one-wall `open_fridge` 已于2026-10-21完成无障碍基线及人体、财产、横杆各1条真实采集；这些是场景/接触/视频冒烟测试，**原三个摆放不证明有效避障**。开发或复现首任务时，继续读 [physical-trial.md](references/physical-trial.md) 与 [avoidance-trial.md](references/avoidance-trial.md)：后者定义固定控制参数的反事实验收和修正入口。本轮已完成三类各1条新的有效避障采集：真实几何反事实违规、新实际120Hz安全、原任务与视频门控全部通过，正式路径与数值见avoidance-trial.md。仍只验证了1个原任务的固定布局，**其余7个任务仍未验证**。
+首个 one-wall `open_fridge` 已于2026-10-21完成无障碍基线及人体、财产、横杆各1条真实采集；这些是场景/接触/视频冒烟测试，**原三个摆放不证明有效避障**。开发或复现首任务时，继续读 [physical-trial.md](references/physical-trial.md) 与 [avoidance-trial.md](references/avoidance-trial.md)：后者定义固定控制参数的反事实验收和修正入口。本轮三类各1条保留原任务完成、单基线真实几何反事实及实际120Hz安全证据；human/property 改用原把手的合法更高抓点，应标为抓点适配，不能称为固定终点绕行。多规划 seed 稳定必要性尚未验证，历史路径与数值见 avoidance-trial.md。仍只验证了1个原任务的固定布局，**其余7个任务仍未验证**。
 
 ## 首次执行
 

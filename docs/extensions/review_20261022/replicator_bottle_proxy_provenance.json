@@ -1,0 +1,138 @@
+{
+  "source_asset": "assets/robolab/objects/hope/mustard_bottle.usd",
+  "source_sha256": "ee5aa3c97b00f0d945af34a514772fe7c276256f455132eb86ebeadfbaf6e7b9",
+  "source_default_prim": "/mustard_bottle",
+  "source_root_xform_ops": [
+    "xformOp:translate",
+    "xformOp:rotateXYZ",
+    "xformOp:scale"
+  ],
+  "enabled_collision_meshes": [
+    {
+      "path": "/mustard_bottle/obj_000016_Mesh",
+      "vertices": 10676,
+      "approximation": "convexDecomposition",
+      "local_to_root_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "bounds_min": [
+        -0.02428709901869297,
+        -0.03256659954786301,
+        -0.08002520352602005
+      ],
+      "bounds_max": [
+        0.02428709901869297,
+        0.03256659954786301,
+        0.08002520352602005
+      ]
+    }
+  ],
+  "enabled_collider_count": 1,
+  "proxy_half_extents_m": [
+    0.025,
+    0.033,
+    0.081
+  ],
+  "proxy_contains_all_authored_collision_vertices": true,
+  "largest_vertex_excess_m": -0.00043340045213699496,
+  "minimum_box_padding_per_axis_m": [
+    0.0007129009813070311,
+    0.00043340045213699496,
+    0.0009747964739799525
+  ],
+  "convex_hull_contained_by_box": true,
+  "pose_source": "datasets/avoidance_trials/replicator/base/baseline_human_03/physics_states.npz",
+  "pose_sha256": "df090ea5d4690a29d7b32e8270ab4c9dbf06543071b1c7d85e36b77f2951f20a",
+  "recorded_pose_format": "xyz + xyzw, same scipy Rotation.from_quat and translation used by original CollisionWorld._object_pose/transform",
+  "pose_quaternion_norm_minmax": [
+    0.9999999776588806,
+    1.0000002621208144
+  ],
+  "original_unsafe_physics_samples": 33,
+  "full_saved_physics_samples": 3848,
+  "full_probe_minimum": {
+    "physics_index": 1875,
+    "action_index": 264,
+    "phase": "above_bowl",
+    "valid": true,
+    "distance_m": 0.0210466764090978,
+    "required_m": 0.02,
+    "slack_m": 0.0010466764090978006,
+    "robot_part": "source_mustard//Bottle/obj_000016_Mesh",
+    "obstacle": "/World/Person/Visual_KitchenAdult/base_001",
+    "intersecting": false
+  },
+  "full_probe_unsafe_samples": 0,
+  "source_spawn_provenance": "kitchen_safety/extensions/replicator/environment.py:58 directly references source USD as RIGID object, no dimensions/scale override. Authored root transform ops evaluate to identity. Review reference clears root ops and applies exactly the recorded rigid root xyz+xyzw; child mesh transform is preserved.",
+  "limitations": [
+    "No Isaac/PhysX cook or physical counterfactual executed. Convex-decomposition cooking/contact offsets can differ from raw mesh/hull.",
+    "21.047 mm margin leaves only 1.047 mm over requested 20 mm; this is evidence existing broad box-based true-necessity assertion is unestablished, not a certified physically safe execution.",
+    "Probe preserves existing source robot_hulls and measured articulated gripper collision meshes; excludes extra arm/finger/capsule envelopes. Fixed base legality is not reevaluated here."
+  ],
+  "source_root_xform_values": {
+    "xformOp:translate": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "xformOp:rotateXYZ": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "xformOp:scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "source_root_local_matrix": [
+    [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ]
+}
