@@ -175,8 +175,9 @@ class VectorizedCameraWriter:
         from pathlib import Path
         if not isinstance(outputs, Mapping) or not outputs:
             raise ValueError('outputs must map environment indices to episode directories')
-        if tuple(names) != CAMERA_NAMES or not np.isclose(dt, 1 / 15, rtol=0, atol=1e-10):
-            raise ValueError('Vectorized recording retains the three original cameras at 15 Hz')
+        supported_dt = any(np.isclose(dt, 1 / hz, rtol=0, atol=1e-10) for hz in (15, 30))
+        if tuple(names) != CAMERA_NAMES or not supported_dt:
+            raise ValueError('Vectorized recording requires the three original cameras at 15 or 30 Hz')
         self.scene, self.names, self.dt = scene, tuple(names), dt
         self.num_envs = int(scene.num_envs)
         if any(type(index) is not int or not 0 <= index < self.num_envs for index in outputs):

@@ -165,7 +165,7 @@ def render_stream(job,out,painter,max_frames=None):
   decoded=sum(1 for _ in check.decode(video=0));duration=float(check.duration or 0)/av.time_base
  assert decoded==n
  result=dict(job,displayed_categories=list(painter.categories),visual_layout='Three cameras; category labels, grades, metrics and reasons only',output=str(dest),frames=n,decoded_frames=decoded,fps=fps,duration_s=duration,passed=True,
-  temporal_alignment='Latest risk decision at or before measured RGB source time; 30Hz risk sampled at original 15fps RGB.',
+  temporal_alignment='Latest risk decision at or before measured RGB source time; source timestamps are checked against recorded trajectory observations.',
   pt_mode=binding['resolved_profile']['rules']['pt_mode'],profile_sha256=profile_hash,
   task_success=axes['task']['legacy_success'],source_camera_mode='offline_measured_state_render',
   source_modified=False,timeline_scope='Latest known overall grade; timeline remains outside the compact video layout',bytes=dest.stat().st_size,elapsed_s=round(time.time()-start,2))
