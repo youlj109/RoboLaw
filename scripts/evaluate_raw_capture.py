@@ -101,7 +101,10 @@ class OfflineObserver(RiskObserver):
             self.geometry_not_applicable['HS'] += 1
         else:
             self.geometry_complete['HS'] += h.get('distance_evidence',{}).get('complete') is True
-        self.geometry_complete['PT'] += all(x.get('distance_coverage_complete') is True for x in p['protected_pairs'])
+        from kitchen_safety.pt_distance_policy import omitted_keys
+        omitted=omitted_keys(self.binding['pt_asset_inventory'])
+        self.geometry_complete['PT'] += all(x.get('distance_coverage_complete') is True for x in p['protected_pairs']
+            if (x['actor'],x['object_id']) not in omitted)
         self.geometry_complete['RS'] += r['self_collision_evidence'].get('coverage_complete') is True
         self.csv.writerow(project(record))
         super()._line(stream, record)
@@ -255,6 +258,7 @@ def main():
         geometry_backend_statistics=pt.fcl.batch_stats(),warp_runtime_loaded='kitchen_safety.warp_mesh_backend' in sys.modules,
         mesh_backend_runtime=pt.fcl.runtime_info() if hasattr(pt.fcl,'runtime_info') else descriptor('warp'),
         source_profile_sha256=original_frozen['profile_sha256'],backend_migration=frozen.get('geometry_backend_migration'),
+        pt_distance_omissions=frozen['binding']['pt_asset_inventory'].get('distance_omissions'),
         raw_sha256=source_hash.hexdigest(), source_hash_verified=expected is not None,
         counts=dict(counts), risk_counts={k:dict(v) for k,v in observer.counts.items()},
         complete_counts=dict(observer.complete), geometry_complete_counts=dict(observer.geometry_complete),

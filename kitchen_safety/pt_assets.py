@@ -37,6 +37,8 @@ def validate_policy(policy):
         if key in seen:
             raise ValueError('Duplicate excluded PT relationship')
         seen.add(key)
+    from kitchen_safety.pt_distance_policy import validate_policies
+    validate_policies(policy.get('distance_omission_policies', []))
     support = policy['support_policy']
     for key in ('min_abs_vertical_normal', 'max_penetration_m', 'max_payload_speed_mps'):
         value = support[key]
@@ -267,6 +269,7 @@ def apply_support_distance_rules(report, features, binding):
     report['arena_pt_distance_summary'] = dict(
         scope='configured PT assets; excludes declared PT relationships, robot-to-task-target distances, proven allowed support, inactive payload and exempt grip links',
         configured_object_count=len(inv['objects']), configured_pair_count=len(distance_rules),
+        omitted_distance_pair_count=len((inv.get('distance_omissions') or {}).get('relations', [])),
         valid_applicable_pair_count=len(active),
         incomplete_pair_count=sum(not r['complete'] for r in distance_rules),
         nearest_pair=min(active, key=lambda p: p['distance_m']) if active else None,

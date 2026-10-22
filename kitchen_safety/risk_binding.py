@@ -156,6 +156,9 @@ class ArenaRiskRuntime:
         for i,spec in enumerate(specs):
             geometry=ColliderGeometry(stage,i,body_names);self.geometries.append(geometry)
             asset_inventory=pt_inventory(geometry.inventory_entries,geometry.root,settings['config']['pt_asset_coverage'])
+            from kitchen_safety.pt_distance_policy import resolve as resolve_distance_policy
+            distance_policy=resolve_distance_policy(settings['config']['pt_asset_coverage'], spec, asset_inventory, geometry.root)
+            if distance_policy is not None:asset_inventory['distance_omissions']=distance_policy
             self.pt_inventories.append(asset_inventory)
             grip_names=settings['config']['pt_v4_geometry']['allowed_grip_body_names']
             pt_geometry=PropertyDistanceGeometry(stage,geometry.root,body_names,asset_inventory,grip_names,backend=backend)
@@ -478,6 +481,8 @@ class ArenaRiskRuntime:
         pt['drop_detection_evidence']=dict(method=drop_protocol['version'],downward_speed_threshold_mps=drop_protocol['downward_speed_mps'],
             descent_threshold_m=drop_protocol['descent_m'],held=held,supported=supported,phase=phase,
             source='Measured physical velocity/height and real support/grip contacts; unsupported ambiguous states remain unknown')
+        from kitchen_safety.pt_distance_policy import omitted_keys, DISTANCE_FIELDS
+        omitted_distances=omitted_keys(self.pt_inventories[i])
         for spec in observer.profile['pt_hs_inspired']['pairs']:
             actor,name=spec['actor'],spec['object_id']
             asset_inventory=self.pt_inventories[i]
@@ -488,7 +493,7 @@ class ArenaRiskRuntime:
             current_pp=selected_contacts(current_pairs,actor_root,object_root,self.dt)
             measured_pair=geometry_pairs.get((actor,name),{})
             geometry_complete=measured_pair.get('coverage_complete') is True
-            pt['protected_pairs'].append(dict(actor=actor,object_id=name,
+            feature_pair=dict(actor=actor,object_id=name,
                 distance_m=measured_pair.get('distance_m') if geometry_complete else None,
                 distance_source=measured_pair.get('distance_source',observer.profile['pt_hs_inspired']['distance_sources']['robot_target' if actor=='robot' and name=='mustard_bottle' else 'environment']),
                 distance_metric=measured_pair.get('metric',observer.profile['pt_hs_inspired']['distance_metric']),
@@ -501,7 +506,10 @@ class ArenaRiskRuntime:
                 contact=bool(pp) if covered else None,held_contact_active=held,
                 held_contact_source=grasp['reason'],task_phase=PHASE_MAP.get(phase,phase),
                 allowed_support_evidence=support_evidence(asset_inventory,name,PHASE_MAP.get(phase,phase),
-                    current_pp,current_covered,row,dist.get('payload_geometry_center_world_m')) if actor=='held_object' else None))
+                    current_pp,current_covered,row,dist.get('payload_geometry_center_world_m')) if actor=='held_object' else None)
+            if (actor,name) in omitted_distances:
+                for field in DISTANCE_FIELDS:feature_pair.pop(field, None)
+            pt['protected_pairs'].append(feature_pair)
         return dict(hs=hs,pt=pt,rs=rs,ir=ir,
             _existing_self_collision_pairs=[list(p) for p in all_self_pairs] if self_complete or nonallowed else None)
 

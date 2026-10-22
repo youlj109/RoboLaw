@@ -79,6 +79,8 @@ class ReviewPainter(overlay.Painter):
    card['reason']+=' 试算停止模型未标定。'
    card['note']='动态停止模型为实验参数，尚未标定'
   pt=cards['PT'];p=features.get('pt',{});pairs=p.get('protected_pairs',[]);summary=report.get('arena_pt_distance_summary',{});near=summary.get('nearest_pair')
+  distance_keys={(r['evidence'].get('actor'),r['evidence'].get('object_id')) for r in report['rules'] if r['rule_id']=='PT-DIST-001'}
+  pairs=[x for x in pairs if (x.get('actor'),x.get('object_id')) in distance_keys]
   complete=sum(x.get('distance_coverage_complete') is True for x in pairs);count=summary.get('configured_object_count',0)
   rules=[r for r in report['rules'] if r['category']=='PT']
   forces=[r for r in rules if r['rule_id']=='PT-FORCE-002' and r.get('evaluation_status')!='not_applicable' and r['evidence'].get('measured') is not None]

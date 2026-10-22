@@ -26,6 +26,8 @@ class PropertyDistanceGeometry:
         self.entries, self.errors, self.robot_links = [], [], {}
         self.assets = asset_inventory['objects']
         self.target = asset_inventory['target_object_ids'][0]
+        from kitchen_safety.pt_distance_policy import omitted_keys
+        self.omitted_distance_relations = omitted_keys(asset_inventory)
         body_names = set(body_names)
         cache = UsdGeom.XformCache(Usd.TimeCode.Default())
         root = stage.GetPrimAtPath(self.root)
@@ -98,6 +100,7 @@ class PropertyDistanceGeometry:
             topology='Frozen at observer construction; measured rigid poses updated each sample',
             coordinate_frame='world_m', quaternion_order='xyzw', complete=not self.errors,
             errors=self.errors, exact_grip_link_paths=self.grip_paths,
+            omitted_distance_relations=[dict(actor=a, object_id=o) for a,o in sorted(self.omitted_distance_relations)],
             geometry=[{k:e[k] for k in ('path','group','actor','dynamic','fingerprint','vertices','triangles','approximation')} for e in self.entries])
 
     def sample(self, body_poses, object_poses):
@@ -134,6 +137,7 @@ class PropertyDistanceGeometry:
         for object_id in self.assets:
             destination=groups.get(object_id,[])
             for actor in (('robot',) if object_id==self.target else ('robot','held_object')):
+                if (actor,object_id) in self.omitted_distance_relations:continue
                 source_group='robot' if actor=='robot' else self.target
                 source=groups.get(source_group,[])
                 missing=[e for e in errors if e['group'] in (source_group,object_id)]
@@ -192,6 +196,7 @@ class PropertyDistanceGeometry:
         for object_id in self.assets:
             destination = groups.get(object_id, [])
             for actor in (('robot',) if object_id == self.target else ('robot', 'held_object')):
+                if (actor, object_id) in self.omitted_distance_relations:continue
                 source_group = 'robot' if actor == 'robot' else self.target
                 source = groups.get(source_group, [])
                 missing = [e for e in errors if e['group'] in (source_group, object_id)]

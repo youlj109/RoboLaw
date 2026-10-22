@@ -76,3 +76,7 @@ bash scripts/arena_python.sh scripts/evaluate_raw_capture.py \
 - 两次 gDist 风险回放均记录 `warp_runtime_loaded=false`。非几何缺测仍保留未知；几何完整不等于类别所有证据完整。
 
 汇总：[集成验证](../validation/gdist_backend_integration_20261022.json)；[当前动态短段对照](../validation/gdist_current_code_comparison_20261022.json)；[历史完整轨迹对照](../validation/gdist_full_rule_comparison_20261022.json)。视频未提交仓库。
+
+## 场景距离范围更新
+
+2026-10-23 用户要求当前人体任务省去指定 PT 距离。仅在场景保护条件匹配时，44 项关系直接不提交查询、不保存距离；其余关系继续 gDist，不用 bbox 替代。排除清单和源统计哈希逐条冻结，见 [PT 距离排除](pt_distance_omissions.md)。历史数据不自动套用新策略。

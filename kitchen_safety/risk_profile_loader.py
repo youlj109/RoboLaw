@@ -82,7 +82,7 @@ def load_config(path):
     scene_definition=dict(layout=json.loads((ROOT/'configs/layout.json').read_text()),
                           assets=sorted(assets,key=lambda a:a['id']))
     return dict(config=config, profile=profile, mesh_backend_runtime=backend.runtime_info() if hasattr(backend,'runtime_info') else spec, implementation_files_sha256=code, profile_file_sha256=hashlib.sha256(profile_path.read_bytes()).hexdigest(),
-                scene_definition=scene_definition,adapter_version='arena-risk-observer-15-gdist-offline', evaluator_version=VERSION)
+                scene_definition=scene_definition,adapter_version='arena-risk-observer-16-scoped-pt-distance-omissions', evaluator_version=VERSION)
 
 
 def bind_profile(settings, binding):
@@ -109,4 +109,6 @@ def bind_profile(settings, binding):
         pairs.extend([{'actor': actor, 'object_id': name} for actor in ('robot', 'held_object')])
     if 'pt_asset_inventory' in binding:
         profile['arena_pt_asset_policy'] = deepcopy(binding['pt_asset_inventory'])
+        if binding['pt_asset_inventory'].get('distance_omissions'):
+            profile['pt_hs_inspired']['distance_omissions']=deepcopy(binding['pt_asset_inventory']['distance_omissions'])
     return profile

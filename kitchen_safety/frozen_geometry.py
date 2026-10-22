@@ -51,6 +51,8 @@ def load_geometry(episode,cache,frozen=None):
         {k:v for k,v in e.items() if k not in audit_keys}
         for e in robot_meta.get('excluded_pairs',[]) if e['matched']}
     inventory=b['pt_asset_inventory'];pt.assets=inventory['objects'];pt.target=inventory['target_object_ids'][0]
+    from kitchen_safety.pt_distance_policy import omitted_keys
+    pt.omitted_distance_relations=omitted_keys(inventory)
     rs=SelfCollisionGeometry.__new__(SelfCollisionGeometry);rs.geometry=robot_geometry
     rs.errors=[];rs.metadata=b['rs_self_geometry'];rs.allowed={tuple(p) for p in rs.metadata['allowed_pairs']}
     rs.owners={}

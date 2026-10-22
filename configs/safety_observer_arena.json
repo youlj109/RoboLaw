@@ -109,6 +109,207 @@
         "scope": "all_pair_rules_all_phases",
         "authorization": "User: 碗是目标物体要放到的位置，其和抓取物无需考虑财产安全，机器人和碗也不用考虑财产安全。"
       }
+    ],
+    "distance_omission_policies": [
+      {
+        "version": "arena-pt-distance-omission-1",
+        "id": "human-mustard-empirical-l0-and-task-relations-20261023",
+        "scenario_id": "human_default_mpfb",
+        "scope": "distance_only_all_phases",
+        "authorization": "User requested permanent PT distance query and raw distance persistence omission for consistently L0 relations in the current human mustard scene, including randomized episodes; additionally payload-to-bowl and payload-to-bowl-supporting-counter distances are omitted.",
+        "layout_guard": {
+          "task": "pick up the mustard bottle and place it in the bowl",
+          "robot_position": [
+            2.2,
+            -0.93,
+            0.0
+          ],
+          "robot_yaw_deg": 90,
+          "stand_height": 0.8,
+          "obstacle_usd_path": "assets/people/mpfb_corridor/collidable.usda"
+        },
+        "inventory_signature": "f9ac74c50dbc53e3983c62b8695ef1ab57d7f232461b3a8d764daf248008a399",
+        "selection_report_sha256": "e59fa377c4256095f46bb5b11db1cd3509edcc6f299c2ce2edee937fb8d6eae7",
+        "selection_report": "validation/pt_l0_distance_selection_20261023.json",
+        "relations": [
+          {
+            "actor": "robot",
+            "object_id": "kitchen/cab_1_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/cab_2_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/cab_3_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/cab_4_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/cab_micro_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/coffee_machine_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/counter_main_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/counter_right_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/dishwasher_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/floor_backing_room"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/floor_room"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/fridge_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/knife_block_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/light_switch_2_room"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/light_switch_room"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/microwave_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/outlet_2_room"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/outlet_room"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/paper_towel_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/sink_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_1_main_group_1"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_1_main_group_2"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_1_main_group_3"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_1_main_group_4"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_1_main_group_base"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_2_main_group_1"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_2_main_group_2"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_2_main_group_base"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_3_main_group_1"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_3_main_group_base"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_4_main_group_1"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_4_main_group_2"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stack_4_main_group_base"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/stove_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/toaster_main_group"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/wall_backing_room"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/wall_left_backing_room"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/wall_left_room"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/wall_right_backing_room"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/wall_right_room"
+          },
+          {
+            "actor": "robot",
+            "object_id": "kitchen/wall_room"
+          },
+          {
+            "actor": "robot",
+            "object_id": "bowl"
+          },
+          {
+            "actor": "held_object",
+            "object_id": "bowl"
+          },
+          {
+            "actor": "held_object",
+            "object_id": "kitchen/counter_main_main_group"
+          }
+        ]
+      }
     ]
   },
   "pt_v4_geometry": {
