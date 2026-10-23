@@ -16,7 +16,7 @@ ylj参考：https://github.com/youlj109/RoboLaw/tree/ylj
 请实际执行开发，不只给计划。取得ylj基线并进入个人分支后，读取本组SKILL.md、references/review-gates.md、references/workflow.md、references/assignment.json，以及SKILL链接的实测参考，重点读取references/repaired-left-button.md。不要假设历史accepted=true自动满足新验收要求。
 
 一、职责和边界
-先复现修复后的左取消按钮，再开发右取消按钮，最后开发烤箱温度旋钮。
+先复现修复后的左取消按钮，再开发右取消按钮，最后开发烤箱温度旋钮。按钮原任务描述为按住，原成功谓词为is_pressed；记录成功时刻和保持时长，不编造原任务规定的持续秒数。温度旋钮原目标为3档，不能把任意转动当成功。
 当前状态：左按钮三类已修复重采，各有三个 seed 的接近段规划对照；右按钮与温度旋钮未验证。
 任务ID、原YAML和源码哈希从assignment.json逐项核对。不要开发其他组任务。
 只在以下本组目录实施：
@@ -31,10 +31,10 @@ docs/extensions/controls/
 二、立即开始
 1. 先确认本人姓名缩写。未知时先询问，等待我的答案；这期间可以只读检查仓库，不创建或切换个人分支。获得答案后将其作为本次任务的student_branch值；后续命令执行前确保该变量已按答案赋值且非空，使用git check-ref-format --branch "$student_branch"验证，禁止使用main、master、ylj或ylj-分组名。不同shell调用不会自动保留变量，应重新赋值或使用已确认的具体姓名分支名。
    执行git status --short --branch和git remote get-url origin，确认是在本人的独立克隆，且origin指向youlj109/RoboLaw（HTTPS或SSH均可）。远程不符时先报告，不擅自改写远程。保留所有未提交修改；工作区不干净时不要直接切换/合并，不reset、clean或自动stash，可保留原目录并建立独立克隆继续。
-   在确认远程后显式执行：git fetch origin refs/heads/ylj:refs/remotes/origin/ylj
+   在确认远程后执行git remote set-branches --add origin ylj，保留原获取规则并让后续fetch包含共同基线；再显式执行：git fetch origin refs/heads/ylj:refs/remotes/origin/ylj
    该命令兼容只获取过主分支的single-branch克隆；不要只用git pull main代替。
    先检查本人姓名分支是否在本地或远程存在。在干净的个人工作区，确认本地和远程均不存在该姓名分支且student_branch已按本人答案赋值后执行：git switch --no-track -c "$student_branch" origin/ylj
-   若姓名分支已存在，保留其提交，在student_branch已赋值后执行git switch "$student_branch"；用git merge-base --is-ancestor origin/ylj HEAD检查是否包含最新基线，缺少时审阅差异并执行git merge origin/ylj，解决冲突时保留双方有效工作，禁止强制重置或丢弃已有工作。若只在远程已有个人分支，先获取并沿用该分支，再检查基线，不另建同名分支覆盖其历史。若已按旧文档创建分组分支并有个人提交，先确认所属者，再安全重命名为本人姓名分支，或将其工作合入已有姓名分支；不得丢弃提交，也不自动删除旧远程分支。
+   若姓名分支已存在，保留其提交。若远程存在该个人分支，先执行git remote set-branches --add origin "$student_branch"，再执行git fetch origin "refs/heads/$student_branch:refs/remotes/origin/$student_branch"；single-branch克隆也必须先补获取规则，不能仅fetch后直接--track。本地没有时执行git switch --track -c "$student_branch" "origin/$student_branch"；本地已有则执行git switch "$student_branch"，审阅并合入尚未包含的个人远程提交。用git merge-base --is-ancestor origin/ylj HEAD检查最新共同基线，缺少时审阅差异并执行git merge origin/ylj。解决冲突时保留双方有效工作，禁止强制重置或丢弃已有工作。若已按旧文档创建分组分支并有个人提交，先确认所属者，再安全重命名为本人姓名分支，或将其工作合入已有姓名分支；不得丢弃提交，也不自动删除旧远程分支。
    不从main/master直接开始开发，也不要将origin/ylj设为个人分支的upstream；已有误配置应取消，个人upstream在提交时用下述git push -u设置。
    完成基线准备后，再读取上文列出的本组技能及参考文件。assignment.json中的旧base_commit用于溯源，不要据此回退工作分支。
 2. 执行：python3 student_skills/robolaw-controls/scripts/preflight.py --repo "$PWD"
@@ -61,7 +61,7 @@ docs/extensions/controls/
 
 五、资源与提交
 本机Kit/cuRobo统一使用/workspace/reports/skill_trials/gpu.lock；多个克隆/容器中的该路径必须映射同一宿主锁文件，不能各自新建一把锁。遵循本组runner：已内部持锁的不再外套同一锁；其他GPU入口须按技能加锁。CPU工作可并行。--device cpu不保证不使用GPU。
-每完成一个原始任务，确认当前分支与已确认的本人姓名缩写一致后提交；确保student_branch已按本人答案赋值，再执行git push -u origin "$student_branch"，附配置、复现命令、验收报告和视频路径。检查Git diff，只提交本任务源码/配置/文档，遵守已有大资产与数据忽略规则；数据/视频另行列路径及哈希，不宣称已随Git上传。
+每完成一个原始任务，确认当前分支与已确认的本人姓名缩写一致后提交；确保student_branch已按本人答案赋值，再执行git push -u origin "$student_branch"；首次成功创建个人远程分支后执行git remote set-branches --add origin "$student_branch"，让后续fetch也获取它。附配置、复现命令、验收报告和视频路径。检查Git diff，只提交本任务源码/配置/文档，遵守已有大资产与数据忽略规则；数据/视频另行列路径及哈希，不宣称已随Git上传。
 收尾用任务表列出：已完成、失败、未验证、下一任务。不要降低验收条件来凑数量。
 ```
 

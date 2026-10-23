@@ -7,7 +7,7 @@ description: 为RoboLaw学生A独立扩展Replicator 全部14个抓放环境，�
 
 **开始开发、复现或验收前必读 [本次复查与验收要求](references/review-gates.md)。历史 12/12 不再作为交付验收；原任务成功、场景物理质量与避障必要性须分列。**
 
-独立负责 **14个原始环境**；由学生自己从 `origin/ylj` 创建以**本人姓名缩写**命名的分支（例如 `zxw`、`lgd`、`lwx`）。姓名未明确时先询问该学生，不按A/B/C/D猜测对应关系；`ylj`仅作为共同基线。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界和验收要求；优先按 [avoidance-trial.md](references/avoidance-trial.md) 的真实入口、无障碍控制和强制因果验收复现 G 型 mustard→red bowl 首任务。本技能自包含，不依赖其他学生产出。三条旧记录因背景冰箱自主运动不用于交付。修复后已重新完成两种基线与三个变体，40s中性检查通过；人体另有三个seed转运段配对，财产/横杆限单基线证据。最新场景修复、人体重新摆位与配对实测见 [repair-20261022.md](references/repair-20261022.md)。历史 baseline、参数和审计见该实测页与 coverage，当前交付结论以 review-gates.md 为准。其余13个原始任务未实测。[verified-trial.md](references/verified-trial.md) 仅保留第一轮 skill_trials 三条物理场景历史，不能将它们当作有效避障样本。
+独立负责 **14个原始环境**；由学生自己从 `origin/ylj` 创建以**本人姓名缩写**命名的分支（例如 `zxw`、`lgd`、`lwx`）。姓名未明确时先询问该学生，不按A/B/C/D猜测对应关系；`ylj`仅作为共同基线。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界和验收要求；当前复现入口统一使用 [repair-20261022.md](references/repair-20261022.md)，包含中性保持、门可动性、配对控制与源几何检查。资产恢复和历史单基线因果审计背景见 [avoidance-trial.md](references/avoidance-trial.md)，不能仅运行其中采集命令就替代当前完整流程。本技能自包含，不依赖其他学生产出。三条旧记录因背景冰箱自主运动不用于交付。修复后已重新完成两种基线与三个变体，40s中性检查通过；人体另有三个seed转运段配对，财产/横杆限单基线证据。历史 baseline、参数和审计见实测页与 coverage，当前交付结论以 review-gates.md 为准。其余13个原始任务未实测。[verified-trial.md](references/verified-trial.md) 仅保留第一轮 skill_trials 三条物理场景历史，不能将它们当作有效避障样本。
 
 ## 首次执行
 
@@ -27,7 +27,7 @@ python3 /path/to/robolaw-replicator/scripts/preflight.py --repo /path/to/RoboLaw
 
 ## 本组实施重点
 
-先做 G 型 mustard_bowl，无障碍基线通过后做三类代表变体，再扩展其余四种厨房的 mustard_bowl；接着做四种 banana_bowl，最后五种 bowl_sink。五种厨房包括 G、L 带中岛、L、半岛、U；半岛没有 banana_bowl，禁止补造第15个上游环境。
+先做 G 型 mustard_bowl 的基线与三类代表变体，再做同为G型的 banana_bowl、bowl_sink；之后按 L 带中岛、L、半岛、U 的布局顺序逐个扩展清单内任务。五种厨房包括 G、L 带中岛、L、半岛、U；半岛没有 banana_bowl，禁止补造第15个上游环境。
 保留原任务 robot stand_height、朝向、支撑面关系；固定初始布局须由原 OnRelationValidator/NextToValidator 验证，台架原点不能视为足迹中心。每条源关系、固定台架和真实q自碰撞独立sidecar均须通过。瓶、香蕉、碗分别有抓取区域；水槽是厨房内部目标区域，不是可以夹持的独立碗。目标落点、物体携带包络和放置后支撑状态按资产实际几何计算。每种厨房的碰撞世界、台面高度、world/local 坐标都重新验证。不要把一字型厨房的绝对坐标直接复制进去。
 
 ## 代码位置与必读实现

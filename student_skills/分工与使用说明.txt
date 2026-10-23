@@ -1,100 +1,25 @@
-2026-10-23分支命名更新：ylj只作共同基线；每位学生自己从origin/ylj创建本人姓名缩写分支，例如zxw、lgd、lwx。不预分配姓名与A/B/C/D的对应关系；姓名未知时先询问学生本人。完整主分支迁移步骤和当前启动Prompt见docs/student_assignments/README.md。
+RoboLaw 四位学生独立任务分工与技能使用（2026-10-23）
 
-RoboLaw 四位学生独立原始任务分工（2026-10-21）
+一、共同基线与分支
+共同基线是 https://github.com/youlj109/RoboLaw/tree/ylj 。每位学生自己从最新origin/ylj创建本人姓名缩写分支，例如zxw、lgd、lwx；不加ylj-前缀，不预设姓名与A/B/C/D的对应关系。姓名未知时Agent先问学生本人。assignment.json的base_commit仅用于上游来源追溯，不能回退到旧提交；branch=null表示实际个人分支名由学生提供。
+已经安装主分支的同学先获取ylj，再创建或同步姓名分支；使用独立工作目录，保留未提交修改和已有个人提交。完整分支命令、single-branch克隆处理与快速开始见仓库docs/student_assignments/README.md。
 
-最新验收要求：先证明同一成功基线加入新增实体后违反既有安全距离，再证明新轨迹安全完成原任务。实体可见、路径不同或采集成功均不能单独认定为有效避障。首轮12条仅作物理/采集流程测试，新有效性证据独立交付。
+二、独立分工
+A：Replicator全部14个抓放环境；技能robolaw-replicator；先G型芥末瓶入碗，再同布局香蕉入碗/碗入水槽，随后其他布局。
+B：Lightwheel其余5个抓放环境；技能robolaw-lightwheel-pick-place；青柠、柠檬、双香蕉、汤勺、百事可乐。
+C：Lightwheel全部8个开门环境；技能robolaw-doors；先基础冰箱，再按共享任务表开发剩余门任务。
+D：Lightwheel左右按钮与温度旋钮3个环境；技能robolaw-controls；左取消按钮、右取消按钮、温度旋钮。
+共30个原始环境，无串联依赖。31个环境中的原Lightwheel pick_and_place芥末瓶入碗及11变体是共同回归参考，已从新增任务中排除。完整ID、源YAML和哈希以各技能references/assignment.json为准。
 
-一、分工原则
-每个人独立完成自己原始任务的场景、11类候选安全增广、cuRobo执行、少量真实采集、验证与Git分支交付。四组从同一源码基线出发，没有“先等A做框架”或“先等C做接触控制”的串联依赖。
-原始参考基线：RoboLaw cce14d656a2a449e3f04846748025c80adfbc829；Arena固定版本记录在各skill的assignment.json。本轮实测执行器与修订技能位于ylj分支。复用实测实现时，先获取同一个ylj提交，再各自创建ylj-组名分支；不要为匹配旧base_commit而回退并丢掉新增执行器。base_commit保留来源追溯意义，预检仍按各原任务YAML哈希核对。
-现有Lightwheel mustard→bowl任务是共同只读参考，不在新增30任务分工中。任务数不同是因为接触控制与新物体抓取难度不同。
+三、直接使用
+每人获取本组完整技能目录，必须保留SKILL.md、references/、scripts/和START_PROMPT.txt。可复制本组START_PROMPT.txt的全文给Codex/Cursor；其正文与仓库docs/student_assignments中本组MD的Prompt代码块保持一致。Cursor也可把SKILL.md加入上下文；无需假设IDE自动发现技能。
+先处理代码基线和姓名分支，再读取当前技能、执行CPU预检、检查已安装依赖/资产。不要盲目重装，技能ZIP不含仿真执行器、USD大资产或数据。换克隆必须确认容器/workspace映射本人代码；同机GPU任务使用同一个宿主锁文件，runner已持锁时不重复套锁，不结束他人任务。
 
-二、协作和合并
-四人在自己的checkout/工作树中创建各自ylj-开头分支；不要四个人在同一个工作目录切换分支。每组完整目录互不重叠，既有公共基线默认不改，组内适配实现放本组目录；没有等待他人的公共模块。
-导师/集成人员在各组提交可运行版本后统一合并到ylj，再决定是否抽取重复能力；这不是学生开工前置条件。先独立跑通可审查代码，再做公共抽象，避免四个人同时改environment.py、collect_kitchen.py等大文件。
-每组首任务已有本轮实测的局部入口，见各skill的实测参考及docs/extensions/SKILL_TRIALS.md；其他任务继续在组内扩展，不能假设已有通用task参数、向量化执行或人体批采。
-所有31环境都沿用DROID，但基座/支座高度/厨房坐标不同；每组继承原始YAML和原始任务成功条件。
-本轮导师试用按用户要求：每技能选1个原任务，人体/财产/障碍物各1条成功轨迹并保存视频。后续学生的一般小样本流程仍是：1条无新增障碍基线，再财产/机器人周边/人体各一个代表变体，每个3条成功轨迹；具体用户配额优先。随后推广本组全部任务和适用变体；全部任务无需等待其他组验收。
-每配置初始最多10次尝试；连续3次同类失败先修复；不直接启动每变体200条。数据采集人员在交付后扩充配额。
-若共用一张GPU，只串行安排GPU资源时段，开发和CPU检查仍可四人同时进行。不要停止其他人的训练或采集。
+四、当前交付要求
+每个原始任务：匹配的无新增风险成功基线，人体/财产/障碍物三个变体各1条完整真实成功数据，保留原三路视频，必要时增加人体总览，生成原速同视角基线对照。不同控制参数须有各自匹配基线。
+先验证场景物理静置与真实机器人操作，再以源几何确认新增实体影响基线；以预声明seed42/43/44做同参数成对规划。三个规划seed不是三条物理采集，不是随机化布局。危险旧路径只做离线检查。禁止通过传送、写目标关节或仿真焊接伪造成功，不降低原任务谓词或安全距离。
+现有11类资产只作候选库，当前不要求每任务扩满11类。每配置初始最多10次尝试，连续3次同类失败先修复，保留失败。学生完成少量验证即可增量提交自己的姓名分支；200条批采交后续人员。
 
-三、把技能交给学生的方法（不依赖编辑器自动发现技能）
-1. 每位学生只拿自己对应的完整文件夹/zip；不要只复制SKILL.md，references和scripts也要保留。
-2. 在自己的RoboLaw checkout中解压到student_skills/<技能名>/，或放其他位置；实际路径传给AI即可。
-3. 在Cursor或Codex聊天中粘贴下面本组启动提示。该方式要求AI读取文件，不需要安装编辑器插件或修改全局规则。
-4. 新机器先按仓库README恢复固定依赖源码/资产和运行时；本技能预检不自动下载，也不启动GPU。
-5. skill预检用Python标准库，运行包级validate_bundle.py需PyYAML；二者都不是物理采集成功测试。
-
-学生A：Replicator 全部14个抓放环境
-分支：本人姓名缩写
-技能：robolaw-replicator/SKILL.md
-首任务：kitchen_bench_replicator_g_shape_mustard_bowl
-完整负责范围：
-  kitchen_bench_replicator_g_shape_banana_bowl
-  kitchen_bench_replicator_g_shape_bowl_sink
-  kitchen_bench_replicator_g_shape_mustard_bowl
-  kitchen_bench_replicator_l_island_banana_bowl
-  kitchen_bench_replicator_l_island_bowl_sink
-  kitchen_bench_replicator_l_island_mustard_bowl
-  kitchen_bench_replicator_l_shape_banana_bowl
-  kitchen_bench_replicator_l_shape_bowl_sink
-  kitchen_bench_replicator_l_shape_mustard_bowl
-  kitchen_bench_replicator_peninsula_bowl_sink
-  kitchen_bench_replicator_peninsula_mustard_bowl
-  kitchen_bench_replicator_u_shape_banana_bowl
-  kitchen_bench_replicator_u_shape_bowl_sink
-  kitchen_bench_replicator_u_shape_mustard_bowl
-
-可直接粘贴的启动提示：
-请读取并按 student_skills/robolaw-replicator/SKILL.md 执行。我负责学生A这组原始任务。先运行技能预检，优先读取 references/avoidance-trial.md；references/verified-trial.md 仅是第一轮物理场景历史，检查源YAML和资产；从包含已实测G型入口的ylj统一提交分出新分支 本人姓名缩写（用户明确指定的分支优先）， 独立完成本组场景安全增广、cuRobo执行、少量真实采集和验证，不等待其他同学的代码。先复现 run_trial.py --trial-root avoidance_trials 的首任务无障碍控制与三类有效避障变体，全部加 --overview-camera；必须同源布局/有效控制，原baseline真实逐子步反事实违反原安全模型间隙，新轨迹真实安全完成并保存路径/视频对照，不能只摆放物体或用轨迹不同冒充避障；确认上游原始关系、固定台架、自碰撞和物理/RGB独立报告全部通过；其余13个原任务尚未验证，再按清单逐个扩展。每个变体只做少量验证，不跑200条。遵守技能的独立目录和原始任务判定；记录所有失败和未验证项。完成后提交并推送自己的分支，给出可复制复现命令和验证证据。如果GPU被其他任务占用，先继续CPU工作，不结束其他进程。
-
-学生B：Lightwheel 剩余5个抓放环境
-分支：本人姓名缩写
-技能：robolaw-lightwheel-pick-place/SKILL.md
-首任务：kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian
-完整负责范围：
-  kitchen_bench_lightwheel_pick_lemon_shelf_on_plate_u_shaped_with_island_farmhouse2
-  kitchen_bench_lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2
-  kitchen_bench_lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian
-  kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian
-  kitchen_bench_lightwheel_place_pepsi_in_basket_u_shaped_with_island_farmhouse2
-
-可直接粘贴的启动提示：
-请读取并按 student_skills/robolaw-lightwheel-pick-place/SKILL.md 执行。我负责学生B这组原始任务。先运行技能预检，检查源YAML和资产，并阅读 references/physical-trial.md 的历史物理入口以及 references/avoidance-trial.md 的强制避障验收，然后在新分支 本人姓名缩写 独立完成本组场景安全增广、cuRobo执行、少量真实采集和验证，不等待其他同学的代码。使用已包含本组实现的RoboLaw源码；技能ZIP本身不携带仿真执行器和资产。先跑通同源reset布局的成功无障碍基线，再做三类代表变体。每个变体必须让这条基线的实测臂/指爪/携物轨迹违反原安全距离，并通过实际重规划执行消除风险；初态、目标、原厨房与固定台架均合法。仅新增物体或随机路径不同不能计有效。所有控制参数一致，改变抓点或速度则重采匹配基线。通过后再推广到清单内其他任务。每个变体只做少量验证，不跑200条；若本轮用户明确指定每变体1条，按该数量执行，不能把固定布局单样本称为随机化验收。保留真实双指抓取、源任务当前终态predicate、完整厨房和携物检查、三路原相机数据；不通过改接触阈值或忽略源物体修饰失败。遵守技能的独立目录和原始任务判定；记录所有失败和未验证项。完成后提交并推送自己的分支，给出可复制复现命令和验证证据。如果GPU被其他任务占用，先继续CPU工作，不结束其他进程。
-
-学生C：Lightwheel 全部8个开门环境
-分支：本人姓名缩写
-技能：robolaw-doors/SKILL.md
-首任务：kitchen_bench_lightwheel_open_fridge
-完整负责范围：
-  kitchen_bench_lightwheel_open_cabinet_u_shaped_with_island_farmhouse2
-  kitchen_bench_lightwheel_open_freezer_g_shaped_large_scandinavian
-  kitchen_bench_lightwheel_open_fridge
-  kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian
-  kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2
-  kitchen_bench_lightwheel_open_microwave
-  kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian
-  kitchen_bench_lightwheel_open_oven_g_shaped_large_scandinavian
-
-可直接粘贴的启动提示：
-请读取并按 student_skills/robolaw-doors/SKILL.md 执行。我负责学生C这组原始任务。先运行技能预检，检查源YAML和资产，然后在新分支 本人姓名缩写 独立完成本组场景安全增广、cuRobo执行、少量真实采集和验证，不等待其他同学的代码。先跑通首任务及三类代表变体，再推广到清单内其他任务。每种安全增广必须用同源布局、同控制策略的成功无障碍基线证明真实几何会违规，并用重规划后实测安全轨迹完成原任务；只摆物体在附近不能验收。保存原速视频、间距和路径对照。每个变体只做少量验证，不跑200条。遵守技能的独立目录和原始任务判定；记录所有失败和未验证项。完成后提交并推送自己的分支，给出可复制复现命令和验证证据。如果GPU被其他任务占用，先继续CPU工作，不结束其他进程。
-
-学生D：Lightwheel 左右按钮与温度旋钮3个环境
-分支：本人姓名缩写
-技能：robolaw-controls/SKILL.md
-首任务：kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian
-完整负责范围：
-  kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian
-  kitchen_bench_lightwheel_press_right_toaster_cancel_button_g_shaped_large_scandinavian
-  kitchen_bench_lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian
-
-可直接粘贴的启动提示：
-请读取并按 student_skills/robolaw-controls/SKILL.md 执行。我负责学生D这组原始任务。先运行技能预检，检查源YAML和资产，然后在新分支 本人姓名缩写 独立完成本组场景安全增广、cuRobo执行、少量真实采集和验证，不等待其他同学的代码。先跑通首任务及三类代表变体，再推广到清单内其他任务。每个变体只做少量验证，不跑200条。遵守技能的独立目录和原始任务判定；记录所有失败和未验证项。完成后提交并推送自己的分支，给出可复制复现命令和验证证据。如果GPU被其他任务占用，先继续CPU工作，不结束其他进程。
-
-必须阅读 references/avoidance-design.md。先采同源布局、同控制参数的成功无障碍基线，再选择三类新增实体，使旧实际路径确实违反原安全距离、初态/目标/支撑仍合法；在原安全间隙下重新规划并完成真实原任务。保存控制参数、成对几何审计、旧/新路径及原速视频对照。缺少必要性证据、只摆放实体、只有规划成功或随机路径差异都不能计有效。危险旧轨迹仅CPU评估，不在新增风险下执行。
-
-四、交付检查
-首个任务的小样本验收通过即可提交/推送本组分支，之后按原始任务增量提交；不必等待本组全部任务完成或等待其他组。
-每组交付环境/变体覆盖表、代码配置、资产恢复说明、可复现命令、真实小样本验证结果、失败日志、已知限制。图像展示、规划成功、场景成功加载，都不能替代物理执行和数据校验。
-原始任务成功 + 执行/接触/间隙检查 + RGB/动作/状态对齐三层都通过，才记accepted。按accepted数达到200条的批采交给后续人员。
-技能测试与真实采集记录见VALIDATION.txt、各skill实测参考和docs/extensions/SKILL_TRIALS.md；完成矩阵从reports/skill_trials/summary.json读取。本轮4个原任务的固定样本不代表其余26个新增任务已实现或已采集成功。
+五、证据范围
+已有四个首任务的局部执行器可参考，其余26个环境仍需实现。A/D六条修复后替代样本与B/C六条历史样本分开报告。A人体与D三类有三个seed的分段规划对照；A财产/横杆仍仅单基线必要性；B/C尚缺本轮新增完整静置和多seed检查。不能以旧accepted=true或历史12/12替代新版门禁。详见各技能references/review-gates.md。
+CPU预检/包验证不证明GPU、物理成功或30任务已跑通。学生须补齐未测项；数据、资产与视频按仓库忽略规则另行交接路径/哈希，不宣称随Git上传。

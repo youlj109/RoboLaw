@@ -2,15 +2,15 @@
 
 **修复进展：** 新的左按钮 `human_repaired01`、`property_repaired01`、`robot_repaired01` 与 `base_repaired02` 已另行验证；按 [修复后的实测与复现](repaired-left-button.md) 使用新配置。下述历史撤回及严格验收要求保留，不能据新样本复活旧回合。
 
-> 以下记录保留首轮物理/采集试用及其历史限制，不能据其中三条成功认定避障有效。后续新增场景必须采用同源无障碍基线、原间隙反事实违例、新轨迹安全成功的成对验收；技能参考 `references/avoidance-design.md`，新配置为 `configs/extensions/controls/avoidance_left_button.json`，新数据位于 `datasets/avoidance_trials/controls/`。
+> 以下记录保留首轮物理/采集试用及其历史限制，不能据其中三条成功认定避障有效。后续新增场景必须采用同源无障碍基线、原间隙反事实违例、新轨迹安全成功的成对验收。`avoidance-design.md` 保存此前单基线试验，`configs/extensions/controls/avoidance_left_button.json` 是该轮历史配置；当前启动入口、修复配置与完整验收步骤见 [repaired-left-button.md](repaired-left-button.md)。
 
-本轮用户要求每个技能选择一个原任务，构建人体、财产、机器人周边障碍三个变体，每变体一条真实采集并保存视频；这是对 workflow 默认三条要求的本轮覆盖，不是批采成功率结论。
+该轮用户要求每个技能选择一个原任务，构建人体、财产、机器人周边障碍三个变体，每变体一条真实采集并保存视频；不构成随机化或批采成功率结论。当前配额以 workflow 为准。
 
 选用 `kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian`，保留原 PressButtonTask、原 YAML 关系、DROID 相机/动作空间。Lightwheel 官方厨房为 layout 9 / style 8，恢复版本 UUID 为 `1a892eee-c6c7-4077-9791-bfa3686b3cf7`。
 
-## 仓库入口
+## 历史试用入口（仅作溯源）
 
-首先检查 `scripts/extensions/controls/collect_trial.py` 是否存在。以下命令只适用于包含该扩展的仓库版本；技能压缩包本身不携带大型厨房、数据或完整 RoboLaw 仓库。若入口不存在，按本技能与原源码实现本组局部适配，不调用不存在的脚本。
+以下命令解释首轮记录，不是当前新交付的启动流程。技能压缩包本身不携带大型厨房、数据或完整 RoboLaw 仓库；先取得 `origin/ylj` 基线，再使用 [当前修复入口](repaired-left-button.md)，不能直接运行本段默认旧配置后宣称完成新验收。
 
 ```bash
 bash scripts/arena_python.sh scripts/extensions/controls/restore_assets.py

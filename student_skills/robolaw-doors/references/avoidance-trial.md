@@ -10,6 +10,14 @@
 
 ## 判定与入口
 
+当前入口只覆盖下述历史单基线范围。新交付前须在本组目录补齐三项：
+
+- 机器人中性保持入口，使用同 reset/资产/机构参数，观察完整任务相当时长，保存目标门及全部未操作关节 q/dq、视频、预声明容差和独立结果；目前没有现成的本组中性对照 CLI。
+- 物理子步同步的接触载荷、目标门及背景关节 q/dq 记录与独立因果审计。现 `collect.py` 的120 Hz外部几何记录保存机器人 q、目标门角和位姿，但接触及 `fridge_q/fridge_dq` 只在15 Hz动作帧保存；`validate_trial.py` 检查双指接触计数，不能据此补成子步接触因果通过。同步采样仍分不清同一子步内先后时，明确标出证据边界。
+- seed42/43/44 的障碍开关成对规划入口及报告，沿用相同初态、候选抓点策略、目标与控制参数，保存全部候选/失败、源形状反事实和新路径检查。当前尚无本组通用成对规划 CLI；先实现并核验接口，再给真实复现命令。抓点适配与固定目标绕行分别报告。
+
+下述旧采集/验证命令可以用于复现历史能力，**不会自动生成这三项新增证据**。尚未补齐时报告具体未验证项，旧 `accepted=true` 不能替代它们。
+
 - `scripts/extensions/doors/search_avoidance_layouts.py`：沿原轨迹搜索，检查原厨房/实际台架/门扫掠；`--pedestal` 的支柱整个实体都检查。输出是候选，不是通过。
 - 正式复现使用已保存的 `configs/extensions/doors/avoidance_variants.json` 和其中的小型支座/wrapper资产；需要时按下文命令重建同源人体。`build_avoidance_pedestals.py` 是早期探索工具，会生成历史候选配置，不能拿它覆盖最终配置。新布局另存配置，并重新验收。
 - `scripts/extensions/doors/collect.py --variant property --adaptive-handle-height --variant-config configs/extensions/doors/avoidance_variants.json --output datasets/avoidance_trials/doors/<new_attempt>`：沿用原控制参数，cuRobo 对新增几何重规划。人体同样传 `--adaptive-handle-height`；横杆不传。无障碍base必须用与对应增广样本相同的flag。通过环境 `HEADLESS=1` 启动；本 CLI 没有 `--headless`。实际 Python/容器入口按本机部署配置。

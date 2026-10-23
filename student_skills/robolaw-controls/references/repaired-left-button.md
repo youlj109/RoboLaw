@@ -1,6 +1,6 @@
 # 左取消按钮：2026-10-22 修复后的入口
 
-本轮只验证本组首任务 `kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian`，人体／花瓶／横杆各一条真实采集，以及每类三个规划 seed 的障碍开关配对。用户的一条要求覆盖 workflow 默认三条实采要求；不代表右按钮、温度旋钮或批量成功率。历史 `human_attempt02`／`property_attempt01`／`robot_attempt02` 保持撤回。
+本轮只验证本组首任务 `kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian`，人体／花瓶／横杆各一条真实采集，以及每类三个规划 seed 的障碍开关配对。当前每变体一条实采与 workflow 配额一致；不代表右按钮、温度旋钮或批量成功率。历史 `human_attempt02`／`property_attempt01`／`robot_attempt02` 保持撤回。
 
 ## 当前配置与物理约束
 
@@ -30,7 +30,25 @@
 
 ## 可复制步骤
 
-先确认本组脚本、资产、正确容器挂载和 GPU 锁均存在。在本机重新生成 `reports/skill_trials/controls/inspection/stage.usda`，不要假设其他学生的 ignored 数据已随 Git 提供。所有输出换新目录；下列是本组首任务入口，不能套用到右按钮／旋钮。
+先确认本组脚本、正确容器挂载和 GPU 锁均存在；下列入口只支持本组首任务，不能套用到右按钮／旋钮。不要假设其他学生的 ignored 资产、stage 或数据已随 Git 提供。
+
+先检查资产，只恢复实际缺项：默认 MPFB 的 `posed.blend`、`person.usdc` 与纹理由 `python3 scripts/restore_modelscope_assets.py` 恢复；DROID、台架和 cuRobo 模型按仓库 README 使用 `python3 scripts/restore_downloaded_assets.py --source official`（或其已列出的 modelscope 镜像）。本组 G 型厨房需在实际 Arena 解释器的缓存中存在，恢复入口为：
+
+```bash
+bash scripts/arena_python.sh scripts/extensions/controls/restore_assets.py
+```
+
+该脚本写默认 `reports/skill_trials/controls/assets.json`；已有报告时用 `--report` 指定新文件。它只恢复厨房，不恢复人体或机器人。重新下载前先核对已有文件与版本，避免重复安装。
+
+本组伸臂人体的可重建入口为 `bash scripts/extensions/controls/build_reposed_human.sh /path/to/blender`，将最后参数换成已核实的 Blender 可执行文件，历史验证版本为 4.0.2。它依赖上述原始 `posed.blend` 和 textures，会写 `assets/extensions/controls/human_reach_elbow_up/` 中的 USDC、纹理、pose 和 wrapper。执行前完整备份已有目录到本人的新备份位置，保留原 manifest，不能覆盖唯一历史资产后仍引用旧哈希。重建后逐项核对该目录 `artifact_manifest.json.generated_files`，并检查源哈希、脚/root、骨长、六个碰撞网格及导出画面；配对规划会严格验证全部资产哈希。若导出版本导致哈希不同，先诊断并记录几何/来源差异；需要新资产版本时另存原 manifest，经完整检查后生成对应的新清单并重新验收，不能只改预期哈希来消除报错。
+
+完成资产检查后生成本机 inspection stage：
+
+```bash
+test ! -e reports/skill_trials/controls/inspection && bash scripts/extensions/controls/run.sh inspect_runtime.py --device cpu
+```
+
+`inspect_runtime.py` 的输出路径固定，当前没有 `--out` 参数。若上面的存在性检查失败，先将原 `inspection` 整目录归档到新的个人报告目录，再重新运行；不要覆盖或删除旧证据。确认新 `state.json`、`stage.usda` 与当前原厨房、修复覆盖层和布局一致，再进行下面步骤。`audit_avoidance.py` 当前也固定读取这个 stage，不能拿其他任务或其他回合的 stage 代替。以下各采集/审计输出使用新的目录；重审同一回合时也需保留原报告。
 
 ```bash
 bash scripts/extensions/controls/run.sh probe_passive_knobs.py --out reports/controls/neutral_new --device cpu
@@ -53,6 +71,10 @@ bash scripts/extensions/controls/run.sh paired_planning.py --config configs/exte
 
 同样采集并审计 property／robot，两者有自己的新目录。三个配对 seed 是规划检查，不自动计为三条物理采集。`--device cpu` 仍使用 GPU 进行 cuRobo 和 RTX 相机；`run.sh` 已持共享锁，不要外套同一 flock。
 
-读取每份报告实际 gate，新增配置／资产／原任务后重新验收。数据集里的 `config.json` 是读取时冻结副本；源资产、机构配方、状态、视频及审计哈希必须对应同一回合。真实危险关障路线只做离线检查。源相机第二路在人类手臂附近被遮挡时仍完整保留，展示对照可选原第一路，但不移动相机或隐藏人体。
+读取每份报告实际 gate，新增配置／资产／原任务后重新验收。中性试验默认 30 秒；应核对它覆盖当前完整回合的实际时长，必要时增加 `--neutral-seconds`，读取 `neutral_new/validation.json` 而不是只看进程退出。该 probe 当前读取首任务的 `avoidance_left_button.json` 中原机器人位姿，未提供任意任务/config参数；更改源布局、机构或任务时须先适配诊断，不沿用旧结论。
+
+`paired_planning.py` 会保存失败并正常写出报告，进程结束不等于通过。检查 `paired_new/paired_planning.json`：应完整包含 seed42/43/44 × base/human/property/robot 的12条记录，`all_plans_valid` 与 `all_hazard_off_paths_require_adjustment` 均为 true；逐条核对原密集验证、源形状新路径无违规、同seed基线路径的真实几何违规和资产manifest结果。它只检查接近段规划，不代替真实全程执行和视频。接触因果报告、中性机构报告、避障报告和视频验证分别通过，不能用任一个 accepted 替代其他门禁。
+
+数据集里的 `config.json` 是读取时冻结副本；源资产、机构配方、状态、视频及审计哈希必须对应同一回合。真实危险关障路线只做离线检查。源相机第二路在人类手臂附近被遮挡时仍完整保留，展示对照可选原第一路，但不移动相机或隐藏人体。
 
 仓库内详细结果在 `docs/extensions/controls/REPAIRED_LEFT_BUTTON.md` 和 `repaired_left_button_results.json`。未通过项、未测项和旧撤回单列，不能依据本轮三条使旧回合恢复合格。

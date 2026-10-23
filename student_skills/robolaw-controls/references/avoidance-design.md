@@ -30,9 +30,9 @@
 
 当前本组搜索入口 `scripts/extensions/controls/search_avoidance.py` 只生成稀疏采样候选，不能当成正式验收。采集支持 `collect_trial.py --config PATH`，把选中布局存入独立配置，禁止覆盖历史回合配置。最终 `audit_avoidance.py EPISODE --baseline BASELINE` 读取全部动作前后真实状态，并要求物理、数据、固定台架、自碰撞报告。CPU 几何审计仍不等于逐物理步审计。
 
-## 本仓库的成对复现命令
+## 历史单基线复现命令（仅作溯源）
 
-使用 `configs/extensions/controls/avoidance_left_button.json`，旧 `left_button_trial.json` 仅保留作首轮物理流程记录。每次选择新目录，不覆盖历史数据：
+以下使用历史 `configs/extensions/controls/avoidance_left_button.json`，用于解释旧记录；**当前启动请使用 [repaired-left-button.md](repaired-left-button.md) 的配置、资产恢复和完整验收步骤，不执行本段作为新交付。** `left_button_trial.json` 同样仅保留作首轮物理流程记录。历史命令如下，旧数据不覆盖：
 
 ```bash
 bash scripts/extensions/controls/run.sh collect_trial.py --config configs/extensions/controls/avoidance_left_button.json --variant base --output datasets/controls/avoidance_base_01 --max-steps 550

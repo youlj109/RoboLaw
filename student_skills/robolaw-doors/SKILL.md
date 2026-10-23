@@ -11,6 +11,8 @@ description: 为RoboLaw学生C独立扩展Lightwheel 全部8个开门环境，�
 
 首个 one-wall `open_fridge` 已于2026-10-21完成无障碍基线及人体、财产、横杆各1条真实采集；这些是场景/接触/视频冒烟测试，**原三个摆放不证明有效避障**。开发或复现首任务时，继续读 [physical-trial.md](references/physical-trial.md) 与 [avoidance-trial.md](references/avoidance-trial.md)：后者定义固定控制参数的反事实验收和修正入口。本轮三类各1条保留原任务完成、单基线真实几何反事实及实际120Hz安全证据；human/property 改用原把手的合法更高抓点，应标为抓点适配，不能称为固定终点绕行。多规划 seed 稳定必要性尚未验证，历史路径与数值见 avoidance-trial.md。仍只验证了1个原任务的固定布局，**其余7个任务仍未验证**。
 
+首任务现有命令尚不能完成新版验收：120 Hz 记录覆盖外部几何和目标门角，接触及全部冰箱关节 q/dq 仍为动作率；现有验证仅要求拉门时双指接触计数，未独立证明子步载荷/运动先后，也没有本组中性机构对照和多 seed 成对规划入口。须先补齐这些采样、诊断和独立审计，再完成新交付；不能把重跑旧三条检查自动记作新版通过。具体缺口见 [avoidance-trial.md](references/avoidance-trial.md)。
+
 ## 首次执行
 
 在用户指定的RoboLaw仓库中运行以下真实预检（把技能目录替换成实际路径；无需Isaac/GPU）：

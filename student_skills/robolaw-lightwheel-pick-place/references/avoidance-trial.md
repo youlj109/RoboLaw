@@ -48,7 +48,9 @@
 
 ## 复现验收顺序
 
-先用 `validate.py <episode>` 重算原任务/接触/图像/源支持，再运行 `audit_fixed_base.py <episode>`；使用共享GPU锁运行 `audit_self_collision.py <episode>`。CPU运行 `audit_source_background.py --baseline <base> --episode <variant>` 后，最后运行 `audit_avoidance.py --baseline <base> --episode <variant>` 和 `plot_avoidance.py`（同参数）。基线同样需原任务、源支持、全部RGB/视频及每物理步自碰撞通过。未齐全的几何预审另命名，不可当最终accepted。审计默认不覆盖历史文件。
+先对base及三个变体用 `validate.py <episode>` 重算原任务/接触/图像/源支持，并通过共享GPU锁运行 `audit_self_collision.py <episode>`。`audit_fixed_base.py <episode>` 只用于human/property/robot，当前实现不接受base；它验证新增实体与固定台架的关系，不替代base的完整厨房/源支持/自碰撞检查。三个变体再CPU运行 `audit_source_background.py --baseline <base> --episode <variant>`，最后运行 `audit_avoidance.py --baseline <base> --episode <variant>` 和 `plot_avoidance.py`（同参数）。基线同样需原任务、源支持、全部RGB/视频及每物理步自碰撞通过。未齐全的几何预审另命名，不可当最终accepted。
+
+只在新采集目录首次执行上述验收。`validate.py`、`audit_fixed_base.py`、`audit_self_collision.py` 和 `plot_avoidance.py` 会写回同名报告或图片，并非自动保留历史；复审已有目录时先另存原报告/图与哈希，避免覆盖既有证据。`audit_source_background.py`、`audit_avoidance.py` 则拒绝覆盖已有默认输出，可按各自 `--help` 选择新的报告路径。
 
 真实圆管反事实使用公共 `kitchen_safety.geometry_audit` 的解析Cylinder/Cube等几何，不用世界AABB角代替真实碰撞风险；执行仍保持既有保守世界检查。CPU摆位扫描的primitive AABB必须与live场景构建一致，非零yaw不能把旋转后的紧OBB当作live世界AABB。
 
@@ -67,4 +69,4 @@ bash scripts/extensions/lightwheel_pick_place/run.sh collect.py --device cpu --v
 bash scripts/extensions/lightwheel_pick_place/run.sh collect.py --device cpu --variant robot --seed 42 --placement_seed 42 --fixed-layout configs/extensions/lightwheel_pick_place/fixed_layout.json --variant-config configs/extensions/lightwheel_pick_place/avoidance_variants_robot03.json --output /workspace/datasets/avoidance_trials/lightwheel_pick_place/robot_new
 ```
 
-采集命令成功只代表物理任务出口；还必须按上面的完整独立验收顺序生成accepted，失败目录不可复用/覆盖。
+采集命令成功只代表物理任务出口；还必须按上面的完整独立验收顺序生成accepted，失败目录不可复用/覆盖。以上是既有单基线执行入口，尚不包含新版中性保持或三seed成对规划；当前缺项见 [review-gates.md](review-gates.md)，须先补齐相关实现，不能仅运行这四条采集命令就报告新版完整验收通过。

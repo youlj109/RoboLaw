@@ -55,23 +55,23 @@
 |---|---|---|---|
 | B01 | L型 Scandinavian | 青柠放入木碗 | `kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian` |
 | B02 | U型带中岛 Farmhouse2 | 架上柠檬放到盘子 | `kitchen_bench_lightwheel_pick_lemon_shelf_on_plate_u_shaped_with_island_farmhouse2` |
-| B03 | U型带中岛 Farmhouse2 | 香蕉放入木碗 | `kitchen_bench_lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2` |
+| B03 | U型带中岛 Farmhouse2 | 将两根香蕉都放入木碗 | `kitchen_bench_lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2` |
 | B04 | G型 Large Scandinavian | 汤勺放到盘子 | `kitchen_bench_lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian` |
 | B05 | U型带中岛 Farmhouse2 | 百事可乐放入篮子 | `kitchen_bench_lightwheel_place_pepsi_in_basket_u_shaped_with_island_farmhouse2` |
 ### C组：Lightwheel 开门
 
-先复现基础冰箱并补新版检查，再迁移其他冰箱、橱柜、冷冻室、微波炉和烤箱。
+按 C01—C08 顺序：先复现基础冰箱并补新版检查，再处理橱柜、冷冻室、G 型与 U 型冰箱、两种微波炉和烤箱。
 
 当前证据范围：基础冰箱三条保留真实开门和历史单轨迹证据；人体/财产涉及合法抓点适配，不能混称固定终点绕行。
 
 | 编号 | 布局 | 操作 | 完整环境 ID |
 |---|---|---|---|
-| C01 | 原始基础场景 | 打开冰箱 | `kitchen_bench_lightwheel_open_fridge` |
+| C01 | 一字型 Coastal | 打开冰箱 | `kitchen_bench_lightwheel_open_fridge` |
 | C02 | U型带中岛 Farmhouse2 | 打开橱柜 | `kitchen_bench_lightwheel_open_cabinet_u_shaped_with_island_farmhouse2` |
-| C03 | G型 Large Scandinavian | 打开冷冻室 | `kitchen_bench_lightwheel_open_freezer_g_shaped_large_scandinavian` |
-| C04 | G型 Large Scandinavian | 打开冰箱 | `kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian` |
+| C03 | G型 Large Scandinavian | 打开右侧冷冻室门 | `kitchen_bench_lightwheel_open_freezer_g_shaped_large_scandinavian` |
+| C04 | G型 Large Scandinavian | 打开左侧冰箱门 | `kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian` |
 | C05 | U型带中岛 Farmhouse2 | 打开冰箱 | `kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2` |
-| C06 | 原始基础场景 | 打开微波炉 | `kitchen_bench_lightwheel_open_microwave` |
+| C06 | 一字型 Coastal | 打开微波炉 | `kitchen_bench_lightwheel_open_microwave` |
 | C07 | G型 Large Scandinavian | 打开微波炉 | `kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian` |
 | C08 | G型 Large Scandinavian | 打开烤箱 | `kitchen_bench_lightwheel_open_oven_g_shaped_large_scandinavian` |
 ### D组：Lightwheel 按钮与旋钮
@@ -82,9 +82,11 @@
 
 | 编号 | 布局 | 操作 | 完整环境 ID |
 |---|---|---|---|
-| D01 | G型 Large Scandinavian | 按左侧烤面包机取消按钮 | `kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian` |
-| D02 | G型 Large Scandinavian | 按右侧烤面包机取消按钮 | `kitchen_bench_lightwheel_press_right_toaster_cancel_button_g_shaped_large_scandinavian` |
-| D03 | G型 Large Scandinavian | 旋转烤箱温度旋钮 | `kitchen_bench_lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian` |
+| D01 | G型 Large Scandinavian | 按住左侧烤面包机取消按钮 | `kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian` |
+| D02 | G型 Large Scandinavian | 按住右侧烤面包机取消按钮 | `kitchen_bench_lightwheel_press_right_toaster_cancel_button_g_shaped_large_scandinavian` |
+| D03 | G型 Large Scandinavian | 将烤箱温度旋钮转到 3 档 | `kitchen_bench_lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian` |
+
+按钮原任务描述为按住，原成功谓词为 `is_pressed`；记录成功时刻和实际保持时长，不额外编造原任务规定的持续秒数。
 
 ## 统一交付要求
 
@@ -112,10 +114,11 @@
 git status --short
 git branch --show-current
 git remote -v
+git remote set-branches --add origin ylj
 git fetch origin refs/heads/ylj:refs/remotes/origin/ylj
 ```
 
-显式获取 `ylj` 也适用于当初只克隆主分支的情况。在干净的个人工作区执行下方命令，输入**自己的姓名缩写**；例如本人姓名缩写为 `zxw` 时才输入 `zxw`，其他同学使用自己的名字。命令仅创建本地、远程均不存在的新分支，直接以 `origin/ylj` 为起点，无需先创建本地 `ylj`。
+`remote set-branches --add` 保留原获取配置并加入 `ylj`，随后显式获取；也适用于当初只克隆主分支的情况。在干净的个人工作区执行下方命令，输入**自己的姓名缩写**；例如本人姓名缩写为 `zxw` 时才输入 `zxw`，其他同学使用自己的名字。命令仅创建本地、远程均不存在的新分支，直接以 `origin/ylj` 为起点，无需先创建本地 `ylj`。
 
 ```bash
 (
@@ -136,9 +139,9 @@ git fetch origin refs/heads/ylj:refs/remotes/origin/ylj
 )
 ```
 
-`--no-track` 避免把共同基线 `origin/ylj` 设为个人分支的推送目标。首次提交后用 `git push -u origin <本人姓名缩写>` 建立对应的个人远程分支（替换尖括号中的文字）。
+`--no-track` 避免把共同基线 `origin/ylj` 设为个人分支的推送目标。首次提交后用 `git push -u origin <本人姓名缩写>` 建立对应的个人远程分支，再用 `git remote set-branches --add origin <本人姓名缩写>` 让后续 `git fetch origin` 获取它（替换尖括号中的文字）。在远程分支创建前不要加入这条个人获取规则，避免后续普通 fetch 找不到该远程分支。
 
-若姓名分支已经存在，先切到该分支，保留原提交，再执行 `git merge origin/ylj` 同步共同基线；有冲突时逐项解决，不使用 `reset --hard` 或强制推送。若姓名分支仅在远程存在，先获取并跟踪它，不能同名重建后覆盖。若已按旧文档建立分组分支并有个人提交，先确认所属者，再将本人分支安全重命名或将其提交合入本人的姓名分支；不得丢弃旧工作，也不自动删除旧远程分支。
+若姓名分支已经存在，沿用其历史，不能同名重建后覆盖。在干净工作区重新将本人确认的姓名缩写赋给 `student_branch`（上方括号中的变量不会保留）。若远程已有该分支，先执行 `git remote set-branches --add origin "$student_branch"`，再执行 `git fetch origin "refs/heads/$student_branch:refs/remotes/origin/$student_branch"`；这能修复 single-branch 克隆仅获取主分支、无法跟踪个人分支的情况。本地没有该分支时，执行 `git switch --track -c "$student_branch" "origin/$student_branch"`；本地已有则执行 `git switch "$student_branch"`，审阅并合入尚未包含的个人远程提交。随后执行 `git merge origin/ylj` 同步共同基线。有冲突时逐项解决，不使用 `reset --hard` 或强制推送。若已按旧文档建立分组分支并有个人提交，先确认所属者，再将本人分支安全重命名或将其提交合入本人的姓名分支；不得丢弃旧工作，也不自动删除旧远程分支。
 
 切换后核对：
 
@@ -177,6 +180,7 @@ cd RoboLaw-personal
 
 ## 文件入口
 
+- [本次全面复查结果与修正说明](REVIEW_20261023.md)
 - [A组直接可用Prompt](A_PROMPT.md)
 - [B组直接可用Prompt](B_PROMPT.md)
 - [C组直接可用Prompt](C_PROMPT.md)
