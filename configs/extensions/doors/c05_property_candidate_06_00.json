@@ -1,0 +1,54 @@
+{
+  "_kitchen_asset": "assets/extensions/doors/c02_mechanisms_lwx_01.usda",
+  "_selection_note": "Discovery candidate only; not task or physical acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2",
+  "_fixed_source_layout": "configs/extensions/doors/c05_source_layout_lwx.json",
+  "_status": "Frozen source relation solution; added layouts require design from this task baseline.",
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/tablet_stand.usda",
+    "position": [
+      5.447158756256104,
+      -2.9043338394165032,
+      1.12
+    ],
+    "static": false,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "yaw_deg": 90.0,
+    "baseline_intersection_actions": [
+      54,
+      58,
+      62,
+      66
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/c05_property_candidate_06_00_property_support.usda",
+      "position": [
+        5.447158756256104,
+        -2.9043338394165032,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          5.397158756256104,
+          -2.954333839416503,
+          -4.470348362317633e-10
+        ],
+        [
+          5.497158756256104,
+          -2.8543338394165034,
+          1.12
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry"
+    },
+    "candidate_search": "reports/doors/lwx_C04_C08_20261024/C05_property_tablet_newbase_search07.json",
+    "candidate_search_sha256": "a68081fbb17fa9a11c56ad9fcc457726d267340a8d22db6f13cf836ccdbd32bf",
+    "candidate_index": 0
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "image": "reports/doors/lwx_C04_C08_20261024/C05_human_06_source_risk01.jpg",
+  "image_sha256": "ff60ea3d2b78efbc593a9092579258ee04ed521363c206b5607d7ef72f36fdc6",
+  "camera": "external_camera_2",
+  "source_audit": "datasets/doors/lwx_C04_C08_20261024/C05_human_06/avoidance_audit.json",
+  "audit_sha256": "566925666ff5504c6d501e4ce2259373b462e9736ffca7cfe4b4a429ccc9712f",
+  "physics_replay": false,
+  "unsafe_path_executed": false,
+  "safety_margin_m": 0.02,
+  "panels": [
+    {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C05_base_03",
+      "frame": 68,
+      "risky_robot_bodies": [
+        "/panda/Gripper/Robotiq_2F_85/left_outer_finger",
+        "/panda/Gripper/Robotiq_2F_85/left_inner_finger",
+        "/panda/Gripper/Robotiq_2F_85/left_inner_knuckle"
+      ],
+      "frame_sha256": "14e53fd5e48d757db4d494efe075b0f7cda15101dddf73b4de10854d49fa62f1"
+    },
+    {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C05_human_06",
+      "frame": 60,
+      "risky_robot_bodies": [],
+      "frame_sha256": "9af0569b4b46923886503ac0fbe2eb1d2fd9323fefb8a07454093918ed076274"
+    }
+  ],
+  "scope": "Illustration only. Projected per-collider convex outlines and sampled margin envelopes do not replace FCL or physics audits. Panels use matching normalized pregrasp progress, not equal elapsed times.",
+  "camera_projection": "Recorded intrinsics and source panda_link0 camera mount, OpenGL convention.",
+  "visual_alignment_review_pending": true
+}

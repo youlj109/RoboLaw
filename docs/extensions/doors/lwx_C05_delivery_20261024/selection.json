@@ -1,0 +1,37 @@
+{
+  "label": "C05",
+  "task": "kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2",
+  "unit_test_log": "reports/doors/lwx_C04_C08_20261024/unit_tests_all_12.log",
+  "retained_rejections": [
+    "Earlier C05 baselines and rejected source-only candidates remain retained and excluded.",
+    "All three selected variants use the same base03 policy and scene.",
+    "Human external_camera is partly occluded by the nearby body; external_camera_2 and wrist show contact stages."
+  ],
+  "episodes": {
+    "base": {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C05_base_03",
+      "visual_review": "reports/doors/lwx_C04_C08_20261024/C05_base_03_visual_review01.json"
+    },
+    "human": {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C05_human_06",
+      "baseline": "datasets/doors/lwx_C04_C08_20261024/C05_base_03",
+      "paired_report": "reports/doors/lwx_C04_C08_20261024/C05_human_06_candidate_05_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C04_C08_20261024/C05_human_06_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C04_C08_20261024/C05_human_06_source_risk01_visual_review.json"
+    },
+    "property": {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C05_property_06",
+      "baseline": "datasets/doors/lwx_C04_C08_20261024/C05_base_03",
+      "paired_report": "reports/doors/lwx_C04_C08_20261024/C05_property_06_candidate_00_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C04_C08_20261024/C05_property_06_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C04_C08_20261024/C05_property_06_source_risk01_visual_review.json"
+    },
+    "robot": {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C05_robot_05",
+      "baseline": "datasets/doors/lwx_C04_C08_20261024/C05_base_03",
+      "paired_report": "reports/doors/lwx_C04_C08_20261024/C05_robot_05_candidate_12_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C04_C08_20261024/C05_robot_05_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C04_C08_20261024/C05_robot_05_source_risk01_visual_review.json"
+    }
+  }
+}

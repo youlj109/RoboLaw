@@ -1,0 +1,53 @@
+{
+  "_kitchen_asset": "assets/extensions/doors/c02_mechanisms_lwx_01.usda",
+  "_selection_note": "Discovery candidate only; not task or physical acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2",
+  "_fixed_source_layout": "configs/extensions/doors/c05_source_layout_lwx.json",
+  "_status": "Frozen source relation solution; added layouts require design from this task baseline.",
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      5.407158756256104,
+      -2.584333839416503,
+      1.039999942779541
+    ],
+    "yaw_deg": 0.0,
+    "static": true,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "baseline_intersection_actions": [
+      54,
+      58,
+      62
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/c05_robot_candidate_05_12_robot_support.usda",
+      "position": [
+        5.407158756256104,
+        -2.584333839416503,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          5.322158756256104,
+          -2.669333839416503,
+          -4.470348362317633e-10
+        ],
+        [
+          5.492158756256104,
+          -2.499333839416503,
+          1.039999942779541
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry"
+    },
+    "candidate_search": "reports/doors/lwx_C04_C08_20261024/C05_robot_search_06.json",
+    "candidate_search_sha256": "c9865a72000f711bebca225f5e19f01a270c090407eeec28cf550f8cb6a36336",
+    "candidate_index": 12
+  }
+}
