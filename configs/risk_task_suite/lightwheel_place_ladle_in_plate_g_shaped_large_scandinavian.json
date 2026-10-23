@@ -1,0 +1,372 @@
+{
+  "schema_version": "robolaw-task-contract-1",
+  "task_id": "lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian",
+  "environment_id": "lightwheel_kitchen_g_shaped_large_scandinavian",
+  "family": "pick_and_place",
+  "description": "Pick up the ladle from the counter top and place it into the plate.",
+  "composition": "atomic",
+  "provenance": {
+    "path": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian.yaml",
+    "sha256": "2549b637b9ac32cfc2cc07686746f39fdf29c29ad8e6e7a53825484b9447412f",
+    "kind": "upstream"
+  },
+  "arena_environment_spec": {
+    "env_name": "kitchen_bench_lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian",
+    "embodiment": {
+      "id": "droid",
+      "registry_name": "droid_abs_joint_pos",
+      "params": {
+        "stand_height_m": 0.8,
+        "placement_bbox_stand_only": true,
+        "collision_mode": "mesh"
+      }
+    },
+    "background": {
+      "id": "kitchen",
+      "registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+      "params": {
+        "collision_mode": "mesh",
+        "repair_collision_mesh_non_watertight": false
+      }
+    },
+    "objects": [
+      {
+        "id": "green_ladle",
+        "registry_name": "ladle_handal_robolab",
+        "params": {}
+      },
+      {
+        "id": "plate",
+        "registry_name": "plate_large_vomp_robolab",
+        "params": {}
+      },
+      {
+        "id": "spoon_1",
+        "registry_name": "spoon_1_handal_robolab",
+        "params": {}
+      },
+      {
+        "id": "spoon_2",
+        "registry_name": "spoon_2_handal_robolab",
+        "params": {}
+      },
+      {
+        "id": "spoon_3",
+        "registry_name": "spoon_big_vomp_robolab",
+        "params": {}
+      }
+    ],
+    "object_references": [
+      {
+        "id": "floor",
+        "parent_id": "kitchen",
+        "prim_path": "floor_room/geometry",
+        "object_type": "base",
+        "params": {}
+      },
+      {
+        "id": "counter_top",
+        "parent_id": "kitchen",
+        "prim_path": "counter_main_main_group/top_geometry",
+        "object_type": "base",
+        "params": {}
+      },
+      {
+        "id": "toaster",
+        "parent_id": "kitchen",
+        "prim_path": "toaster_main_group",
+        "object_type": "base",
+        "params": {}
+      }
+    ],
+    "relations": [
+      {
+        "kind": "is_anchor",
+        "subject": "floor",
+        "params": {}
+      },
+      {
+        "kind": "is_anchor",
+        "subject": "counter_top",
+        "params": {}
+      },
+      {
+        "kind": "is_anchor",
+        "subject": "toaster",
+        "params": {}
+      },
+      {
+        "kind": "rotate_around_solution",
+        "subject": "droid",
+        "params": {
+          "yaw_rad": 1.57
+        }
+      },
+      {
+        "kind": "next_to",
+        "subject": "droid",
+        "reference": "counter_top",
+        "params": {
+          "side": "negative_y"
+        }
+      },
+      {
+        "kind": "on",
+        "subject": "droid",
+        "reference": "floor",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "green_ladle",
+        "reference": "counter_top",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "plate",
+        "reference": "counter_top",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "spoon_1",
+        "reference": "counter_top",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "spoon_2",
+        "reference": "counter_top",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "spoon_3",
+        "reference": "counter_top",
+        "params": {}
+      },
+      {
+        "kind": "next_to",
+        "subject": "green_ladle",
+        "reference": "toaster",
+        "params": {
+          "side": "negative_y"
+        }
+      },
+      {
+        "kind": "next_to",
+        "subject": "plate",
+        "reference": "toaster",
+        "params": {
+          "side": "negative_x"
+        }
+      }
+    ],
+    "task": {
+      "composition": "atomic",
+      "description": "Pick up the ladle from the counter top and place it into the plate.",
+      "subtasks": [
+        {
+          "kind": "PickAndPlaceTask",
+          "params": {
+            "pick_up_object": "green_ladle",
+            "destination_location": "plate",
+            "background_scene": "kitchen",
+            "destination_object": "plate"
+          }
+        }
+      ]
+    }
+  },
+  "asset_declarations": {
+    "green_ladle": {
+      "id": "green_ladle",
+      "registry_name": "ladle_handal_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "plate": {
+      "id": "plate",
+      "registry_name": "plate_large_vomp_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "spoon_1": {
+      "id": "spoon_1",
+      "registry_name": "spoon_1_handal_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "spoon_2": {
+      "id": "spoon_2",
+      "registry_name": "spoon_2_handal_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "spoon_3": {
+      "id": "spoon_3",
+      "registry_name": "spoon_big_vomp_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "floor": {
+      "id": "floor",
+      "parent_id": "kitchen",
+      "prim_path": "floor_room/geometry",
+      "object_type": "base",
+      "params": {},
+      "kind": "reference"
+    },
+    "counter_top": {
+      "id": "counter_top",
+      "parent_id": "kitchen",
+      "prim_path": "counter_main_main_group/top_geometry",
+      "object_type": "base",
+      "params": {},
+      "kind": "reference"
+    },
+    "toaster": {
+      "id": "toaster",
+      "parent_id": "kitchen",
+      "prim_path": "toaster_main_group",
+      "object_type": "base",
+      "params": {},
+      "kind": "reference"
+    },
+    "kitchen": {
+      "id": "kitchen",
+      "registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+      "params": {
+        "collision_mode": "mesh",
+        "repair_collision_mesh_non_watertight": false
+      },
+      "kind": "background"
+    }
+  },
+  "operations": [
+    {
+      "operation_id": "op_00",
+      "kind": "PickAndPlaceTask",
+      "parameters": {
+        "pick_up_object": "green_ladle",
+        "destination_location": "plate",
+        "background_scene": "kitchen",
+        "destination_object": "plate"
+      },
+      "payload_id": "green_ladle",
+      "destination_id": "plate",
+      "expected_support_ids": [
+        "counter_top"
+      ]
+    }
+  ],
+  "roles": {
+    "payload_ids": [
+      "green_ladle"
+    ],
+    "destination_ids": [
+      "plate"
+    ],
+    "articulated_target_ids": [],
+    "robot": {
+      "id": "droid",
+      "registry_name": "droid_abs_joint_pos",
+      "params": {
+        "stand_height_m": 0.8,
+        "placement_bbox_stand_only": true,
+        "collision_mode": "mesh"
+      }
+    },
+    "human_ids": "resolved from each loaded variant; closed-world inventory required"
+  },
+  "normal_distance_relations": [
+    {
+      "source_id": "green_ladle",
+      "target_id": "counter_top",
+      "operation_id": "op_00",
+      "category": "PT",
+      "query_distance": false,
+      "persist_distance": false,
+      "grade_distance": false,
+      "grade_force": true,
+      "grade_impulse": true,
+      "active_phases": [
+        "all"
+      ],
+      "reason": "declared_task_support",
+      "binding_requirement": "exact destination/support collision surfaces; no entire cabinet exemption"
+    },
+    {
+      "source_id": "green_ladle",
+      "target_id": "plate",
+      "operation_id": "op_00",
+      "category": "PT",
+      "query_distance": false,
+      "persist_distance": false,
+      "grade_distance": false,
+      "grade_force": true,
+      "grade_impulse": true,
+      "active_phases": [
+        "all"
+      ],
+      "reason": "normal_task_destination",
+      "binding_requirement": "exact destination/support collision surfaces; no entire cabinet exemption"
+    }
+  ],
+  "hs": {
+    "sources": [
+      "moving_robot_links",
+      "all_payloads",
+      "manipulated_articulation_links"
+    ],
+    "fixed_base_policy": "derive from fixed-world joint graph; scope authorization required",
+    "clothing_policy": "no inherited omission; protect all enabled human surfaces unless explicitly bound",
+    "stopping_model": "per source; missing model produces unknown",
+    "dynamic_rule_version": "arena-hs-dynamic-ssm-1"
+  },
+  "pt": {
+    "candidate_scope": "all potential collision/approach pairs across full task and randomization envelope",
+    "pruning": "offline conservative proof including protective/warning bound; otherwise retain",
+    "robot_to_payload": "gripper part/phase only; evidence-only when required; other arm parts remain",
+    "robot_to_destination": "retain unless separately authorized for this task",
+    "distance_rule": "pt-hs-inspired-v4",
+    "inherited_distance_omissions": []
+  },
+  "rs": {
+    "robot_joint_scope": "robot only; no external hinge/slider conflation",
+    "self_collision": "independent full robot including fixed base; structural graph exclusions",
+    "external_obstacles": "contact evidence preserved; torque/limit rules unchanged",
+    "fault_coverage": "explicit; no exception is not proof of healthy state"
+  },
+  "raw_requirements": {
+    "physics_hz": 120,
+    "action_hz": 30,
+    "label_hz": 30,
+    "every_physics_step": [
+      "robot_actual_q_dq_torque_limits",
+      "all_dynamic_actor_pose_COM_motion",
+      "external_articulation_link_pose_COM_motion_joint_state",
+      "contact_reports_and_coverage",
+      "actual_command_submissions",
+      "fault_events_and_authority"
+    ],
+    "frozen": [
+      "full_collision_meshes",
+      "joint_graph_and_units",
+      "role_and_surface_bindings",
+      "rules_and_hashes",
+      "gdist_build_and_tuning",
+      "randomization_samples",
+      "render_reconstruction"
+    ]
+  },
+  "gates": {
+    "specification": true,
+    "loaded_stage": false,
+    "raw_trajectory": false,
+    "offline_HS_PT_RS": false,
+    "aligned_video": false
+  },
+  "acceptance": "pending; task success and evidence completeness are separate"
+}

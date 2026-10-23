@@ -63,8 +63,10 @@ class KitchenPhysicsState:
 
         discovery = physics_sim_view.create_articulation_view(kitchen_paths[0] + '/**')
         first_paths = list(discovery.prim_paths)
-        if not first_paths or any(not _under(path, kitchen_paths[0]) for path in first_paths):
+        if any(not _under(path, kitchen_paths[0]) for path in first_paths):
             raise ValueError('Kitchen articulation discovery is empty or outside its requested subtree')
+        # Static kitchens may legitimately have no articulation. The enabled
+        # body coverage check below still rejects untracked dynamic bodies.
         relatives = sorted(path[len(env_paths[0]) + 1:] for path in first_paths)
         if len(set(relatives)) != len(relatives):
             raise ValueError('Duplicate kitchen articulation paths')

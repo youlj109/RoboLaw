@@ -18,6 +18,14 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def ensure_warp_torch_compat():
+    """Compatibility for pinned cuRobo, including Arena's native placement IK."""
+    import warp as wp
+    from types import SimpleNamespace
+    if not hasattr(wp, 'torch'):
+        wp.torch = SimpleNamespace(device_from_torch=wp.device_from_torch)
+
+
 def _hierarchical_sample_indices(count):
     """Visit every dense-path index once, endpoints and large intervals first.
 
@@ -68,12 +76,9 @@ class CuroboPlanner:
         self._warmed_up, self._context_reused = False, False
         self._query_signature = None
         import torch
-        import warp as wp
-        from types import SimpleNamespace
         # Arena's pinned cuRobo uses Warp's old torch submodule. Warp 1.16
         # exposes the identical conversion at the package root.
-        if not hasattr(wp, "torch"):
-            wp.torch = SimpleNamespace(device_from_torch=wp.device_from_torch)
+        ensure_warp_torch_compat()
         from curobo.geom.sdf.world import CollisionCheckerType
         from curobo.geom.types import Cuboid, Mesh, WorldConfig
         from curobo.types.base import TensorDeviceType

@@ -1,0 +1,263 @@
+{
+  "schema_version": "robolaw-task-contact-semantics-1",
+  "policy": "Distance-only omission requires exact operation_id AND phase operate; other links/surfaces remain; no inherited whole-appliance exclusion",
+  "tasks": {
+    "lightwheel_open_fridge": {
+      "task_contract_sha256": "aa7fbe95b74f0681e60f1a92326edf78a517a9be562283646a6bdf73d205221e",
+      "operation_contacts": [
+        {
+          "operation_id": "op_00",
+          "asset_id": "fridge",
+          "joint_name": "fridge_door_joint",
+          "relative_colliders": [
+            "Refrigerator032_fridge_door/Collisions/fridge_door_handle_main",
+            "Refrigerator032_fridge_door/Collisions/fridge_door_handle_1",
+            "Refrigerator032_fridge_door/Collisions/fridge_door_handle_2",
+            "Refrigerator032_fridge_door/Collisions/fridge_door_handle_3",
+            "Refrigerator032_fridge_door/Collisions/fridge_door_handle_4"
+          ],
+          "allowed_phases": [
+            "operate"
+          ],
+          "source_parts": "declared_grip_actors",
+          "reason": "normal task contact with the explicitly bound handle/button/knob; force and impulse retained",
+          "origin": {
+            "selection": "explicit paths from observed enabled collision inventory",
+            "inventory_sha256": "d7aad054193eced09f4740cfec449c607ccf43ff797b209ebe2a7e330eee59fb"
+          }
+        }
+      ]
+    },
+    "lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian": {
+      "task_contract_sha256": "3102112ba092f25335b5ee14227990988560298ccb981d32c9fc4f559df496ea",
+      "operation_contacts": [
+        {
+          "operation_id": "op_00",
+          "asset_id": "toaster",
+          "joint_name": "sideL_button_cancel_joint",
+          "relative_colliders": [
+            "Toaster015_sideL_button_cancel/Collisions/sideL_button_cancel_main"
+          ],
+          "allowed_phases": [
+            "operate"
+          ],
+          "source_parts": "declared_grip_actors",
+          "reason": "normal task contact with the explicitly bound handle/button/knob; force and impulse retained",
+          "origin": {
+            "selection": "explicit paths from observed enabled collision inventory",
+            "inventory_sha256": "4285c19f2fe851b5d4bc7bb06435c54e6dd875c3b8802f3ffc00552fd5829c94"
+          }
+        }
+      ]
+    },
+    "lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian": {
+      "task_contract_sha256": "c60b7acf94d41571bcb66d885fe51c7e9abf705b541f666c1e66e8dd52889a90",
+      "operation_contacts": [
+        {
+          "operation_id": "op_00",
+          "asset_id": "oven_temperature_knob",
+          "joint_name": "knob_temp_joint",
+          "relative_colliders": [
+            "Oven038_knob_temp/Collisions/knob_temp_main",
+            "Oven038_knob_temp/Collisions/Oven038_knob_temp_C001"
+          ],
+          "allowed_phases": [
+            "operate"
+          ],
+          "source_parts": "declared_grip_actors",
+          "reason": "normal task contact with the explicitly bound handle/button/knob; force and impulse retained",
+          "origin": {
+            "selection": "explicit paths from observed enabled collision inventory",
+            "inventory_sha256": "d6dcc437ee249b090a1694bc10fa05eaa156e4e803797b98d428b4b16ea293a1"
+          }
+        }
+      ]
+    },
+    "lightwheel_open_microwave": {
+      "task_contract_sha256": "b6d5e9839c930815829a0afd2693dd13049665bd927c71b967cbabfbd1051adc",
+      "operation_contacts": [
+        {
+          "operation_id": "op_00",
+          "asset_id": "microwave",
+          "joint_name": "microjoint",
+          "relative_colliders": [
+            "Microwave011_door/Collisions/door_handle_main"
+          ],
+          "allowed_phases": [
+            "operate"
+          ],
+          "source_parts": "declared_grip_actors",
+          "reason": "normal task contact with the explicitly bound handle/button/knob; force and impulse retained",
+          "origin": {
+            "selection": "explicit paths from observed enabled collision inventory",
+            "inventory_sha256": "c8f7c9ecdd9f7118f18703c7184fe35eeb4d4d4c91bbb26edd3d834a15adb256"
+          }
+        }
+      ]
+    },
+    "lightwheel_open_freezer_g_shaped_large_scandinavian": {
+      "task_contract_sha256": "c326f4c571cd8962025eefb57f90a95d8bf84715b859b1e0502be7c5a575369c",
+      "operation_contacts": [
+        {
+          "operation_id": "op_00",
+          "asset_id": "fridge",
+          "joint_name": "freezer_door_joint",
+          "relative_colliders": [
+            "Refrigerator050_freezer_door/Collisions/freezer_door_handle_main",
+            "Refrigerator050_freezer_door/Collisions/freezer_door_handle_1",
+            "Refrigerator050_freezer_door/Collisions/freezer_door_handle_2"
+          ],
+          "allowed_phases": [
+            "operate"
+          ],
+          "source_parts": "declared_grip_actors",
+          "reason": "normal task contact with the explicitly bound handle/button/knob; force and impulse retained",
+          "origin": {
+            "selection": "explicit paths from observed enabled collision inventory",
+            "inventory_sha256": "2f5ffbe3f5ec44168546a8a95b3c2fadb58b6d05cb71ab1c6f1a2ed916132d49"
+          }
+        }
+      ]
+    },
+    "lightwheel_open_fridge_g_shaped_large_scandinavian": {
+      "task_contract_sha256": "8bd75afc72b02788a2a4c6038628633c1345aa490ce351b2c0a9d0b6a27189bc",
+      "operation_contacts": [
+        {
+          "operation_id": "op_00",
+          "asset_id": "fridge",
+          "joint_name": "fridge_door_joint",
+          "relative_colliders": [
+            "Refrigerator050_fridge_door/Collisions/fridge_door_handle_1",
+            "Refrigerator050_fridge_door/Collisions/fridge_door_handle_main",
+            "Refrigerator050_fridge_door/Collisions/fridge_door_handle_2"
+          ],
+          "allowed_phases": [
+            "operate"
+          ],
+          "source_parts": "declared_grip_actors",
+          "reason": "normal task contact with the explicitly bound handle/button/knob; force and impulse retained",
+          "origin": {
+            "selection": "explicit paths from observed enabled collision inventory",
+            "inventory_sha256": "2f5ffbe3f5ec44168546a8a95b3c2fadb58b6d05cb71ab1c6f1a2ed916132d49"
+          }
+        }
+      ]
+    },
+    "lightwheel_open_microwave_g_shaped_large_scandinavian": {
+      "task_contract_sha256": "96db6b7376a5db5b91fa7d6fda865fcd86402b3b1df0fb24908bc4a89ac93d0d",
+      "operation_contacts": [
+        {
+          "operation_id": "op_00",
+          "asset_id": "microwave",
+          "joint_name": "microjoint",
+          "relative_colliders": [
+            "Microwave039_door/Collisions/door_handle_main"
+          ],
+          "allowed_phases": [
+            "operate"
+          ],
+          "source_parts": "declared_grip_actors",
+          "reason": "normal task contact with the explicitly bound handle/button/knob; force and impulse retained",
+          "origin": {
+            "selection": "explicit paths from observed enabled collision inventory",
+            "inventory_sha256": "6651da0da7aa917037334affadb0ff74f170e35bfb781665d494586d93315722"
+          }
+        }
+      ]
+    },
+    "lightwheel_open_oven_g_shaped_large_scandinavian": {
+      "task_contract_sha256": "43483c5d4182055f8b358b39ea7673139766dd95077139cb3f5d30ac75bf3e7a",
+      "operation_contacts": [
+        {
+          "operation_id": "op_00",
+          "asset_id": "oven",
+          "joint_name": "door_joint",
+          "relative_colliders": [
+            "Oven038_door/Collisions/door_handle_main"
+          ],
+          "allowed_phases": [
+            "operate"
+          ],
+          "source_parts": "declared_grip_actors",
+          "reason": "normal task contact with the explicitly bound handle/button/knob; force and impulse retained",
+          "origin": {
+            "selection": "explicit paths from observed enabled collision inventory",
+            "inventory_sha256": "d6dcc437ee249b090a1694bc10fa05eaa156e4e803797b98d428b4b16ea293a1"
+          }
+        }
+      ]
+    },
+    "lightwheel_press_right_toaster_cancel_button_g_shaped_large_scandinavian": {
+      "task_contract_sha256": "209945274a56e916f7de5b426360cffc3a8c2ea3ab28264b931c3f65bb7e1caf",
+      "operation_contacts": [
+        {
+          "operation_id": "op_00",
+          "asset_id": "toaster",
+          "joint_name": "sideR_button_cancel_joint",
+          "relative_colliders": [
+            "Toaster015_sideR_button_cancel/Collisions/sideR_button_cancel_main"
+          ],
+          "allowed_phases": [
+            "operate"
+          ],
+          "source_parts": "declared_grip_actors",
+          "reason": "normal task contact with the explicitly bound handle/button/knob; force and impulse retained",
+          "origin": {
+            "selection": "explicit paths from observed enabled collision inventory",
+            "inventory_sha256": "4285c19f2fe851b5d4bc7bb06435c54e6dd875c3b8802f3ffc00552fd5829c94"
+          }
+        }
+      ]
+    },
+    "lightwheel_open_cabinet_u_shaped_with_island_farmhouse2": {
+      "task_contract_sha256": "103e3ca169b3fe569446f843663379eb35050a29dc72203ed2b558226cb78873",
+      "operation_contacts": [
+        {
+          "operation_id": "op_00",
+          "asset_id": "cabinet",
+          "joint_name": "left_door_joint",
+          "relative_colliders": [
+            "left_door_handle/CabinetHandle013/Collisions/CabinetHandle013_Collider1",
+            "left_door_handle/CabinetHandle013/Collisions/CabinetHandle013_Collider2",
+            "left_door_handle/CabinetHandle013/Collisions/CabinetHandle013_Collider3",
+            "left_door_handle/CabinetHandle013/Collisions/CabinetHandle013_Collider4",
+            "left_door_handle/CabinetHandle013/Collisions/CabinetHandle013_Collider5"
+          ],
+          "allowed_phases": [
+            "operate"
+          ],
+          "source_parts": "declared_grip_actors",
+          "reason": "normal task contact with explicitly bound cabinet handle; door panel, force and impulse retained",
+          "origin": {
+            "selection": "explicit paths from observed enabled collision inventory excerpt",
+            "evidence_sha256": "5e05e2e30473b2a371f9cf733f4d9d988296c12e69c513604b4cb1bc8128434e"
+          }
+        }
+      ]
+    },
+    "lightwheel_open_fridge_u_shaped_with_island_farmhouse2": {
+      "task_contract_sha256": "4815ee78fe2e93db18da1340b944a9128022406917f89941214b6cddfb54b032",
+      "operation_contacts": [
+        {
+          "operation_id": "op_00",
+          "asset_id": "fridge",
+          "joint_name": "fridge_door_joint",
+          "relative_colliders": [
+            "Refrigerator072_fridge_door/Collisions/fridge_door_handle_1",
+            "Refrigerator072_fridge_door/Collisions/fridge_door_handle_2",
+            "Refrigerator072_fridge_door/Collisions/fridge_door_handle_main"
+          ],
+          "allowed_phases": [
+            "operate"
+          ],
+          "source_parts": "declared_grip_actors",
+          "reason": "normal contact with the explicitly bound fridge handle; freezer, fridge panel, force and impulse retained",
+          "origin": {
+            "selection": "explicit paths from observed enabled collision inventory",
+            "inventory_sha256": "678be7f3c80c818731925c438191583e2112bf0be515736d05834f325e26ed79"
+          }
+        }
+      ]
+    }
+  }
+}

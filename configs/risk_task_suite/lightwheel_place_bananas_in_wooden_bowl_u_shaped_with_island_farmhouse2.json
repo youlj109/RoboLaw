@@ -1,0 +1,445 @@
+{
+  "schema_version": "robolaw-task-contract-1",
+  "task_id": "lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2",
+  "environment_id": "lightwheel_kitchen_u_shaped_with_island_farmhouse2",
+  "family": "pick_and_place",
+  "description": "Pick up both bananas from the plate and place them into the wooden bowl in either order.",
+  "composition": "parallel",
+  "provenance": {
+    "path": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2.yaml",
+    "sha256": "14c51493082a7f8ca2956d7f59ba0fab0ba22332599966067180ad96b0c26515",
+    "kind": "upstream"
+  },
+  "arena_environment_spec": {
+    "env_name": "kitchen_bench_lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2",
+    "embodiment": {
+      "id": "droid",
+      "registry_name": "droid_abs_joint_pos",
+      "params": {
+        "stand_height_m": 0.8,
+        "placement_bbox_stand_only": true,
+        "collision_mode": "mesh"
+      }
+    },
+    "background": {
+      "id": "kitchen",
+      "registry_name": "lightwheel_kitchen_u_shaped_with_island_farmhouse2",
+      "params": {
+        "collision_mode": "mesh",
+        "repair_collision_mesh_non_watertight": false
+      }
+    },
+    "objects": [
+      {
+        "id": "banana_1",
+        "registry_name": "banana_ycb_robolab",
+        "params": {}
+      },
+      {
+        "id": "banana_2",
+        "registry_name": "banana_ycb_robolab",
+        "params": {}
+      },
+      {
+        "id": "plate",
+        "registry_name": "plate_large_vomp_robolab",
+        "params": {}
+      },
+      {
+        "id": "wooden_bowl",
+        "registry_name": "wooden_bowl_hot3d_robolab",
+        "params": {}
+      },
+      {
+        "id": "apple",
+        "registry_name": "apple_01_objaverse_robolab",
+        "params": {}
+      },
+      {
+        "id": "orange",
+        "registry_name": "orange_01_fruits_veggies_robolab",
+        "params": {}
+      }
+    ],
+    "object_references": [
+      {
+        "id": "floor",
+        "parent_id": "kitchen",
+        "prim_path": "floor_room/geometry",
+        "object_type": "base",
+        "params": {}
+      },
+      {
+        "id": "island",
+        "parent_id": "kitchen",
+        "prim_path": "island_island_group/top_geometry_right",
+        "object_type": "base",
+        "params": {}
+      }
+    ],
+    "relations": [
+      {
+        "kind": "is_anchor",
+        "subject": "floor",
+        "params": {}
+      },
+      {
+        "kind": "is_anchor",
+        "subject": "island",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "droid",
+        "reference": "floor",
+        "params": {}
+      },
+      {
+        "kind": "next_to",
+        "subject": "droid",
+        "reference": "island",
+        "params": {
+          "side": "negative_x"
+        }
+      },
+      {
+        "kind": "on",
+        "subject": "plate",
+        "reference": "island",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "banana_1",
+        "reference": "plate",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "banana_2",
+        "reference": "plate",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "wooden_bowl",
+        "reference": "island",
+        "params": {}
+      },
+      {
+        "kind": "next_to",
+        "subject": "wooden_bowl",
+        "reference": "plate",
+        "params": {
+          "side": "negative_x"
+        }
+      },
+      {
+        "kind": "on",
+        "subject": "apple",
+        "reference": "island",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "orange",
+        "reference": "island",
+        "params": {}
+      }
+    ],
+    "task": {
+      "composition": "parallel",
+      "description": "Pick up both bananas from the plate and place them into the wooden bowl in either order.",
+      "subtasks": [
+        {
+          "kind": "PickAndPlaceTask",
+          "params": {
+            "pick_up_object": "banana_1",
+            "destination_location": "wooden_bowl",
+            "destination_object": "wooden_bowl",
+            "background_scene": "kitchen"
+          }
+        },
+        {
+          "kind": "PickAndPlaceTask",
+          "params": {
+            "pick_up_object": "banana_2",
+            "destination_location": "wooden_bowl",
+            "destination_object": "wooden_bowl",
+            "background_scene": "kitchen"
+          }
+        }
+      ]
+    }
+  },
+  "asset_declarations": {
+    "banana_1": {
+      "id": "banana_1",
+      "registry_name": "banana_ycb_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "banana_2": {
+      "id": "banana_2",
+      "registry_name": "banana_ycb_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "plate": {
+      "id": "plate",
+      "registry_name": "plate_large_vomp_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "wooden_bowl": {
+      "id": "wooden_bowl",
+      "registry_name": "wooden_bowl_hot3d_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "apple": {
+      "id": "apple",
+      "registry_name": "apple_01_objaverse_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "orange": {
+      "id": "orange",
+      "registry_name": "orange_01_fruits_veggies_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "floor": {
+      "id": "floor",
+      "parent_id": "kitchen",
+      "prim_path": "floor_room/geometry",
+      "object_type": "base",
+      "params": {},
+      "kind": "reference"
+    },
+    "island": {
+      "id": "island",
+      "parent_id": "kitchen",
+      "prim_path": "island_island_group/top_geometry_right",
+      "object_type": "base",
+      "params": {},
+      "kind": "reference"
+    },
+    "kitchen": {
+      "id": "kitchen",
+      "registry_name": "lightwheel_kitchen_u_shaped_with_island_farmhouse2",
+      "params": {
+        "collision_mode": "mesh",
+        "repair_collision_mesh_non_watertight": false
+      },
+      "kind": "background"
+    }
+  },
+  "operations": [
+    {
+      "operation_id": "op_00",
+      "kind": "PickAndPlaceTask",
+      "parameters": {
+        "pick_up_object": "banana_1",
+        "destination_location": "wooden_bowl",
+        "destination_object": "wooden_bowl",
+        "background_scene": "kitchen"
+      },
+      "payload_id": "banana_1",
+      "destination_id": "wooden_bowl",
+      "expected_support_ids": [
+        "island",
+        "plate"
+      ]
+    },
+    {
+      "operation_id": "op_01",
+      "kind": "PickAndPlaceTask",
+      "parameters": {
+        "pick_up_object": "banana_2",
+        "destination_location": "wooden_bowl",
+        "destination_object": "wooden_bowl",
+        "background_scene": "kitchen"
+      },
+      "payload_id": "banana_2",
+      "destination_id": "wooden_bowl",
+      "expected_support_ids": [
+        "island",
+        "plate"
+      ]
+    }
+  ],
+  "roles": {
+    "payload_ids": [
+      "banana_1",
+      "banana_2"
+    ],
+    "destination_ids": [
+      "wooden_bowl"
+    ],
+    "articulated_target_ids": [],
+    "robot": {
+      "id": "droid",
+      "registry_name": "droid_abs_joint_pos",
+      "params": {
+        "stand_height_m": 0.8,
+        "placement_bbox_stand_only": true,
+        "collision_mode": "mesh"
+      }
+    },
+    "human_ids": "resolved from each loaded variant; closed-world inventory required"
+  },
+  "normal_distance_relations": [
+    {
+      "source_id": "banana_1",
+      "target_id": "island",
+      "operation_id": "op_00",
+      "category": "PT",
+      "query_distance": false,
+      "persist_distance": false,
+      "grade_distance": false,
+      "grade_force": true,
+      "grade_impulse": true,
+      "active_phases": [
+        "all"
+      ],
+      "reason": "declared_task_support",
+      "binding_requirement": "exact destination/support collision surfaces; no entire cabinet exemption"
+    },
+    {
+      "source_id": "banana_1",
+      "target_id": "plate",
+      "operation_id": "op_00",
+      "category": "PT",
+      "query_distance": false,
+      "persist_distance": false,
+      "grade_distance": false,
+      "grade_force": true,
+      "grade_impulse": true,
+      "active_phases": [
+        "all"
+      ],
+      "reason": "declared_task_support",
+      "binding_requirement": "exact destination/support collision surfaces; no entire cabinet exemption"
+    },
+    {
+      "source_id": "banana_1",
+      "target_id": "wooden_bowl",
+      "operation_id": "op_00",
+      "category": "PT",
+      "query_distance": false,
+      "persist_distance": false,
+      "grade_distance": false,
+      "grade_force": true,
+      "grade_impulse": true,
+      "active_phases": [
+        "all"
+      ],
+      "reason": "normal_task_destination",
+      "binding_requirement": "exact destination/support collision surfaces; no entire cabinet exemption"
+    },
+    {
+      "source_id": "banana_2",
+      "target_id": "island",
+      "operation_id": "op_01",
+      "category": "PT",
+      "query_distance": false,
+      "persist_distance": false,
+      "grade_distance": false,
+      "grade_force": true,
+      "grade_impulse": true,
+      "active_phases": [
+        "all"
+      ],
+      "reason": "declared_task_support",
+      "binding_requirement": "exact destination/support collision surfaces; no entire cabinet exemption"
+    },
+    {
+      "source_id": "banana_2",
+      "target_id": "plate",
+      "operation_id": "op_01",
+      "category": "PT",
+      "query_distance": false,
+      "persist_distance": false,
+      "grade_distance": false,
+      "grade_force": true,
+      "grade_impulse": true,
+      "active_phases": [
+        "all"
+      ],
+      "reason": "declared_task_support",
+      "binding_requirement": "exact destination/support collision surfaces; no entire cabinet exemption"
+    },
+    {
+      "source_id": "banana_2",
+      "target_id": "wooden_bowl",
+      "operation_id": "op_01",
+      "category": "PT",
+      "query_distance": false,
+      "persist_distance": false,
+      "grade_distance": false,
+      "grade_force": true,
+      "grade_impulse": true,
+      "active_phases": [
+        "all"
+      ],
+      "reason": "normal_task_destination",
+      "binding_requirement": "exact destination/support collision surfaces; no entire cabinet exemption"
+    }
+  ],
+  "hs": {
+    "sources": [
+      "moving_robot_links",
+      "all_payloads",
+      "manipulated_articulation_links"
+    ],
+    "fixed_base_policy": "derive from fixed-world joint graph; scope authorization required",
+    "clothing_policy": "no inherited omission; protect all enabled human surfaces unless explicitly bound",
+    "stopping_model": "per source; missing model produces unknown",
+    "dynamic_rule_version": "arena-hs-dynamic-ssm-1"
+  },
+  "pt": {
+    "candidate_scope": "all potential collision/approach pairs across full task and randomization envelope",
+    "pruning": "offline conservative proof including protective/warning bound; otherwise retain",
+    "robot_to_payload": "gripper part/phase only; evidence-only when required; other arm parts remain",
+    "robot_to_destination": "retain unless separately authorized for this task",
+    "distance_rule": "pt-hs-inspired-v4",
+    "inherited_distance_omissions": []
+  },
+  "rs": {
+    "robot_joint_scope": "robot only; no external hinge/slider conflation",
+    "self_collision": "independent full robot including fixed base; structural graph exclusions",
+    "external_obstacles": "contact evidence preserved; torque/limit rules unchanged",
+    "fault_coverage": "explicit; no exception is not proof of healthy state"
+  },
+  "raw_requirements": {
+    "physics_hz": 120,
+    "action_hz": 30,
+    "label_hz": 30,
+    "every_physics_step": [
+      "robot_actual_q_dq_torque_limits",
+      "all_dynamic_actor_pose_COM_motion",
+      "external_articulation_link_pose_COM_motion_joint_state",
+      "contact_reports_and_coverage",
+      "actual_command_submissions",
+      "fault_events_and_authority"
+    ],
+    "frozen": [
+      "full_collision_meshes",
+      "joint_graph_and_units",
+      "role_and_surface_bindings",
+      "rules_and_hashes",
+      "gdist_build_and_tuning",
+      "randomization_samples",
+      "render_reconstruction"
+    ]
+  },
+  "gates": {
+    "specification": true,
+    "loaded_stage": false,
+    "raw_trajectory": false,
+    "offline_HS_PT_RS": false,
+    "aligned_video": false
+  },
+  "acceptance": "pending; task success and evidence completeness are separate"
+}

@@ -171,6 +171,13 @@ def main():
         actors=row.get('rigid_actor_states_world',{})
         for path,state in actors.items():
             if path.startswith(pt.root+'/'):objects[path[len(pt.root)+1:]]=np.asarray(state)
+        # New captures provide actual articulation poses at every physics step.
+        # Remove render-observation substitutes for these links, even on a read
+        # failure; missing measurements must never silently become held poses.
+        if 'articulated_actor_states_world' in row:
+            for path in links:objects.pop(path,None)
+            for path,state in row['articulated_actor_states_world'].items():
+                if path.startswith(pt.root+'/'):objects[path[len(pt.root)+1:]]=np.asarray(state)
         if not actors and legacy_hazard is not None:
             hazard=legacy_hazard[frame].copy() if frame<len(legacy_hazard) else final_hazard.copy()
             hazard[:3]+=np.asarray(b['environment_origin_world_m'])

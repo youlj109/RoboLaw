@@ -1,0 +1,217 @@
+{
+  "schema_version": "robolaw-task-contract-1",
+  "task_id": "lightwheel_open_fridge_u_shaped_with_island_farmhouse2",
+  "environment_id": "lightwheel_kitchen_u_shaped_with_island_farmhouse2",
+  "family": "articulated_object",
+  "description": "Open the fridge door.",
+  "composition": "atomic",
+  "provenance": {
+    "path": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2.yaml",
+    "sha256": "d8e2b5045e36a90a78baa47a23d83e40f22b55e4cfda2bb5e0df8877284cfc0e",
+    "kind": "upstream"
+  },
+  "arena_environment_spec": {
+    "env_name": "kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2",
+    "embodiment": {
+      "id": "droid",
+      "registry_name": "droid_abs_joint_pos",
+      "params": {
+        "stand_height_m": 0.8,
+        "stand_footprint_xy_m": [
+          0.27,
+          0.91032
+        ],
+        "placement_bbox_stand_only": true,
+        "collision_mode": "mesh"
+      }
+    },
+    "background": {
+      "id": "kitchen",
+      "registry_name": "lightwheel_kitchen_u_shaped_with_island_farmhouse2",
+      "params": {
+        "collision_mode": "mesh",
+        "repair_collision_mesh_non_watertight": false
+      }
+    },
+    "objects": [],
+    "object_references": [
+      {
+        "id": "floor",
+        "parent_id": "kitchen",
+        "prim_path": "floor_room/geometry",
+        "object_type": "base",
+        "params": {}
+      },
+      {
+        "id": "fridge",
+        "parent_id": "kitchen",
+        "prim_path": "fridge_right_group",
+        "object_type": "articulation",
+        "params": {
+          "openable_joint_name": "fridge_door_joint"
+        }
+      }
+    ],
+    "relations": [
+      {
+        "kind": "is_anchor",
+        "subject": "floor",
+        "params": {}
+      },
+      {
+        "kind": "is_anchor",
+        "subject": "fridge",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "droid",
+        "reference": "floor",
+        "params": {}
+      },
+      {
+        "kind": "next_to",
+        "subject": "droid",
+        "reference": "fridge",
+        "params": {
+          "side": "negative_x",
+          "distance_m": 0.5
+        }
+      }
+    ],
+    "task": {
+      "composition": "atomic",
+      "description": "Open the fridge door.",
+      "subtasks": [
+        {
+          "kind": "OpenDoorTask",
+          "params": {
+            "openable_object": "fridge",
+            "openness_threshold": 0.2
+          }
+        }
+      ]
+    }
+  },
+  "asset_declarations": {
+    "floor": {
+      "id": "floor",
+      "parent_id": "kitchen",
+      "prim_path": "floor_room/geometry",
+      "object_type": "base",
+      "params": {},
+      "kind": "reference"
+    },
+    "fridge": {
+      "id": "fridge",
+      "parent_id": "kitchen",
+      "prim_path": "fridge_right_group",
+      "object_type": "articulation",
+      "params": {
+        "openable_joint_name": "fridge_door_joint"
+      },
+      "kind": "reference"
+    },
+    "kitchen": {
+      "id": "kitchen",
+      "registry_name": "lightwheel_kitchen_u_shaped_with_island_farmhouse2",
+      "params": {
+        "collision_mode": "mesh",
+        "repair_collision_mesh_non_watertight": false
+      },
+      "kind": "background"
+    }
+  },
+  "operations": [
+    {
+      "operation_id": "op_00",
+      "kind": "OpenDoorTask",
+      "parameters": {
+        "openable_object": "fridge",
+        "openness_threshold": 0.2
+      },
+      "articulation_id": "fridge",
+      "joint_name": "fridge_door_joint",
+      "moving_links": "resolve from actual joint graph, including fixed descendants",
+      "manipulation_surfaces": "runtime binding required; never exempt entire articulation",
+      "stop_model": "unbound; no inherited robot stopping guarantee"
+    }
+  ],
+  "roles": {
+    "payload_ids": [],
+    "destination_ids": [],
+    "articulated_target_ids": [
+      "fridge"
+    ],
+    "robot": {
+      "id": "droid",
+      "registry_name": "droid_abs_joint_pos",
+      "params": {
+        "stand_height_m": 0.8,
+        "stand_footprint_xy_m": [
+          0.27,
+          0.91032
+        ],
+        "placement_bbox_stand_only": true,
+        "collision_mode": "mesh"
+      }
+    },
+    "human_ids": "resolved from each loaded variant; closed-world inventory required"
+  },
+  "normal_distance_relations": [],
+  "hs": {
+    "sources": [
+      "moving_robot_links",
+      "all_payloads",
+      "manipulated_articulation_links"
+    ],
+    "fixed_base_policy": "derive from fixed-world joint graph; scope authorization required",
+    "clothing_policy": "no inherited omission; protect all enabled human surfaces unless explicitly bound",
+    "stopping_model": "per source; missing model produces unknown",
+    "dynamic_rule_version": "arena-hs-dynamic-ssm-1"
+  },
+  "pt": {
+    "candidate_scope": "all potential collision/approach pairs across full task and randomization envelope",
+    "pruning": "offline conservative proof including protective/warning bound; otherwise retain",
+    "robot_to_payload": "gripper part/phase only; evidence-only when required; other arm parts remain",
+    "robot_to_destination": "retain unless separately authorized for this task",
+    "distance_rule": "pt-hs-inspired-v4",
+    "inherited_distance_omissions": []
+  },
+  "rs": {
+    "robot_joint_scope": "robot only; no external hinge/slider conflation",
+    "self_collision": "independent full robot including fixed base; structural graph exclusions",
+    "external_obstacles": "contact evidence preserved; torque/limit rules unchanged",
+    "fault_coverage": "explicit; no exception is not proof of healthy state"
+  },
+  "raw_requirements": {
+    "physics_hz": 120,
+    "action_hz": 30,
+    "label_hz": 30,
+    "every_physics_step": [
+      "robot_actual_q_dq_torque_limits",
+      "all_dynamic_actor_pose_COM_motion",
+      "external_articulation_link_pose_COM_motion_joint_state",
+      "contact_reports_and_coverage",
+      "actual_command_submissions",
+      "fault_events_and_authority"
+    ],
+    "frozen": [
+      "full_collision_meshes",
+      "joint_graph_and_units",
+      "role_and_surface_bindings",
+      "rules_and_hashes",
+      "gdist_build_and_tuning",
+      "randomization_samples",
+      "render_reconstruction"
+    ]
+  },
+  "gates": {
+    "specification": true,
+    "loaded_stage": false,
+    "raw_trajectory": false,
+    "offline_HS_PT_RS": false,
+    "aligned_video": false
+  },
+  "acceptance": "pending; task success and evidence completeness are separate"
+}

@@ -25,6 +25,11 @@ def write(path,value):
 
 def run(args):
     stage,base=args.stage,args.output.resolve()
+    if args.task_contract or (base/'native_workflow.json').exists():
+        from kitchen_safety.native_workflow import run as run_native
+        return run_native(args)
+    if any(getattr(args,key,None) is not None for key in ('appearance_config','appearance_seed','camera_config')):
+        raise ValueError('Native appearance/camera options require a native task workflow')
     policy_path=args.policy.resolve()
     if stage=='capture':
         if not args.episode_specs:raise ValueError('capture requires --episode-specs; no scenario is hard-coded')
@@ -144,6 +149,17 @@ def main():
     p.add_argument('--collector-overrides',type=Path)
     p.add_argument('--policy',type=Path,default=ROOT/'configs/risk_capture_workflow.json')
     p.add_argument('--run-id')
+    p.add_argument('--task-contract',type=Path,help='Native multi-task contract; separate from legacy scene episode specs')
+    p.add_argument('--policy-factory',help='Explicit native task controller module:function')
+    p.add_argument('--policy-config',type=Path)
+    p.add_argument('--asset-cache',type=Path)
+    p.add_argument('--obstacle-binding',type=Path)
+    p.add_argument('--max-actions',type=int,default=3000)
+    p.add_argument('--seed',type=int,default=42,help='Native environment and default placement seed')
+    p.add_argument('--placement-seed',type=int,help='Explicit native placement sampler seed')
+    p.add_argument('--camera-config',type=Path,help='Native render only: task-bound offline camera configuration')
+    p.add_argument('--appearance-config',type=Path,help='Native render only: exact-path visual-only appearance recipe')
+    p.add_argument('--appearance-seed',type=int,help='Native render only: explicit appearance draw seed')
     p.add_argument('--geometry-backend',choices=['frozen','gdist','warp'],default='frozen',help='Evaluation only: explicit historical backend migration; new captures freeze gDist by default')
     args=p.parse_args()
     return run(args)

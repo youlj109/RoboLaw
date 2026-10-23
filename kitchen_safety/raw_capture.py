@@ -64,7 +64,7 @@ class RawSink:
             schema_version='arena-raw-capture-binding-1',identity=identity,binding=binding,
             physics_dt_s=dt,action_dt_s=action_dt,decision_stride=self.stride,
             resolved_config=settings['config'],resolved_profile=profile,profile_sha256=digest(profile),
-            adapter_version='arena-raw-capture-5-hs-data-scope',evaluation_status='pending_offline',
+            adapter_version='arena-raw-capture-6-articulation-motion',evaluation_status='pending_offline',
             capture_workflow=settings_policy(settings),
             implementation_files_sha256=settings.get('implementation_files_sha256',{}),
             mesh_backend_runtime=settings.get('mesh_backend_runtime',{})))
@@ -145,6 +145,7 @@ class RawCaptureRuntime(ArenaRiskRuntime):
                 contacts='Original actor/collider identities, point positions, normals, impulse vectors and separations within the frozen contact acquisition scope; aggregate later',
                 hs_contact_acquisition_omissions=(self.hs_geometries[i].metadata.get('data_omissions',{}) if self.hs_geometries[i] else {}),
                 frozen_kitchen_metadata=self.kitchen_state.metadata,
+                articulated_motion_metadata=self.articulation_capture.metadata,
                 limits_policy='Runtime effort and position limits retained per physics packet',
                 rigid_actor_paths_120hz=sorted(actor_paths),
                 rigid_actor_state_semantics='PhysX get_transforms actor xyz/xyzw and get_velocities COM linear/angular velocity in world frame, all registered scene rigid_objects at 120Hz',
@@ -158,10 +159,13 @@ class RawCaptureRuntime(ArenaRiskRuntime):
                 policy='No online placement verdict; recompute using frozen meshes and initial measured poses'))
 
     def refresh(self,initial=False):
-        # Snapshot each rigid-body view once per step, preserving its actual
-        # row/path mapping across environments. Kitchen articulation links are
-        # separately saved in each measured 30 Hz render observation.
+        # All actual link poses/COM/joint states are saved at the physical clock.
+        # The 30Hz render observations remain independent reconstruction data.
         actors,actor_motion=capture_rigid_actor_motion(self.scene)
+        if not hasattr(self,'articulation_capture'):
+            from kitchen_safety.articulation_capture import ArticulationCapture
+            self.articulation_capture=ArticulationCapture([g['view'] for g in self.kitchen_state._groups])
+        articulated=self.articulation_capture.capture()
         self.latest=[];self.distances=[]
         for i,sink in enumerate(self.observers):
             if not initial:self.sample_steps[i]+=1
@@ -169,6 +173,10 @@ class RawCaptureRuntime(ArenaRiskRuntime):
             root=self.geometries[i].root+'/'
             row['rigid_actor_states_world']={path:state for path,state in actors.items() if path.startswith(root)}
             row['rigid_actor_motion_world']={path:state for path,state in actor_motion.items() if path.startswith(root)}
+            row['articulated_actor_states_world']={path:state for path,state in articulated['actor_states_world'].items() if path.startswith(root)}
+            row['articulated_actor_motion_world']={path:state for path,state in articulated['actor_motion_world'].items() if path.startswith(root)}
+            row['external_articulation_state']={path:state for path,state in articulated['articulations'].items() if path.startswith(root)}
+            row['articulated_state_coverage']=dict(complete=articulated['complete'],errors=articulated['errors'])
             self.latest.append(row);self.distances.append({})
             if initial:sink.submit(dict(kind='initial_state',physics_step=-1,time_s=0.,state=self.latest[-1],
                                         receive_wall_ns=time.time_ns()))

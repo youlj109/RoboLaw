@@ -1,0 +1,224 @@
+{
+  "schema_version": "robolaw-task-contract-1",
+  "task_id": "lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian",
+  "environment_id": "lightwheel_kitchen_g_shaped_large_scandinavian",
+  "family": "articulated_object",
+  "description": "Turn the large temperature knob on the right side of the oven below the microwave to level 3.",
+  "composition": "atomic",
+  "provenance": {
+    "path": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian.yaml",
+    "sha256": "549c26d6e4f6bad3a4a985384a3c0483ebb3c68e20e776e5e089c5e4701ebd0e",
+    "kind": "upstream"
+  },
+  "arena_environment_spec": {
+    "env_name": "kitchen_bench_lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian",
+    "embodiment": {
+      "id": "droid",
+      "registry_name": "droid_abs_joint_pos",
+      "params": {
+        "stand_height_m": 0.7,
+        "placement_bbox_stand_only": true,
+        "collision_mode": "mesh"
+      }
+    },
+    "background": {
+      "id": "kitchen",
+      "registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+      "params": {
+        "collision_mode": "mesh",
+        "repair_collision_mesh_non_watertight": false
+      }
+    },
+    "objects": [],
+    "object_references": [
+      {
+        "id": "floor",
+        "parent_id": "kitchen",
+        "prim_path": "floor_room/geometry",
+        "object_type": "base",
+        "params": {}
+      },
+      {
+        "id": "oven_temperature_knob",
+        "parent_id": "kitchen",
+        "prim_path": "oven_right_group",
+        "object_type": "articulation",
+        "params": {
+          "turnable_joint_name": "knob_temp_joint",
+          "min_level_angle_deg": 30.0,
+          "max_level_angle_deg": 150.0,
+          "num_levels": 5
+        }
+      }
+    ],
+    "relations": [
+      {
+        "kind": "is_anchor",
+        "subject": "floor",
+        "params": {}
+      },
+      {
+        "kind": "is_anchor",
+        "subject": "oven_temperature_knob",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "droid",
+        "reference": "floor",
+        "params": {}
+      },
+      {
+        "kind": "next_to",
+        "subject": "droid",
+        "reference": "oven_temperature_knob",
+        "params": {
+          "side": "negative_x",
+          "distance_m": 0.45
+        }
+      },
+      {
+        "kind": "rotate_around_solution",
+        "subject": "droid",
+        "params": {
+          "yaw_rad": 0.0
+        }
+      }
+    ],
+    "task": {
+      "composition": "atomic",
+      "description": "Turn the large temperature knob on the right side of the oven below the microwave to level 3.",
+      "subtasks": [
+        {
+          "kind": "TurnKnobTask",
+          "params": {
+            "turnable_object": "oven_temperature_knob",
+            "target_level": 3,
+            "reset_level": -1
+          }
+        }
+      ]
+    }
+  },
+  "asset_declarations": {
+    "floor": {
+      "id": "floor",
+      "parent_id": "kitchen",
+      "prim_path": "floor_room/geometry",
+      "object_type": "base",
+      "params": {},
+      "kind": "reference"
+    },
+    "oven_temperature_knob": {
+      "id": "oven_temperature_knob",
+      "parent_id": "kitchen",
+      "prim_path": "oven_right_group",
+      "object_type": "articulation",
+      "params": {
+        "turnable_joint_name": "knob_temp_joint",
+        "min_level_angle_deg": 30.0,
+        "max_level_angle_deg": 150.0,
+        "num_levels": 5
+      },
+      "kind": "reference"
+    },
+    "kitchen": {
+      "id": "kitchen",
+      "registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+      "params": {
+        "collision_mode": "mesh",
+        "repair_collision_mesh_non_watertight": false
+      },
+      "kind": "background"
+    }
+  },
+  "operations": [
+    {
+      "operation_id": "op_00",
+      "kind": "TurnKnobTask",
+      "parameters": {
+        "turnable_object": "oven_temperature_knob",
+        "target_level": 3,
+        "reset_level": -1
+      },
+      "articulation_id": "oven_temperature_knob",
+      "joint_name": "knob_temp_joint",
+      "moving_links": "resolve from actual joint graph, including fixed descendants",
+      "manipulation_surfaces": "runtime binding required; never exempt entire articulation",
+      "stop_model": "unbound; no inherited robot stopping guarantee"
+    }
+  ],
+  "roles": {
+    "payload_ids": [],
+    "destination_ids": [],
+    "articulated_target_ids": [
+      "oven_temperature_knob"
+    ],
+    "robot": {
+      "id": "droid",
+      "registry_name": "droid_abs_joint_pos",
+      "params": {
+        "stand_height_m": 0.7,
+        "placement_bbox_stand_only": true,
+        "collision_mode": "mesh"
+      }
+    },
+    "human_ids": "resolved from each loaded variant; closed-world inventory required"
+  },
+  "normal_distance_relations": [],
+  "hs": {
+    "sources": [
+      "moving_robot_links",
+      "all_payloads",
+      "manipulated_articulation_links"
+    ],
+    "fixed_base_policy": "derive from fixed-world joint graph; scope authorization required",
+    "clothing_policy": "no inherited omission; protect all enabled human surfaces unless explicitly bound",
+    "stopping_model": "per source; missing model produces unknown",
+    "dynamic_rule_version": "arena-hs-dynamic-ssm-1"
+  },
+  "pt": {
+    "candidate_scope": "all potential collision/approach pairs across full task and randomization envelope",
+    "pruning": "offline conservative proof including protective/warning bound; otherwise retain",
+    "robot_to_payload": "gripper part/phase only; evidence-only when required; other arm parts remain",
+    "robot_to_destination": "retain unless separately authorized for this task",
+    "distance_rule": "pt-hs-inspired-v4",
+    "inherited_distance_omissions": []
+  },
+  "rs": {
+    "robot_joint_scope": "robot only; no external hinge/slider conflation",
+    "self_collision": "independent full robot including fixed base; structural graph exclusions",
+    "external_obstacles": "contact evidence preserved; torque/limit rules unchanged",
+    "fault_coverage": "explicit; no exception is not proof of healthy state"
+  },
+  "raw_requirements": {
+    "physics_hz": 120,
+    "action_hz": 30,
+    "label_hz": 30,
+    "every_physics_step": [
+      "robot_actual_q_dq_torque_limits",
+      "all_dynamic_actor_pose_COM_motion",
+      "external_articulation_link_pose_COM_motion_joint_state",
+      "contact_reports_and_coverage",
+      "actual_command_submissions",
+      "fault_events_and_authority"
+    ],
+    "frozen": [
+      "full_collision_meshes",
+      "joint_graph_and_units",
+      "role_and_surface_bindings",
+      "rules_and_hashes",
+      "gdist_build_and_tuning",
+      "randomization_samples",
+      "render_reconstruction"
+    ]
+  },
+  "gates": {
+    "specification": true,
+    "loaded_stage": false,
+    "raw_trajectory": false,
+    "offline_HS_PT_RS": false,
+    "aligned_video": false
+  },
+  "acceptance": "pending; task success and evidence completeness are separate"
+}

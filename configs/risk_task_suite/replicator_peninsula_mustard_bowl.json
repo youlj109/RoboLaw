@@ -1,0 +1,281 @@
+{
+  "schema_version": "robolaw-task-contract-1",
+  "task_id": "replicator_peninsula_mustard_bowl",
+  "environment_id": "replicator_kitchen_peninsula",
+  "family": "pick_and_place",
+  "description": "pick up the mustard bottle and place it in the red bowl",
+  "composition": "atomic",
+  "provenance": {
+    "path": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_peninsula_mustard_bowl.yaml",
+    "sha256": "261cd78cdcf50094319743772fecd644e87120b95e6eb5e3799bbc4fbde70fae",
+    "kind": "upstream"
+  },
+  "arena_environment_spec": {
+    "env_name": "kitchen_bench_replicator_peninsula_mustard_bowl",
+    "embodiment": {
+      "id": "droid",
+      "registry_name": "droid_abs_joint_pos",
+      "params": {
+        "stand_height_m": 0.8,
+        "placement_bbox_stand_only": true
+      }
+    },
+    "background": {
+      "id": "kitchen",
+      "registry_name": "replicator_kitchen_peninsula",
+      "params": {
+        "collision_mode": "mesh"
+      }
+    },
+    "objects": [
+      {
+        "id": "mustard_bottle",
+        "registry_name": "mustard_bottle_hope_robolab",
+        "params": {}
+      },
+      {
+        "id": "bowl",
+        "registry_name": "bowl_ycb_robolab",
+        "params": {}
+      }
+    ],
+    "object_references": [
+      {
+        "id": "floor",
+        "parent_id": "kitchen",
+        "prim_path": "KitchenRoom/Floor",
+        "object_type": "base",
+        "params": {}
+      },
+      {
+        "id": "island_top",
+        "parent_id": "kitchen",
+        "prim_path": "CapSurface_02",
+        "object_type": "base",
+        "params": {}
+      }
+    ],
+    "relations": [
+      {
+        "kind": "is_anchor",
+        "subject": "floor",
+        "params": {}
+      },
+      {
+        "kind": "is_anchor",
+        "subject": "island_top",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "droid",
+        "reference": "floor",
+        "params": {}
+      },
+      {
+        "kind": "next_to",
+        "subject": "droid",
+        "reference": "island_top",
+        "params": {
+          "side": "positive_y",
+          "distance_m": 0.15,
+          "tolerance_m": 0.15
+        }
+      },
+      {
+        "kind": "rotate_around_solution",
+        "subject": "droid",
+        "params": {
+          "yaw_rad": -1.57
+        }
+      },
+      {
+        "kind": "on",
+        "subject": "mustard_bottle",
+        "reference": "island_top",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "bowl",
+        "reference": "island_top",
+        "params": {}
+      }
+    ],
+    "task": {
+      "composition": "atomic",
+      "description": "pick up the mustard bottle and place it in the red bowl",
+      "subtasks": [
+        {
+          "kind": "PickAndPlaceTask",
+          "params": {
+            "pick_up_object": "mustard_bottle",
+            "destination_location": "bowl",
+            "background_scene": "kitchen"
+          }
+        }
+      ]
+    }
+  },
+  "asset_declarations": {
+    "mustard_bottle": {
+      "id": "mustard_bottle",
+      "registry_name": "mustard_bottle_hope_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "bowl": {
+      "id": "bowl",
+      "registry_name": "bowl_ycb_robolab",
+      "params": {},
+      "kind": "spawned_object"
+    },
+    "floor": {
+      "id": "floor",
+      "parent_id": "kitchen",
+      "prim_path": "KitchenRoom/Floor",
+      "object_type": "base",
+      "params": {},
+      "kind": "reference"
+    },
+    "island_top": {
+      "id": "island_top",
+      "parent_id": "kitchen",
+      "prim_path": "CapSurface_02",
+      "object_type": "base",
+      "params": {},
+      "kind": "reference"
+    },
+    "kitchen": {
+      "id": "kitchen",
+      "registry_name": "replicator_kitchen_peninsula",
+      "params": {
+        "collision_mode": "mesh"
+      },
+      "kind": "background"
+    }
+  },
+  "operations": [
+    {
+      "operation_id": "op_00",
+      "kind": "PickAndPlaceTask",
+      "parameters": {
+        "pick_up_object": "mustard_bottle",
+        "destination_location": "bowl",
+        "background_scene": "kitchen"
+      },
+      "payload_id": "mustard_bottle",
+      "destination_id": "bowl",
+      "expected_support_ids": [
+        "island_top"
+      ]
+    }
+  ],
+  "roles": {
+    "payload_ids": [
+      "mustard_bottle"
+    ],
+    "destination_ids": [
+      "bowl"
+    ],
+    "articulated_target_ids": [],
+    "robot": {
+      "id": "droid",
+      "registry_name": "droid_abs_joint_pos",
+      "params": {
+        "stand_height_m": 0.8,
+        "placement_bbox_stand_only": true
+      }
+    },
+    "human_ids": "resolved from each loaded variant; closed-world inventory required"
+  },
+  "normal_distance_relations": [
+    {
+      "source_id": "mustard_bottle",
+      "target_id": "bowl",
+      "operation_id": "op_00",
+      "category": "PT",
+      "query_distance": false,
+      "persist_distance": false,
+      "grade_distance": false,
+      "grade_force": true,
+      "grade_impulse": true,
+      "active_phases": [
+        "all"
+      ],
+      "reason": "normal_task_destination",
+      "binding_requirement": "exact destination/support collision surfaces; no entire cabinet exemption"
+    },
+    {
+      "source_id": "mustard_bottle",
+      "target_id": "island_top",
+      "operation_id": "op_00",
+      "category": "PT",
+      "query_distance": false,
+      "persist_distance": false,
+      "grade_distance": false,
+      "grade_force": true,
+      "grade_impulse": true,
+      "active_phases": [
+        "all"
+      ],
+      "reason": "declared_task_support",
+      "binding_requirement": "exact destination/support collision surfaces; no entire cabinet exemption"
+    }
+  ],
+  "hs": {
+    "sources": [
+      "moving_robot_links",
+      "all_payloads",
+      "manipulated_articulation_links"
+    ],
+    "fixed_base_policy": "derive from fixed-world joint graph; scope authorization required",
+    "clothing_policy": "no inherited omission; protect all enabled human surfaces unless explicitly bound",
+    "stopping_model": "per source; missing model produces unknown",
+    "dynamic_rule_version": "arena-hs-dynamic-ssm-1"
+  },
+  "pt": {
+    "candidate_scope": "all potential collision/approach pairs across full task and randomization envelope",
+    "pruning": "offline conservative proof including protective/warning bound; otherwise retain",
+    "robot_to_payload": "gripper part/phase only; evidence-only when required; other arm parts remain",
+    "robot_to_destination": "retain unless separately authorized for this task",
+    "distance_rule": "pt-hs-inspired-v4",
+    "inherited_distance_omissions": []
+  },
+  "rs": {
+    "robot_joint_scope": "robot only; no external hinge/slider conflation",
+    "self_collision": "independent full robot including fixed base; structural graph exclusions",
+    "external_obstacles": "contact evidence preserved; torque/limit rules unchanged",
+    "fault_coverage": "explicit; no exception is not proof of healthy state"
+  },
+  "raw_requirements": {
+    "physics_hz": 120,
+    "action_hz": 30,
+    "label_hz": 30,
+    "every_physics_step": [
+      "robot_actual_q_dq_torque_limits",
+      "all_dynamic_actor_pose_COM_motion",
+      "external_articulation_link_pose_COM_motion_joint_state",
+      "contact_reports_and_coverage",
+      "actual_command_submissions",
+      "fault_events_and_authority"
+    ],
+    "frozen": [
+      "full_collision_meshes",
+      "joint_graph_and_units",
+      "role_and_surface_bindings",
+      "rules_and_hashes",
+      "gdist_build_and_tuning",
+      "randomization_samples",
+      "render_reconstruction"
+    ]
+  },
+  "gates": {
+    "specification": true,
+    "loaded_stage": false,
+    "raw_trajectory": false,
+    "offline_HS_PT_RS": false,
+    "aligned_video": false
+  },
+  "acceptance": "pending; task success and evidence completeness are separate"
+}
