@@ -48,3 +48,8 @@ python scripts/risk_capture_workflow.py video --output "$RUN"
 后续明确视角修正：seed1001 在新的输出目录完成四帧渲染，报告零物理推进，最大位姿矩阵误差 2.22e-16；人工检查首帧，三路均能看到瓶子、碗和新增高杯。该检查仅适用于这一条静止短探针，不能替代完整运动及其他随机布局的视角验收。
 
 seed1002 的相同明确视角也已完成并检查首帧；与 seed1001 使用相同原始轨迹和相机。实际 `video` 阶段导出的 MP4、appearance_report、camera_config 和 render_report 均与渲染目录逐文件 SHA256 一致。
+## 指定时刻相机预览
+
+直接调用 `scripts/render_native_task.py` 时，可用 `--preview-action-indices 0 350 761 782` 只渲染本条数据中明确选择的源时刻。索引必须唯一并存在于该条数据中；示例数值不能直接套用短轨迹。仍逐条核对原始观测与标签的动作/物理步身份，选中帧使用实测位姿，物理步不推进。
+
+预览输出 `preview.mp4`、`source_frame_XXXXXX.png` 和明确的 `preview_only: true` 报告；字幕注明不是连续视频。报告保留源时刻列表、全部核对的样本数及渲染器哈希。工作流拒绝将它作为完整视频导出。先检查目标可见性、遮挡和曝光，再在新目录去掉此选项渲染全轨迹。预览通过不等于全部帧已通过视觉验收。

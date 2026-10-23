@@ -8,6 +8,7 @@
 - `--asset-cache`：数据盘缓存。官方资产使用 `official/<域名>/<原 URL 路径>`；Lightwheel 使用 `floorplan/`、`object/`。
 - `--policy-factory kitchen_safety.<module>:<factory>`：显式任务控制器。factory 接收 `env, contract, bindings, config`，返回实现 `act(state, last_result)` 的对象。每次返回 `action, phase`，可带 `operation_id, evidence`；返回 `None` 结束。控制器不得改变已冻结场景拓扑、规则或资产角色。
 - `--policy-config`：控制器配置 JSON。已有 `task_action_policy:create` 只回放显式命令表，要求 task hash、asset roots、30Hz 一致。它不生成成功策略，也不把演示状态当实测状态。
+- `task_cartesian_policy:create` 提供按本次实测位姿计算目标的关键帧开发控制器，说明及验收边界见 [native_task_controllers.md](native_task_controllers.md)。它不包含路径避障，不能直接作为正式批量策略。
 - `--obstacle-binding`：本任务实际障碍 USD、静态标志、类别及放置依据；可选择明确世界位姿或下述本任务原生关系放置。不得将上一场景世界坐标直接套用新场景；即使厨房相同，原生放置器也可能重新确定机器人位置。
 
 控制器执行所需状态可在线处理。风险距离、风险特征、HS/PT/RS、完整审计、RGB 和视频不在采集进程内运行。视觉策略必须另外保存真实在线视觉输入，不能用离线画面替代。

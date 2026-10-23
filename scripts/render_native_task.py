@@ -18,6 +18,8 @@ def main():
     parser.add_argument('--camera-config',type=Path,help='Task-bound three-camera offline view configuration')
     parser.add_argument('--appearance-config',type=Path,help='Explicit task-bound visual-only offline augmentation')
     parser.add_argument('--appearance-seed',type=int,help='Required with --appearance-config; actual draws are saved')
+    parser.add_argument('--preview-action-indices',type=int,nargs='+',
+        help='Explicit source samples for camera/pose review only; not a full aligned video')
     args=parser.parse_args();args.enable_cameras=True
     if (args.appearance_config is None)!=(args.appearance_seed is None):
         raise ValueError('Appearance config and seed must be supplied together')
@@ -28,10 +30,16 @@ def main():
     risk_summary=json.loads((args.risk/'evaluation_summary.json').read_text())
     if not risk_summary.get('complete') or risk_summary['raw_sha256']!=raw_summary['raw_writer']['sha256']:
         raise ValueError('Risk result must be complete replay of this exact raw archive')
+    preview=args.preview_action_indices is not None
+    selected=set(args.preview_action_indices or [])
+    if preview and (not selected or len(selected)!=len(args.preview_action_indices) or min(selected)<0 or max(selected)>=risk_summary['frames']):
+        raise ValueError('Preview indices must be unique source sample indices within this episode')
     inventory=json.loads((args.episode/'mesh_inventory.json').read_text());scope=json.loads((args.episode/'relation_scope.json').read_text())
-    report=dict(complete=False,mode='offline_measured_USD_pose_render',source_episode=str(args.episode.resolve()),
+    report=dict(complete=False,mode='offline_measured_USD_pose_preview' if preview else 'offline_measured_USD_pose_render',source_episode=str(args.episode.resolve()),
         physics_steps_advanced=0,frames=0,full_task_execution_verified=raw_summary.get('full_task_execution_verified',False),
-        source_raw_sha256=raw_summary['raw_writer']['sha256'])
+        source_raw_sha256=raw_summary['raw_writer']['sha256'],preview_only=preview,
+        requested_action_indices=sorted(selected) if preview else None,rendered_action_indices=[],source_samples_checked=0,
+        render_implementation_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
     frozen_scene=args.episode/'reconstruction.usda'
     frozen_scene_sha256=hashlib.sha256(frozen_scene.read_bytes()).hexdigest()
     report['source_reconstruction_sha256']=frozen_scene_sha256
@@ -157,7 +165,8 @@ def main():
             if isinstance(probe,dict):probe=probe.get('data',[])
             if np.asarray(probe).size==0:raise RuntimeError('RTX did not produce a capture; stop instead of repeating empty frames')
         if event_count[0] or timeline.get_current_time()!=baseline_time:raise ValueError('Physics/time advanced during RGB warmup')
-        writer=video_encoder(args.output/'risk_review.mp4',1920,544,1/30)
+        video=args.output/('preview.mp4' if preview else 'risk_review.mp4')
+        writer=video_encoder(video,1920,544,1/30)
         max_error=0.;dark=[]
         try:
             with (args.episode/'raw_evidence.jsonl').open() as source,(args.risk/'safety_decisions.jsonl').open() as labels:
@@ -167,6 +176,8 @@ def main():
                     label=json.loads(next(labels))
                     if label['action_index']!=packet['action_index'] or label['source_physics_step']!=packet['source_physics_step']:
                         raise ValueError('RGB/label source-time identity differs')
+                    report['source_samples_checked']+=1
+                    if preview and packet['action_index'] not in selected:continue
                     max_error=max(max_error,restore(packet['state']))
                     render_frame()
                     if event_count[0] or timeline.get_current_time()!=baseline_time:raise ValueError('Physics/time advanced during offline rendering')
@@ -186,15 +197,20 @@ def main():
                         (' (partial)' if categories[c].get('data_complete') is False else '') for c in ('HS','PT','RS'))
                     draw.text((20,494),caption,fill='white',font_size=24)
                     sample='terminal' if packet['kind']=='terminal_observation' else f"obs[{packet['action_index']}]"
-                    draw.text((20,524),f"t={packet['time_s']:.3f}s | {packet['phase']} | measured {sample} | offline replay",fill='white')
+                    suffix='SELECTED FRAME PREVIEW; not continuous video' if preview else 'offline replay'
+                    draw.text((20,524),f"t={packet['time_s']:.3f}s | {packet['phase']} | measured {sample} | {suffix}",fill='white')
                     writer.stdin.write(np.asarray(panel).tobytes());report['frames']+=1
+                    report['rendered_action_indices'].append(packet['action_index'])
                     if report['frames']==1:panel.save(args.output/'first_frame.png')
-            if report['frames']!=risk_summary['frames']:raise ValueError('RGB frame count differs from labels')
+                    if preview:panel.save(args.output/f"source_frame_{packet['action_index']:06d}.png")
+            expected=len(selected) if preview else risk_summary['frames']
+            if report['frames']!=expected or report['source_samples_checked']!=risk_summary['frames']:
+                raise ValueError('RGB selection or source frame count differs from labels')
         finally:close_encoders({'risk_review':writer})
         if hashlib.sha256(frozen_scene.read_bytes()).hexdigest()!=frozen_scene_sha256:
             raise ValueError('Offline appearance/rendering modified the frozen source scene')
         report.update(complete=not dark,physics_steps_advanced=event_count[0],pose_matrix_max_error=max_error,dark_frames=dark,
-            video=str(args.output/'risk_review.mp4'),RGB_source='frozen scene with actual observed actor transforms, no simulated trajectory replay')
+            video=str(video),RGB_source='frozen scene with actual observed actor transforms, no simulated trajectory replay')
         save()
         for annotator,product in zip(annotators,products):annotator.detach(product)
         step_subscription=None

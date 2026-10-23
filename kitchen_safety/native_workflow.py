@@ -65,6 +65,8 @@ def run(args):
         elif stage=='video':
             started=time.time_ns();tick=time.perf_counter()
             report=read(render/'render_report.json');raw=read(episode/'raw_capture_summary.json')
+            if report.get('preview_only') or report.get('mode')!='offline_measured_USD_pose_render':
+                raise ValueError('Selected-frame previews cannot be exported as full aligned videos')
             if not report['complete'] or report['source_raw_sha256']!=raw['raw_writer']['sha256'] or report['physics_steps_advanced']!=0:
                 raise ValueError('Video requires complete source-time RGB alignment with zero physics advancement')
             attachments=[]

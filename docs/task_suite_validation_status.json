@@ -2058,5 +2058,129 @@
       }
     },
     "yaw_pi_visual_review": "Actual Z-axis rotation verified; reach faces robot support table. Coastal views show human and robot. Replicator L second view has foreground occlusion and human overexposure; visual acceptance pending. Full-motion relevance still unverified for both."
+  },
+  "native_cartesian_controller_trials": {
+    "status": "development; no production acceptance",
+    "controller": "kitchen_safety.task_cartesian_policy:create",
+    "trials": {
+      "replicator_l_shape_mustard_bowl": {
+        "group": "native_cartesian_mustard_trial_01",
+        "raw_sha256": "8498e300e9c56cc6aebb74193949550bbf6483f483e112ebbc5f19d128ba9bec",
+        "task_success": true,
+        "stop_reason": "environment_terminal",
+        "native_outcome": {
+          "action_index": 781,
+          "source_physics_step": 3127,
+          "native_episode_index": 0,
+          "terminated": true,
+          "truncated": false,
+          "terms": {
+            "object_dropped": false,
+            "time_out": false,
+            "success": true
+          },
+          "success": true,
+          "errors": [],
+          "source": "existing native termination results after step; replacement disabled by episode limit 1"
+        },
+        "actions": 782,
+        "physics_steps": 3128,
+        "phases": {
+          "pregrasp": 220,
+          "approach": 60,
+          "close": 30,
+          "lift": 60,
+          "above_bowl": 297,
+          "lower": 90,
+          "release": 25
+        },
+        "online_counters": {
+          "risk_queries_online": 0,
+          "features_online": 0,
+          "grades_online": 0
+        },
+        "raw_collection_wall_s": 74.96925508001004,
+        "audit_passed": true,
+        "placement_validation": {
+          "available": true,
+          "passed": true,
+          "failed_checks": [],
+          "attempts": 10,
+          "final_loss": 0.013928711414337158,
+          "source": "native PlacementSampler.last_results[0] for this reset",
+          "fallback_used": false,
+          "task_success_inferred": false
+        },
+        "offline_complete": true,
+        "offline_wall_s": 156.86102845301502,
+        "safety_samples": 783,
+        "risk_level_counts": {
+          "HS": {
+            "L0": 783
+          },
+          "PT": {
+            "L0": 778,
+            "L1": 3,
+            "L3": 2
+          },
+          "RS": {
+            "L0": 782,
+            "L1": 1
+          }
+        },
+        "kinematics_max_matrix_error": 6.526837405183253e-07,
+        "full_task_acceptance": false,
+        "counts_toward_200_quota": false,
+        "missing": [
+          "Release contact impulse spike and final rim-supported/leaning placement require physical-quality review",
+          "Other task controllers not validated"
+        ],
+        "camera_preview": {
+          "preview_only": true,
+          "complete": true,
+          "frames": 4,
+          "source_samples_checked": 783,
+          "rendered_action_indices": [
+            0,
+            350,
+            761,
+            782
+          ],
+          "physics_steps_advanced": 0,
+          "pose_matrix_max_error": 2.220446049250313e-16,
+          "wall_s": 34.99422697699629,
+          "visual_review": "All four selected three-view frames inspected: bottle grasp/lift and transfer visible, final bottle leans against bowl rim; native success criterion alone does not certify stable supported placement. Occluded initial/default camera renders preserved as diagnostics."
+        },
+        "controller_capabilities": {
+          "generates_actual_joint_commands": true,
+          "path_collision_avoidance": false,
+          "risk_evaluation_online": false
+        },
+        "aligned_video": {
+          "complete": true,
+          "preview_only": false,
+          "frames": 783,
+          "source_samples_checked": 783,
+          "physics_steps_advanced": 0,
+          "pose_matrix_max_error": 2.220446049250313e-16,
+          "source_raw_sha256": "8498e300e9c56cc6aebb74193949550bbf6483f483e112ebbc5f19d128ba9bec",
+          "render_implementation_sha256": "a47f2467a659326c607b8a53554c8fc4c7d7af6dc904572a09d2e23e198418e9",
+          "wall_s": 130.98738733798382,
+          "encoded_stream": {
+            "width": 1920,
+            "height": 544,
+            "r_frame_rate": "30/1",
+            "duration": "26.100000",
+            "nb_frames": "783"
+          },
+          "local_file_hash_matches_remote": true
+        },
+        "process_wall_s": {
+          "capture": 108.29070220698486,
+          "audit": 4.244774249003967,
+          "evaluate": 157.0066126479942
+        }
+      }
+    }
   }
 }
