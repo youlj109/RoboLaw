@@ -70,6 +70,20 @@ parser.add_argument('--placement-strategy', choices=['pose', 'lower-first'], def
 parser.add_argument('--placement-tcp-height-m', type=float, default=argparse.SUPPRESS,
                     help='Independent lower-first placement TCP height in world coordinates')
 args = parser.parse_args()
+from kitchen_safety.extensions.replicator.collection_evidence import CollectionProvenance, MotionPhysicsIndex
+collection_provenance = CollectionProvenance(Path(__file__).resolve().parents[3])
+collection_provenance.capture('configs/extensions/replicator/g_shape_mustard.json', 'default_layout', snapshot=True)
+for category in ('people', 'property', 'robot'):
+    catalog = Path(__file__).resolve().parents[3] / 'assets/obstacle_library' / category / 'catalog.json'
+    # Match load_assets(): catalogs are optional; source-default human assets
+    # do not require a people catalog. Bind the actual selected USD below.
+    if catalog.exists():
+        collection_provenance.capture(catalog, 'obstacle_catalog', snapshot=True)
+for planner_input in ('franka_robotiq_2f_85_zero_curobo.yml', 'urdf/franka_robotiq_2f_85_zero.urdf', 'tcp_calibration.json'):
+    collection_provenance.capture('assets/curobo/droid/' + planner_input, 'planner_input', snapshot=True)
+for source_input in (args.layout_json, args.episode_spec):
+    if source_input:
+        collection_provenance.capture(source_input, 'selected_input', snapshot=True)
 if args.control_profile is not None and args.variant != 'base' and args.control_profile != args.variant:
     parser.error('A control-profile override is only allowed for no-hazard baselines')
 control_variant = args.control_profile or args.variant
@@ -169,6 +183,13 @@ with SimulationAppContext(args):
         variant=args.variant, enable_cameras=args.enable_cameras, object_jitter_m=args.jitter,
         collection_seed=args.seed or 0, obstacle_id=args.obstacle_id, episode_spec=episode_spec, fixed_layout=fixed_layout,
         episode_length_s=args.episode_length_s))
+    evidence_layout = (episode_spec['layout'] if episode_spec else fixed_layout if fixed_layout is not None
+                       else resolve_layout(args.obstacle_id, args.jitter, args.seed or 0))
+    collection_provenance.bind_scene(evidence_layout, environment.background_physics_provenance,
+                                     environment.scene.assets['kitchen'].usd_path)
+    collection_provenance.capture(environment.embodiment.scene_config.robot.spawn.usd_path, 'composed_robot_root')
+    if not collection_provenance.check()['passed']:
+        raise RuntimeError('Execution source/input/recipe changed before environment initialization')
     out = Path('/workspace') / (args.output or (
         f'datasets/kitchen_auto/{args.variant}/episode_{datetime.now():%Y%m%d_%H%M%S}'))
     builder = ArenaEnvBuilder(environment, ArenaEnvBuilderCfg(
@@ -225,10 +246,9 @@ with SimulationAppContext(args):
     terminated = False
     terminal = {}
     world = None
-    deferred_safety = None
-    if args.execution_checks == 'deferred':
-        from kitchen_safety.extensions.replicator.deferred_safety import DeferredSafetyBuffer
-        deferred_safety = DeferredSafetyBuffer()
+    from kitchen_safety.extensions.replicator.deferred_safety import DeferredSafetyBuffer
+    motion_states = DeferredSafetyBuffer()
+    deferred_safety = motion_states if args.execution_checks == 'deferred' else None
     motion_planner = None
     safety_checks = 0
     safety_failure = None
@@ -252,8 +272,14 @@ with SimulationAppContext(args):
     appearance_report = None
     grasp_rotation_delta = np.eye(3)
     out.mkdir(parents=True, exist_ok=True)
-    for _ in range(8):
+    from kitchen_safety.extensions.replicator.startup_recorder import StartupRecorder
+    startup = StartupRecorder(e, layout, out, lambda: (phase, len(records)),
+                              getattr(environment, 'background_physics_provenance', None))
+    motion_physics_index = MotionPhysicsIndex()
+    for warmup_index in range(8):
+        startup.set_stage('warmup', warmup_index)
         env.step(torch.tensor(np.r_[q, 0.][None], dtype=torch.float32, device=e.device))
+    startup.set_stage('pre_recording')
     if episode_spec:
         from kitchen_safety.randomization import apply_appearance
         (out/'episode_spec.json').write_text(json.dumps(episode_spec, indent=2))
@@ -277,7 +303,7 @@ with SimulationAppContext(args):
     grasp_contacts = BottleGraspContacts(scene['robot_contacts']._physics_sim_view, cfg.sim.dt)
     background_view=scene['robot_contacts']._physics_sim_view.create_rigid_body_view('/World/envs/env_0/kitchen/**')
     background_paths=list(background_view.prim_paths)
-    if deferred_safety is not None:deferred_safety.background_paths=background_paths
+    motion_states.background_paths=background_paths
     def background_poses():
         value=background_view.get_transforms()
         if hasattr(value,'torch'):return value.torch.detach().cpu().numpy().copy()
@@ -326,11 +352,11 @@ with SimulationAppContext(args):
                      'mustard': arr(scene['mustard_bottle'].data.root_state_w)[0]}
             if dynamic_hazard:
                 state['hazard_pose'] = arr(scene['glass'].data.root_state_w)[0,:7]
+        motion_states.background_poses.append(background_poses())
+        motion_states.append(q=state['q'], mustard=state['mustard'][:7],
+                             phase=phase, action_index=len(records), attachment=world.attachment,
+                             hazard_pose=state.get('hazard_pose'))
         if deferred_safety is not None:
-            deferred_safety.background_poses.append(background_poses())
-            deferred_safety.append(q=state['q'], mustard=state['mustard'][:7],
-                                   phase=phase, action_index=len(records), attachment=world.attachment,
-                                   hazard_pose=state.get('hazard_pose'))
             return
         if dynamic_hazard:
             with step_profile.section('safety_checks', hook='safety_obstacle_update'):
@@ -359,6 +385,7 @@ with SimulationAppContext(args):
         with step_profile.section('scene_update', hook='scene_update'):
             scene_update_original(dt)
         if world is not None:
+            motion_physics_index.append(e.sim.get_physics_step_count(), phase, len(records))
             with step_profile.section('safety_checks', hook='physics_rate_safety'):
                 check_executed_safety()
 
@@ -1035,6 +1062,7 @@ with SimulationAppContext(args):
             phase = 'settle'
         if not np.isfinite(args.initial_settling_seconds) or args.initial_settling_seconds < 5.:
             raise ValueError('Initial source-background settling must be at least the validated 5 seconds')
+        startup.set_stage('initial_settle')
         for _ in range(int(round(args.initial_settling_seconds/e.step_dt))):
             step(q, grip)
         world = CollisionWorld(e.sim.stage, kin,
@@ -1047,6 +1075,10 @@ with SimulationAppContext(args):
         result['background_rigid_paths']=background_paths
         if dynamic_hazard:
             world.set_obstacle_pose('glass', snapshot()['hazard_pose'])
+        result['startup_recording'] = startup.finish(world_ready=True, world=world, arm_ids=ids)
+        if not result['startup_recording']['passed']:
+            result['failure_kind'] = 'data_validation_failed'
+            raise RuntimeError('Reset-to-world startup coverage, stability or execution safety failed')
         if episode_spec or fixed_layout:
             settled = snapshot()
             # Fabric need not write dynamic root poses back to USD. Explicitly
@@ -1284,6 +1316,13 @@ with SimulationAppContext(args):
         print('COLLECTION_ERROR', repr(ex), flush=True)
     finally:
         scene.update = scene_update_original
+        if startup.report is None:
+            result['startup_recording'] = startup.finish(world=world, arm_ids=ids)
+        result['collection_code_integrity'] = startup.code_integrity()
+        (out/'startup_code_integrity.json').write_text(json.dumps(result['collection_code_integrity'], indent=2)+'\n')
+        if not result.get('startup_recording', {}).get('passed') or not result['collection_code_integrity']['passed']:
+            result.update(success=False, failure_kind='data_validation_failed',
+                          error='Startup evidence incomplete/unsafe or collection source changed during execution')
         if deferred_safety is not None and world is not None:
             # The same physics-rate states and thresholds are evaluated after
             # execution. A failed audit cannot be counted as a successful sample.
@@ -1304,6 +1343,16 @@ with SimulationAppContext(args):
                 result.update(success=False, failure_kind='data_validation_failed',
                               error='Could not complete deferred safety validation: ' + repr(ex))
             timings['deferred_safety_s'] = time.perf_counter() - audit_started
+        elif world is not None:
+            # Keep the same schema and online geometry queries; persist their
+            # measured states so timeline evidence also exists in online mode.
+            motion_states.write_npz(out/'physics_states.npz', arm_ids=ids, joint_names=robot.joint_names)
+        result['motion_physics_alignment'] = motion_physics_index.finish(
+            out, startup.metadata, int(e.sim.get_physics_step_count()))
+        result['collection_provenance'] = collection_provenance.finish(out, e.sim.get_physics_step_count())
+        if not result['motion_physics_alignment']['passed'] or not result['collection_provenance']['passed']:
+            result.update(success=False, failure_kind='data_validation_failed')
+            result.setdefault('error', 'Physics prefix/main alignment incomplete or execution source/input changed')
         if cameras:
             try:
                 cameras.close()
