@@ -20,6 +20,29 @@ def pose_matrix(pose):
     return result
 
 
+def resolve_target_pose(target,reference,robot_base,schema_version):
+    """Resolve one control target, keeping position and orientation frames explicit."""
+    if schema_version=='robolaw-cartesian-keyframes-1':
+        if set(target)!={'reference','offset_m','rotation_world_xyzw'}:
+            raise ValueError('Version 1 requires an explicit world orientation')
+        rotation_reference='world';quaternion=target['rotation_world_xyzw']
+    elif schema_version=='robolaw-cartesian-keyframes-2':
+        if set(target)!={'reference','offset_m','rotation_reference','rotation_xyzw'}:
+            raise ValueError('Version 2 requires explicit position and orientation reference frames')
+        rotation_reference=target['rotation_reference'];quaternion=target['rotation_xyzw']
+    else:raise ValueError('Unknown Cartesian keyframe schema')
+    if rotation_reference not in ('world','reference','robot_base'):
+        raise ValueError('Unknown target orientation reference')
+    offset=np.asarray(target['offset_m'],dtype=float);quaternion=np.asarray(quaternion,dtype=float)
+    if offset.shape!=(3,) or quaternion.shape!=(4,) or not np.isfinite(offset).all():
+        raise ValueError('Target requires a finite 3D offset and xyzw quaternion')
+    local=pose_matrix(np.r_[offset,quaternion]);result=np.eye(4)
+    result[:3,3]=reference[:3,3]+reference[:3,:3]@offset
+    orientation_frame={'world':np.eye(4),'reference':reference,'robot_base':robot_base}[rotation_reference]
+    result[:3,:3]=orientation_frame[:3,:3]@local[:3,:3]
+    return result
+
+
 class StageArmKinematics:
     """Read the actual serial joint frames, axes and limits from this stage."""
     def __init__(self,stage,robot_root,joint_names,tcp_body_name,tcp_offset):
@@ -96,7 +119,9 @@ def create(*,env,contract,bindings,config):
         raise ValueError('DROID keyframes require eight absolute controls at 30Hz')
     allowed={'schema_version','task_sha256','tcp_body_name','tcp_offset_m','max_joint_speed_rad_s',
         'max_joint_acceleration_rad_s2','tracking_limit_rad','settle_tolerance_rad','settle_timeout_s','keyframes','purpose'}
-    if set(config)-allowed or config.get('schema_version')!='robolaw-cartesian-keyframes-1':raise ValueError('Unknown keyframe config fields/version')
+    schema_version=config.get('schema_version')
+    if set(config)-allowed or schema_version not in ('robolaw-cartesian-keyframes-1','robolaw-cartesian-keyframes-2'):
+        raise ValueError('Unknown keyframe config fields/version')
     names=['panda_joint'+str(i) for i in range(1,8)];robot=env.unwrapped.scene['robot']
     ids=[robot.joint_names.index(n) for n in names]
     kin=StageArmKinematics(env.unwrapped.sim.stage,bindings['robot_root'],names,config['tcp_body_name'],config['tcp_offset_m'])
@@ -113,14 +138,13 @@ def create(*,env,contract,bindings,config):
         if not math.isfinite(frame['duration_s']) or frame['duration_s']<=0:raise ValueError('Invalid duration')
         if frame['kind']=='move':
             target=frame['target']
-            if set(target)!={'reference','offset_m','rotation_world_xyzw'}:raise ValueError('Explicit target position reference and world orientation required')
+            resolve_target_pose(target,np.eye(4),np.eye(4),schema_version)
             ref=target['reference']
             if ref!='current_tcp':
                 if not isinstance(ref,dict) or set(ref)!={'asset_id','actor_relative_path'} or ref['asset_id'] not in bindings['asset_roots']:
                     raise ValueError('Target must bind a declared current task asset')
                 path=ref['actor_relative_path']
                 if path and (path.startswith('/') or any(x in path.split('/') for x in ('.','..',''))):raise ValueError('Invalid relative actor path')
-            pose_matrix([*target['offset_m'],*target['rotation_world_xyzw']])
         elif 'target' in frame:raise ValueError('Hold keyframe cannot have a target')
     class Policy:
         def __init__(self):
@@ -148,10 +172,10 @@ def create(*,env,contract,bindings,config):
                         path=bindings['asset_roots'][ref['asset_id']]
                         if ref['actor_relative_path']:path+='/'+ref['actor_relative_path']
                         reference=pose_matrix(state['actor_states_world'][path])
-                    desired=np.eye(4);desired[:3,3]=reference[:3,3]+reference[:3,:3]@np.asarray(target['offset_m'])
-                    desired[:3,:3]=Rotation.from_quat(target['rotation_world_xyzw']).as_matrix()
+                    desired=resolve_target_pose(target,reference,base,schema_version)
                     self.goal,ik=kin.ik(desired,q,base)
-                    self.last_evidence=dict(target_world_matrix=desired.tolist(),reference_world_matrix=reference.tolist(),ik=ik)
+                    self.last_evidence=dict(target_world_matrix=desired.tolist(),reference_world_matrix=reference.tolist(),ik=ik,
+                        rotation_reference=target.get('rotation_reference','world'),robot_base_actor=kin.base_actor)
                 delta=float(np.max(np.abs(self.goal-self.start)))
                 duration=max(self.frame['duration_s'],1.875*delta/speed,math.sqrt(5.774*delta/accel))
                 self.steps=max(1,math.ceil(duration*30))

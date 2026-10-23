@@ -2181,6 +2181,304 @@
           "evaluate": 157.0066126479942
         }
       }
+    },
+    "human_motion_trial": {
+      "task_id": "replicator_l_shape_mustard_bowl",
+      "output_group": "native_cartesian_mustard_human_trial_01",
+      "task_success": true,
+      "raw_sha256": "c6a15385dbe039332602344e5e4ec99c51e930b54f61add62d68381fa13ad6b8",
+      "physics_steps": 3168,
+      "raw_collection_wall_s": 79.3783320710063,
+      "audit_passed": true,
+      "hs_relations": 90,
+      "human_surfaces": 5,
+      "full_task_acceptance": false,
+      "counts_toward_200_quota": false,
+      "offline_status": "complete",
+      "frames": 793,
+      "risk_level_counts": {
+        "HS": {
+          "L0": 793
+        },
+        "PT": {
+          "L0": 791,
+          "L1": 1,
+          "L3": 1
+        },
+        "RS": {
+          "L0": 793
+        }
+      },
+      "minimum_hs": {
+        "action_index": 0,
+        "phase": "pregrasp",
+        "distance_m": 0.9810474514961243,
+        "pair": {
+          "distance_m": 0.9810474514961243,
+          "robot_surface_speed_mps": 0.0,
+          "human_surface_speed_mps": 0.0,
+          "human_static": true,
+          "stop_model": "robot_coupled",
+          "level": "L0",
+          "complete": true,
+          "missing": [],
+          "model_calibrated": false,
+          "model_status": "experimental_uncalibrated",
+          "robot_speed_bound_mps": 0.0,
+          "human_speed_bound_mps": 0.0,
+          "reaction_s": 0.05,
+          "stop_s": 0.0,
+          "brake_travel_m": 0.0,
+          "human_travel_m": 0.0,
+          "reaction_travel_m": 0.0,
+          "intrusion_m": 0.015,
+          "robot_position_uncertainty_m": 0.005,
+          "human_position_uncertainty_m": 0.005,
+          "protective_distance_m": 0.025,
+          "warning_outer_m": 0.07500000000000001,
+          "warning_band_m": 0.05,
+          "margin_m": 0.9560474514961242,
+          "robot_acceleration_bound_mps2": 0.0,
+          "human_acceleration_bound_mps2": 0.0,
+          "brake_deceleration_min_mps2": 1.0,
+          "relation_id": "HS:d29b70e610ccf8a6f7fa124f",
+          "source_group": "robot",
+          "source_actor": "/World/envs/env_0/Robot/panda_link3",
+          "human_collider": "/World/envs/env_0/human_default_mpfb/Visual_KitchenAdult/base_001",
+          "nearest_geometry": {
+            "distance_m": 0.9810474514961243,
+            "source_collider": "/World/envs/env_0/Robot/panda_link3/geometry/panda_link3",
+            "destination_collider": "/World/envs/env_0/human_default_mpfb/Visual_KitchenAdult/base_001",
+            "mesh_intersection": false,
+            "nearest_points_world_m": null,
+            "nearest_points_valid": false,
+            "metric": "gdist_authored_collision_surface_distance",
+            "complete": true,
+            "effective_target_colliders": [
+              "/World/envs/env_0/human_default_mpfb/Visual_KitchenAdult/base_001"
+            ]
+          },
+          "closing_speed_mps": null,
+          "TTC_s": null
+        },
+        "levels": {
+          "HS": "L0",
+          "PT": "L0",
+          "RS": "L0",
+          "IR": null,
+          "overall": "L0"
+        }
+      },
+      "risk_placement_acceptance": false,
+      "risk_placement_limitation": "Minimum measured HS distance remains approximately 0.981m; this trajectory verifies full-motion evidence flow but not a close-approach human variant."
+    },
+    "relative_orientation_candidate": {
+      "schema": "robolaw-cartesian-keyframes-2",
+      "configuration_tasks": [
+        "replicator_g_shape_mustard_bowl",
+        "replicator_l_island_mustard_bowl",
+        "replicator_l_shape_mustard_bowl",
+        "replicator_peninsula_mustard_bowl",
+        "replicator_u_shape_mustard_bowl"
+      ],
+      "coordinate_check": {
+        "passed": true,
+        "orientation_frames": [
+          "world",
+          "reference",
+          "robot_base"
+        ],
+        "legacy_world_orientation_preserved": true,
+        "invalid_config_checks": 12,
+        "source_deployed_to_runtime": false
+      },
+      "physical_task_verification": "G-kitchen complete physical trajectory and offline risk assessment; native task unsuccessful; development configuration remains unaccepted",
+      "deployed_source_sha256": "64af173f5d609a4ae74235ac580e2c7ac73f532e3d4bfc5a509196d4c49894bd",
+      "g_kitchen_trial": {
+        "output_group": "native_cartesian_g_mustard_relative_trial_01",
+        "task_success": false,
+        "stop_reason": "controller_stopped",
+        "raw_sha256": "800cb28aadcfd59f2db2bafdbb87d485a425925af623f4ffa68124b0f558fddd",
+        "actions": 949,
+        "physics_steps": 3796,
+        "raw_collection_wall_s": 86.08897948401864,
+        "audit_passed": true,
+        "placement_validation_passed": true,
+        "online_risk_queries": 0,
+        "kinematics_max_matrix_error": 8.542686598684429e-07,
+        "full_task_acceptance": false,
+        "counts_toward_200_quota": false,
+        "observed_payload_positions": {
+          "initial": {
+            "mustard_bottle": [
+              -0.5837289690971375,
+              -0.4893549084663391,
+              0.9849247336387634
+            ],
+            "bowl": [
+              0.3213597536087036,
+              -0.4995468556880951,
+              0.9323845505714417
+            ]
+          },
+          "final": {
+            "mustard_bottle": [
+              -0.24500273168087006,
+              -0.4845481216907501,
+              0.9205447435379028
+            ],
+            "bowl": [
+              0.3213338255882263,
+              -0.499524861574173,
+              0.9222506880760193
+            ]
+          },
+          "extents": {
+            "mustard_bottle": {
+              "min": [
+                -0.5880247354507446,
+                -0.5963208079338074,
+                0.9204049706459045
+              ],
+              "max": [
+                -0.2405920922756195,
+                -0.48243069648742676,
+                1.1933025121688843
+              ]
+            },
+            "bowl": {
+              "min": [
+                0.3213338255882263,
+                -0.4995468556880951,
+                0.9222506880760193
+              ],
+              "max": [
+                0.3213597536087036,
+                -0.499524861574173,
+                0.9323845505714417
+              ]
+            }
+          }
+        },
+        "contact_model_warning": "PhysX reported a dynamic background coffee mug triangle mesh fallback to convex hull; authored-mesh gDist metric and physical collision model must remain distinguished.",
+        "offline_complete": true,
+        "frames": 950,
+        "risk_level_counts": {
+          "HS": {
+            "L0": 950
+          },
+          "PT": {
+            "L0": 925,
+            "L1": 16,
+            "L2": 7,
+            "L3": 2
+          },
+          "RS": {
+            "L0": 936,
+            "L1": 14
+          }
+        },
+        "offline_wall_s": 395.9134558700025,
+        "offline_timings": {
+          "geometry_s": 99.56712329993024,
+          "feature_extraction_s": 74.9883248952392,
+          "rules_s": 63.52212189580314,
+          "temporal_features_s": 2.3685039843257982
+        },
+        "contact_diagnostic": "Raw bottle contacts with kettle body/button during transport; later counter and spatula contacts; first PT L3 at action499 from PT-DROP-001.",
+        "drop_rule_peak": {
+          "level": "L3",
+          "action_index": 499,
+          "phase": "above_bowl",
+          "rules": [
+            {
+              "rule_id": "PT-DROP-001",
+              "category": "PT",
+              "level": "L3",
+              "complete": true,
+              "missing": [],
+              "evidence": {
+                "event": true,
+                "value": 0.2083713412284851,
+                "limit": 0.1,
+                "uncertainty": 0.01,
+                "nominal": 2.083713412284851,
+                "robust": 2.183713412284851
+              },
+              "attachment_section": "5.1",
+              "source_ids": [
+                "ISO2248"
+              ],
+              "clause_ref": null,
+              "note": null,
+              "mapping_origin": "historical_attachment_mapping",
+              "normative_clause_verified": false,
+              "relation_id": "payload:mustard_bottle",
+              "payload_id": "mustard_bottle",
+              "profile_hash": "678af921e52e33c1815b56c75fa77458bc412d71347cd328852aab2d36d9028b",
+              "scope_hash": "df5e9e3e258663f5c024f0176aea73f132927ec321ed34528754666b48d7d2d4",
+              "counted_in_grade": true
+            }
+          ]
+        },
+        "robot_peak": {
+          "level": "L1",
+          "action_index": 399,
+          "phase": "above_bowl",
+          "rules": [
+            {
+              "rule_id": "RS-TORQ-001",
+              "category": "RS",
+              "level": "L1",
+              "complete": true,
+              "missing": [],
+              "evidence": {
+                "ratio": 1.0,
+                "lower": 0.97,
+                "upper": 1.03,
+                "rated_boundary": 1.0
+              },
+              "attachment_section": "6.1",
+              "source_ids": [
+                "ISO10218_1"
+              ],
+              "clause_ref": null,
+              "note": null,
+              "mapping_origin": "historical_attachment_mapping",
+              "normative_clause_verified": false,
+              "profile_hash": "678af921e52e33c1815b56c75fa77458bc412d71347cd328852aab2d36d9028b",
+              "scope_hash": "df5e9e3e258663f5c024f0176aea73f132927ec321ed34528754666b48d7d2d4",
+              "counted_in_grade": true
+            }
+          ]
+        },
+        "selected_frame_preview": {
+          "complete": true,
+          "preview_only": true,
+          "frames": 5,
+          "requested_action_indices": [
+            0,
+            312,
+            372,
+            500,
+            949
+          ],
+          "rendered_action_indices": [
+            0,
+            312,
+            372,
+            500,
+            949
+          ],
+          "source_samples_checked": 950,
+          "physics_steps_advanced": 0,
+          "pose_matrix_max_error": 4.440892098500626e-16,
+          "wall_s": 86.17008162502316,
+          "source_raw_sha256": "800cb28aadcfd59f2db2bafdbb87d485a425925af623f4ffa68124b0f558fddd",
+          "render_implementation_sha256": "a47f2467a659326c607b8a53554c8fc4c7d7af6dc904572a09d2e23e198418e9",
+          "visual_review": "All five frames inspected: bottle grasp/lift and final bottle outside bowl visible; frame500 shows PT L3 aligned to drop. Selected frames only, not a continuous video."
+        }
+      }
     }
   }
 }

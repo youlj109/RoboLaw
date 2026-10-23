@@ -1,0 +1,183 @@
+{
+  "schema_version": "robolaw-cartesian-keyframes-2",
+  "task_sha256": "63c0ebcd894690b14223b831322dd2f408f7fb97464416de8647b8fad8645d8c",
+  "tcp_body_name": "base_link",
+  "tcp_offset_m": [
+    0.131,
+    0,
+    0
+  ],
+  "max_joint_speed_rad_s": 0.4,
+  "max_joint_acceleration_rad_s2": 0.8,
+  "tracking_limit_rad": 0.35,
+  "settle_tolerance_rad": 0.025,
+  "settle_timeout_s": 3,
+  "keyframes": [
+    {
+      "kind": "move",
+      "phase": "pregrasp",
+      "duration_s": 3,
+      "gripper": 0,
+      "target": {
+        "reference": {
+          "asset_id": "mustard_bottle",
+          "actor_relative_path": ""
+        },
+        "offset_m": [
+          0,
+          0,
+          0.125
+        ],
+        "rotation_reference": "robot_base",
+        "rotation_xyzw": [
+          -0.0001523705315516488,
+          0.38268340203090506,
+          0.00036785500377800595,
+          0.9238794592780867
+        ]
+      },
+      "operation_id": "op_00"
+    },
+    {
+      "kind": "move",
+      "phase": "approach",
+      "duration_s": 2,
+      "gripper": 0,
+      "target": {
+        "reference": {
+          "asset_id": "mustard_bottle",
+          "actor_relative_path": ""
+        },
+        "offset_m": [
+          0,
+          0,
+          0
+        ],
+        "rotation_reference": "robot_base",
+        "rotation_xyzw": [
+          -0.0001523705315516488,
+          0.38268340203090506,
+          0.00036785500377800595,
+          0.9238794592780867
+        ]
+      },
+      "operation_id": "op_00"
+    },
+    {
+      "kind": "hold",
+      "phase": "close",
+      "duration_s": 1,
+      "gripper": 1,
+      "operation_id": "op_00"
+    },
+    {
+      "kind": "move",
+      "phase": "lift",
+      "duration_s": 2,
+      "gripper": 1,
+      "target": {
+        "reference": "current_tcp",
+        "offset_m": [
+          -0.10606601717798211,
+          0.0,
+          0.10606601717798213
+        ],
+        "rotation_reference": "robot_base",
+        "rotation_xyzw": [
+          -0.0001523705315516488,
+          0.38268340203090506,
+          0.00036785500377800595,
+          0.9238794592780867
+        ]
+      },
+      "operation_id": "op_00"
+    },
+    {
+      "kind": "move",
+      "phase": "above_bowl",
+      "duration_s": 4,
+      "gripper": 1,
+      "target": {
+        "reference": {
+          "asset_id": "bowl",
+          "actor_relative_path": ""
+        },
+        "offset_m": [
+          0,
+          0,
+          0.23
+        ],
+        "rotation_reference": "robot_base",
+        "rotation_xyzw": [
+          -0.0001523705315516488,
+          0.38268340203090506,
+          0.00036785500377800595,
+          0.9238794592780867
+        ]
+      },
+      "operation_id": "op_00"
+    },
+    {
+      "kind": "move",
+      "phase": "lower",
+      "duration_s": 3,
+      "gripper": 1,
+      "target": {
+        "reference": {
+          "asset_id": "bowl",
+          "actor_relative_path": ""
+        },
+        "offset_m": [
+          0,
+          0,
+          0.115
+        ],
+        "rotation_reference": "robot_base",
+        "rotation_xyzw": [
+          -0.0001523705315516488,
+          0.38268340203090506,
+          0.00036785500377800595,
+          0.9238794592780867
+        ]
+      },
+      "operation_id": "op_00"
+    },
+    {
+      "kind": "hold",
+      "phase": "release",
+      "duration_s": 1,
+      "gripper": 0,
+      "operation_id": "op_00"
+    },
+    {
+      "kind": "move",
+      "phase": "retreat",
+      "duration_s": 2,
+      "gripper": 0,
+      "target": {
+        "reference": "current_tcp",
+        "offset_m": [
+          -0.10606601717798211,
+          0.0,
+          0.10606601717798213
+        ],
+        "rotation_reference": "robot_base",
+        "rotation_xyzw": [
+          -0.0001523705315516488,
+          0.38268340203090506,
+          0.00036785500377800595,
+          0.9238794592780867
+        ]
+      },
+      "operation_id": "op_00"
+    },
+    {
+      "kind": "hold",
+      "phase": "settle",
+      "duration_s": 2,
+      "gripper": 0,
+      "operation_id": "op_00"
+    }
+  ],
+  "purpose": "Development recipe for this exact task and matched mustard/bowl assets; measured robot-relative orientation; independently validate actual trajectory and risks before production"
+}
