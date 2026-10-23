@@ -1,0 +1,80 @@
+{
+  "human": {
+    "name": "person",
+    "asset": "assets/extensions/doors/human_yaw220.usda",
+    "position": [
+      3.76,
+      -1.48,
+      0.0
+    ],
+    "yaw_deg": 0.0,
+    "static": true,
+    "semantic_anchor": "Same-source human with raised elbow; occupies original approach channel while retaining floor contact, original kitchen and whole door sweep.",
+    "candidate_evidence": "reports/avoidance_trials/doors/human_adaptive_height_search.json candidate 2; exact robot mesh necessity in human_physical_candidates.json",
+    "pose_provenance": "assets/extensions/doors/human_reach_elbow_up/pose.json",
+    "unrotated_asset": "assets/extensions/doors/human_reach_elbow_up/collidable.usda",
+    "baked_yaw_deg": 220.0
+  },
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      4.339999999999999,
+      -1.17,
+      0.94
+    ],
+    "static": false,
+    "semantic_anchor": "Anchored floor pedestal; full column, kitchen, stand and door sweep included; old baseline conflicts during free pregrasp.",
+    "yaw_deg": 0.0,
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/property_floor_pedestal_front_lwx_01.usda",
+      "position": [
+        4.339999999999999,
+        -1.17,
+        0.0
+      ],
+      "static": true,
+      "dimensions_m": [
+        0.09999999999999964,
+        0.10000000000000009,
+        0.938
+      ]
+    },
+    "candidate_evidence": "reports/avoidance_trials/doors/bottle_adaptive_search.json candidate 19"
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.8799999999999875,
+      -0.9899999999999998,
+      0.8600000000000001
+    ],
+    "yaw_deg": 270.0,
+    "static": true,
+    "semantic_anchor": "Anchored floor pedestal; full column, kitchen, stand and door sweep included; old baseline conflicts during free pregrasp.",
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/robot_floor_pedestal_filtered.usda",
+      "position": [
+        4.8799999999999875,
+        -0.9899999999999998,
+        0.0
+      ],
+      "static": true,
+      "dimensions_m": [
+        0.16999999999999993,
+        0.16999999999999993,
+        0.8600000000000001
+      ]
+    },
+    "candidate_evidence": "reports/avoidance_trials/doors/robot_planner_filtered_search.json candidate 4"
+  },
+  "_fixed_source_layout": "configs/extensions/doors/fixed_source_layout.json",
+  "_revision": {
+    "purpose": "CPU screening of a 60mm taller real floor pedestal while moving the same bottle toward the robot forward axis; source robot, bottle, yaw and thresholds unchanged",
+    "support_height_change_m": 0.06,
+    "requires_fresh_physical_validation": true
+  }
+}

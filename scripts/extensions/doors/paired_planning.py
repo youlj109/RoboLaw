@@ -33,6 +33,19 @@ def plan(start, metadata, spec, seed, offsets):
             failures.append({'height_offset_m': offset, 'reason': str(error),
                              'target_pose': target.tolist(), 'executed_actions': 0})
             continue
+        if 'pregrasp_validation' in metadata['controller_parameters']:
+            from kitchen_safety.extensions.doors.pregrasp import POLICY, check_pregrasp
+            if metadata['controller_parameters']['pregrasp_validation'] != POLICY:
+                raise ValueError('Recorded pregrasp policy differs from current implementation')
+            validation = check_pregrasp(planner, trajectory)
+            trajectory['metadata']['pregrasp_validation'] = validation
+            if not validation['accepted']:
+                failures.append({'height_offset_m': offset,
+                    'reason': 'Dense pre-execution geometry gate rejected cuRobo path',
+                    'target_pose': target.tolist(), 'executed_actions': 0,
+                    'positions': trajectory['positions'].tolist(), 'validation': validation,
+                    'planner_metadata': trajectory['metadata']})
+                continue
         output.update(success=True, selected_offset_m=offset,
                       target_pose=target.tolist(), positions=trajectory['positions'].tolist(),
                       metadata=trajectory['metadata'])

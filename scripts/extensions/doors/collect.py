@@ -4,6 +4,7 @@ from pathlib import Path
 from isaaclab_arena.cli.isaaclab_arena_cli import get_isaaclab_arena_cli_parser
 from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppContext
 p=get_isaaclab_arena_cli_parser();p.add_argument('--variant',choices=['base','human','property','robot'],default='base');p.add_argument('--output',required=True);p.add_argument('--max-steps',type=int,default=500);p.add_argument('--handle-offset-y',type=float,default=0.);p.add_argument('--handle-offset-z',type=float,default=.12);p.add_argument('--variant-config',default='configs/extensions/doors/open_fridge_variants.json');p.add_argument('--adaptive-handle-height',action='store_true')
+p.add_argument('--validated-pregrasp', action='store_true')
 p.add_argument('--mode', choices=['collect', 'neutral'], default='collect')
 p.add_argument('--neutral-seconds', type=float, default=40.)
 p.add_argument('--review-config', default='configs/extensions/doors/review_gates_lwx.json')
@@ -81,8 +82,14 @@ with SimulationAppContext(a):
     metadata['contact_localization_scope']='PhysX finger-to-door body filter plus bounds computed from source collision mesh vertices, not authored USD extents; independent source-shape distance audit required.'
     metadata['door_joint_id']=joint_id
     metadata['door_joint_limits_rad']=arr(fridge.data.joint_pos_limits)[0,joint_id].tolist()
+    if a.validated_pregrasp:
+        from kitchen_safety.extensions.doors.pregrasp import POLICY, check_pregrasp
+        metadata['controller_parameters']['pregrasp_validation']=POLICY.copy()
     if a.adaptive_handle_height:metadata['controller_parameters']['handle_height_candidates_m']=[a.handle_offset_z,a.handle_offset_z+.06,a.handle_offset_z+.10]
     metadata['implementation_sha256']={str(path):hashlib.sha256(Path(path).read_bytes()).hexdigest() for path in (__file__,'kitchen_safety/extensions/doors/environment.py','kitchen_safety/extensions/doors/collision.py',a.variant_config)}
+    if a.validated_pregrasp:
+        validation_source=Path('kitchen_safety/extensions/doors/pregrasp.py')
+        metadata['implementation_sha256'][str(validation_source)]=hashlib.sha256(validation_source.read_bytes()).hexdigest()
     (out/'metadata.json').write_text(json.dumps(metadata,indent=2))
     contact_view=scene['robot_contacts']._physics_sim_view.create_rigid_contact_view(['/World/envs/env_0/Robot/Gripper/Robotiq_2F_85/left_inner_finger','/World/envs/env_0/Robot/Gripper/Robotiq_2F_85/right_inner_finger'],filter_patterns=[[door_path],[door_path]],max_contact_data_count=4096)
     mechanisms=MechanismObserver(e.sim.stage,scene['robot_contacts']._physics_sim_view,contact_arr)
@@ -178,11 +185,22 @@ with SimulationAppContext(a):
                 handle0=default_handle+[0.,0.,offset];target[:3,3]=handle0+[0,-.13,0]
                 candidate_queries.append({'offset_z_m':a.handle_offset_z+offset,'requested_handle_point_world':handle0.tolist(),'requested_pregrasp_pose_world':target.tolist()})
                 print('DOOR_PLAN',phase,target.tolist(),flush=True)
-                try:plan=planner.plan_pose(q,target,phase='door_pregrasp')
+                try:
+                    plan=planner.plan_pose(q,target,phase='door_pregrasp')
+                    if a.validated_pregrasp:
+                        validation=check_pregrasp(planner,plan)
+                        plan['metadata']['pregrasp_validation']=validation
+                        if not validation['accepted']:
+                            candidate_failures.append({'handle_offset_z_m':a.handle_offset_z+offset,
+                                'reason':'Dense pre-execution geometry gate rejected cuRobo path',
+                                'validation':validation,'positions':plan['positions'].tolist(),
+                                'planner_metadata':plan['metadata'],'executed_actions':0})
+                            plan=None
+                            continue
                 except RuntimeError as exc:
                     candidate_failures.append({'handle_offset_z_m':a.handle_offset_z+offset,'reason':str(exc),'executed_actions':0});continue
                 metadata['selected_handle_initial']=handle0.tolist();metadata['selected_handle_offset_z_m']=a.handle_offset_z+offset;break
-            metadata['handle_candidate_failures']=candidate_failures;metadata['handle_candidate_queries']=candidate_queries;metadata['handle_selection_policy']='First feasible collision-aware cuRobo plan from the same ordered source-handle height candidates; no variant-label branch.';(out/'metadata.json').write_text(json.dumps(metadata,indent=2))
+            metadata['handle_candidate_failures']=candidate_failures;metadata['handle_candidate_queries']=candidate_queries;metadata['handle_selection_policy']=('First cuRobo plan passing dense independent pre-execution validation from the same ordered source-handle height candidates; no variant-label branch.' if a.validated_pregrasp else 'First feasible collision-aware cuRobo plan from the same ordered source-handle height candidates; no variant-label branch.');(out/'metadata.json').write_text(json.dumps(metadata,indent=2))
             if plan is None:raise RuntimeError('All unchanged-task handle-height candidates rejected: '+json.dumps(candidate_failures))
             plans.append(plan['metadata'])
             for command in plan['positions']:step(command,0.)

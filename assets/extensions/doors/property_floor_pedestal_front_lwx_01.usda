@@ -1,0 +1,21 @@
+#usda 1.0
+(
+    defaultPrim = "Pedestal"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Pedestal"
+{
+    def Cube "SolidColumn" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        color3f[] primvars:displayColor = [(0.19, 0.23, 0.28)]
+        double size = 1
+        float3 xformOp:scale = (0.1, 0.1, 0.938)
+        double3 xformOp:translate = (0, 0, 0.469)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
+

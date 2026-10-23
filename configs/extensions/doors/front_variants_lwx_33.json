@@ -1,0 +1,92 @@
+{
+  "human": {
+    "name": "person",
+    "asset": "assets/extensions/doors/human_yaw220.usda",
+    "position": [
+      3.78,
+      -1.58,
+      0.0
+    ],
+    "yaw_deg": 0.0,
+    "static": true,
+    "semantic_anchor": "Same-source human with raised elbow; occupies original approach channel while retaining floor contact, original kitchen and whole door sweep.",
+    "candidate_evidence": "reports/doors/lwx_front_20261023/human_02.pipeline.json",
+    "pose_provenance": "assets/extensions/doors/human_reach_elbow_up/pose.json",
+    "unrotated_asset": "assets/extensions/doors/human_reach_elbow_up/collidable.usda",
+    "baked_yaw_deg": 220.0
+  },
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      4.52,
+      -1.25,
+      0.91
+    ],
+    "static": false,
+    "semantic_anchor": "Original bottle and physical floor support moved toward measured robot forward axis; original source collision geometry, controller and all safety margins retained.",
+    "yaw_deg": 0.0,
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/property_floor_pedestal_front_lwx_33.usda",
+      "position": [
+        4.52,
+        -1.25,
+        0.0
+      ],
+      "static": true,
+      "dimensions_m": [
+        0.1,
+        0.1,
+        0.908
+      ]
+    },
+    "candidate_evidence": "reports/doors/lwx_front_20261023/motion_property_33.json; full paired planning and physical audits required"
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.8799999999999875,
+      -0.9899999999999998,
+      0.8600000000000001
+    ],
+    "yaw_deg": 270.0,
+    "static": true,
+    "semantic_anchor": "Anchored floor pedestal; full column, kitchen, stand and door sweep included; old baseline conflicts during free pregrasp.",
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/robot_floor_pedestal_filtered.usda",
+      "position": [
+        4.8799999999999875,
+        -0.9899999999999998,
+        0.0
+      ],
+      "static": true,
+      "dimensions_m": [
+        0.16999999999999993,
+        0.16999999999999993,
+        0.8600000000000001
+      ]
+    },
+    "candidate_evidence": "reports/avoidance_trials/doors/robot_planner_filtered_search.json candidate 4"
+  },
+  "_fixed_source_layout": "configs/extensions/doors/fixed_source_layout.json",
+  "_revision": {
+    "purpose": "C01 front revision candidate screened using source geometry and measured reference motion; robot and source layout fixed",
+    "support_height_change_m": 0.03,
+    "requires_fresh_physical_validation": true,
+    "translations_from_original_m": {
+      "human": [
+        0.08,
+        0.02,
+        0.0
+      ],
+      "property": [
+        0.18,
+        -0.08,
+        0.03
+      ]
+    }
+  }
+}
