@@ -7,7 +7,7 @@ description: 为RoboLaw学生B独立扩展Lightwheel 剩余5个抓放环境，�
 
 **开始开发、复现或验收前必读 [本次复查与验收要求](references/review-gates.md)。历史 12/12 不再作为交付验收；原任务成功、场景物理质量与避障必要性须分列。**
 
-独立负责 **5个原始环境**；新分支 **ylj-lightwheel-pick-place**。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界、现有缺口和验收要求。本技能自包含，不依赖其他技能或学生产出。
+独立负责 **5个原始环境**；由学生自己从 `origin/ylj` 创建以**本人姓名缩写**命名的分支（例如 `zxw`、`lgd`、`lwx`）。姓名未明确时先询问该学生，不按A/B/C/D猜测对应关系；`ylj`仅作为共同基线。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界、现有缺口和验收要求。本技能自包含，不依赖其他技能或学生产出。
 
 本仓库已实现青柠任务的本组场景、cuRobo/物理执行与采集入口。 本轮 `datasets/avoidance_trials/lightwheel_pick_place/` 的 human/property/robot 各1条真实任务完成及单基线避让证据仍保留，尚未验证多规划 seed 下的稳定必要性；人体主要体现冗余关节姿态调整。具体样本与历史门控见下述 avoidance-trial 参考，当前交付要求见 review-gates.md。旧human/property/robot各1条只证明场景与采集流程跑通，其无障碍基线在新增物体下仍安全，**不计为有效避障增广**。继续前读 [physical-trial.md](references/physical-trial.md) 的物理边界，以及 [avoidance-trial.md](references/avoidance-trial.md) 的强制避障验收。有效样本必须证明：同一成功基线的实测臂/指爪/携物轨迹在该新增物体下违反原安全距离，而实际重规划采集安全且原任务成功；初态、目标与原厨房/固定台架合法。仅摆了物体、路径随机不同或视频中物体可见不能通过。技能ZIP只含指导与预检脚本，需配套RoboLaw源码。其余4个任务仍未物理验证。
 

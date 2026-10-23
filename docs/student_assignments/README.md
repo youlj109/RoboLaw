@@ -2,6 +2,8 @@
 
 更新日期：2026-10-23。共同开发基线为 `origin/ylj`，本轮修复提交 `76de5bb`。四人按不同原始任务独立完成端到端开发，没有串联依赖。
 
+**每位同学自己从 `origin/ylj` 创建以本人姓名缩写命名的分支，例如 `zxw`、`lgd`、`lwx`。** `ylj` 是共同参考基线，个人分支不加 `ylj-` 前缀。姓名与 A/B/C/D 分工的对应关系由实际分配确定，本文不作预设。
+
 **已经安装主分支的同学，请先按下方步骤获取 `ylj`，再从它创建个人分支。** 本轮安全扩展、修复和学生技能以 [`ylj` 分支](https://github.com/youlj109/RoboLaw/tree/ylj)为参考；仅在主分支执行 `git pull` 不会把 `ylj` 的实现合入当前分支。线上入口：[共享任务安排](https://github.com/youlj109/RoboLaw/blob/ylj/docs/student_assignments/README.md)、[四组技能源码](https://github.com/youlj109/RoboLaw/tree/ylj/student_skills)、[物理与避障修复说明](https://github.com/youlj109/RoboLaw/blob/ylj/docs/extensions/AVOIDANCE_REPAIR_20261022.md)。
 
 31个原始环境中，已完成的 Lightwheel `pick_and_place` 芥末瓶入碗及11个变体作为参考；剩余30个环境分配如下。每个原始任务先做人体、财产、障碍物三个变体，不要求立即复制11种资产。
@@ -10,10 +12,10 @@
 
 | 学生 | 范围 | 环境数 | 分支 | 直接可用的 Prompt |
 |---|---|---:|---|---|
-| A | Replicator 厨房抓放 | 14 | `ylj-replicator` | [A组启动 Prompt](A_PROMPT.md) |
-| B | Lightwheel 其余抓放 | 5 | `ylj-lightwheel-pick-place` | [B组启动 Prompt](B_PROMPT.md) |
-| C | Lightwheel 开门 | 8 | `ylj-doors` | [C组启动 Prompt](C_PROMPT.md) |
-| D | Lightwheel 按钮与旋钮 | 3 | `ylj-controls` | [D组启动 Prompt](D_PROMPT.md) |
+| A | Replicator 厨房抓放 | 14 | 本人姓名缩写 | [A组启动 Prompt](A_PROMPT.md) |
+| B | Lightwheel 其余抓放 | 5 | 本人姓名缩写 | [B组启动 Prompt](B_PROMPT.md) |
+| C | Lightwheel 开门 | 8 | 本人姓名缩写 | [C组启动 Prompt](C_PROMPT.md) |
+| D | Lightwheel 按钮与旋钮 | 3 | 本人姓名缩写 | [D组启动 Prompt](D_PROMPT.md) |
 
 任务数按实施难度分配，按钮、旋钮和开门的接触控制工作量较大，不按数量平均。
 
@@ -113,18 +115,30 @@ git remote -v
 git fetch origin refs/heads/ylj:refs/remotes/origin/ylj
 ```
 
-显式获取 `ylj` 也适用于当初只克隆主分支的情况。之后按分工**只执行自己这一行**；这些命令用于个人分支尚不存在的情况，直接以 `origin/ylj` 为起点，无需先创建本地 `ylj`。
+显式获取 `ylj` 也适用于当初只克隆主分支的情况。在干净的个人工作区执行下方命令，输入**自己的姓名缩写**；例如本人姓名缩写为 `zxw` 时才输入 `zxw`，其他同学使用自己的名字。命令仅创建本地、远程均不存在的新分支，直接以 `origin/ylj` 为起点，无需先创建本地 `ylj`。
 
-| 学生 | 创建个人分支 |
-|---|---|
-| A | `git switch --no-track -c ylj-replicator origin/ylj` |
-| B | `git switch --no-track -c ylj-lightwheel-pick-place origin/ylj` |
-| C | `git switch --no-track -c ylj-doors origin/ylj` |
-| D | `git switch --no-track -c ylj-controls origin/ylj` |
+```bash
+(
+  read -r -p '请输入本人姓名缩写，作为个人分支名：' student_branch || exit 1
+  case "$student_branch" in
+    ''|main|master|ylj|ylj-*)
+      echo '请使用本人姓名缩写；不能使用共同基线或原 ylj- 分组命名。'
+      exit 1
+      ;;
+  esac
+  git check-ref-format --branch "$student_branch" >/dev/null || exit 1
+  remote_branch=$(git ls-remote --heads origin "refs/heads/$student_branch") || exit 1
+  if git show-ref --verify --quiet "refs/heads/$student_branch" || [ -n "$remote_branch" ]; then
+    echo '该个人分支已经存在，请按下文沿用其历史，不要覆盖。'
+    exit 1
+  fi
+  git switch --no-track -c "$student_branch" origin/ylj
+)
+```
 
-`--no-track` 避免把共同基线 `origin/ylj` 设为个人分支的推送目标。首次提交后用 `git push -u origin <个人分支名>` 建立对应的个人远程分支。
+`--no-track` 避免把共同基线 `origin/ylj` 设为个人分支的推送目标。首次提交后用 `git push -u origin <本人姓名缩写>` 建立对应的个人远程分支（替换尖括号中的文字）。
 
-若个人分支已经存在，先切到该分支，保留原提交，再执行 `git merge origin/ylj` 同步共同基线；有冲突时逐项解决，不使用 `reset --hard` 或强制推送。若个人分支仅在远程存在，先获取并跟踪它，不能同名重建后覆盖。
+若姓名分支已经存在，先切到该分支，保留原提交，再执行 `git merge origin/ylj` 同步共同基线；有冲突时逐项解决，不使用 `reset --hard` 或强制推送。若姓名分支仅在远程存在，先获取并跟踪它，不能同名重建后覆盖。若已按旧文档建立分组分支并有个人提交，先确认所属者，再将本人分支安全重命名或将其提交合入本人的姓名分支；不得丢弃旧工作，也不自动删除旧远程分支。
 
 切换后核对：
 
@@ -138,20 +152,19 @@ git log -1 --oneline
 
 ### 新建独立克隆
 
-尚无仓库，或原目录由多人共用时，每人克隆到独立目录。例如A：
+尚无仓库，或原目录由多人共用时，每人克隆到独立目录。下面的目录名可自行调整：
 
 ```bash
-git clone --branch ylj https://github.com/youlj109/RoboLaw.git RoboLaw-A
-cd RoboLaw-A
-git switch --no-track -c ylj-replicator origin/ylj
+git clone --branch ylj https://github.com/youlj109/RoboLaw.git RoboLaw-personal
+cd RoboLaw-personal
 ```
 
-其他组替换目录与分支。已有个人分支沿用，不强制覆盖；共享工作目录不要同时切分支。
+进入新克隆后，执行上一节的交互命令，输入本人姓名缩写并创建个人分支，再开始开发。已有个人分支沿用，不强制覆盖；共享工作目录不要同时切分支。
 
 ### 启动技能并开发
 
 1. 读取仓库中的对应技能。Codex可安装整份技能目录后调用；Cursor可直接将SKILL.md加入文件上下文，要求Agent读取其相对引用。无需先依赖特定IDE插件安装方式。
-2. 打开本人的A/B/C/D_PROMPT.md，将代码块完整复制给Agent。也可直接复制线上个人 Prompt 到当前主分支上的 Agent，它会先处理分支，再读取技能、执行CPU预检。
+2. 打开本人的A/B/C/D_PROMPT.md，将代码块完整复制给Agent。也可直接复制线上个人 Prompt 到当前主分支上的 Agent，它会先确认本人姓名缩写并处理分支，再读取技能、执行CPU预检。
 3. 复现本组首任务，补齐未通过的新检查；随后逐个扩展任务，完成一个即可增量提交。不要等待另外三组。
 
 本机可用环境为arena-kitchen-dev，仓库挂载/workspace。独立克隆后必须确认容器的/workspace实际对应本人的目录，否则脚本可能仍在执行旧仓库；同机多人运行还需将GPU锁映射到同一宿主机文件。Git不包含所有大资产、运行时、视频和原始数据；换目录或换机器须检查并恢复缺项。技能预检只验证元数据，不代表GPU/物理可运行。

@@ -9,7 +9,7 @@
 ## 开始工作
 1. 先读 SKILL.md、assignment.json 和本文件，在仓库根目录运行随技能的 preflight.py。技能目录与仓库目录可能不同，明确传 --repo；预检不下载、改分支或启动GPU。
 2. 阅读分配给自己的原始 YAML 及其中 task kind 的源码，保留源任务对象、机器人位置关系、支座高度、相机与成功predicate。检查资产恢复情况。preflight仅证明清单与源码一致，不证明其余厨房资产已恢复或仿真可运行。
-3. 检查 git status、remote、当前commit。从包含本组实测入口的同一 `ylj` 统一提交开始；`assignment.json.base_commit` 只用于追溯原上游来源，不要退回旧 `cce` 提交，否则本组入口与修复会缺失。用户指定分支优先。新建本组分支（assignment.json.branch）；如果已在本组分支直接继续。若分支存在先检查，不强制覆盖、不reset、不删除未提交文件。首次分支示例 git switch -c ylj-本组名称，以assignment实际名称替换。不要将本机绝对路径、容器名或第三方源码路径当成同学机器的既定环境。
+3. 检查 git status、remote、当前commit；确认origin为RoboLaw后执行 `git fetch origin refs/heads/ylj:refs/remotes/origin/ylj`。由学生自己从 `origin/ylj` 创建以本人姓名缩写命名的个人分支，例如 `zxw`、`lgd`、`lwx`；姓名未提供时先询问，不按组号猜测。将已确认姓名赋给 `student_branch` 后，在干净的独立工作区执行 `git switch --no-track -c "$student_branch" origin/ylj`。已有同名个人分支先检查并沿用，必要时合并 `origin/ylj`，不强制覆盖、不reset、不删除或自动stash未提交文件。`assignment.json.branch` 为null表示由学生提供实际名称，`branch_naming`记录命名规则；base_commit只作来源追溯，不退回旧提交。首次推送执行 `git push -u origin "$student_branch"`。不要将本机绝对路径、容器名或第三方源码路径当成同学机器的既定环境。
 4. README提供源码/资产恢复与安装入口。默认 assets/kitchen/scene.usd 只覆盖一套厨房，新增资产按原registry/source核实来源、引用与许可并补充本组下载清单/恢复脚本。不凭空编造下载URL，不搬运无出处的大文件。
 5. 区分宿主机Python与实际容器/venv解释器；宿主机缺torch/fcl不能直接判定容器运行时缺失。检查实际运行解释器和挂载路径。CPU预检可以先做。GPU上有他人训练/采集时，继续做独立的代码和配置工作，等待资源空闲或使用自己设备；不结束别人的任务。设置独立ARENA_CONTAINER、输出目录，确认 scripts/arena_python.sh 指向本组挂载。不要盲目创建与其他工程同名容器。
 

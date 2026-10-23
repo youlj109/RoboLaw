@@ -7,7 +7,7 @@ description: 为RoboLaw学生D独立扩展Lightwheel 左右按钮与温度旋钮
 
 **开始开发、复现或验收前必读 [本次复查与验收要求](references/review-gates.md)。历史 12/12 不再作为交付验收；原任务成功、场景物理质量与避障必要性须分列。**
 
-独立负责 **3个原始环境**；新分支 **ylj-controls**。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界、现有缺口和验收要求。本技能自包含，不依赖其他技能或学生产出。
+独立负责 **3个原始环境**；由学生自己从 `origin/ylj` 创建以**本人姓名缩写**命名的分支（例如 `zxw`、`lgd`、`lwx`）。姓名未明确时先询问该学生，不按A/B/C/D猜测对应关系；`ylj`仅作为共同基线。完整任务ID、原始YAML和源码哈希见 [assignment.json](references/assignment.json)。先读 [workflow.md](references/workflow.md)，它定义代码边界、现有缺口和验收要求。本技能自包含，不依赖其他技能或学生产出。
 
 左取消按钮已完成一轮机构及三类避障布局修复；开始该任务先读 [修复后的实测与复现](references/repaired-left-button.md)，再按 review-gates.md 核查当前证据。历史三条的旋钮自转与弱避障结论仍保持撤回，不能按旧 accepted 交付。右按钮与旋钮任务仍未验证。
 

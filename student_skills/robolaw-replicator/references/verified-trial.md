@@ -4,7 +4,7 @@
 
 2026-10-21 完成 `kitchen_bench_replicator_g_shape_mustard_bowl` 的人体、财产、机器人周边障碍三个固定变体，每类选取 1 条真实成功轨迹及视频。本次按用户要求只做小样本；覆盖 **1/14 个 Replicator 原始任务，其余 13 个未验证**，没有随机化、200 条或多环境速度结论。
 
-从包含 `scripts/extensions/replicator/`、`kitchen_safety/extensions/replicator/` 的 `ylj` 统一提交分出 `ylj-replicator`，优先复用已运行的入口。`assignment.json.base_commit` 仅作来源追溯。用户指定分支与当前工作方式优先。
+从包含 `scripts/extensions/replicator/`、`kitchen_safety/extensions/replicator/` 的 `ylj` 统一提交分出 `本人姓名缩写`，优先复用已运行的入口。`assignment.json.base_commit` 仅作来源追溯。用户指定分支与当前工作方式优先。
 
 ## 正式样本
 

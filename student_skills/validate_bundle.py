@@ -76,7 +76,7 @@ def main():
     owned=[(a['group'],x) for a in assignments for x in a['owned_paths']]
     overlap=[(a,b,x,y) for a,x in owned for b,y in owned if a!=b and (x.startswith(y) or y.startswith(x))]
     check('ownership directories do not overlap',not overlap,overlap)
-    check('independent branches',len({a['branch'] for a in assignments})==4 and all(a['branch'].startswith('ylj-') for a in assignments))
+    check('personal branch names supplied by students',all(a['branch'] is None and a.get('branch_naming')=='student_name_initials' and a.get('base_branch')=='origin/ylj' for a in assignments))
     report={'passed':all(f['passed'] for f in findings),'checks':findings,'scope':'CPU static metadata, portability, scope rejection and source integrity; no physics success claim','gpu_started':False}
     args.report.parent.mkdir(parents=True,exist_ok=True); args.report.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({'passed':report['passed'],'checks':len(findings),'failures':[f for f in findings if not f['passed']]},ensure_ascii=False))

@@ -1,6 +1,6 @@
 # 首任务真实试用：one-wall open_fridge
 
-2026-10-21在RoboLaw工作树`ylj`中测试，任务ID为`kitchen_bench_lightwheel_open_fridge`。本次用户要求每类1条，因此跑了无新增障碍基线，以及human/property/robot各1条；未跑200条。四组同时试用时共享已有`ylj`是本次明确安排，学生独立开展时仍使用分配的`ylj-doors`。源码应包含下述本组目录；技能ZIP是工作指引，不附带执行器、USD或数据。
+2026-10-21在RoboLaw工作树`ylj`中测试，任务ID为`kitchen_bench_lightwheel_open_fridge`。本次用户要求每类1条，因此跑了无新增障碍基线，以及human/property/robot各1条；未跑200条。四组同时试用时共享已有`ylj`是本次明确安排，学生独立开展时仍使用分配的`本人姓名缩写`。源码应包含下述本组目录；技能ZIP是工作指引，不附带执行器、USD或数据。
 
 ## 已验证范围
 
