@@ -99,20 +99,20 @@ def build_world(baseline: Path, kin: DroidKinematics, variant: str | None, varia
 
 
 def plan_segment(planner: LimePlanner, world: CollisionWorld, segment: str, q0, target, grip: float, attachment):
-    if segment == 'transfer':
+    if segment in ('transfer', 'lift'):
         world.attachment = np.asarray(attachment, dtype=float)
         world.gripper_joint_position = float(grip)
-        world.allowed_phase = 'transfer'
+        world.allowed_phase = segment
         ignore = ('lime',)
         grip_binary = 1
-        phase = 'transfer'
-    elif segment == 'pregrasp':
+        phase = segment
+    elif segment in ('pregrasp', 'approach'):
         world.attachment = None
         world.gripper_joint_position = 0.0
-        world.allowed_phase = 'pregrasp'
+        world.allowed_phase = segment
         ignore = ('lime',)
         grip_binary = 0
-        phase = 'pregrasp'
+        phase = segment
     else:
         raise ValueError(segment)
     path = planner.plan_pose(np.asarray(q0), np.asarray(target), ignore, grip_binary, phase=phase)
@@ -136,8 +136,8 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--seeds', type=int, nargs='+', default=[42, 43, 44])
     p.add_argument('--variants', nargs='+', default=['base', 'human', 'property', 'robot'])
-    p.add_argument('--segments', nargs='+', default=['transfer', 'pregrasp'],
-                   choices=['transfer', 'pregrasp'])
+    p.add_argument('--segments', nargs='+', default=['transfer', 'approach'],
+                   choices=['transfer', 'pregrasp', 'approach', 'lift'])
     p.add_argument('--max-joint-speed', type=float, default=0.4)
     a = p.parse_args()
 
@@ -154,15 +154,19 @@ def main():
 
     with h5py.File(baseline / 'trajectory.h5') as f:
         phases = f['phase'].asstr()[:]
-        transfer_i = phase_start_index(phases, 'transfer')
-        pregrasp_i = phase_start_index(phases, 'pregrasp')
-        q_transfer = f['obs/q'][transfer_i, :7].copy()
-        grip_transfer = float(f['obs/q'][transfer_i, finger])
-        q_pregrasp = f['obs/q'][pregrasp_i, :7].copy()
-        bg_transfer = {n: f['obs/' + n][transfer_i, :7].copy() for n in BACKGROUND}
-        bg_pregrasp = {n: f['obs/' + n][pregrasp_i, :7].copy() for n in BACKGROUND}
-        lime_transfer = f['obs/lime'][transfer_i, :7].copy()
-        lime_pregrasp = f['obs/lime'][pregrasp_i, :7].copy()
+        starts = {}
+        for segment in ('transfer', 'pregrasp', 'approach', 'lift'):
+            if segment not in a.segments:
+                continue
+            i = phase_start_index(phases, segment)
+            starts[segment] = {
+                'frame_index': i,
+                'q': f['obs/q'][i, :7].copy(),
+                'gripper_joint_position': float(f['obs/q'][i, finger]),
+                'background': {n: f['obs/' + n][i, :7].copy() for n in BACKGROUND},
+                'lime': f['obs/lime'][i, :7].copy(),
+            }
+        # attachment is measured at close; reuse baseline planning attachment for carried phases
 
     summary = {
         'scope': (
@@ -192,8 +196,12 @@ def main():
             'seed_policy': 'planning seed only; physical episode seed remains baseline',
         },
         'segment_starts': {
-            'transfer': {'q': q_transfer.tolist(), 'gripper_joint_position': grip_transfer, 'frame_index': transfer_i},
-            'pregrasp': {'q': q_pregrasp.tolist(), 'gripper_joint_position': 0.0, 'frame_index': pregrasp_i},
+            s: {
+                'q': starts[s]['q'].tolist(),
+                'gripper_joint_position': starts[s]['gripper_joint_position'] if s in ('transfer', 'lift') else 0.0,
+                'frame_index': starts[s]['frame_index'],
+            }
+            for s in starts
         },
         'targets': {k: targets[k].tolist() for k in a.segments if k in targets},
         'runs': [],
@@ -208,14 +216,13 @@ def main():
                 started = time.monotonic()
                 try:
                     world, stage = build_world(baseline, kin, variant if variant != 'base' else None, variants)
-                    bg = bg_transfer if segment == 'transfer' else bg_pregrasp
-                    for name, pose in bg.items():
+                    st = starts[segment]
+                    for name, pose in st['background'].items():
                         world.set_obstacle_pose(name, pose)
-                    lime = lime_transfer if segment == 'transfer' else lime_pregrasp
-                    world.set_obstacle_pose('lime', lime)
+                    world.set_obstacle_pose('lime', st['lime'])
                     planner = LimePlanner(world, kin, dt=result['dt'], seed=int(seed), max_joint_speed=a.max_joint_speed)
-                    q0 = q_transfer if segment == 'transfer' else q_pregrasp
-                    grip = grip_transfer if segment == 'transfer' else 0.0
+                    q0 = st['q']
+                    grip = st['gripper_joint_position'] if segment in ('transfer', 'lift') else 0.0
                     target = targets[segment]
                     planned = plan_segment(planner, world, segment, q0, target, grip, attachment)
                     positions = planned.pop('positions')
@@ -229,7 +236,7 @@ def main():
                         key = HAZARD_KEY[variant]
                         required = world.execution_clearances[key]
                         # true-shape of actual planned path vs hazard
-                        run['true_shape_actual'] = true_shape_path(world, key, positions, grip if segment == 'transfer' else 0.0, required)
+                        run['true_shape_actual'] = true_shape_path(world, key, positions, grip if segment in ('transfer', 'lift') else 0.0, required)
                         # counterfactual: base path under this hazard geometry
                         base_file = out / f'{segment}_base_seed{seed}_positions.npy'
                         if (seed, segment) in base_positions or base_file.exists():
@@ -237,7 +244,7 @@ def main():
                             if base_path is None:
                                 base_path = np.load(base_file)
                             run['true_shape_counterfactual'] = true_shape_path(
-                                world, key, base_path, grip if segment == 'transfer' else 0.0, required
+                                world, key, base_path, grip if segment in ('transfer', 'lift') else 0.0, required
                             )
                     del planner
                 except Exception as exc:
@@ -271,56 +278,68 @@ def main():
     for segment in a.segments:
         base_ok = all(r['success'] for r in runs_for(segment, 'base'))
         hazard_runs = [r for r in runs_for(segment) if r['variant'] != 'base']
-        cf_need = all(
-            bool(r.get('true_shape_counterfactual', {}).get('violations'))
-            for r in hazard_runs
-            if 'true_shape_counterfactual' in r
-        ) and bool(hazard_runs)
-        actual_clear = all(
-            r.get('success') and not r.get('true_shape_actual', {}).get('violations')
-            for r in hazard_runs
-            if r.get('success') and 'true_shape_actual' in r
-        )
-        # path change vs base when both succeed
         changed = []
         for seed in a.seeds:
             base = next((r for r in runs_for(segment, 'base') if r['seed'] == seed), None)
             for variant in ('human', 'property', 'robot'):
                 haz = next((r for r in runs_for(segment, variant) if r['seed'] == seed), None)
-                if not base or not haz or not base['success'] or not haz['success']:
+                if not base or not haz or not base.get('success') or not haz.get('success'):
                     continue
                 bp = np.load(out / base['positions_file'])
                 hp = np.load(out / haz['positions_file'])
                 n = min(len(bp), len(hp))
-                # normalize time length
                 samples = np.linspace(0, 1, 101)
                 bi = np.column_stack([np.interp(samples, np.linspace(0, 1, n), bp[:n, j]) for j in range(7)])
                 hi = np.column_stack([np.interp(samples, np.linspace(0, 1, n), hp[:n, j]) for j in range(7)])
                 d = np.linalg.norm(bi - hi, axis=1).max()
-                changed.append({'seed': seed, 'variant': variant, 'max_q_difference_rad': float(d), 'changed': bool(d > 0.01)})
+                changed.append({'seed': int(seed), 'variant': variant, 'max_q_difference_rad': float(d), 'changed': bool(d > 0.01)})
         segment_reports[segment] = {
             'all_base_plans_valid': bool(base_ok),
-            'all_hazard_off_paths_require_adjustment': bool(cf_need),
-            'hazard_on_plans_clear_when_successful': bool(actual_clear),
             'path_comparisons': changed,
-            'stable_avoidance_necessity_in_tested_seeds': bool(
-                base_ok and cf_need and all(x['changed'] or True for x in changed) and cf_need
-            ),
+            'hazard_runs_success': {v: all(r['success'] for r in runs_for(segment, v)) for v in ('human', 'property', 'robot')},
         }
-        # tighten: necessity requires counterfactual violations for every seed×hazard that has CF data
-        segment_reports[segment]['stable_avoidance_necessity_in_tested_seeds'] = bool(
-            base_ok
-            and cf_need
-            and all(r.get('true_shape_counterfactual', {}).get('violations') for r in hazard_runs if 'true_shape_counterfactual' in r)
+
+    # Primary evidence segment per hazard (from geometry risk phases / redesign).
+    primary = {'human': 'approach', 'property': 'transfer', 'robot': 'transfer'}
+    variant_reports = {}
+    for variant, segment in primary.items():
+        if segment not in a.segments:
+            variant_reports[variant] = {'passed': False, 'reason': f'primary segment {segment} not run'}
+            continue
+        rows = [r for r in runs_for(segment, variant)]
+        bases = [r for r in runs_for(segment, 'base')]
+        base_ok = all(r['success'] for r in bases) and len(bases) == len(a.seeds)
+        cf_ok = all(bool(r.get('true_shape_counterfactual', {}).get('violations')) for r in rows)
+        on_ok = all(r.get('success') and not r.get('true_shape_actual', {}).get('violations') for r in rows)
+        path_ok = all(
+            any(c['seed'] == r['seed'] and c['variant'] == variant and c['changed'] for c in segment_reports[segment]['path_comparisons'])
+            for r in rows if r.get('success')
         )
+        variant_reports[variant] = {
+            'primary_segment': segment,
+            'all_base_plans_valid': bool(base_ok),
+            'all_hazard_off_paths_require_adjustment': bool(cf_ok and rows),
+            'all_hazard_on_plans_clear': bool(on_ok and rows),
+            'path_changed_each_seed': bool(path_ok and rows),
+            'seeds': [
+                {
+                    'seed': r['seed'],
+                    'success': r.get('success'),
+                    'cf_violations': len(r.get('true_shape_counterfactual', {}).get('violations') or []),
+                    'actual_violations': len(r.get('true_shape_actual', {}).get('violations') or []),
+                    'tcp_path_m': r.get('tcp_path_m'),
+                }
+                for r in rows
+            ],
+            'passed': bool(base_ok and cf_ok and on_ok and path_ok and rows),
+        }
 
     summary['segment_reports'] = segment_reports
-    summary['passed'] = bool(
-        all(segment_reports[s]['all_base_plans_valid'] for s in a.segments)
-        and all(segment_reports[s]['all_hazard_off_paths_require_adjustment'] for s in a.segments)
-    )
+    summary['variant_reports'] = variant_reports
+    summary['primary_segments'] = primary
+    summary['passed'] = bool(all(v.get('passed') for v in variant_reports.values()))
     (out / 'paired_planning.json').write_text(json.dumps(summary, indent=2))
-    print('PAIR_SUMMARY', json.dumps({k: summary[k] for k in ('passed', 'segment_reports')}, indent=2), flush=True)
+    print('PAIR_SUMMARY', json.dumps({k: summary[k] for k in ('passed', 'variant_reports', 'primary_segments')}, indent=2), flush=True)
     raise SystemExit(0 if summary['passed'] else 2)
 
 
