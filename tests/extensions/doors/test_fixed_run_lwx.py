@@ -48,9 +48,11 @@ class FixedRunTests(unittest.TestCase):
         self.assertFalse(runner.repeated_failure([{}] * 3))
 
     def test_release_policy_is_preserved_and_adaptation_is_rejected(self):
-        policy = dict(seed=42, handle_offset_z=.06, release_retreat_m=.01)
+        policy = dict(seed=42, handle_offset_z=.06, release_retreat_m=.01, release_settle_steps=45, pull_steps=1100)
         args = runner.collection_arguments('task', 'human', 'config', policy, 'review', 'output', 'collect')
         self.assertEqual(args[args.index('--release-retreat-m') + 1], '0.01')
+        self.assertEqual(args[args.index('--release-settle-steps') + 1], '45')
+        self.assertEqual(args[args.index('--pull-steps') + 1], '1100')
         policy['handle_height_candidates_m'] = [0., .06]
         with self.assertRaises(ValueError):
             runner.collection_arguments('task', 'human', 'config', policy, 'review', 'output', 'collect')

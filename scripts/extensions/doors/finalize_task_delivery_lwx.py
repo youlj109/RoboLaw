@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from matched_scene_lwx import require_matching_scene
 
 
 def read(path):
@@ -60,6 +61,7 @@ def main():
         if variant != 'base':
             baseline = Path(item['baseline'])
             bm = read(baseline / 'metadata.json')
+            require_matching_scene(bm, metadata['variant_config'], metadata)
             require(all(read(baseline / name).get(key) for name, key in required),
                     f'{root}: baseline rejected')
             baseline_review = read(baseline / 'task_review_audit.json')

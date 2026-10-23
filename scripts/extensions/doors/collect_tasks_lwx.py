@@ -13,6 +13,8 @@ p.add_argument('--pull-lead-rad',type=float,default=.018)
 p.add_argument('--pull-steps',type=int,default=500)
 p.add_argument('--ik-limit-margin-rad',type=float,default=0.,help='Contract only local command IK bounds; source robot limits remain unchanged')
 p.add_argument('--release-retreat-m',type=float,default=0.,help='Checked outward TCP retreat during finger release; same policy for baseline and variants')
+p.add_argument('--release-tilt-deg',type=float,default=0.,help='Tilt outward release direction toward world up; negative moves down, same matched policy')
+p.add_argument('--release-settle-steps',type=int,default=0,help='Additional closed-gripper hold at one measured joint target before release; inherited by matched variants')
 p.add_argument('--mode', choices=['collect', 'neutral'], default='collect')
 p.add_argument('--render-warmup', action='store_true', help='Converge RTX appearance with no physics advancement before recording')
 p.add_argument('--neutral-seconds', type=float, default=40.)
@@ -21,6 +23,8 @@ a=p.parse_args();a.enable_cameras=True
 if a.neutral_seconds <= 0:p.error('--neutral-seconds must be positive')
 if not 0. <= a.ik_limit_margin_rad <= .1:p.error('--ik-limit-margin-rad must be in [0, .1]')
 if not 0. <= a.release_retreat_m <= .04:p.error('--release-retreat-m must be in [0, .04]')
+if not 0 <= a.release_settle_steps <= 90:p.error('--release-settle-steps must be in [0,90]')
+if not -60. <= a.release_tilt_deg <= 60. or (a.release_tilt_deg and not a.release_retreat_m):p.error('--release-tilt-deg needs a retreat and must be in [-60,60]')
 review=json.loads(Path(a.review_config).read_text())
 out=Path(a.output)
 if (out/'result.json').exists() or (out/'images.h5').exists():raise SystemExit('Output already has trial data; use a new attempt directory')
@@ -98,6 +102,8 @@ with SimulationAppContext(a):
     metadata['controller_parameters']['grasp_roll_deg']=a.grasp_roll_deg
     if a.grasp_pitch_deg:metadata['controller_parameters']['grasp_pitch_deg']=a.grasp_pitch_deg
     if a.release_retreat_m:metadata['controller_parameters']['release_retreat_m']=a.release_retreat_m
+    if a.release_tilt_deg:metadata['controller_parameters']['release_tilt_deg']=a.release_tilt_deg
+    if a.release_settle_steps:metadata['controller_parameters']['release_settle_steps']=a.release_settle_steps
     metadata['controller_parameters']['pull_lead_rad']=a.pull_lead_rad
     metadata['controller_parameters']['pull_steps']=a.pull_steps
     if a.ik_limit_margin_rad>0:
@@ -294,6 +300,11 @@ with SimulationAppContext(a):
             if not source_success:raise RuntimeError('Original OpenDoorTask predicate sequence not achieved')
             phase='success_hold'
             for _ in range(5):step(q,1.)
+            if a.release_settle_steps:
+                # Keep a fixed actuator target so physical contact can brake the door.
+                # All physics recording and collision checks remain active.
+                release_hold_target=q.copy()
+                for _ in range(a.release_settle_steps):step(release_hold_target,1.)
             if not bool(predicate[1](e)[0]):
                 # A threshold crossing can settle back by a fraction of a degree.
                 # Recover through the same real handle contact, never a door-state
@@ -312,10 +323,14 @@ with SimulationAppContext(a):
             release_start=kin.fk(q) if a.release_retreat_m else None
             release_angle=rows[-1]['next_obs']['door_q']-reference_joint_position
             release_normal=Rotation.from_rotvec(axis*release_angle).apply(approach)
+            # Tilt the outward direction, preserving its total length and tool rotation.
+            # All command checks, joint increments and every physics-step audit stay active.
+            release_direction=-release_normal*np.cos(np.deg2rad(a.release_tilt_deg))+np.array([0.,0.,np.sin(np.deg2rad(a.release_tilt_deg))])
+            release_direction/=np.linalg.norm(release_direction)
             for fraction in np.linspace(.05,1.,20):
                 if a.release_retreat_m:
                     target=release_start.copy()
-                    target[:3,3]-=release_normal*a.release_retreat_m*fraction
+                    target[:3,3]+=release_direction*a.release_retreat_m*fraction
                     command=kin.ik(target,q,attempts=1)
                     delta_q=command-q;command=q+delta_q/max(1.,float(np.max(np.abs(delta_q)))/.025)
                     world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])

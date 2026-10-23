@@ -1,6 +1,7 @@
 """At most three offline candidates, then one real variant/control and full audits."""
 import argparse,json,subprocess,hashlib
 from pathlib import Path
+from matched_scene_lwx import require_matching_scene
 p=argparse.ArgumentParser();p.add_argument('--label',required=True);p.add_argument('--variant',required=True,choices=['human','property','robot']);p.add_argument('--search',type=Path,required=True);p.add_argument('--baseline',type=Path,required=True);p.add_argument('--attempt',default='01');p.add_argument('--report-root',type=Path,default=Path('reports/doors/lwx_C04_C08_20261024'));p.add_argument('--data-root',type=Path,default=Path('datasets/doors/lwx_C04_C08_20261024'));p.add_argument('--config',type=Path);a=p.parse_args();label=a.label;variant=a.variant;r=a.report_root;data=a.data_root;ep=data/(label+'_'+variant+'_'+a.attempt);neutral=data/(label+'_'+variant+'_neutral_'+a.attempt);statepath=r/(ep.name+'_campaign01.json');config=a.config or Path('configs/extensions/doors')/(label.lower()+'_variants_lwx_01.json')
 if statepath.exists() or ep.exists():raise FileExistsError(ep)
 state={'stage':'prepared','baseline':str(a.baseline),'search':str(a.search),'search_sha256':hashlib.sha256(a.search.read_bytes()).hexdigest(),'offline_candidate_budget':3,'physical_trial_budget':1,'small_detour_limits':{'max_joint_length_ratio':1.6,'max_added_tcp_length_m':.15},'complete':False,'candidates':[]};required=[('result.json','accepted'),('task_validation_full.json','accepted'),('task_review_audit.json','passed'),('source_contact_audit.json','passed'),('self_collision_audit.json','passed')]
@@ -17,7 +18,7 @@ try:
  if review is None:raise RuntimeError('Cannot recover exact predeclared baseline review config')
  rank=r/(ep.name+'_candidate_rank01.json');run('rank','rank_assigned_candidates_lwx.py',['--baseline',a.baseline,'--config',config,'--variant',variant,'--search',a.search,'--output',rank]);ranking=json.loads(rank.read_text());safe=[x for x in ranking if x['initial_sphere']['slack_m']>.003][:3];choices=[]
  for ri,item in enumerate(safe):
-  idx=item['candidate'];cfg=Path('configs/extensions/doors')/(label.lower()+'_'+variant+'_candidate_'+a.attempt+'_'+str(idx).zfill(2)+'.json');paired=r/(ep.name+'_candidate_'+str(idx).zfill(2)+'_paired01');run('prepare_'+str(idx),'prepare_task_candidate_lwx.py',['--config',config,'--search',a.search,'--variant',variant,'--index',idx,'--output',cfg]);code=run('paired_'+str(idx),'paired_tasks_lwx.py',['--baseline',a.baseline,'--config',cfg,'--variant',variant,'--output',paired],gpu=True,allow_failure=True)
+  idx=item['candidate'];cfg=Path('configs/extensions/doors')/(label.lower()+'_'+variant+'_candidate_'+a.attempt+'_'+str(idx).zfill(2)+'.json');paired=r/(ep.name+'_candidate_'+str(idx).zfill(2)+'_paired01');run('prepare_'+str(idx),'prepare_task_candidate_lwx.py',['--config',config,'--search',a.search,'--variant',variant,'--index',idx,'--output',cfg]);require_matching_scene(m,cfg);code=run('paired_'+str(idx),'paired_tasks_lwx.py',['--baseline',a.baseline,'--config',cfg,'--variant',variant,'--output',paired],gpu=True,allow_failure=True)
   entry={'candidate_index':idx,'config':str(cfg),'paired_report':str(paired/'report.json'),'exit_code':code,'eligible':False};state['candidates'].append(entry)
   if (paired/'report.json').exists():
    report=json.loads((paired/'report.json').read_text());pairs=report['pairs'];actual_hits=all(any(v.get('intersecting',False) for v in pair['off'].get('risk_with_added_geometry',{}).get('violations',[])) for pair in pairs);ratios=[];extra=[]
@@ -34,6 +35,8 @@ try:
  for mode,out in [('collect',ep),('neutral',neutral)]:
   args=['--task-id',m['task'],'--variant',variant,'--variant-config',cfg,'--output',out,'--mode',mode,'--handle-offset-y',cp['handle_offset_y'],'--handle-offset-z',cp['handle_offset_z'],'--handle-normal-offset',cp['handle_normal_offset_m'],'--grasp-roll-deg',cp['grasp_roll_deg'],'--grasp-pitch-deg',cp.get('grasp_pitch_deg',0.),'--pull-lead-rad',cp['pull_lead_rad'],'--pull-steps',cp['pull_steps'],'--ik-limit-margin-rad',cp.get('ik_limit_margin_rad',0.),'--max-steps','1200','--validated-pregrasp','--render-warmup','--review-config',review];
   if cp.get('release_retreat_m'):args+=['--release-retreat-m',str(cp['release_retreat_m'])]
+  if cp.get('release_tilt_deg'):args+=['--release-tilt-deg',str(cp['release_tilt_deg'])]
+  if cp.get('release_settle_steps'):args+=['--release-settle-steps',str(cp['release_settle_steps'])]
   if mode=='neutral':args+=['--neutral-seconds',str(max(40.,json.loads((ep/'result.json').read_text())['frames']*m['dt']+2.))]
   run(mode,'collect_tasks_lwx.py',args,gpu=True)
  state['stage']='independent_reviews';save()

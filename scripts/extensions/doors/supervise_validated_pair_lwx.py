@@ -1,6 +1,7 @@
 """One current-policy paired revision followed by one real operation/control."""
 import argparse,json,subprocess,hashlib,time
 from pathlib import Path
+from matched_scene_lwx import require_matching_scene
 p=argparse.ArgumentParser();p.add_argument('--baseline',type=Path,required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--variant',required=True);p.add_argument('--label',required=True);p.add_argument('--attempt',required=True);p.add_argument('--report-root',type=Path,required=True);p.add_argument('--data-root',type=Path,required=True);p.add_argument('--wait-for-baseline',action='store_true');p.add_argument('--baseline-driver',type=Path);a=p.parse_args()
 r=a.report_root;ep=a.data_root/(a.label+'_'+a.variant+'_'+a.attempt);neutral=a.data_root/(a.label+'_'+a.variant+'_neutral_'+a.attempt);paired=r/(ep.name+'_paired01');sf=r/(ep.name+'_validated_pair01.json');state={'stage':'prepared','complete':False,'physical_trial_budget':1,'offline_pair_budget':1,'baseline':str(a.baseline),'paired':str(paired/'report.json'),'config':str(a.config)}
 if sf.exists() or ep.exists():raise FileExistsError(ep)
@@ -22,6 +23,7 @@ try:
    time.sleep(20)
  if not all(json.loads((a.baseline/f).read_text()).get(k,False) for f,k in required):raise RuntimeError('Baseline gates failed')
  m=json.loads((a.baseline/'metadata.json').read_text());cp=m['controller_parameters'];review=next(q for q in Path('configs/extensions/doors').glob('*review*.json') if hashlib.sha256(q.read_bytes()).hexdigest()==m['review_config_sha256'])
+ require_matching_scene(m,a.config)
  run('paired','paired_tasks_lwx.py',['--baseline',a.baseline,'--config',a.config,'--variant',a.variant,'--output',paired],True);pairs=json.loads((paired/'report.json').read_text());ratios=[];extras=[]
  for pair in pairs['pairs']:
   if not (pair['off'].get('success') and pair['on'].get('success') and any(v.get('intersecting') for v in pair['off']['risk_with_added_geometry']['violations'])):raise RuntimeError('No actual obstruction and successful on path in every seed')
@@ -31,6 +33,8 @@ try:
  for mode,out in [('collect',ep),('neutral',neutral)]:
   args=['--task-id',m['task'],'--variant',a.variant,'--variant-config',a.config,'--output',out,'--mode',mode,'--handle-offset-y',cp['handle_offset_y'],'--handle-offset-z',cp['handle_offset_z'],'--handle-normal-offset',cp['handle_normal_offset_m'],'--grasp-roll-deg',cp['grasp_roll_deg'],'--grasp-pitch-deg',cp.get('grasp_pitch_deg',0.),'--pull-lead-rad',cp['pull_lead_rad'],'--pull-steps',cp['pull_steps'],'--ik-limit-margin-rad',cp.get('ik_limit_margin_rad',0.),'--max-steps','1500','--validated-pregrasp','--render-warmup','--review-config',review]
   if cp.get('release_retreat_m'):args+=['--release-retreat-m',cp['release_retreat_m']]
+  if cp.get('release_tilt_deg'):args+=['--release-tilt-deg',cp['release_tilt_deg']]
+  if cp.get('release_settle_steps'):args+=['--release-settle-steps',cp['release_settle_steps']]
   if mode=='neutral':args+=['--neutral-seconds',max(40.,json.loads((ep/'result.json').read_text())['frames']*m['dt']+2.)]
   run(mode,'collect_tasks_lwx.py',args,True)
  run('reviews','supervise_task_reviews_lwx.py',[ep,'--neutral',neutral,'--report-root',r,'--run-label','02'],host=True);state['gates']={f:bool(json.loads((ep/f).read_text()).get(k,False)) for f,k in required};save()

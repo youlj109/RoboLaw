@@ -75,7 +75,8 @@ def collection_arguments(task, variant, config, policy, review, output, mode):
               'grasp_roll_deg': 'grasp-roll-deg', 'grasp_pitch_deg': 'grasp-pitch-deg',
               'handle_normal_offset_m': 'handle-normal-offset', 'pull_lead_rad': 'pull-lead-rad',
               'pull_steps': 'pull-steps', 'ik_limit_margin_rad': 'ik-limit-margin-rad',
-              'release_retreat_m': 'release-retreat-m'}
+              'release_retreat_m': 'release-retreat-m', 'release_tilt_deg': 'release-tilt-deg',
+              'release_settle_steps': 'release-settle-steps'}
     for key, flag in fields.items():
         if key in policy:
             args += ['--' + flag, str(policy[key])]
@@ -96,6 +97,9 @@ def main():
     p.add_argument('--output-root', type=Path)
     p.add_argument('--report-root', type=Path)
     p.add_argument('--release-retreat-m', type=float, help='Baseline-only policy revision; variants inherit their matching baseline')
+    p.add_argument('--release-tilt-deg', type=float, help='Baseline-only release direction revision; variants inherit their matching baseline')
+    p.add_argument('--release-settle-steps', type=int, help='Baseline-only fixed actuator hold before release; matched variants inherit this policy')
+    p.add_argument('--pull-steps', type=int, help='Baseline-only pull duration revision, inherited by matched variants')
     p.add_argument('--container', default=os.environ.get('ARENA_CONTAINER'))
     p.add_argument('--runtime-python', default='/workspace/.venv-arena/bin/python')
     p.add_argument('--gpu-lock', default='/workspace/reports/skill_trials/gpu.lock')
@@ -134,6 +138,17 @@ def main():
     if sha(review) != metadata['review_config_sha256']:
         p.error('Review config differs from the recorded predeclared policy')
     policy = dict(metadata['controller_parameters'])
+    if a.release_settle_steps is not None:
+        if a.variant != 'base' or not 0 <= a.release_settle_steps <= 90:
+            p.error('Release settling revision requires a new baseline and 0..90 steps')
+        if a.release_settle_steps:
+            policy['release_settle_steps'] = a.release_settle_steps
+        else:
+            policy.pop('release_settle_steps', None)
+    if a.pull_steps is not None:
+        if a.variant != 'base' or not 1 <= a.pull_steps <= 1200:
+            p.error('Pull duration revision requires a new baseline and 1..1200 steps')
+        policy['pull_steps'] = a.pull_steps
     if a.release_retreat_m is not None:
         if a.variant != 'base' or not 0. <= a.release_retreat_m <= .04:
             p.error('Release revision is allowed only for a new baseline and must be in [0,.04] m')
@@ -141,6 +156,13 @@ def main():
             policy['release_retreat_m'] = a.release_retreat_m
         else:
             policy.pop('release_retreat_m', None)
+    if a.release_tilt_deg is not None:
+        if a.variant != 'base' or not -60. <= a.release_tilt_deg <= 60. or not policy.get('release_retreat_m'):
+            p.error('Release tilt revision needs a new baseline with retreat and must be in [-60,60] deg')
+        if a.release_tilt_deg:
+            policy['release_tilt_deg'] = a.release_tilt_deg
+        else:
+            policy.pop('release_tilt_deg', None)
     if policy.get('max_joint_speed') != .5 or 'pregrasp_validation' not in policy:
         p.error('This runner supports the recorded .5 rad/s validated-pregrasp policy')
     recorded_config = read(Path(metadata['variant_config']))

@@ -20,7 +20,9 @@ while pending:
 spheres=[(link,i,T[:3,:3]@s['center']+T[:3,3],s['radius']+.005) for link,T in frames.items() for i,s in enumerate(cfg['collision_spheres'].get(link,[]))];centers=np.asarray([x[2] for x in spheres]);radii=np.asarray([x[3] for x in spheres]);rows=[]
 for index,c in enumerate(search['candidates']):
  w.set_obstacle_pose(spec['name'],[*c['position'],*Rotation.from_euler('z',c['yaw_deg'],degrees=True).as_quat()]);haz=[(n,lo-w.clearances[spec['name']],hi+w.clearances[spec['name']]) for n,_,lo,hi in w.objects if w._matches(n,spec['name'])]
- if c.get('proposed_support'):haz.append(('support',np.asarray(c['proposed_support']['low']),np.asarray(c['proposed_support']['high'])))
+ if c.get('proposed_support'):
+  support=c['proposed_support']
+  haz.extend(('support',np.asarray(part['low']),np.asarray(part['high'])) for part in support.get('parts',[support]))
  scores=[]
  if a.variant=='human':
   import fcl

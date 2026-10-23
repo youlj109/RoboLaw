@@ -7,10 +7,15 @@ p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p
 if a.output.exists():raise FileExistsError(a.output)
 cfg=json.loads(a.config.read_text());spec=json.loads(a.search.read_text())['candidates'][a.index];support=spec.pop('proposed_support',None)
 if support:
- low=np.array(support['low']);high=np.array(support['high']);low[2]-=.002;high[2]+=.002;center=(low+high)/2;center[:2]=0.;asset=Path('assets/extensions/doors')/(a.output.stem+'_'+a.variant+'_support.usda')
+ low=np.array(support['low']);high=np.array(support['high']);low[2]-=.002;high[2]+=.002;asset=Path('assets/extensions/doors')/(a.output.stem+'_'+a.variant+'_support.usda')
  if asset.exists():raise FileExistsError(asset)
- stage=Usd.Stage.CreateNew(str(asset));root=UsdGeom.Xform.Define(stage,'/Support');stage.SetDefaultPrim(root.GetPrim());c=UsdGeom.Cube.Define(stage,'/Support/Column');c.CreateSizeAttr(1.);c.AddTranslateOp().Set(Gf.Vec3d(*center));c.AddScaleOp().Set(Gf.Vec3f(*(high-low)));c.CreateDisplayColorAttr([Gf.Vec3f(.28,.30,.32)]);UsdPhysics.CollisionAPI.Apply(c.GetPrim());UsdGeom.SetStageUpAxis(stage,UsdGeom.Tokens.z);UsdGeom.SetStageMetersPerUnit(stage,1.);stage.GetRootLayer().Save()
+ stage=Usd.Stage.CreateNew(str(asset));root=UsdGeom.Xform.Define(stage,'/Support');stage.SetDefaultPrim(root.GetPrim())
+ parts=support.get('parts',[{'low':support['low'],'high':support['high']}])
+ for i,part in enumerate(parts):
+  pl=np.array(part['low']);ph=np.array(part['high']);pl[2]-=.002;ph[2]+=.002;center=(pl+ph)/2-np.array([*spec['position'][:2],0.]);c=UsdGeom.Cube.Define(stage,'/Support/'+('Column' if i==0 else 'Tray'));c.CreateSizeAttr(1.);c.AddTranslateOp().Set(Gf.Vec3d(*center));c.AddScaleOp().Set(Gf.Vec3f(*(ph-pl)));c.CreateDisplayColorAttr([Gf.Vec3f(.28,.30,.32)]);UsdPhysics.CollisionAPI.Apply(c.GetPrim())
+ UsdGeom.SetStageUpAxis(stage,UsdGeom.Tokens.z);UsdGeom.SetStageMetersPerUnit(stage,1.);stage.GetRootLayer().Save()
  spec['support']={'name':a.variant+'_pedestal','asset':str(asset),'position':[*spec['position'][:2],0.],'static':True,'bounds_world_m':[low.tolist(),high.tolist()],'source_support':support['rests_on']}
+ if support.get('parts'):spec['support'].update(component_bounds_world_m=parts,design=support['design'])
 if a.variant=='human':
  pose=Path(spec['asset']).parent/'pose.json'
  if not pose.exists():raise FileNotFoundError(pose)
