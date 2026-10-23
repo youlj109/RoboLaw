@@ -114,6 +114,91 @@ class DashboardTests(unittest.TestCase):
         self.assertEqual(latest['kind'], 'startup')
         self.assertEqual(latest['reason'], 'physical run failed')
 
+    def test_diagnostic_failure_is_visible_without_certifying_success(self):
+        folder = 'reports/replicator_execution_test/g_banana/destination_probe_02/'
+        report = {'task_id': self.tid, 'variant': 'human', 'diagnostic_only': True,
+                  'diagnostic_completed': False, 'status': 'failed', 'error': 'original joint limit',
+                  'physical_trial_passed': True, 'original_task_success': True, 'accepted': True}
+        self.write(folder + 'result.json', report)
+        self.write(folder + 'launch_failure.json', {'error': 'launcher stopped'})
+        data = self.progress.snapshot()
+        item = data['tasks'][0]['latest']
+        self.assertEqual((item['kind'], item['status'], item['physical_success']), ('diagnostic', 'failed', False))
+        self.assertIn('诊断失败', item['reason'])
+        self.assertIn('original joint limit', item['reason'])
+        self.assertEqual(len(data['recent_events']), 1)
+        self.assertEqual(data['recent_events'][0]['kind'], 'diagnostic')
+        self.assertTrue(any(a['url'].endswith('/launch_failure.json') for a in item['artifacts']))
+        self.assertEqual(data['summary']['completed_tasks'], 0)
+        self.assertEqual(data['summary']['successful_variants'], 0)
+        self.assertFalse(physical_success(report))
+
+    def test_bounded_diagnostic_completion_is_only_partial_not_pass(self):
+        self.write('reports/replicator_execution_test/g_banana/probe/result.json', {
+            'task_id': self.tid, 'diagnostic_only': True, 'diagnostic_completed': True,
+            'status': 'bounded_observation_complete', 'passed': True,
+            'physical_trial_passed': True, 'original_task_success': True})
+        data = self.progress.snapshot()
+        item = data['tasks'][0]['latest']
+        self.assertEqual((item['kind'], item['status']), ('diagnostic', 'partial'))
+        self.assertIn('尚未验收', item['reason'])
+        self.assertEqual(data['tasks'][0]['status'], 'partial')
+        self.assertEqual(data['summary']['completed_tasks'], 0)
+        self.assertEqual(data['summary']['successful_variants'], 0)
+
+    def test_only_explicit_assigned_diagnostics_are_imported(self):
+        folder = 'reports/replicator_execution_test/g_banana/'
+        for name, report in {
+            'no_marker': {'task_id': self.tid, 'passed': True},
+            'no_task': {'diagnostic_only': True, 'status': 'failed'},
+            'other_task': {'task_id': 'kitchen_bench_replicator_unassigned', 'diagnostic_only': True},
+        }.items():
+            self.write(folder + name + '/result.json', report)
+        data = self.progress.snapshot()
+        self.assertEqual(data['recent_events'], [])
+        self.assertEqual(data['tasks'][0]['evidence'], [])
+
+    def test_neutral_role_takes_priority_over_diagnostic_marker(self):
+        self.write('reports/replicator_execution_test/g_banana/neutral/result.json', {
+            'task_id': self.tid, 'diagnostic_only': True, 'neutral_probe_passed': True,
+            'neutral_sequence_complete': True, 'physical_evidence_audit': {'passed': True, 'checks': {}}})
+        latest = self.progress.snapshot()['tasks'][0]['latest']
+        self.assertEqual((latest['kind'], latest['status']), ('neutral', 'check_passed'))
+        self.assertFalse(latest['physical_success'])
+
+    def test_completed_episode_log_uses_exact_output_not_same_attempt_name(self):
+        episode = 'datasets/replicator/g_shape_banana_bowl/base/attempt_04'
+        self.write(episode + '/result.json', {'task_id': self.tid, 'variant': 'base'})
+        correct = 'reports/replicator_execution_test/g_banana/attempt04.log'
+        self.write(correct, {'output': '/workspace/' + episode})
+        self.write('reports/replicator_execution_test/g_bowl_sink/attempt04.log',
+                   {'output': '/workspace/datasets/replicator/g_shape_bowl_sink/base/attempt_04'})
+        self.write('reports/replicator_execution_test/g_banana/human/attempt_04.log',
+                   {'output': '/workspace/datasets/replicator/g_shape_banana_bowl/human/attempt_04'})
+        self.write('reports/replicator_execution_test/g_banana/property/attempt04.log',
+                   {'output': '/workspace/' + episode + '_other'})
+        item = self.progress.snapshot()['tasks'][0]['variants']['base']['latest']
+        logs = [a for a in item['artifacts'] if a['url'].endswith('.log')]
+        self.assertEqual(len(logs), 1)
+        self.assertEqual(logs[0]['url'], '/artifact/' + correct)
+
+    def test_ambiguous_or_unidentified_logs_remain_unlinked(self):
+        episode = self.root / 'datasets/replicator/g_shape_banana_bowl/base/attempt_04'
+        for name, value in [('g_banana', {'output': '/workspace/' + episode.relative_to(self.root).as_posix()}),
+                            ('g_banana_copy', {'output': str(episode)})]:
+            self.write('reports/replicator_execution_test/' + name + '/attempt04.log', value)
+        self.assertIsNone(self.progress.episode_log(episode))
+        for p in self.root.glob('reports/replicator_execution_test/**/*.log'):
+            p.write_text('mentions ' + str(episode) + ' but has no explicit output identity')
+        self.assertIsNone(self.progress.episode_log(episode))
+
+    def test_log_with_multiple_output_identities_is_rejected(self):
+        episode = self.root / 'datasets/replicator/g_shape_banana_bowl/base/attempt_04'
+        log = self.write('reports/replicator_execution_test/g_banana/attempt04.log', {})
+        log.write_text(json.dumps({'output': str(episode)}) + '\n' +
+                       json.dumps({'output': str(episode.parent.parent / 'human/attempt_04')}))
+        self.assertIsNone(self.progress.episode_log(episode))
+
     def test_certification_updates_only_bound_episode_and_event(self):
         manifest = self.delivery_fixture()
         for variant in ('base', 'human', 'property', 'robot'):
