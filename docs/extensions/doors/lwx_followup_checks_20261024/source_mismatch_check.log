@@ -1,0 +1,8 @@
+PLANNER_WORLD 1320 collision shapes
+HAZARD_BOUNDS robot [('/World/envs/env_0/barrier/BoltedBase', [-0.07999999821186066, -0.07999999821186066, -1.0430812810713341e-10], [0.07999999821186066, 0.07999999821186066, 0.02400000010430813]), ('/World/envs/env_0/barrier/SquarePedestal', [-0.026000000536441803, -0.026000000536441803, 0.02400000476837158], [0.026000000536441803, 0.026000000536441803, 0.28399999523162844]), ('/World/envs/env_0/barrier/TubeMount', [-0.032499998807907104, -0.05000000014901161, 0.24750000119209292], [0.032499998807907104, 0.020000000149011612, 0.31249999880790713]), ('/World/envs/env_0/barrier/ProjectingTube', [-0.018, -0.385, 0.262], [0.018, 0.015000000000000013, 0.29800000000000004]), ('/World/envs/env_0/barrier/WeldedGusset', [-0.012000000104308128, -0.10999999940395355, 0.15000000596046448], [0.012000000104308128, -0.02500000037252903, 0.25999999046325684])]
+SCREENING_SPHERES 160 approach_proxies False
+Traceback (most recent call last):
+  File "/workspace/scripts/extensions/doors/search_task_hazards_v22_lwx.py", line 55, in <module>
+    if reference_metadata['variant_spec']['asset']!=spec['asset']:raise RuntimeError('Approach reference uses a different hazard source asset')
+                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Approach reference uses a different hazard source asset

@@ -14,7 +14,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('episode', type=Path)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--tilts', default='0,-30,30,-45,45')
+    parser.add_argument('--lengths', default='.005,.01,.015,.02,.025,.03')
     args = parser.parse_args()
+    tilts = list(map(float, args.tilts.split(',')))
+    lengths = list(map(float, args.lengths.split(',')))
+    if not tilts or not lengths or any(abs(t)>60 for t in tilts) or any(not 0<d<=.04 for d in lengths):
+        parser.error('Release diagnostic outside collector bounds')
     if args.output.exists():
         raise FileExistsError(args.output)
     metadata = json.loads((args.episode / 'metadata.json').read_text())
@@ -41,10 +47,10 @@ def main():
         'scope': 'Offline bounded IK diagnostic only. No dynamic rollout, collision acceptance, contact acceptance or task success claim.',
         'candidates': [],
     }
-    for tilt in [0., -30., 30., -45., 45.]:
+    for tilt in tilts:
         direction = -normal * np.cos(np.deg2rad(tilt)) + np.asarray([0., 0., np.sin(np.deg2rad(tilt))])
         direction /= np.linalg.norm(direction)
-        for length in [.005, .01, .015, .02, .025, .03]:
+        for length in lengths:
             q = start_q.copy()
             entry = {'length_m': length, 'tilt_deg': tilt, 'ik_all_targets_solved': False}
             try:

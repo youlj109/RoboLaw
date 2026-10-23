@@ -1,0 +1,27 @@
+{
+  "command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "scripts/extensions/doors/search_task_hazards_v22_lwx.py",
+    "--baseline",
+    "datasets/doors/lwx_C02_release_retry06_20261024/C02_base_attempt01",
+    "--config",
+    "configs/extensions/doors/c02_human_candidate_08_00.json",
+    "--variant",
+    "robot",
+    "--output",
+    "reports/doors/lwx_C02_release_retry06_20261024/C02_mismatched_source_guard17.json",
+    "--approach-reference",
+    "datasets/doors/lwx_C02_release_retry06_20261024/C02_robot_14"
+  ],
+  "pid": 770645,
+  "expected_exit_code": 1,
+  "expected_error": "Approach reference uses a different hazard source asset",
+  "expected_no_candidate_report": true
+}
