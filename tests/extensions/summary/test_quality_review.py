@@ -45,6 +45,13 @@ class QualityReviewTests(unittest.TestCase):
         if resolved:
             value['resolution_evidence'] = ['docs/extensions/review_resolution.json']
             self.write(value['resolution_evidence'][0], {'reviewed': True})
+            episode = self.episode('controls', 'human').parent.relative_to(self.root)
+            acceptance = self.write(episode / 'repair_acceptance.json',
+                                    {'passed': True, 'episode': str(episode), 'artifacts': {
+                                        str(episode / 'result.json'): trials.sha256_file(self.root / episode / 'result.json')}})
+            value['resolved_categories'] = [{'group': 'controls', 'variant': 'human',
+                'episode': str(episode),
+                'acceptance_sha256': hashlib.sha256(acceptance.read_bytes()).hexdigest()}]
         self.write(trials.QUALITY_REVIEW, value)
         return value
 
@@ -176,6 +183,55 @@ class QualityReviewTests(unittest.TestCase):
         self.assertNotIn('avoidance_quality_review.json', report['attempts'][0]['evidence_files'])
         self.write(trials.QUALITY_REVIEW, ['malformed'])
         self.assertEqual(trials.summarize('skill_trials')['completed'], 1)
+
+    def test_resolution_only_accepts_exact_reviewed_replacement(self):
+        self.review(resolved=True)
+        repaired = self.episode('controls', 'human')
+        old = self.episode('controls', 'human', 'old_success')
+        renamed = self.episode('controls', 'human', 'newer_unreviewed')
+        self.assertTrue(trials.collect_attempt('controls', repaired, 'avoidance_trials')['passed'])
+        for file in (old, renamed):
+            self.assertFalse(trials.collect_attempt('controls', file, 'avoidance_trials')['passed'])
+        report = trials.summarize('avoidance_trials')
+        row = next(r for r in report['episodes'] if r['group'] == 'controls' and r['variant'] == 'human')
+        self.assertEqual(row['episode'], str(repaired.parent.relative_to(self.root)))
+
+    def test_resolution_evidence_is_bound_to_episode_and_hash(self):
+        value = self.review(resolved=True)
+        entry = value['resolved_categories'][0]
+        self.write(Path(entry['episode']) / 'repair_acceptance.json', {'passed': False})
+        with self.assertRaisesRegex(trials.QualityReviewError, 'hash mismatch'):
+            trials.load_quality_review()
+        value = self.review(resolved=True)
+        value.pop('resolved_categories')
+        self.write(trials.QUALITY_REVIEW, value)
+        with self.assertRaisesRegex(trials.QualityReviewError, 'resolved_categories'):
+            trials.load_quality_review()
+
+    def test_reviewed_artifact_cannot_change_under_unchanged_acceptance(self):
+        value = self.review(resolved=True)
+        episode = value['resolved_categories'][0]['episode']
+        self.write(Path(episode) / 'result.json', {'variant': 'human', 'accepted': False})
+        with self.assertRaisesRegex(trials.QualityReviewError, 'reviewed artifact hash mismatch'):
+            trials.load_quality_review()
+
+    def test_export_rejects_substituted_old_episode_under_current_registry(self):
+        self.review(resolved=True)
+        for group in trials.GROUPS:
+            for variant in trials.VARIANTS:
+                self.episode(group, variant)
+        old = self.episode('controls', 'human', 'old_unreviewed_success')
+        report = trials.summarize('avoidance_trials')
+        self.assertEqual(report['completed'], 12)
+        unreviewed = trials.collect_attempt('controls', old, 'avoidance_trials')
+        self.assertFalse(unreviewed['passed'])
+        index = next(i for i,r in enumerate(report['episodes']) if r['group']=='controls' and r['variant']=='human')
+        report['episodes'][index] = {**unreviewed, 'passed': True}
+        sentinel = self.write('exports/avoidance-trial-videos/index.html')
+        before = sentinel.read_bytes()
+        with self.assertRaisesRegex(SystemExit, 'episode selection or evidence'):
+            trials.export(report)
+        self.assertEqual(sentinel.read_bytes(), before)
 
 
 if __name__ == '__main__':

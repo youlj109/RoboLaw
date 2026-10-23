@@ -1,10 +1,9 @@
 """Causal gates must include early physics and rotation, and actual reset state."""
-import sys,tempfile,unittest
+import json,tempfile,unittest
 from pathlib import Path
 import h5py,numpy as np
 from scipy.spatial.transform import Rotation
-sys.path.insert(0,str(Path(__file__).resolve().parents[3]/'scripts/extensions/replicator'))
-from audit_avoidance import hazard_stationarity,initial_state_comparison
+from scripts.extensions.replicator.audit_avoidance import hazard_stationarity,initial_state_comparison
 
 class AvoidanceMeasurementTest(unittest.TestCase):
  def test_early_hazard_displacement_and_rotation_cannot_hide_after_settling(self):
@@ -31,5 +30,20 @@ class AvoidanceMeasurementTest(unittest.TestCase):
    with h5py.File(out/'trajectory.h5','r+') as f:f['obs/q'][0,0]=.01
    self.assertFalse(initial_state_comparison(base,out)['passed'])
    with h5py.File(out/'trajectory.h5','r+') as f:f['obs/q'][0,0]=0;f['obs/bowl'][30,0]=.001
+   self.assertFalse(initial_state_comparison(base,out)['passed'])
+ def test_new_hold_profile_checks_frame_75_even_when_frame_30_matches(self):
+  with tempfile.TemporaryDirectory() as tmp:
+   root=Path(tmp);base=root/'base';out=root/'augmented';base.mkdir();out.mkdir()
+   for folder in [base,out]:
+    (folder/'result.json').write_text(json.dumps({'effective_controls':{'initial_settling_actions':75,'initial_settling_seconds':5.}}))
+    with h5py.File(folder/'trajectory.h5','w') as f:
+     f.create_dataset('obs/q',data=np.zeros((76,13)))
+     pose=np.zeros((76,7));pose[:,6]=1
+     for name in ['mustard','bowl']:f.create_dataset('obs/'+name,data=pose)
+     for name in ['robot_body_pose_w','background_rigid_poses']:f.create_dataset('obs/'+name,data=pose[:,None,:])
+   result=initial_state_comparison(base,out);self.assertTrue(result['passed']);self.assertEqual(result['stages'][-1]['index'],75)
+   with h5py.File(out/'trajectory.h5','r+') as f:f['obs/q'][75,0]=.01
+   self.assertFalse(initial_state_comparison(base,out)['passed'])
+   with h5py.File(out/'trajectory.h5','r+') as f:f['obs/q'][75,0]=0;f['obs/bowl'][75,0]=.001
    self.assertFalse(initial_state_comparison(base,out)['passed'])
 if __name__=='__main__':unittest.main()

@@ -4,8 +4,8 @@ from pathlib import Path
 import fcl,h5py,numpy as np
 from scipy.spatial.transform import Rotation
 from pxr import Usd,UsdGeom,Gf
-from audit import hazard_stage,HAZARDS
-from audit_fixed_base import fixed_colliders
+from scripts.extensions.replicator.audit import hazard_stage,HAZARDS
+from scripts.extensions.replicator.audit_fixed_base import fixed_colliders
 from kitchen_safety.extensions.replicator.collision_planner import CollisionWorld
 from kitchen_safety.extensions.replicator.layout import resolve_layout
 from kitchen_safety.planning import DroidKinematics
@@ -21,12 +21,16 @@ def load_baseline(path):
   d['phases']=f['phase'].asstr()[:].tolist();d['phases'].append(d['phases'][-1]);d['dt']=float(f.attrs['dt']);d['body_names']=json.loads(f.attrs['robot_body_names'])
  return r,d,names,ids
 
+def settled_index(result):
+ return int(result.get('effective_controls',{}).get('initial_settling_actions',30))
+
 def kitchen_world(layout,kin,data,result):
+ index=settled_index(result)
  stage=Usd.Stage.CreateInMemory();prefix='/World/envs/env_0'
  def ref(name,path,pose):
   root=UsdGeom.Xform.Define(stage,prefix+'/'+name);root.GetPrim().GetReferences().AddReference(str(ROOT/path));root.ClearXformOpOrder();root.AddTranslateOp().Set(Gf.Vec3d(*map(float,pose[:3])));q=pose[3:];root.AddOrientOp().Set(Gf.Quatf(float(q[3]),Gf.Vec3f(*map(float,q[:3]))))
- ref('kitchen',layout['kitchen_usd'],[0,0,0,0,0,0,1]);ref('bowl','assets/robolab/objects/ycb/bowl.usd',data['bowl'][30,:7]);ref('mustard_bottle','assets/robolab/objects/hope/mustard_bottle.usd',data['mustard'][30,:7])
- w=CollisionWorld(stage,kin);w.sync_background(result['background_rigid_paths'],data['background_rigid_poses'][30]);return w
+ ref('kitchen',layout['kitchen_usd'],[0,0,0,0,0,0,1]);ref('bowl','assets/robolab/objects/ycb/bowl.usd',data['bowl'][index,:7]);ref('mustard_bottle','assets/robolab/objects/hope/mustard_bottle.usd',data['mustard'][index,:7])
+ w=CollisionWorld(stage,kin);w.sync_background(result['background_rigid_paths'],data['background_rigid_poses'][index]);return w
 
 def initial_geometry(world,environment,fixed,variant):
  # Exact pair intersections plus conservative initial/goal motion-envelope checks elsewhere.
@@ -53,7 +57,7 @@ def main():
  result,data,names,ids=load_baseline(a.baseline);variant=a.variant;hazard=HAZARDS[variant]
  layout=resolve_layout({'human':'human_default_mpfb','property':'property_vase','robot':'robot_projecting_crossbar'}[variant]);assert {k:v for k,v in layout.items() if k!='obstacle'}==result['layout'];entry=layout['obstacle'];kin=DroidKinematics(np.array(layout['robot_position'])+[0,0,layout['stand_height']],layout['robot_yaw_deg']);cfg=layout['planning']
  stage,_=hazard_stage(layout,variant,entry);world=CollisionWorld(stage,kin,clearances=cfg['clearances_m'],execution_clearances=cfg['execution_clearances_m']);environment=kitchen_world(layout,kin,data,result)
- fixed=fixed_colliders(data['robot_body_pose_w'][0,data['body_names'].index('panda_link0')]);n=len(data['q']);phases=data['phases'];endpoints=sorted(set([0,30,n-1]+[max(i for i,p in enumerate(phases) if p==phase) for phase in ['approach','close','lower','release']]))
+ fixed=fixed_colliders(data['robot_body_pose_w'][0,data['body_names'].index('panda_link0')]);n=len(data['q']);phases=data['phases'];endpoints=sorted(set([0,settled_index(result),n-1]+[max(i for i,p in enumerate(phases) if p==phase) for phase in ['approach','close','lower','release']]))
  if a.strict_waypoints:endpoints=sorted(set(endpoints)|{max(i for i,p in enumerate(phases) if p==phase) for phase in ['pregrasp','lift']})
  if a.retain_pregrasp:endpoints=sorted(set(endpoints)|{max(i for i,p in enumerate(phases) if p=='pregrasp')})
  indices=sorted(set(range(0,n,a.stride))|set(endpoints));original_shapes=world.shapes;shapes={}
@@ -75,26 +79,30 @@ def main():
  elif variant=='property':candidates=[(float(x),float(y),layout['counter_height']+.002,0.) for x in np.arange(.15,.91,.025) for y in np.arange(-1.15,-.375,.025)]
  else:candidates=[(float(x),float(y),layout['counter_height']+.002,float(yaw)) for x in np.arange(.15,.91,.05) for y in np.arange(-1.15,-.375,.05) for yaw in [0,45,90,135,180,225,270,315]]
  if a.limit:candidates=candidates[:a.limit]
- rows=[];counts=dict(total=len(candidates),endpoint_rejected=0,geometry_rejected=0,no_obstruction=0);started=time.time()
+ rows=[];outcomes=[];counts=dict(total=len(candidates),endpoint_rejected=0,geometry_rejected=0,no_obstruction=0);started=time.time()
  for num,(x,y,z,yaw) in enumerate(candidates):
+  outcome=dict(candidate_index=num,position=[x,y,z],yaw_deg=yaw);outcomes.append(outcome)
   pose=np.r_[[x,y,z],Rotation.from_euler('z',yaw,degrees=True).as_quat()];world.set_obstacle_pose(hazard,pose);endpoint_bad=False
   for i in endpoints:
    current[0]=i
    if not world.valid(data['q'][i,ids],mode='planning',obstacle_filter=(hazard,)):
     endpoint_bad=True;break
-  if endpoint_bad:counts['endpoint_rejected']+=1;continue
+  if endpoint_bad:
+   counts['endpoint_rejected']+=1;outcome.update(status='endpoint_rejected',index=i,phase=phases[i],clearance=world.last_clearance);continue
   legal,failures=initial_geometry(world,environment,fixed,variant)
-  if not legal:counts['geometry_rejected']+=1;continue
+  if not legal:
+   counts['geometry_rejected']+=1;outcome.update(status='geometry_rejected',intersections=failures);continue
   violations=[]
   for i in indices:
    if i in endpoints or phases[i] in ['settle','release','retreat']:continue
    current[0]=i
    if not world.valid(data['q'][i,ids],mode='planning',obstacle_filter=(hazard,)):
     violations.append(dict(index=i,phase=phases[i],time_s=i*data['dt'],**world.last_clearance))
-  if not violations:counts['no_obstruction']+=1;continue
+  if not violations:
+   counts['no_obstruction']+=1;outcome.update(status='no_sampled_obstruction');continue
   row=dict(position=[x,y,z],yaw_deg=yaw,baseline_violations=violations,minimum=min(violations,key=lambda v:v['slack_m']),tested_endpoints=endpoints,initial_geometry_clear=True)
-  rows.append(row);print(json.dumps(dict(candidate=num,position=row['position'],yaw_deg=yaw,violating_samples=len(violations),minimum=row['minimum'])),flush=True)
+  outcome.update(status='candidate_retained',violating_samples=len(violations),minimum=row['minimum']);rows.append(row);print(json.dumps(dict(candidate=num,position=row['position'],yaw_deg=yaw,violating_samples=len(violations),minimum=row['minimum'])),flush=True)
  rows.sort(key=lambda r:(not any(v['distance_m']<cfg['execution_clearances_m'][hazard] for v in r['baseline_violations']),-len(r['baseline_violations']),r['minimum']['slack_m']))
- report=dict(baseline=str(a.baseline.relative_to(ROOT)),variant=variant,sampling_stride=a.stride,elapsed_seconds=time.time()-started,counts=counts,candidates=rows,scope='Unexecuted geometric counterfactual of measured baseline q/fingers/bottle poses. Source layout unchanged. Endpoint/source/kitchen/fixed-solid collider prefilter; full-rate audit and live physical validation required before acceptance.')
+ report=dict(baseline=str(a.baseline.relative_to(ROOT)),variant=variant,sampling_stride=a.stride,elapsed_seconds=time.time()-started,counts=counts,candidate_outcomes=outcomes,candidates=rows,scope='Unexecuted geometric counterfactual of measured baseline q/fingers/bottle poses. Source layout unchanged. Endpoint/source/kitchen/fixed-solid collider prefilter; full-rate audit and live physical validation required before acceptance.')
  target=a.report or ROOT/'reports/avoidance_trials/replicator'/f'{variant}_search.json';target.parent.mkdir(parents=True,exist_ok=True);target.write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(dict(report=str(target),valid_candidates=len(rows),counts=counts,elapsed_seconds=report['elapsed_seconds'])),flush=True)
 if __name__=='__main__':main()

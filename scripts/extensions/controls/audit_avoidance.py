@@ -12,7 +12,7 @@ from scipy.spatial.transform import Rotation
 from kitchen_safety.extensions.controls.collision import ControlsCollisionWorld
 from kitchen_safety.planning import DroidKinematics
 from kitchen_safety.geometry_audit import static_collision_shapes, minimum_distance
-from search_avoidance import fixed_shapes, minimum
+from scripts.extensions.controls.search_avoidance import fixed_shapes, minimum
 
 ROOT = Path(__file__).resolve().parents[3]
 
@@ -77,10 +77,15 @@ def main():
                     violations=violations,samples=len(measurements),measurements=measurements,
                     scope='Actual action before/after states, at 15 Hz. Unsafe baseline is only evaluated geometrically, never executed into hazard.')
     baseline=evaluate(br,True);augmented=evaluate(ar,False)
-    exact_baseline={'applicable':variant=='robot','passed':True}
-    if variant=='robot':
+    exact_baseline={'applicable':True,'passed':False}
+    if variant in ('human','property','robot'):
         # Narrow phase on true authored round primitives excludes an AABB-only
         # counterfactual. Drop redundant arm capsules, retain collision hulls.
+        measured=np.eye(4)
+        measured[:3,:3]=Rotation.from_quat(static_pose[3:7]).as_matrix()
+        measured[:3,3]=static_pose[:3]
+        prim.ClearXformOpOrder()
+        prim.AddTransformOp().Set(Gf.Matrix4d(measured.T))
         exact_shapes=static_collision_shapes(stage,'/World/envs/env_0/'+name)
         exact_rows=[]
         for i,row in enumerate(br):
@@ -93,6 +98,8 @@ def main():
         risks=[m for m in exact_rows if not m['valid']]
         exact_baseline.update(passed=bool(risks),minimum=min(exact_rows,key=lambda m:m['distance_m']),
             violations=risks,samples=len(exact_rows),
+            source_asset=spec['asset'],source_asset_sha256=hashlib.sha256((ROOT/spec['asset']).read_bytes()).hexdigest(),
+            hazard_pose_xyzw=static_pose,
             scope='Exact authored obstacle primitives/meshes versus robot/individual gripper collision hulls. Redundant arm capsules excluded; CPU counterfactual only.')
     q_error=float(np.max(np.abs(np.array(br[0]['before']['q'])-np.array(ar[0]['before']['q']))))
     toaster_error=float(np.max(np.abs(np.array(br[0]['before']['toaster_body_pose'])-np.array(ar[0]['before']['toaster_body_pose']))))
@@ -106,6 +113,18 @@ def main():
     scene=ControlsCollisionWorld(Usd.Stage.Open(str(ROOT/'reports/skill_trials/controls/inspection/stage.usda')),kin,env_root='/World/envs/env_0')
     kitchen=minimum(scene.objects,world.objects)
     environment_intersections=[];support_contacts=[]
+    # The original vase's bottom wall ring shares the base's source z=0
+    # support plane. Its tiny numerical contact is not an elevated sidewall
+    # intersection. Confirm the source geometry before allowing only this
+    # ring/table pair, with a 1 um tolerance (not the base's 0.5 mm tolerance).
+    floor_ring_names=set()
+    if variant=='property' and spec['asset']=='assets/obstacle_library/property/vase.usda':
+        source_stage=Usd.Stage.Open(str(ROOT/spec['asset']))
+        for source_prim in source_stage.Traverse():
+            if source_prim.GetName().startswith('Wall00_') and source_prim.IsA(UsdGeom.Mesh):
+                vertices=np.asarray(UsdGeom.Mesh(source_prim).GetPointsAttr().Get())
+                if abs(float(vertices[:,2].min()))<1e-9 and float(vertices[:,2].max())<.05:
+                    floor_ring_names.add(source_prim.GetName())
     for obstacle in world.objects:
         for surface in scene.objects:
             gap=np.linalg.norm(np.maximum(np.maximum(obstacle[2]-surface[3],surface[2]-obstacle[3]),0))
@@ -115,10 +134,15 @@ def main():
             # PhysX resting contact can leave sub-millimetre mesh overlap.
             # Permit only this known vase BASE / original countertop pair;
             # sides, other kitchen parts and all robot clearances stay strict.
-            support=(variant=='property' and obstacle[0].endswith('/glass/Colliders/Base')
+            source_base=obstacle[0].endswith('/glass/Colliders/Base')
+            source_floor_ring=obstacle[0].split('/')[-1] in floor_ring_names
+            tolerance=.0005 if source_base else .000001
+            support=(variant=='property' and (source_base or source_floor_ring)
                 and surface[0].endswith('/kitchen/counter_main_main_group/top_geometry')
-                and obstacle[2][2]>=surface[3][2]-.0005)
-            item=dict(**contact,obstacle_low_z_m=float(obstacle[2][2]),support_top_z_m=float(surface[3][2]))
+                and obstacle[2][2]>=surface[3][2]-tolerance)
+            item=dict(**contact,obstacle_low_z_m=float(obstacle[2][2]),support_top_z_m=float(surface[3][2]),
+                      allowed_support_tolerance_m=tolerance if support else None,
+                      source_bottom_ring_verified=source_floor_ring)
             (support_contacts if support else environment_intersections).append(item)
     legal=not fixed['intersecting'] and not environment_intersections
     bp=np.array([np.array(r['after']['tcp'])[:3,3] for r in br if r['phase']=='prepress'])
@@ -171,6 +195,9 @@ def main():
                 initial_and_goal_feasible=endpoints_passed,hazard_environment_legal=legal,
                 initial_fixed_base=fixed,initial_kitchen=kitchen,path_comparison=comparison,
                 hazard_environment_intersections=environment_intersections,allowed_resting_support_contacts=support_contacts,
+                support_contact_policy={'source_vase_bottom_ring_names':sorted(floor_ring_names),
+                    'bottom_ring_table_tolerance_m':.000001,'base_table_tolerance_m':.0005,
+                    'scope':'Only original vase source bottom plane / original main countertop support; robot and all other clearances unchanged.'},
                 property_stability=property_stability,
                 limitation='One fixed configuration; counterfactual is action-rate geometry. New actual execution retains the separate physics-rate safety audit.')
     out.write_text(json.dumps(report,indent=2))

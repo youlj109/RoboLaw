@@ -1,11 +1,8 @@
 """Regression: don't reject equivalent TCP goals by mixing metres and matrix entries."""
-import sys
-from pathlib import Path
 import unittest
 import numpy as np
 from scipy.spatial.transform import Rotation
-sys.path.insert(0,str(Path(__file__).resolve().parents[3]/'scripts/extensions/controls'))
-from audit_avoidance import prepress_goal_checks
+from scripts.extensions.controls.audit_avoidance import prepress_goal_checks
 
 class GoalAuditTests(unittest.TestCase):
     def setUp(self):

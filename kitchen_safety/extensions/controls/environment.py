@@ -12,7 +12,8 @@ SOURCE = ROOT / 'third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_
 KITCHEN = Path.home() / '.cache/lightwheel_sdk/floorplan/robocasa-robocasakitchen-9-8/scene.usd'
 
 
-def build_environment(enable_cameras=True, variant='base', fixed_pose=None, trial_config=None):
+def build_environment(enable_cameras=True, variant='base', fixed_pose=None, trial_config=None,
+                      repair_toaster_physics=True):
     # cuRobo 0.7 imports Warp's pre-1.16 torch namespace. This compatibility
     # alias restores that namespace without changing any kernel or algorithm.
     import warp as wp
@@ -35,6 +36,13 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None, tria
     from isaaclab_arena.utils.pose import Pose
     from isaaclab_arena.assets.object import Object
     from isaaclab_arena.assets.object_type import ObjectType
+
+    kitchen_path = KITCHEN
+    physics_provenance = None
+    if repair_toaster_physics:
+        from .toaster_physics import repaired_kitchen
+        kitchen_path, physics_provenance = repaired_kitchen(
+            KITCHEN, ROOT / 'reports/controls_physics/assets')
 
     class LocalDroid(droid.DroidAbsoluteJointPositionEmbodiment):
         def __init__(self, enable_cameras=False, stand_height_m=.8,
@@ -65,7 +73,7 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None, tria
             if name == 'droid_abs_joint_pos':
                 return LocalDroid
             if name == 'lightwheel_kitchen_g_shaped_large_scandinavian':
-                return lambda **kwargs: Background(name='kitchen', usd_path=str(KITCHEN),
+                return lambda **kwargs: Background(name='kitchen', usd_path=str(kitchen_path),
                     object_min_z=-.2, initial_pose=Pose.identity(), reset_nested_physics=False, **kwargs)
             return AssetRegistry().get_asset_by_name(name)
 
@@ -88,4 +96,5 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None, tria
     environment = IsaacLabArenaEnvironment(name=spec.env_name,
         scene=Scene(assets=[v for k, v in assets.items() if k != spec.embodiment.id]),
         embodiment=assets[spec.embodiment.id], task=build_task_from_spec(spec.task, assets))
+    environment.toaster_physics_provenance = physics_provenance
     return environment, assets

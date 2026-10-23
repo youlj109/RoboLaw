@@ -21,15 +21,24 @@ CAMERAS = ('external_camera', 'external_camera_2', 'wrist_camera', 'all_cameras'
 SCOPE = ('One original task per skill, three fixed augmentation categories each; '
          'physical-task/data smoke tests only: this count does not prove avoidance effectiveness; '
          'does not establish other tasks, randomized coverage, bulk success rate or maximum speed.')
-AVOIDANCE_SCOPE = ('Counts retain the previous single-baseline geometry, physical-task and data gates, '
-                  'subject to the current category quality review. Unwithheld entries are not a new '
-                  'certification of physically necessary or visibly meaningful avoidance. '
-                  'One fixed sample per category; no randomized or bulk success-rate claim.')
+AVOIDANCE_SCOPE = ('Per-category evidence: exact repaired episodes have the new reviews recorded in their '
+                  'repair acceptance; other entries retain previous single-baseline geometry, physical-task '
+                  'and data gates. These two scopes are counted separately. One fixed physical sample '
+                  'per category; offline paired seeds are identified separately, with no randomized '
+                  'physical or bulk success-rate claim.')
 QUALITY_REVIEW = Path('docs/extensions/avoidance_quality_review.json')
 
 
 class QualityReviewError(ValueError):
     """Avoidance evidence cannot be published without a valid current review."""
+
+
+def sha256_file(path):
+    digest = hashlib.sha256()
+    with path.open('rb') as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def load_quality_review():
@@ -92,15 +101,66 @@ def load_quality_review():
             if not isinstance(name, str) or not name.strip():
                 invalid('resolution_evidence entries must be nonempty paths')
             evidence_file(name)
+    resolutions = value.get('resolved_categories', [])
+    if not isinstance(resolutions, list) or (value['status'] == 'resolved' and not resolutions):
+        invalid('resolved requires explicit resolved_categories and replacement episode evidence')
+    resolved = set()
+    for item in resolutions:
+        if not isinstance(item, dict):
+            invalid('resolved_categories entries must be objects')
+        category = (item.get('group'), item.get('variant'))
+        if (not all(isinstance(part, str) for part in category)
+                or category[0] not in GROUPS or category[1] not in VARIANTS
+                or category in seen or category in resolved):
+            invalid(f'invalid, duplicate or still withheld resolution: {category}')
+        resolved.add(category)
+        episode = item.get('episode')
+        if not isinstance(episode, str) or not episode.startswith(f'datasets/avoidance_trials/{category[0]}/'):
+            invalid('resolution episode must belong to its avoidance trial group')
+        evidence_file(str(Path(episode) / 'result.json'))
+        acceptance_path = Path(episode) / 'repair_acceptance.json'
+        evidence_file(str(acceptance_path))
+        acceptance_bytes = (ROOT / acceptance_path).read_bytes()
+        if hashlib.sha256(acceptance_bytes).hexdigest() != item.get('acceptance_sha256'):
+            invalid(f'repair acceptance hash mismatch: {acceptance_path}')
+        try:
+            acceptance = json.loads(acceptance_bytes)
+        except (ValueError, TypeError):
+            invalid(f'invalid repair acceptance JSON: {acceptance_path}')
+        if not isinstance(acceptance, dict) or acceptance.get('passed') is not True or acceptance.get('episode') != episode:
+            invalid(f'repair acceptance must pass and identify the exact episode: {acceptance_path}')
+        artifacts = acceptance.get('artifacts')
+        if not isinstance(artifacts, dict) or not artifacts:
+            invalid(f'repair acceptance must bind the reviewed artifacts: {acceptance_path}')
+        for name, expected_hash in artifacts.items():
+            evidence_file(name)
+            if sha256_file(ROOT / name) != expected_hash:
+                invalid(f'reviewed artifact hash mismatch: {name}')
+    media_entries = value.get('resolution_media', [])
+    if not isinstance(media_entries, list):
+        invalid('resolution_media must be a list')
+    for media in media_entries:
+        if not isinstance(media, dict) or not all(isinstance(media.get(key), str) and media[key] for key in ('path', 'title', 'description', 'sha256')):
+            invalid('resolution_media requires path, title, description and sha256')
+        evidence_file(media['path'])
+        if sha256_file(ROOT / media['path']) != media['sha256']:
+            invalid(f'resolution media hash mismatch: {media["path"]}')
     return {**value, 'registry_file': str(QUALITY_REVIEW),
             'registry_sha256': hashlib.sha256(payload).hexdigest()}
 
 
-def category_review(review, group, variant):
+def category_review(review, group, variant, episode=None):
     blocker = next((item for item in review['withheld_categories']
                     if item['group'] == group and item['variant'] == variant), None)
-    return {'passed': blocker is None, 'status': review['status'],
-            'reason': blocker['reason'] if blocker else 'Retained under previous gates; strengthened avoidance quality is not established by this count.',
+    resolution = next((item for item in review.get('resolved_categories', [])
+                       if item['group'] == group and item['variant'] == variant), None)
+    matched = resolution is not None and resolution['episode'] == episode
+    reason = (blocker['reason'] if blocker else
+              'Repair reviewed for this exact replacement episode.' if matched else
+              'Historical or unreviewed attempt: this category is resolved only for ' + resolution['episode'] if resolution else
+              'Retained under previous gates; strengthened avoidance quality is not established by this count.')
+    return {'passed': blocker is None and (resolution is None or matched), 'status': review['status'],
+            'repair_reviewed': matched, 'reason': reason,
             'registry_file': review['registry_file'], 'registry_sha256': review['registry_sha256']}
 
 
@@ -136,9 +196,16 @@ def collect_attempt(group, file, trial_root='skill_trials', *, quality_review=No
     sources = {'result.json': file}
     review_gate = None
     if trial_root == 'avoidance_trials':
-        review_gate = category_review(quality_review, group, variant)
+        review_gate = category_review(quality_review, group, variant, relative(directory))
         evidence['quality_review'] = review_gate['passed']
         sources['avoidance_quality_review.json'] = ROOT / QUALITY_REVIEW
+        if review_gate['repair_reviewed']:
+            sources['repair_acceptance.json'] = directory / 'repair_acceptance.json'
+            acceptance = read(directory / 'repair_acceptance.json')
+            for name, path in acceptance.get('export_evidence', {}).items():
+                if path not in acceptance['artifacts'] or Path(name).name != name:
+                    raise QualityReviewError(f'Invalid repair export evidence: {name}: {path}')
+                sources['repair_' + name] = ROOT / path
     notes = {'replicator': 'docs/extensions/replicator/SKILL_TRIAL.txt',
              'lightwheel_pick_place': 'docs/extensions/lightwheel_pick_place/TRIAL_NOTES.md',
              'doors': 'docs/extensions/doors/physical_trial_notes.md',
@@ -262,7 +329,8 @@ def collect_attempt(group, file, trial_root='skill_trials', *, quality_review=No
         'raw_data': data, 'result_mtime_ns': file.stat().st_mtime_ns,
         'error': result.get('failure', result.get('error')),
         **({'quality_review': review_gate,
-            'acceptance_scope': 'previous_gates_subject_to_quality_review'} if review_gate is not None else {}),
+            'acceptance_scope': ('exact_repaired_sample_with_declared_new_evidence' if review_gate['repair_reviewed']
+                                 else 'previous_gates_subject_to_quality_review')} if review_gate is not None else {}),
     }
 
 
@@ -291,13 +359,16 @@ def summarize(trial_root='skill_trials'):
                   scope=AVOIDANCE_SCOPE if trial_root=='avoidance_trials' else SCOPE)
     if review is not None:
         report['quality_review'] = review
+        report['repair_reviewed_count'] = sum(row['passed'] and row.get('quality_review', {}).get('repair_reviewed', False) for row in rows)
+        report['previous_gates_retained_count'] = report['completed'] - report['repair_reviewed_count']
         report['strengthened_avoidance_acceptance_established'] = False
     output = ROOT / 'reports' / trial_root
     output.mkdir(parents=True, exist_ok=True)
     (output / 'summary.json').write_text(json.dumps(report, ensure_ascii=False, indent=2))
     page = ['<!doctype html><html lang="zh"><meta charset="utf-8"><title>四组 Skill 实测视频</title>',
         '<style>body{font:16px system-ui;max-width:1300px;margin:30px auto;background:#f3f5f8;color:#182334}table{border-collapse:collapse;width:100%;background:white}td,th{padding:15px;border:1px solid #dce1e8}a{color:#155bb8}p{line-height:1.6}</style>',
-        f'<h1>四组 Skill 实测：{report["completed"]}/12 {"旧门槛结果保留" if review is not None else "已通过"}</h1>',
+        f'<h1>四组 Skill 实测：{report["completed"]}/12 {"有验收记录" if review is not None else "已通过"}</h1>',
+        (f'<p>本轮修复复审 {report["repair_reviewed_count"]} 条；保留原门槛记录 {report["previous_gates_retained_count"]} 条。两种证据范围分开标记。</p>' if review is not None else ''),
         f'<p>{html.escape(report["scope"])}</p>',
         '<p>每组一个原始任务，各采集人体、财产、障碍物三个固定变体。失败尝试未计入成功数。</p>',
         '<table><tr><th>原始任务</th><th>变体</th><th>结果</th><th>视频及证据</th></tr>']
@@ -308,7 +379,8 @@ def summarize(trial_root='skill_trials'):
             links += '<br>' + ' · '.join(f'<a href="../../{html.escape(path)}">{html.escape(name)}</a>' for name, path in row['evidence_files'].items())
         if review is not None and not row['quality_review']['passed']:
             links = html.escape(row['quality_review']['reason']) + f' · <a href="../../{QUALITY_REVIEW}">quality review</a>'
-        status = ('旧门槛保留' if review is not None else '通过') if row['passed'] else '待完成'
+        status = ('修复复审通过' if row.get('quality_review', {}).get('repair_reviewed') else
+                  '旧门槛保留' if review is not None else '通过') if row['passed'] else '待完成'
         page.append(f'<tr><td>{row["group_label"]}</td><td>{row["variant_label"]}</td><td>{status}</td><td>{links}</td></tr>')
     page.append('</table><p>本轮仅代表这 12 条样本及固定配置，其余原始任务、随机化及 200 条批采未验证。</p></html>')
     (output / 'index.html').write_text('\n'.join(page))
@@ -327,12 +399,26 @@ def export(report):
             raise SystemExit('Refusing final avoidance export: stale or missing quality review snapshot; summarize again')
     if report['completed'] != 12:
         raise SystemExit('Refusing final export: fewer than 12 independently validated episodes')
+    if is_avoidance:
+        # A current registry hash alone does not authenticate caller-supplied
+        # rows. Rebuild selection and evidence before touching an existing ZIP.
+        current = summarize('avoidance_trials')
+        if (current['completed'] != 12 or report.get('episodes') != current['episodes']
+                or current['quality_review']['registry_sha256'] != review['registry_sha256']):
+            raise SystemExit('Refusing final avoidance export: episode selection or evidence differs from current validation')
+        report = current
     exports = ROOT / 'exports'
     exports.mkdir(exist_ok=True)
     destination = exports / ('avoidance-trial-videos' if is_avoidance else 'skill-trial-videos')
     with tempfile.TemporaryDirectory(prefix='.skill-trial-videos-', dir=exports) as temp:
         stage = Path(temp) / destination.name
         stage.mkdir()
+        resolution_media = []
+        if is_avoidance:
+            for index, item in enumerate(review.get('resolution_media', [])):
+                name = f'physics_review_{index + 1}' + Path(item['path']).suffix
+                shutil.copy2(ROOT / item['path'], stage / name)
+                resolution_media.append({**item, 'file': name})
         exported = []
         for row in report['episodes']:
             source = ROOT / row['videos']['all_cameras']
@@ -359,17 +445,25 @@ def export(report):
                         scope=report['scope'], storage='ZIP contains 12 multi-camera previews, any additional overview/comparison videos, and JSON acceptance evidence. Original three separate MP4s and raw trajectory/images remain at repository-relative paths recorded for each episode.')
         if is_avoidance:
             manifest['quality_review'] = review
+            manifest['repair_reviewed_count'] = report['repair_reviewed_count']
+            manifest['previous_gates_retained_count'] = report['previous_gates_retained_count']
+            manifest['resolution_media'] = resolution_media
         (stage / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2))
         gallery = ['<!doctype html><html lang="zh"><meta charset="utf-8"><title>RoboLaw 12 条实测视频</title>',
             '<style>body{font:16px system-ui;margin:24px;background:#f4f6f9}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(430px,1fr));gap:20px}article{padding:16px;background:white;border-radius:10px}video{width:100%}</style>',
             '<h1>RoboLaw：四个原始任务 × 三类安全变体</h1><p>每条通过真实物理执行、原任务成功判据及数据/视频检查。独立三路视频与原始数据保留在仓库，具体路径见 manifest.json。</p>',
-            ('<p>本包另要求：旧基线违反新增实体的安全距离，新轨迹安全且完成原任务。反事实只做几何检查，不执行危险碰撞。</p>' if is_avoidance else '<p>本包为物理任务与采集流程测试，不代表各布局均已证明有效避障。</p>'), '<main>']
+            (f'<p>本轮修复并复审 {report["repair_reviewed_count"]} 条；另外 {report["previous_gates_retained_count"]} 条保留原单轨迹证据，未据此宣称通过新增静置和多seed检查。</p>' if is_avoidance else ''),
+            ('<p>本包另要求：旧基线违反新增实体的安全距离，新轨迹安全且完成原任务。反事实只做几何检查，不执行危险碰撞。</p>' if is_avoidance else '<p>本包为物理任务与采集流程测试，不代表各布局均已证明有效避障。</p>')]
+        for item in resolution_media:
+            gallery.append(f'<article style="max-width:1000px"><h2>{html.escape(item["title"])}</h2><p>{html.escape(item["description"])}</p><video controls preload="metadata" src="{item["file"]}"></video></article>')
+        gallery.append('<main>')
         for row in exported:
             links = ' · '.join(f'<a href="evidence/{row["group"]}/{row["variant"]}/{html.escape(name)}">{html.escape(name)}</a>' for name in row['evidence_files'])
             extra = ''.join(f'<p>{"原基线与新增实体后真实执行对照" if key=="comparison" else "额外场景总览（原三路相机保留）"}</p><video controls preload="metadata" src="{item["file"]}"></video>' for key,item in row['supplemental_videos'].items())
             if 'path_comparison.png' in row['evidence_files']:
                 extra += f'<p>轨迹与间距对照（仅几何反事实，不执行危险旧路径）</p><img style="width:100%" src="evidence/{row["group"]}/{row["variant"]}/path_comparison.png">'
-            gallery.append(f'<article><h2>{row["group_label"]} · {row["variant_label"]}</h2><video controls preload="metadata" src="{row["preview"]}"></video>{extra}<p>{links}</p></article>')
+            scope = ('本轮修复复审通过' if row.get('quality_review', {}).get('repair_reviewed') else '保留原单轨迹证据') if is_avoidance else '物理任务与采集通过'
+            gallery.append(f'<article><h2>{row["group_label"]} · {row["variant_label"]}</h2><p>{scope}</p><video controls preload="metadata" src="{row["preview"]}"></video>{extra}<p>{links}</p></article>')
         gallery.append('</main></html>')
         (stage / 'index.html').write_text('\n'.join(gallery))
         # Replace only this script's generated export directory; stale episodes cannot enter a new ZIP.

@@ -1,5 +1,7 @@
 # 有效避障：强制因果对照与修正记录
 
+**2026-10-22 修复轮：先读 [本组最新修复实测](repair-20261022.md)。三类旧样本因共享背景冰箱自主运动而撤回场景质量验收；修复后两种基线与三类新样本已完成，确切路径、当前命令与范围见最新修复页。**
+
 **2026-10-22 复查：先读 [当前交付验收](review-gates.md)。下面保存旧单基线试验的参数和报告，历史 accepted 不等于当前交付通过。**
 
 本组芥末瓶三条的真实抓放完成仍有记录支持。但 human/attempt_04 的“必要性”未证实：盒代理给出 15.382 mm，而独立整瓶源顶点凸包加机器人/夹爪碰撞网格复核，原基线全部 3848 个物理子步最小 21.047 mm，高于原 20 mm 要求，33 个代理违规消失。没有校验 PhysX cooked shape/contact offsets，不能反向称其绝对无风险。该人体摆位须重设计、重采；property/robot 仍保留单基线的安全裕度/几何相交证据，不能升级为稳定必要性。
@@ -45,7 +47,7 @@ bash scripts/arena_python.sh -m unittest discover -s tests/extensions/replicator
 
 新布局只改obstacle：human `[1.60,-0.55,0]` yaw40°，property `[0.625,-0.59,0.896899501]` yaw0°，robot `[0.61,-0.84,0.896899501]` yaw180°。原厨房、芥末瓶、红碗、机器人及全部7条上游关系不变。人体候选由粗/细/东西两侧CPU网格筛选，最终原pregrasp、抓取、lift和放置端点合法，只约束中间转运；候选04逐动作原轨迹有17个转运状态低于40mm规划间隙，其中最小15.588mm低于20mm执行间隙。
 
-下面命令在当前实现下重新生成配对控制与样本。每个输出名必须尚不存在；不要把旧baseline_01与当前v2策略的新采样混用，验收会拒绝有效控制不一致。
+下面命令已将人体配置更新为修复后的 human_repaired03；最新完整流程（含中性/可动性/三seed配对）见 repair-20261022.md。它们在当前实现下重新生成配对控制与样本。每个输出名必须尚不存在；不要把旧baseline_01与当前v2策略的新采样混用，验收会拒绝有效控制不一致。
 
 ```bash
 python3 student_skills/robolaw-replicator/scripts/preflight.py --repo .
@@ -54,7 +56,7 @@ python3 scripts/extensions/replicator/verify_assets.py
 bash scripts/arena_python.sh -m unittest discover -s tests/extensions/replicator -v
 bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --trial-root avoidance_trials --variant base --attempt repro_base --overview-camera
 bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --trial-root avoidance_trials --variant base --control-profile human --attempt repro_human_base --overview-camera
-bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --trial-root avoidance_trials --variant human --attempt repro_human --layout-json configs/extensions/replicator/avoidance/human_candidate04.json --baseline-episode datasets/avoidance_trials/replicator/base/repro_human_base --overview-camera
+bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --trial-root avoidance_trials --variant human --attempt repro_human --layout-json configs/extensions/replicator/avoidance/human_repaired03.json --baseline-episode datasets/avoidance_trials/replicator/base/repro_human_base --overview-camera
 bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --trial-root avoidance_trials --variant property --attempt repro_property --layout-json configs/extensions/replicator/avoidance/property_candidate02.json --baseline-episode datasets/avoidance_trials/replicator/base/repro_base --overview-camera
 bash scripts/arena_python.sh scripts/extensions/replicator/run_trial.py --trial-root avoidance_trials --variant robot --attempt repro_robot --layout-json configs/extensions/replicator/avoidance/robot_candidate01.json --baseline-episode datasets/avoidance_trials/replicator/base/repro_base --overview-camera
 ```

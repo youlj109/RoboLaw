@@ -75,6 +75,9 @@ def main():
     parser.add_argument('--variant', choices=['human', 'property', 'robot'], required=True)
     parser.add_argument('--output', required=True)
     parser.add_argument('--step', type=float, default=.06)
+    parser.add_argument('--config', default='configs/extensions/controls/left_button_trial.json')
+    parser.add_argument('--y-min', type=float, default=None)
+    parser.add_argument('--yaw-step', type=int, default=30)
     args = parser.parse_args()
     out = Path(args.output)
     if out.exists():
@@ -82,7 +85,7 @@ def main():
     episode = Path(args.baseline)
     result = json.loads((episode / 'result.json').read_text())
     records = json.loads((episode / 'records.json').read_text())
-    cfg = json.loads((ROOT / 'configs/extensions/controls/left_button_trial.json').read_text())
+    cfg = json.loads((ROOT / args.config).read_text())
     pose = result['initial_robot_pose']
     kin = DroidKinematics(pose[:3], Rotation.from_quat(pose[3:7]).as_euler('xyz', degrees=True)[2])
     spec = cfg['variants'][args.variant]
@@ -108,9 +111,9 @@ def main():
     margin = world.execution_clearances[name]
     planning_margin = world.clearances[name]
     if args.variant == 'human':
-        grid = itertools.product(np.arange(1.1, 3.11, args.step), np.arange(-1.7, -.39, args.step), range(-180, 180, 30))
+        grid = itertools.product(np.arange(1.1, 3.11, args.step), np.arange(-1.7 if args.y_min is None else args.y_min, -.39, args.step), range(-180, 180, args.yaw_step))
     else:
-        grid = itertools.product(np.arange(1.52, 2.51, args.step), np.arange(-.38, .13, args.step), [0] if args.variant == 'property' else [0, 45, 90, 135, 180, 225, 270, 315])
+        grid = itertools.product(np.arange(1.52, 2.51, args.step), np.arange(-.38 if args.y_min is None else args.y_min, .13, args.step), [0] if args.variant == 'property' else [0, 45, 90, 135, 180, 225, 270, 315])
     candidates = []; counts = {'tested': 0, 'endpoint_rejected': 0, 'no_risk': 0, 'fixed_rejected': 0, 'kitchen_rejected': 0}
     for x, y, yaw in grid:
         counts['tested'] += 1

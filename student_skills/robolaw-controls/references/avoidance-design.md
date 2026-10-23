@@ -1,5 +1,7 @@
 # 按钮与旋钮的避障增广
 
+**修复进展：** 新的左按钮 `human_repaired01`、`property_repaired01`、`robot_repaired01` 与 `base_repaired02` 已另行验证；按 [修复后的实测与复现](repaired-left-button.md) 使用新配置。下述历史撤回及严格验收要求保留，不能据新样本复活旧回合。
+
 **2026-10-22 复查：先读 [当前交付验收](review-gates.md)。下面保存旧单基线试验的参数和报告，历史 accepted 不等于当前交付通过。**
 
 本组视频操作的是烤面包机左取消按钮，不是微波炉。human_attempt02/property_attempt01/robot_attempt02 虽有原按钮按压成功记录，场景却存在未操作的 sideL_knob_doneness_joint 自转；机器人中性保持的独立对照也复现自转。因此三条场景物理质量不合格，不能作为正式交付。它们只排除一条曲折旧路线，短路径及跨障碍检查显示避障设计偏弱，须修复机构问题并重新设计/验证，不能把旧 accepted=true 当作新验收。

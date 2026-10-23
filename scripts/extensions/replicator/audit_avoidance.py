@@ -5,9 +5,9 @@ import argparse,hashlib,json
 from pathlib import Path
 import h5py,numpy as np
 from scipy.spatial.transform import Rotation
-from audit import audit_episode,hazard_stage,HAZARDS
-from audit_fixed_base import fixed_colliders
-from search_avoidance import load_baseline,kitchen_world,initial_geometry
+from scripts.extensions.replicator.audit import audit_episode,hazard_stage,HAZARDS
+from scripts.extensions.replicator.audit_fixed_base import fixed_colliders
+from scripts.extensions.replicator.search_avoidance import load_baseline,kitchen_world,initial_geometry,settled_index
 from kitchen_safety.extensions.replicator.collision_planner import CollisionWorld
 from kitchen_safety.planning import DroidKinematics
 ROOT=Path(__file__).resolve().parents[3]
@@ -23,7 +23,8 @@ def pose_rows(world,qs,bottles,names,ids,phases,indices,mode):
 
 def controls(result):
  g=result['requested_grasp'];effective=result.get('effective_controls',{})
- return dict(planning_strategy=result.get('planning_strategy','not_recorded_before_v1'),seed=result['seed'],planner_seed=effective.get('planner_seed',result['seed']),planner=result['planner'],tilt_deg=g['tilt_deg'],yaw_deg=g['yaw_deg'],offset_z_m=g['offset_z_m'],offset_y_m=g['offset_y_m'],transport_bottle_height_m=g['transport_bottle_height_m'],supported_release=g['supported_release'],transport_tilt_cap_deg=g['transport_tilt_cap_deg'],placement_strategy=result['placement_strategy'],placement_tcp_height_override_m=g['placement_tcp_height_override_m'],transfer_mode=result['transfer_mode'],transport_object_padding_m=effective.get('transport_object_padding_m',result['layout']['planning'].get('transport_object_padding_m_by_variant',{}).get(result['variant'],0.)))
+ physics=result.get('background_physics') or {}
+ return dict(initial_settling_seconds=effective.get('initial_settling_seconds',2.),background_physics_profile={key:physics.get(key) for key in ['recipe','source_sha256','recipe_sha256','overlay_sha256']},planning_strategy=result.get('planning_strategy','not_recorded_before_v1'),seed=result['seed'],planner_seed=effective.get('planner_seed',result['seed']),planner=result['planner'],tilt_deg=g['tilt_deg'],yaw_deg=g['yaw_deg'],offset_z_m=g['offset_z_m'],offset_y_m=g['offset_y_m'],transport_bottle_height_m=g['transport_bottle_height_m'],supported_release=g['supported_release'],transport_tilt_cap_deg=g['transport_tilt_cap_deg'],placement_strategy=result['placement_strategy'],placement_tcp_height_override_m=g['placement_tcp_height_override_m'],transfer_mode=result['transfer_mode'],transport_object_padding_m=effective.get('transport_object_padding_m',result['layout']['planning'].get('transport_object_padding_m_by_variant',{}).get(result['variant'],0.)))
 def report_passed(value):
  return value.get('passed') is True if isinstance(value,dict) else bool(value) and all(report_passed(x) for x in value)
 def rgb_passed(episode):
@@ -50,14 +51,16 @@ def pose_difference(a,b):
 
 def initial_state_comparison(base,out):
  stages=[]
+ base_index=settled_index(read(base/'result.json')) if (base/'result.json').exists() else 30
+ augmented_index=settled_index(read(out/'result.json')) if (out/'result.json').exists() else 30
  with h5py.File(base/'trajectory.h5') as bf,h5py.File(out/'trajectory.h5') as af:
-  for index,label in [(0,'first_recorded_state'),(30,'settled_before_task_motion')]:
-   qdiff=float(np.max(np.abs(af['obs/q'][index]-bf['obs/q'][index])))
-   robot=pose_difference(af['obs/robot_body_pose_w'][index],bf['obs/robot_body_pose_w'][index])
-   objects={name:pose_difference(af['obs/'+name][index,:7],bf['obs/'+name][index,:7]) for name in ['mustard','bowl']}
-   background=pose_difference(af['obs/background_rigid_poses'][index],bf['obs/background_rigid_poses'][index])
+  for index,other_index,label in [(0,0,'first_recorded_state'),(base_index,augmented_index,'settled_before_task_motion')]:
+   qdiff=float(np.max(np.abs(af['obs/q'][other_index]-bf['obs/q'][index])))
+   robot=pose_difference(af['obs/robot_body_pose_w'][other_index],bf['obs/robot_body_pose_w'][index])
+   objects={name:pose_difference(af['obs/'+name][other_index,:7],bf['obs/'+name][index,:7]) for name in ['mustard','bowl']}
+   background=pose_difference(af['obs/background_rigid_poses'][other_index],bf['obs/background_rigid_poses'][index])
    passed=qdiff<=1e-5 and robot['max_translation_m']<=1e-6 and robot['max_rotation_deg']<=.001 and all(v['max_translation_m']<=.0001 and v['max_rotation_deg']<=.01 for v in objects.values())
-   stages.append(dict(index=index,stage=label,passed=bool(passed),max_robot_joint_difference_rad=qdiff,robot_body_pose_differences=robot,task_object_pose_differences=objects,background_rigid_pose_differences=background))
+   stages.append(dict(index=index,augmented_index=other_index,stage=label,passed=bool(passed),max_robot_joint_difference_rad=qdiff,robot_body_pose_differences=robot,task_object_pose_differences=objects,background_rigid_pose_differences=background))
  return dict(passed=all(s['passed'] for s in stages),stages=stages,tolerances=dict(robot_joint_rad=1e-5,robot_position_m=1e-6,robot_orientation_deg=.001,task_object_position_m=.0001,task_object_orientation_deg=.01),scope='Compare actual recorded initial and settled robot and original task-object states. Tiny rigid-body settling differences are measured explicitly. Background dynamics differences are reported rather than hidden; authored source reset layout and original task relations are checked separately.')
 
 def hazard_stationarity(out,result,stage,settled_pose):
@@ -87,7 +90,7 @@ def main():
  with np.load(base/'physics_states.npz') as f:
   q=f['q'];b=f['mustard'];phases=f['phase'];indices=f['action_index'];pn=f['joint_names'].tolist();pi=f['arm_ids'];rows=pose_rows(world,q,b,pn,pi,phases,indices,'execution')
  required=cfg['execution_clearances_m'][hazard];planning_required=cfg['clearances_m'][hazard];violations=[x for x in rows if not x['valid']];planning_violations=[x for x in rows if x['distance_m']<planning_required or x['intersecting']];middle=[x for x in violations if x['phase'] not in ['settle','release','retreat']];minimum=min(rows,key=lambda x:x['slack_m'])
- endpoints=sorted(set([0,30,len(data['q'])-1]+[max(i for i,p in enumerate(data['phases']) if p==phase) for phase in ['approach','close','lower','release']]))
+ endpoints=sorted(set([0,settled_index(br),len(data['q'])-1]+[max(i for i,p in enumerate(data['phases']) if p==phase) for phase in ['approach','close','lower','release']]))
  endpoint_rows=pose_rows(world,data['q'][endpoints],data['mustard'][endpoints],names,ids,[data['phases'][i] for i in endpoints],endpoints,'planning');feasible=all(x['valid'] for x in endpoint_rows)
  env=kitchen_world(layout,kin,data,br);fixed=fixed_colliders(data['robot_body_pose_w'][0,data['body_names'].index('panda_link0')]);legal,pairs=initial_geometry(world,env,fixed,variant)
  actual=audit_episode(out);fixed_report=read(out/'fixed_base_hazard_audit.json');self_report=read(out/'self_collision_audit.json');source=read(out/'source_relation_audit.json');overview=read(out/'overview_validation.json');base_source=read(base/'source_relation_audit.json');base_self=read(base/'self_collision_audit.json')

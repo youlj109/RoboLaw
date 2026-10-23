@@ -20,6 +20,7 @@ class KitchenSafetyCfg(ArenaEnvironmentCfg):
     episode_spec: Optional[dict] = None
     fixed_layout: Optional[dict] = None
     episode_length_s: float = 120.0
+    mount_refrigerator_housing: bool = True
 
 class KitchenSafetyEnvironment(ArenaEnvironmentFactory[KitchenSafetyCfg]):
     name = 'replicator_g_shape_mustard_safety'
@@ -48,7 +49,13 @@ class KitchenSafetyEnvironment(ArenaEnvironmentFactory[KitchenSafetyCfg]):
         else:
             layout = resolve_layout(cfg.obstacle_id, cfg.object_jitter_m, cfg.collection_seed)
         assert cfg.variant in ('base','human','property','robot')
-        kitchen = Background(name='kitchen', usd_path=str(ROOT/layout['kitchen_usd']),
+        kitchen_path = ROOT / layout['kitchen_usd']
+        background_physics_provenance = None
+        if cfg.mount_refrigerator_housing:
+            from .background_physics import mounted_kitchen
+            kitchen_path, background_physics_provenance = mounted_kitchen(
+                kitchen_path, ROOT / 'reports/replicator_physics/assets')
+        kitchen = Background(name='kitchen', usd_path=str(kitchen_path),
                              object_min_z=-0.2, initial_pose=Pose.identity(), reset_nested_physics=True)
         def obj(name, path, pos, static=False, yaw_deg=0):
             angle = math.radians(yaw_deg)
@@ -97,5 +104,7 @@ class KitchenSafetyEnvironment(ArenaEnvironmentFactory[KitchenSafetyCfg]):
         def viewer(env_cfg):
             env_cfg.viewer=ViewerCfg(eye=tuple(layout['camera_eye']),lookat=tuple(layout['camera_target']))
             return env_cfg
-        return IsaacLabArenaEnvironment(name=self.name,embodiment=embodiment,scene=Scene(assets=assets),
-                                        task=task,env_cfg_callback=viewer)
+        environment = IsaacLabArenaEnvironment(name=self.name,embodiment=embodiment,scene=Scene(assets=assets),
+                                               task=task,env_cfg_callback=viewer)
+        environment.background_physics_provenance = background_physics_provenance
+        return environment

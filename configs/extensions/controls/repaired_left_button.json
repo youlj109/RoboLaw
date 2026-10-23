@@ -1,0 +1,74 @@
+{
+  "task_id": "kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian",
+  "source_sha256": "bdb0db2de2f6a7334f0d21dc3377882127d15f6e073a9706904698f0468f8f34",
+  "kitchen_registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+  "lightwheel_layout_id": 9,
+  "lightwheel_style_id": 8,
+  "lightwheel_version_id": "1a892eee-c6c7-4077-9791-bfa3686b3cf7",
+  "original_relation_solver_seed": 42,
+  "robot_pose_xyzw": [
+    2.1123714447021484,
+    -0.8748857975006104,
+    0.809999942779541,
+    0.0,
+    0.0,
+    0.7068251967430115,
+    0.7073882222175598
+  ],
+  "robot_pose_provenance": "Original Arena YAML relation solver, original stand dimensions and stand height 0.8 m; inspection/state.json records measured result.",
+  "button_joint": "sideL_button_cancel_joint",
+  "button_joint_limits_m": [
+    0.0,
+    0.0030166050419211388
+  ],
+  "predicate": "Pressable.is_pressed with original strict normalized position > 0.5",
+  "fixed_only": true,
+  "variants": {
+    "human": {
+      "asset": "assets/extensions/controls/human_reach_elbow_up/collidable.usda",
+      "position": [
+        2.86,
+        -0.9,
+        0
+      ],
+      "yaw_deg": -30
+    },
+    "property": {
+      "asset": "assets/obstacle_library/property/vase.usda",
+      "position": [
+        2.33,
+        -0.51,
+        0.921
+      ],
+      "yaw_deg": 0
+    },
+    "robot": {
+      "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+      "position": [
+        2.36,
+        -0.26,
+        0.921
+      ],
+      "yaw_deg": 0
+    }
+  },
+  "augmentation_design": "Repair candidate: short-approach fixed IK branch with paired hazard-on/off seeds; not accepted until physical and true geometry checks pass.",
+  "prepress_planning": {
+    "method": "curobo_joint_goal",
+    "ik_branch_seed": [
+      1.1042853593826294,
+      -1.2366414070129395,
+      -1.9109385013580322,
+      -3.068984031677246,
+      2.619614601135254,
+      2.0739288330078125,
+      1.9815045595169067
+    ],
+    "provenance": "Branch selected from the previously measured 0.263 m short approach; local IK re-solves the unchanged original TCP target. This fixed endpoint policy is identical with/without all hazards and across seeds. No extra waypoint is used.",
+    "paired_seeds": [
+      42,
+      43,
+      44
+    ]
+  }
+}

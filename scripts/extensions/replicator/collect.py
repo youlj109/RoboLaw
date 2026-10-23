@@ -41,6 +41,7 @@ parser.add_argument('--camera-device', default=None,
                     help='Optional camera buffer device independent of CPU physics, e.g. cuda:0')
 parser.add_argument('--reuse-planner', action='store_true',
                     help='Update supported cuRobo hazard boxes in place when their measured pose changes')
+parser.add_argument('--initial-settling-seconds', type=float, default=5., help='Recorded open-gripper neutral hold before planning; identical in matched baseline and variant')
 parser.add_argument('--max-steps', type=int, default=0)
 parser.add_argument('--episode-length-s', type=float, default=120.0,
                     help='Arena task timeout in simulation seconds, including initialization; default 120')
@@ -987,10 +988,11 @@ with SimulationAppContext(args):
         return float(candidate['above_pose'][2, 3]) if args.supported_release else hover_z
 
     result = dict(task_id='kitchen_bench_replicator_g_shape_mustard_bowl', variant=args.variant, layout=layout, seed=args.seed or 0,
+                  background_physics=environment.background_physics_provenance,
                   jitter_m=args.jitter, success=False, planner=args.planner, physics_grasp=True,
                   placement_strategy=args.placement_strategy)
     result['planning_strategy']='replicator_obstacle_aware_hover_lift_v2'
-    result['effective_controls'] = dict(collector_options=collector_options, seed=args.seed or 0, planner_seed=planner_seed, transport_object_padding_m=settings.get('transport_object_padding_m_by_variant', {}).get(control_variant,0.), transfer_mode=settings.get('transfer_mode_by_variant',{}).get(control_variant,'front_waypoints'), profile=control_variant)
+    result['effective_controls'] = dict(initial_settling_seconds=args.initial_settling_seconds, initial_settling_actions=int(round(args.initial_settling_seconds/e.step_dt)), collector_options=collector_options, seed=args.seed or 0, planner_seed=planner_seed, transport_object_padding_m=settings.get('transport_object_padding_m_by_variant', {}).get(control_variant,0.), transfer_mode=settings.get('transfer_mode_by_variant',{}).get(control_variant,'front_waypoints'), profile=control_variant)
     if overview_spec is not None:result['overview_camera'] = overview_spec
     if episode_spec:
         result.update(episode_spec=episode_spec, appearance=appearance_report, augmentation_eligible=False)
@@ -1031,7 +1033,9 @@ with SimulationAppContext(args):
                 result['failure_kind'] = 'data_validation_failed'
                 raise RuntimeError('Randomized appearance did not stabilize before recording')
             phase = 'settle'
-        for _ in range(30):
+        if not np.isfinite(args.initial_settling_seconds) or args.initial_settling_seconds < 5.:
+            raise ValueError('Initial source-background settling must be at least the validated 5 seconds')
+        for _ in range(int(round(args.initial_settling_seconds/e.step_dt))):
             step(q, grip)
         world = CollisionWorld(e.sim.stage, kin,
                                clearances=settings.get('clearances_m', {}),

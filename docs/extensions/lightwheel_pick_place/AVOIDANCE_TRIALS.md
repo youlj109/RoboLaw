@@ -1,3 +1,5 @@
+当前修复状态见 docs/extensions/AVOIDANCE_REPAIR_20261022.md：A/D六条新样本完成修复重采，B/C六条保留原证据。以下为历史记录。
+
 2026-10-22 复审更正：本页保留历史过程，不能以其中 passed/accepted 或“通过”代替当前交付状态。A人体真实几何必要性未证实，D三条机构自转及避障设计待修；其余8条仅保留单轨迹证据。当前结论见 docs/extensions/AVOIDANCE_REVIEW_20261022.md 与 avoidance_quality_review.json。
 
 # 青柠任务：真实避障对照补测

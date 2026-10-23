@@ -32,9 +32,12 @@ with SimulationAppContext(args):
     from kitchen_safety.planning import DroidKinematics
     from kitchen_safety.dataset import CameraWriter, numpy as arr, decode_video
     from kitchen_safety.curobo_backend import CuroboPlanner
+    from kitchen_safety.extensions.controls.planning import plan_prepress
     from kitchen_safety.grasp_contacts import _numpy as contact_array
     torch.set_num_threads(4)
-    trial_config=json.loads(Path(args.config).read_text())
+    config_bytes=Path(args.config).read_bytes()
+    trial_config=json.loads(config_bytes)
+    (out/'config.json').write_bytes(config_bytes)
     original_pose=trial_config['robot_pose_xyzw']
     envdef,assets=build_environment(variant=args.variant,fixed_pose=original_pose,trial_config=trial_config)
     envdef.task.episode_length_s=120.
@@ -83,6 +86,7 @@ with SimulationAppContext(args):
         joints=arr(robot.data.joint_pos)[0]
         return dict(q=joints.tolist(),dq=arr(robot.data.joint_vel)[0].tolist(),
             tcp=kin.fk(joints[arm_ids]).tolist(),toaster_q=arr(toaster.data.joint_pos)[0].tolist(),
+            toaster_dq=arr(toaster.data.joint_vel)[0].tolist(),
             robot_body_pose=np.c_[arr(robot.data.body_pos_w)[0],arr(robot.data.body_quat_w)[0]].tolist(),
             toaster_body_pose=np.c_[arr(toaster.data.body_pos_w)[0],arr(toaster.data.body_quat_w)[0]].tolist(),
             contact_forces=arr(robot_contacts.data.net_forces_w)[0].tolist(),
@@ -104,7 +108,14 @@ with SimulationAppContext(args):
         world.allow_button_contact=(phase in ('press','hold'))
         valid=world.valid(np.array(state['q'])[arm_ids],mode='execution',
             gripper_q={k:joints[k] for k in world.GRIPPER_JOINT_NAMES})
-        entry={'action_index':len(records),'phase':phase,'valid':bool(valid)}
+        target_contacts={}
+        for name,view in views.items():
+            force,points,normals,separation,counts,starts=map(contact_array,view.get_contact_data(dt=cfg.sim.dt))
+            n=int(counts.reshape(-1)[0]);a=int(starts.reshape(-1)[0])
+            target_contacts[name]={'count':n,'normal_force':force[a:a+n].reshape(-1).tolist()}
+        entry={'action_index':len(records),'phase':phase,'valid':bool(valid),
+               'toaster_q':state['toaster_q'],'toaster_dq':state['toaster_dq'],
+               'button_contacts':target_contacts,'hazard_pose':state['hazard_pose']}
         if not valid:entry['violation']=world.last_clearance
         physics_audits.append(entry)
         if not valid:raise RuntimeError('Physics-step clearance violation: '+json.dumps(entry))
@@ -151,7 +162,7 @@ with SimulationAppContext(args):
         target[:3,:3]=Rotation.from_euler('z',90,degrees=True).as_matrix()@Rotation.from_euler('x',args.roll_deg,degrees=True).as_matrix()
         target[:3,3]=[2.08087763+args.tcp_x_offset,-.44,1.03313965+args.tcp_z_offset]
         phase='prepress'
-        plan=planner.plan_pose(q,target,grip_binary=1,phase='prepress')
+        plan=plan_prepress(planner,q,target,trial_config.get('prepress_planning'))
         validation=planner.validate_path(plan['positions'],grip_binary=1,phase='prepress')
         plan['metadata']['dense_path_validation']=validation
         plan['metadata']['requested_tcp_pose']=target.tolist()
@@ -206,6 +217,7 @@ with SimulationAppContext(args):
         # corroborated by button displacement and robot net contact forces.
         loaded_contact_count=sum(sum(abs(f)>.01 for f in v['force']) for c in contacts for v in c['fingers'].values())
         result={'task_id':TASK_ID,'variant':args.variant,'seed':args.seed or 42,
+            'toaster_physics_provenance':getattr(envdef,'toaster_physics_provenance',None),
             'source_sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
             'success':success_step is not None,'success_action_index':success_step,
             'accepted':bool(success_step is not None and failure is None and loaded_contact_count>0 and validation['passed']),
@@ -214,14 +226,17 @@ with SimulationAppContext(args):
             'button_joint_limits_m':[0.,.0030166050419211388],
             'original_predicate':'Pressable.is_pressed(normalized_joint_position > 0.5)',
             'variant_spec':trial_config['variants'].get(args.variant),
-            'config_sha256':hashlib.sha256(Path(args.config).read_bytes()).hexdigest(),
+            'config_sha256':hashlib.sha256(config_bytes).hexdigest(),
             'initial_state':initial_state,
             'control_parameters':{'planner_seed':args.seed or 42,'max_joint_speed_rad_s':.4,
+                'prepress_planning':trial_config.get('prepress_planning',{'method':'curobo_pose'}),
                 'roll_deg':args.roll_deg,'tcp_z_offset_m':args.tcp_z_offset,'tcp_x_offset_m':args.tcp_x_offset,
                 'press_y_increment_m':.0005,'physics_actions_per_press_increment':2},
             'final':snapshot(),'initial_robot_pose':original_pose,
             'physical_object_setters_after_reset':False,'fixed_only':True,'dt':e.step_dt,
+            'physics_dt':cfg.sim.dt,
             'robot_body_names':robot.body_names,'robot_joint_names':robot.joint_names,
+            'toaster_body_names':toaster.body_names,'toaster_joint_names':toaster.joint_names,
             'robot_contact_body_names':robot_contacts.body_names,
             'action_semantics':'7 absolute arm joint targets in rad + binary gripper (0=open,1=closed)'}
         (out/'result.json').write_text(json.dumps(result,indent=2))

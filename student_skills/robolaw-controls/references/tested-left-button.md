@@ -1,5 +1,7 @@
 # 左取消按钮：真实试用所得的实现约束
 
+**修复进展：** 新的左按钮 `human_repaired01`、`property_repaired01`、`robot_repaired01` 与 `base_repaired02` 已另行验证；按 [修复后的实测与复现](repaired-left-button.md) 使用新配置。下述历史撤回及严格验收要求保留，不能据新样本复活旧回合。
+
 > 以下记录保留首轮物理/采集试用及其历史限制，不能据其中三条成功认定避障有效。后续新增场景必须采用同源无障碍基线、原间隙反事实违例、新轨迹安全成功的成对验收；技能参考 `references/avoidance-design.md`，新配置为 `configs/extensions/controls/avoidance_left_button.json`，新数据位于 `datasets/avoidance_trials/controls/`。
 
 本轮用户要求每个技能选择一个原任务，构建人体、财产、机器人周边障碍三个变体，每变体一条真实采集并保存视频；这是对 workflow 默认三条要求的本轮覆盖，不是批采成功率结论。
