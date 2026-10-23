@@ -55,12 +55,19 @@ def main():
                     controller_parameters=metadata['controller_parameters'],
                     implementation_sha256=metadata['implementation_sha256'],
                     visual_review=item['visual_review'])
-        extra_files = [Path(item['visual_review']), Path(visual['image'])]
+        evidence_roots = [root, neutral]
+        extra_files = [Path(item['visual_review']), Path(visual['image']), Path(metadata['variant_config'])]
         if variant != 'base':
             baseline = Path(item['baseline'])
             bm = read(baseline / 'metadata.json')
             require(all(read(baseline / name).get(key) for name, key in required),
                     f'{root}: baseline rejected')
+            baseline_review = read(baseline / 'task_review_audit.json')
+            require(all(baseline_review['matching_neutral'][key] for key in
+                        ['same_parameters', 'covers_operation_duration', 'passed']),
+                    f'{root}: baseline matching neutral rejected')
+            evidence_roots += [baseline, Path(baseline_review['matching_neutral']['path'])]
+            extra_files.append(Path(bm['variant_config']))
             require(metadata['controller_parameters'] == bm['controller_parameters'] and
                     metadata['robot_base'] == bm['robot_base'] and
                     metadata['robot_yaw_deg'] == bm['robot_yaw_deg'] and
@@ -110,14 +117,16 @@ def main():
             require(sha(snapshot['path']) == snapshot['sha256'], f'{root}: source snapshot changed: {relative}')
         if not metadata.get('source_snapshot'):
             limitations.append(f'{root}: historical implementation hashes retained; immutable runtime source copies were not captured.')
-        files = extra_files + [p for directory in [root, neutral] for p in directory.rglob('*')
+        files = extra_files + [p for directory in evidence_roots for p in directory.rglob('*')
                                if p.is_file() and 'arena' not in p.relative_to(directory).parts]
         for path in files:
             manifest[str(path)] = dict(bytes=path.stat().st_size, sha256=sha(path))
         episodes[variant] = info
     test_log = Path(selected['unit_test_log']).read_text()
     test_count=re.search(r'Ran (\d+) tests',test_log)
-    require(test_count and int(test_count.group(1))>=34 and test_log.rstrip().endswith('OK'), 'Current unit tests not accepted')
+    require(test_count and int(test_count.group(1))>=37 and test_log.rstrip().endswith('OK'), 'Current unit tests not accepted')
+    manifest[selected['unit_test_log']] = dict(bytes=Path(selected['unit_test_log']).stat().st_size,
+                                               sha256=sha(selected['unit_test_log']))
     limitations += ['One original fixed layout; planning seeds are not physical success rates or proof about all paths.',
                     'Tangential forces and ordering inside one physics substep remain unmeasured.',
                     'FCL source geometry checks do not assert equivalence to PhysX cooked shapes.']

@@ -268,7 +268,10 @@ with SimulationAppContext(a):
                 world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])
                 sync(update_planner=True)
                 planner._prepare_path_query(handles,0.,phase)
-                if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(command[None])).all()):raise RuntimeError('cuRobo rejected contact approach')
+                if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(command[None])).all()):
+                    rejection={'phase':phase,'action_index':len(rows),'approach_fraction':float(alpha),'command_q':command.tolist(),'target_pose':target.tolist(),'measured_state':snapshot(),'fcl_execution_clearance':world.clearance(command,mode='execution',gripper_q={name:float(arr(robot.data.joint_pos)[0,robot.joint_names.index(name)]) for name in world.GRIPPER_JOINT_NAMES}),'scope':'Rejected command was not executed. FCL external geometry does not explain every GPU self-collision or planning constraint.'}
+                    (out/'rejected_command.json').write_text(json.dumps(rejection,indent=2))
+                    raise RuntimeError('cuRobo rejected contact approach')
                 step(command,0.)
             phase='grasp_handle'
             for _ in range(20):step(q,1.)

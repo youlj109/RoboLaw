@@ -79,3 +79,29 @@ class OpeningCommandTests(unittest.TestCase):
   np.testing.assert_allclose(R,np.diag([1.,-1.,-1.])@Rotation.from_euler('x',45,degrees=True).as_matrix(),atol=1e-12)
   tilted=grasp_rotation(a,45.,15.)
   self.assertAlmostEqual(Rotation.from_matrix(R.T@tilted).magnitude(),np.pi/12)
+
+
+class AffineSourceBoxTests(unittest.TestCase):
+ def test_sheared_cube_face_normals_in_world_metres(self):
+  from pxr import Usd,UsdGeom
+  stage=Usd.Stage.CreateInMemory();cube=UsdGeom.Cube.Define(stage,'/Handle');cube.CreateSizeAttr(2.)
+  T=np.eye(4);T[:3,:3]=[[.023,.004,0.],[0.,.014,-.0066],[0.,-.0011,.0673]];T[:3,3]=[4.3,-.85,1.35]
+  distance=source_distance(cube.GetPrim(),T)
+  self.assertEqual(distance(T[:3,3]),0.)
+  for axis in range(3):
+   for sign in [-1.,1.]:
+    local=np.zeros(3);local[axis]=sign;face=T[:3,:3]@local+T[:3,3]
+    normal=np.linalg.inv(T[:3,:3]).T@local;normal/=np.linalg.norm(normal)
+    self.assertAlmostEqual(distance(face+normal*.007),.007,places=11)
+ def test_affine_box_matches_independent_bounded_solver(self):
+  from scipy.optimize import lsq_linear
+  from kitchen_safety.extensions.doors.primitive_distance import affine_box_solid_distance
+  rng=np.random.default_rng(20261024);T=np.eye(4);T[:3,:3]=[[.023,.004,0.],[0.,.014,-.0066],[0.,-.0011,-.0673]];T[:3,3]=[4.3,-.85,1.35]
+  distance=affine_box_solid_distance(T,1.)
+  for local in rng.uniform(-3.,3.,(30,3)):
+   v=T[:3,:3]@local;reference=lsq_linear(T[:3,:3],v,bounds=(-1.,1.),tol=1e-14)
+   self.assertAlmostEqual(distance(v+T[:3,3]),np.linalg.norm(T[:3,:3]@reference.x-v),places=8)
+ def test_degenerate_affine_box_is_rejected(self):
+  from kitchen_safety.extensions.doors.primitive_distance import affine_box_solid_distance
+  T=np.eye(4);T[:3,1]=T[:3,0]
+  with self.assertRaises(ValueError):affine_box_solid_distance(T,1.)
