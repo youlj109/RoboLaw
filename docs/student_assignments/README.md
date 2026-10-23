@@ -166,7 +166,7 @@ cd RoboLaw-personal
 
 ### 启动技能并开发
 
-1. 读取仓库中的对应技能。Codex可安装整份技能目录后调用；Cursor可直接将SKILL.md加入文件上下文，要求Agent读取其相对引用。无需先依赖特定IDE插件安装方式。
+1. 读取仓库中的对应技能，或[下载四组技能 ZIP 包](https://raw.githubusercontent.com/youlj109/RoboLaw/refs/heads/ylj/exports/robolaw-student-skills.zip)。ZIP 内包含 `student_skills/`，解压后每人使用本组完整目录，保留 `SKILL.md`、`references/`、`scripts/` 和 `START_PROMPT.txt`。Codex可安装整份技能目录后调用；Cursor可直接将SKILL.md加入文件上下文，要求Agent读取其相对引用。无需先依赖特定IDE插件安装方式。
 2. 打开本人的A/B/C/D_PROMPT.md，将代码块完整复制给Agent。也可直接复制线上个人 Prompt 到当前主分支上的 Agent，它会先确认本人姓名缩写并处理分支，再读取技能、执行CPU预检。
 3. 复现本组首任务，补齐未通过的新检查；随后逐个扩展任务，完成一个即可增量提交。不要等待另外三组。
 
@@ -185,6 +185,6 @@ cd RoboLaw-personal
 - [C组直接可用Prompt](C_PROMPT.md)
 - [D组直接可用Prompt](D_PROMPT.md)
 - [修复总报告](../extensions/AVOIDANCE_REPAIR_20261022.md)
-- 四份技能包：`exports/robolaw-student-skills.zip`（本机生成文件，不随Git提供；从云端获取时直接使用 `student_skills/` 中的完整目录）
+- [四组技能 ZIP 包](../../exports/robolaw-student-skills.zip)（已随Git提供；[直接下载](https://raw.githubusercontent.com/youlj109/RoboLaw/refs/heads/ylj/exports/robolaw-student-skills.zip)，也可直接使用仓库 `student_skills/` 中的完整目录）
 
 assignment.json中的base_commit是最初分工时的历史基线；此次开发从origin/ylj及已包含的76de5bb修复开始。任务YAML与依赖哈希仍按原清单核对，不能随意更新哈希绕过不一致。
