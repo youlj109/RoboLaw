@@ -1,0 +1,980 @@
+{
+  "accepted": true,
+  "baseline_episode": "datasets/doors/lwx_C02_C03_20261023/C03_base_05",
+  "baseline_sha256": "10151089cd37be069f880fc2bb59f12a9e2ada047607e0eb4c0789f6b9fb6eaf",
+  "same_source_layout": true,
+  "baseline_counterfactual": {
+    "passed": false,
+    "violates_safety_margin": true,
+    "violates_free_pregrasp": true,
+    "min_distance_m": 0.0,
+    "required_m": 0.01,
+    "violations": [
+      {
+        "action_index": 52,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.009337223950737192,
+        "required_m": 0.01,
+        "slack_m": -0.0006627760492628077,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 53,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.009337223950737192,
+        "required_m": 0.01,
+        "slack_m": -0.0006627760492628077,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 53,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.006068068695302938,
+        "required_m": 0.01,
+        "slack_m": -0.003931931304697062,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 54,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.006068068695302938,
+        "required_m": 0.01,
+        "slack_m": -0.003931931304697062,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 54,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0029766685880787272,
+        "required_m": 0.01,
+        "slack_m": -0.007023331411921273,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 55,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0029766685880787272,
+        "required_m": 0.01,
+        "slack_m": -0.007023331411921273,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 55,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 6.889375449174868e-05,
+        "required_m": 0.01,
+        "slack_m": -0.009931106245508251,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 56,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 6.889375449174868e-05,
+        "required_m": 0.01,
+        "slack_m": -0.009931106245508251,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 56,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 57,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 57,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 58,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 58,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 59,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 59,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 60,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 60,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 61,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 61,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 62,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 62,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 63,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 63,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 64,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 64,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 65,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 65,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 66,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 66,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 67,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 67,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 68,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 68,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 69,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 69,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 70,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 70,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 71,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      {
+        "action_index": 71,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0035127458963701494,
+        "required_m": 0.01,
+        "slack_m": -0.006487254103629851,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 72,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0035127458963701494,
+        "required_m": 0.01,
+        "slack_m": -0.006487254103629851,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 72,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.008500832034114638,
+        "required_m": 0.01,
+        "slack_m": -0.0014991679658853622,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 73,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.008500832034114638,
+        "required_m": 0.01,
+        "slack_m": -0.0014991679658853622,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 81,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.009230784073121211,
+        "required_m": 0.01,
+        "slack_m": -0.0007692159268787892,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 82,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.009230784073121211,
+        "required_m": 0.01,
+        "slack_m": -0.0007692159268787892,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 82,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.005875486883599335,
+        "required_m": 0.01,
+        "slack_m": -0.004124513116400665,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 83,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.005875486883599335,
+        "required_m": 0.01,
+        "slack_m": -0.004124513116400665,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 83,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.003008087866349467,
+        "required_m": 0.01,
+        "slack_m": -0.006991912133650533,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 84,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.003008087866349467,
+        "required_m": 0.01,
+        "slack_m": -0.006991912133650533,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 84,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0010761609421784705,
+        "required_m": 0.01,
+        "slack_m": -0.00892383905782153,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 85,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0010761609421784705,
+        "required_m": 0.01,
+        "slack_m": -0.00892383905782153,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 85,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0005774287893468437,
+        "required_m": 0.01,
+        "slack_m": -0.009422571210653156,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 86,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0005774287893468437,
+        "required_m": 0.01,
+        "slack_m": -0.009422571210653156,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 86,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0015913654478503076,
+        "required_m": 0.01,
+        "slack_m": -0.008408634552149692,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 87,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0015913654478503076,
+        "required_m": 0.01,
+        "slack_m": -0.008408634552149692,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 87,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0036584052416519003,
+        "required_m": 0.01,
+        "slack_m": -0.0063415947583481,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 88,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0036584052416519003,
+        "required_m": 0.01,
+        "slack_m": -0.0063415947583481,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 88,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.006213920522345256,
+        "required_m": 0.01,
+        "slack_m": -0.0037860794776547442,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 89,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.006213920522345256,
+        "required_m": 0.01,
+        "slack_m": -0.0037860794776547442,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 89,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.008904239050490577,
+        "required_m": 0.01,
+        "slack_m": -0.0010957609495094237,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      },
+      {
+        "action_index": 90,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.008904239050490577,
+        "required_m": 0.01,
+        "slack_m": -0.0010957609495094237,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      }
+    ],
+    "minimum": {
+      "action_index": 56,
+      "phase": "pregrasp",
+      "side": "next_obs",
+      "distance_m": 0.0,
+      "required_m": 0.01,
+      "slack_m": -0.01,
+      "valid": false,
+      "robot_part": "gripper/left_outer_finger",
+      "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+      "intersecting": true
+    },
+    "samples": 854,
+    "geometry": "Actual robot collision hulls and articulated gripper meshes; exact USD cylinders/cubes/capsules and original hazard meshes. Coarse arm/finger capsules and primitive world-AABBs cannot establish necessity.",
+    "conservative_safety_model_minimum": {
+      "distance_m": 0.0,
+      "required_m": 0.01,
+      "slack_m": -0.01,
+      "valid": false,
+      "robot_part": "gripper/left_outer_finger",
+      "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+      "intersecting": true
+    }
+  },
+  "augmented_actual": {
+    "passed": true,
+    "min_distance_m": 0.09352790465541566,
+    "required_m": 0.01,
+    "minimum": {
+      "physics_record": 0,
+      "action_index": 0,
+      "phase": "startup",
+      "distance_m": 0.09352790465541566,
+      "required_m": 0.01,
+      "slack_m": 0.08352790465541567,
+      "valid": true,
+      "robot_part": "gripper/left_outer_finger",
+      "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+      "intersecting": false
+    },
+    "conservative_safety_model_minimum": {
+      "physics_record": 0,
+      "action_index": 0,
+      "phase": "startup",
+      "distance_m": 0.04298499491221058,
+      "required_m": 0.01,
+      "slack_m": 0.03298499491221058,
+      "valid": true,
+      "robot_part": "gripper/left_outer_finger",
+      "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+      "intersecting": false
+    },
+    "samples": 3924
+  },
+  "initial_and_goal_feasible": true,
+  "goal_tcp_error_m": 0.0002455338525753514,
+  "goal_tcp_rotation_error_rad": 0.004463645625974939,
+  "hazard_environment_legal": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.25015953586494327,
+    "tcp_max_deviation_m": 0.13913726024169182,
+    "baseline_samples": 131,
+    "augmented_samples": 136,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "baseline_independent_gates": {
+    "passed": true,
+    "reports": {
+      "result.json": {
+        "passed": true,
+        "sha256": "752483d4abb2a07a68dc45e3147462ee14cc86b324e244380de4702834366b72"
+      },
+      "task_validation_full.json": {
+        "passed": true,
+        "sha256": "59a09d9ecee9cbb7167e9d0ceb755bc62dcdaf74680f9e414c2cc9ad4287d836"
+      },
+      "self_collision_audit.json": {
+        "passed": true,
+        "sha256": "91b0346255138ce649fc204f58af93b38b98dd3459c7ee63541f4327fdb9cc89"
+      }
+    }
+  },
+  "actual_independent_gates": {
+    "passed": true,
+    "reports": {
+      "result.json": {
+        "passed": true,
+        "sha256": "ad490679703ae4ca246dcbc10068caa1ab78c6292816a58e382c1389a42f9f85"
+      },
+      "task_validation_full.json": {
+        "passed": true,
+        "sha256": "070a58c42cd2caae9d8f320f2ea8aec94fd607b725f28dd892d88ec87606f840"
+      },
+      "self_collision_audit.json": {
+        "passed": true,
+        "sha256": "33e6b67dd010c8315769fac2ef2df164c0e228394db4b5d69940639ca2dd2c45"
+      }
+    }
+  },
+  "same_controller_policy": true,
+  "recorded_controller_parameters": {
+    "baseline": {
+      "seed": 42,
+      "handle_offset_y": 0.0,
+      "handle_offset_z": 0.12,
+      "max_joint_speed": 0.5,
+      "grasp_roll_deg": 45.0,
+      "pull_lead_rad": 0.07,
+      "pull_steps": 500,
+      "ik_limit_margin_rad": 0.005,
+      "handle_normal_offset_m": -0.005,
+      "pregrasp_validation": {
+        "version": "dense_pregrasp_v4",
+        "resolution_rad": 0.005,
+        "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+      }
+    },
+    "augmented": {
+      "seed": 42,
+      "handle_offset_y": 0.0,
+      "handle_offset_z": 0.12,
+      "max_joint_speed": 0.5,
+      "grasp_roll_deg": 45.0,
+      "pull_lead_rad": 0.07,
+      "pull_steps": 500,
+      "ik_limit_margin_rad": 0.005,
+      "handle_normal_offset_m": -0.005,
+      "pregrasp_validation": {
+        "version": "dense_pregrasp_v4",
+        "resolution_rad": 0.005,
+        "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+      }
+    }
+  },
+  "handle_target_check": {
+    "selected_point": [
+      5.152184789004891,
+      -1.6744460918272397,
+      1.2020755476943146
+    ],
+    "source_handle_bounds": [
+      [
+        5.1394535904736705,
+        -1.6909896022718724,
+        0.6852210905271838
+      ],
+      [
+        5.261712179813991,
+        -1.658014264442342,
+        1.4767812372783884
+      ]
+    ],
+    "point_on_source_handle": true,
+    "candidate_offsets_m": [
+      0.12
+    ],
+    "selected_offset_m": 0.12,
+    "candidate_failures": []
+  },
+  "entity_support": [
+    {
+      "entity": "barrier",
+      "supported": true,
+      "contacts": [
+        {
+          "entity_collider": "/World/envs/env_0/barrier/BoltedBase",
+          "support_collider": "/World/envs/env_0/robot_pedestal/Column",
+          "distance_m": 0.0,
+          "bottom_minus_support_top_m": -1.1801719601578498e-08
+        }
+      ]
+    },
+    {
+      "entity": "robot_pedestal",
+      "supported": true,
+      "contacts": [
+        {
+          "entity_collider": "/World/envs/env_0/robot_pedestal/Column",
+          "support_collider": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 1.2144446323580915e-08,
+          "bottom_minus_support_top_m": 1.214444637562262e-08
+        }
+      ]
+    }
+  ],
+  "property_stability": {
+    "required": false,
+    "passed": true
+  },
+  "source_task_success": true,
+  "initial_issues": [],
+  "support_contact_colliders": [
+    "/World/envs/env_0/kitchen/floor_room/geometry"
+  ],
+  "door_failures": [],
+  "support_failures": [],
+  "fixed_base_failures": [],
+  "sampling": "Baseline original observed states before and after each 15 Hz action; augmented actual robot and moving door recorded at every 120 Hz physics step plus action postchecks. Unsafe baseline never executed with hazards.",
+  "variant_spec": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.683763694763184,
+      -1.1950602293014518,
+      0.959999942779541
+    ],
+    "yaw_deg": 45.0,
+    "static": true,
+    "semantic_anchor": "Substantial actual baseline pregrasp obstruction, fixed source layout and same handle target; paired planning and physical validation required.",
+    "baseline_intersection_actions": [
+      58,
+      62,
+      66,
+      70
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/c03_variants_lwx_04_robot_support.usda",
+      "position": [
+        4.683763694763184,
+        -1.1950602293014518,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.598763694763184,
+          -1.2800602293014518,
+          -4.470348362317633e-10
+        ],
+        [
+          4.768763694763184,
+          -1.1100602293014519,
+          0.959999942779541
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry"
+    },
+    "candidate_search": "reports/doors/lwx_C02_C03_20261023/C03_robot_search_01.json",
+    "candidate_index": 12
+  }
+}

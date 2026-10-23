@@ -75,7 +75,8 @@ def main():
                     f'{root}: baseline policy or layout mismatch')
             require(read(root / 'avoidance_audit.json')['accepted'], f'{root}: actual avoidance rejected')
             paired = read(item['paired_report'])
-            require(paired['controller_parameters'] == metadata['controller_parameters'] and
+            require(paired['variant'] == variant and
+                    paired['controller_parameters'] == metadata['controller_parameters'] and
                     paired['baseline_sha256'] == sha(baseline / 'trajectory.json') and
                     paired['config_sha256'] == sha(metadata['variant_config']) and
                     paired.get('command_ik_margin_applied_rad', 0.) ==

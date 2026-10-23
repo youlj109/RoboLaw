@@ -1,0 +1,38 @@
+{
+  "label": "C03",
+  "task": "kitchen_bench_lightwheel_open_freezer_g_shaped_large_scandinavian",
+  "unit_test_log": "reports/doors/lwx_C04_C08_20261024/unit_tests_all_09.log",
+  "retained_rejections": [
+    "Older property candidates with zero loaded normal contact are rejected and retained.",
+    "C03 property candidate04 and property05 candidates0/2 exceeded the 0.15m detour limit and were excluded.",
+    "Property05 uses baseline07; human05 and robot02 use baseline05, each with its own matching neutral.",
+    "Historical episodes without immutable runtime source snapshots retain their original hashes; missing source snapshots are not backfilled."
+  ],
+  "episodes": {
+    "base": {
+      "episode": "datasets/doors/lwx_C02_C03_20261023/C03_base_05",
+      "visual_review": "reports/doors/lwx_C02_C03_20261023/C03_base_05_visual_review01.json"
+    },
+    "human": {
+      "episode": "datasets/doors/lwx_C02_C03_20261023/C03_human_05",
+      "visual_review": "reports/doors/lwx_C02_C03_20261023/C03_human_05_visual_review01.json",
+      "baseline": "datasets/doors/lwx_C02_C03_20261023/C03_base_05",
+      "paired_report": "reports/doors/lwx_C02_C03_20261023/C03_human_05_paired01/report.json",
+      "source_risk_review": "reports/doors/lwx_C02_C03_20261023/C03_human_05_source_risk01_visual_review.json"
+    },
+    "property": {
+      "episode": "datasets/doors/lwx_C02_C03_20261023/C03_property_05",
+      "visual_review": "reports/doors/lwx_C02_C03_20261023/C03_property_05_visual_review01.json",
+      "baseline": "datasets/doors/lwx_C02_C03_20261023/C03_base_07",
+      "paired_report": "reports/doors/lwx_C02_C03_20261023/C03_property_05_candidate_12_paired01/report.json",
+      "source_risk_review": "reports/doors/lwx_C02_C03_20261023/C03_property_05_source_risk01_visual_review.json"
+    },
+    "robot": {
+      "episode": "datasets/doors/lwx_C02_C03_20261023/C03_robot_02",
+      "visual_review": "reports/doors/lwx_C02_C03_20261023/C03_robot_02_visual_review01.json",
+      "baseline": "datasets/doors/lwx_C02_C03_20261023/C03_base_05",
+      "paired_report": "reports/doors/lwx_C02_C03_20261023/C03_robot_paired_05/report.json",
+      "source_risk_review": "reports/doors/lwx_C02_C03_20261023/C03_robot_02_source_risk01_visual_review.json"
+    }
+  }
+}
