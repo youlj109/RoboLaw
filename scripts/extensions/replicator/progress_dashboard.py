@@ -39,6 +39,16 @@ def iso(stamp: float | None = None) -> str:
     return datetime.fromtimestamp(time.time() if stamp is None else stamp, timezone.utc).isoformat()
 
 
+def physical_success(data: dict) -> bool:
+    """Normalize the two saved collector schemas without treating planning as execution."""
+    if (data.get("diagnostic_only") is True or data.get("status") in ("failed", "error") or data.get("error")
+            or data.get("physical_failure_reasons") or data.get("clearance_failure")):
+        return False
+    if "physical_trial_passed" in data or "original_task_success" in data:
+        return data.get("physical_trial_passed") is True and data.get("original_task_success") is True
+    return all(data.get(key) is True for key in ("success", "arena_success", "physics_grasp", "final_on_destination"))
+
+
 class Progress:
     def __init__(self, root: Path):
         self.root = root.resolve()
@@ -47,6 +57,8 @@ class Progress:
         self.cached = None
         self.json_cache: dict[str, tuple[tuple[int, int], dict]] = {}
         self.hash_cache: dict[str, tuple[tuple[int, int], str]] = {}
+        self.log_cache: dict[str, tuple[tuple[int, int], set[Path]]] = {}
+        self.report_logs: dict[str, list[Path]] | None = None
 
     def json(self, path: Path) -> dict:
         try:
@@ -76,24 +88,83 @@ class Progress:
         return {"label": label or path.name, "url": "/artifact/" + quote(rel, safe="/"),
                 "kind": "video" if path.suffix == ".mp4" else "report"}
 
+    def episode_log(self, episode: Path) -> Path | None:
+        """Bind only a unique log whose explicit JSON output is this exact episode.
+
+        Matching the basename alone is insufficient: different tasks/variants
+        routinely reuse attempt names. Logs without an output identity stay unlinked.
+        """
+        if self.report_logs is None:
+            self.report_logs = {}
+            for log in self.root.glob("reports/replicator_execution*/**/*.log"):
+                self.report_logs.setdefault(log.stem.replace("_", ""), []).append(log)
+        candidates = [episode.with_suffix(".log"), *self.report_logs.get(episode.name.replace("_", ""), [])]
+        matches = []
+        for log in dict.fromkeys(candidates):
+            try:
+                st = log.stat()
+                stamp, key = (st.st_mtime_ns, st.st_size), str(log)
+                if key not in self.log_cache or self.log_cache[key][0] != stamp:
+                    with log.open("rb") as stream:
+                        stream.seek(max(0, st.st_size - 256 * 1024))
+                        text = stream.read().decode(errors="replace")
+                    outputs = set()
+                    for value in re.findall(r'"output"\s*:\s*("(?:[^"\\]|\\.)*")', text):
+                        try:
+                            outputs.add(self.local(json.loads(value)))
+                        except (ValueError, TypeError):
+                            outputs.add(Path("/unverified-output"))
+                    self.log_cache[key] = (stamp, outputs)
+                if self.log_cache[key][1] == {episode.resolve()} and self.artifact(log):
+                    matches.append(log)
+            except OSError:
+                continue
+        return matches[0] if len(matches) == 1 else None
+
     def entry(self, path: Path, data: dict, kind: str = "episode") -> dict:
-        status = "partial" if data.get("physical_trial_passed") is True and data.get("original_task_success") is True else "failed"
+        success = kind == "episode" and physical_success(data)
+        status = "partial" if success else "failed"
+        reason = str(data.get("error") or data.get("failure_reason") or data.get("reason") or "")
         if kind != "episode":
-            status = "partial" if data.get("passed") is True or data.get("neutral_passed") is True else "failed"
+            status = "check_passed" if data.get("passed") is True or data.get("neutral_passed") is True else "failed"
+        if kind == "neutral" and "neutral_probe_passed" in data:
+            audit = data.get("physical_evidence_audit") or {}
+            failed_checks = [name for name, passed in audit.get("checks", {}).items() if passed is False]
+            passed = (data.get("neutral_probe_passed") is True
+                      and data.get("neutral_sequence_complete") is True
+                      and audit.get("passed") is True and not failed_checks)
+            status = "check_passed" if passed else "failed"
+            if not reason:
+                labels = {"background_stable": "背景物体不稳定（background_stable）"}
+                detail = "、".join(labels.get(name, name) for name in failed_checks)
+                reason = "静置检查通过；尚不代表原始任务完成。" if passed else "静置检查未通过" + ("：" + detail if detail else "；详见运行报告。")
+        if kind == "diagnostic":
+            completed = (data.get("diagnostic_completed") is True
+                         and data.get("status") == "bounded_observation_complete"
+                         and not data.get("error"))
+            status = "partial" if completed else "failed"
+            prefix = "诊断观测已结束；尚未验收，不计原始任务成功。" if completed else "诊断失败；不计原始任务成功。"
+            reason = prefix + (" " + reason if reason else "")
         artifacts = []
-        candidates = [(path, "运行报告"), (path.parent / "all_cameras.mp4", "原始多视角视频"),
+        report_label = "诊断报告" if kind == "diagnostic" else "运行报告"
+        candidates = [(path, report_label), (path.parent / "all_cameras.mp4", "原始多视角视频"),
                       (path.parent / "external_camera_2.mp4", "原始外部相机"),
                       (path.parent / "wrist_camera.mp4", "原始腕部相机"),
-                      (path.parent / "overview" / "overview.mp4", "总览视频"),
-                      (path.parent.with_suffix(".log"), "运行日志")]
+                      (path.parent / "overview" / "overview_camera.mp4", "总览视频"),
+                      (path.parent / "overview" / "overview.mp4", "总览视频")]
+        log = self.episode_log(path.parent) if kind == "episode" else path.parent.with_suffix(".log")
+        if log:
+            candidates.append((log, "运行日志"))
+        if kind in ("neutral", "diagnostic") and path.name == "result.json":
+            candidates.append((path.parent / "launch_failure.json", "启动器退出报告"))
         for p, label in candidates:
             a = self.artifact(p, label)
             if a:
                 artifacts.append(a)
         return {"path": path.relative_to(self.root).as_posix(), "kind": kind, "status": status,
-                "reason": str(data.get("error") or data.get("failure_reason") or data.get("reason") or ""),
+                "reason": reason,
                 "updated_at": iso(path.stat().st_mtime), "timestamp": path.stat().st_mtime,
-                "physical_success": kind == "episode" and data.get("physical_trial_passed") is True and data.get("original_task_success") is True,
+                "physical_success": success,
                 "artifacts": artifacts}
 
     def infer_task(self, value: str, tasks: dict) -> str | None:
@@ -262,6 +333,7 @@ class Progress:
                     tasks[tid]["status"] = "prepared"
                     tasks[tid]["notes"].append("已有源布局配置；不代表物理采集或验收通过。")
             events = []
+            self.report_logs = None
             paths = list(self.root.glob("datasets/replicator/*/*/*/result.json"))
             paths += list(self.root.glob("datasets/avoidance_trials/replicator/*/*/result.json"))
             for path in paths:
@@ -287,21 +359,36 @@ class Progress:
                             task["latest"] = item
                             task["status"] = item["status"]
                         events.append({"time": item["updated_at"], "task_id": task["id"], "label": item["path"],
-                                       "status": item["status"], "url": item["artifacts"][0]["url"]})
+                                       "status": item["status"], "kind": item["kind"], "url": item["artifacts"][0]["url"]})
             # Saved neutral/startup evidence is visible, but never completes a task.
-            for name in ("neutral_probe.json", "launch_failure.json", "operator_stop.json"):
+            neutral_results, diagnostic_results = {}, {}
+            for path in self.root.glob("reports/replicator_execution*/**/result.json"):
+                data = self.json(path)
+                if "neutral_probe_passed" in data and "neutral_sequence_complete" in data:
+                    neutral_results[path.parent] = data
+                elif data.get("diagnostic_only") is True and data.get("task_id") in tasks:
+                    diagnostic_results[path.parent] = data
+            for name in ("neutral_probe.json", "result.json", "launch_failure.json", "operator_stop.json"):
                 for path in self.root.glob(f"reports/replicator_execution*/**/{name}"):
+                    if name == "result.json" and path.parent not in neutral_results and path.parent not in diagnostic_results:
+                        continue
+                    if ((name in ("neutral_probe.json", "launch_failure.json") and path.parent in neutral_results)
+                            or (name == "launch_failure.json" and path.parent in diagnostic_results)):
+                        continue
                     d = self.json(path)
                     tid = d.get("task_id") or self.infer_task(str(path), tasks)
                     if tid not in tasks:
                         continue
-                    item = self.entry(path, d, "neutral" if name == "neutral_probe.json" else "startup")
+                    kind = ("diagnostic" if name == "result.json" and path.parent in diagnostic_results
+                            else "neutral" if name in ("neutral_probe.json", "result.json") else "startup")
+                    item = self.entry(path, d, kind)
                     tasks[tid]["evidence"].append(item)
                     events.append({"time": item["updated_at"], "task_id": tid, "label": item["path"],
-                                   "status": item["status"], "url": item["artifacts"][0]["url"]})
-                    if name != "neutral_probe.json" and (not tasks[tid]["latest"] or item["timestamp"] > tasks[tid]["latest"]["timestamp"]):
-                        tasks[tid].update(latest=item, status="failed")
+                                   "status": item["status"], "kind": item["kind"], "url": item["artifacts"][0]["url"]})
+                    if not tasks[tid]["latest"] or item["timestamp"] > tasks[tid]["latest"]["timestamp"]:
+                        tasks[tid].update(latest=item, status="partial" if item["status"] in ("check_passed", "partial") else "failed")
             # Only the complete, current-format delivery report can certify all variants.
+            certified_episodes = set()
             manifests = sorted(self.root.glob("reports/replicator_execution*/**/delivery_manifest*.json"), key=lambda p: p.stat().st_mtime)
             for path in manifests:
                 d = self.json(path)
@@ -325,16 +412,24 @@ class Progress:
                         if ep.is_file():
                             item = self.entry(ep, self.json(ep))
                             item["status"] = "complete"
+                            certified_episodes.add(item["path"])
                             for key, label in (("comparison", "基线 / 新执行对照视频"), ("geometry_explanation", "避障几何说明视频")):
                                 if entry.get(key):
                                     a = self.artifact(self.local(entry[key]), label)
                                     if a:
                                         item["artifacts"].append(a)
                             v["latest"] = item
-                            if all(x["path"] != item["path"] for x in v["episodes"]):
+                            for index, existing in enumerate(v["episodes"]):
+                                if existing["path"] == item["path"]:
+                                    v["episodes"][index] = item
+                                    break
+                            else:
                                 v["episodes"].append(item)
                     if v["latest"]:
                         task["latest"] = v["latest"]
+            for event in events:
+                if event["label"] in certified_episodes:
+                    event["status"] = "complete"
             processes = self.processes(tasks)
             for process in processes:
                 task = tasks.get(process["task_id"])
