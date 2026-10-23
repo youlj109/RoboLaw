@@ -315,7 +315,6 @@ with SimulationAppContext(args):
                 'measurements':overview_alignment},indent=2))
             if overview_writer.frames:
                 (out/'overview_camera.mp4').hardlink_to(out/'overview/overview_camera.mp4')
-                result['overview_video_validation']=decode_video(out/'overview_camera.mp4',len(records),expected_size=(1280,720),expected_dt=e.step_dt)
             result['overview_capture_alignment']=bool(len(overview_alignment)==len(records) and all(
                 x['primary_frame_index']==x['overview_frame_index']==x['action_index'] and
                 x['physics_step_before']==x['physics_step_after'] for x in overview_alignment))
@@ -329,6 +328,7 @@ with SimulationAppContext(args):
             'minimum':min(physics_audits,key=lambda x:x['slack_m']) if physics_audits else None,
             'measurements':physics_audits},indent=2))
         if clearances:result['minimum_clearance']=min(clearances,key=lambda x:x['slack_m'])
+        # Persist result/trajectory before slow MP4 decode so host timeouts still leave usable artifacts.
         (out/'result.json').write_text(json.dumps(result,indent=2,default=lambda x:x.tolist() if hasattr(x,'tolist') else str(x)))
         (out/'clearances.json').write_text(json.dumps(clearances,indent=2))
         (out/'contacts.json').write_text(json.dumps(contacts.records,indent=2))
@@ -342,6 +342,9 @@ with SimulationAppContext(args):
                     for key in records[0][index]:f.create_dataset(group+'/'+key,data=np.array([r[index][key] for r in records]))
         if writer and writer.frames:
             result['video_validation']={name:decode_video(out/(name+'.mp4'),len(records),expected_dt=e.step_dt) for name in (*writer.names,'all_cameras')}
+        if overview_writer and overview_writer.frames and (out/'overview_camera.mp4').exists():
+            result['overview_video_validation']=decode_video(out/'overview_camera.mp4',len(records),expected_size=(1280,720),expected_dt=e.step_dt)
+        if writer and writer.frames or (overview_writer and overview_writer.frames):
             (out/'result.json').write_text(json.dumps(result,indent=2,default=lambda x:x.tolist() if hasattr(x,'tolist') else str(x)))
         print('LIME_RESULT',json.dumps({k:v for k,v in result.items() if k not in ('plans','traceback','close_contacts','lift_contacts')}),flush=True)
         env.close()
