@@ -92,6 +92,7 @@
     function episodeCount(value){return Array.isArray(value)?value.length:number(value);}
     function latestOf(value){return value && typeof value==='object' && !Array.isArray(value) ? value : {};}
     function taskName(task){return str(task.label)||str(task.operation)||str(task.id,'未知任务');}
+    function evidenceKind(value){return {episode:'物理采集',diagnostic:'诊断记录',neutral:'静置检查',startup:'启动记录'}[value]||'检查记录';}
     function matchesFilter(task,filter){if(filter==='all')return true;if(filter==='complete')return task.completed===true;if(filter==='running')return task.status==='running';return task.completed!==true&&task.status!=='running';}
     function visibleTasks(){return arr(state.data?.tasks).filter(task=>matchesFilter(task,state.filter)&&(!state.layout||str(task.layout)===state.layout)&&[task.id,task.label,task.operation,task.layout].map(x=>str(x)).join(' ').toLowerCase().includes(state.search.toLowerCase()));}
     function renderSummary(){
@@ -143,13 +144,13 @@
         const path=str(item.path)||str(value.latest);if(path){const display=el('div','variant-path mono',path);display.title=path;card.append(display);}
         if(str(item.reason)){const reason=el('div','variant-reason',item.reason);reason.title=str(item.reason);card.append(reason);}grid.append(card);
       });variants.append(grid);body.append(variants);
-      const reasonSection=section('最新结果',latest.updated_at?clock(latest.updated_at):'暂无时间');
-      let reason=str(latest.reason);let failed=latest.status==='failed'||task.status==='failed';
-      if(!reason){const other=VARIANTS.map(([key])=>latestOf(task.variants?.[key]?.latest)).filter(item=>str(item.reason)&&item.status==='failed');other.sort((a,b)=>(dateValue(b.updated_at)?.getTime()||0)-(dateValue(a.updated_at)?.getTime()||0));if(other.length){reason=str(other[0].reason);failed=true;}}
+      const reasonSection=section('最新结果',latest.updated_at?evidenceKind(latest.kind)+' · '+clock(latest.updated_at):'暂无时间');
+      let reason=str(latest.reason);const failed=latest.status==='failed';
+      if(!reason&&latest.physical_success===true){reason=latest.status==='complete'?'本次物理采集已通过完整交付验收。':'本次物理采集成功；完整任务验收还需匹配基线、三类安全变体及避障证据。';}
       const reasonBox=el('div','reason-box'+(failed?'':' neutral'));reasonBox.append(el('div','reason-title',failed?'最近失败 · 原始证据保留':statusLabel(latest.status||task.status)),el('div','reason-content',reason||'暂无结果说明。未提供验证证据的阶段，不计为通过。'));reasonSection.append(reasonBox);body.append(reasonSection);
       const files=section('报告与视频','仅打开本地证据');const links=el('div','artifact-list');const candidates=[...arr(latest.artifacts)];VARIANTS.forEach(([key,label])=>arr(latestOf(task.variants?.[key]?.latest).artifacts).forEach(item=>candidates.push({...item,label:label+' · '+str(item.label,'文件')})));arr(task.evidence).forEach(item=>candidates.push(...arr(item?.artifacts)));
       const seen=new Set();candidates.forEach(item=>{const url=safeURL(item?.url);if(!url||seen.has(url))return;const link=artifactLink(item);if(link){seen.add(url);links.append(link);}});files.append(links.childNodes.length?links:el('div','empty small','尚无可用报告、视频或日志链接'));body.append(files);
-      const notes=[...arr(task.evidence),...arr(task.notes)];if(notes.length){const evidence=section('证据与待办'),list=el('ul','evidence-list');notes.forEach(value=>{const label=textLine(value);if(!label)return;const li=el('li');li.append(el('i','evidence-dot'),el('span','',label));if(value&&typeof value==='object'&&safeURL(value.url)){const link=el('a','','查看');link.href=safeURL(value.url);link.target='_blank';link.rel='noopener noreferrer';li.append(link);}list.append(li);});evidence.append(list);body.append(evidence);}
+      const notes=[...arr(task.evidence),...arr(task.notes)];if(notes.length){const evidence=section('证据与待办'),list=el('ul','evidence-list');notes.forEach(value=>{const label=textLine(value);if(!label)return;const li=el('li');const prefix=value&&typeof value==='object'&&value.kind?evidenceKind(value.kind)+' · '+statusLabel(value.status)+'：':'';li.append(el('i','evidence-dot'),el('span','',prefix+label));if(value&&typeof value==='object'&&safeURL(value.url)){const link=el('a','','查看');link.href=safeURL(value.url);link.target='_blank';link.rel='noopener noreferrer';li.append(link);}list.append(li);});evidence.append(list);body.append(evidence);}
       panel.replaceChildren(header,body);
     }
     function renderProcesses(){
@@ -166,7 +167,7 @@
     function renderEvents(){
       const list=byId('eventList'),events=arr(state.data.recent_events).slice(0,10);
       if(!events.length){list.replaceChildren(el('div','empty small','暂无近期事件。'));return;}
-      list.replaceChildren(...events.map(event=>{const row=el('div','event-row'),time=el('time','event-time',clock(event.time));time.title=fullDate(event.time);const main=el('div','event-main'),url=safeURL(event.url);const label=el(url?'a':'div','event-label',str(event.label,'进度更新'));if(url){label.href=url;label.target='_blank';label.rel='noopener noreferrer';}main.append(label);const task=arr(state.data.tasks).find(item=>item.id===event.task_id);if(task||str(event.task_id))main.append(el('div','event-sub',task?taskName(task):event.task_id));row.append(time,main,badge(event.status));return row;}));
+      list.replaceChildren(...events.map(event=>{const row=el('div','event-row'),time=el('time','event-time',clock(event.time));time.title=fullDate(event.time);const main=el('div','event-main'),url=safeURL(event.url);const label=el(url?'a':'div','event-label',str(event.label,'进度更新'));if(url){label.href=url;label.target='_blank';label.rel='noopener noreferrer';}main.append(label);const task=arr(state.data.tasks).find(item=>item.id===event.task_id);if(task||str(event.task_id))main.append(el('div','event-sub',[task?taskName(task):event.task_id,event.kind?evidenceKind(event.kind):''].filter(Boolean).join(' · ')));row.append(time,main,badge(event.status));return row;}));
     }
     function render(){renderSummary();renderFilters();renderTasks();renderDetail();renderProcesses();renderEvents();}
     async function refresh(){
