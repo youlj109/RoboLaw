@@ -1,0 +1,48 @@
+#usda 1.0
+(
+    defaultPrim = "Lamp"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Lamp" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    customData = { string provenance = "Controls-local procedural weighted floor lamp, metres; fragile shade semantics, no fracture model." }
+)
+{
+    float physics:mass = 6
+    point3f physics:centerOfMass = (0, 0, 0.12)
+    def Cylinder "Base" (prepend apiSchemas = ["PhysicsCollisionAPI"])
+    {
+        double radius = 0.16
+        double height = 0.04
+        token axis = "Z"
+        double3 xformOp:translate = (0, 0, 0.02)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        color3f[] primvars:displayColor = [(0.14, 0.15, 0.17)]
+    }
+    def Cube "Post" (prepend apiSchemas = ["PhysicsCollisionAPI"])
+    {
+        double size = 1
+        double3 xformOp:translate = (0, 0, 0.56)
+        double3 xformOp:scale = (0.025, 0.025, 1.08)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.23, 0.24, 0.26)]
+    }
+    def Cube "Arm" (prepend apiSchemas = ["PhysicsCollisionAPI"])
+    {
+        double size = 1
+        double3 xformOp:translate = (0, 0.24, 1.10)
+        double3 xformOp:scale = (0.025, 0.50, 0.025)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.23, 0.24, 0.26)]
+    }
+    def Cylinder "GlassShade" (prepend apiSchemas = ["PhysicsCollisionAPI"])
+    {
+        double radius = 0.085
+        double height = 0.16
+        token axis = "Z"
+        double3 xformOp:translate = (0, 0.48, 1.10)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        color3f[] primvars:displayColor = [(0.45, 0.66, 0.78)]
+    }
+}

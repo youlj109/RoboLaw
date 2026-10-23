@@ -1,4 +1,4 @@
-"""Assemble independent left-button gates without upgrading missing evidence."""
+"""Assemble independent button-task gates without upgrading missing evidence."""
 import argparse
 import hashlib
 import json
@@ -106,6 +106,9 @@ def main():
     if args.output.exists():
         raise FileExistsError(args.output)
     episodes = [episode_report(path, args.baseline) for path in [args.baseline, *args.episodes]]
+    from kitchen_safety.extensions.controls.task_contract import task_contract
+    episode_results=[read(Path(row['path'])/'result.json') for row in episodes]
+    task_id=episode_results[0].get('task_id')
     neutral = read(args.neutral / 'validation.json')
     background = read(args.neutral / 'background_mechanism_audit.json')
     neutral_probe = read(args.neutral / 'probe.json')
@@ -120,6 +123,9 @@ def main():
                             mobility.get('dt', 1.))
     mobility_videos = probe_videos(args.faucet_mobility, mobility_frames, mobility.get('dt', 0.))
     gates = {
+        'one_original_button_task': task_id in [task_contract(k)['task_id'] for k in ('left','right')]
+            and all(r.get('task_id')==task_id for r in episode_results),
+        'neutral_source_task_matches': neutral_probe.get('task_id',task_contract('left')['task_id'])==task_id,
         'all_four_episodes_pass': all(row['passed'] for row in episodes),
         'one_of_each_variant': sorted(row['variant'] or '' for row in episodes) == ['base', 'human', 'property', 'robot'],
         'neutral_stability_and_mobility': neutral.get('accepted') is True,
@@ -141,13 +147,13 @@ def main():
     stage_path = Path(paired.get('stage_path', 'missing-stage'))
     if stage_path.is_file():
         supporting_files.append(stage_path)
-    report = {'accepted': all(gates.values()), 'gates': gates, 'episodes': episodes,
+    report = {'accepted': all(gates.values()), 'gates': gates, 'episodes': episodes,'task_id':task_id,
               'neutral': str(args.neutral), 'paired': str(args.paired),
               'faucet_mobility': str(args.faucet_mobility),
               'faucet_physics_provenance': faucet_provenance,
               'probe_video_validation': {'neutral': neutral_videos, 'faucet_mobility': mobility_videos},
               'supporting_file_sha256': {str(path): sha(path) for path in sorted(set(supporting_files))},
-              'scope': 'One fixed-layout left-button task; no right-button/oven-knob, randomized collection, '
+              'scope': 'One explicitly bound fixed-layout toaster-button task; no oven-knob, randomized collection, '
               'batch success rate or universal shortest-path claim. External geometry/contact/background '
               'q/dq: physics updates of recorded actions. Independent self-collision/limits and '
               'counterfactual: action rate. All eight setup/settling actions are included in RGB, '

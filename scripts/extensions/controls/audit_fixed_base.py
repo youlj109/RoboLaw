@@ -15,11 +15,13 @@ ROOT=Path(__file__).resolve().parents[3]
 cache=Path.home()/'.cache/isaaclab_arena/usd/robot_on_stand'
 GROUPS={'controls':(['human_attempt03','property_attempt01','robot_attempt01'],'controls_droid_original_stand_0.8_1.08x0.91032.usd')}
 parser=argparse.ArgumentParser();parser.add_argument('episodes',nargs='*',help='Recorded left-button episode directories');parser.add_argument('--report-name',default='fixed_base_hazard_audit.json')
+parser.add_argument('--stand-height',type=float,choices=[.7,.8],default=.8)
 args=parser.parse_args()
 episode_paths = ([Path(raw).resolve() for raw in args.episodes] if args.episodes else
  [ROOT/'datasets/skill_trials/controls'/name for name in GROUPS['controls'][0]])
 summary={}
 for group,(episodes,cachefile) in GROUPS.items():
+ cachefile=cachefile.replace('_0.8_','_'+str(args.stand_height)+'_')
  source=cache/cachefile;s=Usd.Stage.Open(str(source));xc=UsdGeom.XformCache();base=next(p for p in s.Traverse() if p.GetName()=='panda_link0');basepath=str(base.GetPath());sourcebase=np.array(xc.GetLocalToWorldTransform(base)).T;local_models=[]
  for p in Usd.PrimRange(base,Usd.TraverseInstanceProxies()):
   if not p.HasAPI(UsdPhysics.CollisionAPI) or not UsdPhysics.CollisionAPI(p).GetCollisionEnabledAttr().Get():continue
@@ -35,7 +37,9 @@ for group,(episodes,cachefile) in GROUPS.items():
   destination=ep/args.report_name
   if destination.exists():raise FileExistsError('Refusing to overwrite '+str(destination))
   meta=json.loads((ep/'result.json').read_text())
-  if meta.get('task_id')!='kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian':raise ValueError('This source stand audit is scoped to the tested left-button task')
+  from kitchen_safety.extensions.controls.task_contract import task_contract
+  keys=('temperature',) if args.stand_height==.7 else ('left','right')
+  if meta.get('task_id') not in [task_contract(k)['task_id'] for k in keys]:raise ValueError('Task/source stand height mismatch')
   spec=(json.loads((ep/'augmentation_audit.json').read_text())['hazard'] if (ep/'augmentation_audit.json').exists() else (meta.get('variant_spec') or json.loads((ROOT/'configs/extensions/controls/left_button_trial.json').read_text())['variants'][meta['variant']])).copy();spec['name']={'human':'person','property':'glass','robot':'barrier'}[meta['variant']];pos=meta['initial_robot_pose'][:3];quat=meta['initial_robot_pose'][3:7];records=json.loads((ep/'records.json').read_text());poses=[x['after'].get('hazard_pose') for x in records]
   rt=transform(pos,quat);fixed=[(name,fcl.CollisionObject(model,fcl.Transform(rt[:3,:3],rt[:3,3]))) for name,model,v in local_models]
   stage=Usd.Stage.CreateInMemory();x=UsdGeom.Xform.Define(stage,'/World/envs/env_0/'+spec['name']);x.GetPrim().GetReferences().AddReference(str(ROOT/spec['asset']));x.AddTranslateOp().Set(Gf.Vec3d(*spec['position']));x.AddRotateZOp().Set(spec.get('yaw_deg',0));world=ControlsCollisionWorld(stage,DroidKinematics(pos,Rotation.from_quat(quat).as_euler('xyz',degrees=True)[2]),env_root='/World/envs/env_0');measurements=[]

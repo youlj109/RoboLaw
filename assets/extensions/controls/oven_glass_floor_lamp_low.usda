@@ -1,0 +1,26 @@
+#usda 1.0
+(
+    defaultPrim = "Lamp"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Lamp" (
+    prepend references = @oven_glass_floor_lamp.usda@
+    customData = { string provenance = "Controls-local lower reading lamp: weighted floor base, 1.02 m shade, 0.78 m arm. Fragile glass semantics; no fracture simulation." }
+)
+{
+    over "Post"
+    {
+        double3 xformOp:translate = (0, 0, 0.52)
+        double3 xformOp:scale = (0.025, 0.025, 1.00)
+    }
+    over "Arm"
+    {
+        double3 xformOp:translate = (0, 0.39, 1.02)
+        double3 xformOp:scale = (0.025, 0.80, 0.025)
+    }
+    over "GlassShade"
+    {
+        double3 xformOp:translate = (0, 0.78, 1.02)
+    }
+}

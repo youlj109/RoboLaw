@@ -1,4 +1,4 @@
-"""Run ordered independent acceptance for the repaired left-button task only."""
+"""Run ordered independent acceptance for a bound original toaster-button task."""
 import argparse
 import json
 from pathlib import Path
@@ -7,6 +7,7 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0,str(ROOT))
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--episodes-root', type=Path, required=True)
 parser.add_argument('--reports-root', type=Path, required=True)
@@ -14,6 +15,9 @@ parser.add_argument('--neutral', type=Path, required=True)
 parser.add_argument('--faucet-mobility', type=Path, required=True)
 parser.add_argument('--output', type=Path, required=True)
 parser.add_argument('--wait-seconds', type=float, default=0.)
+parser.add_argument('--controls-task', choices=['left','right'], default='left')
+parser.add_argument('--config', type=Path, default=Path('configs/extensions/controls/repaired_left_button.json'))
+parser.add_argument('--stage', default='reports/skill_trials/controls/inspection/stage.usda')
 args = parser.parse_args()
 
 
@@ -27,7 +31,12 @@ for path in (episodes, reports, args.neutral, args.faucet_mobility, args.output)
     relative(path)
 reports.mkdir(parents=True, exist_ok=False)
 deadline = time.monotonic() + args.wait_seconds
-progress = {'task': 'repaired_left_cancel_button', 'complete': False, 'steps': []}
+from kitchen_safety.extensions.controls.task_contract import task_contract
+contract=task_contract(args.controls_task)
+config=json.loads(args.config.read_text())
+if config['task_id']!=contract['task_id']:
+    raise ValueError('Verifier config belongs to a different source task')
+progress = {'task': contract['task_id'], 'complete': False, 'steps': []}
 
 
 def save():
@@ -69,6 +78,8 @@ try:
                 time.sleep(1.)
         if result.get('accepted') is not True:
             raise RuntimeError('Collector rejected '+variant+': '+str(result.get('failure')))
+        if result.get('task_id')!=contract['task_id']:
+            raise ValueError('Episode belongs to a different source task: '+variant)
         for name in ('independent_validation.json', 'contact_causality_review.json',
                      'self_collision_detailed_audit.json', 'fixed_base_hazard_audit.json',
                      'strict_clearance_audit.json', 'avoidance_audit.json',
@@ -83,13 +94,13 @@ try:
         if variant != 'base':
             run(variant+'_fixed_base', 'audit_fixed_base.py', [ep])
             run(variant+'_strict_clearance', 'audit_augmentation.py',
-                [ep, '--baseline', base+'/records.json', '--report-name', 'strict_clearance_audit.json'])
-            run(variant+'_avoidance', 'audit_avoidance.py', [ep, '--baseline', base])
+                [ep, '--baseline', base+'/records.json', '--report-name', 'strict_clearance_audit.json', '--stage', args.stage])
+            run(variant+'_avoidance', 'audit_avoidance.py', [ep, '--baseline', base, '--stage', args.stage])
             run(variant+'_comparison', 'render_avoidance_comparison.py', [ep, '--camera', 'external_camera'])
     paired = relative(reports/'paired')
     run('paired_planning', 'paired_planning.py', [
-        '--config', 'configs/extensions/controls/repaired_left_button.json', '--baseline', base,
-        '--stage', 'reports/skill_trials/controls/inspection/stage.usda', '--output', paired,
+        '--config', relative(args.config), '--baseline', base,
+        '--stage', args.stage, '--output', paired,
         '--seeds', '42', '43', '44', '--variants', 'base', 'human', 'property', 'robot'], gpu=True)
     run('summary', 'summarize_acceptance.py', [
         '--baseline', base, '--episodes', *(relative(episodes/v) for v in ('human','property','robot')),

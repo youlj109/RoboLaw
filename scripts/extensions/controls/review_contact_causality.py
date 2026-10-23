@@ -28,6 +28,9 @@ def review(episode, joint_map=None):
     paths = {name: episode / (name + '.json') for name in ('result', 'records', 'contacts', 'audit')}
     data = {name: json.loads(path.read_text()) for name, path in paths.items()}
     result, records, contacts, audit = (data[name] for name in paths)
+    target_name=result.get('button_joint',TARGET)
+    if target_name not in (TARGET,'sideR_button_cancel_joint'):
+        raise ValueError('Unsupported original button target')
     names = result.get('toaster_joint_names')
     mapping_provenance = {'source': 'result.toaster_joint_names'}
     if names is None:
@@ -36,9 +39,9 @@ def review(episode, joint_map=None):
         joint_map = Path(joint_map)
         names = list(json.loads(joint_map.read_text())['toaster_joints'])
         mapping_provenance = {'source': str(joint_map), 'sha256': sha(joint_map), 'historical_mapping': True}
-    if TARGET not in names or not records:
+    if target_name not in names or not records:
         raise ValueError('Missing target joint or recorded actions')
-    target = names.index(TARGET)
+    target = names.index(target_name)
     start = np.array(records[0]['before']['toaster_q'], dtype=float)
     updates = audit.get('physics_updates', [])
     physics_complete = bool(updates) and all('toaster_q' in u and 'button_contacts' in u and 'toaster_dq' in u for u in updates)
@@ -89,7 +92,7 @@ def review(episode, joint_map=None):
         'execution_audit_passed': bool(audit.get('passed')),
     }
     return {'passed': all(checks.values()), 'checks': checks,
-            'thresholds': THRESHOLDS, 'target_joint': TARGET, 'target_index': target,
+            'thresholds': THRESHOLDS, 'target_joint': target_name, 'target_index': target,
             'source_button_success_threshold_m': threshold, 'joint_mapping_provenance': mapping_provenance,
             'sampling_scope': sampling, 'samples': len(q), 'actions': len(records),
             'physics_samples_per_action': dict(Counter(counts.values())) if physics_complete else None,

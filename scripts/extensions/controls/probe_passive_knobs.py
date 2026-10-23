@@ -11,6 +11,8 @@ parser = get_isaaclab_arena_cli_parser()
 parser.add_argument('--out', required=True)
 parser.add_argument('--original-physics', action='store_true')
 parser.add_argument('--neutral-seconds', type=float, default=30.)
+parser.add_argument('--controls-task', choices=['left','right'], default='left')
+parser.add_argument('--config', default='configs/extensions/controls/avoidance_left_button.json')
 args = parser.parse_args()
 args.enable_cameras = True
 out = Path(args.out)
@@ -24,9 +26,10 @@ with SimulationAppContext(args):
     from kitchen_safety.extensions.controls.environment import build_environment
     from kitchen_safety.dataset import CameraWriter, numpy as arr
 
-    config = json.loads(Path('configs/extensions/controls/avoidance_left_button.json').read_text())
+    config = json.loads(Path(args.config).read_text())
     envdef, assets = build_environment(variant='base', fixed_pose=config['robot_pose_xyzw'],
-                                      trial_config=config, repair_toaster_physics=not args.original_physics)
+                                      trial_config=config, repair_toaster_physics=not args.original_physics,
+                                      task=args.controls_task)
     envdef.task.episode_length_s = 120.
     builder = ArenaEnvBuilder(envdef, ArenaEnvBuilderCfg(num_envs=1, seed=42, device=args.device,
                                                         presets='physx', solve_relations=False))
@@ -57,6 +60,8 @@ with SimulationAppContext(args):
               'mobility_min_rotation_deg': 5., 'mobility_max_rotation_deg': 60.,
               'post_pulse_final_second_drift_max_deg': 1.}
     info = {'purpose': 'Passive mechanism diagnostic; external torque phase is not robot task success',
+            'task_id': config['task_id'], 'initial_robot_pose':config['robot_pose_xyzw'],
+            'config_sha256':hashlib.sha256(Path(args.config).read_bytes()).hexdigest(),
             'dt': e.step_dt, 'physics_dt': e.physics_dt, 'seed': 42,
             'joint_names': toaster.joint_names, 'body_names': toaster.body_names,
             'neutral_seconds': steps * e.step_dt, 'torque_pulse_seconds': pulse_steps * e.step_dt,

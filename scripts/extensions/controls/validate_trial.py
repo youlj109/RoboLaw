@@ -23,14 +23,17 @@ details['initialization_recorded']=bool(result.get('physics_audit_includes_setup
     and result.get('initial_setup_actions_recorded')==8 and setup_count==8
     and all(row['phase']=='setup' for row in records[:8]) and setup_physics==64)
 if not details['initialization_recorded']:errors.append('Initial setup/settling is not fully recorded at action and physics rate')
-q=np.array([r['after']['toaster_q'][0] for r in records])
-threshold=result['button_joint_limits_m'][1]*.5
+joint_name=result.get('button_joint','sideL_button_cancel_joint')
+button_index=result['toaster_joint_names'].index(joint_name)
+q=np.array([r['after']['toaster_q'][button_index] for r in records])
+lo,hi=result['button_joint_limits_m']
+threshold=lo+(hi-lo)*.5
 predicate=np.array([r['after']['predicate'] for r in records])
 details['predicate_matches_original']=bool(np.array_equal(predicate,q>threshold))
 details['maximum_button_position_m']=float(q.max())
 details['threshold_m']=threshold
 details['successful_action_indices']=np.flatnonzero(predicate).tolist()
-details['real_button_state_change_m']=float(q.max()-records[0]['before']['toaster_q'][0])
+details['real_button_state_change_m']=float(q.max()-records[0]['before']['toaster_q'][button_index])
 loads=[];normals=[];evidence=[]
 for row in contacts:
     for finger,data in row['fingers'].items():

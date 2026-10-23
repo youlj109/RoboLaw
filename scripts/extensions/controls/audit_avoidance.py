@@ -32,10 +32,11 @@ def counterfactual_hazard_pose(result, records, nominal_pose):
     return result['initial_state'].get('hazard_pose') or nominal_pose
 
 
-def prepress_goal_checks(base_goal, actual_goal):
+def prepress_goal_checks(base_goal, actual_goal, expected=None):
     """Use original MotionGen tolerances in metres/radians, never matrix entries."""
-    expected=np.eye(4);expected[:3,:3]=Rotation.from_euler('z',90,degrees=True).as_matrix()
-    expected[:3,3]=[2.08087763,-.44,1.02713965]
+    if expected is None:
+        expected=np.eye(4);expected[:3,:3]=Rotation.from_euler('z',90,degrees=True).as_matrix()
+        expected[:3,3]=[2.08087763,-.44,1.02713965]
     checks={}
     for label,goal in [('baseline',base_goal),('actual',actual_goal)]:
         position=float(np.linalg.norm(goal[:3,3]-expected[:3,3]))
@@ -52,12 +53,16 @@ def main():
     parser.add_argument('episode', type=Path)
     parser.add_argument('--baseline', type=Path, required=True)
     parser.add_argument('--report-name', default='avoidance_audit.json')
+    parser.add_argument('--stage', default='reports/skill_trials/controls/inspection/stage.usda')
     args = parser.parse_args()
     out = args.episode / args.report_name
     if out.exists():
         raise FileExistsError(out)
     base = read(args.baseline/'result.json'); actual = read(args.episode/'result.json')
     br = read(args.baseline/'records.json'); ar = read(args.episode/'records.json')
+    temperature='turn_oven_temperature_knob' in actual['task_id']
+    free_phase='pregrasp' if temperature else 'prepress'
+    validation_file='independent_temperature_validation.json' if temperature else 'independent_validation.json'
     pose = actual['initial_robot_pose']; names = actual['robot_joint_names']
     assert names == base['robot_joint_names']
     ids = [names.index(f'panda_joint{i}') for i in range(1,8)]
@@ -117,11 +122,12 @@ def main():
     same_source=bool(base['task_id']==actual['task_id'] and base['source_sha256']==actual['source_sha256'] and base['seed']==actual['seed']
                      and np.allclose(base['initial_robot_pose'],pose,atol=1e-7,rtol=0)
                      and q_error<1e-4 and toaster_error<1e-4)
-    endpoints=[m for m in baseline['measurements'] if m['action_index']==0 or m['phase'] in ('press','hold')]
+    endpoints=[m for m in baseline['measurements'] if m['action_index']==0 or
+               (m['phase']!=free_phase if temperature else m['phase'] in ('press','hold'))]
     endpoints_passed=all(m['valid'] for m in endpoints)
     world.set_obstacle_pose(name,static_pose)
-    fixed=minimum(fixed_shapes(pose),world.objects)
-    scene=ControlsCollisionWorld(Usd.Stage.Open(str(ROOT/'reports/skill_trials/controls/inspection/stage.usda')),kin,env_root='/World/envs/env_0')
+    fixed=minimum(fixed_shapes(pose,.7 if temperature else .8),world.objects)
+    scene=ControlsCollisionWorld(Usd.Stage.Open(str(ROOT/args.stage)),kin,env_root='/World/envs/env_0')
     kitchen=minimum(scene.objects,world.objects)
     environment_intersections=[];support_contacts=[]
     # The original vase's bottom wall ring shares the base's source z=0
@@ -151,13 +157,24 @@ def main():
             support=(variant=='property' and (source_base or source_floor_ring)
                 and surface[0].endswith('/kitchen/counter_main_main_group/top_geometry')
                 and obstacle[2][2]>=surface[3][2]-tolerance)
+            if temperature and spec['asset']=='assets/extensions/controls/oven_glass_floor_lamp.usda':
+                # Only the authored z=0 cylindrical foot may rest on the floor.
+                source=Usd.Stage.Open(str(ROOT/spec['asset']))
+                base_prim=source.GetPrimAtPath('/Lamp/Base')
+                bottom_verified=(base_prim.IsA(UsdGeom.Cylinder) and
+                    abs(float(UsdGeom.Cylinder(base_prim).GetHeightAttr().Get())-.04)<1e-9 and
+                    abs(float(UsdGeom.XformCache().GetLocalToWorldTransform(base_prim).ExtractTranslation()[2])-.02)<1e-9)
+                support=(variant=='property' and bottom_verified and obstacle[0].endswith('/glass/Base')
+                    and surface[0].endswith('/kitchen/floor_room/geometry')
+                    and obstacle[2][2]>=surface[3][2]-.0005)
+                tolerance=.0005
             item=dict(**contact,obstacle_low_z_m=float(obstacle[2][2]),support_top_z_m=float(surface[3][2]),
                       allowed_support_tolerance_m=tolerance if support else None,
                       source_bottom_ring_verified=source_floor_ring)
             (support_contacts if support else environment_intersections).append(item)
     legal=not fixed['intersecting'] and not environment_intersections
-    bp=np.array([np.array(r['after']['tcp'])[:3,3] for r in br if r['phase']=='prepress'])
-    ap=np.array([np.array(r['after']['tcp'])[:3,3] for r in ar if r['phase']=='prepress'])
+    bp=np.array([np.array(r['after']['tcp'])[:3,3] for r in br if r['phase']==free_phase])
+    ap=np.array([np.array(r['after']['tcp'])[:3,3] for r in ar if r['phase']==free_phase])
     distances=cdist(bp,ap)
     comparison=dict(baseline_tcp_path_m=float(np.linalg.norm(np.diff(bp,axis=0),axis=1).sum()),
                     augmented_tcp_path_m=float(np.linalg.norm(np.diff(ap,axis=0),axis=1).sum()),
@@ -173,20 +190,29 @@ def main():
             maximum_tilt_deg=float(np.rad2deg(tilt).max()),translation_limit_m=.005,rotation_limit_deg=2.,
             passed=bool(displacement.max()<=.005 and np.rad2deg(orientation).max()<=2 and np.rad2deg(tilt).max()<=2),
             scope='Measured before/after rigid poses; fragile property must remain upright and stationary. No fracture simulation claim.')
-    base_goal=np.array([r for r in br if r['phase']=='prepress'][-1]['after']['tcp'])
-    actual_goal=np.array([r for r in ar if r['phase']=='prepress'][-1]['after']['tcp'])
+    base_goal=np.array([r for r in br if r['phase']==free_phase][-1]['after']['tcp'])
+    actual_goal=np.array([r for r in ar if r['phase']==free_phase][-1]['after']['tcp'])
     goal_error=float(np.max(np.abs(base_goal-actual_goal)))
     # Pose matrices mix dimensionless rotation entries and metres. Evaluate
     # achieved endpoints in physical units against the original planner's
     # existing 2 mm / 0.02 rad goal tolerance, not an arbitrary matrix norm.
-    goal_checks=prepress_goal_checks(base_goal,actual_goal)
+    from kitchen_safety.extensions.controls.planning import button_prepress_pose
+    config=read(args.episode/'config.json')
+    params=actual['control_parameters']
+    if temperature:
+        expected=np.eye(4)
+        expected[:3,:3]=Rotation.from_euler('x',config['initial_roll_deg'],degrees=True).as_matrix()
+        expected[:3,3]=config['pregrasp_tcp_world_m']
+    else:
+        expected=button_prepress_pose(config,params['roll_deg'],params['tcp_x_offset_m'],params['tcp_z_offset_m'])
+    goal_checks=prepress_goal_checks(base_goal,actual_goal,expected)
     same_controls=bool(base.get('control_parameters') and
                        base['control_parameters']==actual.get('control_parameters'))
-    gates=dict(baseline_collector=base.get('accepted') is True,baseline_validation=read(args.baseline/'independent_validation.json').get('passed') is True,
+    gates=dict(baseline_collector=base.get('accepted') is True,baseline_validation=read(args.baseline/validation_file).get('passed') is True,
                baseline_self_collision=read(args.baseline/'self_collision_detailed_audit.json').get('passed') is True,
                same_control_parameters=same_controls,
                same_prepress_goal=goal_checks['baseline']['passed'] and goal_checks['actual']['passed'],
-               actual_collector=actual.get('accepted') is True,actual_validation=read(args.episode/'independent_validation.json').get('passed') is True,
+               actual_collector=actual.get('accepted') is True,actual_validation=read(args.episode/validation_file).get('passed') is True,
                actual_self_collision=read(args.episode/'self_collision_detailed_audit.json').get('passed') is True,
                actual_fixed_base=read(args.episode/'fixed_base_hazard_audit.json').get('passed') is True,
                actual_physics=read(args.episode/'audit.json').get('passed') is True,

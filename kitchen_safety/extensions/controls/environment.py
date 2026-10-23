@@ -13,7 +13,12 @@ KITCHEN = Path.home() / '.cache/lightwheel_sdk/floorplan/robocasa-robocasakitche
 
 
 def build_environment(enable_cameras=True, variant='base', fixed_pose=None, trial_config=None,
-                      repair_toaster_physics=True):
+                      repair_toaster_physics=True, task='left', repair_oven_racks=False,
+                      balance_temperature_knob=False):
+    from .task_contract import task_contract
+    contract = task_contract(task)
+    if trial_config is not None and trial_config.get('task_id') != contract['task_id']:
+        raise ValueError('Trial config belongs to a different source task')
     # cuRobo 0.7 imports Warp's pre-1.16 torch namespace. This compatibility
     # alias restores that namespace without changing any kernel or algorithm.
     import warp as wp
@@ -40,6 +45,8 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None, tria
     kitchen_path = KITCHEN
     physics_provenance = None
     faucet_provenance = None
+    oven_provenance = None
+    temperature_provenance = None
     if repair_toaster_physics:
         from .toaster_physics import repaired_kitchen
         kitchen_path, physics_provenance = repaired_kitchen(
@@ -47,6 +54,14 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None, tria
         from .faucet_physics import balanced_faucet
         kitchen_path, faucet_provenance = balanced_faucet(
             kitchen_path, ROOT / 'reports/controls_physics/assets')
+    if repair_oven_racks:
+        if task!='temperature':raise ValueError('Rack repair is scoped to temperature task only')
+        from .oven_physics import damped_oven_racks
+        kitchen_path,oven_provenance=damped_oven_racks(kitchen_path,ROOT/'reports/controls_physics/assets')
+    if balance_temperature_knob:
+        if task!='temperature':raise ValueError('Temperature balance is scoped to the assigned oven knob')
+        from .temperature_knob_physics import balanced_temperature_knob
+        kitchen_path,temperature_provenance=balanced_temperature_knob(kitchen_path,ROOT/'reports/controls_physics/assets')
 
     class LocalDroid(droid.DroidAbsoluteJointPositionEmbodiment):
         def __init__(self, enable_cameras=False, stand_height_m=.8,
@@ -81,7 +96,7 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None, tria
                     object_min_z=-.2, initial_pose=Pose.identity(), reset_nested_physics=False, **kwargs)
             return AssetRegistry().get_asset_by_name(name)
 
-    spec = ArenaEnvGraphSpec.from_yaml(SOURCE)
+    spec = ArenaEnvGraphSpec.from_yaml(contract['source'])
     assets = instantiate_assets_from_spec(spec, LocalRegistry(), enable_cameras=enable_cameras)
     _ensure_scene_lighting(spec, assets)
     _attach_spatial_relations_to_assets(spec.relations, assets)
@@ -102,4 +117,7 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None, tria
         embodiment=assets[spec.embodiment.id], task=build_task_from_spec(spec.task, assets))
     environment.toaster_physics_provenance = physics_provenance
     environment.faucet_physics_provenance = faucet_provenance
+    environment.controls_task_contract = contract
+    environment.oven_physics_provenance = oven_provenance
+    environment.temperature_knob_physics_provenance = temperature_provenance
     return environment, assets

@@ -54,7 +54,7 @@ class MechanismMonitor:
         q = np.array([self.initial] + [s['q'] for s in self.samples])
         for index, joint in enumerate(self.metadata):
             excursion = float(np.max(np.abs(q[:, index] - q[0, index])))
-            allowed = joint['path'].rsplit('/', 1)[-1] in allowed_joint_names
+            allowed = joint['path'] in allowed_joint_names or joint['path'].rsplit('/', 1)[-1] in allowed_joint_names
             threshold = limits['rotation_excursion_rad' if joint['rotational'] else 'translation_excursion_m']
             rows.append({**joint, 'maximum_excursion': excursion, 'threshold': threshold,
                          'allowed_task_motion': allowed, 'passed': allowed or excursion < threshold})

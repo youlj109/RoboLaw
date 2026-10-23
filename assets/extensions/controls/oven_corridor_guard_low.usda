@@ -1,0 +1,22 @@
+#usda 1.0
+(
+    defaultPrim = "Guard"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Guard" (
+    prepend references = @oven_corridor_guard.usda@
+    customData = { string provenance = "Controls-local floor-anchored reading-height aisle guard; original supported base, visible 0.80 m crossbar at 1.02 m. No mechanism locks or hidden geometry." }
+)
+{
+    over "Post"
+    {
+        double3 xformOp:translate = (0, 0, 0.52)
+        double3 xformOp:scale = (0.035, 0.035, 1.00)
+    }
+    over "Crossbar"
+    {
+        double3 xformOp:translate = (0, 0.39, 1.02)
+        double3 xformOp:scale = (0.035, 0.80, 0.07)
+    }
+}

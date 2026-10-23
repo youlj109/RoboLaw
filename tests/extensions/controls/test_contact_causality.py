@@ -67,3 +67,18 @@ def test_missing_substep_evidence_never_upgrades_to_pass(tmp_path):
     result = write(data)
     assert not result['checks']['physics_synchronous_evidence_complete']
     assert not result['passed']
+
+
+def test_right_joint_not_left_index_is_reviewed(tmp_path):
+    data, write = episode(tmp_path)
+    data['result']['button_joint']='sideR_button_cancel_joint'
+    for row in data['records']:
+        for when in ('before','after'):
+            q=row[when]['toaster_q']
+            q[3],q[0]=q[0],q[3]
+    for row in data['audit']['physics_updates']:
+        q=row['toaster_q']
+        q[3],q[0]=q[0],q[3]
+    report=write(data)
+    assert report['passed']
+    assert report['target_index']==3

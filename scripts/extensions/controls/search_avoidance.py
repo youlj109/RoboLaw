@@ -20,8 +20,9 @@ from kitchen_safety.planning import DroidKinematics, transform
 ROOT = Path(__file__).resolve().parents[3]
 
 
-def fixed_shapes(pose):
-    source = Path.home() / '.cache/isaaclab_arena/usd/robot_on_stand/controls_droid_original_stand_0.8_1.08x0.91032.usd'
+def fixed_shapes(pose,stand_height=.8):
+    if stand_height not in (.7,.8):raise ValueError('Unsupported original controls stand height')
+    source = Path.home() / f'.cache/isaaclab_arena/usd/robot_on_stand/controls_droid_original_stand_{stand_height}_1.08x0.91032.usd'
     stage = Usd.Stage.Open(str(source))
     cache = UsdGeom.XformCache()
     base = next(p for p in stage.Traverse() if p.GetName() == 'panda_link0')
@@ -78,6 +79,7 @@ def main():
     parser.add_argument('--config', default='configs/extensions/controls/left_button_trial.json')
     parser.add_argument('--y-min', type=float, default=None)
     parser.add_argument('--yaw-step', type=int, default=30)
+    parser.add_argument('--stage', default='reports/skill_trials/controls/inspection/stage.usda')
     args = parser.parse_args()
     out = Path(args.output)
     if out.exists():
@@ -95,7 +97,7 @@ def main():
     prim.GetPrim().GetReferences().AddReference(str(ROOT / spec['asset']))
     prim.AddTranslateOp().Set(Gf.Vec3d(0, 0, 0))
     world = ControlsCollisionWorld(stage, kin, env_root='/World/envs/env_0')
-    scene = ControlsCollisionWorld(Usd.Stage.Open(str(ROOT / 'reports/skill_trials/controls/inspection/stage.usda')), kin, env_root='/World/envs/env_0')
+    scene = ControlsCollisionWorld(Usd.Stage.Open(str(ROOT / args.stage)), kin, env_root='/World/envs/env_0')
     fixed = fixed_shapes(pose)
     names = result.get('robot_joint_names') or list(json.loads((ROOT/'reports/skill_trials/controls/inspection/state.json').read_text())['robot_joints'])
     ids = [names.index(f'panda_joint{i}') for i in range(1, 8)]

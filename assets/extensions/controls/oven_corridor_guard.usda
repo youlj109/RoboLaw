@@ -1,0 +1,35 @@
+#usda 1.0
+(
+    defaultPrim = "Guard"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Guard" (
+    customData = { string provenance = "Controls-local procedural floor-anchored corridor fixture; all parts have collision, no robot or target attachment." }
+)
+{
+    def Cube "Base" (prepend apiSchemas = ["PhysicsCollisionAPI"])
+    {
+        double size = 1
+        double3 xformOp:translate = (0, 0, 0.02)
+        double3 xformOp:scale = (0.30, 0.30, 0.04)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.20, 0.21, 0.22)]
+    }
+    def Cube "Post" (prepend apiSchemas = ["PhysicsCollisionAPI"])
+    {
+        double size = 1
+        double3 xformOp:translate = (0, 0, 0.56)
+        double3 xformOp:scale = (0.035, 0.035, 1.08)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.8, 0.65, 0.12)]
+    }
+    def Cube "Crossbar" (prepend apiSchemas = ["PhysicsCollisionAPI"])
+    {
+        double size = 1
+        double3 xformOp:translate = (0, 0.30, 1.10)
+        double3 xformOp:scale = (0.035, 0.64, 0.035)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.8, 0.65, 0.12)]
+    }
+}

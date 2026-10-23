@@ -24,14 +24,18 @@ class ControlsCollisionWorld(CollisionWorld):
         if self.allow_button_contact:
             pairs=[p for p in pairs if not (
                 p[1] in ('gripper/left_inner_finger','gripper/right_inner_finger')
-                and '/Toaster015_sideL_button_cancel/' in p[2])]
+                and self.contact_body_fragment in p[2])]
         return pairs
 
     def __init__(self, stage, kin, clearances=None, execution_clearances=None,
-                 default_clearance=.002, *, env_root=None, env_origin=None):
+                 default_clearance=.002, *, env_root=None, env_origin=None,
+                 contact_body_fragment='/Toaster015_sideL_button_cancel/'):
         import fcl
         from pxr import Usd, UsdGeom, UsdPhysics
         self.fcl=fcl;self.kin=kin;self.objects=[];self.attachment=None;self.meshes={}
+        if not contact_body_fragment or not contact_body_fragment.startswith('/'):
+            raise ValueError('Contact exemption requires an explicit target body path')
+        self.contact_body_fragment=contact_body_fragment
         self._root_reference_transforms={};self._object_reference=[]
         self._last_obstacle_pose_call=None
         self._pair_selection_key=None;self._pair_selection_cache={}

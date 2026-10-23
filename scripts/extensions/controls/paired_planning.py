@@ -12,7 +12,7 @@ from scipy.spatial.transform import Rotation
 from kitchen_safety.planning import DroidKinematics
 from kitchen_safety.curobo_backend import CuroboPlanner
 from kitchen_safety.extensions.controls.collision import ControlsCollisionWorld
-from kitchen_safety.extensions.controls.planning import plan_prepress
+from kitchen_safety.extensions.controls.planning import plan_prepress, button_prepress_pose
 from kitchen_safety.geometry_audit import static_collision_shapes, minimum_distance
 
 ROOT=Path(__file__).resolve().parents[3]
@@ -50,12 +50,24 @@ def main():
     (out/'config.json').write_text(json.dumps(config,indent=2))
     source=Path(a.baseline);result=json.loads((source/'result.json').read_text())
     rows=json.loads((source/'records.json').read_text())
-    state=next(x['before'] for x in rows if x['phase']=='prepress')
+    temperature='turn_oven_temperature_knob' in result['task_id']
+    phase='pregrasp' if temperature else 'prepress'
+    grip_binary=0 if temperature else 1
+    state=next(x['before'] for x in rows if x['phase']==phase)
     names=result['robot_joint_names'];ids=[names.index('panda_joint'+str(i)) for i in range(1,8)]
     q=np.asarray(state['q'])[ids];grip=state['q'][names.index('finger_joint')]
     pose=result['initial_robot_pose'];kin=DroidKinematics(pose[:3],Rotation.from_quat(pose[3:]).as_euler('xyz',degrees=True)[2])
-    target=np.eye(4);target[:3,:3]=Rotation.from_euler('z',90,degrees=True).as_matrix()
-    target[:3,3]=[2.08087763,-.44,1.02713965]
+    if result['task_id']!=config['task_id']:
+        raise ValueError('Paired baseline/config task mismatch')
+    parameters=result['control_parameters']
+    if temperature:
+        target=np.eye(4)
+        target[:3,:3]=Rotation.from_euler('x',config['initial_roll_deg'],degrees=True).as_matrix()
+        target[:3,3]=config['pregrasp_tcp_world_m']
+        policy={'method':'curobo_pose_goal','grip_binary':0,'phase':phase}
+    else:
+        target=button_prepress_pose(config,parameters['roll_deg'],parameters['tcp_x_offset_m'],parameters['tcp_z_offset_m'])
+        policy=config['prepress_planning']
     summary={'scope':'Offline paired MotionGen planning. Identical start, fixed IK branch, original target and control policy per seed. Unsafe hazard-off paths are geometry-only; no unsafe playback.',
         'config_sha256':hashlib.sha256(Path(a.config).read_bytes()).hexdigest(),
         'stage_path':a.stage,'stage_sha256':hashlib.sha256(Path(a.stage).read_bytes()).hexdigest(),
@@ -63,7 +75,9 @@ def main():
         'asset_manifest_verification':verify_asset_manifests(config),
         'baseline_state_source':str(source),'source_records_sha256':hashlib.sha256((source/'records.json').read_bytes()).hexdigest(),
         'start_q':q.tolist(),'gripper_joint_position':grip,'requested_tcp':target.tolist(),
-        'seeds':a.seeds,'policy':config['prepress_planning'],'runs':[]}
+        'seeds':a.seeds,'policy':policy,'runs':[]}
+    if temperature:
+        summary['scope']='Offline paired MotionGen pose-goal planning: identical start, TCP, open gripper, seed and source control policy. Redundant joint endpoint may differ. Unsafe hazard-off paths are geometry only.'
     for seed in a.seeds:
         for variant in a.variants:
             stage=Usd.Stage.CreateInMemory();stage.GetRootLayer().subLayerPaths.append(str((ROOT/a.stage).resolve()))
@@ -79,12 +93,15 @@ def main():
             run={'seed':seed,'variant':variant,'success':False};started=time.monotonic()
             try:
                 planner=CuroboPlanner(world,kin,dt=result['dt'],seed=seed,max_joint_speed=.4)
-                planner._prepare_path_query((),1,'prepress')
-                goal=kin.ik(target,np.asarray(config['prepress_planning']['ik_branch_seed']),attempts=1)
-                run['endpoint_curobo_valid']=planner.motion_gen.ik_solver.check_valid(planner.args.to_device(np.array([q,goal]))).detach().cpu().numpy().tolist()
-                plan=plan_prepress(planner,q,target,config['prepress_planning'])
+                if temperature:
+                    plan=planner.plan_pose(q,target,grip_binary=0,phase=phase)
+                else:
+                    planner._prepare_path_query((),1,phase)
+                    goal=kin.ik(target,np.asarray(config['prepress_planning']['ik_branch_seed']),attempts=1)
+                    run['endpoint_curobo_valid']=planner.motion_gen.ik_solver.check_valid(planner.args.to_device(np.array([q,goal]))).detach().cpu().numpy().tolist()
+                    plan=plan_prepress(planner,q,target,config['prepress_planning'])
                 positions=plan['positions'];np.save(out/f'{variant}_seed{seed}_positions.npy',positions)
-                validation=planner.validate_path(positions,grip_binary=1,phase='prepress')
+                validation=planner.validate_path(positions,grip_binary=grip_binary,phase=phase)
                 tcp=np.array([kin.fk(x)[:3,3] for x in positions])
                 run.update(metadata=plan['metadata'],validation=validation,
                     success=bool(validation['valid']),tcp_path_m=float(np.linalg.norm(np.diff(tcp,axis=0),axis=1).sum()),

@@ -1,6 +1,7 @@
 # zxw D Group Execution
 
-Base: `origin/ylj` at `a5ab6fe5d45d6eb75ca62c51754aba07bc437e64`.
+Latest synchronized base: `origin/ylj` at `ffbc983` (2026-10-23).
+Left-button evidence was originally developed from `a5ab6fe`.
 Personal branch: `zxw`. Existing ignored datasets and local Kit settings retained.
 
 ## Scope
@@ -12,10 +13,111 @@ seeds 42/43/44. No 200-episode collection.
 | Assigned task | Current status |
 | --- | --- |
 | Left toaster cancel button | Complete, fixed layout, baseline + three variants |
-| Right toaster cancel button | Not implemented or physically validated |
-| Oven temperature knob, original target level 3 | Not implemented or physically validated |
+| Right toaster cancel button | Complete: baseline + three physical variants; all 26 ordered reviews and 12 paired plans passed |
+| Oven temperature knob, original target level 3 | In progress: baseline03 and neutral03 passed; three hazard variants not accepted yet |
 
-Next task: right cancel button. This submission does not claim all D tasks done.
+User now requires all three tasks. Only the oven's three hazard variants remain.
+
+## Right Button Delivery
+
+`docs/extensions/controls/ZXW_RIGHT_BUTTON_RESULTS.json` is accepted. Fresh
+ordered verification completed all 26 steps under
+`reports/controls_right_zxw_20261023/final_verification/`. Matching final config:
+`configs/extensions/controls/right_button_final_candidate.json`.
+
+The four physical recordings are packaged without changing raw bytes under
+`datasets/controls_right_zxw_20261023/final_raw/{base,human,property,robot}`.
+The packaging manifest records their original base01/human02/property03/robot01
+paths and hashes. These hardlinks are the same four episodes, not extra samples.
+All original attempts remain. Neutral02 completed cleanly; all 90 kitchen DOFs
+were stable for 50 seconds and toaster torque diagnostics established mobility.
+Each of the 12 seed42/43/44 planning pairs passed dense checks; all nine hazard
+counterfactuals violated true source geometry while new plans remained safe.
+Three original-camera comparison videos were fully decoded and keyframes were
+actually viewed (`reports/controls_right_zxw_20261023/*_comparison_preview.png`).
+No physical batch-success-rate or universal path-blocking claim is made.
+
+Oven baseline03 independently passed: 589 frames, 4712 physics samples,
+loaded contact sample1837 before target motion1995 and original success3931.
+It reached 136.373 degrees / original level3 and stayed stable after physical
+release and retreat (zero recorded retreat drift). Neutral03 passed 50 seconds
+with the same explicit passive knob/rack models. Initial oven hazard layouts
+failed endpoint feasibility and remain rejected. Candidate placement searches
+are not physical demonstrations or final acceptance.
+
+## Remaining-Task Work Log
+
+- Merged latest `origin/ylj` without conflicts; existing left evidence retained.
+- Added explicit task/source bindings, rejecting mismatched configs and limits.
+- Right inspection: original relation solver pose saved under
+  `reports/controls_right_zxw_20261023/inspection/`; target index 3,
+  `sideR_button_cancel_joint`, limits 0 to 0.0030166050419211388 m.
+- Right candidate center comes from the actual source cylinder transform:
+  `[2.1455796052410947, -0.3851382242188458, 1.0331396496470036]` m.
+- Right neutral experiment: `reports/controls_right_zxw_20261023/neutral01`.
+- Neutral data report passed all 90 DOFs / 6000 updates / 50 seconds;
+  diagnostic toaster torque mobility was 11.452 degrees on both sides.
+  The outer runner returned 2 after simulator teardown because its shell file
+  was extended while the shell was blocked in the long-running Docker call.
+  This runner failure is retained in `neutral01.log`, not reported as exit 0.
+  Current `bash -n scripts/extensions/controls/run.sh` passes. No mechanism
+  reset or dataset rewrite was used to hide this failure.
+- Right baseline experiment: `datasets/controls_right_zxw_20261023/base01`.
+  These paths are experiments, not accepted deliverables until reviewed.
+- No right hazard layout is advertised before a successful physical baseline.
+- Right `base01`: 275 frames / 2200 physics samples; original right predicate
+  succeeded at action 269. Maximum travel 2.140631 mm. Independent RGB/data,
+  contact causality and measured-state self-collision/limits all passed.
+  Loaded contact sample 2107 precedes success sample 2158. Original success
+  image actually viewed: `reports/controls_right_zxw_20261023/base01_success.png`.
+- Right `robot01`: physical collector succeeded; independent data/contact and
+  fixed-base checks passed. Further clearance/necessity/paired reviews pending.
+- Right `human01`: rejected before hazardous execution by dense FCL check:
+  25.827 mm person gap, below original 30 mm planning margin. No margin reduced.
+- Right `property01`: cuRobo GRAPH_FAIL / invalid query; no task success.
+- Right second candidates move person 20 mm and vase 50 mm outward. Complete
+  source-geometry screening still shows baseline violations with legal fixed
+  base/kitchen and feasible endpoints. These screens are not physical acceptance.
+- Oven inspection: `reports/controls_temperature_zxw_20261023/inspection/`.
+  Original 0.7 m stand and level-3 floor-based predicate must be retained.
+- Oven `neutral01`: rejected. All 90 DOFs were covered, but rack0/rack1 drifted
+  0.129411 / 0.595572 mm in 50 s, beyond the predeclared 0.1 mm static tolerance.
+  Source rack joints have an X drive but no correctly named linear drive.
+  A new explicit passive 1 N s/m linear-damping overlay is under test; zero
+  positional stiffness, unchanged mass/geometry/axis/limits, no state setters.
+  The tiny source drift's underlying numerical force is not conclusively
+  identified; the model change is not claimed as manufacturer calibration.
+- Oven `base01`: rejected at action 262. Real fingertip contact rotated the
+  correct knob by 2.687 degrees, not level 3. The independent physics-step
+  checker stopped at 1.997032 mm finger/panel gap vs required 2 mm; no actual
+  panel intersection was reported. All failure data retained.
+- Oven `base02` retracts the grasp TCP 5 mm, retaining the same original goal,
+  physical target and safety distances. Neutral and external-force rack
+  mobility tests are required before any final acceptance.
+- Oven `neutral02` passed all 90 DOFs / 6000 updates / 50 s. Rack excursions
+  were 0.005130 / 0.023735 mm. Independent `rack_mobility01` passed: explicit
+  0.05 N local forces for 2 s produced 82.257 / 57.858 mm travel, with measured
+  zero positional stiffness and 1 N s/m linear damping. This is not a robot
+  demonstration, and is not a locked mechanism.
+- Oven `base02` physically reached level 3 / 135 degrees, but is rejected:
+  release accelerated the unbalanced knob beyond the success band, then the
+  earlier success-only reset hook allowed an automatic reset at action 534.
+  Both target and robot jumped; the subsequent retreat hit the door-handle
+  model. Its original `physical_object_setters_after_reset=false` field does
+  not establish absence of that automatic reset and is explicitly withdrawn
+  as evidence. The new hook suppresses every reset request after initialization
+  and the independent validator rejects robot reset discontinuities.
+- A separate idealized balanced passive temperature-knob overlay projects its
+  collision-volume COM onto the original axis (approximately 0.523 mm radial
+  correction), retaining 200 g mass, geometry and 0-180 degree limits. Actual
+  angular drive has zero stiffness and 0.05 Nm s/rad damping. It is not a
+  calibrated manufacturer model and requires new neutral/release evidence.
+- User interruption stopped the container at 12:02:31 UTC with exit 137;
+  Docker reported OOMKilled=false. `property02` is retained as incomplete,
+  not a failed task demonstration or successful sample. `property03` is a
+  fresh attempt. No GPU-memory cause is asserted from this exit alone.
+- Current regression: 41 tests plus 11 subtests passed; not evidence that the
+  remaining physical tasks are complete.
 
 ## Current Evidence
 

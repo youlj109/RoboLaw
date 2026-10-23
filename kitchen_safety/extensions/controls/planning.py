@@ -2,6 +2,19 @@
 import numpy as np
 
 
+def button_prepress_pose(config, roll_deg=0., tcp_x_offset=0., tcp_z_offset=-.006):
+    from scipy.spatial.transform import Rotation
+    from .task_contract import task_contract
+    left_id=task_contract('left')['task_id']
+    if config['task_id']!=left_id and 'button_center_world_m' not in config:
+        raise ValueError('Non-left target requires an inspected center')
+    center=config.get('button_center_world_m',[2.08087763,-.38513822422,1.03313965])
+    pose=np.eye(4)
+    pose[:3,:3]=Rotation.from_euler('z',90,degrees=True).as_matrix()@Rotation.from_euler('x',roll_deg,degrees=True).as_matrix()
+    pose[:3,3]=[center[0]+tcp_x_offset,-.44,center[2]+tcp_z_offset]
+    return pose
+
+
 def plan_prepress(planner, q, target, policy=None):
     policy = policy or {'method': 'curobo_pose'}
     if policy['method'] == 'curobo_pose':
