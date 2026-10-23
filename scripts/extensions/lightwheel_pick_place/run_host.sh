@@ -40,6 +40,6 @@ fi
 # Avoid plugin-path poisoning for USD crate opens in child processes.
 unset PXR_PLUGINPATH_NAME USD_PLUGIN_PATH || true
 cd "$ROOT"
-exec flock "$LOCK" timeout "${LIME_EPISODE_TIMEOUT_S:-1200}" \
+exec flock "$LOCK" timeout "${LIME_EPISODE_TIMEOUT_S:-1800}" \
   env -u ISAACSIM_ROOT_PATH -u ISAACLAB_PATH -u OMNI_SERVER -u PXR_PLUGINPATH_NAME \
   "$PY" "scripts/extensions/lightwheel_pick_place/$script_name" "$@"
