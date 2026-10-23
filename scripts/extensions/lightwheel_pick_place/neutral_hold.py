@@ -216,7 +216,7 @@ with SimulationAppContext(a):
     )
 
     articulated = []
-    if joint_connected and rows['articulated_transforms'].size:
+    if joint_connected and rows['articulated_transforms'].ndim == 4:
         mats = rows['articulated_transforms']
         for j, path in enumerate(joint_connected):
             start = mats[0, j]
@@ -225,8 +225,8 @@ with SimulationAppContext(a):
             origins = mats[:, j, :3, 3]
             rot = []
             for i in range(len(mats)):
-                r0 = start[:3, :3]
-                r1 = mats[i, :3, :3]
+                r0 = np.asarray(start[:3, :3], dtype=float)
+                r1 = np.asarray(mats[i, j, :3, :3], dtype=float)
                 rot.append(np.rad2deg(Rotation.from_matrix(r1 @ r0.T).magnitude()))
             record = dict(
                 path=path,
