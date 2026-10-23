@@ -180,7 +180,6 @@ cd RoboLaw-personal
 
 ## 文件入口
 
-- [本次全面复查结果与修正说明](REVIEW_20261023.md)
 - [A组直接可用Prompt](A_PROMPT.md)
 - [B组直接可用Prompt](B_PROMPT.md)
 - [C组直接可用Prompt](C_PROMPT.md)
