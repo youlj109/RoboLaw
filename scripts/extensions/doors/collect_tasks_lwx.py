@@ -12,6 +12,7 @@ p.add_argument('--handle-normal-offset',type=float,default=0.)
 p.add_argument('--pull-lead-rad',type=float,default=.018)
 p.add_argument('--pull-steps',type=int,default=500)
 p.add_argument('--ik-limit-margin-rad',type=float,default=0.,help='Contract only local command IK bounds; source robot limits remain unchanged')
+p.add_argument('--release-retreat-m',type=float,default=0.,help='Checked outward TCP retreat during finger release; same policy for baseline and variants')
 p.add_argument('--mode', choices=['collect', 'neutral'], default='collect')
 p.add_argument('--render-warmup', action='store_true', help='Converge RTX appearance with no physics advancement before recording')
 p.add_argument('--neutral-seconds', type=float, default=40.)
@@ -19,6 +20,7 @@ p.add_argument('--review-config', default='configs/extensions/doors/review_gates
 a=p.parse_args();a.enable_cameras=True
 if a.neutral_seconds <= 0:p.error('--neutral-seconds must be positive')
 if not 0. <= a.ik_limit_margin_rad <= .1:p.error('--ik-limit-margin-rad must be in [0, .1]')
+if not 0. <= a.release_retreat_m <= .04:p.error('--release-retreat-m must be in [0, .04]')
 review=json.loads(Path(a.review_config).read_text())
 out=Path(a.output)
 if (out/'result.json').exists() or (out/'images.h5').exists():raise SystemExit('Output already has trial data; use a new attempt directory')
@@ -95,6 +97,7 @@ with SimulationAppContext(a):
     metadata['door_motion_reference_joint_rad']=reference_joint_position
     metadata['controller_parameters']['grasp_roll_deg']=a.grasp_roll_deg
     if a.grasp_pitch_deg:metadata['controller_parameters']['grasp_pitch_deg']=a.grasp_pitch_deg
+    if a.release_retreat_m:metadata['controller_parameters']['release_retreat_m']=a.release_retreat_m
     metadata['controller_parameters']['pull_lead_rad']=a.pull_lead_rad
     metadata['controller_parameters']['pull_steps']=a.pull_steps
     if a.ik_limit_margin_rad>0:
@@ -303,7 +306,20 @@ with SimulationAppContext(a):
                     if stable>=5:break
                 if stable<5:raise RuntimeError('Final original door-open predicate did not stabilize')
             phase='release_handle'
-            for _ in range(20):step(q,0.)
+            release_start=kin.fk(q) if a.release_retreat_m else None
+            release_angle=rows[-1]['next_obs']['door_q']-reference_joint_position
+            release_normal=Rotation.from_rotvec(axis*release_angle).apply(approach)
+            for fraction in np.linspace(.05,1.,20):
+                if a.release_retreat_m:
+                    target=release_start.copy()
+                    target[:3,3]-=release_normal*a.release_retreat_m*fraction
+                    command=kin.ik(target,q,attempts=1)
+                    delta_q=command-q;command=q+delta_q/max(1.,float(np.max(np.abs(delta_q)))/.025)
+                    world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])
+                    sync(update_planner=True);planner._prepare_path_query(handles,0.,phase)
+                    if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(command[None])).all()):raise RuntimeError('cuRobo rejected release retreat')
+                    step(command,0.)
+                else:step(q,0.)
             phase='released_hold'
             for _ in range(5):step(q,0.)
             if not bool(predicate[1](e)[0]):raise RuntimeError('Original door-open predicate is false after release')

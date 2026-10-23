@@ -27,15 +27,18 @@ try:
    entry.update(actual_source_intersections_all_seeds=actual_hits,max_joint_length_ratio=max(ratios),max_added_tcp_length_m=max(extra));entry['eligible']=bool(not code and report['stable_policy_necessity_in_tested_seeds'] and report['fixed_endpoint_rerouting_supported'] and actual_hits and max(ratios)<=1.6 and max(extra)<=.15)
    if entry['eligible']:choices.append(entry)
   save()
+  if entry['eligible'] and entry['max_added_tcp_length_m']<=.05 and entry['max_joint_length_ratio']<=1.15:
+   state['selection_rule']='First eligible candidate with <=.05m added TCP length and <=1.15 joint ratio; otherwise minimum added length among at most three eligible candidates';save();break
  if not choices:raise RuntimeError('No candidate established actual obstruction and a small safe reroute across all seeds')
  choice=min(choices,key=lambda x:(x['max_added_tcp_length_m'],x['max_joint_length_ratio']));state['selected_candidate']=choice;cfg=Path(choice['config']);save()
  for mode,out in [('collect',ep),('neutral',neutral)]:
   args=['--task-id',m['task'],'--variant',variant,'--variant-config',cfg,'--output',out,'--mode',mode,'--handle-offset-y',cp['handle_offset_y'],'--handle-offset-z',cp['handle_offset_z'],'--handle-normal-offset',cp['handle_normal_offset_m'],'--grasp-roll-deg',cp['grasp_roll_deg'],'--grasp-pitch-deg',cp.get('grasp_pitch_deg',0.),'--pull-lead-rad',cp['pull_lead_rad'],'--pull-steps',cp['pull_steps'],'--ik-limit-margin-rad',cp.get('ik_limit_margin_rad',0.),'--max-steps','1200','--validated-pregrasp','--render-warmup','--review-config',review];
+  if cp.get('release_retreat_m'):args+=['--release-retreat-m',str(cp['release_retreat_m'])]
   if mode=='neutral':args+=['--neutral-seconds',str(max(40.,json.loads((ep/'result.json').read_text())['frames']*m['dt']+2.))]
   run(mode,'collect_tasks_lwx.py',args,gpu=True)
  state['stage']='independent_reviews';save()
  with (r/(ep.name+'_reviews_campaign01.log')).open('x') as f:subprocess.run(['python3','-u','scripts/extensions/doors/supervise_task_reviews_lwx.py',str(ep),'--neutral',str(neutral),'--report-root',str(r),'--run-label','02'],stdin=subprocess.DEVNULL,stdout=f,stderr=subprocess.STDOUT,check=True)
  gates={f:bool(json.loads((ep/f).read_text()).get(k,False)) for f,k in required};state['variant_gates']=gates;save()
  if not all(gates.values()):raise RuntimeError('Physical variant independent gates rejected')
- run('avoidance','audit_task_avoidance_lwx.py',[ep,'--baseline',a.baseline]);run('comparison','make_task_comparison_lwx.py',[ep,'--baseline',a.baseline,'--run-label','03']);state.update(stage='ready_for_visual_review',complete=True,visual_review_pending=True,episode=str(ep),neutral=str(neutral));save()
+ run('avoidance','audit_task_avoidance_lwx.py',[ep,'--baseline',a.baseline]);run('comparison','make_task_comparison_lwx.py',[ep,'--baseline',a.baseline,'--run-label','03']);run('source_risk_illustration','make_source_risk_illustration_lwx.py',[ep,'--baseline',a.baseline,'--output',r/(ep.name+'_source_risk01.jpg')]);state.update(stage='ready_for_visual_review',complete=True,visual_review_pending=True,episode=str(ep),neutral=str(neutral));save()
 except Exception as exc:state['error']=repr(exc);save();raise

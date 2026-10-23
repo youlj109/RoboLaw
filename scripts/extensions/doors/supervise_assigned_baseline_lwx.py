@@ -1,7 +1,7 @@
 """Host: start one matched baseline/control after its own source geometry screen."""
 import argparse,json,time,subprocess
 from pathlib import Path
-p=argparse.ArgumentParser();p.add_argument('label',choices=['C01','C02','C03','C04','C05','C06','C07','C08']);p.add_argument('--screen-labels',default='01');p.add_argument('--attempt',default='01');p.add_argument('--run-label',default='01');p.add_argument('--config',type=Path);p.add_argument('--report-root',type=Path);p.add_argument('--data-root',type=Path);p.add_argument('--review-config',type=Path);a=p.parse_args();label=a.label
+p=argparse.ArgumentParser();p.add_argument('label',choices=['C01','C02','C03','C04','C05','C06','C07','C08']);p.add_argument('--screen-labels',default='01');p.add_argument('--attempt',default='01');p.add_argument('--run-label',default='01');p.add_argument('--config',type=Path);p.add_argument('--report-root',type=Path);p.add_argument('--data-root',type=Path);p.add_argument('--review-config',type=Path);p.add_argument('--release-retreat-m',type=float,default=0.);a=p.parse_args();label=a.label
 root=a.report_root or Path('reports/doors/lwx_C04_C08_20261024');data=a.data_root or Path('datasets/doors/lwx_C04_C08_20261024');statefile=root/(label+'_baseline_driver'+a.run_label+'.json')
 if statefile.exists():raise FileExistsError(statefile)
 state={'label':label,'stage':'waiting_for_contact_screen','history':[],'complete':False};deadline=time.monotonic()+18000
@@ -29,6 +29,7 @@ try:
  candidate=screen['first_feasible'];config=a.config or Path('configs/extensions/doors')/(label.lower()+'_variants_lwx_01.json');task=json.loads(config.read_text()).get('_task_scope',screen['task']);state['chosen_candidate']=candidate;save()
  for mode,name in [('collect',label+'_base_'+a.attempt),('neutral',label+'_base_neutral_'+a.attempt)]:
   cmd=['docker','exec','robolaw-wenxuanli','flock','/workspace/reports/skill_trials/gpu.lock','env','-u','ISAACSIM_ROOT_PATH','-u','ISAACLAB_PATH','-u','OMNI_SERVER','PYTHONPATH=/workspace','HEADLESS=1','OMP_NUM_THREADS=2','OPENBLAS_NUM_THREADS=2','/workspace/.venv-arena/bin/python','-u','scripts/extensions/doors/collect_tasks_lwx.py','--task-id',task,'--variant','base','--variant-config',str(config),'--output',str(data/name),'--mode',mode,'--handle-offset-z',str(candidate['offset_z']),'--handle-normal-offset',str(candidate['normal_offset_m']),'--grasp-roll-deg',str(candidate['roll_deg']),'--grasp-pitch-deg',str(candidate.get('pitch_deg',0.)),'--pull-lead-rad',str(screen['pull_lead_rad']),'--pull-steps','600','--max-steps','1000','--validated-pregrasp','--render-warmup','--ik-limit-margin-rad',str(screen['ik_command_margin_rad']),'--review-config',str(a.review_config or Path('configs/extensions/doors')/(label.lower()+'_review_lwx.json'))]
+  if a.release_retreat_m:cmd+=['--release-retreat-m',str(a.release_retreat_m)]
   if mode=='neutral':
    operation=json.loads((data/(label+'_base_'+a.attempt)/'result.json').read_text());cmd+=['--neutral-seconds',str(max(40.,operation['frames']/15.+2.))]
   run(name,cmd)

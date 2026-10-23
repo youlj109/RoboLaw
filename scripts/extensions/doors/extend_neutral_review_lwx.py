@@ -12,10 +12,12 @@ try:
  review=next(q for q in Path('configs/extensions/doors').glob('*review*.json') if hashlib.sha256(q.read_bytes()).hexdigest()==m['review_config_sha256'])
  duration=json.loads((a.episode/'result.json').read_text())['frames']*m['dt']+2.
  args=['--task-id',m['task'],'--variant',m['variant'],'--variant-config',m['variant_config'],'--output',a.neutral,'--mode','neutral','--neutral-seconds',max(40.,duration),'--max-steps',max(1200,int(duration/m['dt'])+30),'--handle-offset-y',cp['handle_offset_y'],'--handle-offset-z',cp['handle_offset_z'],'--handle-normal-offset',cp['handle_normal_offset_m'],'--grasp-roll-deg',cp['grasp_roll_deg'],'--grasp-pitch-deg',cp.get('grasp_pitch_deg',0),'--pull-lead-rad',cp['pull_lead_rad'],'--pull-steps',cp['pull_steps'],'--ik-limit-margin-rad',cp.get('ik_limit_margin_rad',0),'--validated-pregrasp','--render-warmup','--review-config',review]
+ if cp.get('release_retreat_m'):args+=['--release-retreat-m',cp['release_retreat_m']]
  run('neutral','collect_tasks_lwx.py',args,True);run('neutral_review','audit_task_review_lwx.py',[a.neutral])
  revised=a.episode/('task_review_audit_'+a.revision+'.json');run('operation_review','audit_task_review_lwx.py',[a.episode,'--neutral',a.neutral,'--output',revised]);d=json.loads(revised.read_text())
  if not d['passed']:raise RuntimeError('Extended control did not establish all gates')
  old=a.episode/'task_review_audit.json';archive=a.episode/('task_review_audit_before_'+a.revision+'.json')
  if archive.exists():raise FileExistsError(archive)
- old.rename(archive);revised.rename(old);state.update(complete=True,stage='accepted_with_extended_control',prior_rejected_review=str(archive));save()
+ if old.exists():old.rename(archive);state['prior_rejected_review']=str(archive)
+ revised.rename(old);state.update(complete=True,stage='accepted_with_extended_control');save()
 except Exception as exc:state['error']=repr(exc);save();raise

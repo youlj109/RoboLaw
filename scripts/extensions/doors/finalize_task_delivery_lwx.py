@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 
 
@@ -92,6 +93,18 @@ def main():
                     comparison['video_validation'] > 0 and comparison['sha256'] == sha(comparison_path.with_suffix('.mp4')),
                     f'{root}: comparison video invalid')
             info.update(baseline=str(baseline), paired_report=item['paired_report'], pairs=pairs)
+            risk_review=read(item['source_risk_review'])
+            require(risk_review.get('reviewed_alignment') and
+                    sha(risk_review['image']) == risk_review['image_sha256'] and
+                    sha(risk_review['illustration_report']) == risk_review['illustration_report_sha256'],
+                    f'{root}: source risk illustration has not been visually checked')
+            risk=read(risk_review['illustration_report'])
+            require(not risk['physics_replay'] and not risk['unsafe_path_executed'] and
+                    risk['audit_sha256'] == sha(root / 'avoidance_audit.json') and
+                    risk['panels'][0]['risky_robot_bodies'] and not risk['panels'][1]['risky_robot_bodies'],
+                    f'{root}: illustration provenance or risk annotation rejected')
+            info['source_risk_review']=item['source_risk_review']
+            extra_files += [Path(item['source_risk_review']),Path(risk_review['image']),Path(risk_review['illustration_report'])]
             extra_files.append(Path(item['paired_report']))
         for relative, snapshot in metadata.get('source_snapshot', {}).items():
             require(sha(snapshot['path']) == snapshot['sha256'], f'{root}: source snapshot changed: {relative}')
@@ -103,7 +116,8 @@ def main():
             manifest[str(path)] = dict(bytes=path.stat().st_size, sha256=sha(path))
         episodes[variant] = info
     test_log = Path(selected['unit_test_log']).read_text()
-    require('Ran 27 tests' in test_log and test_log.rstrip().endswith('OK'), 'Current unit tests not accepted')
+    test_count=re.search(r'Ran (\d+) tests',test_log)
+    require(test_count and int(test_count.group(1))>=34 and test_log.rstrip().endswith('OK'), 'Current unit tests not accepted')
     limitations += ['One original fixed layout; planning seeds are not physical success rates or proof about all paths.',
                     'Tangential forces and ordering inside one physics substep remain unmeasured.',
                     'FCL source geometry checks do not assert equivalence to PhysX cooked shapes.']
