@@ -61,7 +61,7 @@
     const STATES = {
       pending:{label:'未开始',symbol:'—'},prepared:{label:'已准备',symbol:'◇'},
       running:{label:'运行中',symbol:'●'},failed:{label:'失败',symbol:'×'},
-      partial:{label:'部分完成',symbol:'◐'},complete:{label:'验收通过',symbol:'✓'}
+      partial:{label:'部分完成',symbol:'◐'},check_passed:{label:'检查通过',symbol:'✓'},complete:{label:'验收通过',symbol:'✓'}
     };
     const VARIANTS = [['base','基线','BASE'],['human','人体','HUMAN'],['property','财产','PROPERTY'],['robot','障碍物','ROBOT']];
     const state = {data:null,selected:null,filter:'all',search:'',layout:'',busy:false,lastSuccess:null,openProcesses:new Set(),layoutOptions:''};

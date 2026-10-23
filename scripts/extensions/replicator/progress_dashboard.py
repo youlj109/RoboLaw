@@ -39,6 +39,16 @@ def iso(stamp: float | None = None) -> str:
     return datetime.fromtimestamp(time.time() if stamp is None else stamp, timezone.utc).isoformat()
 
 
+def physical_success(data: dict) -> bool:
+    """Normalize the two saved collector schemas without treating planning as execution."""
+    if (data.get("status") in ("failed", "error") or data.get("error")
+            or data.get("physical_failure_reasons") or data.get("clearance_failure")):
+        return False
+    if "physical_trial_passed" in data or "original_task_success" in data:
+        return data.get("physical_trial_passed") is True and data.get("original_task_success") is True
+    return all(data.get(key) is True for key in ("success", "arena_success", "physics_grasp", "final_on_destination"))
+
+
 class Progress:
     def __init__(self, root: Path):
         self.root = root.resolve()
@@ -77,13 +87,15 @@ class Progress:
                 "kind": "video" if path.suffix == ".mp4" else "report"}
 
     def entry(self, path: Path, data: dict, kind: str = "episode") -> dict:
-        status = "partial" if data.get("physical_trial_passed") is True and data.get("original_task_success") is True else "failed"
+        success = kind == "episode" and physical_success(data)
+        status = "partial" if success else "failed"
         if kind != "episode":
-            status = "partial" if data.get("passed") is True or data.get("neutral_passed") is True else "failed"
+            status = "check_passed" if data.get("passed") is True or data.get("neutral_passed") is True else "failed"
         artifacts = []
         candidates = [(path, "运行报告"), (path.parent / "all_cameras.mp4", "原始多视角视频"),
                       (path.parent / "external_camera_2.mp4", "原始外部相机"),
                       (path.parent / "wrist_camera.mp4", "原始腕部相机"),
+                      (path.parent / "overview" / "overview_camera.mp4", "总览视频"),
                       (path.parent / "overview" / "overview.mp4", "总览视频"),
                       (path.parent.with_suffix(".log"), "运行日志")]
         for p, label in candidates:
@@ -93,7 +105,7 @@ class Progress:
         return {"path": path.relative_to(self.root).as_posix(), "kind": kind, "status": status,
                 "reason": str(data.get("error") or data.get("failure_reason") or data.get("reason") or ""),
                 "updated_at": iso(path.stat().st_mtime), "timestamp": path.stat().st_mtime,
-                "physical_success": kind == "episode" and data.get("physical_trial_passed") is True and data.get("original_task_success") is True,
+                "physical_success": success,
                 "artifacts": artifacts}
 
     def infer_task(self, value: str, tasks: dict) -> str | None:
@@ -302,6 +314,7 @@ class Progress:
                     if name != "neutral_probe.json" and (not tasks[tid]["latest"] or item["timestamp"] > tasks[tid]["latest"]["timestamp"]):
                         tasks[tid].update(latest=item, status="failed")
             # Only the complete, current-format delivery report can certify all variants.
+            certified_episodes = set()
             manifests = sorted(self.root.glob("reports/replicator_execution*/**/delivery_manifest*.json"), key=lambda p: p.stat().st_mtime)
             for path in manifests:
                 d = self.json(path)
@@ -325,16 +338,24 @@ class Progress:
                         if ep.is_file():
                             item = self.entry(ep, self.json(ep))
                             item["status"] = "complete"
+                            certified_episodes.add(item["path"])
                             for key, label in (("comparison", "基线 / 新执行对照视频"), ("geometry_explanation", "避障几何说明视频")):
                                 if entry.get(key):
                                     a = self.artifact(self.local(entry[key]), label)
                                     if a:
                                         item["artifacts"].append(a)
                             v["latest"] = item
-                            if all(x["path"] != item["path"] for x in v["episodes"]):
+                            for index, existing in enumerate(v["episodes"]):
+                                if existing["path"] == item["path"]:
+                                    v["episodes"][index] = item
+                                    break
+                            else:
                                 v["episodes"].append(item)
                     if v["latest"]:
                         task["latest"] = v["latest"]
+            for event in events:
+                if event["label"] in certified_episodes:
+                    event["status"] = "complete"
             processes = self.processes(tasks)
             for process in processes:
                 task = tasks.get(process["task_id"])

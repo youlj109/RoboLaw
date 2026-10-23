@@ -10,7 +10,7 @@ import urllib.error
 import urllib.request
 from http.server import ThreadingHTTPServer
 
-from scripts.extensions.replicator.progress_dashboard import Progress, handler_for
+from scripts.extensions.replicator.progress_dashboard import Progress, handler_for, physical_success
 
 
 class DashboardTests(unittest.TestCase):
@@ -47,6 +47,54 @@ class DashboardTests(unittest.TestCase):
 
     def test_legacy_pass_flag_not_delivery(self):
         self.assertFalse(self.progress.manifest_valid({'task_id': self.tid, 'passed': True, 'accepted': True}, {self.tid: {}}))
+
+    def test_original_collector_success_and_conflicting_flags(self):
+        raw = dict(success=True, arena_success=True, physics_grasp=True, final_on_destination=True)
+        self.assertTrue(physical_success(raw))
+        for field in raw:
+            self.assertFalse(physical_success({**raw, field: False}))
+        for changed in ({'physical_trial_passed': False}, {'original_task_success': False},
+                        {'status': 'failed'}, {'error': 'aborted'},
+                        {'physical_failure_reasons': ['contact']}, {'clearance_failure': 'collision'}):
+            self.assertFalse(physical_success({**raw, **changed}))
+        self.assertFalse(physical_success({'accepted': True, 'success': True}))
+
+    def test_neutral_check_and_overview_do_not_certify_task(self):
+        p = self.write('reports/replicator_execution_test/g_banana/neutral/neutral_probe.json',
+                       {'task_id': self.tid, 'passed': True})
+        video = p.parent / 'overview/overview_camera.mp4'
+        video.parent.mkdir()
+        video.write_bytes(b'video fixture')
+        data = self.progress.snapshot()
+        self.assertEqual(data['summary']['completed_tasks'], 0)
+        self.assertEqual(data['summary']['successful_variants'], 0)
+        self.assertEqual(data['recent_events'][0]['status'], 'check_passed')
+        evidence = data['tasks'][0]['evidence'][0]
+        self.assertTrue(any(a['url'].endswith('/overview/overview_camera.mp4') for a in evidence['artifacts']))
+
+    def test_certification_updates_only_bound_episode_and_event(self):
+        manifest = self.delivery_fixture()
+        for variant in ('base', 'human', 'property', 'robot'):
+            rel = f'datasets/replicator/demo/{variant}/one/result.json'
+            raw = dict(task_id=self.tid, variant=variant, success=True, arena_success=True,
+                       physics_grasp=True, final_on_destination=True)
+            p = self.write(rel, raw)
+            manifest['artifacts']['/workspace/' + rel] = {'bytes': p.stat().st_size,
+                                                         'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
+        self.write('reports/replicator_execution_test/delivery_manifest_test.json', manifest)
+        failed = 'datasets/replicator/demo/human/failed/result.json'
+        self.write(failed, {'task_id': self.tid, 'variant': 'human', 'error': 'real failure'})
+        data = self.progress.snapshot()
+        task = data['tasks'][0]
+        self.assertTrue(task['completed'])
+        episodes = {e['path']: e for e in task['variants']['human']['episodes']}
+        self.assertEqual(episodes[failed]['status'], 'failed')
+        certified = episodes['datasets/replicator/demo/human/one/result.json']
+        self.assertEqual(certified['status'], 'complete')
+        self.assertTrue(certified['physical_success'])
+        events = {e['label']: e for e in data['recent_events']}
+        self.assertEqual(events[failed]['status'], 'failed')
+        self.assertEqual(events['datasets/replicator/demo/property/one/result.json']['status'], 'complete')
 
     def delivery_fixture(self):
         gates = ['physical_and_rgb', 'independent_actual', 'sampled_visual', 'complete_startup_physics',
