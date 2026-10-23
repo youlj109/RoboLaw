@@ -1,0 +1,55 @@
+{
+  "_kitchen_asset": "assets/extensions/doors/c03_mechanisms_lwx_01.usda",
+  "_selection_note": "Discovery candidate only; not task or physical acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_oven_g_shaped_large_scandinavian",
+  "_fixed_source_layout": "configs/extensions/doors/c08_source_layout_lwx.json",
+  "_status": "Frozen source relation solution; added layouts require design from this task baseline.",
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.682674598693848,
+      -3.0960556602478024,
+      0.9399999785423279
+    ],
+    "yaw_deg": 90.0,
+    "static": true,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "baseline_intersection_actions": [
+      66,
+      70,
+      74,
+      78,
+      82
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/c08_robot_candidate_01_05_robot_support.usda",
+      "position": [
+        4.682674598693848,
+        -3.0960556602478024,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.597674598693848,
+          -3.1810556602478024,
+          -4.470348362317633e-10
+        ],
+        [
+          4.767674598693848,
+          -3.0110556602478025,
+          0.9399999785423279
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry"
+    },
+    "candidate_search": "reports/doors/lwx_C04_C08_20261024/C08_robot_search_02.json",
+    "candidate_search_sha256": "615b42966ac5f374cd9c7d0e57f6f3466049db31696b0fe9140def36fe7b962c",
+    "candidate_index": 5
+  }
+}

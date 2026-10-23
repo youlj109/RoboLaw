@@ -1,0 +1,57 @@
+{
+  "_kitchen_asset": "assets/extensions/doors/c03_mechanisms_lwx_01.usda",
+  "_selection_note": "Discovery candidate only; not task or physical acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_oven_g_shaped_large_scandinavian",
+  "_fixed_source_layout": "configs/extensions/doors/c08_source_layout_lwx.json",
+  "_status": "Frozen source relation solution; added layouts require design from this task baseline.",
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/wine_glass.usda",
+    "position": [
+      4.9626745986938285,
+      -3.1560556602478025,
+      0.96
+    ],
+    "static": false,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "yaw_deg": 0.0,
+    "baseline_intersection_actions": [
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/c08_property_candidate_09_01_property_support.usda",
+      "position": [
+        4.9626745986938285,
+        -3.1560556602478025,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.912674598693829,
+          -3.2060556602478023,
+          -4.470348362317633e-10
+        ],
+        [
+          5.012674598693828,
+          -3.1060556602478027,
+          0.96
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry"
+    },
+    "candidate_search": "reports/doors/lwx_C04_C08_20261024/C08_property_dense_wine_glass_search09.json",
+    "candidate_search_sha256": "134bae04861ea08f329c4708b8ba058d0ed2ff058d7bb8008e40bb46675e9023",
+    "candidate_index": 1
+  }
+}

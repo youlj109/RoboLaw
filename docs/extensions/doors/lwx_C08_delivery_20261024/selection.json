@@ -1,0 +1,38 @@
+{
+  "label": "C08",
+  "task": "kitchen_bench_lightwheel_open_oven_g_shaped_large_scandinavian",
+  "unit_test_log": "reports/doors/lwx_C04_C08_20261024/unit_tests_all_13.log",
+  "retained_rejections": [
+    "Old property01/02 approaches were rejected by the unchanged original glass Body3 constraint and remain retained.",
+    "Property09 uses the unscaled original wine_glass and same base01 fixed target; discovery sampling was denser, while final source-intersection and small-reroute limits stayed unchanged.",
+    "The first property09 neutral failed during the container-wide NVML/CUDA outage; a new matching neutral is used, retaining the accepted original operation.",
+    "The operation shutdown log contains Vulkan fence/host-memory errors. Actual three-camera recordings and video integrity are checked separately; sampled visual review does not certify every frame."
+  ],
+  "episodes": {
+    "base": {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C08_base_01",
+      "visual_review": "reports/doors/lwx_C04_C08_20261024/C08_base_01_visual_review01.json"
+    },
+    "human": {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C08_human_01",
+      "baseline": "datasets/doors/lwx_C04_C08_20261024/C08_base_01",
+      "paired_report": "reports/doors/lwx_C04_C08_20261024/C08_human_01_candidate_04_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C04_C08_20261024/C08_human_01_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C04_C08_20261024/C08_human_01_source_risk01_visual_review.json"
+    },
+    "robot": {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C08_robot_01",
+      "baseline": "datasets/doors/lwx_C04_C08_20261024/C08_base_01",
+      "paired_report": "reports/doors/lwx_C04_C08_20261024/C08_robot_01_candidate_05_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C04_C08_20261024/C08_robot_01_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C04_C08_20261024/C08_robot_01_source_risk01_visual_review.json"
+    },
+    "property": {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C08_property_09",
+      "baseline": "datasets/doors/lwx_C04_C08_20261024/C08_base_01",
+      "paired_report": "reports/doors/lwx_C04_C08_20261024/C08_property_09_candidate_01_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C04_C08_20261024/C08_property_09_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C04_C08_20261024/C08_property_09_source_risk01_visual_review.json"
+    }
+  }
+}
