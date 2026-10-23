@@ -1,0 +1,110 @@
+{
+  "_task_scope": "kitchen_bench_lightwheel_open_microwave",
+  "_fixed_source_layout": "configs/extensions/doors/c06_source_layout_lwx.json",
+  "_status": "Source neutral passed; added layouts not designed",
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/narrow_opening.usda",
+    "position": [
+      2.932452487945557,
+      -0.7057162332534781,
+      1.28
+    ],
+    "yaw_deg": 90.0,
+    "static": true,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "baseline_intersection_actions": [
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "source_intersection_in_reference_off_seeds": {
+      "42": [
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "43": [
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "44": [
+        21,
+        22,
+        23,
+        24,
+        25
+      ]
+    },
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/c06_robot_candidate_06_18_robot_support.usda",
+      "position": [
+        2.932452487945557,
+        -0.7057162332534781,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          2.847452487945557,
+          -1.030716233253478,
+          -4.470348362317633e-10
+        ],
+        [
+          3.017452487945557,
+          -0.6207162332534781,
+          1.28
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry",
+      "component_bounds_world_m": [
+        {
+          "low": [
+            2.847452487945557,
+            -1.030716233253478,
+            0.001999999552965164
+          ],
+          "high": [
+            3.017452487945557,
+            -0.8607162332534781,
+            1.258
+          ]
+        },
+        {
+          "low": [
+            2.847452487945557,
+            -1.030716233253478,
+            1.258
+          ],
+          "high": [
+            3.017452487945557,
+            -0.6207162332534781,
+            1.278
+          ]
+        }
+      ],
+      "design": "Floor-anchored offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+    },
+    "candidate_search": "reports/doors/lwx_C06_release_retry04_20261024/C06_robot_library_height_search05.json",
+    "candidate_search_sha256": "4692b8bab22bd4db9f07a4b78266c681c78f531ce106bc0a146b4676923e31d7",
+    "candidate_index": 18
+  },
+  "_selection_note": "Discovery candidate only; not task or physical acceptance."
+}

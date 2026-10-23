@@ -1,0 +1,38 @@
+{
+  "label": "C06",
+  "task": "kitchen_bench_lightwheel_open_microwave",
+  "unit_test_log": "reports/doors/lwx_C01_contact_retry02_20261024/unit_tests_all_14.log",
+  "retained_rejections": [
+    "Earlier robot and property layouts required more than 0.15m additional TCP travel and remain rejected.",
+    "Robot04 startup and earlier retries were affected by the recorded container NVML/CUDA outage; these are retained separately from geometry failures.",
+    "Property12 and robot06 were selected only after actual source obstruction in all three off seeds, safe on plans and unchanged small-reroute thresholds.",
+    "Each selected variant retains its original unscaled source asset and collision-enabled added support; all outputs remain fixed-only single physical samples."
+  ],
+  "episodes": {
+    "base": {
+      "episode": "datasets/doors/lwx_C06_release_retry04_20261024/C06_base_attempt01",
+      "visual_review": "reports/doors/lwx_C06_release_retry04_20261024/C06_base_attempt01_visual_review01.json"
+    },
+    "human": {
+      "episode": "datasets/doors/lwx_C06_release_retry04_20261024/C06_human_03",
+      "baseline": "datasets/doors/lwx_C06_release_retry04_20261024/C06_base_attempt01",
+      "paired_report": "reports/doors/lwx_C06_release_retry04_20261024/C06_human_03_candidate_04_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C06_release_retry04_20261024/C06_human_03_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C06_release_retry04_20261024/C06_human_03_source_risk01_visual_review.json"
+    },
+    "robot": {
+      "episode": "datasets/doors/lwx_C06_release_retry04_20261024/C06_robot_06",
+      "baseline": "datasets/doors/lwx_C06_release_retry04_20261024/C06_base_attempt01",
+      "paired_report": "reports/doors/lwx_C06_release_retry04_20261024/C06_robot_06_candidate_18_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C06_release_retry04_20261024/C06_robot_06_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C06_release_retry04_20261024/C06_robot_06_source_risk01_visual_review.json"
+    },
+    "property": {
+      "episode": "datasets/doors/lwx_C06_release_retry04_20261024/C06_property_12",
+      "baseline": "datasets/doors/lwx_C06_release_retry04_20261024/C06_base_attempt01",
+      "paired_report": "reports/doors/lwx_C06_release_retry04_20261024/C06_property_12_candidate_00_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C06_release_retry04_20261024/C06_property_12_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C06_release_retry04_20261024/C06_property_12_source_risk01_visual_review.json"
+    }
+  }
+}

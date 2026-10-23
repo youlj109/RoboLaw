@@ -1,0 +1,69 @@
+{
+  "source": "assets/people/mpfb_corridor/posed.blend",
+  "source_sha256": "7d022d459ebd584592cde705b7bd73cf112e6cfc719e99b8ea3096506ff650ea",
+  "blender_version": "4.0.2",
+  "builder": "scripts/extensions/doors/repose_human_both_lwx.py",
+  "builder_sha256": "ddc21bc5398cf6ba267cece1e2d559e53253e3b10da845571b388f6c57645cca",
+  "wrapper": "scripts/extensions/doors/wrap_reposed_human.py",
+  "wrapper_sha256": "1f59944588720766f1f9230fbf40f002ebfaa5044d9bac1a00f4c9365bfc8055",
+  "rebuild_arguments": [
+    "--wrist",
+    "-.88",
+    ".30",
+    "1.60",
+    "--left-wrist",
+    "-.88",
+    ".15",
+    "1.60",
+    "--clavicle-y-deg",
+    "60",
+    "--left-clavicle-y-deg",
+    "-60",
+    "--torso-y-deg",
+    "-18",
+    "--auto-reachable-target",
+    "--left-hand-use-right-orientation",
+    "--asset-dir",
+    "assets/extensions/doors/human_reach_c02_both_lwx_17"
+  ],
+  "files": {
+    "assets/extensions/doors/human_reach_c02_both_lwx_17/collidable.usda": {
+      "bytes": 2757,
+      "sha256": "69b3fb9503e2a25c700881392f48679b55db02ae8336229b51029bb7f7f887c1"
+    },
+    "assets/extensions/doors/human_reach_c02_both_lwx_17/person.usdc": {
+      "bytes": 2479836,
+      "sha256": "e53ae40ab9743586d9c69bb140b7a38052be614975cf7d74e1f8109ed8a2b9b9"
+    },
+    "assets/extensions/doors/human_reach_c02_both_lwx_17/pose.json": {
+      "bytes": 26475,
+      "sha256": "0a130751f8ad6ba77bdb30e99ced2202919279b52619e8e7c30032be81f2ae0e"
+    },
+    "assets/extensions/doors/human_reach_c02_both_lwx_17/textures/brown_eye.png": {
+      "bytes": 610817,
+      "sha256": "4659691c7295ad6206c78b003e5fd0e5f91dcd53032fa914a229bb48cabe424b"
+    },
+    "assets/extensions/doors/human_reach_c02_both_lwx_17/textures/eyebrow001.png": {
+      "bytes": 89619,
+      "sha256": "9940f7d0b1b223709a19b05156ba6f6e9e4dbdbced02d7574f4d51d72c58967b"
+    },
+    "assets/extensions/doors/human_reach_c02_both_lwx_17/textures/male_casualsuit01_diffuse.png": {
+      "bytes": 5531728,
+      "sha256": "3fd0bba5dcbdea0ac427f644a6c7c298938f7369b8f96626621ce1e88989394e"
+    },
+    "assets/extensions/doors/human_reach_c02_both_lwx_17/textures/shoes01_diffuse.png": {
+      "bytes": 1335772,
+      "sha256": "50c9a406a7f1cb6aa7b42912348e78f09d0252aa3963c8229cf18dfe8353cdbf"
+    },
+    "assets/extensions/doors/human_reach_c02_both_lwx_17/textures/short02_diffuse.png": {
+      "bytes": 3553543,
+      "sha256": "47fe33831a3929567c733356dd66243116e05df2ace1f884ddca0080b728229f"
+    },
+    "assets/extensions/doors/human_reach_c02_both_lwx_17/textures/young_lightskinned_male_diffuse3.png": {
+      "bytes": 3593099,
+      "sha256": "f50016a5507fc687dc8df06599c8ea48de950cd185de33a71cafc1319ddab4d5"
+    }
+  },
+  "scope": "Hashes capture the actual evaluated source meshes, materials and six exact mesh colliders used by trials. Rig bone lengths, root and feet unchanged per pose.json. Large generated binaries remain outside Git; regenerate in an unused output directory and independently compare geometry and provenance before collection. Blender USDC export byte identity is not assumed.",
+  "rebuild_arguments_status": "Derived from pose.json, including right-arm original bend and left-arm world-up bend. Verify regenerated numeric geometry before collection; export byte identity is not assumed."
+}

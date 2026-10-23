@@ -1,0 +1,105 @@
+{
+  "_task_scope": "kitchen_bench_lightwheel_open_microwave",
+  "_fixed_source_layout": "configs/extensions/doors/c06_source_layout_lwx.json",
+  "_status": "Source neutral passed; added layouts not designed",
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/wine_glass.usda",
+    "position": [
+      3.012452487945557,
+      -0.7057162332534781,
+      1.36
+    ],
+    "static": false,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "yaw_deg": 0.0,
+    "baseline_intersection_actions": [
+      54,
+      58,
+      62
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "source_intersection_in_reference_off_seeds": {
+      "42": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "43": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "44": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ]
+    },
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/c06_property_candidate_12_00_property_support.usda",
+      "position": [
+        3.012452487945557,
+        -0.7057162332534781,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          2.962452487945557,
+          -0.9957162332534781,
+          -4.470348362317633e-10
+        ],
+        [
+          3.062452487945557,
+          -0.655716233253478,
+          1.36
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry",
+      "component_bounds_world_m": [
+        {
+          "low": [
+            2.962452487945557,
+            -0.9957162332534781,
+            0.001999999552965164
+          ],
+          "high": [
+            3.062452487945557,
+            -0.895716233253478,
+            1.338
+          ]
+        },
+        {
+          "low": [
+            2.962452487945557,
+            -0.9957162332534781,
+            1.338
+          ],
+          "high": [
+            3.062452487945557,
+            -0.655716233253478,
+            1.358
+          ]
+        }
+      ],
+      "design": "Floor-anchored offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+    },
+    "candidate_search": "reports/doors/lwx_C06_release_retry04_20261024/C06_property_distinct_positions_search12.json",
+    "candidate_search_sha256": "c42191b4f62169924c3a270dcb34f6cb4c18cd95730c9d7e261c8a721d267f1f",
+    "candidate_index": 0
+  },
+  "_selection_note": "Discovery candidate only; not task or physical acceptance."
+}
