@@ -49,11 +49,12 @@ with SimulationAppContext(args):
     cfg.scene.robot_contacts=ContactSensorCfg(prim_path='{ENV_REGEX_NS}/Robot/.*',update_period=0,history_length=1)
     env=builder.make_registered(cfg,kwargs);env.reset();e=env.unwrapped
     robot=e.scene['robot'];toaster=e.scene['toaster']
+    from kitchen_safety.extensions.controls.mechanism_monitor import MechanismMonitor
+    mechanisms=MechanismMonitor(e.sim.stage)
     arm_ids=[robot.joint_names.index(f'panda_joint{i}') for i in range(1,8)]
     button_id=toaster.joint_names.index('sideL_button_cancel_joint')
     kin=DroidKinematics(original_pose[:3],Rotation.from_quat(original_pose[3:]).as_euler('xyz',degrees=True)[2])
     q=arr(robot.data.joint_pos)[0,arm_ids]
-    for _ in range(8):env.step(torch.tensor(np.r_[q,0][None],dtype=torch.float32,device=e.device))
     world=ControlsCollisionWorld(e.sim.stage,kin,env_root='/World/envs/env_0')
     # Preserve the benchmark's 60 mm planning / 50 mm execution glass margin.
     writer=CameraWriter(out,e.scene,envdef.embodiment.camera_config.camera_names(),e.step_dt,previews=True)
@@ -64,7 +65,7 @@ with SimulationAppContext(args):
         [f'/World/envs/env_0/Robot/Gripper/Robotiq_2F_85/{name}'],
         filter_patterns=[[button_path]],max_contact_data_count=1024)
         for name in ('left_inner_finger','right_inner_finger')}
-    records=[];plans=[];audits=[];physics_audits=[];contacts=[];failure=None;phase='close';success_step=None
+    records=[];plans=[];audits=[];physics_audits=[];contacts=[];failure=None;phase='setup';success_step=None
     toaster_body_keys={i:f'/World/envs/env_0/kitchen/toaster_main_group/{name}'
         for i,name in enumerate(toaster.body_names)
         if any(p.startswith(f'/World/envs/env_0/kitchen/toaster_main_group/{name}/') for p,*_ in world.objects)}
@@ -103,6 +104,7 @@ with SimulationAppContext(args):
     original_scene_update=e.scene.update
     def checked_scene_update(dt):
         original_scene_update(dt)
+        mechanisms.sample(phase,len(records))
         state=snapshot();refresh_world(state)
         joints=dict(zip(robot.joint_names,state['q']))
         world.allow_button_contact=(phase in ('press','hold'))
@@ -152,6 +154,8 @@ with SimulationAppContext(args):
             raise RuntimeError('Executed clearance violation: '+json.dumps(measurement))
         return after
     try:
+        for _ in range(8):step(q,grip=0)
+        phase='close'
         for _ in range(15):step(q)
         q=np.array(snapshot()['q'])[arm_ids]
         # This task closes an empty gripper. The shared bottle collector's
@@ -191,6 +195,10 @@ with SimulationAppContext(args):
         writer.close()
         (out/'records.json').write_text(json.dumps(records))
         (out/'contacts.json').write_text(json.dumps(contacts,indent=2))
+        mechanism_report=mechanisms.report(('sideL_button_cancel_joint',))
+        (out/'mechanism_audit.json').write_text(json.dumps(mechanism_report,indent=2))
+        if not mechanism_report['passed'] and failure is None:
+            failure='All-kitchen mechanism stability/coverage gate failed; see mechanism_audit.json'
         (out/'plans.json').write_text(json.dumps(plans,indent=2))
         if records:
             np.savez_compressed(out/'trajectory.npz',
@@ -218,9 +226,10 @@ with SimulationAppContext(args):
         loaded_contact_count=sum(sum(abs(f)>.01 for f in v['force']) for c in contacts for v in c['fingers'].values())
         result={'task_id':TASK_ID,'variant':args.variant,'seed':args.seed or 42,
             'toaster_physics_provenance':getattr(envdef,'toaster_physics_provenance',None),
+            'faucet_physics_provenance':getattr(envdef,'faucet_physics_provenance',None),
             'source_sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
             'success':success_step is not None,'success_action_index':success_step,
-            'accepted':bool(success_step is not None and failure is None and loaded_contact_count>0 and validation['passed']),
+            'accepted':bool(success_step is not None and failure is None and loaded_contact_count>0 and validation['passed'] and mechanism_report['passed']),
             'button_contact_count':contact_count,'button_loaded_contact_count':loaded_contact_count,
             'failure':failure,'seconds':time.monotonic()-started,
             'button_joint_limits_m':[0.,.0030166050419211388],
@@ -235,6 +244,8 @@ with SimulationAppContext(args):
             'final':snapshot(),'initial_robot_pose':original_pose,
             'physical_object_setters_after_reset':False,'fixed_only':True,'dt':e.step_dt,
             'physics_dt':cfg.sim.dt,
+            'initial_setup_actions_recorded':sum(r['phase']=='setup' for r in records),
+            'physics_audit_includes_setup':True,
             'robot_body_names':robot.body_names,'robot_joint_names':robot.joint_names,
             'toaster_body_names':toaster.body_names,'toaster_joint_names':toaster.joint_names,
             'robot_contact_body_names':robot_contacts.body_names,

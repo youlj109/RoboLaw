@@ -39,10 +39,14 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None, tria
 
     kitchen_path = KITCHEN
     physics_provenance = None
+    faucet_provenance = None
     if repair_toaster_physics:
         from .toaster_physics import repaired_kitchen
         kitchen_path, physics_provenance = repaired_kitchen(
             KITCHEN, ROOT / 'reports/controls_physics/assets')
+        from .faucet_physics import balanced_faucet
+        kitchen_path, faucet_provenance = balanced_faucet(
+            kitchen_path, ROOT / 'reports/controls_physics/assets')
 
     class LocalDroid(droid.DroidAbsoluteJointPositionEmbodiment):
         def __init__(self, enable_cameras=False, stand_height_m=.8,
@@ -97,4 +101,5 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None, tria
         scene=Scene(assets=[v for k, v in assets.items() if k != spec.embodiment.id]),
         embodiment=assets[spec.embodiment.id], task=build_task_from_spec(spec.task, assets))
     environment.toaster_physics_provenance = physics_provenance
+    environment.faucet_physics_provenance = faucet_provenance
     return environment, assets

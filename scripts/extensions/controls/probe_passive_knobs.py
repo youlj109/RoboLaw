@@ -37,6 +37,13 @@ with SimulationAppContext(args):
     env.reset()
     e = env.unwrapped
     robot, toaster = e.scene['robot'], e.scene['toaster']
+    from kitchen_safety.extensions.controls.mechanism_monitor import MechanismMonitor
+    mechanisms = MechanismMonitor(e.sim.stage)
+    scene_update = e.scene.update
+    def monitored_update(dt):
+        scene_update(dt)
+        mechanisms.sample('neutral', len(info['states']))
+    e.scene.update = monitored_update
     ids = [robot.joint_names.index(f'panda_joint{i}') for i in range(1, 8)]
     q = arr(robot.data.joint_pos)[0, ids]
     command = torch.tensor(np.r_[q, 0][None], dtype=torch.float32, device=e.device)
@@ -59,6 +66,7 @@ with SimulationAppContext(args):
             'thresholds_declared_before_execution': limits,
             'control': 'Robot initial seven joint targets held, gripper open. No object pose or joint state setters after reset.',
             'physics_provenance': envdef.toaster_physics_provenance,
+            'faucet_physics_provenance': envdef.faucet_physics_provenance,
             'runtime_parameters': {}, 'states': []}
     for name in ('get_dof_stiffnesses', 'get_dof_dampings', 'get_dof_friction_coefficients',
                  'get_dof_armatures', 'get_dof_limits', 'get_masses', 'get_coms', 'get_inertias'):
@@ -76,6 +84,9 @@ with SimulationAppContext(args):
     try:
         for i in range(steps + pulse_steps + rest_steps):
             phase = 'neutral' if i < steps else ('external_torque_mobility' if i < steps + pulse_steps else 'passive_damping')
+            if i == steps:
+                (out / 'background_mechanism_audit.json').write_text(json.dumps(mechanisms.report(), indent=2))
+                e.scene.update = scene_update
             writer.write(phase)
             info['states'].append({'index': i, 'time_s': i * e.step_dt, 'phase': phase,
                                    'robot_q': arr(robot.data.joint_pos)[0].tolist(),
@@ -99,6 +110,7 @@ with SimulationAppContext(args):
     rotation = np.degrees(all_q[-1, knobs] - all_q[steps, knobs])
     last = all_q[-round(1 / e.step_dt):, knobs]
     checks = {
+        'all_kitchen_mechanisms_stationary': json.loads((out/'background_mechanism_audit.json').read_text())['passed'],
         'neutral_duration': steps * e.step_dt >= limits['neutral_min_seconds'],
         'neutral_knob_excursion': float(np.max(np.abs(np.degrees(neutral_q[:, knobs] - neutral_q[0, knobs])))) < limits['neutral_knob_excursion_max_deg'],
         'neutral_knob_speed': float(np.max(np.abs(np.degrees(neutral_dq[:, knobs])))) < limits['neutral_knob_speed_max_deg_s'],

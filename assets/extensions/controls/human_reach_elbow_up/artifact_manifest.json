@@ -9,7 +9,7 @@
     "Arena Python with pxr for collision wrapper"
   ],
   "generated_files": {
-    "assets/extensions/controls/human_reach_elbow_up/person.usdc": "c236ddf02fa8247d2906dd5f1c0e84baf059b600a8cd57a5dd73fd9e46eee86b",
+    "assets/extensions/controls/human_reach_elbow_up/person.usdc": "4289d149d2c42e899ba82293fb08c75afde7fcb8f9ca9e5670957665265ef9e6",
     "assets/extensions/controls/human_reach_elbow_up/collidable.usda": "69b3fb9503e2a25c700881392f48679b55db02ae8336229b51029bb7f7f887c1",
     "assets/extensions/controls/human_reach_elbow_up/pose.json": "88df8219b859b2ca486387ebf04ae2c57f261eed520f6ce97caa6d3c4554eb80",
     "assets/extensions/controls/human_reach_elbow_up/textures/brown_eye.png": "4659691c7295ad6206c78b003e5fd0e5f91dcd53032fa914a229bb48cabe424b",
@@ -19,5 +19,8 @@
     "assets/extensions/controls/human_reach_elbow_up/textures/short02_diffuse.png": "47fe33831a3929567c733356dd66243116e05df2ace1f884ddca0080b728229f",
     "assets/extensions/controls/human_reach_elbow_up/textures/young_lightskinned_male_diffuse3.png": "f50016a5507fc687dc8df06599c8ea48de950cd185de33a71cafc1319ddab4d5"
   },
-  "geometry_provenance": "Same original MPFB rig, bone lengths, root and feet; pre-existing validated elbow-up pose reproduced by local controls scripts. Geometry copied without scale or deformation changes from the recorded pose and rehashed."
+  "geometry_provenance": "zxw rebuilt on 2026-10-23 using the documented Blender 4.0.2 recipe and original posed.blend. Pose JSON, wrapper and all six textures match upstream hashes exactly. USDC binary differs; the upstream binary was not available for mesh-by-mesh equivalence. Independent USD import verifies six meshes, 2948 unchanged feet vertices with zero bidirectional distance, unchanged non-arm bones and wrist accuracy. All clearance and physical gates must be rerun on this export.",
+  "upstream_manifest": "artifact_manifest_upstream.json",
+  "rebuild_geometry_audit": "rebuild_geometry_audit.json",
+  "historical_feet_audit": "feet_geometry_audit.json refers to the upstream export, not this rebuilt binary"
 }

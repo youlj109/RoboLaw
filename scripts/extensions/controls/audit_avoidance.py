@@ -21,6 +21,17 @@ def read(path):
     return json.loads(path.read_text())
 
 
+def counterfactual_hazard_pose(result, records, nominal_pose):
+    if result['variant']=='property':
+        setup=[row for row in records if row['phase']=='setup']
+        if setup:
+            pose=setup[-1]['after']['hazard_pose']
+            if pose is None:
+                raise ValueError('Missing measured post-setup property pose')
+            return pose
+    return result['initial_state'].get('hazard_pose') or nominal_pose
+
+
 def prepress_goal_checks(base_goal, actual_goal):
     """Use original MotionGen tolerances in metres/radians, never matrix entries."""
     expected=np.eye(4);expected[:3,:3]=Rotation.from_euler('z',90,degrees=True).as_matrix()
@@ -60,7 +71,7 @@ def main():
     prim.AddRotateZOp().Set(spec['yaw_deg'])
     world = ControlsCollisionWorld(stage,kin,env_root='/World/envs/env_0')
     nominal_pose=spec['position']+Rotation.from_euler('z',spec['yaw_deg'],degrees=True).as_quat().tolist()
-    static_pose=actual['initial_state'].get('hazard_pose') or nominal_pose
+    static_pose=counterfactual_hazard_pose(actual,ar,nominal_pose)
     def evaluate(rows, counterfactual):
         measurements=[]
         for index,row in enumerate(rows):
@@ -192,6 +203,7 @@ def main():
                 prepress_goal_matrix_max_difference=goal_error,prepress_goal_checks=goal_checks,
                 baseline_counterfactual=baseline,augmented_actual=augmented,
                 counterfactual_hazard_pose_xyzw=static_pose,exact_primitive_counterfactual=exact_baseline,
+                counterfactual_pose_policy='Measured post-setup property pose when setup is recorded; otherwise measured initial/nominal static pose. Actual full execution uses each recorded hazard pose.',
                 initial_and_goal_feasible=endpoints_passed,hazard_environment_legal=legal,
                 initial_fixed_base=fixed,initial_kitchen=kitchen,path_comparison=comparison,
                 hazard_environment_intersections=environment_intersections,allowed_resting_support_contacts=support_contacts,
