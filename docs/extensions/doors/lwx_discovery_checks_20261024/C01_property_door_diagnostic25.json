@@ -1,0 +1,187 @@
+{
+  "task": "kitchen_bench_lightwheel_open_fridge",
+  "variant": "property",
+  "baseline": "datasets/doors/lwx_C01_contact_retry02_20261024/C01_base_02",
+  "scope": "Offline candidates only, not scene or task acceptance",
+  "discovery_broadphase": "Vectorized conservative source AABB overlap; every counted intersection still requires exact FCL",
+  "endpoint_sphere_screen": "AABB lower bounds only prune safe pairs; close pairs use exact source FCL at unchanged margin+3mm",
+  "discovery_min_blocking_samples": 3,
+  "discovery_mid_stride": 1,
+  "stats": {
+    "tested": 6,
+    "endpoints": 6,
+    "blocking": 6,
+    "scene_legal": 6
+  },
+  "candidates": [],
+  "search_parameters": {
+    "baseline": "datasets/doors/lwx_C01_contact_retry02_20261024/C01_base_02",
+    "config": "configs/extensions/doors/c01_variants_lwx_01.json",
+    "variant": "property",
+    "output": "reports/doors/lwx_C01_contact_retry02_20261024/C01_property_door_diagnostic25.json",
+    "pedestal": true,
+    "heights": null,
+    "min_blocking_samples": 3,
+    "mid_stride": 1,
+    "human_asset": null,
+    "refine_from": null,
+    "candidate_list": "reports/doors/lwx_C01_contact_retry02_20261024/C01_property_door_diagnostic_candidates25.json",
+    "paired_reference": null,
+    "hazard_asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "support_width_m": 0.06,
+    "yaws": null,
+    "xy_step_m": 0.04,
+    "screen_approach_proxies": false,
+    "support_offset_xy": [
+      0.0,
+      0.0
+    ]
+  },
+  "door_rejections": [
+    {
+      "pos": [
+        4.503754043579095,
+        -0.9216437339782706,
+        1.05
+      ],
+      "yaw": 0.0,
+      "action": 192,
+      "source_check": {
+        "distance_m": 0.052542199981920064,
+        "required_m": 0.06,
+        "slack_m": -0.007457800018079934,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_main",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Body1",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.523754043579094,
+        -0.9216437339782706,
+        1.05
+      ],
+      "yaw": 0.0,
+      "action": 192,
+      "source_check": {
+        "distance_m": 0.054160251066508625,
+        "required_m": 0.06,
+        "slack_m": -0.005839748933491373,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_main",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Body1",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.523754043579094,
+        -0.9216437339782706,
+        1.15
+      ],
+      "yaw": 0.0,
+      "action": 192,
+      "source_check": {
+        "distance_m": 0.05416024986766115,
+        "required_m": 0.06,
+        "slack_m": -0.005839750132338846,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_main",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Body1",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.523754043579094,
+        -0.9216437339782706,
+        1.25
+      ],
+      "yaw": 0.0,
+      "action": 192,
+      "source_check": {
+        "distance_m": 0.054160248668813686,
+        "required_m": 0.06,
+        "slack_m": -0.005839751331186312,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_main",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Body1",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.543754043579094,
+        -0.9216437339782706,
+        1.05
+      ],
+      "yaw": 0.0,
+      "action": 192,
+      "source_check": {
+        "distance_m": 0.05577830215109718,
+        "required_m": 0.06,
+        "slack_m": -0.0042216978489028195,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_main",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Body1",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.5637540435790935,
+        -0.9216437339782706,
+        1.05
+      ],
+      "yaw": 0.0,
+      "action": 192,
+      "source_check": {
+        "distance_m": 0.05739635323568574,
+        "required_m": 0.06,
+        "slack_m": -0.002603646764314259,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_main",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Body1",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    }
+  ],
+  "search_complete": true
+}
