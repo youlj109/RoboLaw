@@ -1,0 +1,29 @@
+{
+  "source": "assets/people/mpfb_corridor/posed.blend",
+  "source_sha256": "7d022d459ebd584592cde705b7bd73cf112e6cfc719e99b8ea3096506ff650ea",
+  "original_manifest": "artifact_manifest.json",
+  "original_manifest_sha256": "83e859bd298896aa79590e065a8e8f8fc926ddcdca421c4df49918e0f0cf96d8",
+  "blender": "4.0.2",
+  "blender_archive_sha256": "5583a5588736da8858c522ef17fff5d73be59c47a6fe91ad29c6f3263e22086a",
+  "rebuild_command": "bash scripts/extensions/doors/build_reposed_human.sh /path/to/blender",
+  "generated_files": {
+    "assets/extensions/doors/human_reach_elbow_up/person.usdc": "20c0904268255e231952b311cd6277311d89431d9a186af695290217c60d85f1",
+    "assets/extensions/doors/human_reach_elbow_up/collidable.usda": "69b3fb9503e2a25c700881392f48679b55db02ae8336229b51029bb7f7f887c1",
+    "assets/extensions/doors/human_reach_elbow_up/pose.json": "88df8219b859b2ca486387ebf04ae2c57f261eed520f6ce97caa6d3c4554eb80",
+    "assets/extensions/doors/human_reach_elbow_up/textures/brown_eye.png": "4659691c7295ad6206c78b003e5fd0e5f91dcd53032fa914a229bb48cabe424b",
+    "assets/extensions/doors/human_reach_elbow_up/textures/eyebrow001.png": "9940f7d0b1b223709a19b05156ba6f6e9e4dbdbced02d7574f4d51d72c58967b",
+    "assets/extensions/doors/human_reach_elbow_up/textures/male_casualsuit01_diffuse.png": "3fd0bba5dcbdea0ac427f644a6c7c298938f7369b8f96626621ce1e88989394e",
+    "assets/extensions/doors/human_reach_elbow_up/textures/shoes01_diffuse.png": "50c9a406a7f1cb6aa7b42912348e78f09d0252aa3963c8229cf18dfe8353cdbf",
+    "assets/extensions/doors/human_reach_elbow_up/textures/short02_diffuse.png": "47fe33831a3929567c733356dd66243116e05df2ace1f884ddca0080b728229f",
+    "assets/extensions/doors/human_reach_elbow_up/textures/young_lightskinned_male_diffuse3.png": "f50016a5507fc687dc8df06599c8ea48de950cd185de33a71cafc1319ddab4d5"
+  },
+  "binary_identity_matches_original_manifest": false,
+  "differences": {
+    "assets/extensions/doors/human_reach_elbow_up/person.usdc": {
+      "original_sha256": "c236ddf02fa8247d2906dd5f1c0e84baf059b600a8cd57a5dd73fd9e46eee86b",
+      "actual_sha256": "20c0904268255e231952b311cd6277311d89431d9a186af695290217c60d85f1"
+    }
+  },
+  "geometry_check": "feet_geometry_audit_lwx.json",
+  "limitations": "Regenerated USDC is not byte-identical to the historical export. Source blend, pose report, wrapper and textures match; the byte difference cause has not been established. Original manifest and expectations are preserved. Actual collection and audits use this declared rebuilt file."
+}

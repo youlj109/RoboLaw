@@ -37,7 +37,9 @@ class DoorCollisionWorld(CollisionWorld):
             False,True)
         for p in Usd.PrimRange(root,Usd.TraverseInstanceProxies()):
             name=str(p.GetPath())
-            if '/Robot' in name or not p.HasAPI(UsdPhysics.CollisionAPI): continue
+            # The fixed stand is real external geometry although authored below
+            # Robot/panda_link0. Keep it while excluding moving robot colliders.
+            if ('/Robot' in name and '/stand_instanceable/' not in name) or not p.HasAPI(UsdPhysics.CollisionAPI): continue
             if not UsdPhysics.CollisionAPI(p).GetCollisionEnabledAttr().Get(): continue
             if p.IsA(UsdGeom.Mesh):
                 m=UsdGeom.Mesh(p);verts=np.array(m.GetPointsAttr().Get(),dtype=float)
@@ -92,8 +94,19 @@ class DoorCollisionWorld(CollisionWorld):
         print('PLANNER_WORLD',len(self.objects),'collision shapes',flush=True)
 
 
+    def shapes(self,*args,**kwargs):
+        shapes=super().shapes(*args,**kwargs)
+        if shapes[0][0]!='arm':raise RuntimeError('Source proximal envelope ordering changed')
+        shapes[0]=('arm_mount_envelope',*shapes[0][1:])
+        return shapes
+
     def _pairs(self,*args,**kwargs):
         pairs=super()._pairs(*args,**kwargs)
+        # The source proximal capsule extends 75 mm below the fixed base origin
+        # into its own mounting stand. It is an envelope, not a physical link.
+        # Keep every source robot hull/mesh against the stand at the original
+        # clearance, and keep this envelope against all foreign scene geometry.
+        pairs=[p for p in pairs if not (p[1]=='arm_mount_envelope' and '/stand_instanceable/' in p[2])]
         if not getattr(self,'allow_handle_contact',False):return pairs
         return [p for p in pairs if not ('/fridge_door_handle' in p[2] and p[1] in ('finger','gripper/left_inner_finger','gripper/right_inner_finger'))]
 
