@@ -1,6 +1,7 @@
 """Bounded robot-only contact experiment for the original level-three knob."""
 import numpy as np
 from scipy.spatial.transform import Rotation
+from .planning import plan_control_pose
 
 
 def execute_temperature(config, planner, kin, state, step, set_phase, arm_ids, on_plan):
@@ -15,7 +16,7 @@ def execute_temperature(config, planner, kin, state, step, set_phase, arm_ids, o
     target[:3,:3]=Rotation.from_euler('x',config['initial_roll_deg'],degrees=True).as_matrix()
     target[:3,3]=config['pregrasp_tcp_world_m']
     set_phase('pregrasp')
-    plan=planner.plan_pose(q(),target,grip_binary=0,phase='pregrasp')
+    plan=plan_control_pose(planner,q(),target,config.get('prepress_planning'),grip_binary=0,phase='pregrasp')
     validation=planner.validate_path(plan['positions'],grip_binary=0,phase='pregrasp')
     plan['metadata']['dense_path_validation']=validation
     plan['metadata']['requested_tcp_pose']=target.tolist()

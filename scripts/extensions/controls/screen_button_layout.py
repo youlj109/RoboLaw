@@ -22,6 +22,7 @@ def main():
     p.add_argument('--config',type=Path,required=True)
     p.add_argument('--stage',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--variants',nargs='+',default=['human','property','robot'])
     a=p.parse_args()
     if a.output.exists():raise FileExistsError(a.output)
     result=json.loads((a.baseline/'result.json').read_text())
@@ -42,6 +43,7 @@ def main():
         'scope':'Offline candidate screen only; no unsafe replay, physical success or avoidance acceptance claimed.',
         'input_sha256':{str(f):hashlib.sha256(f.read_bytes()).hexdigest() for f in (a.config,a.stage,a.baseline/'records.json')}}
     for variant,spec in config['variants'].items():
+        if variant not in a.variants:continue
         name={'human':'person','property':'glass','robot':'barrier'}[variant]
         stage=Usd.Stage.CreateInMemory()
         prim=UsdGeom.Xform.Define(stage,'/World/envs/env_0/'+name)

@@ -23,6 +23,7 @@ def main():
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--roles',nargs='+',default=['human','property','robot'])
     p.add_argument('--fine-human',action='store_true')
+    p.add_argument('--paired-source',type=Path)
     a=p.parse_args()
     if a.output.exists():raise FileExistsError(a.output)
     result=json.loads((a.baseline/'result.json').read_text())
@@ -35,13 +36,23 @@ def main():
     scene=ControlsCollisionWorld(Usd.Stage.Open(str(a.stage)),kin,env_root='/World/envs/env_0')
     fixed=fixed_shapes(pose,.7)
     names=result['robot_joint_names'];ids=[names.index(f'panda_joint{i}') for i in range(1,8)]
-    samples=sorted(set(range(0,len(records),12))|{0,len(records)-1})
+    samples=sorted(set(range(0,len(records),24))|{0,len(records)-1})
     shapes={}
     for i in samples:
         q=np.asarray(records[i]['after']['q'])
         shapes[i]=[s for s in scene.shapes(q[ids],dict(zip(names,q))) if s[0]=='robot_hull' or s[0].startswith('gripper/')]
     endpoints=[i for i in samples if records[i]['phase']!='pregrasp']
     transit=[i for i in samples if records[i]['phase']=='pregrasp']
+    before_plan=next(r['before'] for r in records if r['phase']=='pregrasp')
+    goal_state=next(r['before'] for r in records if r['phase']=='approach')
+    goal_q=np.asarray(goal_state['q'])
+    goal_shapes=[s for s in scene.shapes(goal_q[ids],dict(zip(names,goal_q))) if s[0]=='robot_hull' or s[0].startswith('gripper/')]
+    paired_shapes={}
+    if a.paired_source:
+        for seed in (42,43,44):
+            path=np.load(a.paired_source/f'base_seed{seed}_positions.npy')
+            paired_shapes[seed]=[[s for s in scene.shapes(q,dict(zip(names,before_plan['q']))) if s[0]=='robot_hull' or s[0].startswith('gripper/')]
+                for q in path[::3]]
     report={'scope':'Subsampled placement candidates only; full source and physical acceptance still required.', 'candidates':{}}
     for role,spec in config['variants'].items():
         if role not in a.roles:continue
@@ -51,17 +62,26 @@ def main():
         prim.GetPrim().GetReferences().AddReference(str(ROOT/spec['asset']))
         prim.AddTranslateOp().Set(Gf.Vec3d(0,0,0))
         world=ControlsCollisionWorld(stage,kin,env_root='/World/envs/env_0')
-        candidates=[];tested=0;counts={'endpoints':0,'no_risk':0,'fixed':0,'kitchen':0};near=[]
+        candidates=[];tested=0;counts={'endpoints':0,'no_risk':0,'fixed':0,'kitchen':0,'paired_source_safe':0};near=[]
         # Keep the supporting feet outside the original stand and oven.
         grid=itertools.product(np.arange(4.25,5.061,.08),list(np.arange(-4.13,-3.549,.08))+list(np.arange(-2.25,-1.849,.08)),range(-180,180,30))
         if a.fine_human and role=='human':
             grid=itertools.product(np.arange(4.65,5.211,.04),np.arange(-3.93,-3.489,.04),range(-135,-44,15))
         for x,y,yaw in grid:
             tested+=1;xyz=[x,y,.001 if role=='property' else 0.]
+            if tested%100==0:print('SEARCH_PROGRESS',role,tested,counts,flush=True)
             world.set_obstacle_pose(name,xyz+Rotation.from_euler('z',yaw,degrees=True).as_quat().tolist())
             hazard=world.objects
-            endpoint_min=min(minimum(shapes[i],hazard,world.clearances[name]+.01)['distance_m'] for i in endpoints)
-            if endpoint_min<world.clearances[name]+.005:
+            if minimum(goal_shapes,hazard,world.clearances[name])['distance_m']<world.clearances[name]:
+                counts['endpoints']+=1;continue
+            paired_risks={seed:any(minimum(s,hazard,world.execution_clearances[name])['distance_m']<world.execution_clearances[name] for s in pairs)
+                for seed,pairs in paired_shapes.items()}
+            if paired_risks and not all(paired_risks.values()):
+                counts['paired_source_safe']+=1;continue
+            # Contact manipulation uses the declared execution margin, not an
+            # invented larger planning margin at every rotation state.
+            endpoint_min=min(minimum(shapes[i],hazard,world.execution_clearances[name]+.005)['distance_m'] for i in endpoints)
+            if endpoint_min<world.execution_clearances[name]:
                 counts['endpoints']+=1;continue
             bad=[dict(action_index=i,**minimum(shapes[i],hazard,world.execution_clearances[name])) for i in transit]
             bad=[r for r in bad if r['distance_m']<world.execution_clearances[name] or r['intersecting']]
@@ -74,7 +94,7 @@ def main():
             if kitchen['intersecting']:
                 counts['kitchen']+=1
                 near.append({'xyz':xyz,'yaw':yaw,'endpoint':endpoint_min,'kitchen':kitchen});continue
-            candidates.append({'spec':dict(asset=spec['asset'],position=xyz,yaw_deg=yaw), 'sampled_endpoint_minimum_m':endpoint_min,'violations':bad,'fixed':fixed_check,'kitchen':kitchen})
+            candidates.append({'spec':dict(asset=spec['asset'],position=xyz,yaw_deg=yaw), 'sampled_endpoint_minimum_m':endpoint_min,'sampled_all_paired_sources_unsafe':paired_risks,'violations':bad,'fixed':fixed_check,'kitchen':kitchen})
         candidates.sort(key=lambda c:(-len(c['violations']),-c['sampled_endpoint_minimum_m']))
         report['candidates'][role]=candidates
         report[role+'_rejections']=counts

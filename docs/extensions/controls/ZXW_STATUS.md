@@ -1,22 +1,106 @@
 # zxw D Group Execution
 
-Latest synchronized base: `origin/ylj` at `ffbc983` (2026-10-23).
+Latest synchronized base: `origin/ylj` at `eda19a6` (2026-10-24 local time),
+merged without conflicts as `1f010a8`. Its new changes only affect the other
+group's progress dashboard; all current controls changes/data were retained.
 Left-button evidence was originally developed from `a5ab6fe`.
 Personal branch: `zxw`. Existing ignored datasets and local Kit settings retained.
 
 ## Scope
 
-Completed the repaired left toaster cancel button: one physical baseline and
-one successful episode each for human/property/robot, plus paired planning
-seeds 42/43/44. No 200-episode collection.
+Completed all three assigned original tasks: three physical baselines and
+nine successful hazard episodes, one human/property/robot episode per task.
+Each task has paired planning seeds 42/43/44 (12 plans; 36 across the group).
+No 200-episode collection or batch-success-rate claim.
+
+Unified accepted report: [ZXW_ALL_RESULTS.json](ZXW_ALL_RESULTS.json).
+It indexes the three task reports, local data/videos, hashes, first source-risk
+times, resolved robot links and human wrist positions. Nine annotated evidence
+images and JSON sidecars are included in [evidence/](evidence/); full raw
+data/videos remain local ignored files, not Git-uploaded.
 
 | Assigned task | Current status |
 | --- | --- |
-| Left toaster cancel button | Complete, fixed layout, baseline + three variants |
+| Left toaster cancel button | Complete: baseline + three variants; current explicit-task summary recheck passed |
 | Right toaster cancel button | Complete: baseline + three physical variants; all 26 ordered reviews and 12 paired plans passed |
-| Oven temperature knob, original target level 3 | In progress: baseline03 and neutral03 passed; three hazard variants not accepted yet |
+| Oven temperature knob, original target level 3 | Complete: matching fixed-branch baseline04 + human/property/robot; original level3, release/retreat, all independent gates and all 12 paired plans passed |
 
-User now requires all three tasks. Only the oven's three hazard variants remain.
+All required physical tasks and safety gates are complete. Current controls
+regression: 48 tests passed in the actual Arena container. No required physics
+gate is waived. Limitations and rejected attempts are listed separately below.
+
+### Oven Final Delivery
+
+Accepted report: [ZXW_TEMPERATURE_RESULTS.json](ZXW_TEMPERATURE_RESULTS.json).
+All 29 ordered pipeline steps passed in
+`reports/controls_temperature_zxw_20261023/fixed_verification01/`.
+Baseline: `datasets/controls_temperature_zxw_20261023/base04_fixed`.
+Variants: `datasets/controls_temperature_zxw_20261023/fixed_run01/`.
+
+| Variant | Frames / physics samples | Maximum angle | Final original level | Released retreat drift |
+| --- | ---: | ---: | ---: | ---: |
+| base | 588 / 4704 | 136.344 degrees | 3 | 0 degrees |
+| human | 578 / 4624 | 136.149 degrees | 3 | 0 degrees |
+| property | 603 / 4824 | 137.044 degrees | 3 | 0 degrees |
+| robot | 592 / 4736 | 136.283 degrees | 3 | 0 degrees |
+
+Strict measured minimum hazard gaps: human 41.483/20 mm, property 66.377/50 mm,
+robot 53.767/10 mm (observed/required). Separate 120 Hz external clearance,
+contact and 90-DOF background checks passed; independent self-collision and
+source counterfactual checks are action-rate, not claimed as 120 Hz.
+Neutral03's 50-second observation covers the longest 40.2-second episode.
+All original videos and comparisons were fully decoded; all three oven
+comparison keyframe sheets and annotated risk images were actually viewed.
+
+The first unified-index attempt rejected the legacy left report because it
+lacked a top-level task ID. It is retained in
+`fixed_verification01/initial_delivery_index_missing_legacy_task_id.json`.
+No gate was weakened. Current strict summarization of the same original four
+recordings passed as
+[ZXW_LEFT_BUTTON_REVIEWED_RESULTS.json](ZXW_LEFT_BUTTON_REVIEWED_RESULTS.json).
+The original left report remains unchanged for provenance.
+
+Right-button completion and the oven development checkpoint were pushed as
+`747e7f9` on `zxw`; remote `main` and `ylj` were not pushed.
+
+### Oven Comparison Policy Revision
+
+Original pose-goal base03 and property02/robot02 all passed independent original
+level3/contact/release/data/self/fixed-base checks. Property02 and robot02 also
+passed source-geometry avoidance and three-seed paired planning. These are
+physical experiments, not yet a complete matched oven delivery: all human
+layouts either obstructed the original manipulation states, failed dense IK,
+or left the seed43 pose-policy baseline safe. All failures are retained.
+
+Exact rejected-endpoint diagnostics identified original panda_link5/6 against
+human right upper/lower-arm clothing, not just the hand. Do not excuse this by
+changing margins or accepting a different joint endpoint. The stronger baseline
+initial/approach/rotation/release/retreat feasibility gate is retained.
+
+`temperature_fixed_branch01.json` predeclares a lawful IK branch from the first
+successful base03 pregrasp pose (source path and hash embedded). It re-solves the
+same original TCP, uses open-gripper joint-goal MotionGen, and adds NO waypoints.
+It is the same declared fixed-endpoint policy used by the accepted buttons,
+adapted to the original knob pregrasp. New `base04_fixed` and all three
+`fixed_run01` variants were collected with this policy and independently passed.
+Old pose-policy recordings must not be mixed into the new matched set.
+
+All twelve new seed42/43/44 plans passed dense checks. All nine hazard-off
+source-shape checks required adjustment; all new source-shape plans were safe.
+The human physical episode has 578 frames / 4624 physics samples, reached
+136.149 degrees and original final level3, and had zero retreat drift.
+Its source first violation is at 4.8667 s, `gripper/right_inner_finger`,
+19.51 mm vs required 20 mm. Actual contact precedes target motion and success.
+The annotated risk keyframe was actually viewed; its hypothetical baseline
+hazard is explicitly geometry-only, not a physical collision replay.
+See [OVEN_REPRODUCTION.md](OVEN_REPRODUCTION.md) for exact asset/policy recipes.
+
+Pose-policy failures retained include property01 (300-step diagnostic budget),
+robot01 (real angle 126.68 degrees was original level3 but did not reach the
+extra declared 135-degree interior target, no successful release/retreat),
+wide-guard endpoint conflicts, and every bounded human candidate/paired run.
+New first-violation evidence uses original synchronized RGB and explicitly
+labeled conservative projected bounds, never an unsafe physical replay.
 
 ## Right Button Delivery
 
@@ -45,7 +129,10 @@ with the same explicit passive knob/rack models. Initial oven hazard layouts
 failed endpoint feasibility and remain rejected. Candidate placement searches
 are not physical demonstrations or final acceptance.
 
-## Remaining-Task Work Log
+## Historical Work Log
+
+The entries below preserve intermediate results and rejections chronologically;
+the task table above and final machine-readable reports determine current status.
 
 - Merged latest `origin/ylj` without conflicts; existing left evidence retained.
 - Added explicit task/source bindings, rejecting mismatched configs and limits.
@@ -116,10 +203,10 @@ are not physical demonstrations or final acceptance.
   Docker reported OOMKilled=false. `property02` is retained as incomplete,
   not a failed task demonstration or successful sample. `property03` is a
   fresh attempt. No GPU-memory cause is asserted from this exit alone.
-- Current regression: 41 tests plus 11 subtests passed; not evidence that the
+- Earlier regression: 41 tests plus 11 subtests passed; not evidence that the
   remaining physical tasks are complete.
 
-## Current Evidence
+## Left Button Evidence
 
 Final strict review found that the reference collector omitted its first eight
 setup actions, including the vase's approximately 1 mm natural settling.
@@ -130,7 +217,9 @@ The collector now includes all setup actions in RGB, action/state/contact and
 120 Hz audits. Strict final recapture: `datasets/controls_zxw_20261023/full_recorded/`.
 Ordered acceptance progress: `reports/controls_zxw_20261023/full_verification/verification_progress.json`.
 This recapture passed all 26 ordered acceptance steps. The machine-readable
-final report is [ZXW_LEFT_BUTTON_RESULTS.json](ZXW_LEFT_BUTTON_RESULTS.json).
+original final report is [ZXW_LEFT_BUTTON_RESULTS.json](ZXW_LEFT_BUTTON_RESULTS.json);
+the new explicit-task review is
+[ZXW_LEFT_BUTTON_REVIEWED_RESULTS.json](ZXW_LEFT_BUTTON_REVIEWED_RESULTS.json).
 
 | Final episode | Frames | Physics samples | First success (s) | Extra hold (s) |
 | --- | ---: | ---: | ---: | ---: |

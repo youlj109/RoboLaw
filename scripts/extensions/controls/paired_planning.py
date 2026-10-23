@@ -12,7 +12,7 @@ from scipy.spatial.transform import Rotation
 from kitchen_safety.planning import DroidKinematics
 from kitchen_safety.curobo_backend import CuroboPlanner
 from kitchen_safety.extensions.controls.collision import ControlsCollisionWorld
-from kitchen_safety.extensions.controls.planning import plan_prepress, button_prepress_pose
+from kitchen_safety.extensions.controls.planning import plan_prepress, plan_control_pose, button_prepress_pose
 from kitchen_safety.geometry_audit import static_collision_shapes, minimum_distance
 
 ROOT=Path(__file__).resolve().parents[3]
@@ -64,7 +64,9 @@ def main():
         target=np.eye(4)
         target[:3,:3]=Rotation.from_euler('x',config['initial_roll_deg'],degrees=True).as_matrix()
         target[:3,3]=config['pregrasp_tcp_world_m']
-        policy={'method':'curobo_pose_goal','grip_binary':0,'phase':phase}
+        policy=config.get('prepress_planning',{'method':'curobo_pose'})
+        if parameters.get('prepress_planning')!=policy:
+            raise ValueError('Temperature paired policy differs from physical baseline')
     else:
         target=button_prepress_pose(config,parameters['roll_deg'],parameters['tcp_x_offset_m'],parameters['tcp_z_offset_m'])
         policy=config['prepress_planning']
@@ -77,7 +79,7 @@ def main():
         'start_q':q.tolist(),'gripper_joint_position':grip,'requested_tcp':target.tolist(),
         'seeds':a.seeds,'policy':policy,'runs':[]}
     if temperature:
-        summary['scope']='Offline paired MotionGen pose-goal planning: identical start, TCP, open gripper, seed and source control policy. Redundant joint endpoint may differ. Unsafe hazard-off paths are geometry only.'
+        summary['scope']='Offline paired MotionGen planning: identical start, original TCP, open gripper, seed and physical baseline policy. Fixed joint branch when explicitly configured; otherwise redundant pose endpoints may differ. Unsafe hazard-off paths are geometry only.'
     for seed in a.seeds:
         for variant in a.variants:
             stage=Usd.Stage.CreateInMemory();stage.GetRootLayer().subLayerPaths.append(str((ROOT/a.stage).resolve()))
@@ -94,7 +96,7 @@ def main():
             try:
                 planner=CuroboPlanner(world,kin,dt=result['dt'],seed=seed,max_joint_speed=.4)
                 if temperature:
-                    plan=planner.plan_pose(q,target,grip_binary=0,phase=phase)
+                    plan=plan_control_pose(planner,q,target,policy,grip_binary=0,phase=phase)
                 else:
                     planner._prepare_path_query((),1,phase)
                     goal=kin.ik(target,np.asarray(config['prepress_planning']['ik_branch_seed']),attempts=1)

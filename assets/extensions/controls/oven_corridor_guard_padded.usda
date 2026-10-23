@@ -1,0 +1,17 @@
+#usda 1.0
+(
+    defaultPrim = "Guard"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Guard" (
+    prepend references = @oven_corridor_guard_low.usda@
+    customData = { string provenance = "Controls-local visibly padded floor-mounted aisle crossbar, 0.17 x 0.98 x 0.16 m. All padding is rendered and collidable; no invisible enlargement." }
+)
+{
+    over "Crossbar"
+    {
+        double3 xformOp:translate = (0, 0.43, 1.02)
+        double3 xformOp:scale = (0.17, 0.98, 0.16)
+    }
+}

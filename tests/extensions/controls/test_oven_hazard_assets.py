@@ -11,6 +11,10 @@ ROOT=Path(__file__).resolve().parents[3]
     ('oven_glass_floor_lamp_low.usda','Lamp',4,True),
     ('oven_corridor_guard.usda','Guard',3,False),
     ('oven_corridor_guard_low.usda','Guard',3,False),
+    ('oven_corridor_guard_wide.usda','Guard',3,False),
+    ('oven_corridor_guard_padded.usda','Guard',3,False),
+    ('oven_corridor_guard_padded_v2.usda','Guard',3,False),
+    ('oven_corridor_guard_endpad.usda','Guard',4,False),
 ])
 def test_visible_supported_source_colliders(asset,root,count,dynamic):
     stage=Usd.Stage.Open(str(ROOT/'assets/extensions/controls'/asset))

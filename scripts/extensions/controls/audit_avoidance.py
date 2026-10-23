@@ -125,6 +125,7 @@ def main():
     endpoints=[m for m in baseline['measurements'] if m['action_index']==0 or
                (m['phase']!=free_phase if temperature else m['phase'] in ('press','hold'))]
     endpoints_passed=all(m['valid'] for m in endpoints)
+    baseline_manipulation_configuration_safe=endpoints_passed
     world.set_obstacle_pose(name,static_pose)
     fixed=minimum(fixed_shapes(pose,.7 if temperature else .8),world.objects)
     scene=ControlsCollisionWorld(Usd.Stage.Open(str(ROOT/args.stage)),kin,env_root='/World/envs/env_0')
@@ -157,7 +158,9 @@ def main():
             support=(variant=='property' and (source_base or source_floor_ring)
                 and surface[0].endswith('/kitchen/counter_main_main_group/top_geometry')
                 and obstacle[2][2]>=surface[3][2]-tolerance)
-            if temperature and spec['asset']=='assets/extensions/controls/oven_glass_floor_lamp.usda':
+            if temperature and spec['asset'] in (
+                    'assets/extensions/controls/oven_glass_floor_lamp.usda',
+                    'assets/extensions/controls/oven_glass_floor_lamp_low.usda'):
                 # Only the authored z=0 cylindrical foot may rest on the floor.
                 source=Usd.Stage.Open(str(ROOT/spec['asset']))
                 base_prim=source.GetPrimAtPath('/Lamp/Base')
@@ -206,6 +209,12 @@ def main():
     else:
         expected=button_prepress_pose(config,params['roll_deg'],params['tcp_x_offset_m'],params['tcp_z_offset_m'])
     goal_checks=prepress_goal_checks(base_goal,actual_goal,expected)
+    evidence_class='free_space_replanning'
+    if temperature:
+        # Keep the stronger original baseline manipulation-feasibility gate.
+        # A new redundant endpoint cannot excuse an obstructed old grasp pose.
+        if not baseline_manipulation_configuration_safe:
+            evidence_class='rejected_baseline_manipulation_configuration_conflict'
     same_controls=bool(base.get('control_parameters') and
                        base['control_parameters']==actual.get('control_parameters'))
     gates=dict(baseline_collector=base.get('accepted') is True,baseline_validation=read(args.baseline/validation_file).get('passed') is True,
@@ -222,6 +231,9 @@ def main():
                baseline_robust_violation=baseline['min_distance_m']<=baseline['required_m']-.005,
                augmented_safe=augmented['passed'],initial_and_goal_feasible=endpoints_passed,hazard_environment_legal=legal)
     report=dict(accepted=all(gates.values()),gates=gates,baseline_episode=str(args.baseline),
+                avoidance_evidence_class=evidence_class,
+                baseline_manipulation_joint_configuration_safe=baseline_manipulation_configuration_safe,
+                goal_feasibility_semantics=('Original baseline initial, approach, full rotation, release and retreat states must remain hazard-safe; actual execution must achieve the same original TCP and contact policy. Original pose-goal planning permits redundant joint endpoints to differ.' if temperature else 'Original fixed prepress state and press/hold counterfactual remain feasible.'),
                 baseline_sha256=hashlib.sha256((args.baseline/'records.json').read_bytes()).hexdigest(),
                 episode_sha256=hashlib.sha256((args.episode/'records.json').read_bytes()).hexdigest(),
                 same_source_layout=same_source,initial_joint_max_difference_rad=q_error,initial_toaster_body_pose_max_difference=toaster_error,
@@ -235,7 +247,7 @@ def main():
                 hazard_environment_intersections=environment_intersections,allowed_resting_support_contacts=support_contacts,
                 support_contact_policy={'source_vase_bottom_ring_names':sorted(floor_ring_names),
                     'bottom_ring_table_tolerance_m':.000001,'base_table_tolerance_m':.0005,
-                    'scope':'Only original vase source bottom plane / original main countertop support; robot and all other clearances unchanged.'},
+                    'scope':'Original vase source bottom plane / main countertop, or independently verified authored floor-lamp Base z=0 / original kitchen floor, tolerance 0.5 mm. No sidewalls, elevated geometry or robot clearance exceptions.'},
                 property_stability=property_stability,
                 limitation='One fixed configuration; counterfactual is action-rate geometry. New actual execution retains the separate physics-rate safety audit.')
     out.write_text(json.dumps(report,indent=2))

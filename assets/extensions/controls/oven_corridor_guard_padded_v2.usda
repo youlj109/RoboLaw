@@ -1,0 +1,16 @@
+#usda 1.0
+(
+    defaultPrim = "Guard"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Guard" (
+    prepend references = @oven_corridor_guard_padded.usda@
+    customData = { string provenance = "Controls-local visible floor-mounted padded crossbar v2, 0.23 x 1.04 x 0.22 m. Authored source box is both rendered and collidable; all margins unchanged." }
+)
+{
+    over "Crossbar"
+    {
+        double3 xformOp:scale = (0.23, 1.04, 0.22)
+    }
+}

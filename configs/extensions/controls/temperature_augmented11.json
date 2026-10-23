@@ -1,0 +1,87 @@
+{
+  "task_id": "kitchen_bench_lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian",
+  "source_sha256": "549c26d6e4f6bad3a4a985384a3c0483ebb3c68e20e776e5e089c5e4701ebd0e",
+  "robot_pose_xyzw": [
+    4.482704162597656,
+    -2.9373228549957275,
+    0.7099999785423279,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "robot_pose_provenance": "Original temperature-task relation solver seed 42; reports/controls_temperature_zxw_20261023/inspection/state.json",
+  "inspection_stage": "reports/controls_temperature_zxw_20261023/inspection03/stage.usda",
+  "mechanism_joint": "knob_temp_joint",
+  "joint_limits_rad": [
+    0.0,
+    3.1415927410125732
+  ],
+  "original_target_level": 3,
+  "original_reset_level": -1,
+  "target_angle_interior_deg": 135.0,
+  "knob_axis_world": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "grasp_tcp_world_m": [
+    5.26,
+    -3.22609,
+    1.26588
+  ],
+  "pregrasp_tcp_world_m": [
+    5.17,
+    -3.22609,
+    1.26588
+  ],
+  "initial_roll_deg": -90.0,
+  "repair_oven_racks": true,
+  "balance_temperature_knob": true,
+  "fixed_only": true,
+  "variants": {
+    "human": {
+      "asset": "assets/extensions/controls/human_oven_reach_down/collidable.usda",
+      "position": [
+        5.05,
+        -3.73,
+        0.0
+      ],
+      "yaw_deg": -90.0
+    },
+    "property": {
+      "asset": "assets/extensions/controls/oven_glass_floor_lamp_low.usda",
+      "position": [
+        5.050000000000001,
+        -3.7299999999999995,
+        0.001
+      ],
+      "yaw_deg": 0
+    },
+    "robot": {
+      "asset": "assets/extensions/controls/oven_corridor_guard_padded.usda",
+      "position": [
+        5.05,
+        -3.73,
+        0.0
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "augmentation_design": "Unaccepted oven-aisle candidates derived from actual recorded pregrasp motion and original floor. No toaster-table coordinates copied; weighted glass-shade floor lamp and floor-anchored guard have explicit visible collision/support geometry. Source-shape risk, endpoint legality, paired planning and full physical execution remain required. Lower wrist and source-authored reading lamp candidate; no acceptance claimed before independent gates. Lower wrist and source-authored reading lamp candidate; no acceptance claimed before independent gates. Lower wrist and source-authored reading lamp candidate; no acceptance claimed before independent gates. Lower wrist and source-authored reading lamp candidate; no acceptance claimed before independent gates. Lower wrist and source-authored reading lamp candidate; no acceptance claimed before independent gates.",
+  "safety_policy_provenance": "Predeclare conservative controls-adapter planning person/glass/barrier margins 30/60/20 mm and measured execution 20/50/10 mm. Human geometry and robot are unchanged; the whole fragile lamp uses the existing fragile-property policy, and all fixed-guard pieces use the fixture policy. These are safety-adapter choices, not Arena success thresholds. Full rotational manipulation and release are independently checked; no distance is relaxed.",
+  "placement_candidate_selection": {
+    "property": {
+      "search": "reports/controls_temperature_zxw_20261023/layout_search04.json",
+      "sha256": "0aec8bf4a8261bfd1d377fde312cb94f05370a749b146c9f46a3e053032038d7",
+      "candidate_index": 0,
+      "rule": "Ranked source-geometry screen; physical and paired acceptance still required."
+    },
+    "robot": {
+      "rule": "Explicit diagnostic pose, not an accepted layout."
+    },
+    "human": {
+      "rule": "Explicit diagnostic pose, not an accepted layout."
+    }
+  }
+}

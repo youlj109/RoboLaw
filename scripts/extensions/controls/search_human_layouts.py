@@ -14,6 +14,7 @@ def main():
     p.add_argument('--baseline',type=Path,required=True)
     p.add_argument('--stage',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--candidates-report',type=Path)
     a=p.parse_args()
     output=a.output.resolve()
     output.relative_to(ROOT)
@@ -21,12 +22,19 @@ def main():
     original=json.loads(a.config.read_text())
     positions=[[2.90,-.90,0.],[2.92,-.90,0.],[2.94,-.90,0.],
                [2.90,-.94,0.],[2.92,-.94,0.],[2.94,-.94,0.]]
+    specs=[dict(original['variants']['human'],position=position) for position in positions]
+    if a.candidates_report:
+        specs=[row['spec'] for row in json.loads(a.candidates_report.read_text())['candidates']['human']]
+    elif 'turn_oven_temperature' in original['task_id']:
+        raise ValueError('Temperature search requires an explicit candidate report')
+    positions=[spec['position'] for spec in specs]
     summary={'candidate_order':positions,'seeds':[42,43,44],'attempts':[],
         'selection_rule':'First declared layout with all six dense-valid paired plans, all three source-geometry baseline violations and zero source-geometry actual violations. No physical execution here; kitchen/support legality remains a separate gate.',
         'selected':None}
-    for index,position in enumerate(positions):
+    for index,spec in enumerate(specs):
+        position=spec['position']
         config=json.loads(json.dumps(original))
-        config['variants']['human']['position']=position
+        config['variants']['human']=spec
         config['augmentation_design']='Bounded human layout candidate; unchanged baseline endpoint/control/seed policy. Acceptance requires independent physical and source-geometry gates.'
         config_path=output/f'candidate{index:02d}.json'
         config_path.write_text(json.dumps(config,indent=2)+'\n')

@@ -2,7 +2,7 @@
 import bpy,json,math,hashlib,argparse,sys
 from pathlib import Path
 from mathutils import Vector,Matrix
-p=argparse.ArgumentParser();p.add_argument('--wrist',type=float,nargs=3,default=[-.59115082,.48153019,1.32]);p.add_argument('--asset-dir',default='assets/extensions/controls/human_reach_high');p.add_argument('--elbow-up',action='store_true');args=p.parse_args(sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else [])
+p=argparse.ArgumentParser();p.add_argument('--wrist',type=float,nargs=3,default=[-.59115082,.48153019,1.32]);p.add_argument('--asset-dir',default='assets/extensions/controls/human_reach_high');group=p.add_mutually_exclusive_group();group.add_argument('--elbow-up',action='store_true');group.add_argument('--elbow-down',action='store_true');group.add_argument('--elbow-direction',type=float,nargs=3);args=p.parse_args(sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else [])
 root=Path.cwd();source=root/'assets/people/mpfb_corridor/posed.blend';out=root/args.asset_dir;out.mkdir(parents=True,exist_ok=True)
 rig=bpy.data.objects['KitchenAdult.rig'];upper=rig.pose.bones['upperarm_r'];lower=rig.pose.bones['lowerarm_r'];hand=rig.pose.bones['hand_r']
 before={b.name:[list(rig.matrix_world@b.head),list(rig.matrix_world@b.tail)] for b in rig.pose.bones}
@@ -11,8 +11,8 @@ target_world=Vector(args.wrist);target=rig.matrix_world.inverted()@target_world
 d=(target-head).length
 assert abs(l1-l2)<d<l1+l2
 axis=(target-head).normalized();along=(l1*l1-l2*l2+d*d)/(2*d);radius=math.sqrt(max(0,l1*l1-along*along));bend=elbow-head-axis*(elbow-head).dot(axis);bend.normalize();goal_elbow=head+axis*along+bend*radius
-if args.elbow_up:
- up=rig.matrix_world.inverted().to_3x3()@Vector((0,0,1));bend=(up-axis*up.dot(axis)).normalized();goal_elbow=head+axis*along+bend*radius
+if args.elbow_up or args.elbow_down or args.elbow_direction:
+ up=rig.matrix_world.inverted().to_3x3()@Vector(args.elbow_direction or (0,0,-1 if args.elbow_down else 1));bend=up-axis*up.dot(axis);assert bend.length>1e-6;bend.normalize();goal_elbow=head+axis*along+bend*radius
 hand_rotation=hand.matrix.to_3x3().copy()
 def aim(bone,point):
  h=bone.head.copy();q=(bone.tail-h).rotation_difference(point-h)

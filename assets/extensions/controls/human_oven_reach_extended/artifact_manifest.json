@@ -1,0 +1,19 @@
+{
+  "source": "assets/people/mpfb_corridor/posed.blend",
+  "source_sha256": "7d022d459ebd584592cde705b7bd73cf112e6cfc719e99b8ea3096506ff650ea",
+  "tested_blender": "4.0.2",
+  "geometry_provenance": "Original armature two-bone IK; original skin weights and preserve-volume deformation; right shoulder pivot and arm lengths unchanged; same hand orientation; source root, feet and all other non-right-arm bones unchanged. Static evaluated mesh export.",
+  "rebuild_geometry_audit": "rebuild_geometry_audit.json",
+  "generated_files": {
+    "assets/extensions/controls/human_oven_reach_extended/person.usdc": "d6550d17e248277fd167214a2bdc5934d52a77a5655a5c4ca2b8c84d25a809b9",
+    "assets/extensions/controls/human_oven_reach_extended/collidable.usda": "69b3fb9503e2a25c700881392f48679b55db02ae8336229b51029bb7f7f887c1",
+    "assets/extensions/controls/human_oven_reach_extended/pose.json": "bb70cc5e5963c8692035c723a6e77ec1e22f4442a2aab2f0d5d378036ea9930b",
+    "assets/extensions/controls/human_oven_reach_extended/textures/brown_eye.png": "4659691c7295ad6206c78b003e5fd0e5f91dcd53032fa914a229bb48cabe424b",
+    "assets/extensions/controls/human_oven_reach_extended/textures/eyebrow001.png": "9940f7d0b1b223709a19b05156ba6f6e9e4dbdbced02d7574f4d51d72c58967b",
+    "assets/extensions/controls/human_oven_reach_extended/textures/male_casualsuit01_diffuse.png": "3fd0bba5dcbdea0ac427f644a6c7c298938f7369b8f96626621ce1e88989394e",
+    "assets/extensions/controls/human_oven_reach_extended/textures/shoes01_diffuse.png": "50c9a406a7f1cb6aa7b42912348e78f09d0252aa3963c8229cf18dfe8353cdbf",
+    "assets/extensions/controls/human_oven_reach_extended/textures/short02_diffuse.png": "47fe33831a3929567c733356dd66243116e05df2ace1f884ddca0080b728229f",
+    "assets/extensions/controls/human_oven_reach_extended/textures/young_lightskinned_male_diffuse3.png": "f50016a5507fc687dc8df06599c8ea48de950cd185de33a71cafc1319ddab4d5"
+  },
+  "rebuild": "Blender original posed.blend; repose_human_arm.py --wrist [-0.6800000071525574, 0.0, 1.1200000047683716] --asset-dir assets/extensions/controls/human_oven_reach_extended; retain recorded pose method/elbow branch; then wrap_reposed_human.py and audit_human_export_blender.py"
+}
