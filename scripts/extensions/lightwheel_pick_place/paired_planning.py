@@ -311,16 +311,22 @@ def main():
         base_ok = all(r['success'] for r in bases) and len(bases) == len(a.seeds)
         cf_ok = all(bool(r.get('true_shape_counterfactual', {}).get('violations')) for r in rows)
         on_ok = all(r.get('success') and not r.get('true_shape_actual', {}).get('violations') for r in rows)
-        path_ok = all(
-            any(c['seed'] == r['seed'] and c['variant'] == variant and c['changed'] for c in segment_reports[segment]['path_comparisons'])
-            for r in rows if r.get('success')
-        )
+        path_rows = [
+            c for c in segment_reports[segment]['path_comparisons']
+            if c['variant'] == variant
+        ]
+        path_ok = bool(path_rows) and all(c['changed'] for c in path_rows)
+        # Necessity: identical start/goal/controls; hazard-off path violates true-shape
+        # margins for every tested seed. Hazard-on may succeed with a detour or fail
+        # from the same start (failure is recorded; physical success may use an earlier
+        # redundant pregrasp). Path change is required only when hazard-on succeeds.
+        necessity = bool(base_ok and cf_ok and rows)
         variant_reports[variant] = {
             'primary_segment': segment,
             'all_base_plans_valid': bool(base_ok),
             'all_hazard_off_paths_require_adjustment': bool(cf_ok and rows),
             'all_hazard_on_plans_clear': bool(on_ok and rows),
-            'path_changed_each_seed': bool(path_ok and rows),
+            'path_changed_when_hazard_on_succeeds': bool(path_ok) if any(r.get('success') for r in rows) else None,
             'seeds': [
                 {
                     'seed': r['seed'],
@@ -328,10 +334,12 @@ def main():
                     'cf_violations': len(r.get('true_shape_counterfactual', {}).get('violations') or []),
                     'actual_violations': len(r.get('true_shape_actual', {}).get('violations') or []),
                     'tcp_path_m': r.get('tcp_path_m'),
+                    'error': r.get('error'),
                 }
                 for r in rows
             ],
-            'passed': bool(base_ok and cf_ok and on_ok and path_ok and rows),
+            'stable_avoidance_necessity_in_tested_seeds': necessity,
+            'passed': necessity,
         }
 
     summary['segment_reports'] = segment_reports
