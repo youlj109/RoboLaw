@@ -111,12 +111,14 @@ def build_environment(contract, *, enable_cameras=False, obstacle=None,asset_cac
         required = {'asset_id','usd_path','static','category','placement_evidence'}
         if not required <= obstacle.keys():
             raise ValueError('Risk obstacle requires identity, static flag and placement provenance')
-        if obstacle['asset_id'] in semantic_assets or obstacle['asset_id'] in environment.scene.assets:
+        if (obstacle['asset_id'] in semantic_assets or obstacle['asset_id'] in environment.scene.assets or
+            obstacle['asset_id']==contract['roles']['robot']['id']):
             raise ValueError('Obstacle ID conflicts with a task asset')
         if obstacle['category'] not in ('HS','PT','RS') or not obstacle['placement_evidence']:
             raise ValueError('Invalid obstacle category/placement evidence')
-        from kitchen_safety.task_variant import obstacle_relations
-        relations=obstacle_relations(contract,obstacle,semantic_assets)
+        from kitchen_safety.task_variant import obstacle_relations,placement_reference_assets
+        placement_assets=placement_reference_assets(contract,semantic_assets,environment.embodiment)
+        relations=obstacle_relations(contract,obstacle,placement_assets)
         pose=None
         if relations is None:
             if len(obstacle.get('position_xyz', [])) != 3 or len(obstacle.get('rotation_xyzw', [])) != 4:
@@ -142,7 +144,8 @@ def build_environment(contract, *, enable_cameras=False, obstacle=None,asset_cac
     return environment, dict(task_id=contract['task_id'], task_sha256=digest(contract),
         asset_path_templates={aid: a.get_prim_path() for aid,a in semantic_assets.items()},
         source_usd_paths={aid: getattr(a,'usd_path',None) for aid,a in semantic_assets.items()},
-        obstacle=deepcopy(obstacle),local_robot_assets=robot_local,local_object_assets=object_local)
+        obstacle=deepcopy(obstacle),local_robot_assets=robot_local,local_object_assets=object_local,
+        placement_reference_roles={contract['roles']['robot']['id']:'current task robot embodiment; placement only, not a protected PT asset'})
 
 
 def resolve_loaded_roots(stage, metadata, env_root):

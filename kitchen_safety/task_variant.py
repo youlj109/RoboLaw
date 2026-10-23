@@ -49,6 +49,17 @@ def sample_placement_parameters(declaration, seed):
     return result
 
 
+
+def placement_reference_assets(contract, semantic_assets, embodiment):
+    """Expose the current robot to placement without making it a PT asset."""
+    robot_id=contract['roles']['robot']['id']
+    if not isinstance(robot_id,str) or not robot_id or embodiment is None:
+        raise ValueError('Placement robot reference requires a current task embodiment')
+    if robot_id in semantic_assets or robot_id in contract['asset_declarations']:
+        raise ValueError('Robot placement ID collides with a task asset')
+    return {**semantic_assets,robot_id:embodiment}
+
+
 def obstacle_relations(contract, declaration, assets):
     if declaration.get('placement_mode', 'world_pose') == 'world_pose':
         if 'placement_relations' in declaration:
@@ -85,7 +96,8 @@ def obstacle_relations(contract, declaration, assets):
                 raise ValueError('Nonfinite obstacle placement parameter')
         if kind in binary:
             reference = row.get('reference')
-            if reference not in contract['asset_declarations'] or reference not in assets:
+            declared=set(contract['asset_declarations'])|{contract['roles']['robot']['id']}
+            if reference not in declared or reference not in assets:
                 raise ValueError('Obstacle reference is not a current task asset: ' + str(reference))
             params['parent'] = assets[reference]
             anchored = anchored or kind in {'on', 'next_to'}
