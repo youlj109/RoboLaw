@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "declared_before_collection": true,
+  "task": "kitchen_bench_lightwheel_open_oven_g_shaped_large_scandinavian",
+  "neutral_seconds": 40.0,
+  "planning_seeds": [
+    42,
+    43,
+    44
+  ],
+  "neutral_revolute_drift_rad": 0.005,
+  "neutral_revolute_speed_rad_s": 0.05,
+  "neutral_prismatic_drift_m": 0.002,
+  "neutral_prismatic_speed_m_s": 0.02,
+  "door_motion_rad": 0.002,
+  "contact_force_noise_n": 0.0001,
+  "handle_contact_bounds_padding_m": 0.004,
+  "property_translation_m": 0.005,
+  "property_rotation_deg": 2.0,
+  "property_vertical_tilt_deg": 2.0,
+  "notes": "Diagnostic motion thresholds do not replace the original strict OpenDoorTask success predicate or source safety margins. Neutral tolerances apply from the first post-reset observation, including startup. Task label resolved for this new trial; shared diagnostic tolerances are distinct from source success predicates.",
+  "shared_tolerance_origin": "configs/extensions/doors/review_gates_lwx.json"
+}

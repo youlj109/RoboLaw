@@ -1,0 +1,135 @@
+{
+  "_kitchen_asset": "assets/extensions/doors/c03_mechanisms_lwx_01.usda",
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      5.003763694763184,
+      -1.475060229301452,
+      1.039999942779541
+    ],
+    "static": false,
+    "semantic_anchor": "Substantial actual baseline pregrasp obstruction, fixed source layout and same handle target; paired planning and physical validation required.",
+    "yaw_deg": 0.0,
+    "baseline_intersection_actions": [
+      70,
+      74,
+      78,
+      86,
+      90,
+      94
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/c03_variants_lwx_04_property_support.usda",
+      "position": [
+        5.003763694763184,
+        -1.475060229301452,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.953763694763184,
+          -1.5250602293014521,
+          -4.470348362317633e-10
+        ],
+        [
+          5.053763694763184,
+          -1.425060229301452,
+          1.039999942779541
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry"
+    },
+    "candidate_search": "reports/doors/lwx_C02_C03_20261023/C03_property_search_01.json",
+    "candidate_index": 5
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.683763694763184,
+      -1.1950602293014518,
+      0.959999942779541
+    ],
+    "yaw_deg": 45.0,
+    "static": true,
+    "semantic_anchor": "Substantial actual baseline pregrasp obstruction, fixed source layout and same handle target; paired planning and physical validation required.",
+    "baseline_intersection_actions": [
+      58,
+      62,
+      66,
+      70
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/c03_variants_lwx_04_robot_support.usda",
+      "position": [
+        4.683763694763184,
+        -1.1950602293014518,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.598763694763184,
+          -1.2800602293014518,
+          -4.470348362317633e-10
+        ],
+        [
+          4.768763694763184,
+          -1.1100602293014519,
+          0.959999942779541
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry"
+    },
+    "candidate_search": "reports/doors/lwx_C02_C03_20261023/C03_robot_search_01.json",
+    "candidate_index": 12
+  },
+  "human": {
+    "name": "person",
+    "asset": "assets/extensions/doors/human_reach_elbow_up/collidable.usda",
+    "position": [
+      4.883763694763185,
+      -1.2750602293014515,
+      0.0
+    ],
+    "yaw_deg": 330.0,
+    "static": true,
+    "semantic_anchor": "Substantial actual baseline pregrasp obstruction, fixed source layout and same handle target; paired planning and physical validation required.",
+    "pose_provenance": "assets/extensions/doors/human_reach_elbow_up/pose.json",
+    "unrotated_asset": "assets/extensions/doors/human_reach_elbow_up/collidable.usda",
+    "baseline_intersection_actions": [
+      38,
+      42,
+      46,
+      50,
+      54,
+      58,
+      62,
+      66,
+      70,
+      74,
+      78,
+      82,
+      86,
+      90,
+      94
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "candidate_search": "reports/doors/lwx_C02_C03_20261023/C03_human_search_01.json",
+    "candidate_index": 1
+  },
+  "_selection_note": "Offline source geometry candidates; this configuration does not assert physical task acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian"
+}

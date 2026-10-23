@@ -1,0 +1,115 @@
+{
+  "_fixed_source_layout": "configs/extensions/doors/c03_source_layout_lwx.json",
+  "_kitchen_asset": "assets/extensions/doors/c03_mechanisms_lwx_01.usda",
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      4.963763694763184,
+      -1.475060229301452,
+      1.039999942779541
+    ],
+    "static": false,
+    "semantic_anchor": "Actual baseline pregrasp obstruction; fixed source task layout and fixed handle target retained. Candidate requires paired planning and physical validation.",
+    "yaw_deg": 0.0,
+    "baseline_intersection_actions": [
+      58,
+      62,
+      66,
+      70,
+      74,
+      78,
+      82,
+      86,
+      90,
+      94
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/c03_property_support_lwx_01.usda",
+      "position": [
+        4.963763694763184,
+        -1.475060229301452,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.913763694763184,
+          -1.5250602293014521,
+          -4.470348362317633e-10
+        ],
+        [
+          5.013763694763184,
+          -1.425060229301452,
+          1.039999942779541
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry"
+    },
+    "candidate_search": "reports/doors/lwx_C02_C03_20261023/C03_property_search_01.json",
+    "candidate_index": 3
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.683763694763184,
+      -1.275060229301452,
+      0.959999942779541
+    ],
+    "yaw_deg": 45.0,
+    "static": true,
+    "semantic_anchor": "Actual baseline pregrasp obstruction; fixed source task layout and fixed handle target retained. Candidate requires paired planning and physical validation.",
+    "baseline_intersection_actions": [
+      42,
+      46,
+      50,
+      54,
+      58,
+      62,
+      66,
+      70,
+      74,
+      78,
+      82,
+      86,
+      90,
+      94,
+      98,
+      102,
+      106
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/c03_robot_support_lwx_01.usda",
+      "position": [
+        4.683763694763184,
+        -1.275060229301452,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.598763694763184,
+          -1.3600602293014519,
+          -4.470348362317633e-10
+        ],
+        [
+          4.768763694763184,
+          -1.190060229301452,
+          0.959999942779541
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry"
+    },
+    "candidate_search": "reports/doors/lwx_C02_C03_20261023/C03_robot_search_01.json",
+    "candidate_index": 9
+  }
+}

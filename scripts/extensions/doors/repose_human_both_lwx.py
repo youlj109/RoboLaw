@@ -1,0 +1,75 @@
+"""Blender CPU: two-bone IK on the original MPFB rig, feet/root unchanged."""
+import bpy,json,math,hashlib,argparse,sys
+from pathlib import Path
+from mathutils import Vector,Matrix
+p=argparse.ArgumentParser();p.add_argument('--wrist',type=float,nargs=3,default=[-.59115082,.48153019,1.32]);p.add_argument('--asset-dir',default='assets/extensions/doors/human_reach_high');p.add_argument('--elbow-up',action='store_true');p.add_argument('--clavicle-y-deg',type=float,default=45.);p.add_argument('--torso-y-deg',type=float,default=-18.);p.add_argument('--auto-reachable-target',action='store_true');p.add_argument('--left-wrist',type=float,nargs=3);p.add_argument('--left-clavicle-y-deg',type=float,default=60.);p.add_argument('--left-hand-use-right-orientation',action='store_true');args=p.parse_args(sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else [])
+root=Path.cwd();source=root/'assets/people/mpfb_corridor/posed.blend';out=root/args.asset_dir;out.mkdir(parents=True,exist_ok=True)
+rig=bpy.data.objects['KitchenAdult.rig'];upper=rig.pose.bones['upperarm_r'];lower=rig.pose.bones['lowerarm_r'];hand=rig.pose.bones['hand_r']
+before={b.name:[list(rig.matrix_world@b.head),list(rig.matrix_world@b.tail)] for b in rig.pose.bones}
+source_hand_rotation=hand.matrix.to_3x3().copy()
+torso=rig.pose.bones['spine_01'];torso_pivot=torso.head.copy()
+torso_world_rotation=Matrix.Rotation(math.radians(args.torso_y_deg),3,'Y')
+torso_local_rotation=rig.matrix_world.to_3x3().inverted()@torso_world_rotation@rig.matrix_world.to_3x3()
+torso.matrix=Matrix.Translation(torso_pivot)@torso_local_rotation.to_4x4()@Matrix.Translation(-torso_pivot)@torso.matrix
+bpy.context.view_layer.update()
+clav=rig.pose.bones['clavicle_r'];pivot=clav.head.copy()
+world_rotation=Matrix.Rotation(math.radians(args.clavicle_y_deg),3,'Y')
+local_rotation=rig.matrix_world.to_3x3().inverted()@world_rotation@rig.matrix_world.to_3x3()
+clav.matrix=Matrix.Translation(pivot)@local_rotation.to_4x4()@Matrix.Translation(-pivot)@clav.matrix
+bpy.context.view_layer.update()
+head=upper.head.copy();elbow=lower.head.copy();wrist=hand.head.copy();l1=(elbow-head).length;l2=(wrist-elbow).length
+requested_world=Vector(args.wrist);target_world=requested_world.copy()
+if args.auto_reachable_target:
+ hw=rig.matrix_world@head;length=(l1+l2)*rig.matrix_world.to_scale()[0]-.012
+ remain=length*length-(target_world.y-hw.y)**2-(target_world.z-hw.z)**2
+ assert remain>0.,(list(hw),length,list(target_world))
+ target_world.x=max(target_world.x,hw.x-math.sqrt(remain))
+print('REACH_GEOMETRY',list(rig.matrix_world@head),l1,l2,list(requested_world),list(target_world),flush=True)
+target=rig.matrix_world.inverted()@target_world
+d=(target-head).length
+assert abs(l1-l2)<d<l1+l2
+axis=(target-head).normalized();along=(l1*l1-l2*l2+d*d)/(2*d);radius=math.sqrt(max(0,l1*l1-along*along));bend=elbow-head-axis*(elbow-head).dot(axis);bend.normalize();goal_elbow=head+axis*along+bend*radius
+if args.elbow_up:
+ up=rig.matrix_world.inverted().to_3x3()@Vector((0,0,1));bend=(up-axis*up.dot(axis)).normalized();goal_elbow=head+axis*along+bend*radius
+hand_rotation=source_hand_rotation.copy()
+def aim(bone,point):
+ h=bone.head.copy();q=(bone.tail-h).rotation_difference(point-h)
+ bone.matrix=Matrix.Translation(h)@q.to_matrix().to_4x4()@Matrix.Translation(-h)@bone.matrix
+ bpy.context.view_layer.update()
+aim(upper,goal_elbow);aim(lower,target)
+hm=hand_rotation.to_4x4();hm.translation=hand.head.copy();hand.matrix=hm;bpy.context.view_layer.update()
+left_report=None
+if args.left_wrist is not None:
+ lu=rig.pose.bones['upperarm_l'];ll=rig.pose.bones['lowerarm_l'];lh=rig.pose.bones['hand_l'];lc=rig.pose.bones['clavicle_l']
+ left_rotation=source_hand_rotation.copy() if args.left_hand_use_right_orientation else lh.matrix.to_3x3().copy()
+ pivot=lc.head.copy();wr=Matrix.Rotation(math.radians(args.left_clavicle_y_deg),3,'Y');lr=rig.matrix_world.to_3x3().inverted()@wr@rig.matrix_world.to_3x3();lc.matrix=Matrix.Translation(pivot)@lr.to_4x4()@Matrix.Translation(-pivot)@lc.matrix;bpy.context.view_layer.update()
+ headl=lu.head.copy();el=ll.head.copy();wl=lh.head.copy();a1=(el-headl).length;a2=(wl-el).length;requested_left=Vector(args.left_wrist);target_left=requested_left.copy()
+ if args.auto_reachable_target:
+  hw=rig.matrix_world@headl;length=(a1+a2)*rig.matrix_world.to_scale()[0]-.012;remain=length*length-(target_left.y-hw.y)**2-(target_left.z-hw.z)**2;assert remain>0.;target_left.x=max(target_left.x,hw.x-math.sqrt(remain))
+ tl=rig.matrix_world.inverted()@target_left;d=(tl-headl).length;assert abs(a1-a2)<d<a1+a2;axis_l=(tl-headl).normalized();along=(a1*a1-a2*a2+d*d)/(2*d);radius=math.sqrt(max(0,a1*a1-along*along));up=rig.matrix_world.inverted().to_3x3()@Vector((0,0,1));bend=(up-axis_l*up.dot(axis_l)).normalized();left_elbow=headl+axis_l*along+bend*radius
+ aim(lu,left_elbow);aim(ll,tl);hm=left_rotation.to_4x4();hm.translation=lh.head.copy();lh.matrix=hm;bpy.context.view_layer.update();left_error=(rig.matrix_world@lh.head-target_left).length;assert left_error<1e-5
+ left_report={'requested_wrist':list(requested_left),'target_wrist':list(target_left),'actual_wrist':list(rig.matrix_world@lh.head),'wrist_error_m':left_error,'clavicle_world_y_deg':args.left_clavicle_y_deg,'hand_orientation':('original right hand world rotation' if args.left_hand_use_right_orientation else 'original left hand world rotation'),'arm_lengths_local_m':[a1,a2]}
+after={b.name:[list(rig.matrix_world@b.head),list(rig.matrix_world@b.tail)] for b in rig.pose.bones}
+affected={torso.name,*[b.name for b in torso.children_recursive]}
+unchanged=[n for n in before if n not in affected]
+max_other=max((Vector(before[n][j])-Vector(after[n][j])).length for n in unchanged for j in [0,1])
+error=(rig.matrix_world@hand.head-target_world).length
+print('POSE_NUMERIC_CHECK',error,max_other,flush=True)
+max_length_change=max(abs((Vector(before[n][1])-Vector(before[n][0])).length-(Vector(after[n][1])-Vector(after[n][0])).length) for n in before)
+assert error<1e-5 and max_other<1e-5 and max_length_change<1e-5
+for ob in bpy.data.objects:
+ for mod in ob.modifiers:
+  if mod.type=='ARMATURE':mod.use_deform_preserve_volume=True
+bpy.context.view_layer.update();deps=bpy.context.evaluated_depsgraph_get();meshes=[o for o in bpy.data.objects if o.type=='MESH'];bpy.ops.object.select_all(action='DESELECT');clones=[]
+for original in meshes:
+ mesh=bpy.data.meshes.new_from_object(original.evaluated_get(deps),preserve_all_data_layers=True,depsgraph=deps)
+ ob=bpy.data.objects.new('Posed_'+original.name,mesh);bpy.context.collection.objects.link(ob);ob.matrix_world=original.matrix_world.copy();ob.select_set(True);clones.append(ob)
+bpy.context.scene.render.engine='BLENDER_EEVEE'
+for image in bpy.data.images:
+ candidate=root/'assets/people/mpfb_corridor/textures'/Path(bpy.path.abspath(image.filepath)).name
+ if candidate.is_file():image.filepath=str(candidate)
+bpy.ops.wm.usd_export(filepath=str(out/'person.usdc'),selected_objects_only=True,export_animation=False,export_materials=True,export_textures=True,overwrite_textures=True,relative_paths=True,root_prim_path='/Person')
+report={'source':str(source.relative_to(root)),'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'blender_version':bpy.app.version_string,'method':'Original MPFB rig: spine_01 rotated about its unchanged head around world Y, right clavicle rotated about its unchanged head around world Y, then original-length two-bone arm IK. Skin weights and all non-spine_01-descendant bones unchanged, including root and feet; original hand world orientation. Static evaluated mesh export.','torso_world_y_rotation_deg':args.torso_y_deg,'clavicle_world_y_rotation_deg':args.clavicle_y_deg,'requested_wrist_world_asset_m':list(requested_world),'target_wrist_world_asset_m':list(target_world),'actual_wrist_world_asset_m':list(rig.matrix_world@hand.head),'wrist_error_m':error,'max_unchanged_bone_error_m':max_other,'max_bone_length_change_m':max_length_change,'before':before,'after':after,'arm_lengths_local_m':[l1,l2],'arm_lengths_world_m':[l1*rig.matrix_world.to_scale()[0],l2*rig.matrix_world.to_scale()[0]],'exported_meshes':[o.name for o in clones]}
+report['left_arm']=left_report
+if left_report is not None:report['method']+=' Left arm also uses original-length two-bone IK after clavicle rotation; no root, feet or bone lengths changed.'
+(out/'pose.json').write_text(json.dumps(report,indent=2));print('POSE_RESULT',error,max_other,len(clones))

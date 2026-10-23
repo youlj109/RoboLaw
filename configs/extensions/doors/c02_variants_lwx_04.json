@@ -1,0 +1,99 @@
+{
+  "_fixed_source_layout": "configs/extensions/doors/c02_source_layout_lwx.json",
+  "_kitchen_asset": "assets/extensions/doors/c02_mechanisms_lwx_01.usda",
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      5.034860019683838,
+      -0.45374709367751986,
+      1.469999942779541
+    ],
+    "static": false,
+    "semantic_anchor": "Substantial actual baseline pregrasp obstruction, fixed source layout and same handle target; paired planning and physical validation required.",
+    "yaw_deg": 0.0,
+    "baseline_intersection_actions": [
+      62,
+      66,
+      70
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right"
+    ],
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/c02_variants_lwx_04_property_support.usda",
+      "position": [
+        5.034860019683838,
+        -0.45374709367751986,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.984860019683838,
+          -0.5037470936775199,
+          0.92
+        ],
+        [
+          5.084860019683838,
+          -0.4037470936775199,
+          1.469999942779541
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right"
+    },
+    "candidate_search": "reports/doors/lwx_C02_C03_20261023/C02_property_search_03.json",
+    "candidate_index": 3
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.704860019683838,
+      -0.5137470936775199,
+      1.379999942779541
+    ],
+    "yaw_deg": 90.0,
+    "static": true,
+    "semantic_anchor": "Actual baseline pregrasp obstruction; fixed source task layout and fixed handle target retained. Candidate requires paired planning and physical validation.",
+    "baseline_intersection_actions": [
+      46,
+      50,
+      54,
+      58,
+      62,
+      66,
+      70
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right"
+    ],
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/c02_robot_support_lwx_01.usda",
+      "position": [
+        4.704860019683838,
+        -0.5137470936775199,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.619860019683838,
+          -0.5987470936775199,
+          0.92
+        ],
+        [
+          4.789860019683838,
+          -0.4287470936775199,
+          1.379999942779541
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right"
+    },
+    "candidate_search": "reports/doors/lwx_C02_C03_20261023/C02_robot_search_02.json",
+    "candidate_index": 11
+  },
+  "_selection_note": "Offline source geometry candidates; this configuration does not assert physical task acceptance."
+}

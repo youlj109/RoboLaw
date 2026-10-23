@@ -1,0 +1,121 @@
+#usda 1.0
+(
+    defaultPrim = "world"
+)
+
+def Xform "world" (
+    prepend references = @../../../runtime/home/.cache/lightwheel_sdk/floorplan/robocasa-robocasakitchen-7-10/scene.usd@
+)
+{
+    over "sink_island_group"
+    {
+        over "Sink014_handle"
+        {
+            over "handle_joint"
+            {
+                float drive:rotX:physics:maxForce = 0.5
+                float drive:rotY:physics:maxForce = 0.5
+            }
+        }
+    }
+
+    over "oven_left_group"
+    {
+        over "Oven043_knob_temp"
+        {
+            over "knob_temp_joint" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 0.05
+                float drive:angular:physics:maxForce = 10000
+                float drive:angular:physics:stiffness = 0
+                float drive:angular:physics:targetPosition = 0
+                float drive:angular:physics:targetVelocity = 0
+                uniform token drive:angular:physics:type = "force"
+            }
+        }
+
+        over "Oven043_knob_time"
+        {
+            over "knob_time_joint" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 0.05
+                float drive:angular:physics:maxForce = 10000
+                float drive:angular:physics:stiffness = 0
+                float drive:angular:physics:targetPosition = 0
+                float drive:angular:physics:targetVelocity = 0
+                uniform token drive:angular:physics:type = "force"
+            }
+        }
+    }
+
+    over "toaster_oven_left_group"
+    {
+        over "ToasterOven017_knob_temp"
+        {
+            over "knob_temp_joint" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 0.05
+                float drive:angular:physics:maxForce = 10000
+                float drive:angular:physics:stiffness = 0
+                float drive:angular:physics:targetPosition = 0
+                float drive:angular:physics:targetVelocity = 0
+                uniform token drive:angular:physics:type = "force"
+            }
+        }
+
+        over "ToasterOven017_knob_time"
+        {
+            over "knob_time_joint" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 0.05
+                float drive:angular:physics:maxForce = 10000
+                float drive:angular:physics:stiffness = 0
+                float drive:angular:physics:targetPosition = 0
+                float drive:angular:physics:targetVelocity = 0
+                uniform token drive:angular:physics:type = "force"
+            }
+        }
+    }
+
+    over "toaster_right_group"
+    {
+        over "Toaster066_sideL_knob_doneness"
+        {
+            over "sideL_knob_doneness_joint" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 0.05
+                float drive:angular:physics:maxForce = 10000
+                float drive:angular:physics:stiffness = 0
+                float drive:angular:physics:targetPosition = 0
+                float drive:angular:physics:targetVelocity = 0
+                uniform token drive:angular:physics:type = "force"
+            }
+        }
+
+        over "Toaster066_sideR_knob_doneness"
+        {
+            over "sideR_knob_doneness_joint" (
+                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+            )
+            {
+                float drive:angular:physics:damping = 0.05
+                float drive:angular:physics:maxForce = 10000
+                float drive:angular:physics:stiffness = 0
+                float drive:angular:physics:targetPosition = 0
+                float drive:angular:physics:targetVelocity = 0
+                uniform token drive:angular:physics:type = "force"
+            }
+        }
+    }
+}
+
