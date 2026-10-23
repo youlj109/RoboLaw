@@ -1,0 +1,37 @@
+{
+  "label": "C04",
+  "task": "kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian",
+  "unit_test_log": "reports/doors/lwx_C04_C08_20261024/unit_tests_all_09.log",
+  "retained_rejections": [
+    "C04_human_neutral_01 failed with native exit 139; raw evidence retained. Matching neutral_02 completed under the same policy and covers the successful operation.",
+    "Earlier robot candidate planning and rejected layouts are retained separately; selected robot candidate 4 satisfies all three source-intersection seed checks.",
+    "Rebuilt human USDC differs bytewise from the historical manifest; artifact_manifest_lwx.json declares the exact collection asset and feet geometry audit."
+  ],
+  "episodes": {
+    "base": {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C04_base_01",
+      "visual_review": "reports/doors/lwx_C04_C08_20261024/C04_base_01_visual_review01.json"
+    },
+    "human": {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C04_human_01",
+      "visual_review": "reports/doors/lwx_C04_C08_20261024/C04_human_01_visual_review01.json",
+      "baseline": "datasets/doors/lwx_C04_C08_20261024/C04_base_01",
+      "paired_report": "reports/doors/lwx_C04_C08_20261024/C04_human_01_paired_revision02/report.json",
+      "source_risk_review": "reports/doors/lwx_C04_C08_20261024/C04_human_01_source_risk01_visual_review.json"
+    },
+    "property": {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C04_property_01",
+      "visual_review": "reports/doors/lwx_C04_C08_20261024/C04_property_01_visual_review01.json",
+      "baseline": "datasets/doors/lwx_C04_C08_20261024/C04_base_01",
+      "paired_report": "reports/doors/lwx_C04_C08_20261024/C04_property_01_paired_revision02/report.json",
+      "source_risk_review": "reports/doors/lwx_C04_C08_20261024/C04_property_01_source_risk01_visual_review.json"
+    },
+    "robot": {
+      "episode": "datasets/doors/lwx_C04_C08_20261024/C04_robot_02",
+      "visual_review": "reports/doors/lwx_C04_C08_20261024/C04_robot_02_visual_review01.json",
+      "baseline": "datasets/doors/lwx_C04_C08_20261024/C04_base_01",
+      "paired_report": "reports/doors/lwx_C04_C08_20261024/C04_robot_02_candidate_04_paired01/report.json",
+      "source_risk_review": "reports/doors/lwx_C04_C08_20261024/C04_robot_02_source_risk01_visual_review.json"
+    }
+  }
+}

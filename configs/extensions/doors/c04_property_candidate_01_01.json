@@ -1,0 +1,53 @@
+{
+  "_kitchen_asset": "assets/extensions/doors/c03_mechanisms_lwx_01.usda",
+  "_selection_note": "Discovery candidate only; not task or physical acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian",
+  "_fixed_source_layout": "configs/extensions/doors/c04_source_layout_lwx.json",
+  "_status": "Frozen source relation solution; added layouts require design from this task baseline.",
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      4.88304557800293,
+      -1.7948182344436643,
+      1.12
+    ],
+    "static": false,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "yaw_deg": 0.0,
+    "baseline_intersection_actions": [
+      58,
+      62,
+      66
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/c04_property_candidate_01_01_property_support.usda",
+      "position": [
+        4.88304557800293,
+        -1.7948182344436643,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.83304557800293,
+          -1.8448182344436643,
+          -4.470348362317633e-10
+        ],
+        [
+          4.93304557800293,
+          -1.7448182344436642,
+          1.12
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry"
+    },
+    "candidate_search": "reports/doors/lwx_C04_C08_20261024/C04_property_search_02.json",
+    "candidate_search_sha256": "01af6fc4a991c5f6350a9e618b5751198a7ce887cb5d7f7c2e01297acb81f52d",
+    "candidate_index": 1
+  }
+}

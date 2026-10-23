@@ -1,0 +1,80 @@
+{
+  "_kitchen_asset": "assets/extensions/doors/c03_mechanisms_lwx_01.usda",
+  "_selection_note": "Discovery candidate only; not task or physical acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian",
+  "_fixed_source_layout": "configs/extensions/doors/c04_source_layout_lwx.json",
+  "_status": "Frozen source relation solution; added layouts require design from this task baseline.",
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.76304557800293,
+      -1.7948182344436643,
+      0.96
+    ],
+    "yaw_deg": 90.0,
+    "static": true,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "baseline_intersection_actions": [
+      66,
+      68
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "source_intersection_in_reference_off_seeds": {
+      "42": [
+        27,
+        28
+      ],
+      "43": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "44": [
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ]
+    },
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/c04_robot_candidate_02_04_robot_support.usda",
+      "position": [
+        4.76304557800293,
+        -1.7948182344436643,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.67804557800293,
+          -1.8798182344436642,
+          -4.470348362317633e-10
+        ],
+        [
+          4.84804557800293,
+          -1.7098182344436643,
+          0.96
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry"
+    },
+    "candidate_search": "reports/doors/lwx_C04_C08_20261024/C04_robot_search_goal_spheres02.json",
+    "candidate_search_sha256": "c8d38bbad0bbbb6f4348939e3d8609b55793fe6e2f94d7964529b3690311da55",
+    "candidate_index": 4
+  }
+}
