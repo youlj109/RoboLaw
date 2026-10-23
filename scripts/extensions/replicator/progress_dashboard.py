@@ -89,8 +89,20 @@ class Progress:
     def entry(self, path: Path, data: dict, kind: str = "episode") -> dict:
         success = kind == "episode" and physical_success(data)
         status = "partial" if success else "failed"
+        reason = str(data.get("error") or data.get("failure_reason") or data.get("reason") or "")
         if kind != "episode":
             status = "check_passed" if data.get("passed") is True or data.get("neutral_passed") is True else "failed"
+        if kind == "neutral" and "neutral_probe_passed" in data:
+            audit = data.get("physical_evidence_audit") or {}
+            failed_checks = [name for name, passed in audit.get("checks", {}).items() if passed is False]
+            passed = (data.get("neutral_probe_passed") is True
+                      and data.get("neutral_sequence_complete") is True
+                      and audit.get("passed") is True and not failed_checks)
+            status = "check_passed" if passed else "failed"
+            if not reason:
+                labels = {"background_stable": "背景物体不稳定（background_stable）"}
+                detail = "、".join(labels.get(name, name) for name in failed_checks)
+                reason = "静置检查通过；尚不代表原始任务完成。" if passed else "静置检查未通过" + ("：" + detail if detail else "；详见运行报告。")
         artifacts = []
         candidates = [(path, "运行报告"), (path.parent / "all_cameras.mp4", "原始多视角视频"),
                       (path.parent / "external_camera_2.mp4", "原始外部相机"),
@@ -98,12 +110,14 @@ class Progress:
                       (path.parent / "overview" / "overview_camera.mp4", "总览视频"),
                       (path.parent / "overview" / "overview.mp4", "总览视频"),
                       (path.parent.with_suffix(".log"), "运行日志")]
+        if kind == "neutral" and path.name == "result.json":
+            candidates.append((path.parent / "launch_failure.json", "启动器退出报告"))
         for p, label in candidates:
             a = self.artifact(p, label)
             if a:
                 artifacts.append(a)
         return {"path": path.relative_to(self.root).as_posix(), "kind": kind, "status": status,
-                "reason": str(data.get("error") or data.get("failure_reason") or data.get("reason") or ""),
+                "reason": reason,
                 "updated_at": iso(path.stat().st_mtime), "timestamp": path.stat().st_mtime,
                 "physical_success": success,
                 "artifacts": artifacts}
@@ -301,18 +315,27 @@ class Progress:
                         events.append({"time": item["updated_at"], "task_id": task["id"], "label": item["path"],
                                        "status": item["status"], "url": item["artifacts"][0]["url"]})
             # Saved neutral/startup evidence is visible, but never completes a task.
-            for name in ("neutral_probe.json", "launch_failure.json", "operator_stop.json"):
+            neutral_results = {}
+            for path in self.root.glob("reports/replicator_execution*/**/result.json"):
+                data = self.json(path)
+                if "neutral_probe_passed" in data and "neutral_sequence_complete" in data:
+                    neutral_results[path.parent] = data
+            for name in ("neutral_probe.json", "result.json", "launch_failure.json", "operator_stop.json"):
                 for path in self.root.glob(f"reports/replicator_execution*/**/{name}"):
+                    if name == "result.json" and path.parent not in neutral_results:
+                        continue
+                    if name in ("neutral_probe.json", "launch_failure.json") and path.parent in neutral_results:
+                        continue
                     d = self.json(path)
                     tid = d.get("task_id") or self.infer_task(str(path), tasks)
                     if tid not in tasks:
                         continue
-                    item = self.entry(path, d, "neutral" if name == "neutral_probe.json" else "startup")
+                    item = self.entry(path, d, "neutral" if name in ("neutral_probe.json", "result.json") else "startup")
                     tasks[tid]["evidence"].append(item)
                     events.append({"time": item["updated_at"], "task_id": tid, "label": item["path"],
                                    "status": item["status"], "url": item["artifacts"][0]["url"]})
-                    if name != "neutral_probe.json" and (not tasks[tid]["latest"] or item["timestamp"] > tasks[tid]["latest"]["timestamp"]):
-                        tasks[tid].update(latest=item, status="failed")
+                    if not tasks[tid]["latest"] or item["timestamp"] > tasks[tid]["latest"]["timestamp"]:
+                        tasks[tid].update(latest=item, status="partial" if item["status"] == "check_passed" else "failed")
             # Only the complete, current-format delivery report can certify all variants.
             certified_episodes = set()
             manifests = sorted(self.root.glob("reports/replicator_execution*/**/delivery_manifest*.json"), key=lambda p: p.stat().st_mtime)

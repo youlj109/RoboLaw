@@ -72,6 +72,48 @@ class DashboardTests(unittest.TestCase):
         evidence = data['tasks'][0]['evidence'][0]
         self.assertTrue(any(a['url'].endswith('/overview/overview_camera.mp4') for a in evidence['artifacts']))
 
+    def test_family_neutral_uses_physical_report_over_launcher_error(self):
+        folder = 'reports/replicator_execution_test/g_banana/family_neutral03/'
+        self.write(folder + 'result.json', {
+            'task_id': self.tid, 'neutral_probe_passed': False, 'neutral_sequence_complete': True,
+            'physical_evidence_audit': {'passed': False, 'checks': {'background_stable': False}}})
+        self.write(folder + 'launch_failure.json', {'error': 'generic launcher error'})
+        data = self.progress.snapshot()
+        latest = data['tasks'][0]['latest']
+        self.assertEqual(latest['kind'], 'neutral')
+        self.assertEqual(latest['status'], 'failed')
+        self.assertIn('background_stable', latest['reason'])
+        self.assertTrue(latest['path'].endswith('/result.json'))
+        self.assertTrue(any(a['url'].endswith('/launch_failure.json') for a in latest['artifacts']))
+        self.assertEqual(len(data['recent_events']), 1)
+        self.assertEqual(data['summary']['completed_tasks'], 0)
+        self.assertEqual(data['summary']['successful_variants'], 0)
+
+    def test_family_neutral_cannot_count_as_task_or_variant_success(self):
+        folder = 'reports/replicator_execution_test/g_banana/family_neutral/'
+        report = {'task_id': self.tid, 'neutral_probe_passed': True, 'neutral_sequence_complete': True,
+                  'physical_trial_passed': True, 'original_task_success': True,
+                  'physical_evidence_audit': {'passed': True, 'checks': {'background_stable': True}}}
+        self.write(folder + 'result.json', report)
+        data = self.progress.snapshot()
+        self.assertEqual(data['tasks'][0]['latest']['status'], 'check_passed')
+        self.assertFalse(data['tasks'][0]['latest']['physical_success'])
+        self.assertEqual(data['summary']['completed_tasks'], 0)
+        self.assertEqual(data['summary']['successful_variants'], 0)
+        report['physical_evidence_audit']['checks']['background_stable'] = False
+        self.write(folder + 'result.json', report)
+        self.progress.cached_at = 0
+        self.assertEqual(self.progress.snapshot()['tasks'][0]['latest']['status'], 'failed')
+
+    def test_normal_family_report_with_default_neutral_flag_is_not_neutral(self):
+        folder = 'reports/replicator_execution_test/g_banana/physical/'
+        self.write(folder + 'result.json', {'task_id': self.tid, 'neutral_probe_passed': False,
+                                          'physical_trial_passed': False})
+        self.write(folder + 'launch_failure.json', {'error': 'physical run failed'})
+        latest = self.progress.snapshot()['tasks'][0]['latest']
+        self.assertEqual(latest['kind'], 'startup')
+        self.assertEqual(latest['reason'], 'physical run failed')
+
     def test_certification_updates_only_bound_episode_and_event(self):
         manifest = self.delivery_fixture()
         for variant in ('base', 'human', 'property', 'robot'):
