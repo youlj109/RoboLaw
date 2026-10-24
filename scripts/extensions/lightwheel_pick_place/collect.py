@@ -29,6 +29,8 @@ parser.add_argument('--shelf-rise-z',type=float,default=0.12,
     help='Shelf extract: rise after retract clear of board_1; metres')
 parser.add_argument('--shelf-retract-steps',type=int,default=3,
     help='Shelf extract: number of equal retract waypoints before rise')
+parser.add_argument('--shelf-retract-clear-z',type=float,default=0.02,
+    help='Shelf extract: small Z clearance held during level retract (deck clear, below board_1)')
 args=parser.parse_args();args.enable_cameras=True
 if args.num_envs!=1:raise ValueError('This verified entry runs one environment; parallel collection is not implemented')
 from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
@@ -324,18 +326,27 @@ with SimulationAppContext(args):
         if use_pregrasp_phase:
             phase='lift';cart(held['tcp']+[0,0,.16])
         else:
-            # Shelf corridor: level retract toward robot (no early Z), then rise clear of board_1.
+            # Shelf corridor: retract toward robot with micro Z clearance (deck), then rise past board_1.
             phase='lift'
             n=max(1,int(args.shelf_retract_steps))
             y_final=float(args.shelf_retract_y); z_rise=float(args.shelf_rise_z)
+            z_clear=float(args.shelf_retract_clear_z)
             waypoints=[]
             for i in range(1,n+1):
-                waypoints.append(np.array([0.0, y_final*(i/n), 0.0]))
+                # Geometric-ish early micro steps: denser near the grasp (i/n squared blend).
+                frac=i/n
+                # Blend linear+quad so first steps are smaller than equal spacing.
+                t=0.5*frac+0.5*(frac*frac)
+                waypoints.append(np.array([0.0, y_final*t, z_clear*min(1.0, frac*1.5)]))
             waypoints.append(np.array([0.0, y_final, z_rise]))
-            result['shelf_lift_retract_m']={'y_final':y_final,'z_rise':z_rise,'steps':n,
+            result['shelf_lift_retract_m']={'y_final':y_final,'z_rise':z_rise,'z_clear':z_clear,'steps':n,
                 'waypoints':[w.tolist() for w in waypoints]}
-            for w in waypoints:
-                cart(held['tcp']+w)
+            for wi,w in enumerate(waypoints):
+                try:
+                    cart(held['tcp']+w)
+                except RuntimeError as exc:
+                    result['shelf_lift_failed_waypoint']= {'index':wi,'delta_m':w.tolist(),'error':str(exc)}
+                    raise
         lifted=snapshot();result['lift_m']=float(lifted['lime'][2]-p[2]);result['lift_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'lift',last_actions=5)
         if result['lift_m']<.08 or not result['lift_contacts']['both_fingers_on_body']:raise RuntimeError('Lime failed physical lift/contact check')
         dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
