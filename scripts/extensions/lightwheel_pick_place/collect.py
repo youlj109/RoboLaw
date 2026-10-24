@@ -174,7 +174,7 @@ with SimulationAppContext(args):
     if args.fixed_layout:
         result['fixed_layout_source']={'path':args.fixed_layout,'sha256':hashlib.sha256(Path(args.fixed_layout).read_bytes()).hexdigest()}
     if args.variant!='base':
-        config_path=Path(args.variant_config or 'configs/extensions/lightwheel_pick_place/variants.json')
+        config_path=Path(args.variant_config or TASK_SPEC.default_variants)
         result['variant_spec']=json.loads(config_path.read_text())[args.variant]
         result['variant_config_source']={'path':str(config_path),'sha256':hashlib.sha256(config_path.read_bytes()).hexdigest()}
     try:
