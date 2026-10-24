@@ -2,7 +2,8 @@
 import argparse,json,subprocess,hashlib
 from pathlib import Path
 from matched_scene_lwx import require_matching_scene
-p=argparse.ArgumentParser();p.add_argument('--label',required=True);p.add_argument('--variant',required=True,choices=['human','property','robot']);p.add_argument('--search',type=Path,required=True);p.add_argument('--baseline',type=Path,required=True);p.add_argument('--attempt',default='01');p.add_argument('--report-root',type=Path,default=Path('reports/doors/lwx_C04_C08_20261024'));p.add_argument('--data-root',type=Path,default=Path('datasets/doors/lwx_C04_C08_20261024'));p.add_argument('--config',type=Path);p.add_argument('--screen-contact-approach',action='store_true');a=p.parse_args();label=a.label;variant=a.variant;r=a.report_root;data=a.data_root;ep=data/(label+'_'+variant+'_'+a.attempt);neutral=data/(label+'_'+variant+'_neutral_'+a.attempt);statepath=r/(ep.name+'_campaign01.json');config=a.config or Path(json.loads((a.baseline/'metadata.json').read_text())['variant_config'])
+p=argparse.ArgumentParser();p.add_argument('--label',required=True);p.add_argument('--variant',required=True,choices=['human','property','robot']);p.add_argument('--search',type=Path,required=True);p.add_argument('--baseline',type=Path,required=True);p.add_argument('--attempt',default='01');p.add_argument('--report-root',type=Path,default=Path('reports/doors/lwx_C04_C08_20261024'));p.add_argument('--data-root',type=Path,default=Path('datasets/doors/lwx_C04_C08_20261024'));p.add_argument('--config',type=Path);p.add_argument('--screen-contact-approach',action='store_true');p.add_argument('--screen-contact-pull',action='store_true');a=p.parse_args();label=a.label;variant=a.variant;r=a.report_root;data=a.data_root;ep=data/(label+'_'+variant+'_'+a.attempt);neutral=data/(label+'_'+variant+'_neutral_'+a.attempt);statepath=r/(ep.name+'_campaign01.json');config=a.config or Path(json.loads((a.baseline/'metadata.json').read_text())['variant_config'])
+if a.screen_contact_pull and (not a.screen_contact_approach or variant not in ['property','robot']):p.error('Pull proxy discovery requires approach screen and property/robot')
 if statepath.exists() or ep.exists():raise FileExistsError(ep)
 state={'stage':'prepared','baseline':str(a.baseline),'search':str(a.search),'search_sha256':hashlib.sha256(a.search.read_bytes()).hexdigest(),'offline_candidate_budget':3,'physical_trial_budget':1,'small_detour_limits':{'max_joint_length_ratio':1.6,'max_added_tcp_length_m':.15},'complete':False,'candidates':[]};required=[('result.json','accepted'),('task_validation_full.json','accepted'),('task_review_audit.json','passed'),('source_contact_audit.json','passed'),('self_collision_audit.json','passed')]
 def save():statepath.write_text(json.dumps(state,indent=2)+'\n')
@@ -31,6 +32,11 @@ try:
     run('approach_screen_'+str(idx),'diagnose_paired_approach_lwx.py',['--baseline',a.baseline,'--config',cfg,'--variant',variant,'--paired',paired/'report.json','--output',diagnostic])
     entry['contact_approach_diagnostic']=str(diagnostic)
     entry['eligible']=bool(json.loads(diagnostic.read_text())['all_predicted_approaches_discovery_eligible'])
+   if entry['eligible'] and a.screen_contact_pull:
+    pull_diagnostic=r/(ep.name+'_candidate_'+str(idx).zfill(2)+'_pull_proxy01.json')
+    run('pull_proxy_'+str(idx),'diagnose_paired_pull_proxy_lwx.py',['--baseline',a.baseline,'--config',cfg,'--variant',variant,'--paired',paired/'report.json','--approach',entry['contact_approach_diagnostic'],'--output',pull_diagnostic])
+    entry['contact_pull_proxy_diagnostic']=str(pull_diagnostic)
+    entry['eligible']=bool(json.loads(pull_diagnostic.read_text())['all_projected_pulls_discovery_eligible'])
    if entry['eligible']:choices.append(entry)
   save()
   if entry['eligible'] and entry['max_added_tcp_length_m']<=.05 and entry['max_joint_length_ratio']<=1.15:

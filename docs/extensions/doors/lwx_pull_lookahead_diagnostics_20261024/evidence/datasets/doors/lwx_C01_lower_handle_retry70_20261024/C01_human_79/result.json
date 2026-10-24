@@ -1,0 +1,62 @@
+{
+  "task_success": false,
+  "accepted": false,
+  "mode": "collect",
+  "neutral_completed": false,
+  "failure": "RuntimeError: EXECUTION_COLLISION {\"action_index\": 508, \"phase\": \"pull_door\", \"valid\": false, \"failure\": {\"valid\": false, \"distance_m\": 0.01999949457841113, \"required_m\": 0.02, \"slack_m\": -5.054215888693203e-07, \"robot_part\": \"robot_hull\", \"obstacle\": \"/World/envs/env_0/person/Posed_KitchenAdult/base_001\", \"intersecting\": false}, \"q\": [1.544274926185608, 0.320698082447052, -0.5999382138252258, -3.0442159175872803, -2.4885785579681396, 1.5360360145568848, 0.2591436505317688, 0.37813878059387207, 0.37806934118270874, -0.38075339794158936, 0.38304102420806885, -0.3780145049095154, -0.37771981954574585], \"door_body_pose\": [4.523456573486328, -0.5603686571121216, 0.875, 2.5553163141012192e-08, -1.83499651029706e-08, 0.15102019906044006, 0.988530695438385], \"hazard_pose\": null, \"door_q\": 0.30320048332214355, \"door_hazard_pairs_near_15cm\": [{\"door_shape\": \"/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_main\", \"hazard_shape\": \"/World/envs/env_0/person/Posed_KitchenAdult/base_001\", \"distance_m\": 0.14269403217561225, \"intersecting\": false}, {\"door_shape\": \"/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_1\", \"hazard_shape\": \"/World/envs/env_0/person/Posed_KitchenAdult/base_001\", \"distance_m\": 0.3665660688902959, \"intersecting\": false}, {\"door_shape\": \"/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_2\", \"hazard_shape\": \"/World/envs/env_0/person/Posed_KitchenAdult/base_001\", \"distance_m\": 0.220905673566044, \"intersecting\": false}, {\"door_shape\": \"/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_3\", \"hazard_shape\": \"/World/envs/env_0/person/Posed_KitchenAdult/base_001\", \"distance_m\": 0.15492761103748007, \"intersecting\": false}, {\"door_shape\": \"/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_4\", \"hazard_shape\": \"/World/envs/env_0/person/Posed_KitchenAdult/base_001\", \"distance_m\": 0.2849310809245548, \"intersecting\": false}]}",
+  "frames": 508,
+  "final_door_rad": 0.30320048332214355,
+  "actual_trajectory_samples": 508,
+  "physical_contact_samples": 335,
+  "delivery_accepted": false,
+  "no_execution_state_writes": true,
+  "safety_audit_physics_dt": 0.008333333333333333,
+  "safety_checks": 4573,
+  "physics_samples": 4066,
+  "plans": [
+    {
+      "backend": "curobo",
+      "method": "motion_gen",
+      "collision_geometry": {
+        "hazard_mesh_policy": "per_collider_world_aabb_plus_planning_clearance",
+        "hazard_mesh_box_counts": {
+          "glass": 0,
+          "barrier": 0
+        },
+        "retained_triangle_mesh_count": 19,
+        "planning_box_count": 582,
+        "fcl_and_physx_geometry": "original"
+      },
+      "status": "SUCCESS",
+      "planning_seconds": 3.8038140200078487,
+      "samples": 115,
+      "dt": 0.06666666666666667,
+      "gripper_joint_position": 0.0,
+      "attached_bottle": false,
+      "transport_object_padding_m": 0.0,
+      "pregrasp_validation": {
+        "valid": true,
+        "samples": 544,
+        "input_waypoints": 115,
+        "resolution_rad": 0.005,
+        "curobo_failures": [],
+        "fcl_failures": [],
+        "curobo_samples_checked": 544,
+        "fcl_samples_checked": 544,
+        "fcl_samples_unchecked": 0,
+        "validation_complete": true,
+        "early_rejection": null,
+        "sample_order": "cuRobo all original dense samples; FCL endpoints then interval midpoints",
+        "transport_object_padding_m": 0.0,
+        "gripper_joint_position": 0.0,
+        "validation_seconds": 0.9669534866698086,
+        "policy": {
+          "version": "dense_pregrasp_v4",
+          "resolution_rad": 0.005,
+          "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+        },
+        "accepted": true
+      }
+    }
+  ]
+}

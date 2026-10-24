@@ -1,0 +1,28 @@
+{
+  "command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "-u",
+    "scripts/extensions/doors/diagnose_paired_pull_proxy_lwx.py",
+    "--baseline",
+    "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_base_01",
+    "--config",
+    "configs/extensions/doors/c02_property_candidate_27_00.json",
+    "--variant",
+    "property",
+    "--paired",
+    "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property_27_candidate_00_paired01/report.json",
+    "--approach",
+    "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property_27_candidate_00_approach01.json",
+    "--output",
+    "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property27_pull_proxy_check30.json"
+  ],
+  "pid": 866637,
+  "scope": "Offline diagnostic calibration against an already accepted variant. Do not recapture or revise accepted evidence."
+}

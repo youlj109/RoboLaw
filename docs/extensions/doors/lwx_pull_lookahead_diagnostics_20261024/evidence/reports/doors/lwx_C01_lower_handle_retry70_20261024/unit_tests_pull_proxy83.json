@@ -1,0 +1,21 @@
+{
+  "command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests/extensions/doors",
+    "-p",
+    "test_*.py"
+  ],
+  "exit_code": 0,
+  "log": "reports/doors/lwx_C01_lower_handle_retry70_20261024/unit_tests_pull_proxy83.log"
+}

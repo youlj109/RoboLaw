@@ -1,7 +1,7 @@
 """Wait for an explicitly selected offline search, then run one bounded variant campaign."""
 import argparse,json,time,subprocess
 from pathlib import Path
-p=argparse.ArgumentParser();p.add_argument('--label',required=True);p.add_argument('--variant',required=True);p.add_argument('--attempt',required=True);p.add_argument('--search',type=Path,required=True);p.add_argument('--baseline',type=Path,required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--report-root',type=Path,required=True);p.add_argument('--data-root',type=Path,required=True);p.add_argument('--after-campaign',type=Path);p.add_argument('--screen-contact-approach',action='store_true');a=p.parse_args();sf=a.report_root/(a.label+'_'+a.variant+'_'+a.attempt+'_search_wait01.json');state={'stage':'waiting_search','complete':False}
+p=argparse.ArgumentParser();p.add_argument('--label',required=True);p.add_argument('--variant',required=True);p.add_argument('--attempt',required=True);p.add_argument('--search',type=Path,required=True);p.add_argument('--baseline',type=Path,required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--report-root',type=Path,required=True);p.add_argument('--data-root',type=Path,required=True);p.add_argument('--after-campaign',type=Path);p.add_argument('--screen-contact-approach',action='store_true');p.add_argument('--screen-contact-pull',action='store_true');a=p.parse_args();sf=a.report_root/(a.label+'_'+a.variant+'_'+a.attempt+'_search_wait01.json');state={'stage':'waiting_search','complete':False}
 if sf.exists():raise FileExistsError(sf)
 def save():sf.write_text(json.dumps(state,indent=2))
 try:
@@ -40,6 +40,7 @@ try:
  state['stage']='campaign';save();cmd=['python3','-u','scripts/extensions/doors/supervise_assigned_variant_lwx.py']
  for key in ['label','variant','attempt','search','baseline','config','report_root','data_root']:cmd+=['--'+key.replace('_','-'),str(getattr(a,key))]
  if a.screen_contact_approach:cmd+=['--screen-contact-approach']
+ if a.screen_contact_pull:cmd+=['--screen-contact-pull']
  with sf.with_suffix('.log').open('x') as f:subprocess.run(cmd,stdin=subprocess.DEVNULL,stdout=f,stderr=subprocess.STDOUT,check=True)
  state.update(stage='campaign_complete',complete=True);save()
 except Exception as exc:state['error']=repr(exc);save();raise

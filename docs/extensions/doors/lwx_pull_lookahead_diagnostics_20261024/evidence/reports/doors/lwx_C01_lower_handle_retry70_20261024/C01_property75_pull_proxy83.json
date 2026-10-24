@@ -1,0 +1,2077 @@
+{
+  "scope": "CPU conservative hazard-proxy proposals only. Candidate arm tracks commands ideally while door/fingers follow recorded baseline timing. No changed dynamics, exact rejected command, GPU self-collision, safe execution or acceptance claim.",
+  "physics_replay": false,
+  "unsafe_path_executed": false,
+  "baseline": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+  "baseline_sha256": "c760034717c154b19a631ce9d7e54ebbb002142d476d807d999ed27d1b943094",
+  "config": "configs/extensions/doors/c01_property_candidate_75_18.json",
+  "config_sha256": "8a917d3431b59625a4c8d7ba2b1ee315dee6179aafe9e1c761ffd86ce47f72e7",
+  "paired": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_75_candidate_18_paired01/report.json",
+  "paired_sha256": "8b65ac1380f350b182cc0ca3124a58dabe87e7663dc4da5b87baaee66cdaceb4",
+  "approach": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_75_candidate_18_approach01.json",
+  "approach_sha256": "de30723e89bcf160ec1739e42d76812ef44924e34cd9a15e22e477435c0bc469",
+  "implementation_sha256": "e734c8de2a42a4008146846666dea4cd4fe8a19c0de8cea0ed5d6dad8a338796",
+  "controller_parameters": {
+    "seed": 42,
+    "handle_offset_y": 0.0,
+    "handle_offset_z": -0.18,
+    "max_joint_speed": 0.5,
+    "grasp_roll_deg": 0.0,
+    "pull_lead_rad": 0.03,
+    "pull_steps": 600,
+    "ik_limit_margin_rad": 0.005,
+    "handle_normal_offset_m": -0.005,
+    "pregrasp_validation": {
+      "version": "dense_pregrasp_v4",
+      "resolution_rad": 0.005,
+      "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+    }
+  },
+  "planning_padding_m": 0.06,
+  "sphere_model": "Original cuRobo spheres including existing 5mm buffer versus axis-expanded original per-collider hazard AABBs.",
+  "pairs": [
+    {
+      "seed": 42,
+      "available": true,
+      "samples": [
+        {
+          "baseline_action_index": 181,
+          "recorded_baseline_door_q": 0.0004971458693034947,
+          "arm_q": [
+            0.5927122144085378,
+            0.43198191145448683,
+            0.09184512846448678,
+            -2.486471051912734,
+            -2.4686564485777995,
+            1.7236992867612269,
+            -0.16974214302980842
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.04269319185203759,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 182,
+          "recorded_baseline_door_q": 0.0023289143573492765,
+          "arm_q": [
+            0.5956868828918824,
+            0.42049780400033127,
+            0.09299721168553877,
+            -2.511471051912734,
+            -2.4773874663173974,
+            1.7146462786034231,
+            -0.15976828114648617
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03896128628254516,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 183,
+          "recorded_baseline_door_q": 0.005799235310405493,
+          "arm_q": [
+            0.5986024433564281,
+            0.4092715083154834,
+            0.09411742566717507,
+            -2.5360110249748637,
+            -2.4859684807442353,
+            1.7056743747453136,
+            -0.15000314088896335
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.035215240857262485,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 184,
+          "recorded_baseline_door_q": 0.008541039191186428,
+          "arm_q": [
+            0.5992767436784988,
+            0.40671507618236546,
+            0.09436345279872968,
+            -2.5416706991007914,
+            -2.487954405437703,
+            1.703546026824604,
+            -0.14776727662666544
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.034259288862732405,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 185,
+          "recorded_baseline_door_q": 0.01164209097623825,
+          "arm_q": [
+            0.6000362272082869,
+            0.40383517010737946,
+            0.09464096888500187,
+            -2.548063310183903,
+            -2.4901992604696033,
+            1.7011283949353646,
+            -0.14524629806385772
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0331666162675139,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 186,
+          "recorded_baseline_door_q": 0.01470146793872118,
+          "arm_q": [
+            0.6007823569188178,
+            0.40100574342244677,
+            0.09491356300035515,
+            -2.554361592502153,
+            -2.4924132958574443,
+            1.6987321571341765,
+            -0.1427667982598514
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03208413757467451,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 187,
+          "recorded_baseline_door_q": 0.01787419617176056,
+          "arm_q": [
+            0.6015527473339568,
+            0.39808393669379627,
+            0.09519500025892284,
+            -2.5608844312323296,
+            -2.4947087597412683,
+            1.696235382268856,
+            -0.14020340316748486
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.030956852152967472,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 188,
+          "recorded_baseline_door_q": 0.02102085016667843,
+          "arm_q": [
+            0.6023134674530763,
+            0.3951987442025236,
+            0.09547270293386147,
+            -2.5673448819026627,
+            -2.496984856295475,
+            1.693747201662208,
+            -0.13766901852286076
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.029834104056868115,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 189,
+          "recorded_baseline_door_q": 0.024249505251646042,
+          "arm_q": [
+            0.6030904920582305,
+            0.39225151234094313,
+            0.09575613155893757,
+            -2.573964648026495,
+            -2.499319852249426,
+            1.6911817066905817,
+            -0.13507679062267194
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.028677210827304088,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 190,
+          "recorded_baseline_door_q": 0.027508389204740524,
+          "arm_q": [
+            0.6038711924304012,
+            0.38929029223168343,
+            0.09604053601438005,
+            -2.5806371681844085,
+            -2.5016764029388447,
+            1.6885792525062766,
+            -0.1324686594857757
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.02750446862556629,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 191,
+          "recorded_baseline_door_q": 0.030777158215641975,
+          "arm_q": [
+            0.6046506317601263,
+            0.38633393346741896,
+            0.09632399346993623,
+            -2.5873206721853363,
+            -2.504039908122145,
+            1.6859557120994575,
+            -0.129861014697049
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.02632311016955665,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 192,
+          "recorded_baseline_door_q": 0.03409300744533539,
+          "arm_q": [
+            0.6054375522553223,
+            0.3833492817672107,
+            0.0966095909309873,
+            -2.594091022196877,
+            -2.5064373851359476,
+            1.6832807369631835,
+            -0.12722436678023188
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.02511956461549488,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 193,
+          "recorded_baseline_door_q": 0.0374264232814312,
+          "arm_q": [
+            0.6062248383580566,
+            0.38036344955320056,
+            0.09689460218659443,
+            -2.6008877377430033,
+            -2.5088476280438834,
+            1.6805775832293794,
+            -0.1245823849607674
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.023904396094450463,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 194,
+          "recorded_baseline_door_q": 0.040756747126579285,
+          "arm_q": [
+            0.6070075851554786,
+            0.3773951717321106,
+            0.09717711643153633,
+            -2.607668687047503,
+            -2.5112558356350765,
+            1.67786275574806,
+            -0.12195145257982683
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.02268510609167681,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 195,
+          "recorded_baseline_door_q": 0.04411719739437103,
+          "arm_q": [
+            0.607793516879931,
+            0.37441516669226826,
+            0.09745982069534592,
+            -2.6145014416610506,
+            -2.513686176690471,
+            1.6751088319907896,
+            -0.11930539642413195
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.021449473706549115,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 196,
+          "recorded_baseline_door_q": 0.04747895896434784,
+          "arm_q": [
+            0.6085758357137223,
+            0.37144934916647687,
+            0.0977401165010098,
+            -2.6213273302218485,
+            -2.516117967300381,
+            1.6723390497402069,
+            -0.11666698032030544
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.020208023493625014,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 197,
+          "recorded_baseline_door_q": 0.05084693059325218,
+          "arm_q": [
+            0.6093556457349106,
+            0.3684936076454075,
+            0.09801827631532502,
+            -2.62815631403639,
+            -2.5185549066320445,
+            1.6695491430614402,
+            -0.11403235036357613
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.018958933659660247,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 198,
+          "recorded_baseline_door_q": 0.05423176661133766,
+          "arm_q": [
+            0.6101353462953026,
+            0.36553891858540694,
+            0.09829502208814836,
+            -2.6350099441374066,
+            -2.521004872369721,
+            1.6667299430212452,
+            -0.11139322349959435
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.017698202568494602,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 199,
+          "recorded_baseline_door_q": 0.0576072596013546,
+          "arm_q": [
+            0.6109088730872339,
+            0.362608383960544,
+            0.09856805384563151,
+            -2.6418351686211308,
+            -2.5234490642824943,
+            1.6639030338916772,
+            -0.1087700213212758
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.016435578059940746,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 200,
+          "recorded_baseline_door_q": 0.06103408336639404,
+          "arm_q": [
+            0.6116899989749061,
+            0.3596498150158704,
+            0.09884210662895264,
+            -2.6487545314382706,
+            -2.5259316103802982,
+            1.661017103381557,
+            -0.1061157277282818
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.015148269827247561,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 201,
+          "recorded_baseline_door_q": 0.06441998481750488,
+          "arm_q": [
+            0.6124576917947548,
+            0.3567431209622861,
+            0.09910959847749913,
+            -2.6555817574281013,
+            -2.5283858629847202,
+            1.6581495658480294,
+            -0.10350178841254418
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.013872372305684756,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 202,
+          "recorded_baseline_door_q": 0.0678359866142273,
+          "arm_q": [
+            0.6132280114378923,
+            0.35382745509991026,
+            0.09937603539927477,
+            -2.6624601318123973,
+            -2.5308634785275608,
+            1.65524012826337,
+            -0.1008733126113951
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.012614856246310827,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 203,
+          "recorded_baseline_door_q": 0.07125157117843628,
+          "arm_q": [
+            0.61399399932544,
+            0.3509292919819997,
+            0.09963882288607849,
+            -2.6693281190567415,
+            -2.533342538576073,
+            1.652314342418546,
+            -0.0982538584897792
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.011403628493514888,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 204,
+          "recorded_baseline_door_q": 0.07467779517173767,
+          "arm_q": [
+            0.6147580808220973,
+            0.348039546080074,
+            0.09989863279897582,
+            -2.6762079394445495,
+            -2.5358312731631205,
+            1.6493624283030148,
+            -0.09563495790611934
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.010238225210620698,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 205,
+          "recorded_baseline_door_q": 0.07811204344034195,
+          "arm_q": [
+            0.6155195954483387,
+            0.34516079415409767,
+            0.10015507046222238,
+            -2.683094294067175,
+            -2.5383280071205134,
+            1.6463862548903003,
+            -0.09301865411725352
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.009123369931233506,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 206,
+          "recorded_baseline_door_q": 0.08154962956905365,
+          "arm_q": [
+            0.6162774502043972,
+            0.3422972908961388,
+            0.10040758420834925,
+            -2.6899777651434635,
+            -2.540829557246015,
+            1.6433895461292154,
+            -0.09040853343422357
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.008064434729151089,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 207,
+          "recorded_baseline_door_q": 0.08498946577310562,
+          "arm_q": [
+            0.6170313468409271,
+            0.3394502347251402,
+            0.10065590823207579,
+            -2.696856175514182,
+            -2.5433353600695283,
+            1.6403729451542144,
+            -0.0878054210894154
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.007065607575955826,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 208,
+          "recorded_baseline_door_q": 0.0884336605668068,
+          "arm_q": [
+            0.6177816908618949,
+            0.3366181916138495,
+            0.10089999461310539,
+            -2.7037337352273645,
+            -2.5458471880421873,
+            1.6373342811858975,
+            -0.08520772535637892
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.006130263423603968,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 209,
+          "recorded_baseline_door_q": 0.09189072251319885,
+          "arm_q": [
+            0.6185302482235178,
+            0.3337945755862745,
+            0.10114022381147744,
+            -2.7106273814406716,
+            -2.5483715070153066,
+            1.6342656284968409,
+            -0.08260907704256822
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.005260466433114626,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 210,
+          "recorded_baseline_door_q": 0.09535011649131775,
+          "arm_q": [
+            0.6192746618086312,
+            0.33098839813069947,
+            0.10137562651935977,
+            -2.7175160592229894,
+            -2.5509008925070886,
+            1.631175924605669,
+            -0.08001743483894755
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.004463224494537947,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 211,
+          "recorded_baseline_door_q": 0.09881773591041565,
+          "arm_q": [
+            0.620016122379024,
+            0.3281952615484467,
+            0.10160637492685436,
+            -2.724411472155368,
+            -2.553439925592302,
+            1.6280595165234704,
+            -0.07742841097878701
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.003411582715590937,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 212,
+          "recorded_baseline_door_q": 0.10228757560253143,
+          "arm_q": [
+            0.6207532691824036,
+            0.3254203978683985,
+            0.10183182842014292,
+            -2.7313016451900487,
+            -2.5559844926565245,
+            1.624921400467444,
+            -0.0748465168148747
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0022672620838337723,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 213,
+          "recorded_baseline_door_q": 0.10575991868972778,
+          "arm_q": [
+            0.6214860917930709,
+            0.32266393993196996,
+            0.10205177165940624,
+            -2.7381871268315354,
+            -2.558535085382686,
+            1.6217609561340316,
+            -0.07227155164454378
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0011655403647671744,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 214,
+          "recorded_baseline_door_q": 0.10923396795988083,
+          "arm_q": [
+            0.6222143491825818,
+            0.3199268882454926,
+            0.10226591319568495,
+            -2.745066321607932,
+            -2.561091412189023,
+            1.6185785374859107,
+            -0.06970411733693796
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.00010911240810108219,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 215,
+          "recorded_baseline_door_q": 0.11271238327026367,
+          "arm_q": [
+            0.6229385171542788,
+            0.31720754551852703,
+            0.10247416377478749,
+            -2.7519444704660496,
+            -2.5636557391641843,
+            1.6153713073153795,
+            -0.06714226950735006
+          ],
+          "minimum_proxy": {
+            "slack_m": -0.0009002773787955554,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        }
+      ],
+      "rejected_at_first_proxy_overlap": true,
+      "discovery_eligible": false,
+      "minimum_slack_m": -0.0009002773787955554
+    },
+    {
+      "seed": 43,
+      "available": true,
+      "samples": [
+        {
+          "baseline_action_index": 181,
+          "recorded_baseline_door_q": 0.0004971458693034947,
+          "arm_q": [
+            0.7157476831817522,
+            0.4314856882114336,
+            -0.022863145330733,
+            -2.481287672274593,
+            -2.4446074100268107,
+            1.753601113804026,
+            -0.13889223209703724
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.04503373034544147,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 182,
+          "recorded_baseline_door_q": 0.0023289143573492765,
+          "arm_q": [
+            0.7194631275802762,
+            0.4200241712699252,
+            -0.02188909400107522,
+            -2.506287672274593,
+            -2.453731275670524,
+            1.7437853614248864,
+            -0.12924370937466362
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.04122697284017903,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 183,
+          "recorded_baseline_door_q": 0.005799235310405493,
+          "arm_q": [
+            0.7231496474971474,
+            0.40866507870684066,
+            -0.02092890288770682,
+            -2.5311696546790103,
+            -2.4628109668452858,
+            1.7339303720063144,
+            -0.11967277249191345
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03710258181101885,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 184,
+          "recorded_baseline_door_q": 0.008541039191186428,
+          "arm_q": [
+            0.7239908440992243,
+            0.40610362232692715,
+            -0.020722480265751846,
+            -2.536855617741723,
+            -2.4648842275500007,
+            1.7316194183930207,
+            -0.11750625289506034
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03614362210517449,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 185,
+          "recorded_baseline_door_q": 0.01164209097623825,
+          "arm_q": [
+            0.7249369538401162,
+            0.4032182291635116,
+            -0.020488637337233433,
+            -2.5432779788729354,
+            -2.4672260858235764,
+            1.7289954266259013,
+            -0.11506471065478258
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.035054699128805177,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 186,
+          "recorded_baseline_door_q": 0.01470146793872118,
+          "arm_q": [
+            0.7258655921473983,
+            0.40038358054637285,
+            -0.020258514089090046,
+            -2.549605625955901,
+            -2.4695339053734116,
+            1.7263958938061355,
+            -0.11266443831478308
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03397576326344517,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 187,
+          "recorded_baseline_door_q": 0.01787419617176056,
+          "arm_q": [
+            0.7268235506670221,
+            0.39745656884539793,
+            -0.02002044756769019,
+            -2.556158927437956,
+            -2.471924620373671,
+            1.7236886199403816,
+            -0.11018408363061147
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03285198837137312,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 188,
+          "recorded_baseline_door_q": 0.02102085016667843,
+          "arm_q": [
+            0.7277686094230249,
+            0.39456643240979183,
+            -0.01978508755138902,
+            -2.5626495953551975,
+            -2.4742931630154676,
+            1.720992027252538,
+            -0.10773290611143528
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03173255934599247,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 189,
+          "recorded_baseline_door_q": 0.024249505251646042,
+          "arm_q": [
+            0.7287330278453351,
+            0.391614354231221,
+            -0.01954439047887886,
+            -2.5693003658661198,
+            -2.476720919197979,
+            1.7182130820990227,
+            -0.10522690323834769
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03057890520191272,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 190,
+          "recorded_baseline_door_q": 0.027508389204740524,
+          "arm_q": [
+            0.7297010981803491,
+            0.3886484796232678,
+            -0.01930238074112319,
+            -2.5760041747724998,
+            -2.4791689428668544,
+            1.7153956105970343,
+            -0.10270664155042229
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.029409263548785668,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 191,
+          "recorded_baseline_door_q": 0.030777158215641975,
+          "arm_q": [
+            0.7306666917879701,
+            0.3856876955408008,
+            -0.019060692397627556,
+            -2.5827190506915523,
+            -2.4816220187805,
+            1.7125568630990033,
+            -0.10018794262019619
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.028230846854367685,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 192,
+          "recorded_baseline_door_q": 0.03409300744533539,
+          "arm_q": [
+            0.7316406266920834,
+            0.38269880611350865,
+            -0.018816676137648706,
+            -2.589521206736121,
+            -2.484108122094839,
+            1.7096640808509278,
+            -0.09764231506526574
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.027030115620541438,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 193,
+          "recorded_baseline_door_q": 0.0374264232814312,
+          "arm_q": [
+            0.7326140908883868,
+            0.3797089729266709,
+            -0.018572661550541034,
+            -2.596349872512209,
+            -2.4866051849959074,
+            1.7067425037001756,
+            -0.09509260061891564
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.025817606598025976,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 194,
+          "recorded_baseline_door_q": 0.040756747126579285,
+          "arm_q": [
+            0.7335810209908252,
+            0.3767369612049841,
+            -0.018330282625353814,
+            -2.6031627121327197,
+            -2.4890978473504353,
+            1.7038100214046639,
+            -0.09255457762054008
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.024600806268385754,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 195,
+          "recorded_baseline_door_q": 0.04411719739437103,
+          "arm_q": [
+            0.7345509675839966,
+            0.37375345772558793,
+            -0.018087227518601326,
+            -2.6100276086162286,
+            -2.49161108428751,
+            1.7008370763813632,
+            -0.09000296783213539
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.023367519319956252,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 196,
+          "recorded_baseline_door_q": 0.04747895896434784,
+          "arm_q": [
+            0.7355155445674532,
+            0.37078441492785663,
+            -0.017845730149403622,
+            -2.6168856081860628,
+            -2.4941234591194488,
+            1.6978488227928517,
+            -0.08745969253674236
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.022128250801450165,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 197,
+          "recorded_baseline_door_q": 0.05084693059325218,
+          "arm_q": [
+            0.736476128260225,
+            0.36782572061047364,
+            -0.01760555542262752,
+            -2.6237467124161125,
+            -2.4966387702236212,
+            1.6948407081605363,
+            -0.08492099573422464
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0208811846138239,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 198,
+          "recorded_baseline_door_q": 0.05423176661133766,
+          "arm_q": [
+            0.7374356832662303,
+            0.36486834771081683,
+            -0.017366074154014238,
+            -2.6306325670463173,
+            -2.499165107504781,
+            1.6918029098732872,
+            -0.08237886012718112
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.019622327041992592,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 199,
+          "recorded_baseline_door_q": 0.0576072596013546,
+          "arm_q": [
+            0.7383867645597508,
+            0.36193542350738034,
+            -0.017129280585630284,
+            -2.6374898639398245,
+            -2.501683058107361,
+            1.6887587378907596,
+            -0.07985291210852376
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.01836141426227208,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 200,
+          "recorded_baseline_door_q": 0.06103408336639404,
+          "arm_q": [
+            0.7393463078524907,
+            0.3589747234464502,
+            -0.01689104579733903,
+            -2.6444417159043674,
+            -2.5042380174793983,
+            1.68565301761158,
+            -0.07729784817691523
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.017075687224719936,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 201,
+          "recorded_baseline_door_q": 0.06441998481750488,
+          "arm_q": [
+            0.7402884969389293,
+            0.356066220464915,
+            -0.01665797457780911,
+            -2.651300965972702,
+            -2.506761360075903,
+            1.6825691168813077,
+            -0.07478239418678734
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.015800246906553496,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 202,
+          "recorded_baseline_door_q": 0.0678359866142273,
+          "arm_q": [
+            0.7412330675017272,
+            0.35314903004714804,
+            -0.01642525856233373,
+            -2.6582115648028646,
+            -2.5093061867449755,
+            1.679442230239171,
+            -0.07225367524548158
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.014538415794997601,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 203,
+          "recorded_baseline_door_q": 0.07125157117843628,
+          "arm_q": [
+            0.7421715018251124,
+            0.35024964776716166,
+            -0.016195160069542087,
+            -2.665111681058327,
+            -2.5118499264735488,
+            1.676299895207979,
+            -0.06973431141173181
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.013321349838392865,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 204,
+          "recorded_baseline_door_q": 0.07467779517173767,
+          "arm_q": [
+            0.7431067907894069,
+            0.34735898844111673,
+            -0.015967083578138995,
+            -2.6720236317072037,
+            -2.5144009865563275,
+            1.6731316663922975,
+            -0.06721610781880027
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.01214836839408244,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 205,
+          "recorded_baseline_door_q": 0.07811204344034195,
+          "arm_q": [
+            0.7440381461616592,
+            0.34447963479873384,
+            -0.01574136603589211,
+            -2.6789420855369195,
+            -2.5169576004913847,
+            1.6699396174863876,
+            -0.06470097899789126
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.011023982383824474,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 206,
+          "recorded_baseline_door_q": 0.08154962956905365,
+          "arm_q": [
+            0.7449642481089997,
+            0.341615847057682,
+            -0.015518481652019966,
+            -2.685857573497513,
+            -2.5195164664192435,
+            1.666727803496892,
+            -0.06219231955382271
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.00995335243782225,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 207,
+          "recorded_baseline_door_q": 0.08498946577310562,
+          "arm_q": [
+            0.7458847654390809,
+            0.3387688272512213,
+            -0.015298661807738366,
+            -2.692767900681272,
+            -2.5220769684423,
+            1.6634969719095112,
+            -0.059690864394369554
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.008940443746775627,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 208,
+          "recorded_baseline_door_q": 0.0884336605668068,
+          "arm_q": [
+            0.7468002211231756,
+            0.33593714522061857,
+            -0.015081940362738168,
+            -2.69967728908395,
+            -2.5246408756587906,
+            1.6602448568414945,
+            -0.057195025286213654
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.007988392649512663,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 209,
+          "recorded_baseline_door_q": 0.09189072251319885,
+          "arm_q": [
+            0.7477127904476449,
+            0.33311422087364984,
+            -0.014867959546737301,
+            -2.706602746351912,
+            -2.527214731716,
+            1.6569630456711488,
+            -0.05469862542548734
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.007098982477376725,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 210,
+          "recorded_baseline_door_q": 0.09535011649131775,
+          "arm_q": [
+            0.7486196307210213,
+            0.33030906888313716,
+            -0.014657572246917808,
+            -2.7135231121371457,
+            -2.5297909083726067,
+            1.6536611674715562,
+            -0.052209248101528355
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0062790538948080885,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 211,
+          "recorded_baseline_door_q": 0.09881773591041565,
+          "arm_q": [
+            0.7495222204587899,
+            0.32751729757030257,
+            -0.014450606044603485,
+            -2.720450135837844,
+            -2.532374017335434,
+            1.6503332468799934,
+            -0.049722615178744774
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.005531203160327326,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 212,
+          "recorded_baseline_door_q": 0.10228757560253143,
+          "arm_q": [
+            0.7504189367039888,
+            0.32474414108602934,
+            -0.014247619833843221,
+            -2.7273717792569903,
+            -2.5349598160527647,
+            1.6469846867749403,
+            -0.047242992794726116
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.004701712134966167,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 213,
+          "recorded_baseline_door_q": 0.10575991868972778,
+          "arm_q": [
+            0.7513098034587015,
+            0.32198973599487385,
+            -0.014048790944242266,
+            -2.734288585310941,
+            -2.5375487509906107,
+            1.6436148875330414,
+            -0.04477011891136738
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0036061884636890904,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 214,
+          "recorded_baseline_door_q": 0.10923396795988083,
+          "arm_q": [
+            0.7521945641535626,
+            0.31925508584103984,
+            -0.013854362546544928,
+            -2.741198943168456,
+            -2.5401404710149014,
+            1.6402242888341851,
+            -0.04230450052681541
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0025545702446699084,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 215,
+          "recorded_baseline_door_q": 0.11271238327026367,
+          "arm_q": [
+            0.7530738370866127,
+            0.3165384989838099,
+            -0.013664394107096902,
+            -2.7481081091228967,
+            -2.5427372124267347,
+            1.6368099336209596,
+            -0.03984419664015287
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.001548440533335145,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 216,
+          "recorded_baseline_door_q": 0.11620602756738663,
+          "arm_q": [
+            0.7539502603464823,
+            0.3138320363504921,
+            -0.013478530022677581,
+            -2.7550375641903817,
+            -2.545347357952859,
+            1.633360668212039,
+            -0.03738152162800076
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0005873899006580488,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 217,
+          "recorded_baseline_door_q": 0.1196959838271141,
+          "arm_q": [
+            0.7548190161443251,
+            0.3111508383960967,
+            -0.013298020569027897,
+            -2.7619497228615177,
+            -2.5479570505798974,
+            1.629894733906099,
+            -0.03492977470504258
+          ],
+          "minimum_proxy": {
+            "slack_m": -0.0003207619148091617,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        }
+      ],
+      "rejected_at_first_proxy_overlap": true,
+      "discovery_eligible": false,
+      "minimum_slack_m": -0.0003207619148091617
+    },
+    {
+      "seed": 44,
+      "available": true,
+      "samples": [
+        {
+          "baseline_action_index": 181,
+          "recorded_baseline_door_q": 0.0004971458693034947,
+          "arm_q": [
+            0.58008156697067,
+            0.43236845695099063,
+            0.10359414738856934,
+            -2.487001613458636,
+            -2.4711879375239536,
+            1.7206650309937759,
+            -0.17295279254202148
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.04245437226759154,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 182,
+          "recorded_baseline_door_q": 0.0023289143573492765,
+          "arm_q": [
+            0.5829809633888464,
+            0.42087616685533796,
+            0.10476364228616206,
+            -2.512001613458636,
+            -2.479877407481919,
+            1.711689615304354,
+            -0.16294445581089886
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03872005787062829,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 183,
+          "recorded_baseline_door_q": 0.005799235310405493,
+          "arm_q": [
+            0.5858192651907151,
+            0.40965778164209354,
+            0.10589915301108659,
+            -2.536506374929988,
+            -2.488406591802872,
+            1.7028065534539176,
+            -0.1531588844409576
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03497693819103489,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 184,
+          "recorded_baseline_door_q": 0.008541039191186428,
+          "arm_q": [
+            0.5864767375492567,
+            0.40710049855097674,
+            0.10614898025764503,
+            -2.5421633417133926,
+            -2.490383296559708,
+            1.7006967401478674,
+            -0.15091570040991253
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03406746365784926,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 185,
+          "recorded_baseline_door_q": 0.01164209097623825,
+          "arm_q": [
+            0.5872173508213018,
+            0.4042196044865176,
+            0.10643073046286665,
+            -2.548552891120799,
+            -2.492617915401016,
+            1.698300044354368,
+            -0.14838635587165797
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03297438417387962,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 186,
+          "recorded_baseline_door_q": 0.01470146793872118,
+          "arm_q": [
+            0.5879450296602534,
+            0.4013891752131751,
+            0.1067074367676157,
+            -2.5548481515382044,
+            -2.4948220475233396,
+            1.6959244353055318,
+            -0.1458985164563096
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.03189151999575831,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 187,
+          "recorded_baseline_door_q": 0.01787419617176056,
+          "arm_q": [
+            0.5886964578444209,
+            0.39846629986678295,
+            0.10699307027163059,
+            -2.5613678555671333,
+            -2.4971074468508285,
+            1.6934490234624588,
+            -0.14332638558912805
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.030763851336236457,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 188,
+          "recorded_baseline_door_q": 0.02102085016667843,
+          "arm_q": [
+            0.5894385436886755,
+            0.39558001808750887,
+            0.10727486536369256,
+            -2.5678251969132067,
+            -2.499373768544307,
+            1.6909819977502134,
+            -0.14078325226989666
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.029640739619301436,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 189,
+          "recorded_baseline_door_q": 0.024249505251646042,
+          "arm_q": [
+            0.5901966257262988,
+            0.3926316382842964,
+            0.10756242020303895,
+            -2.5744417728375804,
+            -2.5016989496735698,
+            1.68843817266034,
+            -0.13818196322721563
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.02848349015083059,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 190,
+          "recorded_baseline_door_q": 0.027508389204740524,
+          "arm_q": [
+            0.5909583901545553,
+            0.38966922812939947,
+            0.10785091101488604,
+            -2.581111073496362,
+            -2.504045814111705,
+            1.685857551989725,
+            -0.1355646019978266
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.02731040554335703,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 191,
+          "recorded_baseline_door_q": 0.030777158215641975,
+          "arm_q": [
+            0.5917190154426598,
+            0.38671164413472775,
+            0.1081383917254764,
+            -2.587791349556749,
+            -2.5063998276966593,
+            1.6832558678833478,
+            -0.13294761898436133
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.02612872068128077,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 192,
+          "recorded_baseline_door_q": 0.03409300744533539,
+          "arm_q": [
+            0.592487036256492,
+            0.38372571721778936,
+            0.10842798922085187,
+            -2.594558426964473,
+            -2.508787905806123,
+            1.6806030172261455,
+            -0.13030141932751252
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.024924861270418895,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 193,
+          "recorded_baseline_door_q": 0.0374264232814312,
+          "arm_q": [
+            0.5932555117373847,
+            0.38073857005475836,
+            0.10871693599770535,
+            -2.6013518549246397,
+            -2.511188933235909,
+            1.6779220554863796,
+            -0.12764975825942815
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.02370939453680162,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 194,
+          "recorded_baseline_door_q": 0.040756747126579285,
+          "arm_q": [
+            0.5940196494502624,
+            0.3777689455471994,
+            0.10900329870207882,
+            -2.6081295227927876,
+            -2.513588169011772,
+            1.6752293459343695,
+            -0.1250090835209735
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.02248982361233228,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 195,
+          "recorded_baseline_door_q": 0.04411719739437103,
+          "arm_q": [
+            0.5947869909014011,
+            0.3747875482846753,
+            0.10928979852323625,
+            -2.614958969973462,
+            -2.516009695971896,
+            1.6724976834620189,
+            -0.12235312749994277
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.02125392475984885,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 196,
+          "recorded_baseline_door_q": 0.04747895896434784,
+          "arm_q": [
+            0.5955508990814938,
+            0.3718203044138529,
+            0.10957380159570658,
+            -2.6217815541191016,
+            -2.5184329101991954,
+            1.6697501112548507,
+            -0.11970474212640415
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.020012224779527764,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 197,
+          "recorded_baseline_door_q": 0.05084693059325218,
+          "arm_q": [
+            0.5963124492201788,
+            0.36886310031458436,
+            0.10985558503584342,
+            -2.628607232404958,
+            -2.5208615006371278,
+            1.6669823923000335,
+            -0.11706006338671159
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.018762901255210594,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 198,
+          "recorded_baseline_door_q": 0.05423176661133766,
+          "arm_q": [
+            0.5970739868775118,
+            0.3659069074232798,
+            0.11013587644122845,
+            -2.635457545970197,
+            -2.523303321814545,
+            1.6641854248722736,
+            -0.1144107794810506
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.017501951722462793,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 199,
+          "recorded_baseline_door_q": 0.0576072596013546,
+          "arm_q": [
+            0.5978295850706346,
+            0.3629748393265753,
+            0.11041234851898196,
+            -2.642279469320938,
+            -2.5257396392872447,
+            1.6613806173842214,
+            -0.11177739560240268
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.016239125409541942,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 200,
+          "recorded_baseline_door_q": 0.06103408336639404,
+          "arm_q": [
+            0.598592698897519,
+            0.36001467918870295,
+            0.11068979206847783,
+            -2.649195487767694,
+            -2.5282144454323974,
+            1.6585170508712477,
+            -0.10911271588421748
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.014951628373025515,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 201,
+          "recorded_baseline_door_q": 0.06441998481750488,
+          "arm_q": [
+            0.5993427777280368,
+            0.3571063788599471,
+            0.1109605337935892,
+            -2.656019416934989,
+            -2.5306613042751556,
+            1.655671533736104,
+            -0.10648847085351373
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.01367568209986525,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 202,
+          "recorded_baseline_door_q": 0.0678359866142273,
+          "arm_q": [
+            0.6000955087747925,
+            0.3541890583668018,
+            0.11123014683309589,
+            -2.6628944735602924,
+            -2.5331317180951065,
+            1.6527842319075183,
+            -0.10384955900056926
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.012418577593474207,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 203,
+          "recorded_baseline_door_q": 0.07125157117843628,
+          "arm_q": [
+            0.6008440967701071,
+            0.3512892064818177,
+            0.11149599975382342,
+            -2.66975915233475,
+            -2.535603837317889,
+            1.649880496273671,
+            -0.10121963514273911
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.011207923142629396,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body2",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 204,
+          "recorded_baseline_door_q": 0.07467779517173767,
+          "arm_q": [
+            0.601590903055882,
+            0.3483977323711183,
+            0.11175877758437731,
+            -2.676635663775468,
+            -2.5380858741803385,
+            1.6469506133578133,
+            -0.09859020397821963
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.010043278105833685,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 205,
+          "recorded_baseline_door_q": 0.07811204344034195,
+          "arm_q": [
+            0.6023352853055156,
+            0.34551721381526207,
+            0.11201807517950393,
+            -2.683518712096748,
+            -2.540576162406027,
+            1.6439964323549858,
+            -0.09596332088902942
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.008929389178597529,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 206,
+          "recorded_baseline_door_q": 0.08154962956905365,
+          "arm_q": [
+            0.6030761695136941,
+            0.34265190794790323,
+            0.11227333680917093,
+            -2.6903988848848432,
+            -2.5430715322236823,
+            1.6410216428687159,
+            -0.09334259294978958
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.007871651395367087,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 207,
+          "recorded_baseline_door_q": 0.08498946577310562,
+          "arm_q": [
+            0.6038132659839652,
+            0.3398030137006251,
+            0.11252428848332982,
+            -2.6972740066102032,
+            -2.5455714249329398,
+            1.6380268784218144,
+            -0.09072885350965237
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.006874276974138567,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 208,
+          "recorded_baseline_door_q": 0.0884336605668068,
+          "arm_q": [
+            0.6045469649539762,
+            0.33696909607201775,
+            0.11277088370458792,
+            -2.7041482861598904,
+            -2.5480776139103396,
+            1.635009977396808,
+            -0.08812051108523422
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.005940666595351286,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 209,
+          "recorded_baseline_door_q": 0.09189072251319885,
+          "arm_q": [
+            0.6052789929404035,
+            0.33414356431434383,
+            0.11301350286485276,
+            -2.7110386533345143,
+            -2.5505965561879735,
+            1.6319630641379261,
+            -0.08551117582659881
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.005072914560469523,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 210,
+          "recorded_baseline_door_q": 0.09535011649131775,
+          "arm_q": [
+            0.6060070403817779,
+            0.3313354357316237,
+            0.11325116683427357,
+            -2.7179240640718496,
+            -2.553120849519604,
+            1.6288950055115528,
+            -0.0829088458151055
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.00427804686814566,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 21
+          }
+        },
+        {
+          "baseline_action_index": 211,
+          "recorded_baseline_door_q": 0.09881773591041565,
+          "arm_q": [
+            0.606732269907611,
+            0.32854030930329586,
+            0.1134840464526477,
+            -2.7248162171647548,
+            -2.555655071393322,
+            1.6258001816697079,
+            -0.08030912148467768
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.003166221438065546,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 212,
+          "recorded_baseline_door_q": 0.10228757560253143,
+          "arm_q": [
+            0.6074533456468366,
+            0.3257634205800818,
+            0.11371149457998818,
+            -2.7317031440834563,
+            -2.5581951223779757,
+            1.6226835471900263,
+            -0.07771653999402815
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0020210545057963783,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 213,
+          "recorded_baseline_door_q": 0.10575991868972778,
+          "arm_q": [
+            0.6081702565828552,
+            0.3230049022926748,
+            0.11393328932706148,
+            -2.7385853937845095,
+            -2.56074149848727,
+            1.619544480248673,
+            -0.07513090626907766
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0009186147561820526,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 214,
+          "recorded_baseline_door_q": 0.10923396795988083,
+          "arm_q": [
+            0.6088827615135433,
+            0.32026575561306564,
+            0.11414913586566804,
+            -2.745461372391582,
+            -2.563293914795992,
+            1.616383325873354,
+            -0.07255283231525939
+          ],
+          "minimum_proxy": {
+            "slack_m": -0.0001383859830837858,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Body3",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        }
+      ],
+      "rejected_at_first_proxy_overlap": true,
+      "discovery_eligible": false,
+      "minimum_slack_m": -0.0001383859830837858
+    }
+  ],
+  "all_projected_pulls_discovery_eligible": false,
+  "complete": true
+}

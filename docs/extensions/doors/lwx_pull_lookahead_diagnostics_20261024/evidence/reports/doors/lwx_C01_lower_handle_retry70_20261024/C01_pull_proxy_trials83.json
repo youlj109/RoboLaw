@@ -1,0 +1,89 @@
+{
+  "scope": "Validate a new CPU conservative hazard-proxy lookahead on retained failed candidates75/78 and current candidate81. Ideal candidate-arm tracking with recorded baseline door/finger schedule; diagnostic only, no physical acceptance or exact dynamics prediction. No changes to collectors or active gates.",
+  "jobs": [
+    {
+      "attempt": "75",
+      "command": [
+        "docker",
+        "exec",
+        "robolaw-wenxuanli",
+        "env",
+        "PYTHONPATH=/workspace",
+        "OPENBLAS_NUM_THREADS=1",
+        "OMP_NUM_THREADS=1",
+        "/workspace/.venv-arena/bin/python",
+        "-u",
+        "scripts/extensions/doors/diagnose_paired_pull_proxy_lwx.py",
+        "--baseline",
+        "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+        "--config",
+        "configs/extensions/doors/c01_property_candidate_75_18.json",
+        "--variant",
+        "property",
+        "--paired",
+        "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_75_candidate_18_paired01/report.json",
+        "--approach",
+        "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_75_candidate_18_approach01.json",
+        "--output",
+        "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property75_pull_proxy83.json"
+      ],
+      "pid": 866443
+    },
+    {
+      "attempt": "78",
+      "command": [
+        "docker",
+        "exec",
+        "robolaw-wenxuanli",
+        "env",
+        "PYTHONPATH=/workspace",
+        "OPENBLAS_NUM_THREADS=1",
+        "OMP_NUM_THREADS=1",
+        "/workspace/.venv-arena/bin/python",
+        "-u",
+        "scripts/extensions/doors/diagnose_paired_pull_proxy_lwx.py",
+        "--baseline",
+        "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+        "--config",
+        "configs/extensions/doors/c01_property_candidate_78_11.json",
+        "--variant",
+        "property",
+        "--paired",
+        "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_78_candidate_11_paired01/report.json",
+        "--approach",
+        "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_78_candidate_11_approach01.json",
+        "--output",
+        "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property78_pull_proxy83.json"
+      ],
+      "pid": 866444
+    },
+    {
+      "attempt": "81",
+      "command": [
+        "docker",
+        "exec",
+        "robolaw-wenxuanli",
+        "env",
+        "PYTHONPATH=/workspace",
+        "OPENBLAS_NUM_THREADS=1",
+        "OMP_NUM_THREADS=1",
+        "/workspace/.venv-arena/bin/python",
+        "-u",
+        "scripts/extensions/doors/diagnose_paired_pull_proxy_lwx.py",
+        "--baseline",
+        "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+        "--config",
+        "configs/extensions/doors/c01_property_candidate_81_00.json",
+        "--variant",
+        "property",
+        "--paired",
+        "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_81_candidate_00_paired01/report.json",
+        "--approach",
+        "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_81_candidate_00_approach01.json",
+        "--output",
+        "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property81_pull_proxy83.json"
+      ],
+      "pid": 866445
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "scope": "CPU conservative hazard-proxy proposals only. Candidate arm tracks commands ideally while door/fingers follow recorded baseline timing. No changed dynamics, exact rejected command, GPU self-collision, safe execution or acceptance claim.",
+  "physics_replay": false,
+  "unsafe_path_executed": false,
+  "baseline": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+  "baseline_sha256": "c760034717c154b19a631ce9d7e54ebbb002142d476d807d999ed27d1b943094",
+  "config": "configs/extensions/doors/c01_property_candidate_78_11.json",
+  "config_sha256": "3021ab3cd966047f5b8172f47e77f5e1f55e71b30c54eee9d1f4a4bdf78e3d83",
+  "paired": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_78_candidate_11_paired01/report.json",
+  "paired_sha256": "7be2969e4f9d8f10ac1d650c41195c3c497abf1f6e84b0a20b888841c4c9bcf5",
+  "approach": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_78_candidate_11_approach01.json",
+  "approach_sha256": "3dfeda47b21d57866b6c1882a71b498bcdd252b19cf476d1f4eb64e8882212ae",
+  "implementation_sha256": "e734c8de2a42a4008146846666dea4cd4fe8a19c0de8cea0ed5d6dad8a338796",
+  "controller_parameters": {
+    "seed": 42,
+    "handle_offset_y": 0.0,
+    "handle_offset_z": -0.18,
+    "max_joint_speed": 0.5,
+    "grasp_roll_deg": 0.0,
+    "pull_lead_rad": 0.03,
+    "pull_steps": 600,
+    "ik_limit_margin_rad": 0.005,
+    "handle_normal_offset_m": -0.005,
+    "pregrasp_validation": {
+      "version": "dense_pregrasp_v4",
+      "resolution_rad": 0.005,
+      "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+    }
+  },
+  "planning_padding_m": 0.06,
+  "sphere_model": "Original cuRobo spheres including existing 5mm buffer versus axis-expanded original per-collider hazard AABBs.",
+  "pairs": [
+    {
+      "seed": 42,
+      "available": true,
+      "samples": [
+        {
+          "baseline_action_index": 181,
+          "recorded_baseline_door_q": 0.0004971458693034947,
+          "arm_q": [
+            0.5923299166607676,
+            0.4319926880696057,
+            0.0922008278955332,
+            -2.4864871086548663,
+            -2.4687328640468924,
+            1.7236073867911312,
+            -0.1698391576073552
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0059399718147060895,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Wall03_10",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 182,
+          "recorded_baseline_door_q": 0.0023289143573492765,
+          "arm_q": [
+            0.595302308978666,
+            0.42050834893754857,
+            0.09335343741620021,
+            -2.5114871086548662,
+            -2.477462627194173,
+            1.7145567294361828,
+            -0.1598642542553184
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.002207993757041747,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Wall03_10",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 183,
+          "recorded_baseline_door_q": 0.005799235310405493,
+          "arm_q": [
+            0.5982155246271672,
+            0.4092823083024471,
+            0.09447411945985311,
+            -2.5360260162677783,
+            -2.48604207512827,
+            1.7055875186717768,
+            -0.15009849742902456
+          ],
+          "minimum_proxy": {
+            "slack_m": -0.0013288007234111068,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Wall03_10",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        }
+      ],
+      "rejected_at_first_proxy_overlap": true,
+      "discovery_eligible": false,
+      "minimum_slack_m": -0.0013288007234111068
+    },
+    {
+      "seed": 43,
+      "available": true,
+      "samples": [
+        {
+          "baseline_action_index": 181,
+          "recorded_baseline_door_q": 0.0004971458693034947,
+          "arm_q": [
+            0.6339298138603663,
+            0.431156585032624,
+            0.05346581155827227,
+            -2.4847396274215097,
+            -2.460487456209759,
+            1.7336354108741685,
+            -0.15933521228259415
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.006727526062490517,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Wall03_10",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 182,
+          "recorded_baseline_door_q": 0.0023289143573492765,
+          "arm_q": [
+            0.6371503237455814,
+            0.4196915627213993,
+            0.054560418797190736,
+            -2.5097396274215096,
+            -2.469352501694768,
+            1.7243282912626383,
+            -0.14947260878649465
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0030033021814398694,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Wall03_10",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 183,
+          "recorded_baseline_door_q": 0.005799235310405493,
+          "arm_q": [
+            0.6403196269010519,
+            0.40843208207139947,
+            0.05562974189492785,
+            -2.5343943864246503,
+            -2.4781018771233447,
+            1.7150641382449832,
+            -0.13977365796504893
+          ],
+          "minimum_proxy": {
+            "slack_m": -0.0005438864268322366,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Wall03_10",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        }
+      ],
+      "rejected_at_first_proxy_overlap": true,
+      "discovery_eligible": false,
+      "minimum_slack_m": -0.0005438864268322366
+    },
+    {
+      "seed": 44,
+      "available": true,
+      "samples": [
+        {
+          "baseline_action_index": 181,
+          "recorded_baseline_door_q": 0.0004971458693034947,
+          "arm_q": [
+            0.5800213156674389,
+            0.4323704518406228,
+            0.10365017873398473,
+            -2.487004144703521,
+            -2.4712000475948708,
+            1.7206505662585179,
+            -0.17296813560969934
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.005707242716270676,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Wall03_10",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 182,
+          "recorded_baseline_door_q": 0.0023289143573492765,
+          "arm_q": [
+            0.5829203486161929,
+            0.4208781203110596,
+            0.1048197605311706,
+            -2.512004144703521,
+            -2.479889319599447,
+            1.711675519460762,
+            -0.16295963517740092
+          ],
+          "minimum_proxy": {
+            "slack_m": 0.0019729167115348986,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Wall03_10",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        },
+        {
+          "baseline_action_index": 183,
+          "recorded_baseline_door_q": 0.005799235310405493,
+          "arm_q": [
+            0.5857582767270895,
+            0.4096597703878879,
+            0.10595534916685954,
+            -2.5365087386164418,
+            -2.4884182575446725,
+            1.7027928792598925,
+            -0.1531739675112207
+          ],
+          "minimum_proxy": {
+            "slack_m": -0.001560831054166066,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Wall03_10",
+            "link": "panda_panda_link5",
+            "sphere": 16
+          }
+        }
+      ],
+      "rejected_at_first_proxy_overlap": true,
+      "discovery_eligible": false,
+      "minimum_slack_m": -0.001560831054166066
+    }
+  ],
+  "all_projected_pulls_discovery_eligible": false,
+  "complete": true
+}

@@ -1,0 +1,33 @@
+{
+  "created": "2026-10-24T13:44:01.793215",
+  "scope": "Stop only identified idle own waiter before its campaign starts, preserving old state/log. Requeue same search and physical budget with extra conservative pull-proxy discovery screen. No running physical collector interrupted.",
+  "old_waiter_pid": 862833,
+  "old_state": {
+    "stage": "waiting_baseline_gates",
+    "complete": false
+  },
+  "watcher_command": [
+    "python3",
+    "-u",
+    "scripts/extensions/doors/supervise_search_candidates_lwx.py",
+    "--label",
+    "C07",
+    "--variant",
+    "property",
+    "--attempt",
+    "96",
+    "--search",
+    "reports/doors/lwx_C07_property_grasp_retry92_20261024/C07_property_bottle_search95.json",
+    "--baseline",
+    "datasets/doors/lwx_C07_property_grasp_retry92_20261024/C07_base_01",
+    "--config",
+    "configs/extensions/doors/c07_variants_lwx_01.json",
+    "--report-root",
+    "reports/doors/lwx_C07_property_grasp_retry92_20261024",
+    "--data-root",
+    "datasets/doors/lwx_C07_property_grasp_retry92_20261024",
+    "--screen-contact-approach",
+    "--screen-contact-pull"
+  ],
+  "watcher_pid": 867736
+}
