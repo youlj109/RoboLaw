@@ -14,6 +14,18 @@ def sha(path):
     return h.hexdigest()
 
 
+def episode_destinations(roots):
+    """Preserve old names unless distinct episodes share a basename."""
+    roots = set(map(Path, roots))
+    counts = {root.name: sum(p.name == root.name for p in roots) for root in roots}
+    names = {root: root.name if counts[root.name] == 1 else
+             root.parent.name + '__' + root.name + '__' +
+             hashlib.sha256(str(root).encode()).hexdigest()[:8] for root in roots}
+    if len(set(names.values())) != len(roots):
+        raise RuntimeError('Cannot assign distinct evidence destinations')
+    return names
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('delivery', type=Path)
@@ -26,6 +38,14 @@ def main():
         raise RuntimeError('Full finalization is required')
     selected = read(out / 'selection.json')
     copies, assets, git_paths, roots = {}, {}, set(), set()
+    for item in selected['episodes'].values():
+        roots.add(Path(item['episode']))
+        if item.get('baseline'):
+            roots.add(Path(item['baseline']))
+    for root in list(roots):
+        review = read(root / 'task_review_audit.json')
+        roots.add(Path(review['matching_neutral']['path']))
+    destinations = episode_destinations(roots)
 
     def copy(source, dest):
         if dest.exists():
@@ -47,7 +67,7 @@ def main():
             if key not in item:
                 continue
             p = Path(item[key])
-            dest = out / 'evidence' / root.name
+            dest = out / 'evidence' / destinations[root]
             copy(p, dest / ('paired_report.json' if key == 'paired_report' else p.name))
             if key != 'paired_report':
                 report = read(p)
@@ -56,18 +76,13 @@ def main():
                 if key == 'source_risk_review':
                     p = Path(report['illustration_report'])
                     copy(p, dest / p.name)
-    for root in list(roots):
-        review = read(root / 'task_review_audit.json')
-        roots.add(Path(review['matching_neutral']['path']))
-    if len({p.name for p in roots}) != len(roots):
-        raise RuntimeError('Episode basenames collide; preserve distinct destinations')
     for root in sorted(roots):
         for name in ['metadata.json', 'result.json', 'task_review_audit.json', 'task_validation_full.json',
                      'source_contact_audit.json', 'self_collision_audit.json', 'avoidance_audit.json',
                      'baseline_comparison_external_camera_2_03.json']:
             p = root / name
             if p.exists():
-                copy(p, out / 'evidence' / root.name / name)
+                copy(p, out / 'evidence' / destinations[root] / name)
         m = read(root / 'metadata.json')
         git_paths.add(m['variant_config'])
         spec = m.get('variant_spec') or {}
@@ -86,9 +101,12 @@ def main():
                     git_paths.add(str(p))
         visual = Path('reports/doors') / root.parent.name / (root.name + '_visual_review01.json')
         if visual.exists():
-            copy(visual, out / 'evidence' / root.name / visual.name)
+            copy(visual, out / 'evidence' / destinations[root] / visual.name)
             p = Path(read(visual)['image'])
-            copy(p, out / 'evidence' / root.name / p.name)
+            copy(p, out / 'evidence' / destinations[root] / p.name)
+    (out / 'evidence_episode_paths.json').write_text(json.dumps(
+        {str(root): 'evidence/' + name for root, name in sorted(destinations.items())},
+        indent=2) + '\n')
     test = Path(selected['unit_test_log'])
     copy(test, out / 'evidence' / test.name)
     for name, value in [('evidence_copies.json', copies), ('selected_asset_hashes.json', assets)]:

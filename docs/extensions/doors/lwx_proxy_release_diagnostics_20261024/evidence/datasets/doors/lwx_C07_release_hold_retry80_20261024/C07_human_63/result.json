@@ -1,0 +1,62 @@
+{
+  "task_success": true,
+  "accepted": false,
+  "mode": "collect",
+  "neutral_completed": false,
+  "failure": "RuntimeError: EXECUTION_COLLISION {\"action_index\": 989, \"phase\": \"released_hold\", \"valid\": false, \"failure\": {\"valid\": false, \"distance_m\": 0.0019830558551241794, \"required_m\": 0.002, \"slack_m\": -1.6944144875820615e-05, \"robot_part\": \"finger\", \"obstacle\": \"/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003\", \"intersecting\": false}, \"q\": [-0.35085466504096985, -1.5599608421325684, 0.5674217343330383, -2.6775972843170166, 2.7689545154571533, 3.747572422027588, 0.8901514410972595, -2.633563644938164e-10, -7.860193745878874e-11, 1.0756135679912404e-06, -1.09698839878547e-06, -3.7025253618594434e-07, -1.5251786180670024e-06], \"door_body_pose\": [5.239925384521484, -2.992647171020508, 1.6250001192092896, 1.3690441846847534e-07, -2.7212081477046013e-08, 0.9079925417900085, -0.4189864993095398], \"hazard_pose\": null, \"door_q\": -0.7061350345611572, \"door_hazard_pairs_near_15cm\": []}",
+  "frames": 989,
+  "final_door_rad": -0.7061350345611572,
+  "actual_trajectory_samples": 989,
+  "physical_contact_samples": 823,
+  "delivery_accepted": false,
+  "no_execution_state_writes": true,
+  "safety_audit_physics_dt": 0.008333333333333333,
+  "safety_checks": 8908,
+  "physics_samples": 7920,
+  "plans": [
+    {
+      "backend": "curobo",
+      "method": "motion_gen",
+      "collision_geometry": {
+        "hazard_mesh_policy": "per_collider_world_aabb_plus_planning_clearance",
+        "hazard_mesh_box_counts": {
+          "glass": 0,
+          "barrier": 0
+        },
+        "retained_triangle_mesh_count": 26,
+        "planning_box_count": 944,
+        "fcl_and_physx_geometry": "original"
+      },
+      "status": "SUCCESS",
+      "planning_seconds": 3.681094742845744,
+      "samples": 86,
+      "dt": 0.06666666666666667,
+      "gripper_joint_position": 0.0,
+      "attached_bottle": false,
+      "transport_object_padding_m": 0.0,
+      "pregrasp_validation": {
+        "valid": true,
+        "samples": 405,
+        "input_waypoints": 86,
+        "resolution_rad": 0.005,
+        "curobo_failures": [],
+        "fcl_failures": [],
+        "curobo_samples_checked": 405,
+        "fcl_samples_checked": 405,
+        "fcl_samples_unchecked": 0,
+        "validation_complete": true,
+        "early_rejection": null,
+        "sample_order": "cuRobo all original dense samples; FCL endpoints then interval midpoints",
+        "transport_object_padding_m": 0.0,
+        "gripper_joint_position": 0.0,
+        "validation_seconds": 0.8625592780299485,
+        "policy": {
+          "version": "dense_pregrasp_v4",
+          "resolution_rad": 0.005,
+          "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+        },
+        "accepted": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "created": "2026-10-24T12:38:23.211124",
+  "scope": "Change existing bounded-position release direction to outward horizontal after recorded-pose CPU direction scan. No extra retreat length or changed safety thresholds. Fresh physical matched baseline required.",
+  "diagnostic": "reports/doors/lwx_C07_release_hold_retry80_20261024/C07_robot62_bounded_angles83.json",
+  "screen_source": "reports/doors/lwx_C07_release_hold_retry80_20261024/C07_contact_screen01.json",
+  "screen_sha256": "ac3a8ac660c4cab1828e5108f68c2ce82bcb13d105d34007936d691a9fc70e94",
+  "screen_scope": "Unchanged pregrasp/approach/pull prefix only; changed release safety is unverified until actual baseline and variant run.",
+  "baseline_command": [
+    "python3",
+    "-u",
+    "scripts/extensions/doors/supervise_assigned_baseline_lwx.py",
+    "C07",
+    "--config",
+    "configs/extensions/doors/c07_variants_lwx_01.json",
+    "--report-root",
+    "reports/doors/lwx_C07_outward_release_retry84_20261024",
+    "--data-root",
+    "datasets/doors/lwx_C07_outward_release_retry84_20261024",
+    "--pull-steps",
+    "1100",
+    "--release-retreat-m",
+    ".04",
+    "--release-tilt-deg",
+    "0",
+    "--release-settle-steps",
+    "15",
+    "--release-retreat-profile",
+    "ease_out",
+    "--release-command-policy",
+    "bounded_position_hold_v2"
+  ],
+  "baseline_pid": 849177
+}

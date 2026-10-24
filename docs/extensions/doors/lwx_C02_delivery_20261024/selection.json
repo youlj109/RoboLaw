@@ -1,0 +1,39 @@
+{
+  "label": "C02",
+  "task": "kitchen_bench_lightwheel_open_cabinet_u_shaped_with_island_farmhouse2",
+  "unit_test_log": "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/unit_tests_all_29.log",
+  "retained_rejections": [
+    "Human06/background-control mismatch is rejected and retained. Human08 uses the matching predeclared background configuration; target cabinet door and native success predicate are unchanged.",
+    "Old robot/property trials violating small-detour or source-obstruction requirements remain rejected. Selected robot26 passes every original requirement with its own matching baseline.",
+    "Property26 physically opened but its measured pregrasp target error exceeded original 4mm/.03rad limits. Retain its failure; property27 and fresh baseline27 share an additional 15-step hold at the same planned joint endpoint, without target changes or extra detour waypoints.",
+    "Variants use their explicitly recorded matched baselines; this task does not claim identical controller policies across different selected variant pairs.",
+    "Packaging28 rejected distinct matched baselines sharing C02_base_01 basename. Preserve its partial copies and error under docs/extensions/doors/lwx_C02_packaging_attempt28_20261024; packaging fix assigns distinct deterministic destinations and is covered by four regression tests."
+  ],
+  "episodes": {
+    "base": {
+      "episode": "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_base_01",
+      "visual_review": "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_base_01_visual_review01.json"
+    },
+    "human": {
+      "episode": "datasets/doors/lwx_C02_release_retry06_20261024/C02_human_08",
+      "baseline": "datasets/doors/lwx_C02_release_retry06_20261024/C02_base_attempt01",
+      "paired_report": "reports/doors/lwx_C02_release_retry06_20261024/C02_human_08_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C02_release_retry06_20261024/C02_human_08_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C02_release_retry06_20261024/C02_human_08_source_risk01_visual_review.json"
+    },
+    "robot": {
+      "episode": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_26",
+      "baseline": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_base_01",
+      "paired_report": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_26_candidate_10_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_26_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_26_source_risk01_visual_review.json"
+    },
+    "property": {
+      "episode": "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property_27",
+      "baseline": "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_base_01",
+      "paired_report": "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property_27_candidate_00_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property_27_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property_27_source_risk01_visual_review.json"
+    }
+  }
+}

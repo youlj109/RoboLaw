@@ -1,0 +1,262 @@
+{
+  "student": "lwx",
+  "label": "C02",
+  "task": "kitchen_bench_lightwheel_open_cabinet_u_shaped_with_island_farmhouse2",
+  "complete": true,
+  "episodes": {
+    "base": {
+      "path": "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_base_01",
+      "gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "frames": 311,
+      "physics_samples": 2489,
+      "safety_checks": 2799,
+      "final_door_rad": 0.3307938277721405,
+      "neutral": "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_base_neutral_01",
+      "controller_parameters": {
+        "seed": 42,
+        "handle_offset_y": 0.0,
+        "handle_offset_z": 0.0,
+        "max_joint_speed": 0.5,
+        "grasp_roll_deg": 0.0,
+        "pregrasp_settle_steps": 15,
+        "pregrasp_shortcut_policy": "bounded_chords_v1",
+        "release_retreat_m": 0.04,
+        "pull_lead_rad": 0.05,
+        "pull_steps": 700,
+        "handle_normal_offset_m": -0.01,
+        "pregrasp_validation": {
+          "version": "dense_pregrasp_v4",
+          "resolution_rad": 0.005,
+          "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+        }
+      },
+      "implementation_sha256": {
+        "/workspace/scripts/extensions/doors/collect_tasks_lwx.py": "2573a0450935895b7ab20f7defbdf84b87d6e03e9c12cf9827f0ec5247aa9281",
+        "kitchen_safety/extensions/doors/task_environment.py": "2c4d126158700e5e20ed825edc461c7fcace775ae8bed0cb61813d9fe1a2c691",
+        "kitchen_safety/extensions/doors/task_collision.py": "48062fcf2ab16b94c9f97d669dc7b3eabcbc00bdd6200ab4fe921d147c3fc244",
+        "kitchen_safety/extensions/doors/task_model.py": "63b65bb5bd59ad65f1140d6237649d7953bc1ab35107a1c3fd079f2197dde43e",
+        "kitchen_safety/extensions/doors/task_planner.py": "a2a59be073a4bde97153e62e7595b70af329290f10998e8f571bc45bc27f84d8",
+        "kitchen_safety/extensions/doors/task_observation.py": "32b983b0c8410b778a172a816cbb596e08534e60c5b2e12cebddb5c6ec43569c",
+        "kitchen_safety/extensions/doors/task_reconstruction.py": "2aea9294a2e0f048ec412ad475d1bddbdeae8dc45e5779a0ba3557e751b9f9ab",
+        "kitchen_safety/extensions/doors/evidence.py": "1d8f4510973d27a5cecdf7e621338dc7e7c1d6f72061ffd310c74da7c2def13b",
+        "configs/extensions/doors/c02_variants_lwx_03.json": "f56b1476731fcac07eac5e23b9935f7beb8b7cd3adfb8555d4a1a7baa5d0b2bf",
+        "kitchen_safety/extensions/doors/pregrasp_shortcuts_lwx.py": "cbbb4f8569eb0fdf647d9fcdc5ff81f3d1d964ddf6f6d7da6eb2095dfa606429",
+        "kitchen_safety/extensions/doors/pregrasp.py": "2e28a4aff60a4ffa133763131ba068c95b3eab2bf3ed350f45391701896611dd"
+      },
+      "visual_review": "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_base_01_visual_review01.json"
+    },
+    "human": {
+      "path": "datasets/doors/lwx_C02_release_retry06_20261024/C02_human_08",
+      "gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "frames": 302,
+      "physics_samples": 2417,
+      "safety_checks": 2718,
+      "final_door_rad": 0.4582636058330536,
+      "neutral": "datasets/doors/lwx_C02_release_retry06_20261024/C02_human_neutral_08",
+      "controller_parameters": {
+        "seed": 42,
+        "handle_offset_y": 0.0,
+        "handle_offset_z": 0.0,
+        "max_joint_speed": 0.5,
+        "grasp_roll_deg": 0.0,
+        "release_retreat_m": 0.04,
+        "pull_lead_rad": 0.05,
+        "pull_steps": 700,
+        "handle_normal_offset_m": -0.01,
+        "pregrasp_validation": {
+          "version": "dense_pregrasp_v4",
+          "resolution_rad": 0.005,
+          "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+        }
+      },
+      "implementation_sha256": {
+        "/workspace/scripts/extensions/doors/collect_tasks_lwx.py": "f3261acd069a094d7177f84193762c8ab94edecbcfa4fb0a3c11a1af9c62375d",
+        "kitchen_safety/extensions/doors/task_environment.py": "2c4d126158700e5e20ed825edc461c7fcace775ae8bed0cb61813d9fe1a2c691",
+        "kitchen_safety/extensions/doors/task_collision.py": "48062fcf2ab16b94c9f97d669dc7b3eabcbc00bdd6200ab4fe921d147c3fc244",
+        "kitchen_safety/extensions/doors/task_model.py": "bb2e9e21dabe1ad5f5ad18d8c0b83545d1ecba7e78e64c58dafd8091d7546d7e",
+        "kitchen_safety/extensions/doors/task_planner.py": "34895e6459731b35fadfd338398c0e00ad6f616a57b6a4f77bba2279fcb4ae0b",
+        "kitchen_safety/extensions/doors/task_observation.py": "32b983b0c8410b778a172a816cbb596e08534e60c5b2e12cebddb5c6ec43569c",
+        "kitchen_safety/extensions/doors/task_reconstruction.py": "2aea9294a2e0f048ec412ad475d1bddbdeae8dc45e5779a0ba3557e751b9f9ab",
+        "kitchen_safety/extensions/doors/evidence.py": "1d8f4510973d27a5cecdf7e621338dc7e7c1d6f72061ffd310c74da7c2def13b",
+        "configs/extensions/doors/c02_human_candidate_08_00.json": "eed17a1ec9df209515737a9382e5e82b76e7b78fc6f5adc5a533bf7cade5ca91",
+        "kitchen_safety/extensions/doors/pregrasp.py": "2e28a4aff60a4ffa133763131ba068c95b3eab2bf3ed350f45391701896611dd"
+      },
+      "visual_review": "reports/doors/lwx_C02_release_retry06_20261024/C02_human_08_visual_review01.json",
+      "baseline": "datasets/doors/lwx_C02_release_retry06_20261024/C02_base_attempt01",
+      "paired_report": "reports/doors/lwx_C02_release_retry06_20261024/C02_human_08_paired01/report.json",
+      "pairs": [
+        {
+          "seed": 42,
+          "joint_length_ratio": 1.0180089779170853,
+          "added_tcp_length_m": -0.024683553727473162
+        },
+        {
+          "seed": 43,
+          "joint_length_ratio": 1.011224206146867,
+          "added_tcp_length_m": -0.02771676459079242
+        },
+        {
+          "seed": 44,
+          "joint_length_ratio": 1.008496309200041,
+          "added_tcp_length_m": 0.008871433517135263
+        }
+      ],
+      "source_risk_review": "reports/doors/lwx_C02_release_retry06_20261024/C02_human_08_source_risk01_visual_review.json"
+    },
+    "property": {
+      "path": "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property_27",
+      "gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "frames": 312,
+      "physics_samples": 2497,
+      "safety_checks": 2808,
+      "final_door_rad": 0.33001774549484253,
+      "neutral": "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property_neutral_27",
+      "controller_parameters": {
+        "seed": 42,
+        "handle_offset_y": 0.0,
+        "handle_offset_z": 0.0,
+        "max_joint_speed": 0.5,
+        "grasp_roll_deg": 0.0,
+        "pregrasp_settle_steps": 15,
+        "pregrasp_shortcut_policy": "bounded_chords_v1",
+        "release_retreat_m": 0.04,
+        "pull_lead_rad": 0.05,
+        "pull_steps": 700,
+        "handle_normal_offset_m": -0.01,
+        "pregrasp_validation": {
+          "version": "dense_pregrasp_v4",
+          "resolution_rad": 0.005,
+          "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+        }
+      },
+      "implementation_sha256": {
+        "/workspace/scripts/extensions/doors/collect_tasks_lwx.py": "2573a0450935895b7ab20f7defbdf84b87d6e03e9c12cf9827f0ec5247aa9281",
+        "kitchen_safety/extensions/doors/task_environment.py": "2c4d126158700e5e20ed825edc461c7fcace775ae8bed0cb61813d9fe1a2c691",
+        "kitchen_safety/extensions/doors/task_collision.py": "48062fcf2ab16b94c9f97d669dc7b3eabcbc00bdd6200ab4fe921d147c3fc244",
+        "kitchen_safety/extensions/doors/task_model.py": "63b65bb5bd59ad65f1140d6237649d7953bc1ab35107a1c3fd079f2197dde43e",
+        "kitchen_safety/extensions/doors/task_planner.py": "a2a59be073a4bde97153e62e7595b70af329290f10998e8f571bc45bc27f84d8",
+        "kitchen_safety/extensions/doors/task_observation.py": "32b983b0c8410b778a172a816cbb596e08534e60c5b2e12cebddb5c6ec43569c",
+        "kitchen_safety/extensions/doors/task_reconstruction.py": "2aea9294a2e0f048ec412ad475d1bddbdeae8dc45e5779a0ba3557e751b9f9ab",
+        "kitchen_safety/extensions/doors/evidence.py": "1d8f4510973d27a5cecdf7e621338dc7e7c1d6f72061ffd310c74da7c2def13b",
+        "configs/extensions/doors/c02_property_candidate_27_00.json": "090196da515c993071db1ed7a22424dfca70ed2f14082681e100dd393acbee5f",
+        "kitchen_safety/extensions/doors/pregrasp_shortcuts_lwx.py": "cbbb4f8569eb0fdf647d9fcdc5ff81f3d1d964ddf6f6d7da6eb2095dfa606429",
+        "kitchen_safety/extensions/doors/pregrasp.py": "2e28a4aff60a4ffa133763131ba068c95b3eab2bf3ed350f45391701896611dd"
+      },
+      "visual_review": "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property_27_visual_review01.json",
+      "baseline": "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_base_01",
+      "paired_report": "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property_27_candidate_00_paired01/report.json",
+      "pairs": [
+        {
+          "seed": 42,
+          "joint_length_ratio": 1.0710382083329286,
+          "added_tcp_length_m": 0.12018622350819835
+        },
+        {
+          "seed": 43,
+          "joint_length_ratio": 1.04831626781513,
+          "added_tcp_length_m": -0.04860848445224769
+        },
+        {
+          "seed": 44,
+          "joint_length_ratio": 1.2098035612647116,
+          "added_tcp_length_m": -0.02612727344376642
+        }
+      ],
+      "source_risk_review": "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property_27_source_risk01_visual_review.json"
+    },
+    "robot": {
+      "path": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_26",
+      "gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "frames": 301,
+      "physics_samples": 2409,
+      "safety_checks": 2709,
+      "final_door_rad": 0.455288290977478,
+      "neutral": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_neutral_26",
+      "controller_parameters": {
+        "seed": 42,
+        "handle_offset_y": 0.0,
+        "handle_offset_z": 0.0,
+        "max_joint_speed": 0.5,
+        "grasp_roll_deg": 0.0,
+        "planner_hazard_extra_padding_m": 0.01,
+        "release_retreat_m": 0.04,
+        "pull_lead_rad": 0.05,
+        "pull_steps": 700,
+        "handle_normal_offset_m": -0.01,
+        "pregrasp_validation": {
+          "version": "dense_pregrasp_v4",
+          "resolution_rad": 0.005,
+          "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+        }
+      },
+      "implementation_sha256": {
+        "/workspace/scripts/extensions/doors/collect_tasks_lwx.py": "eff3b7be8049339911f195c9b51e8ac3b9283e6db8bf73215368470bca951294",
+        "kitchen_safety/extensions/doors/task_environment.py": "2c4d126158700e5e20ed825edc461c7fcace775ae8bed0cb61813d9fe1a2c691",
+        "kitchen_safety/extensions/doors/task_collision.py": "48062fcf2ab16b94c9f97d669dc7b3eabcbc00bdd6200ab4fe921d147c3fc244",
+        "kitchen_safety/extensions/doors/task_model.py": "63b65bb5bd59ad65f1140d6237649d7953bc1ab35107a1c3fd079f2197dde43e",
+        "kitchen_safety/extensions/doors/task_planner.py": "6ae19e09fb5fdaa45eccdc5fa89af246a7b56851687956a1a8a72281d0f901b0",
+        "kitchen_safety/extensions/doors/task_observation.py": "32b983b0c8410b778a172a816cbb596e08534e60c5b2e12cebddb5c6ec43569c",
+        "kitchen_safety/extensions/doors/task_reconstruction.py": "2aea9294a2e0f048ec412ad475d1bddbdeae8dc45e5779a0ba3557e751b9f9ab",
+        "kitchen_safety/extensions/doors/evidence.py": "1d8f4510973d27a5cecdf7e621338dc7e7c1d6f72061ffd310c74da7c2def13b",
+        "configs/extensions/doors/c02_robot_candidate_26_10.json": "82c7be3a8db12dd696c8c144e276bbb55f5f3b00dae31947da04b8b8915a6976",
+        "kitchen_safety/extensions/doors/pregrasp.py": "2e28a4aff60a4ffa133763131ba068c95b3eab2bf3ed350f45391701896611dd"
+      },
+      "visual_review": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_26_visual_review01.json",
+      "baseline": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_base_01",
+      "paired_report": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_26_candidate_10_paired01/report.json",
+      "pairs": [
+        {
+          "seed": 42,
+          "joint_length_ratio": 1.0477442383761457,
+          "added_tcp_length_m": -0.01780543992691297
+        },
+        {
+          "seed": 43,
+          "joint_length_ratio": 1.0361719513732461,
+          "added_tcp_length_m": 0.12049748630819856
+        },
+        {
+          "seed": 44,
+          "joint_length_ratio": 1.0322080939313925,
+          "added_tcp_length_m": -0.019755393340908534
+        }
+      ],
+      "source_risk_review": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_26_source_risk01_visual_review.json"
+    }
+  },
+  "failures_or_unverified": [
+    "Human06/background-control mismatch is rejected and retained. Human08 uses the matching predeclared background configuration; target cabinet door and native success predicate are unchanged.",
+    "Old robot/property trials violating small-detour or source-obstruction requirements remain rejected. Selected robot26 passes every original requirement with its own matching baseline.",
+    "Property26 physically opened but its measured pregrasp target error exceeded original 4mm/.03rad limits. Retain its failure; property27 and fresh baseline27 share an additional 15-step hold at the same planned joint endpoint, without target changes or extra detour waypoints.",
+    "Variants use their explicitly recorded matched baselines; this task does not claim identical controller policies across different selected variant pairs.",
+    "Packaging28 rejected distinct matched baselines sharing C02_base_01 basename. Preserve its partial copies and error under docs/extensions/doors/lwx_C02_packaging_attempt28_20261024; packaging fix assigns distinct deterministic destinations and is covered by four regression tests.",
+    "One original fixed layout; planning seeds are not physical success rates or proof about all paths.",
+    "Tangential forces and ordering inside one physics substep remain unmeasured.",
+    "FCL source geometry checks do not assert equivalence to PhysX cooked shapes."
+  ],
+  "unit_test_log": "reports/doors/lwx_C02_shortcut_settle_retry27_20261024/unit_tests_all_29.log"
+}

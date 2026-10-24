@@ -1,0 +1,6743 @@
+{
+  "task": "kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian",
+  "variant": "property",
+  "baseline": "datasets/doors/lwx_C07_release_hold_retry80_20261024/C07_base_01",
+  "scope": "Offline candidates only, not scene or task acceptance",
+  "discovery_broadphase": "Vectorized conservative source AABB overlap; every counted intersection still requires exact FCL",
+  "endpoint_sphere_screen": "AABB lower bounds only prune safe pairs; close pairs use exact source FCL at unchanged margin+3mm",
+  "discovery_min_blocking_samples": 1,
+  "discovery_mid_stride": 1,
+  "stats": {
+    "tested": 118650,
+    "endpoints": 614,
+    "blocking": 113,
+    "scene_legal": 5,
+    "invariant_conservative_envelope_rejected": 279,
+    "initial_conservative_envelope_rejected": 99,
+    "shared_off_blocking": 113,
+    "support_initial_spheres": 108
+  },
+  "candidates": [],
+  "posture_adaptation_discovery": {
+    "enabled": false,
+    "scope": "Source initial robot and door/environment stay mandatory. Old redundant endpoint and later baseline arm postures are not constrained when enabled. Same Cartesian target, full on-plan endpoint validation, actual approach/pull and all final gates remain mandatory."
+  },
+  "additional_paired_endpoint_reference": [],
+  "paired_endpoint_discovery_clearance_m": 0.065,
+  "additional_approach_reference": [],
+  "additional_approach_clearance_m": 0.055,
+  "search_parameters": {
+    "baseline": "datasets/doors/lwx_C07_release_hold_retry80_20261024/C07_base_01",
+    "config": "configs/extensions/doors/c07_variants_lwx_01.json",
+    "variant": "property",
+    "output": "reports/doors/lwx_C07_release_hold_retry80_20261024/C07_property_mug_endpoint_search86.json",
+    "pedestal": true,
+    "heights": null,
+    "min_blocking_samples": 1,
+    "mid_stride": 1,
+    "human_asset": null,
+    "refine_from": null,
+    "candidate_list": "configs/extensions/doors/c07_property_mug_source_grid86.json",
+    "paired_reference": null,
+    "hazard_asset": "assets/obstacle_library/property/ceramic_mug.usda",
+    "support_width_m": 0.1,
+    "yaws": null,
+    "xy_step_m": 0.04,
+    "screen_approach_proxies": false,
+    "support_offset_xy": [
+      -0.2,
+      0.0
+    ],
+    "approach_reference": [],
+    "paired_endpoint_reference": [],
+    "paired_endpoint_extra_clearance_m": 0.005,
+    "allow_endpoint_posture_adaptation": false,
+    "approach_command_reference": [],
+    "screen_invariant_envelopes": true,
+    "measured_contact_reference": []
+  },
+  "invariant_gripper_screen": {
+    "enabled": false,
+    "sampled_actions": [
+      93,
+      99,
+      105,
+      111,
+      117,
+      123,
+      129,
+      135,
+      141,
+      147,
+      153,
+      159,
+      165,
+      171,
+      177,
+      183,
+      189,
+      195,
+      201,
+      207,
+      213,
+      219,
+      225,
+      231,
+      237,
+      243,
+      249,
+      255,
+      261,
+      267,
+      273,
+      279,
+      285,
+      291,
+      297,
+      303,
+      309,
+      315,
+      321,
+      327,
+      333,
+      339,
+      345,
+      351,
+      357,
+      363,
+      369,
+      375,
+      381,
+      387,
+      393,
+      399,
+      405,
+      411,
+      417,
+      423,
+      429,
+      435,
+      441,
+      447,
+      453,
+      459,
+      465,
+      471,
+      477,
+      483,
+      489,
+      495,
+      501,
+      507,
+      513,
+      519,
+      525,
+      531,
+      537,
+      543,
+      549,
+      555,
+      561,
+      567,
+      573,
+      579,
+      585,
+      591,
+      597,
+      603,
+      609,
+      615,
+      621,
+      627,
+      633,
+      639,
+      645,
+      651,
+      657,
+      663,
+      669,
+      675,
+      681,
+      687,
+      693,
+      699,
+      705,
+      711,
+      717,
+      723,
+      729,
+      735,
+      741,
+      747,
+      753,
+      759,
+      765,
+      771,
+      777,
+      783,
+      789,
+      795,
+      801,
+      807,
+      813,
+      819,
+      825,
+      831,
+      837,
+      843,
+      849,
+      855,
+      861,
+      867,
+      873,
+      879,
+      885,
+      891,
+      897,
+      903,
+      909,
+      915,
+      921,
+      927,
+      933,
+      939,
+      945,
+      951,
+      957,
+      963,
+      969,
+      975,
+      981,
+      987,
+      993,
+      999,
+      1005,
+      1011,
+      1017,
+      1023,
+      1029,
+      1035,
+      1041,
+      1047,
+      1053,
+      1056
+    ],
+    "goal_sphere_links": [
+      "base_link",
+      "left_inner_finger",
+      "left_inner_knuckle",
+      "left_outer_finger",
+      "left_outer_knuckle",
+      "panda_link8",
+      "panda_panda_link7",
+      "right_inner_finger",
+      "right_inner_knuckle",
+      "right_outer_finger",
+      "right_outer_knuckle"
+    ],
+    "goal_spheres": 53,
+    "source_extra_clearance_m": 0.003,
+    "scope": "Discovery only: fixed Cartesian policy uses measured baseline articulated gripper poses. Redundant arm postures remain unconstrained. Source hand plus original margin+3mm, support+5mm and distal goal proxy checks prune impossible placements; full same-target on-plans and actual dynamics still required."
+  },
+  "planning_proxy_discovery_screen": {
+    "enabled": false,
+    "scope": "Also check initial and invariant distal goal spheres against the same per-collider padded AABBs used by cuRobo for glass/barrier, including baseline extra padding. This is a conservative discovery filter, not source-intersection evidence or final acceptance."
+  },
+  "approach_reference_geometry": "All original source robot shapes and conservative execution envelopes; necessity still uses physical source hulls/primitives only.",
+  "invariant_conservative_envelope_screen": {
+    "enabled": true,
+    "source_segment": [
+      7,
+      8,
+      0.055
+    ],
+    "sampled_actions": [
+      93,
+      99,
+      105,
+      111,
+      117,
+      123,
+      129,
+      135,
+      141,
+      147,
+      153,
+      159,
+      165,
+      171,
+      177,
+      183,
+      189,
+      195,
+      201,
+      207,
+      213,
+      219,
+      225,
+      231,
+      237,
+      243,
+      249,
+      255,
+      261,
+      267,
+      273,
+      279,
+      285,
+      291,
+      297,
+      303,
+      309,
+      315,
+      321,
+      327,
+      333,
+      339,
+      345,
+      351,
+      357,
+      363,
+      369,
+      375,
+      381,
+      387,
+      393,
+      399,
+      405,
+      411,
+      417,
+      423,
+      429,
+      435,
+      441,
+      447,
+      453,
+      459,
+      465,
+      471,
+      477,
+      483,
+      489,
+      495,
+      501,
+      507,
+      513,
+      519,
+      525,
+      531,
+      537,
+      543,
+      549,
+      555,
+      561,
+      567,
+      573,
+      579,
+      585,
+      591,
+      597,
+      603,
+      609,
+      615,
+      621,
+      627,
+      633,
+      639,
+      645,
+      651,
+      657,
+      663,
+      669,
+      675,
+      681,
+      687,
+      693,
+      699,
+      705,
+      711,
+      717,
+      723,
+      729,
+      735,
+      741,
+      747,
+      753,
+      759,
+      765,
+      771,
+      777,
+      783,
+      789,
+      795,
+      801,
+      807,
+      813,
+      819,
+      825,
+      831,
+      837,
+      843,
+      849,
+      855,
+      861,
+      867,
+      873,
+      879,
+      885,
+      891,
+      897,
+      903,
+      909,
+      915,
+      921,
+      927,
+      933,
+      939,
+      945,
+      951,
+      957,
+      963,
+      969,
+      975,
+      981,
+      987,
+      993,
+      999,
+      1005,
+      1011,
+      1017,
+      1023,
+      1029,
+      1035,
+      1041,
+      1047,
+      1053,
+      1056
+    ],
+    "initial_full_shapes": 26,
+    "distal_shape_count": 4,
+    "hazard_extra_m": 0.003,
+    "support_m": 0.005,
+    "scope": "Conservative placement discovery only: full initial robot plus fixed Cartesian distal arm/gripper/finger proxies. Not source intersection evidence or global infeasibility. Original final margins and all paired/physical acceptance gates unchanged."
+  },
+  "measured_contact_discovery_references": [],
+  "support_rejections": [
+    {
+      "position": [
+        5.177745,
+        -2.828464,
+        1.390607
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.927745,
+          -2.8784639999999997,
+          0.001999999552965164
+        ],
+        "high": [
+          5.227745,
+          -2.778464,
+          1.388607
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.927745,
+              -2.8784639999999997,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0277449999999995,
+              -2.778464,
+              1.368607
+            ]
+          },
+          {
+            "low": [
+              4.927745,
+              -2.8784639999999997,
+              1.368607
+            ],
+            "high": [
+              5.227745,
+              -2.778464,
+              1.388607
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ]
+    },
+    {
+      "position": [
+        5.173708,
+        -2.827453,
+        1.382188
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.923708,
+          -2.877453,
+          0.001999999552965164
+        ],
+        "high": [
+          5.223708,
+          -2.7774530000000004,
+          1.380188
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.923708,
+              -2.877453,
+              0.001999999552965164
+            ],
+            "high": [
+              5.023708,
+              -2.7774530000000004,
+              1.360188
+            ]
+          },
+          {
+            "low": [
+              4.923708,
+              -2.877453,
+              1.360188
+            ],
+            "high": [
+              5.223708,
+              -2.7774530000000004,
+              1.380188
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ]
+    },
+    {
+      "position": [
+        5.192896,
+        -2.858266,
+        1.371946
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.942896,
+          -2.908266,
+          0.001999999552965164
+        ],
+        "high": [
+          5.242896,
+          -2.808266,
+          1.369946
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.942896,
+              -2.908266,
+              0.001999999552965164
+            ],
+            "high": [
+              5.042896,
+              -2.808266,
+              1.349946
+            ]
+          },
+          {
+            "low": [
+              4.942896,
+              -2.908266,
+              1.349946
+            ],
+            "high": [
+              5.242896,
+              -2.808266,
+              1.369946
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+      ]
+    },
+    {
+      "position": [
+        5.192896,
+        -2.846641,
+        1.422188
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.942896,
+          -2.896641,
+          0.001999999552965164
+        ],
+        "high": [
+          5.242896,
+          -2.796641,
+          1.420188
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.942896,
+              -2.896641,
+              0.001999999552965164
+            ],
+            "high": [
+              5.042896,
+              -2.796641,
+              1.400188
+            ]
+          },
+          {
+            "low": [
+              4.942896,
+              -2.896641,
+              1.400188
+            ],
+            "high": [
+              5.242896,
+              -2.796641,
+              1.420188
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+      ]
+    },
+    {
+      "position": [
+        5.192896,
+        -2.846641,
+        1.382188
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.942896,
+          -2.896641,
+          0.001999999552965164
+        ],
+        "high": [
+          5.242896,
+          -2.796641,
+          1.380188
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.942896,
+              -2.896641,
+              0.001999999552965164
+            ],
+            "high": [
+              5.042896,
+              -2.796641,
+              1.360188
+            ]
+          },
+          {
+            "low": [
+              4.942896,
+              -2.896641,
+              1.360188
+            ],
+            "high": [
+              5.242896,
+              -2.796641,
+              1.380188
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+      ]
+    },
+    {
+      "position": [
+        5.192896,
+        -2.846641,
+        1.462188
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.942896,
+          -2.896641,
+          0.001999999552965164
+        ],
+        "high": [
+          5.242896,
+          -2.796641,
+          1.460188
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.942896,
+              -2.896641,
+              0.001999999552965164
+            ],
+            "high": [
+              5.042896,
+              -2.796641,
+              1.440188
+            ]
+          },
+          {
+            "low": [
+              4.942896,
+              -2.896641,
+              1.440188
+            ],
+            "high": [
+              5.242896,
+              -2.796641,
+              1.460188
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+      ]
+    },
+    {
+      "position": [
+        5.192896,
+        -2.835624,
+        1.422688
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.942896,
+          -2.885624,
+          0.001999999552965164
+        ],
+        "high": [
+          5.242896,
+          -2.7856240000000003,
+          1.420688
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.942896,
+              -2.885624,
+              0.001999999552965164
+            ],
+            "high": [
+              5.042896,
+              -2.7856240000000003,
+              1.400688
+            ]
+          },
+          {
+            "low": [
+              4.942896,
+              -2.885624,
+              1.400688
+            ],
+            "high": [
+              5.242896,
+              -2.7856240000000003,
+              1.420688
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        45,
+        46,
+        47
+      ]
+    },
+    {
+      "position": [
+        5.199075,
+        -2.861479,
+        1.536067
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.949075,
+          -2.911479,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2490749999999995,
+          -2.8114790000000003,
+          1.534067
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.949075,
+              -2.911479,
+              0.001999999552965164
+            ],
+            "high": [
+              5.049074999999999,
+              -2.8114790000000003,
+              1.514067
+            ]
+          },
+          {
+            "low": [
+              4.949075,
+              -2.911479,
+              1.514067
+            ],
+            "high": [
+              5.2490749999999995,
+              -2.8114790000000003,
+              1.534067
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        48,
+        49,
+        50,
+        51
+      ]
+    },
+    {
+      "position": [
+        5.199693,
+        -2.868233,
+        1.347567
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.949693,
+          -2.918233,
+          0.001999999552965164
+        ],
+        "high": [
+          5.249693,
+          -2.818233,
+          1.345567
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.949693,
+              -2.918233,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0496929999999995,
+              -2.818233,
+              1.325567
+            ]
+          },
+          {
+            "low": [
+              4.949693,
+              -2.918233,
+              1.325567
+            ],
+            "high": [
+              5.249693,
+              -2.818233,
+              1.345567
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ]
+    },
+    {
+      "position": [
+        5.199693,
+        -2.868233,
+        1.387567
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.949693,
+          -2.918233,
+          0.001999999552965164
+        ],
+        "high": [
+          5.249693,
+          -2.818233,
+          1.385567
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.949693,
+              -2.918233,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0496929999999995,
+              -2.818233,
+              1.365567
+            ]
+          },
+          {
+            "low": [
+              4.949693,
+              -2.918233,
+              1.365567
+            ],
+            "high": [
+              5.249693,
+              -2.818233,
+              1.385567
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.861085,
+        1.449014
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.911085,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.8110850000000003,
+          1.447014
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.911085,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.8110850000000003,
+              1.427014
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.911085,
+              1.427014
+            ],
+            "high": [
+              5.25254,
+              -2.8110850000000003,
+              1.447014
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.861085,
+        1.409014
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.911085,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.8110850000000003,
+          1.407014
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.911085,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.8110850000000003,
+              1.387014
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.911085,
+              1.387014
+            ],
+            "high": [
+              5.25254,
+              -2.8110850000000003,
+              1.407014
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.861085,
+        1.489014
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.911085,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.8110850000000003,
+          1.487014
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.911085,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.8110850000000003,
+              1.467014
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.911085,
+              1.467014
+            ],
+            "high": [
+              5.25254,
+              -2.8110850000000003,
+              1.487014
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.891897,
+        1.326892
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.941897,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.8418970000000003,
+          1.324892
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.941897,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.8418970000000003,
+              1.304892
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.941897,
+              1.304892
+            ],
+            "high": [
+              5.25254,
+              -2.8418970000000003,
+              1.324892
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.851897,
+        1.366892
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.901897,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.8018970000000003,
+          1.364892
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.901897,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.8018970000000003,
+              1.344892
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.901897,
+              1.344892
+            ],
+            "high": [
+              5.25254,
+              -2.8018970000000003,
+              1.364892
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.851897,
+        1.326892
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.901897,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.8018970000000003,
+          1.324892
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.901897,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.8018970000000003,
+              1.304892
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.901897,
+              1.304892
+            ],
+            "high": [
+              5.25254,
+              -2.8018970000000003,
+              1.324892
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        43,
+        44,
+        45
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.851897,
+        1.406892
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.901897,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.8018970000000003,
+          1.404892
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.901897,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.8018970000000003,
+              1.384892
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.901897,
+              1.384892
+            ],
+            "high": [
+              5.25254,
+              -2.8018970000000003,
+              1.404892
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.862914,
+        1.326393
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.912914,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.812914,
+          1.324393
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.912914,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.812914,
+              1.304393
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.912914,
+              1.304393
+            ],
+            "high": [
+              5.25254,
+              -2.812914,
+              1.324393
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        42,
+        43,
+        44,
+        45
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.862914,
+        1.366393
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.912914,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.812914,
+          1.364393
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.912914,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.812914,
+              1.344393
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.912914,
+              1.344393
+            ],
+            "high": [
+              5.25254,
+              -2.812914,
+              1.364393
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.880272,
+        1.377135
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.930272,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.8302720000000003,
+          1.375135
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.930272,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.8302720000000003,
+              1.355135
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.930272,
+              1.355135
+            ],
+            "high": [
+              5.25254,
+              -2.8302720000000003,
+              1.375135
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.880272,
+        1.337135
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.930272,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.8302720000000003,
+          1.335135
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.930272,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.8302720000000003,
+              1.315135
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.930272,
+              1.315135
+            ],
+            "high": [
+              5.25254,
+              -2.8302720000000003,
+              1.335135
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        43,
+        44,
+        45,
+        46
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.869255,
+        1.417634
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.9192549999999997,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.819255,
+          1.415634
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.9192549999999997,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.819255,
+              1.395634
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.9192549999999997,
+              1.395634
+            ],
+            "high": [
+              5.25254,
+              -2.819255,
+              1.415634
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.869255,
+        1.377634
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.9192549999999997,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.819255,
+          1.375634
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.9192549999999997,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.819255,
+              1.355634
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.9192549999999997,
+              1.355634
+            ],
+            "high": [
+              5.25254,
+              -2.819255,
+              1.375634
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.861085,
+        1.449014
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.911085,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.8110850000000003,
+          1.447014
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.911085,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.8110850000000003,
+              1.427014
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.911085,
+              1.427014
+            ],
+            "high": [
+              5.25254,
+              -2.8110850000000003,
+              1.447014
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.861085,
+        1.409014
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.911085,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.8110850000000003,
+          1.407014
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.911085,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.8110850000000003,
+              1.387014
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.911085,
+              1.387014
+            ],
+            "high": [
+              5.25254,
+              -2.8110850000000003,
+              1.407014
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.20254,
+        -2.861085,
+        1.489014
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.95254,
+          -2.911085,
+          0.001999999552965164
+        ],
+        "high": [
+          5.25254,
+          -2.8110850000000003,
+          1.487014
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.95254,
+              -2.911085,
+              0.001999999552965164
+            ],
+            "high": [
+              5.05254,
+              -2.8110850000000003,
+              1.467014
+            ]
+          },
+          {
+            "low": [
+              4.95254,
+              -2.911085,
+              1.467014
+            ],
+            "high": [
+              5.25254,
+              -2.8110850000000003,
+              1.487014
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ]
+    },
+    {
+      "position": [
+        5.208719,
+        -2.85511,
+        1.451014
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.958719,
+          -2.9051099999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.258719,
+          -2.80511,
+          1.449014
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.958719,
+              -2.9051099999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.058719,
+              -2.80511,
+              1.429014
+            ]
+          },
+          {
+            "low": [
+              4.958719,
+              -2.9051099999999996,
+              1.429014
+            ],
+            "high": [
+              5.258719,
+              -2.80511,
+              1.449014
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        46,
+        47,
+        48,
+        49
+      ]
+    },
+    {
+      "position": [
+        5.208719,
+        -2.85511,
+        1.411014
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.958719,
+          -2.9051099999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.258719,
+          -2.80511,
+          1.409014
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.958719,
+              -2.9051099999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.058719,
+              -2.80511,
+              1.389014
+            ]
+          },
+          {
+            "low": [
+              4.958719,
+              -2.9051099999999996,
+              1.389014
+            ],
+            "high": [
+              5.258719,
+              -2.80511,
+              1.409014
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        45,
+        46,
+        47,
+        48,
+        49,
+        50
+      ]
+    },
+    {
+      "position": [
+        5.208719,
+        -2.85511,
+        1.491014
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.958719,
+          -2.9051099999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.258719,
+          -2.80511,
+          1.489014
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.958719,
+              -2.9051099999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.058719,
+              -2.80511,
+              1.469014
+            ]
+          },
+          {
+            "low": [
+              4.958719,
+              -2.9051099999999996,
+              1.469014
+            ],
+            "high": [
+              5.258719,
+              -2.80511,
+              1.489014
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        46,
+        47,
+        48,
+        49
+      ]
+    },
+    {
+      "position": [
+        5.169337,
+        -2.821864,
+        1.342514
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.919337,
+          -2.871864,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2193369999999994,
+          -2.7718640000000003,
+          1.340514
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.919337,
+              -2.871864,
+              0.001999999552965164
+            ],
+            "high": [
+              5.019336999999999,
+              -2.7718640000000003,
+              1.320514
+            ]
+          },
+          {
+            "low": [
+              4.919337,
+              -2.871864,
+              1.320514
+            ],
+            "high": [
+              5.2193369999999994,
+              -2.7718640000000003,
+              1.340514
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46
+      ]
+    },
+    {
+      "position": [
+        5.209337,
+        -2.861864,
+        1.342514
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.959337,
+          -2.911864,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2593369999999995,
+          -2.8118640000000004,
+          1.340514
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.959337,
+              -2.911864,
+              0.001999999552965164
+            ],
+            "high": [
+              5.059336999999999,
+              -2.8118640000000004,
+              1.320514
+            ]
+          },
+          {
+            "low": [
+              4.959337,
+              -2.911864,
+              1.320514
+            ],
+            "high": [
+              5.2593369999999995,
+              -2.8118640000000004,
+              1.340514
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45,
+        46,
+        47
+      ]
+    },
+    {
+      "position": [
+        5.181622,
+        -2.829718,
+        1.398314
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.931622,
+          -2.879718,
+          0.001999999552965164
+        ],
+        "high": [
+          5.231622,
+          -2.7797180000000004,
+          1.396314
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.931622,
+              -2.879718,
+              0.001999999552965164
+            ],
+            "high": [
+              5.031622,
+              -2.7797180000000004,
+              1.376314
+            ]
+          },
+          {
+            "low": [
+              4.931622,
+              -2.879718,
+              1.376314
+            ],
+            "high": [
+              5.231622,
+              -2.7797180000000004,
+              1.396314
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ]
+    },
+    {
+      "position": [
+        5.181622,
+        -2.829718,
+        1.358314
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.931622,
+          -2.879718,
+          0.001999999552965164
+        ],
+        "high": [
+          5.231622,
+          -2.7797180000000004,
+          1.356314
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.931622,
+              -2.879718,
+              0.001999999552965164
+            ],
+            "high": [
+              5.031622,
+              -2.7797180000000004,
+              1.336314
+            ]
+          },
+          {
+            "low": [
+              4.931622,
+              -2.879718,
+              1.336314
+            ],
+            "high": [
+              5.231622,
+              -2.7797180000000004,
+              1.356314
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ]
+    },
+    {
+      "position": [
+        5.181622,
+        -2.829718,
+        1.438314
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.931622,
+          -2.879718,
+          0.001999999552965164
+        ],
+        "high": [
+          5.231622,
+          -2.7797180000000004,
+          1.436314
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.931622,
+              -2.879718,
+              0.001999999552965164
+            ],
+            "high": [
+              5.031622,
+              -2.7797180000000004,
+              1.416314
+            ]
+          },
+          {
+            "low": [
+              4.931622,
+              -2.879718,
+              1.416314
+            ],
+            "high": [
+              5.231622,
+              -2.7797180000000004,
+              1.436314
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ]
+    },
+    {
+      "position": [
+        5.18842,
+        -2.85131,
+        1.323693
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.93842,
+          -2.9013099999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.23842,
+          -2.80131,
+          1.321693
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.93842,
+              -2.9013099999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0384199999999995,
+              -2.80131,
+              1.301693
+            ]
+          },
+          {
+            "low": [
+              4.93842,
+              -2.9013099999999996,
+              1.301693
+            ],
+            "high": [
+              5.23842,
+              -2.80131,
+              1.321693
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        40,
+        41,
+        42,
+        43,
+        44
+      ]
+    },
+    {
+      "position": [
+        5.18842,
+        -2.85131,
+        1.363693
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.93842,
+          -2.9013099999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.23842,
+          -2.80131,
+          1.361693
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.93842,
+              -2.9013099999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0384199999999995,
+              -2.80131,
+              1.341693
+            ]
+          },
+          {
+            "low": [
+              4.93842,
+              -2.9013099999999996,
+              1.341693
+            ],
+            "high": [
+              5.23842,
+              -2.80131,
+              1.361693
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.925171,
+        1.585779
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.975171,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.8751710000000004,
+          1.583779
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.975171,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.8751710000000004,
+              1.563779
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.975171,
+              1.563779
+            ],
+            "high": [
+              5.276108,
+              -2.8751710000000004,
+              1.583779
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        57
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.965171,
+        1.585779
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -3.0151709999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.915171,
+          1.583779
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -3.0151709999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.915171,
+              1.563779
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -3.0151709999999996,
+              1.563779
+            ],
+            "high": [
+              5.276108,
+              -2.915171,
+              1.583779
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.925171,
+        1.545779
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.975171,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.8751710000000004,
+          1.543779
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.975171,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.8751710000000004,
+              1.523779
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.975171,
+              1.523779
+            ],
+            "high": [
+              5.276108,
+              -2.8751710000000004,
+              1.543779
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        52,
+        53,
+        54,
+        55,
+        56,
+        57
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.915984,
+        1.503658
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.9659839999999997,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.865984,
+          1.501658
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.9659839999999997,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.865984,
+              1.481658
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.9659839999999997,
+              1.481658
+            ],
+            "high": [
+              5.276108,
+              -2.865984,
+              1.501658
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.915984,
+        1.463658
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.9659839999999997,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.865984,
+          1.461658
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.9659839999999997,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.865984,
+              1.4416579999999999
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.9659839999999997,
+              1.4416579999999999
+            ],
+            "high": [
+              5.276108,
+              -2.865984,
+              1.461658
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.915984,
+        1.543658
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.9659839999999997,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.865984,
+          1.541658
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.9659839999999997,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.865984,
+              1.521658
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.9659839999999997,
+              1.521658
+            ],
+            "high": [
+              5.276108,
+              -2.865984,
+              1.541658
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        51,
+        52,
+        53,
+        54,
+        55,
+        56
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.887001,
+        1.463159
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.937001,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.8370010000000003,
+          1.461159
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.937001,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.8370010000000003,
+              1.441159
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.937001,
+              1.441159
+            ],
+            "high": [
+              5.276108,
+              -2.8370010000000003,
+              1.461159
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.887001,
+        1.423159
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.937001,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.8370010000000003,
+          1.421159
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.937001,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.8370010000000003,
+              1.401159
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.937001,
+              1.401159
+            ],
+            "high": [
+              5.276108,
+              -2.8370010000000003,
+              1.421159
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        49,
+        50,
+        51,
+        52,
+        53
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.887001,
+        1.503159
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.937001,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.8370010000000003,
+          1.501159
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.937001,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.8370010000000003,
+              1.481159
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.937001,
+              1.481159
+            ],
+            "high": [
+              5.276108,
+              -2.8370010000000003,
+              1.501159
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        50,
+        51
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.944358,
+        1.553901
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.9943579999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.894358,
+          1.551901
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.9943579999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.894358,
+              1.531901
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.9943579999999996,
+              1.531901
+            ],
+            "high": [
+              5.276108,
+              -2.894358,
+              1.551901
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.904358,
+        1.513901
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.954358,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.8543580000000004,
+          1.511901
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.954358,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.8543580000000004,
+              1.491901
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.954358,
+              1.491901
+            ],
+            "high": [
+              5.276108,
+              -2.8543580000000004,
+              1.511901
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.904358,
+        1.473901
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.954358,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.8543580000000004,
+          1.471901
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.954358,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.8543580000000004,
+              1.4519009999999999
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.954358,
+              1.4519009999999999
+            ],
+            "high": [
+              5.276108,
+              -2.8543580000000004,
+              1.471901
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.904358,
+        1.553901
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.954358,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.8543580000000004,
+          1.551901
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.954358,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.8543580000000004,
+              1.531901
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.954358,
+              1.531901
+            ],
+            "high": [
+              5.276108,
+              -2.8543580000000004,
+              1.551901
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.933341,
+        1.5544
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.983341,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.883341,
+          1.5524
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.983341,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.883341,
+              1.5324
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.983341,
+              1.5324
+            ],
+            "high": [
+              5.276108,
+              -2.883341,
+              1.5524
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.933341,
+        1.5944
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.983341,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.883341,
+          1.5924
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.983341,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.883341,
+              1.5724
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.983341,
+              1.5724
+            ],
+            "high": [
+              5.276108,
+              -2.883341,
+              1.5924
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        58
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.893341,
+        1.5144
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.9433409999999998,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.843341,
+          1.5124
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.9433409999999998,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.843341,
+              1.4924
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.9433409999999998,
+              1.4924
+            ],
+            "high": [
+              5.276108,
+              -2.843341,
+              1.5124
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        49,
+        50,
+        51,
+        52,
+        53
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.925171,
+        1.585779
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.975171,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.8751710000000004,
+          1.583779
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.975171,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.8751710000000004,
+              1.563779
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.975171,
+              1.563779
+            ],
+            "high": [
+              5.276108,
+              -2.8751710000000004,
+              1.583779
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        57
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.965171,
+        1.585779
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -3.0151709999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.915171,
+          1.583779
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -3.0151709999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.915171,
+              1.563779
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -3.0151709999999996,
+              1.563779
+            ],
+            "high": [
+              5.276108,
+              -2.915171,
+              1.583779
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61
+      ]
+    },
+    {
+      "position": [
+        5.226108,
+        -2.925171,
+        1.545779
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.976108,
+          -2.975171,
+          0.001999999552965164
+        ],
+        "high": [
+          5.276108,
+          -2.8751710000000004,
+          1.543779
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.976108,
+              -2.975171,
+              0.001999999552965164
+            ],
+            "high": [
+              5.076108,
+              -2.8751710000000004,
+              1.523779
+            ]
+          },
+          {
+            "low": [
+              4.976108,
+              -2.975171,
+              1.523779
+            ],
+            "high": [
+              5.276108,
+              -2.8751710000000004,
+              1.543779
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        52,
+        53,
+        54,
+        55,
+        56,
+        57
+      ]
+    },
+    {
+      "position": [
+        5.232288,
+        -2.959196,
+        1.587779
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.982288,
+          -3.0091959999999998,
+          0.001999999552965164
+        ],
+        "high": [
+          5.282287999999999,
+          -2.909196,
+          1.585779
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.982288,
+              -3.0091959999999998,
+              0.001999999552965164
+            ],
+            "high": [
+              5.082287999999999,
+              -2.909196,
+              1.565779
+            ]
+          },
+          {
+            "low": [
+              4.982288,
+              -3.0091959999999998,
+              1.565779
+            ],
+            "high": [
+              5.282287999999999,
+              -2.909196,
+              1.585779
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        57,
+        58,
+        59,
+        60
+      ]
+    },
+    {
+      "position": [
+        5.232288,
+        -2.959196,
+        1.547779
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.982288,
+          -3.0091959999999998,
+          0.001999999552965164
+        ],
+        "high": [
+          5.282287999999999,
+          -2.909196,
+          1.545779
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.982288,
+              -3.0091959999999998,
+              0.001999999552965164
+            ],
+            "high": [
+              5.082287999999999,
+              -2.909196,
+              1.525779
+            ]
+          },
+          {
+            "low": [
+              4.982288,
+              -3.0091959999999998,
+              1.525779
+            ],
+            "high": [
+              5.282287999999999,
+              -2.909196,
+              1.545779
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+      ]
+    },
+    {
+      "position": [
+        5.232288,
+        -2.919196,
+        1.547779
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.982288,
+          -2.9691959999999997,
+          0.001999999552965164
+        ],
+        "high": [
+          5.282287999999999,
+          -2.869196,
+          1.545779
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.982288,
+              -2.9691959999999997,
+              0.001999999552965164
+            ],
+            "high": [
+              5.082287999999999,
+              -2.869196,
+              1.525779
+            ]
+          },
+          {
+            "low": [
+              4.982288,
+              -2.9691959999999997,
+              1.525779
+            ],
+            "high": [
+              5.282287999999999,
+              -2.869196,
+              1.545779
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "position": [
+        5.232906,
+        -2.925951,
+        1.43928
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.982906,
+          -2.975951,
+          0.001999999552965164
+        ],
+        "high": [
+          5.282906,
+          -2.875951,
+          1.43728
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.982906,
+              -2.975951,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0829059999999995,
+              -2.875951,
+              1.4172799999999999
+            ]
+          },
+          {
+            "low": [
+              4.982906,
+              -2.975951,
+              1.4172799999999999
+            ],
+            "high": [
+              5.282906,
+              -2.875951,
+              1.43728
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        52,
+        53,
+        54,
+        55,
+        56,
+        57
+      ]
+    },
+    {
+      "position": [
+        5.232906,
+        -2.925951,
+        1.39928
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.982906,
+          -2.975951,
+          0.001999999552965164
+        ],
+        "high": [
+          5.282906,
+          -2.875951,
+          1.39728
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.982906,
+              -2.975951,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0829059999999995,
+              -2.875951,
+              1.37728
+            ]
+          },
+          {
+            "low": [
+              4.982906,
+              -2.975951,
+              1.37728
+            ],
+            "high": [
+              5.282906,
+              -2.875951,
+              1.39728
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        52,
+        53
+      ]
+    },
+    {
+      "position": [
+        5.232906,
+        -2.925951,
+        1.47928
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.982906,
+          -2.975951,
+          0.001999999552965164
+        ],
+        "high": [
+          5.282906,
+          -2.875951,
+          1.47728
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.982906,
+              -2.975951,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0829059999999995,
+              -2.875951,
+              1.45728
+            ]
+          },
+          {
+            "low": [
+              4.982906,
+              -2.975951,
+              1.45728
+            ],
+            "high": [
+              5.282906,
+              -2.875951,
+              1.47728
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        52,
+        53,
+        54,
+        55,
+        56,
+        57
+      ]
+    },
+    {
+      "position": [
+        5.177855,
+        -2.826137,
+        1.469
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.927855,
+          -2.876137,
+          0.001999999552965164
+        ],
+        "high": [
+          5.227855,
+          -2.7761370000000003,
+          1.467
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.927855,
+              -2.876137,
+              0.001999999552965164
+            ],
+            "high": [
+              5.027855,
+              -2.7761370000000003,
+              1.447
+            ]
+          },
+          {
+            "low": [
+              4.927855,
+              -2.876137,
+              1.447
+            ],
+            "high": [
+              5.227855,
+              -2.7761370000000003,
+              1.467
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45
+      ]
+    },
+    {
+      "position": [
+        5.177855,
+        -2.826137,
+        1.429
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.927855,
+          -2.876137,
+          0.001999999552965164
+        ],
+        "high": [
+          5.227855,
+          -2.7761370000000003,
+          1.427
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.927855,
+              -2.876137,
+              0.001999999552965164
+            ],
+            "high": [
+              5.027855,
+              -2.7761370000000003,
+              1.407
+            ]
+          },
+          {
+            "low": [
+              4.927855,
+              -2.876137,
+              1.407
+            ],
+            "high": [
+              5.227855,
+              -2.7761370000000003,
+              1.427
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        42,
+        43,
+        44,
+        45,
+        46
+      ]
+    },
+    {
+      "position": [
+        5.206837,
+        -2.866137,
+        1.428501
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.956837,
+          -2.916137,
+          0.001999999552965164
+        ],
+        "high": [
+          5.256837,
+          -2.8161370000000003,
+          1.426501
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.956837,
+              -2.916137,
+              0.001999999552965164
+            ],
+            "high": [
+              5.056837,
+              -2.8161370000000003,
+              1.406501
+            ]
+          },
+          {
+            "low": [
+              4.956837,
+              -2.916137,
+              1.406501
+            ],
+            "high": [
+              5.256837,
+              -2.8161370000000003,
+              1.426501
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.206837,
+        -2.866137,
+        1.388501
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.956837,
+          -2.916137,
+          0.001999999552965164
+        ],
+        "high": [
+          5.256837,
+          -2.8161370000000003,
+          1.386501
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.956837,
+              -2.916137,
+              0.001999999552965164
+            ],
+            "high": [
+              5.056837,
+              -2.8161370000000003,
+              1.366501
+            ]
+          },
+          {
+            "low": [
+              4.956837,
+              -2.916137,
+              1.366501
+            ],
+            "high": [
+              5.256837,
+              -2.8161370000000003,
+              1.386501
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.206837,
+        -2.866137,
+        1.468501
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.956837,
+          -2.916137,
+          0.001999999552965164
+        ],
+        "high": [
+          5.256837,
+          -2.8161370000000003,
+          1.466501
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.956837,
+              -2.916137,
+              0.001999999552965164
+            ],
+            "high": [
+              5.056837,
+              -2.8161370000000003,
+              1.446501
+            ]
+          },
+          {
+            "low": [
+              4.956837,
+              -2.916137,
+              1.446501
+            ],
+            "high": [
+              5.256837,
+              -2.8161370000000003,
+              1.466501
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.22948,
+        -2.906137,
+        1.479242
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.97948,
+          -2.956137,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2794799999999995,
+          -2.8561370000000004,
+          1.477242
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.97948,
+              -2.956137,
+              0.001999999552965164
+            ],
+            "high": [
+              5.079479999999999,
+              -2.8561370000000004,
+              1.457242
+            ]
+          },
+          {
+            "low": [
+              4.97948,
+              -2.956137,
+              1.457242
+            ],
+            "high": [
+              5.2794799999999995,
+              -2.8561370000000004,
+              1.477242
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "position": [
+        5.22948,
+        -2.906137,
+        1.439242
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.97948,
+          -2.956137,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2794799999999995,
+          -2.8561370000000004,
+          1.437242
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.97948,
+              -2.956137,
+              0.001999999552965164
+            ],
+            "high": [
+              5.079479999999999,
+              -2.8561370000000004,
+              1.417242
+            ]
+          },
+          {
+            "low": [
+              4.97948,
+              -2.956137,
+              1.417242
+            ],
+            "high": [
+              5.2794799999999995,
+              -2.8561370000000004,
+              1.437242
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "position": [
+        5.22948,
+        -2.906137,
+        1.519242
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.97948,
+          -2.956137,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2794799999999995,
+          -2.8561370000000004,
+          1.517242
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.97948,
+              -2.956137,
+              0.001999999552965164
+            ],
+            "high": [
+              5.079479999999999,
+              -2.8561370000000004,
+              1.497242
+            ]
+          },
+          {
+            "low": [
+              4.97948,
+              -2.956137,
+              1.497242
+            ],
+            "high": [
+              5.2794799999999995,
+              -2.8561370000000004,
+              1.517242
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        51,
+        52,
+        53,
+        54
+      ]
+    },
+    {
+      "position": [
+        5.208667,
+        -2.866137,
+        1.511121
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.958667,
+          -2.916137,
+          0.001999999552965164
+        ],
+        "high": [
+          5.258667,
+          -2.8161370000000003,
+          1.509121
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.958667,
+              -2.916137,
+              0.001999999552965164
+            ],
+            "high": [
+              5.058667,
+              -2.8161370000000003,
+              1.489121
+            ]
+          },
+          {
+            "low": [
+              4.958667,
+              -2.916137,
+              1.489121
+            ],
+            "high": [
+              5.258667,
+              -2.8161370000000003,
+              1.509121
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        47,
+        48,
+        49,
+        50,
+        51
+      ]
+    },
+    {
+      "position": [
+        5.214642,
+        -2.912317,
+        1.553121
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.964642,
+          -2.9623169999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.264642,
+          -2.862317,
+          1.551121
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.964642,
+              -2.9623169999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.064642,
+              -2.862317,
+              1.531121
+            ]
+          },
+          {
+            "low": [
+              4.964642,
+              -2.9623169999999996,
+              1.531121
+            ],
+            "high": [
+              5.264642,
+              -2.862317,
+              1.551121
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57
+      ]
+    },
+    {
+      "position": [
+        5.214642,
+        -2.872317,
+        1.513121
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.964642,
+          -2.9223169999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.264642,
+          -2.822317,
+          1.511121
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.964642,
+              -2.9223169999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.064642,
+              -2.822317,
+              1.491121
+            ]
+          },
+          {
+            "low": [
+              4.964642,
+              -2.9223169999999996,
+              1.491121
+            ],
+            "high": [
+              5.264642,
+              -2.822317,
+              1.511121
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.207888,
+        -2.872935,
+        1.404621
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.957888,
+          -2.922935,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2578879999999995,
+          -2.822935,
+          1.402621
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.957888,
+              -2.922935,
+              0.001999999552965164
+            ],
+            "high": [
+              5.057887999999999,
+              -2.822935,
+              1.3826209999999999
+            ]
+          },
+          {
+            "low": [
+              4.957888,
+              -2.922935,
+              1.3826209999999999
+            ],
+            "high": [
+              5.2578879999999995,
+              -2.822935,
+              1.402621
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ]
+    },
+    {
+      "position": [
+        5.207888,
+        -2.872935,
+        1.364621
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.957888,
+          -2.922935,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2578879999999995,
+          -2.822935,
+          1.362621
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.957888,
+              -2.922935,
+              0.001999999552965164
+            ],
+            "high": [
+              5.057887999999999,
+              -2.822935,
+              1.342621
+            ]
+          },
+          {
+            "low": [
+              4.957888,
+              -2.922935,
+              1.342621
+            ],
+            "high": [
+              5.2578879999999995,
+              -2.822935,
+              1.362621
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ]
+    },
+    {
+      "position": [
+        5.207888,
+        -2.872935,
+        1.444621
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.957888,
+          -2.922935,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2578879999999995,
+          -2.822935,
+          1.442621
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.957888,
+              -2.922935,
+              0.001999999552965164
+            ],
+            "high": [
+              5.057887999999999,
+              -2.822935,
+              1.422621
+            ]
+          },
+          {
+            "low": [
+              4.957888,
+              -2.922935,
+              1.422621
+            ],
+            "high": [
+              5.2578879999999995,
+              -2.822935,
+              1.442621
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ]
+    },
+    {
+      "position": [
+        5.208667,
+        -2.867967,
+        1.428501
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.958667,
+          -2.917967,
+          0.001999999552965164
+        ],
+        "high": [
+          5.258667,
+          -2.8179670000000003,
+          1.426501
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.958667,
+              -2.917967,
+              0.001999999552965164
+            ],
+            "high": [
+              5.058667,
+              -2.8179670000000003,
+              1.406501
+            ]
+          },
+          {
+            "low": [
+              4.958667,
+              -2.917967,
+              1.406501
+            ],
+            "high": [
+              5.258667,
+              -2.8179670000000003,
+              1.426501
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.208667,
+        -2.867967,
+        1.388501
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.958667,
+          -2.917967,
+          0.001999999552965164
+        ],
+        "high": [
+          5.258667,
+          -2.8179670000000003,
+          1.386501
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.958667,
+              -2.917967,
+              0.001999999552965164
+            ],
+            "high": [
+              5.058667,
+              -2.8179670000000003,
+              1.366501
+            ]
+          },
+          {
+            "low": [
+              4.958667,
+              -2.917967,
+              1.366501
+            ],
+            "high": [
+              5.258667,
+              -2.8179670000000003,
+              1.386501
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.208667,
+        -2.867967,
+        1.468501
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.958667,
+          -2.917967,
+          0.001999999552965164
+        ],
+        "high": [
+          5.258667,
+          -2.8179670000000003,
+          1.466501
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.958667,
+              -2.917967,
+              0.001999999552965164
+            ],
+            "high": [
+              5.058667,
+              -2.8179670000000003,
+              1.446501
+            ]
+          },
+          {
+            "low": [
+              4.958667,
+              -2.917967,
+              1.446501
+            ],
+            "high": [
+              5.258667,
+              -2.8179670000000003,
+              1.466501
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.208667,
+        -2.874307,
+        1.519742
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.958667,
+          -2.9243069999999998,
+          0.001999999552965164
+        ],
+        "high": [
+          5.258667,
+          -2.824307,
+          1.517742
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.958667,
+              -2.9243069999999998,
+              0.001999999552965164
+            ],
+            "high": [
+              5.058667,
+              -2.824307,
+              1.497742
+            ]
+          },
+          {
+            "low": [
+              4.958667,
+              -2.9243069999999998,
+              1.497742
+            ],
+            "high": [
+              5.258667,
+              -2.824307,
+              1.517742
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ]
+    },
+    {
+      "position": [
+        5.208667,
+        -2.874307,
+        1.479742
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.958667,
+          -2.9243069999999998,
+          0.001999999552965164
+        ],
+        "high": [
+          5.258667,
+          -2.824307,
+          1.4777419999999999
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.958667,
+              -2.9243069999999998,
+              0.001999999552965164
+            ],
+            "high": [
+              5.058667,
+              -2.824307,
+              1.4577419999999999
+            ]
+          },
+          {
+            "low": [
+              4.958667,
+              -2.9243069999999998,
+              1.4577419999999999
+            ],
+            "high": [
+              5.258667,
+              -2.824307,
+              1.4777419999999999
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ]
+    },
+    {
+      "position": [
+        5.208667,
+        -2.866137,
+        1.511121
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.958667,
+          -2.916137,
+          0.001999999552965164
+        ],
+        "high": [
+          5.258667,
+          -2.8161370000000003,
+          1.509121
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.958667,
+              -2.916137,
+              0.001999999552965164
+            ],
+            "high": [
+              5.058667,
+              -2.8161370000000003,
+              1.489121
+            ]
+          },
+          {
+            "low": [
+              4.958667,
+              -2.916137,
+              1.489121
+            ],
+            "high": [
+              5.258667,
+              -2.8161370000000003,
+              1.509121
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        47,
+        48,
+        49,
+        50,
+        51
+      ]
+    },
+    {
+      "position": [
+        5.214847,
+        -2.900162,
+        1.553121
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.964847,
+          -2.9501619999999997,
+          0.001999999552965164
+        ],
+        "high": [
+          5.264847,
+          -2.850162,
+          1.551121
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.964847,
+              -2.9501619999999997,
+              0.001999999552965164
+            ],
+            "high": [
+              5.064846999999999,
+              -2.850162,
+              1.531121
+            ]
+          },
+          {
+            "low": [
+              4.964847,
+              -2.9501619999999997,
+              1.531121
+            ],
+            "high": [
+              5.264847,
+              -2.850162,
+              1.551121
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56
+      ]
+    },
+    {
+      "position": [
+        5.214847,
+        -2.900162,
+        1.513121
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.964847,
+          -2.9501619999999997,
+          0.001999999552965164
+        ],
+        "high": [
+          5.264847,
+          -2.850162,
+          1.511121
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.964847,
+              -2.9501619999999997,
+              0.001999999552965164
+            ],
+            "high": [
+              5.064846999999999,
+              -2.850162,
+              1.491121
+            ]
+          },
+          {
+            "low": [
+              4.964847,
+              -2.9501619999999997,
+              1.491121
+            ],
+            "high": [
+              5.264847,
+              -2.850162,
+              1.511121
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56
+      ]
+    },
+    {
+      "position": [
+        5.215465,
+        -2.866917,
+        1.404621
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.965465,
+          -2.9169169999999998,
+          0.001999999552965164
+        ],
+        "high": [
+          5.265465,
+          -2.816917,
+          1.402621
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.965465,
+              -2.9169169999999998,
+              0.001999999552965164
+            ],
+            "high": [
+              5.065465,
+              -2.816917,
+              1.3826209999999999
+            ]
+          },
+          {
+            "low": [
+              4.965465,
+              -2.9169169999999998,
+              1.3826209999999999
+            ],
+            "high": [
+              5.265465,
+              -2.816917,
+              1.402621
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ]
+    },
+    {
+      "position": [
+        5.215465,
+        -2.866917,
+        1.364621
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.965465,
+          -2.9169169999999998,
+          0.001999999552965164
+        ],
+        "high": [
+          5.265465,
+          -2.816917,
+          1.362621
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.965465,
+              -2.9169169999999998,
+              0.001999999552965164
+            ],
+            "high": [
+              5.065465,
+              -2.816917,
+              1.342621
+            ]
+          },
+          {
+            "low": [
+              4.965465,
+              -2.9169169999999998,
+              1.342621
+            ],
+            "high": [
+              5.265465,
+              -2.816917,
+              1.362621
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        46,
+        47,
+        48,
+        49
+      ]
+    },
+    {
+      "position": [
+        5.215465,
+        -2.866917,
+        1.444621
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.965465,
+          -2.9169169999999998,
+          0.001999999552965164
+        ],
+        "high": [
+          5.265465,
+          -2.816917,
+          1.442621
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.965465,
+              -2.9169169999999998,
+              0.001999999552965164
+            ],
+            "high": [
+              5.065465,
+              -2.816917,
+              1.422621
+            ]
+          },
+          {
+            "low": [
+              4.965465,
+              -2.9169169999999998,
+              1.422621
+            ],
+            "high": [
+              5.265465,
+              -2.816917,
+              1.442621
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ]
+    },
+    {
+      "position": [
+        5.212663,
+        -2.891853,
+        1.552438
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.962663,
+          -2.9418529999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.262663,
+          -2.841853,
+          1.550438
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.962663,
+              -2.9418529999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.062663,
+              -2.841853,
+              1.530438
+            ]
+          },
+          {
+            "low": [
+              4.962663,
+              -2.9418529999999996,
+              1.530438
+            ],
+            "high": [
+              5.262663,
+              -2.841853,
+              1.550438
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "position": [
+        5.212663,
+        -2.891853,
+        1.512438
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.962663,
+          -2.9418529999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.262663,
+          -2.841853,
+          1.510438
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.962663,
+              -2.9418529999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.062663,
+              -2.841853,
+              1.490438
+            ]
+          },
+          {
+            "low": [
+              4.962663,
+              -2.9418529999999996,
+              1.490438
+            ],
+            "high": [
+              5.262663,
+              -2.841853,
+              1.510438
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "position": [
+        5.212663,
+        -2.893682,
+        1.429818
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.962663,
+          -2.943682,
+          0.001999999552965164
+        ],
+        "high": [
+          5.262663,
+          -2.8436820000000003,
+          1.427818
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.962663,
+              -2.943682,
+              0.001999999552965164
+            ],
+            "high": [
+              5.062663,
+              -2.8436820000000003,
+              1.407818
+            ]
+          },
+          {
+            "low": [
+              4.962663,
+              -2.943682,
+              1.407818
+            ],
+            "high": [
+              5.262663,
+              -2.8436820000000003,
+              1.427818
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "position": [
+        5.212663,
+        -2.893682,
+        1.389818
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.962663,
+          -2.943682,
+          0.001999999552965164
+        ],
+        "high": [
+          5.262663,
+          -2.8436820000000003,
+          1.387818
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.962663,
+              -2.943682,
+              0.001999999552965164
+            ],
+            "high": [
+              5.062663,
+              -2.8436820000000003,
+              1.367818
+            ]
+          },
+          {
+            "low": [
+              4.962663,
+              -2.943682,
+              1.367818
+            ],
+            "high": [
+              5.262663,
+              -2.8436820000000003,
+              1.387818
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.212663,
+        -2.87104,
+        1.480559
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.962663,
+          -2.9210399999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.262663,
+          -2.82104,
+          1.478559
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.962663,
+              -2.9210399999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.062663,
+              -2.82104,
+              1.458559
+            ]
+          },
+          {
+            "low": [
+              4.962663,
+              -2.9210399999999996,
+              1.458559
+            ],
+            "high": [
+              5.262663,
+              -2.82104,
+              1.478559
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.212663,
+        -2.87104,
+        1.440559
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.962663,
+          -2.9210399999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.262663,
+          -2.82104,
+          1.438559
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.962663,
+              -2.9210399999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.062663,
+              -2.82104,
+              1.418559
+            ]
+          },
+          {
+            "low": [
+              4.962663,
+              -2.9210399999999996,
+              1.418559
+            ],
+            "high": [
+              5.262663,
+              -2.82104,
+              1.438559
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.212663,
+        -2.87104,
+        1.520559
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.962663,
+          -2.9210399999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.262663,
+          -2.82104,
+          1.518559
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.962663,
+              -2.9210399999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.062663,
+              -2.82104,
+              1.498559
+            ]
+          },
+          {
+            "low": [
+              4.962663,
+              -2.9210399999999996,
+              1.498559
+            ],
+            "high": [
+              5.262663,
+              -2.82104,
+              1.518559
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        48,
+        49,
+        50,
+        51,
+        52
+      ]
+    },
+    {
+      "position": [
+        5.212663,
+        -2.900023,
+        1.561059
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.962663,
+          -2.950023,
+          0.001999999552965164
+        ],
+        "high": [
+          5.262663,
+          -2.850023,
+          1.559059
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.962663,
+              -2.950023,
+              0.001999999552965164
+            ],
+            "high": [
+              5.062663,
+              -2.850023,
+              1.539059
+            ]
+          },
+          {
+            "low": [
+              4.962663,
+              -2.950023,
+              1.539059
+            ],
+            "high": [
+              5.262663,
+              -2.850023,
+              1.559059
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56
+      ]
+    },
+    {
+      "position": [
+        5.212663,
+        -2.891853,
+        1.552438
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.962663,
+          -2.9418529999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.262663,
+          -2.841853,
+          1.550438
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.962663,
+              -2.9418529999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.062663,
+              -2.841853,
+              1.530438
+            ]
+          },
+          {
+            "low": [
+              4.962663,
+              -2.9418529999999996,
+              1.530438
+            ],
+            "high": [
+              5.262663,
+              -2.841853,
+              1.550438
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "position": [
+        5.212663,
+        -2.891853,
+        1.512438
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.962663,
+          -2.9418529999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          5.262663,
+          -2.841853,
+          1.510438
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.962663,
+              -2.9418529999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              5.062663,
+              -2.841853,
+              1.490438
+            ]
+          },
+          {
+            "low": [
+              4.962663,
+              -2.9418529999999996,
+              1.490438
+            ],
+            "high": [
+              5.262663,
+              -2.841853,
+              1.510438
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "position": [
+        5.218843,
+        -2.925878,
+        1.554438
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.968843,
+          -2.975878,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2688429999999995,
+          -2.875878,
+          1.552438
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.968843,
+              -2.975878,
+              0.001999999552965164
+            ],
+            "high": [
+              5.068842999999999,
+              -2.875878,
+              1.532438
+            ]
+          },
+          {
+            "low": [
+              4.968843,
+              -2.975878,
+              1.532438
+            ],
+            "high": [
+              5.2688429999999995,
+              -2.875878,
+              1.552438
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58
+      ]
+    },
+    {
+      "position": [
+        5.218843,
+        -2.925878,
+        1.594438
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.968843,
+          -2.975878,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2688429999999995,
+          -2.875878,
+          1.592438
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.968843,
+              -2.975878,
+              0.001999999552965164
+            ],
+            "high": [
+              5.068842999999999,
+              -2.875878,
+              1.572438
+            ]
+          },
+          {
+            "low": [
+              4.968843,
+              -2.975878,
+              1.572438
+            ],
+            "high": [
+              5.2688429999999995,
+              -2.875878,
+              1.592438
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        57,
+        58
+      ]
+    },
+    {
+      "position": [
+        5.218843,
+        -2.885878,
+        1.554438
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.968843,
+          -2.9358779999999998,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2688429999999995,
+          -2.835878,
+          1.552438
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.968843,
+              -2.9358779999999998,
+              0.001999999552965164
+            ],
+            "high": [
+              5.068842999999999,
+              -2.835878,
+              1.532438
+            ]
+          },
+          {
+            "low": [
+              4.968843,
+              -2.9358779999999998,
+              1.532438
+            ],
+            "high": [
+              5.2688429999999995,
+              -2.835878,
+              1.552438
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        53
+      ]
+    },
+    {
+      "position": [
+        5.218843,
+        -2.885878,
+        1.514438
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.968843,
+          -2.9358779999999998,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2688429999999995,
+          -2.835878,
+          1.512438
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.968843,
+              -2.9358779999999998,
+              0.001999999552965164
+            ],
+            "high": [
+              5.068842999999999,
+              -2.835878,
+              1.492438
+            ]
+          },
+          {
+            "low": [
+              4.968843,
+              -2.9358779999999998,
+              1.492438
+            ],
+            "high": [
+              5.2688429999999995,
+              -2.835878,
+              1.512438
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ]
+    },
+    {
+      "position": [
+        5.219461,
+        -2.892632,
+        1.405938
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.969461,
+          -2.9426319999999997,
+          0.001999999552965164
+        ],
+        "high": [
+          5.269461,
+          -2.842632,
+          1.403938
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.969461,
+              -2.9426319999999997,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0694609999999996,
+              -2.842632,
+              1.383938
+            ]
+          },
+          {
+            "low": [
+              4.969461,
+              -2.9426319999999997,
+              1.383938
+            ],
+            "high": [
+              5.269461,
+              -2.842632,
+              1.403938
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54
+      ]
+    },
+    {
+      "position": [
+        5.219461,
+        -2.892632,
+        1.365938
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.969461,
+          -2.9426319999999997,
+          0.001999999552965164
+        ],
+        "high": [
+          5.269461,
+          -2.842632,
+          1.363938
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.969461,
+              -2.9426319999999997,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0694609999999996,
+              -2.842632,
+              1.343938
+            ]
+          },
+          {
+            "low": [
+              4.969461,
+              -2.9426319999999997,
+              1.343938
+            ],
+            "high": [
+              5.269461,
+              -2.842632,
+              1.363938
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        47,
+        48,
+        49
+      ]
+    },
+    {
+      "position": [
+        5.219461,
+        -2.892632,
+        1.445938
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.969461,
+          -2.9426319999999997,
+          0.001999999552965164
+        ],
+        "high": [
+          5.269461,
+          -2.842632,
+          1.443938
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.969461,
+              -2.9426319999999997,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0694609999999996,
+              -2.842632,
+              1.423938
+            ]
+          },
+          {
+            "low": [
+              4.969461,
+              -2.9426319999999997,
+              1.423938
+            ],
+            "high": [
+              5.269461,
+              -2.842632,
+              1.443938
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    {
+      "position": [
+        5.218943,
+        -2.956712,
+        1.601717
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.968943,
+          -3.006712,
+          0.001999999552965164
+        ],
+        "high": [
+          5.268943,
+          -2.906712,
+          1.599717
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.968943,
+              -3.006712,
+              0.001999999552965164
+            ],
+            "high": [
+              5.068943,
+              -2.906712,
+              1.579717
+            ]
+          },
+          {
+            "low": [
+              4.968943,
+              -3.006712,
+              1.579717
+            ],
+            "high": [
+              5.268943,
+              -2.906712,
+              1.599717
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61
+      ]
+    },
+    {
+      "position": [
+        5.218943,
+        -2.956712,
+        1.601717
+      ],
+      "yaw_deg": 90.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.968943,
+          -3.006712,
+          0.001999999552965164
+        ],
+        "high": [
+          5.268943,
+          -2.906712,
+          1.599717
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.968943,
+              -3.006712,
+              0.001999999552965164
+            ],
+            "high": [
+              5.068943,
+              -2.906712,
+              1.579717
+            ]
+          },
+          {
+            "low": [
+              4.968943,
+              -3.006712,
+              1.579717
+            ],
+            "high": [
+              5.268943,
+              -2.906712,
+              1.599717
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61
+      ]
+    },
+    {
+      "position": [
+        5.235289,
+        -2.93412,
+        1.551037
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.985289,
+          -2.98412,
+          0.001999999552965164
+        ],
+        "high": [
+          5.285289,
+          -2.8841200000000002,
+          1.549037
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.985289,
+              -2.98412,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0852889999999995,
+              -2.8841200000000002,
+              1.529037
+            ]
+          },
+          {
+            "low": [
+              4.985289,
+              -2.98412,
+              1.529037
+            ],
+            "high": [
+              5.285289,
+              -2.8841200000000002,
+              1.549037
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        54,
+        55,
+        56
+      ]
+    },
+    {
+      "position": [
+        5.235289,
+        -2.93412,
+        1.511037
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.985289,
+          -2.98412,
+          0.001999999552965164
+        ],
+        "high": [
+          5.285289,
+          -2.8841200000000002,
+          1.509037
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.985289,
+              -2.98412,
+              0.001999999552965164
+            ],
+            "high": [
+              5.0852889999999995,
+              -2.8841200000000002,
+              1.489037
+            ]
+          },
+          {
+            "low": [
+              4.985289,
+              -2.98412,
+              1.489037
+            ],
+            "high": [
+              5.285289,
+              -2.8841200000000002,
+              1.509037
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        53,
+        54,
+        55,
+        56,
+        57
+      ]
+    },
+    {
+      "position": [
+        5.220451,
+        -2.9403,
+        1.584916
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_initial_spheres",
+      "proposed_support": {
+        "low": [
+          4.970451,
+          -2.9903,
+          0.001999999552965164
+        ],
+        "high": [
+          5.2704509999999996,
+          -2.8903000000000003,
+          1.582916
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.970451,
+              -2.9903,
+              0.001999999552965164
+            ],
+            "high": [
+              5.070450999999999,
+              -2.8903000000000003,
+              1.562916
+            ]
+          },
+          {
+            "low": [
+              4.970451,
+              -2.9903,
+              1.562916
+            ],
+            "high": [
+              5.2704509999999996,
+              -2.8903000000000003,
+              1.582916
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60
+      ]
+    }
+  ],
+  "door_rejections": [
+    {
+      "pos": [
+        5.184543,
+        -2.850056,
+        1.315986
+      ],
+      "yaw": 90.0,
+      "action": 180,
+      "source_check": {
+        "distance_m": 0.05887472444083377,
+        "required_m": 0.06,
+        "slack_m": -0.0011252755591662292,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C004",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Wall01_14",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        5.199693,
+        -2.868233,
+        1.307567
+      ],
+      "yaw": 90.0,
+      "action": 0,
+      "source_check": {
+        "distance_m": 0.04734227788952872,
+        "required_m": 0.06,
+        "slack_m": -0.012657722110471281,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C004",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Wall01_14",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        5.169337,
+        -2.821864,
+        1.302514
+      ],
+      "yaw": 90.0,
+      "action": 258,
+      "source_check": {
+        "distance_m": 0.05980400980106648,
+        "required_m": 0.06,
+        "slack_m": -0.00019599019893351555,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C004",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Wall01_14",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        5.181622,
+        -2.852361,
+        1.307572
+      ],
+      "yaw": 90.0,
+      "action": 192,
+      "source_check": {
+        "distance_m": 0.059228168662217265,
+        "required_m": 0.06,
+        "slack_m": -0.0007718313377827329,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C004",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Wall01_14",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        5.18842,
+        -2.85131,
+        1.283693
+      ],
+      "yaw": 90.0,
+      "action": 0,
+      "source_check": {
+        "distance_m": 0.058615277889528805,
+        "required_m": 0.06,
+        "slack_m": -0.0013847221104711926,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C004",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Wall01_14",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    }
+  ],
+  "search_complete": true
+}

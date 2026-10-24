@@ -1,0 +1,160 @@
+{
+  "human": {
+    "name": "person",
+    "asset": "assets/extensions/doors/human_yaw220.usda",
+    "position": [
+      3.78,
+      -1.58,
+      0.0
+    ],
+    "yaw_deg": 0.0,
+    "static": true,
+    "semantic_anchor": "Same-source human with raised elbow; occupies original approach channel while retaining floor contact, original kitchen and whole door sweep.",
+    "candidate_evidence": "datasets/doors/lwx_front_20261023/human_02/avoidance_audit.json",
+    "pose_provenance": "assets/extensions/doors/human_reach_elbow_up/pose.json",
+    "unrotated_asset": "assets/extensions/doors/human_reach_elbow_up/collidable.usda",
+    "baked_yaw_deg": 220.0
+  },
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      4.64217,
+      -1.089819,
+      0.788635
+    ],
+    "static": false,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "yaw_deg": 0.0,
+    "baseline_intersection_actions": [
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/c01_property_candidate_75_18_property_support.usda",
+      "position": [
+        4.64217,
+        -1.089819,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.40217,
+          -1.1298190000000001,
+          -4.470348362317633e-10
+        ],
+        [
+          4.68217,
+          -1.049819,
+          0.788635
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry",
+      "component_bounds_world_m": [
+        {
+          "low": [
+            4.40217,
+            -1.1298190000000001,
+            0.001999999552965164
+          ],
+          "high": [
+            4.48217,
+            -1.049819,
+            0.766635
+          ]
+        },
+        {
+          "low": [
+            4.40217,
+            -1.1298190000000001,
+            0.766635
+          ],
+          "high": [
+            4.68217,
+            -1.049819,
+            0.786635
+          ]
+        }
+      ],
+      "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+    },
+    "candidate_search": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_proxy_refine_search75.json",
+    "candidate_search_sha256": "382de8415ea66ef6e16563f2dda01ec458d3010914bf59121a2b29201ad42743",
+    "candidate_index": 18
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.8799999999999875,
+      -0.9899999999999998,
+      0.8600000000000001
+    ],
+    "yaw_deg": 270.0,
+    "static": true,
+    "semantic_anchor": "Anchored floor pedestal; full column, kitchen, stand and door sweep included; old baseline conflicts during free pregrasp.",
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/robot_floor_pedestal_filtered.usda",
+      "position": [
+        4.8799999999999875,
+        -0.9899999999999998,
+        0.0
+      ],
+      "static": true,
+      "dimensions_m": [
+        0.16999999999999993,
+        0.16999999999999993,
+        0.8600000000000001
+      ]
+    },
+    "candidate_evidence": "datasets/doors/lwx_20261023/robot_01/avoidance_audit.json"
+  },
+  "_fixed_source_layout": "configs/extensions/doors/fixed_source_layout.json",
+  "_revision": {
+    "purpose": "C01 front revision; original robot group retained; human/property captured with dense_pregrasp_v4 and the same matching baseline policy",
+    "support_height_change_m": 0.03,
+    "translations_from_original_m": {
+      "human": [
+        0.08,
+        0.02,
+        0.0
+      ],
+      "property": [
+        0.18,
+        -0.08,
+        0.03
+      ],
+      "robot": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "capture_configurations": {
+      "base": "configs/extensions/doors/front_height_search_lwx_01.json",
+      "human": "configs/extensions/doors/front_variants_lwx_06.json",
+      "property": "configs/extensions/doors/front_variants_lwx_33.json",
+      "robot": "configs/extensions/doors/avoidance_variants.json"
+    },
+    "scope": "Descriptive annotations corrected; original capture configs and whole-file hashes retained. Physical specs are compared to captured metadata."
+  },
+  "_task_scope": "kitchen_bench_lightwheel_open_fridge",
+  "_selection_note": "Discovery candidate only; not task or physical acceptance."
+}
