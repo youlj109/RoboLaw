@@ -19,6 +19,10 @@ parser.add_argument('--grasp-height-offset',type=float,default=.015,
     help='TCP height above measured pick-object geometry center; metres')
 parser.add_argument('--grasp-lateral-x',type=float,default=0.0,
     help='World-frame +X TCP bias at pick center for finger centerline; metres')
+parser.add_argument('--grasp-local-approach',action='store_true',
+    help='Shelf: build pregrasp/standoff along -TCP_Z from selected wrist R (not fixed world offset)')
+parser.add_argument('--grasp-finger-bias',type=float,default=0.0,
+    help='Offset along grasp-frame finger-open axis (TCP Y col); metres')
 args=parser.parse_args();args.enable_cameras=True
 if args.num_envs!=1:raise ValueError('This verified entry runs one environment; parallel collection is not implemented')
 from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
@@ -258,17 +262,30 @@ with SimulationAppContext(args):
         target_center[2]+=args.grasp_height_offset
         target_center[0]+=args.grasp_lateral_x
         result['grasp_lateral_x_m']=float(args.grasp_lateral_x)
-        pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
+        result['grasp_finger_bias_m']=float(args.grasp_finger_bias)
+        result['grasp_local_approach']=bool(args.grasp_local_approach)
         # use_pregrasp_phase computed earlier from TASK_SPEC for cart() planning-phase selection.
         candidates=list(dict.fromkeys([(args.grasp_tilt,args.grasp_yaw)]+(
             [(25,0),(20,0),(35,90),(35,-90),(10,90),(10,-90),(0,90),(0,-90)] if args.allow_grasp_fallback else [])))
-        result['pregrasp_candidates']=[];result['pregrasp_offset_m']=pregrasp_offset.tolist()
+        result['pregrasp_candidates']=[]
+        selected_R=None
         for tilt,yaw in candidates:
-            R=Rotation.from_euler('z',yaw,degrees=True).as_matrix()@Rotation.from_euler('x',tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]])
+            R=Rotation.from_euler('z',yaw,degrees=True).as_matrix()@Rotation.from_euler('x',tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],dtype=float)
+            # Optional finger-open bias in grasp frame (TCP Y = column 1).
+            center=target_center[:3]+float(args.grasp_finger_bias)*R[:,1]
+            if args.grasp_local_approach and (not use_pregrasp_phase):
+                # TCP Z (col 2) should point into the object; hover back along -TCP_Z.
+                approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
+                pregrasp_offset=-0.17*approach
+            else:
+                pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
             try:
                 phase='pregrasp' if use_pregrasp_phase else 'approach'
-                cart(target_center[:3]+pregrasp_offset,rotation=R)
-                result['selected_grasp']={'tilt':tilt,'yaw':yaw,'phase':phase,'use_pregrasp_phase':use_pregrasp_phase};break
+                cart(center+pregrasp_offset,rotation=R)
+                result['selected_grasp']={'tilt':tilt,'yaw':yaw,'phase':phase,'use_pregrasp_phase':use_pregrasp_phase,
+                    'tcp_z_world':approach.tolist() if (args.grasp_local_approach and not use_pregrasp_phase) else None}
+                result['pregrasp_offset_m']=pregrasp_offset.tolist()
+                selected_R=R; target_center[:3]=center; break
             except RuntimeError as exc:
                 result['pregrasp_candidates'].append({'tilt':tilt,'yaw':yaw,'error':str(exc)})
                 if records:raise
@@ -277,8 +294,9 @@ with SimulationAppContext(args):
         if use_pregrasp_phase:
             cart(target_center[:3])
         else:
-            # Shelf cavity: stop a few cm short of the fruit center along the approach axis.
-            axis=pregrasp_offset/max(float(np.linalg.norm(pregrasp_offset)),1e-6)
+            # Shelf: stop short along the same approach axis used for hover.
+            axis=np.asarray(result['pregrasp_offset_m'],dtype=float)
+            axis=axis/max(float(np.linalg.norm(axis)),1e-6)
             contact_standoff=target_center[:3]+axis*0.02
             result['approach_contact_standoff_m']=contact_standoff.tolist()
             cart(contact_standoff)
