@@ -74,5 +74,5 @@ class DroidKinematics:
             r = least_squares(lambda v: np.r_[residual(v), .001*(v-seed)],x,bounds=(self.limits[:,0]+1e-6,self.limits[:,1]-1e-6),max_nfev=160,gtol=1e-8)
             err = np.linalg.norm(residual(r.x))
             if best is None or err < best[0]: best=(err,r.x)
-            if err < .001: return r.x
+            if err < .0015: return r.x
         raise RuntimeError(f'IK failed: pose residual {best[0]:.5f}, target {target[:3,3]}')

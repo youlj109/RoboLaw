@@ -304,7 +304,7 @@ with SimulationAppContext(args):
             if args.grasp_local_approach and (not use_pregrasp_phase):
                 # TCP Z (col 2) should point into the object; hover back along -TCP_Z.
                 approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
-                pregrasp_offset=-0.10*approach
+                pregrasp_offset=-0.18*approach
             else:
                 pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
             try:
@@ -327,7 +327,8 @@ with SimulationAppContext(args):
             axis=axis/max(float(np.linalg.norm(axis)),1e-6)
             contact_standoff=target_center[:3]+axis*0.02
             result['approach_contact_standoff_m']=contact_standoff.tolist()
-            cart(contact_standoff)
+            # Banana feasibility: MotionGen transfer IK_FAIL on hover->contact; cartesian_line succeeds near tol.
+            cart(contact_standoff, force_phase='cartesian_line')
         phase='close';grip=1.
         for _ in range(30):step(q,grip)
         held=snapshot();result['close_contacts']=contacts.summarize([-.001,.061],'close',last_actions=5)
@@ -447,7 +448,7 @@ with SimulationAppContext(args):
                 # Prefer local approach when flag set; else TASK_SPEC offset.
                 if args.grasp_local_approach:
                     approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
-                    pregrasp_offset=-0.10*approach
+                    pregrasp_offset=-0.18*approach
                 else:
                     pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
             phase='pregrasp' if use_pregrasp_phase else 'approach'
