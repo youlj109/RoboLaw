@@ -1,0 +1,57 @@
+{
+  "stage": "ready_for_visual_review",
+  "baseline": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+  "search": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_contact_proxy_search86.json",
+  "search_sha256": "6ff74be05bc38e9a9511d89be99e21ea4da84839e86ddb0e4bf8f945ee015622",
+  "offline_candidate_budget": 3,
+  "physical_trial_budget": 1,
+  "small_detour_limits": {
+    "max_joint_length_ratio": 1.6,
+    "max_added_tcp_length_m": 0.15
+  },
+  "complete": true,
+  "candidates": [
+    {
+      "candidate_index": 6,
+      "config": "configs/extensions/doors/c01_property_candidate_86_06.json",
+      "paired_report": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_candidate_06_paired01/report.json",
+      "exit_code": 0,
+      "eligible": true,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.0223486077483201,
+      "max_added_tcp_length_m": -0.10283826575579835,
+      "contact_approach_diagnostic": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_candidate_06_approach01.json",
+      "contact_pull_proxy_diagnostic": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_candidate_06_pull_proxy01.json"
+    }
+  ],
+  "baseline_gates": {
+    "result.json": true,
+    "task_validation_full.json": true,
+    "task_review_audit.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "selection_rule": "First eligible candidate with <=.05m added TCP length and <=1.15 joint ratio; otherwise minimum added length among at most three eligible candidates",
+  "selected_candidate": {
+    "candidate_index": 6,
+    "config": "configs/extensions/doors/c01_property_candidate_86_06.json",
+    "paired_report": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_candidate_06_paired01/report.json",
+    "exit_code": 0,
+    "eligible": true,
+    "actual_source_intersections_all_seeds": true,
+    "max_joint_length_ratio": 1.0223486077483201,
+    "max_added_tcp_length_m": -0.10283826575579835,
+    "contact_approach_diagnostic": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_candidate_06_approach01.json",
+    "contact_pull_proxy_diagnostic": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_candidate_06_pull_proxy01.json"
+  },
+  "variant_gates": {
+    "result.json": true,
+    "task_validation_full.json": true,
+    "task_review_audit.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "visual_review_pending": true,
+  "episode": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86",
+  "neutral": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_neutral_86"
+}

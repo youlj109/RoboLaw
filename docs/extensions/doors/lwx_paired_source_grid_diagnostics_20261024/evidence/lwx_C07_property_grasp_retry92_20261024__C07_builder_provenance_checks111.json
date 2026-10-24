@@ -1,0 +1,21 @@
+{
+  "scope": "Negative controls reject foreign baseline/controller before emitting layout proposals. Default grid equivalence and actual paired augmentation recorded separately in110. No physics or safety acceptance claim.",
+  "implementation_sha256": "85a84862f00d43cb5f92d27814a577b978de4abed9f468a63dffdf2503aa0193",
+  "checks": [
+    {
+      "case": "foreign_controller",
+      "returncode": 2,
+      "output_absent": true,
+      "provenance_absent": true,
+      "rejected_before_geometry": true
+    },
+    {
+      "case": "foreign_baseline",
+      "returncode": 2,
+      "output_absent": true,
+      "provenance_absent": true,
+      "rejected_before_geometry": true
+    }
+  ],
+  "passed": true
+}

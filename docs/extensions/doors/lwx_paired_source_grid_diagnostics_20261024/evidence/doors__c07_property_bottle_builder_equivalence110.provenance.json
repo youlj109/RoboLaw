@@ -1,0 +1,113 @@
+{
+  "scope": "Offline proposals centered near measured source hulls and optional original off-seed planning hulls. Paired points are ideal planning states, not physical data. No collision, safety, support, feasibility or acceptance claim.",
+  "baseline": "datasets/doors/lwx_C07_property_grasp_retry92_20261024/C07_base_01",
+  "baseline_sha256": "a05e24f4e99ee7f562db4849e96a6a10a20ae08db81c67d6a27e69416956100b",
+  "config": "configs/extensions/doors/c07_variants_lwx_01.json",
+  "config_sha256": "c02f4c68c5e79e13583fd82f622cf14c131751ec1cbcacf3752e6a74afb1321c",
+  "asset": "assets/obstacle_library/property/glass_bottle.usda",
+  "asset_sha256": "1c6634f18afd9d2d5f0978cf137d4673937e518537769567549d5cd73ea3ad3c",
+  "implementation_sha256": "85a84862f00d43cb5f92d27814a577b978de4abed9f468a63dffdf2503aa0193",
+  "template": "configs/extensions/doors/front_variants_lwx_final.json",
+  "template_sha256": "e674055e97c4abe933888b6bdf68121b36c84292a49cf01d5683e980941f530a",
+  "output": "configs/extensions/doors/c07_property_bottle_builder_equivalence110.json",
+  "output_sha256": "0b359065f648397698e09635e7107bddb2d632b0802157b0e3b9b6df90a8dc66",
+  "sampled_actions": [
+    14,
+    26,
+    38,
+    50,
+    62,
+    74,
+    86
+  ],
+  "source_parts": [
+    [
+      0,
+      "robot_hull"
+    ],
+    [
+      1,
+      "robot_hull"
+    ],
+    [
+      2,
+      "robot_hull"
+    ],
+    [
+      3,
+      "robot_hull"
+    ],
+    [
+      4,
+      "robot_hull"
+    ],
+    [
+      5,
+      "robot_hull"
+    ],
+    [
+      6,
+      "robot_hull"
+    ],
+    [
+      7,
+      "robot_hull"
+    ],
+    [
+      8,
+      "gripper/base_link"
+    ],
+    [
+      9,
+      "gripper/left_outer_knuckle"
+    ],
+    [
+      10,
+      "gripper/left_outer_finger"
+    ],
+    [
+      11,
+      "gripper/left_inner_finger"
+    ],
+    [
+      12,
+      "gripper/left_inner_knuckle"
+    ],
+    [
+      13,
+      "gripper/right_outer_knuckle"
+    ],
+    [
+      14,
+      "gripper/right_outer_finger"
+    ],
+    [
+      15,
+      "gripper/right_inner_finger"
+    ],
+    [
+      16,
+      "gripper/right_inner_knuckle"
+    ]
+  ],
+  "candidates": 50850,
+  "hazard_anchor_names": [
+    "/World/envs/env_0/glass/Colliders/Body3",
+    "/World/envs/env_0/glass/Colliders/Body6",
+    "/World/envs/env_0/glass/Colliders/Body7"
+  ],
+  "parameters": {
+    "baseline": "datasets/doors/lwx_C07_property_grasp_retry92_20261024/C07_base_01",
+    "config": "configs/extensions/doors/c07_variants_lwx_01.json",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "variant": "property",
+    "stride": 12,
+    "hazard_part_centers": true,
+    "hazard_part_suffixes": "Body3,Body6,Body7",
+    "yaws": "0,90",
+    "paired_reference": null,
+    "output": "configs/extensions/doors/c07_property_bottle_builder_equivalence110.json"
+  },
+  "physics_replay": false,
+  "unsafe_path_executed": false
+}
