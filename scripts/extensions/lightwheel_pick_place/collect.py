@@ -31,6 +31,8 @@ parser.add_argument('--shelf-retract-steps',type=int,default=3,
     help='Shelf extract: number of equal retract waypoints before rise')
 parser.add_argument('--shelf-retract-clear-z',type=float,default=0.02,
     help='Shelf extract: small Z clearance held during level retract (deck clear, below board_1)')
+parser.add_argument('--shelf-preclear-z',type=float,default=0.03,
+    help='Shelf extract: pure +Z micro-rise first so attached fruit clears board_0 before -Y retract')
 args=parser.parse_args();args.enable_cameras=True
 if args.num_envs!=1:raise ValueError('This verified entry runs one environment; parallel collection is not implemented')
 from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
@@ -326,21 +328,23 @@ with SimulationAppContext(args):
         if use_pregrasp_phase:
             phase='lift';cart(held['tcp']+[0,0,.16])
         else:
-            # Shelf corridor: retract toward robot with micro Z clearance (deck), then rise past board_1.
+            # Shelf extract: (1) pure +Z preclear off board_0 (2) -Y retract at clear height (3) rise past board_1.
+            # Attached fruit still contacts the deck at close; any -Y before preclear yields FINETUNE_TRAJOPT_FAIL.
             phase='lift'
             n=max(1,int(args.shelf_retract_steps))
             y_final=float(args.shelf_retract_y); z_rise=float(args.shelf_rise_z)
-            z_clear=float(args.shelf_retract_clear_z)
+            z_clear=float(args.shelf_retract_clear_z); z_pre=float(args.shelf_preclear_z)
             waypoints=[]
+            if z_pre>0:
+                waypoints.append(np.array([0.0, 0.0, z_pre]))
+            hold_z=max(z_pre, z_clear)
             for i in range(1,n+1):
-                # Geometric-ish early micro steps: denser near the grasp (i/n squared blend).
                 frac=i/n
-                # Blend linear+quad so first steps are smaller than equal spacing.
                 t=0.5*frac+0.5*(frac*frac)
-                waypoints.append(np.array([0.0, y_final*t, z_clear*min(1.0, frac*1.5)]))
+                waypoints.append(np.array([0.0, y_final*t, hold_z]))
             waypoints.append(np.array([0.0, y_final, z_rise]))
-            result['shelf_lift_retract_m']={'y_final':y_final,'z_rise':z_rise,'z_clear':z_clear,'steps':n,
-                'waypoints':[w.tolist() for w in waypoints]}
+            result['shelf_lift_retract_m']={'y_final':y_final,'z_rise':z_rise,'z_clear':z_clear,
+                'z_preclear':z_pre,'steps':n,'waypoints':[w.tolist() for w in waypoints]}
             for wi,w in enumerate(waypoints):
                 try:
                     cart(held['tcp']+w)
