@@ -1,0 +1,13 @@
+# C07 release boundary diagnostic checkpoint
+
+C07 robot68 and human69 actually opened the door, then failed the original bounded release orientation guard at 979 and 984 recorded actions. Both are rejected and retained. Their successful matched baseline94 does not establish variant release success.
+
+The earlier angle helper only iterated recorded release actions. It omitted the next command whose guard actually failed. The new continuation helper checks the final measured arm seed at this first unexecuted boundary, then explicitly freezes the last recorded door/finger state for any later unobserved proposals. It also uses the actual bounded target-hold rule for the final five proposals. No physics replay or threshold change is performed.
+
+Final guarded helper calibration106 exactly reproduces 17 stored robot commands, 17 human commands and 25 accepted-baseline commands, with zero command difference. It reproduces both first unexecuted guard failures at the original -25 degree direction. Original 0.025 rad increment, 10 degree orientation, CPU source geometry, GPU and actual physical gates remain unchanged.
+
+The -35 degree proposals pass the recorded/frozen CPU checks for both variants. This is a discovery result only. Trial103 queues a fresh matched baseline and new candidates with the same original 4 cm retreat and -35 degree direction; actual release, neutral and independent gates remain unverified at this checkpoint. Existing accepted variants are not recaptured.
+
+C07 property96 candidates fail because source entities do not intersect every off-seed path and their extra TCP distance exceeds 0.15 m. Source-only searches98 and104 finish with zero candidates in their tested finite grids, not a general infeasibility proof. High-grip screen100 rejects all three candidates on original IK residual limits. Original unscaled tablet source107 also completes with zero candidates in its finite grid after paired off-path and baseline-contact constraints. Trial108 queues the existing endpoint-preserving bounded_chords_v1 shortcut controller for the same legal -6 cm grip, with new matched screen/baseline/neutral and unchanged dense GPU/FCL gates. This remains discovery only.
+
+Manifest entries verify every copied evidence file and hash all original trajectory/video inputs, which remain on the remote dataset filesystem. The pre-CLI-guard helper snapshot is retained with its exact report102 hash; final report106 hashes match the committed guarded implementation. Raw video hashes do not constitute visual acceptance. Six tasks are complete; C01 human/property repair and C07 remain unfinished.

@@ -1,0 +1,51 @@
+{
+  "scope": "Original-angle proposal commands reproduce all 59 stored commands exactly and both first failing measured boundaries. Later frozen states are not acceptance evidence. Final guarded diagnostic implementation hash checked.",
+  "checks": [
+    {
+      "episode": "datasets/doors/lwx_C07_outward_balanced_retry94_20261024/C07_robot_68",
+      "diagnostic": "reports/doors/lwx_C07_outward_balanced_retry94_20261024/C07_robot68_continuation106.json",
+      "max_command_difference_rad": 0.0,
+      "compared_commands": 17,
+      "stored_commands": 17,
+      "all_stored_commands_reproduced": true,
+      "failure_boundary_reproduced": true,
+      "first_unexecuted_error": {
+        "release_action_index": 17,
+        "phase": "release_handle",
+        "state_scope": "first_unexecuted_boundary",
+        "recorded_door_q": -0.688262939453125,
+        "error": "Bounded release command exceeded original increment or rotation guard"
+      },
+      "positive_control": false
+    },
+    {
+      "episode": "datasets/doors/lwx_C07_outward_balanced_retry94_20261024/C07_human_69",
+      "diagnostic": "reports/doors/lwx_C07_outward_balanced_retry94_20261024/C07_human69_continuation106.json",
+      "max_command_difference_rad": 0.0,
+      "compared_commands": 17,
+      "stored_commands": 17,
+      "all_stored_commands_reproduced": true,
+      "failure_boundary_reproduced": true,
+      "first_unexecuted_error": {
+        "release_action_index": 17,
+        "phase": "release_handle",
+        "state_scope": "first_unexecuted_boundary",
+        "recorded_door_q": -0.686413049697876,
+        "error": "Bounded release command exceeded original increment or rotation guard"
+      },
+      "positive_control": false
+    },
+    {
+      "episode": "datasets/doors/lwx_C07_outward_balanced_retry94_20261024/C07_base_01",
+      "diagnostic": "reports/doors/lwx_C07_outward_balanced_retry94_20261024/C07_base94_continuation106.json",
+      "max_command_difference_rad": 0.0,
+      "compared_commands": 25,
+      "stored_commands": 25,
+      "all_stored_commands_reproduced": true,
+      "failure_boundary_reproduced": true,
+      "first_unexecuted_error": null,
+      "positive_control": true
+    }
+  ],
+  "passed": true
+}
