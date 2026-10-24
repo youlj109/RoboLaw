@@ -55,7 +55,22 @@ result = json.loads((ep / 'result.json').read_text())
 base = result['robot_base_pose']
 kin = DroidKinematics(base[:3], Rotation.from_quat(base[3:7]).as_euler('xyz', degrees=True)[2])
 stage = Usd.Stage.Open(str(ep / 'scene.usda'))
-world = CollisionWorld(stage, kin)
+pick = args.pick_object
+dest = result.get('destination_object') or 'plate'
+support = (result.get('source_support_contact_model') or {})
+surface = support.get('surface') or ''
+# Suffix after /kitchen
+suffix = '/shelves_main_group/corpus/board_0'
+if '/kitchen/' in surface:
+    suffix = '/' + surface.split('/kitchen/', 1)[1]
+movable = tuple(n for n in ('plate', 'bowl', 'orange', 'apple', 'lime', 'wooden_bowl') if n != pick) + ('glass',)
+world = CollisionWorld(
+    stage, kin,
+    pick_object=pick,
+    destination_object=dest,
+    source_surface_suffix=suffix,
+    movable_objects=movable,
+)
 
 rigid = ('lemon', 'plate', 'bowl', 'orange', 'apple', 'lime', 'wooden_bowl')
 with h5py.File(ep / 'trajectory.h5') as f:
@@ -70,6 +85,15 @@ names = result['robot_joint_names']
 world.attachment = np.asarray(result['planning_attachment_tcp_to_lime'])
 world.gripper_joint_position = float(q_full[names.index('finger_joint')])
 world.allowed_phase = 'lift'
+# Restore lift-floor semantics from the recorded close state.
+if 'source_resting_min_z_m' in support:
+    world.source_resting_min_z = float(support['source_resting_min_z_m'])
+    world.source_resting_xy = np.asarray(support.get('source_resting_xy_m') or tcp0[:2], dtype=float)
+    world.source_support_mode = support.get('mode') or 'native_rest_until_detached'
+    world.source_detached = False
+    world.source_lift_floor_z = float(support['source_resting_min_z_m']) - 0.0005
+    if 'source_resting_root_m' in support:
+        world.source_resting_root = np.asarray(support['source_resting_root_m'], dtype=float)
 
 planner = LimePlanner(world, kin, dt=float(result['dt']), seed=int(result.get('seed') or 43), max_joint_speed=0.4)
 tcp_T = kin.fk(q)
