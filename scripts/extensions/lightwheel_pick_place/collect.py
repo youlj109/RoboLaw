@@ -35,6 +35,12 @@ parser.add_argument('--shelf-preclear-z',type=float,default=0.03,
     help='Shelf extract: pure +Z micro-rise first so attached fruit clears board_0 before -Y retract')
 parser.add_argument('--shelf-lift-template',type=Path,default=None,
     help='Optional JSON with waypoints_delta_m from scan_shelf_extract; overrides CLI retract grid')
+parser.add_argument('--place-lower-mode',choices=('cartesian_line','transfer','skip','steps'),default='cartesian_line',
+    help='Shelf/plate lower: local Z line (default), MotionGen, skip-to-release, or multi-step Z')
+parser.add_argument('--place-lower-z',type=float,default=None,
+    help='Override TASK_SPEC.lower_z_m (metres above destination root)')
+parser.add_argument('--place-lower-steps',type=int,default=3,
+    help='When place-lower-mode=steps: equal Z drops from transfer height to lower height')
 args=parser.parse_args();args.enable_cameras=True
 if args.num_envs!=1:raise ValueError('This verified entry runs one environment; parallel collection is not implemented')
 from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
@@ -380,7 +386,26 @@ with SimulationAppContext(args):
         # Release above destination then let gravity settle the fruit.
         desired_root=dest[:3]+np.array([0,0,TASK_SPEC.transfer_z_m])
         phase='transfer';cart(desired_root+offset)
-        phase='lower';cart(dest[:3]+np.array([0,0,TASK_SPEC.lower_z_m])+offset)
+        lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
+        lower_root=dest[:3]+np.array([0.0,0.0,lower_z])
+        xfer_tcp=desired_root+offset
+        lower_tcp=lower_root+offset
+        result['place_lower']={'mode':args.place_lower_mode,'lower_z_m':lower_z,
+            'transfer_tcp_m':xfer_tcp.tolist(),'lower_tcp_m':lower_tcp.tolist(),
+            'drop_m':float(xfer_tcp[2]-lower_tcp[2])}
+        phase='lower'
+        if args.place_lower_mode=='skip' or (args.place_lower_mode=='steps' and abs(xfer_tcp[2]-lower_tcp[2])<1e-4):
+            result['place_lower']['skipped']=True
+        elif args.place_lower_mode=='steps':
+            n=max(1,int(args.place_lower_steps))
+            for i in range(1,n+1):
+                frac=i/n
+                mid=xfer_tcp*(1.0-frac)+lower_tcp*frac
+                cart(mid, force_phase='cartesian_line')
+        elif args.place_lower_mode=='cartesian_line':
+            cart(lower_tcp, force_phase='cartesian_line')
+        else:
+            cart(lower_tcp, force_phase='transfer')
         phase='release';grip=0.;world.attachment=None
         for _ in range(35):step(q,grip)
         phase='retreat';before_retreat=len(records)
