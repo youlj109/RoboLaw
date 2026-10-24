@@ -17,6 +17,8 @@ parser.add_argument('--grasp-yaw',type=float,default=0)
 parser.add_argument('--grasp-tilt',type=float,default=35)
 parser.add_argument('--grasp-height-offset',type=float,default=.015,
     help='TCP height above measured pick-object geometry center; metres')
+parser.add_argument('--grasp-lateral-x',type=float,default=0.0,
+    help='World-frame +X TCP bias at pick center for finger centerline; metres')
 args=parser.parse_args();args.enable_cameras=True
 if args.num_envs!=1:raise ValueError('This verified entry runs one environment; parallel collection is not implemented')
 from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
@@ -254,6 +256,8 @@ with SimulationAppContext(args):
         p=initial['lime'][:3].copy()
         target_center=transform(initial['lime'][:3],initial['lime'][3:7])@np.r_[world.object_center,1]
         target_center[2]+=args.grasp_height_offset
+        target_center[0]+=args.grasp_lateral_x
+        result['grasp_lateral_x_m']=float(args.grasp_lateral_x)
         pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
         # use_pregrasp_phase computed earlier from TASK_SPEC for cart() planning-phase selection.
         candidates=list(dict.fromkeys([(args.grasp_tilt,args.grasp_yaw)]+(
