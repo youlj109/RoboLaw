@@ -67,7 +67,7 @@ TASKS: dict[str, TaskSpec] = {
         source_surface_suffix="/shelves_main_group/corpus/board_0",
         # Approach from robot side (-Y), not from above into board_1.
         pregrasp_offset_m=(0.0, -0.17, 0.0),
-        transfer_z_m=0.08,
+        transfer_z_m=0.12,
         lower_z_m=0.055,
         grasp_body_z_range=(-0.001, 0.061),
         stand_output_basename="lemon_droid_original_stand",
