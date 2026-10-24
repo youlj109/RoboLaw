@@ -219,7 +219,7 @@ with SimulationAppContext(args):
             target[:3,:3]=(kin.fk(q)[:3,:3] if rotation is None else rotation)
             # Shelf/lateral approach cannot use cuRobo vertical-column phases.
             planning_phase=phase
-            if (not use_pregrasp_phase) and phase in ('pregrasp','approach'):
+            if (not use_pregrasp_phase) and phase in ('pregrasp','approach','lift'):
                 planning_phase='transfer'
             try:trajectory=planner.plan_pose(q,target,ignores(),grip,phase=planning_phase)
             except RuntimeError:
@@ -315,7 +315,15 @@ with SimulationAppContext(args):
             'initial_lower_bound_m':world.source_lift_floor_z,'jitter_tolerance_m':.0005,
             'xy_anchor_m':world.source_resting_xy.tolist(),'max_xy_displacement_m':.05,
             'policy':'Only exact original source surface and 50 mm xy region, collision hull bottom at least initial native rest minus 0.5 mm (asset origin is not a penetration measure); geometric separation plus zero contacts permanently revokes exception.'}
-        phase='lift';cart(held['tcp']+[0,0,.16])
+        if use_pregrasp_phase:
+            phase='lift';cart(held['tcp']+[0,0,.16])
+        else:
+            # Shelf: vertical lift hits board_1; retract along -approach then rise clear.
+            phase='lift'
+            retract=np.array([0.0,-0.10,0.02])
+            cart(held['tcp']+retract)
+            cart(held['tcp']+retract+np.array([0.0,0.0,0.14]))
+            result['shelf_lift_retract_m']=retract.tolist()
         lifted=snapshot();result['lift_m']=float(lifted['lime'][2]-p[2]);result['lift_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'lift',last_actions=5)
         if result['lift_m']<.08 or not result['lift_contacts']['both_fingers_on_body']:raise RuntimeError('Lime failed physical lift/contact check')
         dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
