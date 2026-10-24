@@ -65,6 +65,48 @@ int choose_depth(int da,int db,int len,int now,int target,int maxstep){
  int base=now<da?4:2;int step=1;size_t threads=size_t(len)*base;
  while(threads<size_t(target)&&step<remaining&&step<maxstep){++step;threads*=base;}return std::min(step,remaining);
 }
+// A traversal thread emits at most one pair. Bound worst-case output BEFORE
+// expansion, while the complete input frontier is still available.
+static size_t capacity_closures=0;
+static size_t capacity_closures_asymmetric=0;
+int bounded_depth(int da,int db,int len,int now,int target,int maxstep){
+ int step=choose_depth(da,db,len,now,target,maxstep);
+ int bits=now<da?2:1;
+ while(step>0 && size_t(len)*(size_t(1)<<(bits*step))>size_t(GD_CAP))--step;
+ return step;
+}
+// Exact closure: enumerate all retained triangle pairs using the author's
+// TriDistPQP primitive. Do not use raw_distance_simple as a rejection bound:
+// the real oven fixture exposed a 0.265 mm overestimate with that filter.
+__global__ void gd_complete_frontier(float3*av,float3*bv,g_bvtt_SoA frontier,
+                                    float*out,float*best,int da,int db,int na,int nb,int count){
+ int tid=blockIdx.x*blockDim.x+threadIdx.x;if(tid>=count)return;
+ int sa,ea,sb,eb;
+ getStartAndEnd(frontier.a[tid]-(1<<(da-1)),da,na,sa,ea);
+ getStartAndEnd(frontier.b[tid]-(1<<(db-1)),db,nb,sb,eb);
+ float minimum=best[0];float3 a[3],b[3];
+ for(int i=sa;i<ea;++i){
+  for(int k=0;k<3;++k)a[k]=av[3*i+k];
+  for(int j=sb;j<eb;++j){
+   for(int k=0;k<3;++k)b[k]=bv[3*j+k];
+   minimum=fminf(minimum,TriDistPQP(a,b));
+  }
+ }
+ out[tid]=minimum;
+}
+void finish_frontier(Workspace&w,std::shared_ptr<Mesh>a,std::shared_ptr<Mesh>b,
+                     g_bvtt_SoA frontier,int len,int now,cudaStream_t stream=0){
+ if(len<1||len>GD_CAP)throw std::runtime_error("Invalid complete frontier");
+ // Nodes in A stop advancing at A's own leaf depth; B may be deeper.
+ // Enumerate every retained triangle pair using the same distance primitive.
+ int depthA=std::min(now,a->deep),depthB=std::min(now,b->deep);
+ gd_complete_frontier<<<(len+127)/128,128,0,stream>>>(w.av,b->vertices,
+     frontier,w.out,w.best,depthA,depthB,a->n,b->n,len);
+ CK(cudaGetLastError());
+ CK(cub::DeviceReduce::Min(w.scratch,w.scratch_bytes,w.out,w.reduced,len,stream));
+ gd_final<<<1,1,0,stream>>>(w.best,w.reduced);
+ ++capacity_closures;if(depthA!=depthB)++capacity_closures_asymmetric;
+}
 // Pose is relative A->B; author's native triangle bounds and BVTT kernels remain in use.
 std::pair<float,float> query(std::shared_ptr<Mesh>a,std::shared_ptr<Mesh>b,const float*mat,int target,int maxstep,int small_threshold){
  if(!workspace)workspace=std::make_unique<Workspace>();auto&w=*workspace;
@@ -83,7 +125,8 @@ std::pair<float,float> query(std::shared_ptr<Mesh>a,std::shared_ptr<Mesh>b,const
   kernel_gpu_init<<<1,1>>>(w.an,b->nodes,w.av,b->vertices,w.first,w.length,w.length,0,0,w.best,0.f);
   auto in=w.first,out=w.second;int len=1,now=1;
   while(now<b->deep&&len){
-   int step=choose_depth(a->deep,b->deep,len,now,target,maxstep);
+   int step=bounded_depth(a->deep,b->deep,len,now,target,maxstep);
+   if(step==0){finish_frontier(w,a,b,in,len,now);len=0;break;}
    size_t threads=size_t(len)*(1u<<(step*(now<a->deep?2:1)));
    if(threads>size_t(INT_MAX))throw std::runtime_error("BVTT launch overflow");
    CK(cudaMemset(w.length,0,sizeof(int)));
@@ -104,6 +147,7 @@ std::pair<float,float> query(std::shared_ptr<Mesh>a,std::shared_ptr<Mesh>b,const
 }
 #include "gdist_parallel.inc"
 PYBIND11_MODULE(gdist_native,m){
+ m.def("capacity_stats",[](){py::dict d;d["capacity"]=GD_CAP;d["exact_frontier_closures"]=capacity_closures;d["asymmetric_depth_closures"]=capacity_closures_asymmetric;return d;});
  py::class_<Mesh,std::shared_ptr<Mesh>>(m,"Mesh").def(py::init<py::array_t<float,py::array::c_style|py::array::forcecast>>()).def_readonly("triangles",&Mesh::n);
  m.def("query",[](std::shared_ptr<Mesh>a,std::shared_ptr<Mesh>b,py::array_t<float,py::array::c_style|py::array::forcecast> pose,int target,int maxstep,int small){if(pose.size()!=12)throw std::runtime_error("relative transform length 12 required");return query(a,b,pose.data(),target,maxstep,small);},py::arg("a"),py::arg("b"),py::arg("pose"),py::arg("target")=8192,py::arg("maxstep")=4,py::arg("small")=1024);
  m.def("batch",[](std::vector<std::shared_ptr<Mesh>>a,std::vector<std::shared_ptr<Mesh>>b,py::array_t<float,py::array::c_style|py::array::forcecast> poses,int target,int maxstep,int small){if(a.size()!=b.size()||poses.size()!=12*a.size())throw std::runtime_error("batch shape mismatch");py::array_t<float> values(a.size());auto v=values.mutable_data();double ms=0;auto start=std::chrono::steady_clock::now();{py::gil_scoped_release release;for(size_t i=0;i<a.size();++i){auto r=query(a[i],b[i],poses.data()+12*i,target,maxstep,small);v[i]=r.first;ms+=r.second;}}double wall=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count();return py::make_tuple(values,ms,wall);},py::arg("a"),py::arg("b"),py::arg("poses"),py::arg("target")=8192,py::arg("maxstep")=4,py::arg("small")=1024);

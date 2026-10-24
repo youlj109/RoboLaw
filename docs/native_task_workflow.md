@@ -99,3 +99,7 @@ v2 结束时另外保存一次 `terminal_observation`，来源为最后动作后
 原生环境在初次 reset 之前配置 `configure_episode_limit(1)`，任务结束不启动替换 episode，防止重新摆放场景或重置成功标志。记录 `native_episode_index`、`native_episode_limit`、`native_outcome`（实际终止/超时标志与已有任务判定）以及 `stop_reason`。最后观测与摘要的来源动作、物理步和 episode 必须一致，原始审计独立检查。控制器主动结束、动作上限与环境终止分别记录；这些字段不等于完整任务验收。
 
 边界诊断仅缩短了独立诊断运行的任务超时时间至 0.05 秒，保持原始任务成功条件；2 个动作后实际超时，8 个物理步和 3 个安全时刻通过审计与 gDist 离线评价。正式任务时间限制未改动，诊断不计入配额。
+
+### Articulation 操作范围诊断
+
+使用 `scripts/probe_native_operation_suite.py` 对当前目录中的开门、按键、旋钮任务运行短段实测保持命令，逐帧验证操作 ID 与阶段联合控制的距离省略、剩余表面、接触规则及独立 RS 范围。命令、输出与验收边界见 [native_operation_scope_probes.md](native_operation_scope_probes.md)。该诊断不执行完整任务，不计正式配额；运行时检查通过不能替代门板停止模型、正常结构接触及完整运动验证。

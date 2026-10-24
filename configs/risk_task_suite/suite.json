@@ -311,9 +311,21 @@
       "placement": "task_relative_binding_required; never reuse Coastal world coordinates"
     }
   ],
-  "randomizations_per_combination": 200,
-  "planned_trajectory_count": 76800,
-  "quota_basis": "pending_user_choice; do not discard complete failed-task evidence",
+  "randomizations_per_combination": null,
+  "planned_trajectory_count": null,
+  "quota_basis": "not_required_for_system_delivery",
+  "delivery": {
+    "scope": "HS/PT/RS system for all configured tasks",
+    "production_collection_required": false,
+    "episodes_per_group_required": 0,
+    "verification": "targeted safety integration checks, not production quota",
+    "user_clarified_on": "2026-10-24"
+  },
+  "historical_collection_plan": {
+    "randomizations_per_combination": 200,
+    "trajectory_count": 76800,
+    "status": "reference only; not an execution request or delivery gate"
+  },
   "randomization": {
     "dimensions": [
       "lighting",
@@ -321,7 +333,17 @@
       "roughness",
       "material"
     ],
-    "semantics": "200 joint configurations per task/variant",
+    "semantics": "explicit joint configurations per requested diagnostic or future collection",
+    "material_scope": "visual_only",
+    "physical_material_randomization": false,
+    "online_dimensions": [
+      "position_orientation"
+    ],
+    "offline_dimensions": [
+      "lighting",
+      "roughness",
+      "material"
+    ],
     "ranges": "per-task bounded configuration required before acquisition",
     "seed_policy": "explicit per-attempt seed; persist sampled values and simulator RNG identity"
   },

@@ -1,7 +1,7 @@
 """Compile the requested 32-task suite from checked-out Arena specifications.
 
 This is configuration compilation, not scene or safety acceptance. It neither
-starts Isaac Sim nor creates 76,800 trajectories. Runtime binding is mandatory.
+starts Isaac Sim nor launches production collection. Runtime binding is mandatory.
 """
 from copy import deepcopy
 import hashlib
@@ -66,11 +66,21 @@ def main():
         tasks=[dict(task_id=t['task_id'], environment_id=t['environment_id'],
             family=t['family'], contract_sha256=digest(t),
             path=str((output / (t['task_id'] + '.json')).relative_to(ROOT))) for t in tasks],
-        variants=variants, randomizations_per_combination=200,
-        planned_trajectory_count=len(tasks)*len(variants)*200,
-        quota_basis='pending_user_choice; do not discard complete failed-task evidence',
+        variants=variants, randomizations_per_combination=None,
+        planned_trajectory_count=None,
+        quota_basis='not_required_for_system_delivery',
+        delivery=dict(scope='HS/PT/RS system for all configured tasks',
+            production_collection_required=False, episodes_per_group_required=0,
+            verification='targeted safety integration checks, not production quota',
+            user_clarified_on='2026-10-24'),
+        historical_collection_plan=dict(randomizations_per_combination=200,
+            trajectory_count=len(tasks)*len(variants)*200,
+            status='reference only; not an execution request or delivery gate'),
         randomization=dict(dimensions=['lighting','position_orientation','roughness','material'],
-            semantics='200 joint configurations per task/variant',
+            semantics='explicit joint configurations per requested diagnostic or future collection',
+            material_scope='visual_only', physical_material_randomization=False,
+            online_dimensions=['position_orientation'],
+            offline_dimensions=['lighting','roughness','material'],
             ranges='per-task bounded configuration required before acquisition',
             seed_policy='explicit per-attempt seed; persist sampled values and simulator RNG identity'),
         workflow=dict(capture='raw-only', physics_hz=120, action_hz=30, risk_hz=30,

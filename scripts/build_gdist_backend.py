@@ -27,11 +27,23 @@ def main():
  target=runtime/'gdist_native.so';temporary=runtime/'gdist_native.build.so'
  command=[str(nvcc),'-std=c++17','-O3','-DGD_CAP=4194304','--expt-relaxed-constexpr','-Xcompiler','-fPIC','-shared','-arch='+a.arch,
   '-I',str(adapted),'-I',pybind11.get_include(),'-I',sysconfig.get_path('include'),str(native/'gdist_bridge.cu'),'-o',str(temporary)]
+ # Keep exact previous executable/metadata for immutable historical replay.
+ if target.exists():
+  previous=runtime/'build_info.json'
+  if not previous.is_file():raise RuntimeError('Cannot archive existing backend without build identity')
+  identity=json.loads(previous.read_text());old_sha=hashlib.sha256(target.read_bytes()).hexdigest()
+  if identity.get('binary_sha256')!=old_sha:raise RuntimeError('Existing backend hash mismatch; refusing replacement')
+  history=runtime/'history'/old_sha;history.mkdir(parents=True,exist_ok=True)
+  for old in (target,previous):
+   saved=history/old.name
+   if saved.exists():
+    if saved.read_bytes()!=old.read_bytes():raise RuntimeError('Historical backend archive differs: '+str(saved))
+   else:shutil.copy2(old,saved)
  started=time.perf_counter();subprocess.run(command,cwd=ROOT,check=True);temporary.replace(target)
- info=dict(available=True,version='arena-gdist-runtime-1',source_repository='https://github.com/yingtix/DistanceQuery',source_commit=COMMIT,
+ info=dict(available=True,version='arena-gdist-runtime-2-capacity-safe',source_repository='https://github.com/yingtix/DistanceQuery',source_commit=COMMIT,
   binary_sha256=hashlib.sha256(target.read_bytes()).hexdigest(),native_source_sha256={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in native.iterdir() if p.is_file()},
   compiler=subprocess.check_output([str(nvcc),'--version'],text=True).strip(),command=command,python=sys.version,platform=platform.platform(),architecture=a.arch,build_wall_s=time.perf_counter()-started,
-  semantics='Author BVTT and triangle-distance kernels; persistent models/workspaces; explicit multi-stream batch orchestration; no approximate geometry or backend fallback',
+  semantics='Author BVTT and triangle-distance kernels; persistent models/workspaces; explicit multi-stream batch orchestration; capacity-bounded BVTT with exact retained triangle-product completion; no approximate geometry or backend fallback',
   closest_point_coordinates='not exported; witness validity remains false')
  (runtime/'build_info.json').write_text(json.dumps(info,indent=2)+'\n');print(json.dumps(info,indent=2))
 if __name__=='__main__':main()

@@ -36,7 +36,11 @@ struct AsyncSlot : Workspace {
    }
    CK(cudaMemcpyAsync(hvalue,best,sizeof(float),cudaMemcpyDeviceToHost,stream));phase=3;return;
   }
-  int step=choose_depth(a->deep,b->deep,len,now,target,maxstep);
+  int step=bounded_depth(a->deep,b->deep,len,now,target,maxstep);
+  if(step==0){
+   finish_frontier(*this,a,b,in,len,now,stream);
+   CK(cudaMemcpyAsync(hvalue,best,sizeof(float),cudaMemcpyDeviceToHost,stream));phase=3;return;
+  }
   size_t threads=size_t(len)*(1u<<(step*(now<a->deep?2:1)));
   if(threads>size_t(INT_MAX))throw std::runtime_error("parallel BVTT launch overflow");
   CK(cudaMemsetAsync(length,0,sizeof(int),stream));
@@ -60,6 +64,7 @@ py::tuple parallel_batch(std::vector<std::shared_ptr<Mesh>>aa,std::vector<std::s
   // Warm-up reserves the largest observed source mesh per stream; allocations never recur in steady-state trials.
   int largest=1,depth=1;for(auto a:aa)if(a->n>largest){largest=a->n;depth=a->deep;}
   for(int k=0;k<concurrency;++k)slots[k]->reserve(largest,depth);
+  try {
   for(size_t offset=0;offset<aa.size();offset+=concurrency){
    int used=std::min(size_t(concurrency),aa.size()-offset);
    for(int k=0;k<used;++k)slots[k]->start(aa[offset+k],bb[offset+k],mat+12*(offset+k),small,seeds);
@@ -70,6 +75,10 @@ py::tuple parallel_batch(std::vector<std::shared_ptr<Mesh>>aa,std::vector<std::s
     for(int k=0;k<used;++k)if(slots[k]->phase){slots[k]->synchronize();if(slots[k]->phase)unfinished=true;}
    }
    for(int k=0;k<used;++k){float v=*slots[k]->hvalue;if(!std::isfinite(v)||v<0)throw std::runtime_error("Invalid parallel gDist result");dest[offset+k]=std::sqrt(v);}
+  }
+  } catch(...) {
+   for(auto& slot:slots){cudaStreamSynchronize(slot->stream);slot->phase=0;}
+   throw;
   }
  }
  double wall=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-started).count();return py::make_tuple(values,py::none(),wall);
