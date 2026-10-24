@@ -1,0 +1,29 @@
+{
+  "created": "2026-10-24T16:08:10.318087",
+  "scope": "132 candidates0/1 pass all paired+approach but proxy rejects within first12 pull commands. Continue original CPU IK/.025rad bounded proposals after proxy overlaps to measure the entire finite candidate pull envelope; no physics/GPU success or acceptance claim. Original all-sample eligibility remains false if any proxy failed. Will calibrate every old prefix command exactly.",
+  "command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "-u",
+    "scripts/extensions/doors/diagnose_paired_pull_envelope_lwx.py",
+    "--baseline",
+    "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+    "--config",
+    "configs/extensions/doors/c07_property_candidate_132_00.json",
+    "--variant",
+    "property",
+    "--paired",
+    "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_132_candidate_00_paired01/report.json",
+    "--approach",
+    "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_132_candidate_00_approach01.json",
+    "--output",
+    "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property132_full_pull_envelope134.json"
+  ],
+  "pid": 901157
+}

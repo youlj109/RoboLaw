@@ -1,0 +1,139 @@
+{
+  "_kitchen_asset": "assets/extensions/doors/c03_mechanisms_lwx_01.usda",
+  "_selection_note": "Discovery candidate only; not task or physical acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian",
+  "_fixed_source_layout": "configs/extensions/doors/c07_source_layout_lwx.json",
+  "_status": "Frozen source relation solution; added layouts require design from this task baseline.",
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/wine_glass.usda",
+    "position": [
+      4.877296,
+      -3.130071,
+      1.734969
+    ],
+    "static": false,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "yaw_deg": 0.0,
+    "baseline_intersection_actions": [
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "source_intersection_in_reference_off_seeds": {
+      "42": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42
+      ],
+      "43": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42
+      ],
+      "44": [
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42
+      ]
+    },
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/c07_property_candidate_132_01_property_support.usda",
+      "position": [
+        4.877296,
+        -3.130071,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.8272960000000005,
+          -3.380071,
+          -4.470348362317633e-10
+        ],
+        [
+          4.927296,
+          -3.0800710000000002,
+          1.734969
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry",
+      "component_bounds_world_m": [
+        {
+          "low": [
+            4.8272960000000005,
+            -3.380071,
+            0.001999999552965164
+          ],
+          "high": [
+            4.927296,
+            -3.2800710000000004,
+            1.712969
+          ]
+        },
+        {
+          "low": [
+            4.8272960000000005,
+            -3.380071,
+            1.712969
+          ],
+          "high": [
+            4.927296,
+            -3.0800710000000002,
+            1.732969
+          ]
+        }
+      ],
+      "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+    },
+    "candidate_search": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_seed44_refine_search132.json",
+    "candidate_search_sha256": "5452b352a7247bd7255024c4f2d298d801d3ed1cfe33e6b6f6b58901ae751dca",
+    "candidate_index": 1
+  }
+}

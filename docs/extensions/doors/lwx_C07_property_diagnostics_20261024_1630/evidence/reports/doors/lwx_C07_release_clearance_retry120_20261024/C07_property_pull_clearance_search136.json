@@ -1,0 +1,3048 @@
+{
+  "task": "kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian",
+  "variant": "property",
+  "baseline": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+  "scope": "Offline candidates only, not scene or task acceptance",
+  "discovery_broadphase": "Vectorized conservative source AABB overlap; every counted intersection still requires exact FCL",
+  "endpoint_sphere_screen": "AABB lower bounds only prune safe pairs; close pairs use exact source FCL at unchanged margin+3mm",
+  "discovery_min_blocking_samples": 1,
+  "discovery_mid_stride": 1,
+  "stats": {
+    "tested": 174,
+    "endpoints": 58,
+    "blocking": 42,
+    "scene_legal": 37,
+    "shared_off_blocking": 37,
+    "command_sphere_reference_rejected": 34
+  },
+  "candidates": [
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.857296000000001,
+        -3.1500709999999996,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.807296000000001,
+          -3.4000709999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          4.9072960000000005,
+          -3.100071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.807296000000001,
+              -3.4000709999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              4.9072960000000005,
+              -3.300071,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.807296000000001,
+              -3.4000709999999996,
+              1.722969
+            ],
+            "high": [
+              4.9072960000000005,
+              -3.100071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.857296000000001,
+        -3.140071,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.807296000000001,
+          -3.390071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.9072960000000005,
+          -3.090071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.807296000000001,
+              -3.390071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.9072960000000005,
+              -3.290071,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.807296000000001,
+              -3.390071,
+              1.722969
+            ],
+            "high": [
+              4.9072960000000005,
+              -3.090071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.8672960000000005,
+        -3.1500709999999996,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.817296000000001,
+          -3.4000709999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          4.917296,
+          -3.100071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.817296000000001,
+              -3.4000709999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              4.917296,
+              -3.300071,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.817296000000001,
+              -3.4000709999999996,
+              1.722969
+            ],
+            "high": [
+              4.917296,
+              -3.100071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.8672960000000005,
+        -3.140071,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.817296000000001,
+          -3.390071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.917296,
+          -3.090071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.817296000000001,
+              -3.390071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.917296,
+              -3.290071,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.817296000000001,
+              -3.390071,
+              1.722969
+            ],
+            "high": [
+              4.917296,
+              -3.090071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.8672960000000005,
+        -3.130071,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.817296000000001,
+          -3.380071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.917296,
+          -3.0800710000000002,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.817296000000001,
+              -3.380071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.917296,
+              -3.2800710000000004,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.817296000000001,
+              -3.380071,
+              1.722969
+            ],
+            "high": [
+              4.917296,
+              -3.0800710000000002,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.8672960000000005,
+        -3.120071,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.817296000000001,
+          -3.370071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.917296,
+          -3.070071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.817296000000001,
+              -3.370071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.917296,
+              -3.270071,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.817296000000001,
+              -3.370071,
+              1.722969
+            ],
+            "high": [
+              4.917296,
+              -3.070071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.8672960000000005,
+        -3.110071,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.817296000000001,
+          -3.360071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.917296,
+          -3.060071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.817296000000001,
+              -3.360071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.917296,
+              -3.2600710000000004,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.817296000000001,
+              -3.360071,
+              1.722969
+            ],
+            "high": [
+              4.917296,
+              -3.060071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.877296,
+        -3.1500709999999996,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.8272960000000005,
+          -3.4000709999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          4.927296,
+          -3.100071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.8272960000000005,
+              -3.4000709999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              4.927296,
+              -3.300071,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.8272960000000005,
+              -3.4000709999999996,
+              1.722969
+            ],
+            "high": [
+              4.927296,
+              -3.100071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.877296,
+        -3.140071,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.8272960000000005,
+          -3.390071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.927296,
+          -3.090071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.8272960000000005,
+              -3.390071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.927296,
+              -3.290071,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.8272960000000005,
+              -3.390071,
+              1.722969
+            ],
+            "high": [
+              4.927296,
+              -3.090071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.877296,
+        -3.130071,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.8272960000000005,
+          -3.380071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.927296,
+          -3.0800710000000002,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.8272960000000005,
+              -3.380071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.927296,
+              -3.2800710000000004,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.8272960000000005,
+              -3.380071,
+              1.722969
+            ],
+            "high": [
+              4.927296,
+              -3.0800710000000002,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.877296,
+        -3.120071,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.8272960000000005,
+          -3.370071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.927296,
+          -3.070071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.8272960000000005,
+              -3.370071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.927296,
+              -3.270071,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.8272960000000005,
+              -3.370071,
+              1.722969
+            ],
+            "high": [
+              4.927296,
+              -3.070071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.887296,
+        -3.1500709999999996,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.837296,
+          -3.4000709999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          4.937296,
+          -3.100071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.837296,
+              -3.4000709999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              4.937296,
+              -3.300071,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.837296,
+              -3.4000709999999996,
+              1.722969
+            ],
+            "high": [
+              4.937296,
+              -3.100071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.887296,
+        -3.140071,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.837296,
+          -3.390071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.937296,
+          -3.090071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.837296,
+              -3.390071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.937296,
+              -3.290071,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.837296,
+              -3.390071,
+              1.722969
+            ],
+            "high": [
+              4.937296,
+              -3.090071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.887296,
+        -3.130071,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.837296,
+          -3.380071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.937296,
+          -3.0800710000000002,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.837296,
+              -3.380071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.937296,
+              -3.2800710000000004,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.837296,
+              -3.380071,
+              1.722969
+            ],
+            "high": [
+              4.937296,
+              -3.0800710000000002,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.897296,
+        -3.1500709999999996,
+        1.734969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.847296,
+          -3.4000709999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          4.947296,
+          -3.100071,
+          1.732969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.847296,
+              -3.4000709999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              4.947296,
+              -3.300071,
+              1.712969
+            ]
+          },
+          {
+            "low": [
+              4.847296,
+              -3.4000709999999996,
+              1.712969
+            ],
+            "high": [
+              4.947296,
+              -3.100071,
+              1.732969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.897296,
+        -3.1500709999999996,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.847296,
+          -3.4000709999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          4.947296,
+          -3.100071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.847296,
+              -3.4000709999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              4.947296,
+              -3.300071,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.847296,
+              -3.4000709999999996,
+              1.722969
+            ],
+            "high": [
+              4.947296,
+              -3.100071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.897296,
+        -3.140071,
+        1.734969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.847296,
+          -3.390071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.947296,
+          -3.090071,
+          1.732969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.847296,
+              -3.390071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.947296,
+              -3.290071,
+              1.712969
+            ]
+          },
+          {
+            "low": [
+              4.847296,
+              -3.390071,
+              1.712969
+            ],
+            "high": [
+              4.947296,
+              -3.090071,
+              1.732969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.897296,
+        -3.140071,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.847296,
+          -3.390071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.947296,
+          -3.090071,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.847296,
+              -3.390071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.947296,
+              -3.290071,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.847296,
+              -3.390071,
+              1.722969
+            ],
+            "high": [
+              4.947296,
+              -3.090071,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.9072960000000005,
+        -3.1500709999999996,
+        1.734969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.857296000000001,
+          -3.4000709999999996,
+          0.001999999552965164
+        ],
+        "high": [
+          4.957296,
+          -3.100071,
+          1.732969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.857296000000001,
+              -3.4000709999999996,
+              0.001999999552965164
+            ],
+            "high": [
+              4.957296,
+              -3.300071,
+              1.712969
+            ]
+          },
+          {
+            "low": [
+              4.857296000000001,
+              -3.4000709999999996,
+              1.712969
+            ],
+            "high": [
+              4.957296,
+              -3.100071,
+              1.732969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.857296000000001,
+        -3.150071,
+        1.744969
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.807296000000001,
+          -3.400071,
+          0.001999999552965164
+        ],
+        "high": [
+          4.9072960000000005,
+          -3.1000710000000002,
+          1.742969
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.807296000000001,
+              -3.400071,
+              0.001999999552965164
+            ],
+            "high": [
+              4.9072960000000005,
+              -3.3000710000000004,
+              1.722969
+            ]
+          },
+          {
+            "low": [
+              4.807296000000001,
+              -3.400071,
+              1.722969
+            ],
+            "high": [
+              4.9072960000000005,
+              -3.1000710000000002,
+              1.742969
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "43": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ]
+      }
+    }
+  ],
+  "posture_adaptation_discovery": {
+    "enabled": true,
+    "scope": "Source initial robot and door/environment stay mandatory. Old redundant endpoint and later baseline arm postures are not constrained when enabled. Same Cartesian target, full on-plan endpoint validation, actual approach/pull and all final gates remain mandatory."
+  },
+  "additional_paired_endpoint_reference": [],
+  "paired_endpoint_discovery_clearance_m": 0.065,
+  "additional_approach_reference": [
+    {
+      "diagnostic": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_127_candidate_01_approach01.json",
+      "sha256": "89101afa7a3e806651ee9bf65698501351705719f7eed8022a9bae79f20a5064",
+      "states": 330,
+      "scope": "Only robot configurations reused as conservative discovery constraints; no physical observations or acceptance claim",
+      "reference_hazard_asset": "assets/obstacle_library/property/wine_glass.usda",
+      "search_hazard_asset": "assets/obstacle_library/property/wine_glass.usda"
+    }
+  ],
+  "additional_approach_clearance_m": 0.055,
+  "search_parameters": {
+    "baseline": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+    "config": "configs/extensions/doors/c07_variants_lwx_01.json",
+    "variant": "property",
+    "output": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_pull_clearance_search136.json",
+    "pedestal": true,
+    "heights": null,
+    "min_blocking_samples": 1,
+    "mid_stride": 1,
+    "human_asset": null,
+    "refine_from": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_seed44_refine_search132.json",
+    "candidate_list": null,
+    "paired_reference": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_robot_72_candidate_00_paired01/report.json",
+    "hazard_asset": "assets/obstacle_library/property/wine_glass.usda",
+    "support_width_m": 0.1,
+    "yaws": null,
+    "xy_step_m": 0.04,
+    "screen_approach_proxies": false,
+    "support_offset_xy": [
+      0.0,
+      -0.2
+    ],
+    "approach_reference": [],
+    "paired_endpoint_reference": [],
+    "paired_endpoint_extra_clearance_m": 0.005,
+    "allow_endpoint_posture_adaptation": true,
+    "approach_command_reference": [],
+    "screen_invariant_envelopes": true,
+    "measured_contact_reference": [],
+    "command_sphere_reference": [],
+    "screen_baseline_contact_proxies": false,
+    "candidate_approach_reference": [
+      "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_127_candidate_01_approach01.json"
+    ],
+    "candidate_pull_reference": [
+      "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property132_full_pull_envelope134.json"
+    ]
+  },
+  "invariant_gripper_screen": {
+    "enabled": true,
+    "sampled_actions": [
+      93,
+      99,
+      105,
+      111,
+      117,
+      123,
+      129,
+      135,
+      141,
+      147,
+      153,
+      159,
+      165,
+      171,
+      177,
+      183,
+      189,
+      195,
+      201,
+      207,
+      213,
+      219,
+      225,
+      231,
+      237,
+      243,
+      249,
+      255,
+      261,
+      267,
+      273,
+      279,
+      285,
+      291,
+      297,
+      303,
+      309,
+      315,
+      321,
+      327,
+      333,
+      339,
+      345,
+      351,
+      357,
+      363,
+      369,
+      375,
+      381,
+      387,
+      393,
+      399,
+      405,
+      411,
+      417,
+      423,
+      429,
+      435,
+      441,
+      447,
+      453,
+      459,
+      465,
+      471,
+      477,
+      483,
+      489,
+      495,
+      501,
+      507,
+      513,
+      519,
+      525,
+      531,
+      537,
+      543,
+      549,
+      555,
+      561,
+      567,
+      573,
+      579,
+      585,
+      591,
+      597,
+      603,
+      609,
+      615,
+      621,
+      627,
+      633,
+      639,
+      645,
+      651,
+      657,
+      663,
+      669,
+      675,
+      681,
+      687,
+      693,
+      699,
+      705,
+      711,
+      717,
+      723,
+      729,
+      735,
+      741,
+      747,
+      753,
+      759,
+      765,
+      771,
+      777,
+      783,
+      789,
+      795,
+      801,
+      807,
+      813,
+      819,
+      825,
+      831,
+      837,
+      843,
+      849,
+      855,
+      861,
+      867,
+      873,
+      879,
+      885,
+      891,
+      897,
+      903,
+      909,
+      915,
+      921,
+      927,
+      933,
+      939,
+      945,
+      951,
+      957,
+      963,
+      969,
+      975,
+      981,
+      987,
+      993,
+      999,
+      1005,
+      1011,
+      1017,
+      1023,
+      1029,
+      1035,
+      1041,
+      1047,
+      1053,
+      1056
+    ],
+    "goal_sphere_links": [
+      "base_link",
+      "left_inner_finger",
+      "left_inner_knuckle",
+      "left_outer_finger",
+      "left_outer_knuckle",
+      "panda_link8",
+      "panda_panda_link7",
+      "right_inner_finger",
+      "right_inner_knuckle",
+      "right_outer_finger",
+      "right_outer_knuckle"
+    ],
+    "goal_spheres": 53,
+    "source_extra_clearance_m": 0.003,
+    "scope": "Discovery only: fixed Cartesian policy uses measured baseline articulated gripper poses. Redundant arm postures remain unconstrained. Source hand plus original margin+3mm, support+5mm and distal goal proxy checks prune impossible placements; full same-target on-plans and actual dynamics still required."
+  },
+  "planning_proxy_discovery_screen": {
+    "enabled": true,
+    "scope": "Also check initial and invariant distal goal spheres against the same per-collider padded AABBs used by cuRobo for glass/barrier, including baseline extra padding. This is a conservative discovery filter, not source-intersection evidence or final acceptance."
+  },
+  "approach_reference_geometry": "All original source robot shapes and conservative execution envelopes; necessity still uses physical source hulls/primitives only.",
+  "invariant_conservative_envelope_screen": {
+    "enabled": true,
+    "source_segment": [
+      7,
+      8,
+      0.055
+    ],
+    "sampled_actions": [
+      93,
+      99,
+      105,
+      111,
+      117,
+      123,
+      129,
+      135,
+      141,
+      147,
+      153,
+      159,
+      165,
+      171,
+      177,
+      183,
+      189,
+      195,
+      201,
+      207,
+      213,
+      219,
+      225,
+      231,
+      237,
+      243,
+      249,
+      255,
+      261,
+      267,
+      273,
+      279,
+      285,
+      291,
+      297,
+      303,
+      309,
+      315,
+      321,
+      327,
+      333,
+      339,
+      345,
+      351,
+      357,
+      363,
+      369,
+      375,
+      381,
+      387,
+      393,
+      399,
+      405,
+      411,
+      417,
+      423,
+      429,
+      435,
+      441,
+      447,
+      453,
+      459,
+      465,
+      471,
+      477,
+      483,
+      489,
+      495,
+      501,
+      507,
+      513,
+      519,
+      525,
+      531,
+      537,
+      543,
+      549,
+      555,
+      561,
+      567,
+      573,
+      579,
+      585,
+      591,
+      597,
+      603,
+      609,
+      615,
+      621,
+      627,
+      633,
+      639,
+      645,
+      651,
+      657,
+      663,
+      669,
+      675,
+      681,
+      687,
+      693,
+      699,
+      705,
+      711,
+      717,
+      723,
+      729,
+      735,
+      741,
+      747,
+      753,
+      759,
+      765,
+      771,
+      777,
+      783,
+      789,
+      795,
+      801,
+      807,
+      813,
+      819,
+      825,
+      831,
+      837,
+      843,
+      849,
+      855,
+      861,
+      867,
+      873,
+      879,
+      885,
+      891,
+      897,
+      903,
+      909,
+      915,
+      921,
+      927,
+      933,
+      939,
+      945,
+      951,
+      957,
+      963,
+      969,
+      975,
+      981,
+      987,
+      993,
+      999,
+      1005,
+      1011,
+      1017,
+      1023,
+      1029,
+      1035,
+      1041,
+      1047,
+      1053,
+      1056
+    ],
+    "initial_full_shapes": 26,
+    "distal_shape_count": 4,
+    "hazard_extra_m": 0.003,
+    "support_m": 0.005,
+    "scope": "Conservative placement discovery only: full initial robot plus fixed Cartesian distal arm/gripper/finger proxies. Not source intersection evidence or global infeasibility. Original final margins and all paired/physical acceptance gates unchanged."
+  },
+  "measured_contact_discovery_references": [],
+  "command_sphere_discovery_references": [
+    {
+      "candidate_pull": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property132_full_pull_envelope134.json",
+      "sha256": "14bfe3fe82d97e717fca66dca766778df92b52543123f603663adf4db9536560",
+      "states": [
+        {
+          "seed": 42,
+          "baseline_action_index": 243,
+          "arm_q": [
+            0.572289333249156,
+            -0.7680753232504434,
+            -0.7760869757648337,
+            -2.637485017868545,
+            0.06790012719896042,
+            3.6232003753475306,
+            2.572848650706805
+          ],
+          "calibrated_proxy": {
+            "slack_m": -0.005473227803807393,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Foot",
+            "link": "panda_panda_link5",
+            "sphere": 17
+          }
+        },
+        {
+          "seed": 43,
+          "baseline_action_index": 242,
+          "arm_q": [
+            0.46282857636003116,
+            -0.6927920943940167,
+            -0.7736735769182663,
+            -2.6314546253472706,
+            -0.2001981874794279,
+            3.6281266439543907,
+            2.8542832443549537
+          ],
+          "calibrated_proxy": {
+            "slack_m": -0.0038947834264856096,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Foot",
+            "link": "panda_panda_link5",
+            "sphere": 17
+          }
+        },
+        {
+          "seed": 44,
+          "baseline_action_index": 243,
+          "arm_q": [
+            0.5519029702368411,
+            -0.7544887905963065,
+            -0.7759527886248749,
+            -2.638059474552639,
+            0.01822723199859243,
+            3.622578728445382,
+            2.6250860303292676
+          ],
+          "calibrated_proxy": {
+            "slack_m": -0.004968356186672296,
+            "obstacle": "/World/envs/env_0/glass/Colliders/Foot",
+            "link": "panda_panda_link5",
+            "sphere": 17
+          }
+        }
+      ],
+      "scope": "One worst known CPU-proposed proxy-overlap state per seed, exactly recalibrated at the original pose and padding. Optional finite discovery constraint only; not physical/GPU evidence, not all future commands or a global infeasibility claim. Actual original safety gates remain mandatory."
+    }
+  ],
+  "baseline_contact_proxy_screen": {
+    "enabled": false,
+    "sampled_actions": [],
+    "sphere_count": 0,
+    "baseline_trajectory_sha256": "1c39b4c96cbb1525890cf455a01a62d258f9916ddd47cf083524e09cbe834925",
+    "scope": "Optional conservative placement discovery: full arm/gripper cuRobo spheres at sampled baseline contact states versus original padded per-collider hazard AABBs. Constrains baseline redundant posture as a finite filter only; not a candidate trajectory, global infeasibility or physical/GPU acceptance."
+  },
+  "door_rejections": [
+    {
+      "pos": [
+        4.877296,
+        -3.110071,
+        1.744969
+      ],
+      "yaw": 0.0,
+      "action": 984,
+      "source_check": {
+        "distance_m": 0.05993274718437807,
+        "required_m": 0.06,
+        "slack_m": -6.725281562192792e-05,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.887296,
+        -3.120071,
+        1.744969
+      ],
+      "yaw": 0.0,
+      "action": 966,
+      "source_check": {
+        "distance_m": 0.059774631870319526,
+        "required_m": 0.06,
+        "slack_m": -0.00022536812968047132,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.887296,
+        -3.110071,
+        1.744969
+      ],
+      "yaw": 0.0,
+      "action": 936,
+      "source_check": {
+        "distance_m": 0.059561165517987937,
+        "required_m": 0.06,
+        "slack_m": -0.00043883448201206127,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.897296,
+        -3.130071,
+        1.734969
+      ],
+      "yaw": 0.0,
+      "action": 954,
+      "source_check": {
+        "distance_m": 0.059639261079408236,
+        "required_m": 0.06,
+        "slack_m": -0.0003607389205917619,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.897296,
+        -3.130071,
+        1.744969
+      ],
+      "yaw": 0.0,
+      "action": 954,
+      "source_check": {
+        "distance_m": 0.0596395309743385,
+        "required_m": 0.06,
+        "slack_m": -0.0003604690256614959,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.897296,
+        -3.120071,
+        1.734969
+      ],
+      "yaw": 0.0,
+      "action": 912,
+      "source_check": {
+        "distance_m": 0.059894878759254165,
+        "required_m": 0.06,
+        "slack_m": -0.00010512124074583268,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.897296,
+        -3.120071,
+        1.744969
+      ],
+      "yaw": 0.0,
+      "action": 912,
+      "source_check": {
+        "distance_m": 0.05989511310291363,
+        "required_m": 0.06,
+        "slack_m": -0.00010488689708636895,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.897296,
+        -3.110071,
+        1.734969
+      ],
+      "yaw": 0.0,
+      "action": 894,
+      "source_check": {
+        "distance_m": 0.05991611206959364,
+        "required_m": 0.06,
+        "slack_m": -8.388793040636083e-05,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.897296,
+        -3.110071,
+        1.744969
+      ],
+      "yaw": 0.0,
+      "action": 894,
+      "source_check": {
+        "distance_m": 0.05991608826809595,
+        "required_m": 0.06,
+        "slack_m": -8.391173190405027e-05,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.9072960000000005,
+        -3.140071,
+        1.734969
+      ],
+      "yaw": 0.0,
+      "action": 954,
+      "source_check": {
+        "distance_m": 0.05989891882897023,
+        "required_m": 0.06,
+        "slack_m": -0.0001010811710297696,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.9072960000000005,
+        -3.140071,
+        1.744969
+      ],
+      "yaw": 0.0,
+      "action": 954,
+      "source_check": {
+        "distance_m": 0.05989889743603736,
+        "required_m": 0.06,
+        "slack_m": -0.00010110256396263922,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.9072960000000005,
+        -3.130071,
+        1.734969
+      ],
+      "yaw": 0.0,
+      "action": 894,
+      "source_check": {
+        "distance_m": 0.059561202373413495,
+        "required_m": 0.06,
+        "slack_m": -0.0004387976265865026,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.9072960000000005,
+        -3.130071,
+        1.744969
+      ],
+      "yaw": 0.0,
+      "action": 894,
+      "source_check": {
+        "distance_m": 0.059561466698548914,
+        "required_m": 0.06,
+        "slack_m": -0.0004385333014510842,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.9072960000000005,
+        -3.120071,
+        1.734969
+      ],
+      "yaw": 0.0,
+      "action": 876,
+      "source_check": {
+        "distance_m": 0.058582098795331265,
+        "required_m": 0.06,
+        "slack_m": -0.0014179012046687325,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.9072960000000005,
+        -3.120071,
+        1.744969
+      ],
+      "yaw": 0.0,
+      "action": 876,
+      "source_check": {
+        "distance_m": 0.05858210820006075,
+        "required_m": 0.06,
+        "slack_m": -0.0014178917999392512,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.9072960000000005,
+        -3.110071,
+        1.734969
+      ],
+      "yaw": 0.0,
+      "action": 822,
+      "source_check": {
+        "distance_m": 0.05950057926464399,
+        "required_m": 0.06,
+        "slack_m": -0.0004994207353560057,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C010",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    },
+    {
+      "pos": [
+        4.9072960000000005,
+        -3.110071,
+        1.744969
+      ],
+      "yaw": 0.0,
+      "action": 822,
+      "source_check": {
+        "distance_m": 0.0595015707261933,
+        "required_m": 0.06,
+        "slack_m": -0.0004984292738067012,
+        "valid": false,
+        "robot_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C010",
+        "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+        "intersecting": false
+      },
+      "support_check": {
+        "distance_m": Infinity,
+        "required_m": 0.002,
+        "slack_m": Infinity,
+        "valid": true
+      }
+    }
+  ],
+  "search_complete": true
+}

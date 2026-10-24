@@ -1,0 +1,59 @@
+{
+  "stage": "pull_proxy_18",
+  "baseline": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+  "search": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_pull_clearance_search136.json",
+  "search_sha256": "1694058cd0af88756e1784dcffa219420c7af1d793f8e392b5cc9a0c024091df",
+  "offline_candidate_budget": 3,
+  "physical_trial_budget": 1,
+  "small_detour_limits": {
+    "max_joint_length_ratio": 1.6,
+    "max_added_tcp_length_m": 0.15
+  },
+  "complete": false,
+  "candidates": [
+    {
+      "candidate_index": 15,
+      "config": "configs/extensions/doors/c07_property_candidate_136_15.json",
+      "paired_report": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_136_candidate_15_paired01/report.json",
+      "exit_code": 0,
+      "eligible": false,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.4144815727914206,
+      "max_added_tcp_length_m": -0.0625720290547368,
+      "contact_approach_diagnostic": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_136_candidate_15_approach01.json",
+      "contact_pull_proxy_diagnostic": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_136_candidate_15_pull_proxy01.json"
+    },
+    {
+      "candidate_index": 14,
+      "config": "configs/extensions/doors/c07_property_candidate_136_14.json",
+      "paired_report": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_136_candidate_14_paired01/report.json",
+      "exit_code": 0,
+      "eligible": false,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.4487634017014153,
+      "max_added_tcp_length_m": -0.05392968457865782,
+      "contact_approach_diagnostic": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_136_candidate_14_approach01.json",
+      "contact_pull_proxy_diagnostic": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_136_candidate_14_pull_proxy01.json"
+    },
+    {
+      "candidate_index": 18,
+      "config": "configs/extensions/doors/c07_property_candidate_136_18.json",
+      "paired_report": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_136_candidate_18_paired01/report.json",
+      "exit_code": 0,
+      "eligible": false,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.456193296149172,
+      "max_added_tcp_length_m": -0.014460253318067995,
+      "contact_approach_diagnostic": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_136_candidate_18_approach01.json",
+      "contact_pull_proxy_diagnostic": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_136_candidate_18_pull_proxy01.json"
+    }
+  ],
+  "baseline_gates": {
+    "result.json": true,
+    "task_validation_full.json": true,
+    "task_review_audit.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "error": "RuntimeError('No candidate established actual obstruction and a small safe reroute across all seeds')"
+}

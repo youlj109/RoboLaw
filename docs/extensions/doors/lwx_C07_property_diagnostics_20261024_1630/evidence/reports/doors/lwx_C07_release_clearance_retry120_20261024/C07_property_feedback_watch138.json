@@ -1,0 +1,31 @@
+{
+  "created": "2026-10-24T16:24:20.714435",
+  "scope": "Only136 candidate15 has all3 source-blocking small-detour and approach checks plus690 strictly nonoverlapping CPU pull proposals per seed. Later ideal IK fails at1.14mm residual; this remains a known unverified tail, not successful predictor evidence. One bounded actual-feedback test under unchanged per-command IK/cuRobo/FCL checks; no unsafe counterfactual replay or safety-threshold change.",
+  "optional_offline_pull_screen_omitted": true,
+  "mandatory_physical_safety_gates_unchanged": true,
+  "command": [
+    "python3",
+    "-u",
+    "scripts/extensions/doors/supervise_search_candidates_lwx.py",
+    "--label",
+    "C07",
+    "--variant",
+    "property",
+    "--attempt",
+    "138",
+    "--search",
+    "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_selected_feedback_trial138.json",
+    "--baseline",
+    "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+    "--config",
+    "configs/extensions/doors/c07_variants_lwx_01.json",
+    "--report-root",
+    "reports/doors/lwx_C07_release_clearance_retry120_20261024",
+    "--data-root",
+    "datasets/doors/lwx_C07_release_clearance_retry120_20261024",
+    "--screen-contact-approach",
+    "--after-campaign",
+    "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_136_campaign01.json"
+  ],
+  "pid": 902506
+}

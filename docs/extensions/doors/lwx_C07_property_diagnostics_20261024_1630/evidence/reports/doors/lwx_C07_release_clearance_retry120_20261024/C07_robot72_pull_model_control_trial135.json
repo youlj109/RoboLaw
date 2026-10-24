@@ -1,0 +1,29 @@
+{
+  "created": "2026-10-24T16:11:21.563156",
+  "scope": "Positive control: run the optional CPU perfect-tracking pull predictor on already accepted robot72, whose actual five gates and matched baseline are preserved. A predictor failure is not actual dynamics evidence. No physics replay, recollection, safety gate or acceptance change.",
+  "command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "-u",
+    "scripts/extensions/doors/diagnose_paired_pull_proxy_lwx.py",
+    "--baseline",
+    "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+    "--config",
+    "configs/extensions/doors/c07_robot_candidate_72_00.json",
+    "--variant",
+    "robot",
+    "--paired",
+    "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_robot_72_candidate_00_paired01/report.json",
+    "--approach",
+    "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_robot_72_candidate_00_approach01.json",
+    "--output",
+    "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_robot72_pull_model_control135.json"
+  ],
+  "pid": 901297
+}
