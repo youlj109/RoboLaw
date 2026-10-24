@@ -16,6 +16,7 @@ p.add_argument('--ik-limit-margin-rad',type=float,default=0.,help='Contract only
 p.add_argument('--release-retreat-m',type=float,default=0.,help='Checked outward TCP retreat during finger release; same policy for baseline and variants')
 p.add_argument('--release-tilt-deg',type=float,default=0.,help='Tilt outward release direction toward world up; negative moves down, same matched policy')
 p.add_argument('--opening-reserve-rad',type=float,default=0.,help='Additional measured opening before release; native predicate and all collision checks stay active')
+p.add_argument('--release-retreat-profile',choices=['linear','ease_out'],default='linear',help='Same bounded retreat endpoint; optional early progress with a slower finish, inherited by matched variants')
 p.add_argument('--release-settle-steps',type=int,default=0,help='Additional closed-gripper hold at one measured joint target before release; inherited by matched variants')
 p.add_argument('--mode', choices=['collect', 'neutral'], default='collect')
 p.add_argument('--render-warmup', action='store_true', help='Converge RTX appearance with no physics advancement before recording')
@@ -27,6 +28,7 @@ if not 0.<=a.opening_reserve_rad<=.08:p.error('--opening-reserve-rad must be in 
 if a.neutral_seconds <= 0:p.error('--neutral-seconds must be positive')
 if not 0. <= a.ik_limit_margin_rad <= .1:p.error('--ik-limit-margin-rad must be in [0, .1]')
 if not 0. <= a.release_retreat_m <= .04:p.error('--release-retreat-m must be in [0, .04]')
+if a.release_retreat_profile!='linear' and not a.release_retreat_m:p.error('Release profile needs a retreat')
 if not 0 <= a.release_settle_steps <= 90:p.error('--release-settle-steps must be in [0,90]')
 if not -60. <= a.release_tilt_deg <= 60. or (a.release_tilt_deg and not a.release_retreat_m):p.error('--release-tilt-deg needs a retreat and must be in [-60,60]')
 review=json.loads(Path(a.review_config).read_text())
@@ -54,6 +56,7 @@ with SimulationAppContext(a):
     from kitchen_safety.grasp_contacts import _numpy as contact_arr
     from kitchen_safety.extensions.doors.task_planner import TaskPlanner as CuroboPlanner
     from kitchen_safety.extensions.doors.evidence import contact_sample
+    from kitchen_safety.extensions.doors.release_pose_lwx import release_progress
     from kitchen_safety.extensions.doors.task_observation import MechanismObserver
     from pxr import UsdGeom,UsdPhysics,Usd
     environment,graph=build(a.task_id,a.variant,True,a.variant_config)
@@ -110,6 +113,7 @@ with SimulationAppContext(a):
     if a.release_tilt_deg:metadata['controller_parameters']['release_tilt_deg']=a.release_tilt_deg
     if a.opening_reserve_rad:metadata['controller_parameters']['opening_reserve_rad']=a.opening_reserve_rad
     if a.release_settle_steps:metadata['controller_parameters']['release_settle_steps']=a.release_settle_steps
+    if a.release_retreat_profile!='linear':metadata['controller_parameters']['release_retreat_profile']=a.release_retreat_profile
     metadata['controller_parameters']['pull_lead_rad']=a.pull_lead_rad
     metadata['controller_parameters']['pull_steps']=a.pull_steps
     if a.ik_limit_margin_rad>0:
@@ -337,7 +341,7 @@ with SimulationAppContext(a):
             for fraction in np.linspace(.05,1.,20):
                 if a.release_retreat_m:
                     target=release_start.copy()
-                    target[:3,3]+=release_direction*a.release_retreat_m*fraction
+                    target[:3,3]+=release_direction*a.release_retreat_m*release_progress(float(fraction),a.release_retreat_profile)
                     command=kin.ik(target,q,attempts=1)
                     delta_q=command-q;command=q+delta_q/max(1.,float(np.max(np.abs(delta_q)))/.025)
                     world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])

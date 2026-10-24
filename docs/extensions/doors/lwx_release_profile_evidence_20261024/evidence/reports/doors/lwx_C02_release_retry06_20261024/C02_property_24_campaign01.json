@@ -1,0 +1,53 @@
+{
+  "stage": "paired_16",
+  "baseline": "datasets/doors/lwx_C02_release_retry06_20261024/C02_base_attempt01",
+  "search": "reports/doors/lwx_C02_release_retry06_20261024/C02_property_tangent_search24.json",
+  "search_sha256": "d27c523ca64f6969c05408f515dface9b39dd2b19203cfc068b59587fd070ee2",
+  "offline_candidate_budget": 3,
+  "physical_trial_budget": 1,
+  "small_detour_limits": {
+    "max_joint_length_ratio": 1.6,
+    "max_added_tcp_length_m": 0.15
+  },
+  "complete": false,
+  "candidates": [
+    {
+      "candidate_index": 19,
+      "config": "configs/extensions/doors/c02_property_candidate_24_19.json",
+      "paired_report": "reports/doors/lwx_C02_release_retry06_20261024/C02_property_24_candidate_19_paired01/report.json",
+      "exit_code": 0,
+      "eligible": false,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.274137574675315,
+      "max_added_tcp_length_m": 0.18536518514250383
+    },
+    {
+      "candidate_index": 4,
+      "config": "configs/extensions/doors/c02_property_candidate_24_04.json",
+      "paired_report": "reports/doors/lwx_C02_release_retry06_20261024/C02_property_24_candidate_04_paired01/report.json",
+      "exit_code": 0,
+      "eligible": false,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.1303258543746333,
+      "max_added_tcp_length_m": 0.18716893273181112
+    },
+    {
+      "candidate_index": 16,
+      "config": "configs/extensions/doors/c02_property_candidate_24_16.json",
+      "paired_report": "reports/doors/lwx_C02_release_retry06_20261024/C02_property_24_candidate_16_paired01/report.json",
+      "exit_code": 0,
+      "eligible": false,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.1540407120761944,
+      "max_added_tcp_length_m": 0.18183814171905238
+    }
+  ],
+  "baseline_gates": {
+    "result.json": true,
+    "task_validation_full.json": true,
+    "task_review_audit.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "error": "RuntimeError('No candidate established actual obstruction and a small safe reroute across all seeds')"
+}

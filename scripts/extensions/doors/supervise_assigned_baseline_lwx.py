@@ -1,7 +1,7 @@
 """Host: start one matched baseline/control after its own source geometry screen."""
 import argparse,json,time,subprocess
 from pathlib import Path
-p=argparse.ArgumentParser();p.add_argument('label',choices=['C01','C02','C03','C04','C05','C06','C07','C08']);p.add_argument('--screen-labels',default='01');p.add_argument('--attempt',default='01');p.add_argument('--run-label',default='01');p.add_argument('--config',type=Path);p.add_argument('--report-root',type=Path);p.add_argument('--data-root',type=Path);p.add_argument('--review-config',type=Path);p.add_argument('--release-retreat-m',type=float,default=0.);p.add_argument('--release-tilt-deg',type=float,default=0.);p.add_argument('--pull-steps',type=int,default=600);p.add_argument('--planner-hazard-extra-padding-m',type=float,default=0.);p.add_argument('--opening-reserve-rad',type=float,default=0.);p.add_argument('--release-settle-steps',type=int,default=0);a=p.parse_args();label=a.label
+p=argparse.ArgumentParser();p.add_argument('label',choices=['C01','C02','C03','C04','C05','C06','C07','C08']);p.add_argument('--screen-labels',default='01');p.add_argument('--attempt',default='01');p.add_argument('--run-label',default='01');p.add_argument('--config',type=Path);p.add_argument('--report-root',type=Path);p.add_argument('--data-root',type=Path);p.add_argument('--review-config',type=Path);p.add_argument('--release-retreat-m',type=float,default=0.);p.add_argument('--release-tilt-deg',type=float,default=0.);p.add_argument('--pull-steps',type=int,default=600);p.add_argument('--planner-hazard-extra-padding-m',type=float,default=0.);p.add_argument('--opening-reserve-rad',type=float,default=0.);p.add_argument('--release-settle-steps',type=int,default=0);p.add_argument('--release-retreat-profile',choices=['linear','ease_out'],default='linear');a=p.parse_args();label=a.label
 if not 0.<=a.opening_reserve_rad<=.08:p.error('Opening reserve outside [0,.08]rad')
 if not 0<=a.release_settle_steps<=90:p.error('Release settle steps outside [0,90]')
 if not 0.<=a.planner_hazard_extra_padding_m<=.03:p.error('Planner hazard padding outside [0,.03]m')
@@ -38,6 +38,7 @@ try:
   if a.planner_hazard_extra_padding_m:cmd+=['--planner-hazard-extra-padding-m',str(a.planner_hazard_extra_padding_m)]
   if a.opening_reserve_rad:cmd+=['--opening-reserve-rad',str(a.opening_reserve_rad)]
   if a.release_settle_steps:cmd+=['--release-settle-steps',str(a.release_settle_steps)]
+  if a.release_retreat_profile!='linear':cmd+=['--release-retreat-profile',a.release_retreat_profile]
   if a.release_retreat_m:cmd+=['--release-retreat-m',str(a.release_retreat_m)]
   if a.release_tilt_deg:cmd+=['--release-tilt-deg',str(a.release_tilt_deg)]
   if mode=='neutral':
