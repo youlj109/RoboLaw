@@ -5,7 +5,7 @@ ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)
 script_name=${1:?Usage: run_host.sh SCRIPT.py [arguments...]}
 shift
 case "$script_name" in
-  collect.py|inspect_runtime.py|audit_self_collision.py|check_lift_plan.py|probe_overview.py|probe_transfer_gpu.py|probe_pregrasp_gpu.py|paired_planning.py|neutral_hold.py) ;;
+  collect.py|inspect_runtime.py|audit_self_collision.py|check_lift_plan.py|probe_overview.py|probe_transfer_gpu.py|probe_pregrasp_gpu.py|paired_planning.py|neutral_hold.py|scan_shelf_extract.py) ;;
   *) printf 'Unsupported lightwheel GPU entry: %s\n' "$script_name" >&2; exit 2 ;;
 esac
 PY=${PY:-/root/autodl-tmp/conda_envs/robolaw_data/bin/python}
