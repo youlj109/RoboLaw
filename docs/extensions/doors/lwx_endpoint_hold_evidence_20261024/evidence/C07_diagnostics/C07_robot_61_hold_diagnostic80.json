@@ -1,0 +1,156 @@
+{
+  "scope": "CPU conservative geometry at recorded door/gripper states only. Fixed-target samples are hypothetical commands, not future dynamics, GPU self collision, a safe replay or acceptance. A recorded rejected substep may already violate safety at interpolation start.",
+  "episode": "datasets/doors/lwx_C07_release_position_retry74_20261024/C07_robot_61",
+  "trajectory_sha256": "327fed95c4d7575bd41ea943555a728fae51ac6f0836fdad7a786b5e4d473428",
+  "result_sha256": "74e53a6adeadc29702b47f3f5c5165b8f2099bc902694c6c826c095f4de19e2c",
+  "implementation_sha256": "c5a8fb22f7b9e3e7ee6ad7967a5d6ae52a4823cc58509718b5d100506bf6079b",
+  "physics_replay": false,
+  "unsafe_path_executed": false,
+  "states": [
+    {
+      "state": "last_completed_release",
+      "door_q": -0.6986083984375,
+      "remaining_target_joint_error_rad": 0.017915012641087524,
+      "remaining_target_tcp_distance_m": 0.0010829510860990359,
+      "modes": {
+        "feedback": {
+          "command": [
+            -0.4242326021194458,
+            -1.533728837966919,
+            0.5829733610153198,
+            -2.640970230102539,
+            2.7760300636291504,
+            3.7476089000701904,
+            0.898090124130249
+          ],
+          "joint_step_rad": 0.0,
+          "interpolation_samples": 2,
+          "interpolation_all_valid": true,
+          "minimum": {
+            "valid": true,
+            "distance_m": 0.0025347183531059182,
+            "required_m": 0.002,
+            "slack_m": 0.0005347183531059182,
+            "robot_part": "finger",
+            "obstacle": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+            "intersecting": false
+          },
+          "command_endpoint": {
+            "valid": true,
+            "distance_m": 0.0025347183531059182,
+            "required_m": 0.002,
+            "slack_m": 0.0005347183531059182,
+            "robot_part": "finger",
+            "obstacle": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+            "intersecting": false
+          }
+        },
+        "fixed_final_target": {
+          "command": [
+            -0.43253084164135663,
+            -1.5404123395664366,
+            0.5803649731040038,
+            -2.6400887406685207,
+            2.793943435333319,
+            3.747499959733031,
+            0.8801751114891615
+          ],
+          "joint_step_rad": 0.017915012641087524,
+          "interpolation_samples": 5,
+          "interpolation_all_valid": true,
+          "minimum": {
+            "valid": true,
+            "distance_m": 0.0025347183531059182,
+            "required_m": 0.002,
+            "slack_m": 0.0005347183531059182,
+            "robot_part": "finger",
+            "obstacle": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+            "intersecting": false
+          },
+          "command_endpoint": {
+            "valid": true,
+            "distance_m": 0.003162908059900816,
+            "required_m": 0.002,
+            "slack_m": 0.001162908059900816,
+            "robot_part": "finger",
+            "obstacle": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+            "intersecting": false
+          }
+        }
+      }
+    },
+    {
+      "state": "rejected_hold_substep",
+      "door_q": -0.6999015808105469,
+      "remaining_target_joint_error_rad": 0.017914476199284546,
+      "remaining_target_tcp_distance_m": 0.0011307858388685896,
+      "modes": {
+        "feedback": {
+          "command": [
+            -0.4244568943977356,
+            -1.5339640378952026,
+            0.582956075668335,
+            -2.6409285068511963,
+            2.776038408279419,
+            3.7476089000701904,
+            0.898089587688446
+          ],
+          "joint_step_rad": 0.0,
+          "interpolation_samples": 2,
+          "interpolation_all_valid": false,
+          "minimum": {
+            "valid": false,
+            "distance_m": 0.00182643562848854,
+            "required_m": 0.002,
+            "slack_m": -0.00017356437151146002,
+            "robot_part": "finger",
+            "obstacle": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+            "intersecting": false
+          },
+          "command_endpoint": {
+            "valid": false,
+            "distance_m": 0.00182643562848854,
+            "required_m": 0.002,
+            "slack_m": -0.00017356437151146002,
+            "robot_part": "finger",
+            "obstacle": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+            "intersecting": false
+          }
+        },
+        "fixed_final_target": {
+          "command": [
+            -0.43253084164135663,
+            -1.5404123395664366,
+            0.5803649731040038,
+            -2.6400887406685207,
+            2.793943435333319,
+            3.747499959733031,
+            0.8801751114891615
+          ],
+          "joint_step_rad": 0.017914476199284546,
+          "interpolation_samples": 5,
+          "interpolation_all_valid": false,
+          "minimum": {
+            "valid": false,
+            "distance_m": 0.00182643562848854,
+            "required_m": 0.002,
+            "slack_m": -0.00017356437151146002,
+            "robot_part": "finger",
+            "obstacle": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+            "intersecting": false
+          },
+          "command_endpoint": {
+            "valid": true,
+            "distance_m": 0.0024146199383959484,
+            "required_m": 0.002,
+            "slack_m": 0.00041461993839594837,
+            "robot_part": "finger",
+            "obstacle": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003",
+            "intersecting": false
+          }
+        }
+      }
+    }
+  ],
+  "complete": true
+}

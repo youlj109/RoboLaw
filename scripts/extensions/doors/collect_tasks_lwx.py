@@ -6,6 +6,7 @@ from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppCont
 p=get_isaaclab_arena_cli_parser();p.add_argument('--variant',choices=['base','human','property','robot'],default='base');p.add_argument('--output',required=True);p.add_argument('--max-steps',type=int,default=500);p.add_argument('--handle-offset-y',type=float,default=0.);p.add_argument('--handle-offset-z',type=float,default=.12);p.add_argument('--variant-config',default='configs/extensions/doors/open_fridge_variants.json');p.add_argument('--adaptive-handle-height',action='store_true')
 p.add_argument('--validated-pregrasp', action='store_true')
 p.add_argument('--pregrasp-shortcut-policy',choices=['none','bounded_chords_v1'],default='none')
+p.add_argument('--pregrasp-settle-steps',type=int,default=0,help='Hold the same planned pregrasp endpoint with bounded increments before approach; inherited by matched variants')
 p.add_argument('--planner-hazard-extra-padding-m',type=float,default=0.,help='Additional conservative cuRobo hazard-box padding, same matched policy; independent thresholds unchanged')
 p.add_argument('--task-id',required=True)
 p.add_argument('--grasp-roll-deg',type=float,default=0.)
@@ -18,7 +19,7 @@ p.add_argument('--release-retreat-m',type=float,default=0.,help='Checked outward
 p.add_argument('--release-tilt-deg',type=float,default=0.,help='Tilt outward release direction toward world up; negative moves down, same matched policy')
 p.add_argument('--opening-reserve-rad',type=float,default=0.,help='Additional measured opening before release; native predicate and all collision checks stay active')
 p.add_argument('--release-retreat-profile',choices=['linear','ease_out'],default='linear',help='Same bounded retreat endpoint; optional early progress with a slower finish, inherited by matched variants')
-p.add_argument('--release-command-policy',choices=['full_pose','bounded_position_v1'],default='full_pose')
+p.add_argument('--release-command-policy',choices=['full_pose','bounded_position_v1','bounded_position_hold_v2'],default='full_pose')
 p.add_argument('--release-settle-steps',type=int,default=0,help='Additional closed-gripper hold at one measured joint target before release; inherited by matched variants')
 p.add_argument('--mode', choices=['collect', 'neutral'], default='collect')
 p.add_argument('--render-warmup', action='store_true', help='Converge RTX appearance with no physics advancement before recording')
@@ -28,6 +29,7 @@ a=p.parse_args();a.enable_cameras=True
 if not 0.<=a.planner_hazard_extra_padding_m<=.03:p.error('--planner-hazard-extra-padding-m must be in [0,.03]')
 if not 0.<=a.opening_reserve_rad<=.08:p.error('--opening-reserve-rad must be in [0,.08]')
 if a.release_command_policy!='full_pose' and not a.release_retreat_m:p.error('Bounded position release needs a nonzero retreat')
+if not 0<=a.pregrasp_settle_steps<=60:p.error('--pregrasp-settle-steps must be in [0,60]')
 if a.neutral_seconds <= 0:p.error('--neutral-seconds must be positive')
 if not 0. <= a.ik_limit_margin_rad <= .1:p.error('--ik-limit-margin-rad must be in [0, .1]')
 if not 0. <= a.release_retreat_m <= .04:p.error('--release-retreat-m must be in [0, .04]')
@@ -110,6 +112,7 @@ with SimulationAppContext(a):
     metadata['door_geometry']=geometry
     metadata['door_motion_reference_joint_rad']=reference_joint_position
     metadata['controller_parameters']['grasp_roll_deg']=a.grasp_roll_deg
+    if a.pregrasp_settle_steps:metadata['controller_parameters']['pregrasp_settle_steps']=a.pregrasp_settle_steps
     if a.pregrasp_shortcut_policy!='none':metadata['controller_parameters']['pregrasp_shortcut_policy']=a.pregrasp_shortcut_policy
     if a.planner_hazard_extra_padding_m:metadata['controller_parameters']['planner_hazard_extra_padding_m']=a.planner_hazard_extra_padding_m
     if a.grasp_pitch_deg:metadata['controller_parameters']['grasp_pitch_deg']=a.grasp_pitch_deg
@@ -153,6 +156,9 @@ with SimulationAppContext(a):
     if a.release_command_policy!='full_pose':
         release_source=Path('kitchen_safety/extensions/doors/release_position_lwx.py')
         metadata['implementation_sha256'][str(release_source)]=hashlib.sha256(release_source.read_bytes()).hexdigest()
+    if a.release_command_policy=='bounded_position_hold_v2':
+        hold_source=Path('kitchen_safety/extensions/doors/release_hold_lwx.py')
+        metadata['implementation_sha256'][str(hold_source)]=hashlib.sha256(hold_source.read_bytes()).hexdigest()
     release_commands=[]
     snapshot_root=out/'source_snapshot'
     snapshot_files={Path(__file__),Path(a.variant_config),Path(a.review_config),TASK}
@@ -289,6 +295,12 @@ with SimulationAppContext(a):
             if plan is None:raise RuntimeError('All unchanged-task handle-height candidates rejected: '+json.dumps(candidate_failures))
             plans.append(plan['metadata'])
             for command in plan['positions']:step(command,0.)
+            pregrasp_endpoint=np.asarray(plan['positions'][-1]).copy()
+            for _ in range(a.pregrasp_settle_steps):
+                delta_q=pregrasp_endpoint-q;settle_command=q+delta_q/max(1.,float(np.max(np.abs(delta_q)))/.025)
+                sync(update_planner=True);planner._prepare_path_query(handles,0.,phase)
+                if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(settle_command[None])).all()):raise RuntimeError('cuRobo rejected pregrasp endpoint settling')
+                step(settle_command,0.)
             phase='approach_handle';world.allow_handle_contact=True
             for alpha in np.linspace(0,1,50)[1:]:
                 target[:3,3]=handle0-approach*.13*(1-alpha)
@@ -354,7 +366,7 @@ with SimulationAppContext(a):
                 if a.release_retreat_m:
                     target=release_start.copy()
                     target[:3,3]+=release_direction*a.release_retreat_m*release_progress(float(fraction),a.release_retreat_profile)
-                    if a.release_command_policy=='bounded_position_v1':
+                    if a.release_command_policy in ('bounded_position_v1','bounded_position_hold_v2'):
                         from kitchen_safety.extensions.doors.release_position_lwx import bounded_position_command
                         command=bounded_position_command(kin,q,target[:3,3],release_start[:3,:3])
                         release_commands.append({'action_index':len(rows),'target_pose':target.tolist(),'command':command.tolist(),'command_pose':kin.fk(command).tolist()})
@@ -366,7 +378,17 @@ with SimulationAppContext(a):
                     step(command,0.)
                 else:step(q,0.)
             phase='released_hold'
-            for _ in range(5):step(q,0.)
+            released_hold_target=command.copy() if a.release_command_policy=='bounded_position_hold_v2' else None
+            for _ in range(5):
+                if released_hold_target is None:step(q,0.)
+                else:
+                    from kitchen_safety.extensions.doors.release_hold_lwx import bounded_hold_command
+                    hold_command=bounded_hold_command(q,released_hold_target)
+                    world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])
+                    sync(update_planner=True);planner._prepare_path_query(handles,0.,phase)
+                    if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(hold_command[None])).all()):raise RuntimeError('cuRobo rejected final release-target hold')
+                    release_commands.append({'action_index':len(rows),'phase':phase,'fixed_target':released_hold_target.tolist(),'command':hold_command.tolist()})
+                    step(hold_command,0.)
             if not bool(predicate[1](e)[0]):raise RuntimeError('Original door-open predicate is false after release')
     except Exception as exc:
         failure=f'{type(exc).__name__}: {exc}';traceback.print_exc()

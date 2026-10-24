@@ -24,12 +24,15 @@ def main():
     p.add_argument('--variant', choices=['property', 'robot'], default='property')
     p.add_argument('--stride', type=int, default=4)
     p.add_argument('--hazard-part-centers', action='store_true', help='Also propose contact near each original hazard collider, including narrow bottle necks')
+    p.add_argument('--hazard-part-suffixes', help='Comma-separated exact collider leaf names for discovery anchors only; all collision geometry remains checked')
     p.add_argument('--yaws', default='0,90,180,270')
     p.add_argument('--output', type=Path, required=True)
     a = p.parse_args()
     evidence = a.output.with_suffix('.provenance.json')
     if a.output.exists() or evidence.exists() or a.stride < 1:
         p.error('Output exists or invalid stride')
+    if a.hazard_part_suffixes and not a.hazard_part_centers:
+        p.error('--hazard-part-suffixes requires --hazard-part-centers')
     metadata = json.loads((a.baseline / 'metadata.json').read_text())
     rows = json.loads((a.baseline / 'trajectory.json').read_text())
     config = json.loads(a.config.read_text())
@@ -47,7 +50,14 @@ def main():
     low = np.min([lo for _, _, lo, _ in hazard], axis=0)
     high = np.max([hi for _, _, _, hi in hazard], axis=0)
     local_center = (low + high) / 2
-    local_centers = [(lo+hi)/2 for _, _, lo, hi in hazard] if a.hazard_part_centers else [local_center]
+    anchors = hazard
+    if a.hazard_part_suffixes:
+        names = set(a.hazard_part_suffixes.split(','))
+        anchors = [shape for shape in hazard if shape[0].rsplit('/', 1)[-1] in names]
+        found = {shape[0].rsplit('/', 1)[-1] for shape in anchors}
+        if names != found:
+            p.error('Unknown collider anchor names: ' + ','.join(sorted(names-found)))
+    local_centers = [(lo+hi)/2 for _, _, lo, hi in anchors] if a.hazard_part_centers else [local_center]
     pre = [i for i, row in enumerate(rows) if row['phase'] == 'pregrasp'][5:-5:a.stride]
     if not pre:
         raise ValueError('No measured interior pregrasp samples')
@@ -76,6 +86,7 @@ def main():
                   implementation_sha256=sha(__file__), template=str(template), template_sha256=sha(template),
                   output=str(a.output), output_sha256=sha(a.output),
                   sampled_actions=pre, source_parts=sorted(parts), candidates=len(values),
+                  hazard_anchor_names=[shape[0] for shape in anchors] if a.hazard_part_centers else ['whole_asset_bounds_center'],
                   parameters={k: str(v) if isinstance(v, Path) else v for k, v in vars(a).items()},
                   physics_replay=False, unsafe_path_executed=False)
     evidence.write_text(json.dumps(report, indent=2) + '\n')

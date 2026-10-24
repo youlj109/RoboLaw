@@ -1,0 +1,118 @@
+{
+  "scope": "Offline discovery proposals centered near measured physical source hull AABBs. No collision, safety, support, feasibility or acceptance claim.",
+  "baseline": "datasets/doors/lwx_C07_release_position_retry74_20261024/C07_base_01",
+  "baseline_sha256": "0e53a9dd8916f94e15520f0fde00659467ec3b17883a0850f42aefd310500dbb",
+  "config": "configs/extensions/doors/c07_variants_lwx_01.json",
+  "config_sha256": "c02f4c68c5e79e13583fd82f622cf14c131751ec1cbcacf3752e6a74afb1321c",
+  "asset": "assets/obstacle_library/property/tall_glass.usda",
+  "asset_sha256": "5a2e96568e1f016b9437331b792e35e04b4ede5f11f94420d778eb6ea86cb3dc",
+  "implementation_sha256": "552a7bec202247d55ef6a9e3d28c83dbf0a5ea036d4847884f6ee39f8f0e2f29",
+  "template": "configs/extensions/doors/front_variants_lwx_final.json",
+  "template_sha256": "e674055e97c4abe933888b6bdf68121b36c84292a49cf01d5683e980941f530a",
+  "output": "configs/extensions/doors/c07_property_source_anchor_grid79.json",
+  "output_sha256": "c2e8017cbb690e25f7f28932976ffefd378fc6f5a438727a6111701f7fa50b23",
+  "sampled_actions": [
+    14,
+    20,
+    26,
+    32,
+    38,
+    44,
+    50,
+    56,
+    62,
+    68,
+    74,
+    80,
+    86
+  ],
+  "source_parts": [
+    [
+      0,
+      "robot_hull"
+    ],
+    [
+      1,
+      "robot_hull"
+    ],
+    [
+      2,
+      "robot_hull"
+    ],
+    [
+      3,
+      "robot_hull"
+    ],
+    [
+      4,
+      "robot_hull"
+    ],
+    [
+      5,
+      "robot_hull"
+    ],
+    [
+      6,
+      "robot_hull"
+    ],
+    [
+      7,
+      "robot_hull"
+    ],
+    [
+      8,
+      "gripper/base_link"
+    ],
+    [
+      9,
+      "gripper/left_outer_knuckle"
+    ],
+    [
+      10,
+      "gripper/left_outer_finger"
+    ],
+    [
+      11,
+      "gripper/left_inner_finger"
+    ],
+    [
+      12,
+      "gripper/left_inner_knuckle"
+    ],
+    [
+      13,
+      "gripper/right_outer_knuckle"
+    ],
+    [
+      14,
+      "gripper/right_outer_finger"
+    ],
+    [
+      15,
+      "gripper/right_inner_finger"
+    ],
+    [
+      16,
+      "gripper/right_inner_knuckle"
+    ]
+  ],
+  "candidates": 47025,
+  "hazard_anchor_names": [
+    "/World/envs/env_0/glass/Colliders/Base",
+    "/World/envs/env_0/glass/Colliders/Wall00_00",
+    "/World/envs/env_0/glass/Colliders/Wall01_00"
+  ],
+  "parameters": {
+    "baseline": "datasets/doors/lwx_C07_release_position_retry74_20261024/C07_base_01",
+    "config": "configs/extensions/doors/c07_variants_lwx_01.json",
+    "asset": "assets/obstacle_library/property/tall_glass.usda",
+    "variant": "property",
+    "stride": 6,
+    "hazard_part_centers": true,
+    "hazard_part_suffixes": "Base,Wall00_00,Wall01_00",
+    "yaws": "0",
+    "output": "configs/extensions/doors/c07_property_source_anchor_grid79.json"
+  },
+  "physics_replay": false,
+  "unsafe_path_executed": false
+}

@@ -46,6 +46,7 @@ try:
   if cp.get('release_command_policy','full_pose')!='full_pose':args+=['--release-command-policy',cp['release_command_policy']]
   if cp.get('release_settle_steps'):args+=['--release-settle-steps',str(cp['release_settle_steps'])]
   if cp.get('pregrasp_shortcut_policy','none')!='none':args+=['--pregrasp-shortcut-policy',cp['pregrasp_shortcut_policy']]
+  if cp.get('pregrasp_settle_steps'):args+=['--pregrasp-settle-steps',str(cp['pregrasp_settle_steps'])]
   if cp.get('release_retreat_profile'):args+=['--release-retreat-profile',cp['release_retreat_profile']]
   if mode=='neutral':args+=['--neutral-seconds',str(max(40.,json.loads((ep/'result.json').read_text())['frames']*m['dt']+2.))]
   run(mode,'collect_tasks_lwx.py',args,gpu=True)

@@ -1,0 +1,52 @@
+{
+  "stage": "avoidance",
+  "baseline": "datasets/doors/lwx_C02_shortcut_retry26_20261024/C02_base_01",
+  "search": "reports/doors/lwx_C02_shortcut_retry26_20261024/C02_property_shortcut_search26.json",
+  "search_sha256": "c0730553130fb0dcc4cd0fb68823c79f4dd838fed1f54ff98e6ce950e70e6abc",
+  "offline_candidate_budget": 3,
+  "physical_trial_budget": 1,
+  "small_detour_limits": {
+    "max_joint_length_ratio": 1.6,
+    "max_added_tcp_length_m": 0.15
+  },
+  "complete": false,
+  "candidates": [
+    {
+      "candidate_index": 0,
+      "config": "configs/extensions/doors/c02_property_candidate_26_00.json",
+      "paired_report": "reports/doors/lwx_C02_shortcut_retry26_20261024/C02_property_26_candidate_00_paired01/report.json",
+      "exit_code": 0,
+      "eligible": true,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.2098035612647116,
+      "max_added_tcp_length_m": 0.12018622350819835,
+      "contact_approach_diagnostic": "reports/doors/lwx_C02_shortcut_retry26_20261024/C02_property_26_candidate_00_approach01.json"
+    }
+  ],
+  "baseline_gates": {
+    "result.json": true,
+    "task_validation_full.json": true,
+    "task_review_audit.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "selected_candidate": {
+    "candidate_index": 0,
+    "config": "configs/extensions/doors/c02_property_candidate_26_00.json",
+    "paired_report": "reports/doors/lwx_C02_shortcut_retry26_20261024/C02_property_26_candidate_00_paired01/report.json",
+    "exit_code": 0,
+    "eligible": true,
+    "actual_source_intersections_all_seeds": true,
+    "max_joint_length_ratio": 1.2098035612647116,
+    "max_added_tcp_length_m": 0.12018622350819835,
+    "contact_approach_diagnostic": "reports/doors/lwx_C02_shortcut_retry26_20261024/C02_property_26_candidate_00_approach01.json"
+  },
+  "variant_gates": {
+    "result.json": true,
+    "task_validation_full.json": true,
+    "task_review_audit.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "error": "RuntimeError('avoidance exited 1')"
+}

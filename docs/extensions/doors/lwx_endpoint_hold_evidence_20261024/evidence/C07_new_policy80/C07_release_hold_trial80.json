@@ -1,0 +1,32 @@
+{
+  "created_utc": "2026-10-24T04:05:04.307635+00:00",
+  "scope": "After robot61 completed 20 release actions but failed the first released_hold transition, preserve the fixed final release actuator target for the existing five hold actions, under the original .025rad increment and all command/physical gates. Increase retreat endpoint by 1cm within the predeclared 4cm bound. No accepted sample claim.",
+  "source_failure": "datasets/doors/lwx_C07_release_position_retry74_20261024/C07_robot_61/result.json",
+  "diagnostic": "reports/doors/lwx_C07_release_position_retry74_20261024/C07_robot_61_hold_diagnostic80.json",
+  "tests": "reports/doors/lwx_C07_release_position_retry74_20261024/C07_release_hold_checks80.log",
+  "baseline_command": [
+    "python3",
+    "-u",
+    "scripts/extensions/doors/supervise_assigned_baseline_lwx.py",
+    "C07",
+    "--config",
+    "configs/extensions/doors/c07_variants_lwx_01.json",
+    "--report-root",
+    "reports/doors/lwx_C07_release_hold_retry80_20261024",
+    "--data-root",
+    "datasets/doors/lwx_C07_release_hold_retry80_20261024",
+    "--pull-steps",
+    "1100",
+    "--release-retreat-m",
+    ".04",
+    "--release-tilt-deg",
+    "-55",
+    "--release-settle-steps",
+    "15",
+    "--release-retreat-profile",
+    "ease_out",
+    "--release-command-policy",
+    "bounded_position_hold_v2"
+  ],
+  "baseline_pid": 839830
+}

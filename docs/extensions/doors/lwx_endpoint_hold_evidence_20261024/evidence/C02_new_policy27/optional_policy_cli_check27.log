@@ -1,0 +1,224 @@
+usage: supervise_assigned_baseline_lwx.py [-h] [--screen-labels SCREEN_LABELS]
+                                          [--attempt ATTEMPT]
+                                          [--run-label RUN_LABEL]
+                                          [--config CONFIG]
+                                          [--report-root REPORT_ROOT]
+                                          [--data-root DATA_ROOT]
+                                          [--review-config REVIEW_CONFIG]
+                                          [--release-retreat-m RELEASE_RETREAT_M]
+                                          [--release-tilt-deg RELEASE_TILT_DEG]
+                                          [--pull-steps PULL_STEPS]
+                                          [--planner-hazard-extra-padding-m PLANNER_HAZARD_EXTRA_PADDING_M]
+                                          [--opening-reserve-rad OPENING_RESERVE_RAD]
+                                          [--release-settle-steps RELEASE_SETTLE_STEPS]
+                                          [--release-retreat-profile {linear,ease_out}]
+                                          [--pregrasp-settle-steps PREGRASP_SETTLE_STEPS]
+                                          [--pregrasp-shortcut-policy {none,bounded_chords_v1}]
+                                          [--release-command-policy {full_pose,bounded_position_v1,bounded_position_hold_v2}]
+                                          {C01,C02,C03,C04,C05,C06,C07,C08}
+
+positional arguments:
+  {C01,C02,C03,C04,C05,C06,C07,C08}
+
+options:
+  -h, --help            show this help message and exit
+  --screen-labels SCREEN_LABELS
+  --attempt ATTEMPT
+  --run-label RUN_LABEL
+  --config CONFIG
+  --report-root REPORT_ROOT
+  --data-root DATA_ROOT
+  --review-config REVIEW_CONFIG
+  --release-retreat-m RELEASE_RETREAT_M
+  --release-tilt-deg RELEASE_TILT_DEG
+  --pull-steps PULL_STEPS
+  --planner-hazard-extra-padding-m PLANNER_HAZARD_EXTRA_PADDING_M
+  --opening-reserve-rad OPENING_RESERVE_RAD
+  --release-settle-steps RELEASE_SETTLE_STEPS
+  --release-retreat-profile {linear,ease_out}
+  --pregrasp-settle-steps PREGRASP_SETTLE_STEPS
+  --pregrasp-shortcut-policy {none,bounded_chords_v1}
+  --release-command-policy {full_pose,bounded_position_v1,bounded_position_hold_v2}
+usage: collect_tasks_lwx.py [-h] [--livestream {0,1,2}] [--xr]
+                            [--device DEVICE] [--visualizer VISUALIZER]
+                            [--verbose] [--info] [--experience EXPERIENCE]
+                            [--deterministic] [--kit_args KIT_ARGS]
+                            [--anim_recording_enabled]
+                            [--anim_recording_start_time ANIM_RECORDING_START_TIME]
+                            [--anim_recording_stop_time ANIM_RECORDING_STOP_TIME]
+                            [--max_visible_envs MAX_VISIBLE_ENVS]
+                            [--disable_fabric] [--seed SEED]
+                            [--num_envs NUM_ENVS] [--env_spacing ENV_SPACING]
+                            [--mimic] [--distributed] [--enable_cameras]
+                            [--no_solve_relations]
+                            [--placement_seed PLACEMENT_SEED]
+                            [--presets {physx,newton}]
+                            [--resolve_on_reset | --no-resolve_on_reset]
+                            [--list_variations]
+                            [--external_environment_class_path EXTERNAL_ENVIRONMENT_CLASS_PATH]
+                            [--env_spec ENV_SPEC]
+                            [--variant {base,human,property,robot}] --output
+                            OUTPUT [--max-steps MAX_STEPS]
+                            [--handle-offset-y HANDLE_OFFSET_Y]
+                            [--handle-offset-z HANDLE_OFFSET_Z]
+                            [--variant-config VARIANT_CONFIG]
+                            [--adaptive-handle-height] [--validated-pregrasp]
+                            [--pregrasp-shortcut-policy {none,bounded_chords_v1}]
+                            [--pregrasp-settle-steps PREGRASP_SETTLE_STEPS]
+                            [--planner-hazard-extra-padding-m PLANNER_HAZARD_EXTRA_PADDING_M]
+                            --task-id TASK_ID
+                            [--grasp-roll-deg GRASP_ROLL_DEG]
+                            [--grasp-pitch-deg GRASP_PITCH_DEG]
+                            [--handle-normal-offset HANDLE_NORMAL_OFFSET]
+                            [--pull-lead-rad PULL_LEAD_RAD]
+                            [--pull-steps PULL_STEPS]
+                            [--ik-limit-margin-rad IK_LIMIT_MARGIN_RAD]
+                            [--release-retreat-m RELEASE_RETREAT_M]
+                            [--release-tilt-deg RELEASE_TILT_DEG]
+                            [--opening-reserve-rad OPENING_RESERVE_RAD]
+                            [--release-retreat-profile {linear,ease_out}]
+                            [--release-command-policy {full_pose,bounded_position_v1,bounded_position_hold_v2}]
+                            [--release-settle-steps RELEASE_SETTLE_STEPS]
+                            [--mode {collect,neutral}] [--render-warmup]
+                            [--neutral-seconds NEUTRAL_SECONDS]
+                            [--review-config REVIEW_CONFIG]
+
+IsaacLab Arena CLI parser.
+
+options:
+  -h, --help            show this help message and exit
+  --variant {base,human,property,robot}
+  --output OUTPUT
+  --max-steps MAX_STEPS
+  --handle-offset-y HANDLE_OFFSET_Y
+  --handle-offset-z HANDLE_OFFSET_Z
+  --variant-config VARIANT_CONFIG
+  --adaptive-handle-height
+  --validated-pregrasp
+  --pregrasp-shortcut-policy {none,bounded_chords_v1}
+  --pregrasp-settle-steps PREGRASP_SETTLE_STEPS
+                        Hold the same planned pregrasp endpoint with bounded
+                        increments before approach; inherited by matched
+                        variants
+  --planner-hazard-extra-padding-m PLANNER_HAZARD_EXTRA_PADDING_M
+                        Additional conservative cuRobo hazard-box padding,
+                        same matched policy; independent thresholds unchanged
+  --task-id TASK_ID
+  --grasp-roll-deg GRASP_ROLL_DEG
+  --grasp-pitch-deg GRASP_PITCH_DEG
+  --handle-normal-offset HANDLE_NORMAL_OFFSET
+  --pull-lead-rad PULL_LEAD_RAD
+  --pull-steps PULL_STEPS
+  --ik-limit-margin-rad IK_LIMIT_MARGIN_RAD
+                        Contract only local command IK bounds; source robot
+                        limits remain unchanged
+  --release-retreat-m RELEASE_RETREAT_M
+                        Checked outward TCP retreat during finger release;
+                        same policy for baseline and variants
+  --release-tilt-deg RELEASE_TILT_DEG
+                        Tilt outward release direction toward world up;
+                        negative moves down, same matched policy
+  --opening-reserve-rad OPENING_RESERVE_RAD
+                        Additional measured opening before release; native
+                        predicate and all collision checks stay active
+  --release-retreat-profile {linear,ease_out}
+                        Same bounded retreat endpoint; optional early progress
+                        with a slower finish, inherited by matched variants
+  --release-command-policy {full_pose,bounded_position_v1,bounded_position_hold_v2}
+  --release-settle-steps RELEASE_SETTLE_STEPS
+                        Additional closed-gripper hold at one measured joint
+                        target before release; inherited by matched variants
+  --mode {collect,neutral}
+  --render-warmup       Converge RTX appearance with no physics advancement
+                        before recording
+  --neutral-seconds NEUTRAL_SECONDS
+  --review-config REVIEW_CONFIG
+
+app_launcher arguments:
+  Arguments for the AppLauncher. For more details, please check the
+  documentation.
+
+  --livestream {0,1,2}  Force enable livestreaming. Mapping corresponds to
+                        that for the `LIVESTREAM` environment variable.
+  --xr                  Enable XR mode for VR/AR applications.
+  --device DEVICE       The device to run the simulation on. Can be "cpu",
+                        "cuda", "cuda:N", where N is the device ID
+  --visualizer VISUALIZER, --viz VISUALIZER
+                        Visualizer backends to enable as CSV (e.g.,
+                        kit,newton,rerun,viser).
+  --verbose             Enable verbose-level log output from the
+                        SimulationApp.
+  --info                Enable info-level log output from the SimulationApp.
+  --experience EXPERIENCE
+                        The experience file to load when launching the
+                        SimulationApp. If an empty string is provided, the
+                        experience file is determined from the resolved
+                        visualizer and XR settings. If a relative path is
+                        provided, it is resolved relative to the `apps` folder
+                        in Isaac Sim and Isaac Lab (in that order).
+  --deterministic       Request reproducible rendering (see AppLauncher docs).
+  --kit_args KIT_ARGS   Command line arguments for Omniverse Kit as a string
+                        separated by a space delimiter. Example usage:
+                        --kit_args "--ext-folder=/path/to/ext1 --ext-
+                        folder=/path/to/ext2". A single Kit argument works in
+                        both forms: --kit_args "--ext-folder=/path/to/ext1" or
+                        --kit_args=--ext-folder=/path/to/ext1.
+  --anim_recording_enabled
+                        Enable recording time-sampled USD animations from
+                        IsaacLab PhysX simulations.
+  --anim_recording_start_time ANIM_RECORDING_START_TIME
+                        Set time that animation recording begins playing. If
+                        not set, the recording will start from the beginning.
+  --anim_recording_stop_time ANIM_RECORDING_STOP_TIME
+                        Set time that animation recording stops playing. If
+                        the process is shutdown before the stop time is
+                        exceeded, then the animation is not recorded.
+  --max_visible_envs MAX_VISIBLE_ENVS
+                        When set, caps the nums of envs shown in the launched
+                        visualizers.
+
+Isaac Lab Arguments:
+  Arguments specific to Isaac Lab framework
+
+  --disable_fabric      Disable fabric and use USD I/O operations.
+  --seed SEED           Optional seed for the random number generator.
+  --num_envs NUM_ENVS   Number of environments to simulate.
+  --env_spacing ENV_SPACING
+                        Spacing between environments.
+  --mimic               Enable mimic environment.
+  --distributed         Run distributed (one process per GPU). Use with
+                        torchrun; AppLauncher uses LOCAL_RANK for device.
+
+Isaac Lab Arena Arguments:
+  Arguments specific to Isaac Lab Arena framework
+
+  --enable_cameras      Add the environment's camera sensors and observations.
+  --no_solve_relations  Disable solving spatial relations in the environment.
+  --placement_seed PLACEMENT_SEED
+                        Seed for live solved object placement. Ignored when
+                        recorded placement is replayed.
+  --presets {physx,newton}
+                        Arena physics backend preset: 'physx' or 'newton'.
+                        When not set, each environment uses its own default.
+  --resolve_on_reset, --no-resolve_on_reset
+                        Re-place objects from the pool on each reset (default:
+                        True). Use --no-resolve_on_reset to keep the same
+                        layout.
+  --list_variations     Print Hydra-configurable variations for the selected
+                        environment and exit.
+
+External Environments Arguments:
+  Arguments specific to external environments
+
+  --external_environment_class_path EXTERNAL_ENVIRONMENT_CLASS_PATH
+                        Name of the external environment to run
+
+Environment Graph Spec Arguments:
+  Arguments specific to environment graph spec
+
+  --env_spec ENV_SPEC   Path to an environment graph spec YAML. When set, the
+                        environment is built from the graph spec instead of a
+                        registered example-environment name; the env-name
+                        subcommand then becomes optional. Any override flags
+                        the YAML declares under `cli_override_specs` are added
+                        to the parser dynamically.

@@ -1,0 +1,46 @@
+{
+  "stage": "collect",
+  "baseline": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+  "search": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_lower_handle_search71.json",
+  "search_sha256": "62203d0d998a627c2dc53b7041797d370d2019a4f7a8d0bea704eae09e201162",
+  "offline_candidate_budget": 3,
+  "physical_trial_budget": 1,
+  "small_detour_limits": {
+    "max_joint_length_ratio": 1.6,
+    "max_added_tcp_length_m": 0.15
+  },
+  "complete": false,
+  "candidates": [
+    {
+      "candidate_index": 12,
+      "config": "configs/extensions/doors/c01_property_candidate_71_12.json",
+      "paired_report": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_71_candidate_12_paired01/report.json",
+      "exit_code": 0,
+      "eligible": true,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.0278173945723013,
+      "max_added_tcp_length_m": -0.03237562203389582,
+      "contact_approach_diagnostic": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_71_candidate_12_approach01.json"
+    }
+  ],
+  "baseline_gates": {
+    "result.json": true,
+    "task_validation_full.json": true,
+    "task_review_audit.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "selection_rule": "First eligible candidate with <=.05m added TCP length and <=1.15 joint ratio; otherwise minimum added length among at most three eligible candidates",
+  "selected_candidate": {
+    "candidate_index": 12,
+    "config": "configs/extensions/doors/c01_property_candidate_71_12.json",
+    "paired_report": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_71_candidate_12_paired01/report.json",
+    "exit_code": 0,
+    "eligible": true,
+    "actual_source_intersections_all_seeds": true,
+    "max_joint_length_ratio": 1.0278173945723013,
+    "max_added_tcp_length_m": -0.03237562203389582,
+    "contact_approach_diagnostic": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_71_candidate_12_approach01.json"
+  },
+  "error": "RuntimeError('collect exited 1')"
+}
