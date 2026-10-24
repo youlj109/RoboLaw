@@ -89,6 +89,55 @@ def physical_joint_bindings(inventory):
     return joints,evidence
 
 
+def fixed_assembly_distance_groups(contract, inventory, bindings):
+    """Prove internal, unbreakable rigid assemblies from authored joint data.
+
+    Only manipulated bodies inside the same declared asset qualify. A hinge,
+    slider, disabled/breakable joint or missing property never authorizes this
+    omission. Normal articulated mating surfaces need their own exact binding.
+    """
+    import math
+    from kitchen_safety.task_contract import digest
+    physical_joints,_=physical_joint_bindings(inventory)
+    actors={e['actor'] for e in inventory['colliders'] if e.get('actor')}
+    groups=[]
+    def unbreakable(value):
+        try:number=float(value)
+        except (ValueError,TypeError):return False
+        return math.isinf(number) and number>0
+    for aid in sorted(contract['roles']['articulated_target_ids']):
+        root=bindings['asset_roots'].get(aid)
+        members=set(bindings.get('manipulated_actor_paths',{}).get(aid,[]))&actors
+        members={a for a in members if root and under(a,root)}
+        edges=defaultdict(set);proof=[]
+        for joint in physical_joints:
+            attrs=joint.get('attributes',{})
+            if (joint.get('enabled') is not True or joint['type']!='PhysicsFixedJoint'
+                    or not root or not under(joint['path'],root)
+                    or len(joint['body0'])!=1 or len(joint['body1'])!=1
+                    or not (attrs.get('physics:collisionEnabled') is False or attrs.get('physics:collisionEnabled')=='False')
+                    or not all(unbreakable(attrs.get(k)) for k in ('physics:breakForce','physics:breakTorque'))):
+                continue
+            a,b=joint['body0'][0],joint['body1'][0]
+            if a==b or not {a,b}<=members:continue
+            edges[a].add(b);edges[b].add(a);proof.append(joint)
+        unseen=set(edges)
+        while unseen:
+            found={min(unseen)};pending=list(found)
+            while pending:
+                for child in edges[pending.pop()]:
+                    if child not in found:found.add(child);pending.append(child)
+            unseen-=found
+            joints=sorted((j for j in proof if j['body0'][0] in found and j['body1'][0] in found),key=lambda j:j['path'])
+            group=dict(policy='robolaw-unbreakable-fixed-assembly-1',asset_id=aid,asset_root=root,
+                actor_paths=sorted(found),source_joints=joints,inventory_sha256=digest(inventory),
+                collider_paths_by_actor={a:sorted(e['path'] for e in inventory['colliders'] if e.get('actor')==a) for a in sorted(found)},
+                scope='internal PT distances only; HS, external PT, force/impulse and RS retained',
+                assumption='Frozen enabled unbreakable fixed joints remain unchanged during the episode')
+            group['group_sha256']=digest(group);groups.append(group)
+    return groups
+
+
 def derive_bindings(contract, inventory, asset_roots, robot_root, *, human_roots=(),
                     expected_humans=False, grip_actor_paths=(), fixed_hs_authorization=False,
                     backend_fixed_actor_paths=()):
@@ -151,7 +200,7 @@ def derive_bindings(contract, inventory, asset_roots, robot_root, *, human_roots
             unresolved.append(dict(kind='support_is_whole_background',target_id=target));continue
         selected=[p for p in colliders if under(p,root)]
         if selected:surfaces[target]=sorted(selected)
-    return dict(robot_root=robot_root,asset_roots=dict(asset_roots),human_roots=list(human_roots),
+    bindings=dict(robot_root=robot_root,asset_roots=dict(asset_roots),human_roots=list(human_roots),
         expected_humans=bool(expected_humans),human_inventory_verified=inventory['complete'],
         grip_actor_paths=list(grip_actor_paths),fixed_robot_actor_paths=sorted(fixed),
         fixed_world_actor_paths=sorted(all_fixed),joint_actor_resolution=joint_owner_evidence,
@@ -162,6 +211,8 @@ def derive_bindings(contract, inventory, asset_roots, robot_root, *, human_roots
         manipulated_actor_paths={k:sorted(set(v)) for k,v in manipulated.items()},
         surface_bindings=surfaces,stop_models={},unresolved=unresolved,
         fixed_root_limitation='Never infer fixed actors from body names or one stationary pose')
+    bindings['fixed_assembly_distance_groups']=fixed_assembly_distance_groups(contract,inventory,bindings)
+    return bindings
 
 
 def robot_self_pairs(inventory, robot_root, *, explicit_structural_pairs=()):

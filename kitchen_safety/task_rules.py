@@ -36,7 +36,7 @@ class TaskRules:
                 spec.update(grip_distance_exempt=True,allowed_grip_link_paths=[r['source']],allowed_grip_phases=self.phase_exempt)
             if not r['query_distance']:
                 settings['distance_omissions']=dict(version='arena-pt-distance-omission-1',scope='distance_only_all_phases',
-                    authorization='task semantic destination/support relation; user workflow policy',
+                    authorization='task-bound distance-only policy: '+r.get('reason','explicit frozen scope'),
                     selection_report_sha256=scope['scope_sha256'],relations=[dict(actor=actor,object_id=obj)])
             self.pair_profiles[rid]=dict(pt_hs_inspired=settings)
         self.profile_hash=digest(dict(source_profile_sha256=self.source_hash,task_sha256=digest(contract),

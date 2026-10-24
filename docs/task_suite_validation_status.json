@@ -2995,5 +2995,154 @@
     ],
     "distance_policy_changed": false,
     "remaining": "Validate exact fixed-assembly omission evidence and preserve external door relations; hinge/frame structural surfaces and stopping assumptions remain separate"
+  },
+  "fixed_assembly_distance_policy_20261024": {
+    "version": "robolaw-unbreakable-fixed-assembly-1",
+    "implemented": true,
+    "distance_only": true,
+    "thresholds_changed": false,
+    "binding_checks": {
+      "articulation_tasks": 11,
+      "invalid_binding_cases": 15,
+      "hs_routing_case": 1,
+      "all_task_inventory_comparisons": 32,
+      "exact_historical_scope_rebuilds": 20,
+      "changed_distance_relations": 2,
+      "scope": "Comparison of scope compilers over frozen inventories; not new motion/variant verification"
+    },
+    "qualified_task": "lightwheel_open_cabinet_u_shaped_with_island_farmhouse2",
+    "omitted_relations": [
+      "PT:a5fe6589012dd964fd73e5b8",
+      "PT:d6dd010a37d91d84845666a4"
+    ],
+    "fresh_probe": {
+      "passed": true,
+      "actions": 6,
+      "physics_steps": 24,
+      "frames": [
+        {
+          "action_index": 0,
+          "queried_distance_relations": 5794,
+          "omitted_internal_relations": 2,
+          "rs_pairs": 119,
+          "risk_levels": {
+            "HS": "L0",
+            "PT": "L0",
+            "RS": "L0",
+            "IR": null,
+            "overall": "L0"
+          }
+        },
+        {
+          "action_index": 1,
+          "queried_distance_relations": 5783,
+          "omitted_internal_relations": 2,
+          "rs_pairs": 119,
+          "risk_levels": {
+            "HS": "L0",
+            "PT": "L0",
+            "RS": "L0",
+            "IR": null,
+            "overall": "L0"
+          }
+        },
+        {
+          "action_index": 2,
+          "queried_distance_relations": 5794,
+          "omitted_internal_relations": 2,
+          "rs_pairs": 119,
+          "risk_levels": {
+            "HS": "L0",
+            "PT": "L0",
+            "RS": "L0",
+            "IR": null,
+            "overall": "L0"
+          }
+        },
+        {
+          "action_index": 3,
+          "queried_distance_relations": 5794,
+          "omitted_internal_relations": 2,
+          "rs_pairs": 119,
+          "risk_levels": {
+            "HS": "L0",
+            "PT": "L0",
+            "RS": "L0",
+            "IR": null,
+            "overall": "L0"
+          }
+        },
+        {
+          "action_index": 4,
+          "queried_distance_relations": 5783,
+          "omitted_internal_relations": 2,
+          "rs_pairs": 119,
+          "risk_levels": {
+            "HS": "L0",
+            "PT": "L0",
+            "RS": "L0",
+            "IR": null,
+            "overall": "L0"
+          }
+        },
+        {
+          "action_index": 5,
+          "queried_distance_relations": 5794,
+          "omitted_internal_relations": 2,
+          "rs_pairs": 119,
+          "risk_levels": {
+            "HS": "L0",
+            "PT": "L0",
+            "RS": "L0",
+            "IR": null,
+            "overall": "L0"
+          }
+        },
+        {
+          "action_index": 6,
+          "queried_distance_relations": 5794,
+          "omitted_internal_relations": 2,
+          "rs_pairs": 119,
+          "risk_levels": {
+            "HS": "L0",
+            "PT": "L0",
+            "RS": "L0",
+            "IR": null,
+            "overall": "L0"
+          }
+        }
+      ],
+      "source_raw_sha256": "7edc9b10ce1e78ca38d07a96ef121152465d513b6fa884e73a909090dfe7266a",
+      "stage_results": {
+        "capture": {
+          "exit_code": 0,
+          "timeout": false,
+          "wall_s": 24.736832029011566
+        },
+        "audit": {
+          "exit_code": 0,
+          "timeout": false,
+          "wall_s": 0.16466373798903078
+        },
+        "evaluate": {
+          "exit_code": 0,
+          "timeout": false,
+          "wall_s": 8.536913652991643
+        },
+        "verify": {
+          "exit_code": 0,
+          "timeout": false,
+          "wall_s": 1.3184854770079255
+        }
+      },
+      "full_task_trajectory": false
+    },
+    "source_sha256": {
+      "task_binding.py": "a3fa3fa5215140e099e0ed9269f4c901337cc6d16441034dc1a3e5b343a997e7",
+      "task_scope.py": "dfe4804d5ae1c4a68649d608504d6752dd81fc6f09d8631d27c987bb4264b326",
+      "task_rules.py": "fd8e4f89b43d256d3f3ac924427af8cb7bc2ea45c621b5a1ee5a7b19bfe2e479"
+    },
+    "pending": "Non-fixed articulated mating surfaces require independent exact binding; no inherited robot stopping guarantee",
+    "evidence_root": "/media/user/新加卷/RoboLaw-runtime/task_suite_expansion_20261023/native_fixed_assembly_probe_20261024"
   }
 }

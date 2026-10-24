@@ -143,6 +143,20 @@ def bind_scope(contract, inventory, bindings):
                 matches=[r for r in roots.values() if under(e['path'],r)]
                 key=max(matches,key=len) if matches else e['path']
         targets[key].append(e)
+    # Verify derived evidence against this inventory, never accept an authored
+    # allowlist claiming arbitrary bodies are a rigid assembly.
+    assembly_pairs={}
+    if 'fixed_assembly_distance_groups' in bindings:
+        from kitchen_safety.task_binding import fixed_assembly_distance_groups
+        groups=fixed_assembly_distance_groups(contract,inventory,bindings)
+        if groups!=bindings['fixed_assembly_distance_groups']:
+            raise ValueError('Fixed assembly omission differs from frozen joint/collider evidence')
+        for group in groups:
+            for left in group['actor_paths']:
+                for right in group['actor_paths']:
+                    if left!=right:
+                        if (left,right) in assembly_pairs:raise ValueError('Ambiguous fixed assembly binding')
+                        assembly_pairs[(left,right)]=group
     all_payload_colliders = {p for source in sources if roles[source] == 'payload' for p in sources[source]}
     for source, colliders in sorted(sources.items()):
         for target_id, target_entries in sorted(targets.items()):
@@ -181,6 +195,18 @@ def bind_scope(contract, inventory, bindings):
                     force_and_impulse_retained=True,evidence=bindings.get('fixed_graph_evidence')))
                 relation.update(query_distance=False,persist_distance=False,grade_distance=False,
                     reason='both endpoints are physically world-fixed; no relative approach')
+            assembly=assembly_pairs.get((source,target_id))
+            if assembly is not None:
+                if (roles[source]!='manipulated_link' or any(e.get('actor')!=target_id for e in target_entries)
+                        or set(colliders)!=set(assembly['collider_paths_by_actor'][source])
+                        or set(target_paths)!=set(assembly['collider_paths_by_actor'][target_id])):
+                    raise ValueError('Fixed assembly relation does not exactly match its physical bodies')
+                omitted.append(dict(relation_id=rid,category='PT',source=source,target=target_id,
+                    source_colliders=sorted(colliders),target_colliders=sorted(target_paths),
+                    query_distance=False,persist_distance=False,force_and_impulse_retained=True,
+                    reason='internal unbreakable fixed assembly',assembly_group_sha256=assembly['group_sha256']))
+                relation.update(query_distance=False,persist_distance=False,grade_distance=False,
+                    reason='internal unbreakable fixed assembly',assembly_group_sha256=assembly['group_sha256'])
             # Evidence still supports grasp state. Exempt only the declared grip
             # parts in the normal phase; other robot links retain PT distances.
             if source in grips and set(target_paths)<=all_payload_colliders:
