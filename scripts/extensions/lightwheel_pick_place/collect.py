@@ -53,7 +53,7 @@ SOURCE=ROOT/'third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_benc
 PICK=TASK_SPEC.pick_object
 DEST=TASK_SPEC.destination_object
 RIGID=TASK_SPEC.rigid_objects
-SOURCE_SURFACE_PATH='/World/envs/env_0/kitchen'+TASK_SPEC.source_surface_suffix
+SOURCE_SURFACE_PATH=(TASK_SPEC.source_surface_abs or ('/World/envs/env_0/kitchen'+TASK_SPEC.source_surface_suffix))
 seed=42 if args.seed is None else args.seed
 placement_seed=seed if args.placement_seed is None else args.placement_seed
 out=Path(args.output);out.mkdir(parents=True,exist_ok=False)
@@ -194,7 +194,7 @@ with SimulationAppContext(args):
         world.source_resting_xy=initial['lime'][:2].copy()
         world.source_support_mode='native_rest_until_detached';world.source_detached=False
         world.source_resting_root=initial['lime'][:3].copy()
-        world.source_surface_top=max(v[3][2] for v in world.objects if v[0]==SOURCE_SURFACE_PATH)
+        world.source_surface_top=max((v[3][2] for v in world.objects if v[0]==SOURCE_SURFACE_PATH or v[0].startswith(SOURCE_SURFACE_PATH.rstrip('/')+'/') or v[0].endswith(TASK_SPEC.source_surface_suffix)), default=float(initial['lime'][2]))
         initial_source_contacts=source_contacts.sample()
         if not initial_source_contacts['count']:raise RuntimeError('No measured original pick-object/source-surface support contacts')
         result['source_support_contact_model']={'source_resting_min_z_m':world.source_resting_min_z,

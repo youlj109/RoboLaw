@@ -25,6 +25,8 @@ class TaskSpec:
     destination_object: str
     rigid_objects: tuple[str, ...]
     source_surface_suffix: str
+    # If set, absolute env prim used for PhysX source-support contacts (e.g. plate under bananas).
+    source_surface_abs: str | None = None
     # Pregrasp TCP offset from pick geometry center (metres, world-aligned axes).
     pregrasp_offset_m: tuple[float, float, float]
     # Placement release offsets (metres) above destination root.
@@ -88,7 +90,9 @@ TASKS: dict[str, TaskSpec] = {
         rigid_objects=("banana_1", "banana_2", "wooden_bowl", "plate", "apple", "orange"),
         # Bananas rest on plate on island; allow island counter as source support.
         # Horizontal-dominant offset disables use_pregrasp_phase so --grasp-local-approach applies.
-        source_surface_suffix="/island_island_group/top_geometry_right",
+        # Bananas rest on plate (not island); island contacts are zero.
+        source_surface_suffix="/plate",
+        source_surface_abs="/World/envs/env_0/plate",
         pregrasp_offset_m=(-0.13, 0.07, 0.02),
         transfer_z_m=0.18,
         lower_z_m=0.135,
