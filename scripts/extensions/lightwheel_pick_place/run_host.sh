@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Host (no-Docker) bounded GPU/Kit entry for lime scripts.
+# Host (no-Docker) bounded GPU/Kit entry for lightwheel pick-place scripts.
 set -euo pipefail
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)
 script_name=${1:?Usage: run_host.sh SCRIPT.py [arguments...]}
 shift
 case "$script_name" in
   collect.py|inspect_runtime.py|audit_self_collision.py|check_lift_plan.py|probe_overview.py|probe_transfer_gpu.py|probe_pregrasp_gpu.py|paired_planning.py|neutral_hold.py) ;;
-  *) printf 'Unsupported lime GPU entry: %s\n' "$script_name" >&2; exit 2 ;;
+  *) printf 'Unsupported lightwheel GPU entry: %s\n' "$script_name" >&2; exit 2 ;;
 esac
 PY=${PY:-/root/autodl-tmp/conda_envs/robolaw_data/bin/python}
 mkdir -p "$ROOT/reports/skill_trials"
@@ -40,6 +40,6 @@ fi
 # Avoid plugin-path poisoning for USD crate opens in child processes.
 unset PXR_PLUGINPATH_NAME USD_PLUGIN_PATH || true
 cd "$ROOT"
-exec flock "$LOCK" timeout "${LIME_EPISODE_TIMEOUT_S:-1800}" \
+exec flock "$LOCK" timeout "${EPISODE_TIMEOUT_S:-${LIME_EPISODE_TIMEOUT_S:-1800}}" \
   env -u ISAACSIM_ROOT_PATH -u ISAACLAB_PATH -u OMNI_SERVER -u PXR_PLUGINPATH_NAME \
   "$PY" "scripts/extensions/lightwheel_pick_place/$script_name" "$@"

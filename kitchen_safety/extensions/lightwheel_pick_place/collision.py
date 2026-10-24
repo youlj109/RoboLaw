@@ -51,7 +51,10 @@ class CollisionWorld:
                            'left_inner_finger_knuckle_joint', 'right_inner_finger_knuckle_joint')
 
     def __init__(self, stage, kin, clearances=None, execution_clearances=None,
-                 default_clearance=.002, *, env_root=None, env_origin=None):
+                 default_clearance=.002, *, env_root=None, env_origin=None,
+                 pick_object='lime', destination_object='wooden_bowl',
+                 source_surface_suffix='/counter_main_main_group/top_geometry_right',
+                 movable_objects=None):
         import fcl
         from pxr import Usd, UsdGeom, UsdPhysics
         self.object_size=np.array([.075506996,.061337937,.060035701]);self.object_center=np.array([-.000032013,.002372919,.029799371]);self.fcl=fcl;self.kin=kin;self.objects=[];self.attachment=None;self.meshes={}
@@ -75,6 +78,12 @@ class CollisionWorld:
             raise ValueError(f'Collision environment root does not exist: {env_root}')
         self.env_root = env_root
         self.env_origin = origin.copy()
+        self.pick_object = pick_object
+        self.destination_object = destination_object
+        self.source_surface_suffix = source_surface_suffix
+        if movable_objects is None:
+            movable_objects = (destination_object, 'broccoli', 'sweet_potato', 'red_bell_pepper', 'glass')
+        self.movable_objects = tuple(movable_objects)
         if min([self.default_clearance,*self.clearances.values(),*self.execution_clearances.values()])<0:
             raise ValueError('Clearances must be non-negative')
         cache=UsdGeom.XformCache()
@@ -138,20 +147,26 @@ class CollisionWorld:
         # The round fruit's rotated bounding box can cut deeply through its
         # support and neighbours. Retain the source collider vertices and use
         # their conservative convex hull, transformed by the measured root.
-        lime_root=(env_root or '/World/envs/env_0')+'/lime'
-        reference=self._root_reference_transforms[lime_root]
+        pick_root=(env_root or '/World/envs/env_0')+'/'+self.pick_object
+        if pick_root not in self._root_reference_transforms:
+            raise RuntimeError(f'Pick object root missing from collision world: {pick_root}')
+        reference=self._root_reference_transforms[pick_root]
         inverse=np.linalg.inv(reference)
         parts=[v@inverse[:3,:3].T+inverse[:3,3] for n,(v,f) in self.meshes.items()
-               if self._matches(n,'lime')]
-        if not parts:raise RuntimeError('Original lime collision vertices are required')
+               if self._matches(n,self.pick_object)]
+        if not parts:raise RuntimeError(f'Original {self.pick_object} collision vertices are required')
         self.lime_model,self.lime_vertices=self._convex(np.concatenate(parts))
+        # Geometry center/size from actual pick-object hull (not lime-only constants).
+        lo,hi=self.lime_vertices.min(0),self.lime_vertices.max(0)
+        self.object_center=(lo+hi)/2
+        self.object_size=hi-lo
         self.allowed_phase='initial'
         # Spawn scale is already baked into world vertices. PhysX root poses
         # contain rigid transforms only (sweet_potato uses source scale 1.5).
         # Preserve that geometry, and remove scale only from the reference
         # transform used to compute measured rigid pose deltas.
         self.baked_root_scales={}
-        for object_name in ('wooden_bowl','broccoli','sweet_potato','red_bell_pepper','glass'):
+        for object_name in self.movable_objects:
             key=(env_root or '/World/envs/env_0')+'/'+object_name
             if key not in self._root_reference_transforms:continue
             reference=self._root_reference_transforms[key].copy()
@@ -405,7 +420,7 @@ class CollisionWorld:
         """Candidates with a conservative AABB lower bound on required clearance."""
         # The target container remains an obstacle for every robot link.
         # Only the fruit/container support pair is intended during placement.
-        ignore=tuple(x for x in ignore if x!='wooden_bowl')
+        ignore=tuple(x for x in ignore if x!=self.destination_object)
         pairs=[]
         # Placements change low/high and FCL transforms, never this selection.
         # Include live rule values and ordered names so mutable margins, masks,
@@ -454,8 +469,8 @@ class CollisionWorld:
             label,shape,lo,hi=shapes[shape_index]
             name,obj,ob_lo,ob_hi=self.objects[indices[k]]
             if label=='carried_lime':
-                if self._matches(name,'wooden_bowl') and self.allowed_phase in ('lower','release','retreat','settle_final'):continue
-                source_surface=name.endswith('/counter_main_main_group/top_geometry_right')
+                if self._matches(name,self.destination_object) and self.allowed_phase in ('lower','release','retreat','settle_final'):continue
+                source_surface=name.endswith(self.source_surface_suffix)
                 if source_surface and getattr(self,'source_support_mode',None)=='native_rest_until_detached':
                     from .source_support import support_allowed
                     actual_root=self._object_pose(q,object_pose)[:3,3]

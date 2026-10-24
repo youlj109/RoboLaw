@@ -1,9 +1,11 @@
-"""One genuine lime-in-wooden-bowl rollout with cuRobo and original Arena success."""
+"""One genuine Lightwheel pick-and-place rollout with cuRobo and original Arena success."""
 import hashlib,json,time,traceback
 from pathlib import Path
 from isaaclab_arena.cli.isaaclab_arena_cli import get_isaaclab_arena_cli_parser
 from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppContext
 parser=get_isaaclab_arena_cli_parser()
+parser.add_argument('--task',default='kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian',
+    help='Arena env id; default B01 lime. Use lemon shelf→plate id for B02.')
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
 parser.add_argument('--fixed-layout',help='Use the same saved original reset poses, including for the obstacle-free baseline')
@@ -14,9 +16,18 @@ parser.add_argument('--overview-camera',action='store_true',help='Supplementary 
 parser.add_argument('--grasp-yaw',type=float,default=0)
 parser.add_argument('--grasp-tilt',type=float,default=35)
 parser.add_argument('--grasp-height-offset',type=float,default=.015,
-    help='TCP height above measured lime geometry center; metres')
+    help='TCP height above measured pick-object geometry center; metres')
 args=parser.parse_args();args.enable_cameras=True
 if args.num_envs!=1:raise ValueError('This verified entry runs one environment; parallel collection is not implemented')
+from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
+TASK_SPEC=resolve_task(args.task)
+TASK_ID=TASK_SPEC.task_id
+ROOT=Path(__file__).resolve().parents[3]
+SOURCE=ROOT/'third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench'/(TASK_ID+'.yaml')
+PICK=TASK_SPEC.pick_object
+DEST=TASK_SPEC.destination_object
+RIGID=TASK_SPEC.rigid_objects
+SOURCE_SURFACE_PATH='/World/envs/env_0/kitchen'+TASK_SPEC.source_surface_suffix
 seed=42 if args.seed is None else args.seed
 placement_seed=seed if args.placement_seed is None else args.placement_seed
 out=Path(args.output);out.mkdir(parents=True,exist_ok=False)
@@ -27,15 +38,15 @@ with SimulationAppContext(args):
     from isaaclab.sensors import ContactSensorCfg
     from isaaclab_arena.environments.arena_env_builder import ArenaEnvBuilder
     from isaaclab_arena.environments.arena_env_builder_cfg import ArenaEnvBuilderCfg
-    from kitchen_safety.extensions.lightwheel_pick_place.environment import build_environment,TASK_ID,SOURCE
+    from kitchen_safety.extensions.lightwheel_pick_place.environment import build_environment
     from kitchen_safety.extensions.lightwheel_pick_place.collision import CollisionWorld
     from kitchen_safety.extensions.lightwheel_pick_place.planner import LimePlanner
     from kitchen_safety.extensions.lightwheel_pick_place.contacts import LimeGraspContacts,LimeSourceContacts
-    from kitchen_safety.extensions.lightwheel_pick_place.source_support import SOURCE_SURFACE,JITTER_M,MAX_XY_M,DETACH_CLEARANCE_M,update_detached
+    from kitchen_safety.extensions.lightwheel_pick_place.source_support import JITTER_M,MAX_XY_M,DETACH_CLEARANCE_M,update_detached
     from kitchen_safety.planning import DroidKinematics,transform
     from kitchen_safety.dataset import CameraWriter,numpy as arr,decode_video
     torch.set_num_threads(2)
-    envdef,assets=build_environment(enable_cameras=True,variant=args.variant,
+    envdef,assets=build_environment(enable_cameras=True,variant=args.variant,task_id=TASK_ID,
         fixed_layout_path=args.fixed_layout,variant_config_path=args.variant_config)
     builder=ArenaEnvBuilder(envdef,ArenaEnvBuilderCfg(num_envs=1,seed=seed,device='cpu',
         presets='physx',solve_relations=True,resolve_on_reset=False,placement_seed=placement_seed))
@@ -54,21 +65,23 @@ with SimulationAppContext(args):
     bi=robot.body_names.index('base_link')
     def snapshot():
         quat=arr(robot.data.body_quat_w)[0,bi]
-        return {'q':arr(robot.data.joint_pos)[0], 'dq':arr(robot.data.joint_vel)[0],
+        row={'q':arr(robot.data.joint_pos)[0], 'dq':arr(robot.data.joint_vel)[0],
           'tcp':arr(robot.data.body_pos_w)[0,bi]+Rotation.from_quat(quat).apply([.131,0,0]),
-          'tcp_quat_xyzw':quat,'lime':arr(scene['lime'].data.root_state_w)[0],
-          'wooden_bowl':arr(scene['wooden_bowl'].data.root_state_w)[0],
+          'tcp_quat_xyzw':quat,
           'robot_body_pose_w':np.concatenate([arr(robot.data.body_pos_w)[0],arr(robot.data.body_quat_w)[0]],axis=-1),
           'robot_contact_forces':arr(scene['robot_contacts'].data.net_forces_w)[0],
-          **{name:arr(scene[name].data.root_state_w)[0] for name in ('broccoli','sweet_potato','red_bell_pepper')},
+          **{name:arr(scene[name].data.root_state_w)[0] for name in RIGID},
           **({'hazard_pose':arr(scene['glass'].data.root_state_w)[0,:7]} if args.variant=='property' else {})}
+        # Keep legacy lime/wooden_bowl keys as aliases for pick/destination.
+        row['lime']=row[PICK]; row['wooden_bowl']=row[DEST]
+        return row
     def capture_reset(env_ids):
         if len(env_ids):
             terminal['state']=snapshot()
             terminal['terms']={n:bool(arr(e.termination_manager.get_term(n))[0]) for n in e.termination_manager.active_terms}
     e._reset_idx=capture_reset
     def ignores():
-        return ('lime',)+(('wooden_bowl',) if phase in ('lower','release','retreat','settle_final') else ())
+        return (PICK,)+((DEST,) if phase in ('lower','release','retreat','settle_final') else ())
     def geometry(state):
         return dict(mode='execution',gripper_q={n:state['q'][robot.joint_names.index(n)] for n in finger_names})
     physics_checks=0
@@ -80,7 +93,8 @@ with SimulationAppContext(args):
         s=snapshot();physics_checks+=1
         world.allowed_phase=phase
         if args.variant=='property':world.set_obstacle_pose('glass',s['hazard_pose'])
-        for name in ('wooden_bowl','broccoli','sweet_potato','red_bell_pepper'):
+        for name in RIGID:
+            if name == PICK: continue
             world.set_obstacle_pose(name,s[name][:7])
         source_contact=source_contacts.sample()
         actual_lime_points=world.lime_vertices@Rotation.from_quat(s['lime'][3:7]).as_matrix().T+s['lime'][:3]
@@ -99,12 +113,13 @@ with SimulationAppContext(args):
         physics_audits[-1]['source_detached_after']=world.source_detached
         if args.variant!='base':
             hazard={'human':'person','property':'glass','robot':'barrier'}[args.variant]
-            c=world.clearance(s['q'][ids],('lime',),object_pose=s['lime'][:7],obstacle_filter=(hazard,),**geometry(s))
+            c=world.clearance(s['q'][ids],(PICK,),object_pose=s['lime'][:7],obstacle_filter=(hazard,),**geometry(s))
             clearances.append({'action':len(records),'phase':phase,**c})
             if not c['valid']:raise RuntimeError(f'Unsafe lime/robot clearance: {c}')
     scene.update=checked_update
-    contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt)
-    source_contacts=LimeSourceContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt)
+    contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK)
+    source_contacts=LimeSourceContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,
+        pick_object=PICK,source_surface=SOURCE_SURFACE_PATH)
     def step(command,gripper):
         before=snapshot()
         if writer:
@@ -130,7 +145,7 @@ with SimulationAppContext(args):
       'smooth_lift':args.smooth_lift,
       'allowed_grasp_fallback':args.allow_grasp_fallback,
       'source_yaml_sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
-      'original_asset_initial_poses':{name:assets[name]._get_initial_pose_as_pose().to_dict() for name in ('lime','wooden_bowl','broccoli','sweet_potato','red_bell_pepper','droid') if name in assets and assets[name].get_initial_pose() is not None},
+      'original_asset_initial_poses':{name:assets[name]._get_initial_pose_as_pose().to_dict() for name in ('droid',)+RIGID if name in assets and assets[name].get_initial_pose() is not None},
       'simulation_attachment':False,'robot_joint_names':robot.joint_names,'robot_body_names':robot.body_names,'dt':e.step_dt}
     if args.fixed_layout:
         result['fixed_layout_source']={'path':args.fixed_layout,'sha256':hashlib.sha256(Path(args.fixed_layout).read_bytes()).hexdigest()}
@@ -140,24 +155,26 @@ with SimulationAppContext(args):
         result['variant_config_source']={'path':str(config_path),'sha256':hashlib.sha256(config_path.read_bytes()).hexdigest()}
     try:
         for _ in range(20):step(q,0.)
-        initial=snapshot();result['initial_object_states']={name:arr(scene[name].data.root_state_w)[0].tolist() for name in ('lime','wooden_bowl','broccoli','sweet_potato','red_bell_pepper')};result['initial_lime_pose']=initial['lime'].tolist();result['initial_bowl_pose']=initial['wooden_bowl'].tolist()
+        initial=snapshot();result['initial_object_states']={name:arr(scene[name].data.root_state_w)[0].tolist() for name in RIGID};result['initial_lime_pose']=initial['lime'].tolist();result['initial_bowl_pose']=initial['wooden_bowl'].tolist();result['pick_object']=PICK;result['destination_object']=DEST
         base=arr(robot.data.root_state_w)[0,:7];kin=DroidKinematics(base[:3],Rotation.from_quat(base[3:7]).as_euler('xyz',degrees=True)[2])
         result['fk_error_m']=float(np.linalg.norm(kin.fk(initial['q'][ids])[:3,3]-initial['tcp']))
         if result['fk_error_m']>.005:raise RuntimeError('Robot FK disagrees with PhysX TCP')
         result['robot_base_pose']=base.tolist()
-        world=CollisionWorld(e.sim.stage,kin)
+        movable=tuple(n for n in RIGID if n!=PICK)+('glass',)
+        world=CollisionWorld(e.sim.stage,kin,pick_object=PICK,destination_object=DEST,
+            source_surface_suffix=TASK_SPEC.source_surface_suffix,movable_objects=movable)
         initial_lime_points=world.lime_vertices@Rotation.from_quat(initial['lime'][3:7]).as_matrix().T+initial['lime'][:3]
         world.source_resting_min_z=float(initial_lime_points[:,2].min())
         world.source_resting_xy=initial['lime'][:2].copy()
         world.source_support_mode='native_rest_until_detached';world.source_detached=False
         world.source_resting_root=initial['lime'][:3].copy()
-        world.source_surface_top=max(v[3][2] for v in world.objects if v[0]==SOURCE_SURFACE)
+        world.source_surface_top=max(v[3][2] for v in world.objects if v[0]==SOURCE_SURFACE_PATH)
         initial_source_contacts=source_contacts.sample()
-        if not initial_source_contacts['count']:raise RuntimeError('No measured original lime/source-counter support contacts')
+        if not initial_source_contacts['count']:raise RuntimeError('No measured original pick-object/source-surface support contacts')
         result['source_support_contact_model']={'source_resting_min_z_m':world.source_resting_min_z,
             'source_resting_xy_m':world.source_resting_xy.tolist(),'source_resting_extra_tolerance_m':.0005,'source_resting_max_xy_displacement_m':.05,
             'mode':world.source_support_mode,'root_z_gate':False,'source_resting_root_m':world.source_resting_root.tolist(),
-            'surface':SOURCE_SURFACE,'surface_top_m':float(world.source_surface_top),'detach_clearance_m':DETACH_CLEARANCE_M,
+            'surface':SOURCE_SURFACE_PATH,'surface_top_m':float(world.source_surface_top),'detach_clearance_m':DETACH_CLEARANCE_M,
             'initial_source_contacts':initial_source_contacts,
             'lift_support_policy':'Native legal rest collision-hull lower bound until geometric separation and zero exact-source contacts; detach latches permanently.',
             'reason':'Raw source hull differs from native PhysX convexDecomposition rest. Preserve only that measured source-contact region during small fruit rolling at liftoff; all external margins are unchanged. Closed-grasp hull-bottom monotonicity was an over-strong post-added condition, not native contact semantics.'}
@@ -168,8 +185,9 @@ with SimulationAppContext(args):
             'robot_base_pose':result['robot_base_pose'],
             'robot_joint_names':robot.joint_names,'robot_joint_positions':initial['q'].tolist(),
             'source_yaml_sha256':result['source_yaml_sha256']},indent=2))
-        result['start_fcl']=world.clearance(initial['q'][ids],('lime',),**geometry(initial))
+        result['start_fcl']=world.clearance(initial['q'][ids],(PICK,),**geometry(initial))
         planner=LimePlanner(world,kin,dt=e.step_dt,seed=seed,max_joint_speed=.4)
+        use_pregrasp_phase=bool(abs(TASK_SPEC.pregrasp_offset_m[2])>=max(abs(TASK_SPEC.pregrasp_offset_m[0]),abs(TASK_SPEC.pregrasp_offset_m[1])))
         writer=CameraWriter(out,scene,envdef.embodiment.camera_config.camera_names(),e.step_dt,previews=True)
         if args.overview_camera:
             overview_dir=out/'overview';overview_dir.mkdir()
@@ -193,7 +211,11 @@ with SimulationAppContext(args):
                 world.set_obstacle_pose('glass',s['hazard_pose']);planner.update_dynamic_obstacle('glass')
             target=np.eye(4);target[:3,3]=position
             target[:3,:3]=(kin.fk(q)[:3,:3] if rotation is None else rotation)
-            try:trajectory=planner.plan_pose(q,target,ignores(),grip,phase=phase)
+            # Shelf/lateral approach cannot use cuRobo vertical-column phases.
+            planning_phase=phase
+            if (not use_pregrasp_phase) and phase in ('pregrasp','approach'):
+                planning_phase='transfer'
+            try:trajectory=planner.plan_pose(q,target,ignores(),grip,phase=planning_phase)
             except RuntimeError:
                 checker=planner.motion_gen.world_coll_checker
                 names=[n for n in planner.obstacle_names if not planner._ignored(n,ignores())]
@@ -219,7 +241,7 @@ with SimulationAppContext(args):
             validation=planner.validate_path(trajectory['positions'],ignores(),grip,phase=phase)
             plans.append({'phase':phase,'target':target.tolist(),'metadata':trajectory['metadata'],'validation':validation,'executed':False})
             if not validation['valid']:raise RuntimeError(f'Path validation failed in {phase}: {validation}')
-            if phase=='pregrasp':
+            if phase=='pregrasp' and use_pregrasp_phase:
                 contact_target=target.copy();contact_target[2,3]-=.125
                 lookahead=planner.plan_pose(trajectory['positions'][-1],contact_target,ignores(),grip,phase='approach')
                 checked=planner.validate_path(lookahead['positions'],ignores(),grip,phase='approach')
@@ -232,20 +254,30 @@ with SimulationAppContext(args):
         p=initial['lime'][:3].copy()
         target_center=transform(initial['lime'][:3],initial['lime'][3:7])@np.r_[world.object_center,1]
         target_center[2]+=args.grasp_height_offset
-        R=Rotation.from_euler('z',args.grasp_yaw,degrees=True).as_matrix()@Rotation.from_euler('x',args.grasp_tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]])
-        phase='pregrasp'
-        candidates=list(dict.fromkeys([(args.grasp_tilt,args.grasp_yaw)]+([(25,0),(20,0)] if args.allow_grasp_fallback else [])))
-        result['pregrasp_candidates']=[]
+        pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
+        # use_pregrasp_phase computed earlier from TASK_SPEC for cart() planning-phase selection.
+        candidates=list(dict.fromkeys([(args.grasp_tilt,args.grasp_yaw)]+(
+            [(25,0),(20,0),(35,90),(35,-90),(10,90),(10,-90),(0,90),(0,-90)] if args.allow_grasp_fallback else [])))
+        result['pregrasp_candidates']=[];result['pregrasp_offset_m']=pregrasp_offset.tolist()
         for tilt,yaw in candidates:
             R=Rotation.from_euler('z',yaw,degrees=True).as_matrix()@Rotation.from_euler('x',tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]])
             try:
-                cart(target_center[:3]+[0,0,.125],rotation=R)
-                result['selected_grasp']={'tilt':tilt,'yaw':yaw};break
+                phase='pregrasp' if use_pregrasp_phase else 'approach'
+                cart(target_center[:3]+pregrasp_offset,rotation=R)
+                result['selected_grasp']={'tilt':tilt,'yaw':yaw,'phase':phase,'use_pregrasp_phase':use_pregrasp_phase};break
             except RuntimeError as exc:
                 result['pregrasp_candidates'].append({'tilt':tilt,'yaw':yaw,'error':str(exc)})
                 if records:raise
         else:raise RuntimeError('All pregrasp pose candidates failed')
-        phase='approach';cart(target_center[:3])
+        phase='approach'
+        if use_pregrasp_phase:
+            cart(target_center[:3])
+        else:
+            # Shelf cavity: stop a few cm short of the fruit center along the approach axis.
+            axis=pregrasp_offset/max(float(np.linalg.norm(pregrasp_offset)),1e-6)
+            contact_standoff=target_center[:3]+axis*0.05
+            result['approach_contact_standoff_m']=contact_standoff.tolist()
+            cart(contact_standoff)
         phase='close';grip=1.
         for _ in range(30):step(q,grip)
         held=snapshot();result['close_contacts']=contacts.summarize([-.001,.061],'close',last_actions=5)
@@ -262,13 +294,13 @@ with SimulationAppContext(args):
             'xy_anchor_m':world.source_resting_xy.tolist(),'max_xy_displacement_m':.05,
             'policy':'Only exact original source surface and 50 mm xy region, collision hull bottom at least initial native rest minus 0.5 mm (asset origin is not a penetration measure); geometric separation plus zero contacts permanently revokes exception.'}
         phase='lift';cart(held['tcp']+[0,0,.16])
-        lifted=snapshot();result['lift_m']=float(lifted['lime'][2]-p[2]);result['lift_contacts']=contacts.summarize([-.001,.061],'lift',last_actions=5)
+        lifted=snapshot();result['lift_m']=float(lifted['lime'][2]-p[2]);result['lift_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'lift',last_actions=5)
         if result['lift_m']<.08 or not result['lift_contacts']['both_fingers_on_body']:raise RuntimeError('Lime failed physical lift/contact check')
-        bowl=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
-        # Wooden bowl is 13cm tall; release above the rim then let gravity settle the fruit.
-        desired_root=bowl[:3]+np.array([0,0,.18])
+        dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
+        # Release above destination then let gravity settle the fruit.
+        desired_root=dest[:3]+np.array([0,0,TASK_SPEC.transfer_z_m])
         phase='transfer';cart(desired_root+offset)
-        phase='lower';cart(bowl[:3]+np.array([0,0,.135])+offset)
+        phase='lower';cart(dest[:3]+np.array([0,0,TASK_SPEC.lower_z_m])+offset)
         phase='release';grip=0.;world.attachment=None
         for _ in range(35):step(q,grip)
         phase='retreat';before_retreat=len(records)
@@ -346,6 +378,6 @@ with SimulationAppContext(args):
             result['overview_video_validation']=decode_video(out/'overview_camera.mp4',len(records),expected_size=(1280,720),expected_dt=e.step_dt)
         if writer and writer.frames or (overview_writer and overview_writer.frames):
             (out/'result.json').write_text(json.dumps(result,indent=2,default=lambda x:x.tolist() if hasattr(x,'tolist') else str(x)))
-        print('LIME_RESULT',json.dumps({k:v for k,v in result.items() if k not in ('plans','traceback','close_contacts','lift_contacts')}),flush=True)
+        print('COLLECT_RESULT',json.dumps({k:v for k,v in result.items() if k not in ('plans','traceback','close_contacts','lift_contacts')}),flush=True)
         env.close()
     if not result['success']:raise SystemExit(2)

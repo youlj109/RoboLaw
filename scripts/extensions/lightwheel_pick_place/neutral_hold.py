@@ -15,10 +15,11 @@ from isaaclab_arena.cli.isaaclab_arena_cli import get_isaaclab_arena_cli_parser
 from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppContext
 
 ROOT = Path(__file__).resolve().parents[3]
-TASK_OBJECTS = ('lime', 'wooden_bowl', 'broccoli', 'sweet_potato', 'red_bell_pepper')
 
 p = get_isaaclab_arena_cli_parser()
-p.add_argument('--fixed-layout', type=Path, default=ROOT / 'configs/extensions/lightwheel_pick_place/fixed_layout.json')
+p.add_argument('--task', default='kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian')
+p.add_argument('--fixed-layout', type=Path, default=None,
+               help='Defaults to task-specific fixed_layout path; omit for graph-solved reset')
 p.add_argument('--output', type=Path, required=True)
 p.add_argument('--duration-seconds', type=float, default=35.0,
                help='Observation window; default covers ~one successful B01 episode (~31.5s) with margin')
@@ -26,6 +27,11 @@ p.add_argument('--background-settling-seconds', type=float, default=5.0)
 p.add_argument('--reference-episode', type=Path, default=None,
                help='Optional successful episode whose duration is used as a lower bound')
 a = p.parse_args()
+from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
+TASK_SPEC = resolve_task(a.task)
+TASK_OBJECTS = TASK_SPEC.rigid_objects
+if a.fixed_layout is None:
+    a.fixed_layout = TASK_SPEC.default_fixed_layout if TASK_SPEC.default_fixed_layout.exists() else None
 if not 2.0 <= a.background_settling_seconds < a.duration_seconds:
     p.error('Require 2 <= background settling seconds < duration seconds')
 a.enable_cameras = True
@@ -53,7 +59,8 @@ with SimulationAppContext(a):
     envdef, assets = build_environment(
         enable_cameras=True,
         variant='base',
-        fixed_layout_path=str(a.fixed_layout),
+        task_id=TASK_SPEC.task_id,
+        fixed_layout_path=str(a.fixed_layout) if a.fixed_layout is not None else None,
     )
     builder = ArenaEnvBuilder(
         envdef,

@@ -15,15 +15,17 @@ class LimeGraspContacts:
 
     fingers = ('left_inner_finger', 'right_inner_finger')
 
-    def __init__(self, physics_sim_view, physics_dt, *, env_root='/World/envs/env_0', env_origin=None):
+    def __init__(self, physics_sim_view, physics_dt, *, env_root='/World/envs/env_0', env_origin=None,
+                 pick_object='lime'):
         self.physics_dt = physics_dt
+        self.pick_object = pick_object
         self.env_origin = np.zeros(3) if env_origin is None else np.asarray(env_origin, dtype=float)
         if self.env_origin.shape != (3,) or not np.isfinite(self.env_origin).all():
             raise ValueError('Environment origin must be a finite xyz vector')
         self.views = {
             name: physics_sim_view.create_rigid_contact_view(
                 [f'{env_root}/Robot/Gripper/Robotiq_2F_85/{name}'],
-                filter_patterns=[[f'{env_root}/lime']],
+                filter_patterns=[[f'{env_root}/{pick_object}']],
                 max_contact_data_count=4096)
             for name in self.fingers
         }
@@ -168,12 +170,13 @@ class LimeGraspContacts:
 
 
 class LimeSourceContacts:
-    """Raw PhysX lime/exact-source-counter contact observations, without forces."""
-    def __init__(self,physics_sim_view,physics_dt):
+    """Raw PhysX pick-object/exact-source-surface contact observations, without forces."""
+    def __init__(self,physics_sim_view,physics_dt,*,pick_object='lime',source_surface=None):
         from .source_support import SOURCE_SURFACE
         self.physics_dt=physics_dt
-        self.view=physics_sim_view.create_rigid_contact_view(['/World/envs/env_0/lime'],
-            filter_patterns=[[SOURCE_SURFACE]],max_contact_data_count=4096)
+        surface=SOURCE_SURFACE if source_surface is None else source_surface
+        self.view=physics_sim_view.create_rigid_contact_view([f'/World/envs/env_0/{pick_object}'],
+            filter_patterns=[[surface]],max_contact_data_count=4096)
 
     def sample(self):
         force,point,normal,separation,count,start=map(_numpy,self.view.get_contact_data(dt=self.physics_dt))

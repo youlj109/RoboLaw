@@ -25,7 +25,7 @@ from kitchen_safety.planning import DroidKinematics
 
 ROOT = Path(__file__).resolve().parents[3]
 HAZARD_KEY = {'human': 'person', 'property': 'glass', 'robot': 'barrier'}
-BACKGROUND = ('wooden_bowl', 'broccoli', 'sweet_potato', 'red_bell_pepper')
+DEFAULT_BACKGROUND = ('wooden_bowl', 'broccoli', 'sweet_potato', 'red_bell_pepper')
 
 
 def digest(path: Path) -> str:
@@ -64,7 +64,8 @@ def true_shape_path(world: CollisionWorld, hazard_name: str, positions, grip: fl
     """Dense FCL execution-margin check of a planned path against one named hazard."""
     rows = []
     gq = grip_joints(grip)
-    ignore = ('lime',) if world.attachment is not None else ()
+    pick = getattr(world, 'pick_object', 'lime')
+    ignore = (pick,) if world.attachment is not None else ()
     for i, q in enumerate(np.asarray(positions)):
         world.gripper_joint_position = float(grip)
         row = world.clearance(
@@ -84,7 +85,7 @@ def true_shape_path(world: CollisionWorld, hazard_name: str, positions, grip: fl
     }
 
 
-def build_world(baseline: Path, kin: DroidKinematics, variant: str | None, variants: dict):
+def build_world(baseline: Path, kin: DroidKinematics, variant: str | None, variants: dict, *, task_spec):
     stage = Usd.Stage.Open(str(baseline / 'scene.usda'))
     if variant and variant != 'base':
         spec = variants[variant]
@@ -95,22 +96,31 @@ def build_world(baseline: Path, kin: DroidKinematics, variant: str | None, varia
             spec['position'],
             spec.get('yaw_deg', 0.0),
         )
-    return CollisionWorld(stage, kin), stage
+    movable = tuple(n for n in task_spec.rigid_objects if n != task_spec.pick_object) + ('glass',)
+    world = CollisionWorld(
+        stage, kin,
+        pick_object=task_spec.pick_object,
+        destination_object=task_spec.destination_object,
+        source_surface_suffix=task_spec.source_surface_suffix,
+        movable_objects=movable,
+    )
+    return world, stage
 
 
 def plan_segment(planner: LimePlanner, world: CollisionWorld, segment: str, q0, target, grip: float, attachment):
+    pick = getattr(world, 'pick_object', 'lime')
     if segment in ('transfer', 'lift'):
         world.attachment = np.asarray(attachment, dtype=float)
         world.gripper_joint_position = float(grip)
         world.allowed_phase = segment
-        ignore = ('lime',)
+        ignore = (pick,)
         grip_binary = 1
         phase = segment
     elif segment in ('pregrasp', 'approach'):
         world.attachment = None
         world.gripper_joint_position = 0.0
         world.allowed_phase = segment
-        ignore = ('lime',)
+        ignore = (pick,)
         grip_binary = 0
         phase = segment
     else:
@@ -131,8 +141,10 @@ def plan_segment(planner: LimePlanner, world: CollisionWorld, segment: str, q0, 
 
 def main():
     p = argparse.ArgumentParser()
+    p.add_argument('--task', default=None,
+                   help='Override task id; default reads result.json task field from --baseline')
     p.add_argument('--baseline', type=Path, required=True)
-    p.add_argument('--variant-config', type=Path, default=ROOT / 'configs/extensions/lightwheel_pick_place/variants.json')
+    p.add_argument('--variant-config', type=Path, default=None)
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--seeds', type=int, nargs='+', default=[42, 43, 44])
     p.add_argument('--variants', nargs='+', default=['base', 'human', 'property', 'robot'])
@@ -140,6 +152,15 @@ def main():
                    choices=['transfer', 'pregrasp', 'approach', 'lift'])
     p.add_argument('--max-joint-speed', type=float, default=0.4)
     a = p.parse_args()
+    from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
+    result_probe = json.loads((a.baseline / 'result.json').read_text())
+    task_id = a.task or result_probe.get('task')
+    TASK_SPEC = resolve_task(task_id)
+    PICK = result_probe.get('pick_object') or TASK_SPEC.pick_object
+    DEST = result_probe.get('destination_object') or TASK_SPEC.destination_object
+    BACKGROUND = tuple(n for n in TASK_SPEC.rigid_objects if n != PICK)
+    if a.variant_config is None:
+        a.variant_config = TASK_SPEC.default_variants
 
     out = Path(a.output)
     out.mkdir(parents=True, exist_ok=False)
@@ -164,7 +185,7 @@ def main():
                 'q': f['obs/q'][i, :7].copy(),
                 'gripper_joint_position': float(f['obs/q'][i, finger]),
                 'background': {n: f['obs/' + n][i, :7].copy() for n in BACKGROUND},
-                'lime': f['obs/lime'][i, :7].copy(),
+                PICK: f[f'obs/{PICK}'][i, :7].copy() if f'obs/{PICK}' in f else f['obs/lime'][i, :7].copy(),
             }
         # attachment is measured at close; reuse baseline planning attachment for carried phases
 
@@ -215,11 +236,11 @@ def main():
                 run = {'seed': int(seed), 'segment': segment, 'variant': variant, 'success': False}
                 started = time.monotonic()
                 try:
-                    world, stage = build_world(baseline, kin, variant if variant != 'base' else None, variants)
+                    world, stage = build_world(baseline, kin, variant if variant != 'base' else None, variants, task_spec=TASK_SPEC)
                     st = starts[segment]
                     for name, pose in st['background'].items():
                         world.set_obstacle_pose(name, pose)
-                    world.set_obstacle_pose('lime', st['lime'])
+                    world.set_obstacle_pose(PICK, st[PICK])
                     planner = LimePlanner(world, kin, dt=result['dt'], seed=int(seed), max_joint_speed=a.max_joint_speed)
                     q0 = st['q']
                     grip = st['gripper_joint_position'] if segment in ('transfer', 'lift') else 0.0
