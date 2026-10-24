@@ -15,7 +15,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('episode', type=Path)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--pitches', default='-60,-45,-30,0,30,45,60')
+    parser.add_argument('--lengths', default='.02,.03,.04')
     args = parser.parse_args()
+    pitches = list(map(float, args.pitches.split(',')))
+    lengths = list(map(float, args.lengths.split(',')))
+    if not pitches or not lengths or any(abs(v)>60 for v in pitches) or any(not 0<v<=.04 for v in lengths):
+        parser.error('Release diagnostic outside existing collector bounds')
     if args.output.exists():
         raise FileExistsError(args.output)
     read = lambda p: json.loads(p.read_text())
@@ -44,9 +50,9 @@ def main():
         physics_replay=False, results=[])
     for yaw in [0.]:
         horizontal = Rotation.from_euler('z', yaw, degrees=True).apply(outward)
-        for pitch in [-60., -45., -30., 0., 30., 45., 60.]:
+        for pitch in pitches:
             direction = horizontal * np.cos(np.deg2rad(pitch)) + np.array([0., 0., np.sin(np.deg2rad(pitch))])
-            for distance in [.02, .03, .04]:
+            for distance in lengths:
                 command = qstart.copy()
                 worst = None
                 max_increment = 0.

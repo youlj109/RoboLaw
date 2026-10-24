@@ -8,7 +8,8 @@ try:
  save();deadline=time.monotonic()+18000
  if a.after_campaign:
   while True:
-   prior=json.loads(a.after_campaign.read_text())
+   try:prior=json.loads(a.after_campaign.read_text())
+   except (FileNotFoundError,json.JSONDecodeError):prior={}
    if prior.get('error'):break
    if prior.get('complete'):state.update(stage='prior_variant_complete_no_duplicate_trial',complete=True);save();raise SystemExit(0)
    if time.monotonic()>deadline:raise TimeoutError('Prior campaign has not completed')

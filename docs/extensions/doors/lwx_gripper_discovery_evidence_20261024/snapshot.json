@@ -1,0 +1,153 @@
+{
+  "snapshot_beijing": "2026-10-24T09:12:23.006779+08:00",
+  "scope": "Intermediate discovery and failure evidence, not a new task delivery",
+  "complete_tasks": [
+    "C03",
+    "C04",
+    "C05",
+    "C06",
+    "C08"
+  ],
+  "implementation_sha256": {
+    "scripts/extensions/doors/search_task_hazards_v25_lwx.py": "62f319e09dcf589695cbfa2f49f018f2f5cf0ccc93ff6e899d4005a2633ae5c0",
+    "scripts/extensions/doors/search_task_hazards_v26_lwx.py": "48c7b6bbeab22148e683653ccf99a9f5cbd8985102f3b8c31953662799dbb4dd",
+    "scripts/extensions/doors/diagnose_candidate_gripper_lwx.py": "ab76ddd0ff7eaad687a6dc73fce61a2f2c0594be77e8bdfee322710045e477a0",
+    "scripts/extensions/doors/supervise_search_candidates_lwx.py": "be8eb52ac49b290f22a0ace2c614f4e887506dc9f483876fd8d765fb79eaaa98",
+    "scripts/extensions/doors/supervise_task_hazard_search_lwx.py": "1da884347daa4ababf54e62bbf827f9c0ce5cac07f4fd3b7bf699dcc30d054b9",
+    "scripts/extensions/doors/diagnose_release_tilts_lwx.py": "2b40078d808ebff8ad200a4eb9bb2be926d932d5714866cf7263340f9c6d9938"
+  },
+  "gripper_diagnostics": [
+    {
+      "path": "reports/doors/lwx_C01_low_grasp_retry31_20261024/C01_property_gripper_diagnostic46.json",
+      "sha256": "f07f316d952426aa827680c7f038fbd07ae30629f325faabaf1be359f7a3359e",
+      "margin_m": 0.06,
+      "clear_candidates": [
+        6,
+        7,
+        8,
+        9,
+        15,
+        16,
+        17
+      ],
+      "candidate_count": 20,
+      "scope": "Finite source gripper screening diagnostic only. Baseline measured hand states approximate the same Cartesian policy; no IK feasibility or final acceptance claim."
+    },
+    {
+      "path": "reports/doors/lwx_C01_low_grasp_retry31_20261024/C01_human_gripper_diagnostic47.json",
+      "sha256": "08086634391e682dabd219b318a52d8ae7a7f201ee83a41de4cf62a68a658537",
+      "margin_m": 0.03,
+      "clear_candidates": [
+        0,
+        2,
+        4,
+        7,
+        10,
+        11,
+        12,
+        13,
+        14,
+        16
+      ],
+      "candidate_count": 20,
+      "scope": "Finite source gripper screening diagnostic only. Baseline measured hand states approximate the same Cartesian policy; no IK feasibility or final acceptance claim."
+    },
+    {
+      "path": "reports/doors/lwx_C07_contact_retry13_20261024/C07_human_gripper_diagnostic12.json",
+      "sha256": "05042e978eb0bb2e1b4257737df64e22e9eb77e704036248a1276d4a7996002e",
+      "margin_m": 0.03,
+      "clear_candidates": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16
+      ],
+      "candidate_count": 20,
+      "scope": "Finite source gripper screening diagnostic only. Baseline measured hand states approximate the same Cartesian policy; no IK feasibility or final acceptance claim."
+    }
+  ],
+  "default_source_differential": {
+    "versions": [
+      24,
+      25
+    ],
+    "equal_candidates": true,
+    "equal_stats": true,
+    "candidates": 20,
+    "stats": {
+      "tested": 20,
+      "endpoints": 20,
+      "blocking": 20,
+      "scene_legal": 20
+    },
+    "grid": "configs/extensions/doors/gripper_nonempty_equivalence_grid_lwx_01.json",
+    "mid_stride": 1
+  },
+  "dependency_negative_check": {
+    "state": {
+      "stage": "waiting_baseline_gates",
+      "complete": false,
+      "error": "RuntimeError('Baseline gate rejected; no variant will be collected')"
+    },
+    "scope": "Synthetic host-only negative fixture. Missing prior file kept PID794971 alive; after explicit terminal prior error the independently rejected baseline prevented any GPU or physical launch."
+  },
+  "physical_failures": [
+    {
+      "episode": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_21",
+      "result_sha256": "2db5099e7b9a1e01ee06c2eb5cc15b8dbd73b80da3165c7fefb3e9776318950e",
+      "task_success": false,
+      "accepted": false,
+      "frames": 109,
+      "failure": "RuntimeError: EXECUTION_COLLISION {\"action_index\": 109, \"phase\": \"approach_handle\", \"valid\": false, \"failure\": {\"valid\": false, \"distance_m\": 0.009756870031502086, \"required_m\": 0.01, \"slack_m\": -0.00024312996849791373, \"robot_part\": \"arm\", \"obstacle\": \"/World/envs/env_0/barrier/Upright0\", \"intersecting\": false}, \"q\": [0.05719412863254547, -0.0720803514122963, -1.1450217962265015, -2.6496546268463135, 1.9719310998916626, 1.857069969177246, 0.4468207061290741, 9.531726874456581e-08, 6.6182781210955e-07, -1.9229801182518713e-05, 4.263043956598267e-05, 1.8685170289245434e-05, 5.550431160372682e-05], \"door_body_pose\": [5.425000190734863, -0.2000001221895218, 1.3899999856948853, 2.9103830456733704e-11, -3.469446951953614e-18, 1.2489593359532591e-07, 1.0], \"hazard_pose\": null, \"door_q\": 2.4979186719065183e-07, \"door_hazard_pairs_near_15cm\": []}",
+      "final_door_rad": 2.4979186719065183e-07
+    },
+    {
+      "episode": "datasets/doors/lwx_C07_contact_retry13_20261024/C07_robot_10",
+      "result_sha256": "fd2e9837c79d534488215a0b0244148e29493a1c35d908a4f81cd9d3c251dbe2",
+      "task_success": true,
+      "accepted": false,
+      "frames": 962,
+      "failure": "RuntimeError: EXECUTION_COLLISION {\"action_index\": 962, \"phase\": \"release_handle\", \"valid\": false, \"failure\": {\"valid\": false, \"distance_m\": 0.0019482910662826946, \"required_m\": 0.002, \"slack_m\": -5.170893371730543e-05, \"robot_part\": \"finger\", \"obstacle\": \"/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003\", \"intersecting\": false}, \"q\": [-0.4604165852069855, -1.4743887186050415, 0.5445326566696167, -2.5827529430389404, 2.7751212120056152, 3.747681140899658, 0.8607773780822754, -9.166168934982011e-10, 1.7076035138847978e-14, -1.1547488611540757e-05, -1.4418300452234689e-05, 1.6099684216897003e-05, -1.5146366422413848e-05], \"door_body_pose\": [5.248566627502441, -2.993995428085327, 1.6250001192092896, 1.3224780559539795e-07, -2.708111423999071e-08, 0.9034518003463745, -0.4286899268627167], \"hazard_pose\": null, \"door_q\": -0.6847083568572998, \"door_hazard_pairs_near_15cm\": []}",
+      "final_door_rad": -0.6847083568572998
+    },
+    {
+      "episode": "datasets/doors/lwx_C07_low_handle_reserve45_20261024/C07_base_01",
+      "result_sha256": "2f1c848ddc62724a925052f45b9cdd21751f38ef644069590dee0d221481dfb7",
+      "task_success": false,
+      "accepted": false,
+      "frames": 168,
+      "failure": "RuntimeError: cuRobo rejected pull segment",
+      "final_door_rad": -0.0002857685030903667
+    },
+    {
+      "episode": "datasets/doors/lwx_C07_release60_retry46_20261024/C07_base_01",
+      "result_sha256": "b85cf888282beb630b07bd8451d963be4ac54d87e801fea81e5061590f1baa24",
+      "task_success": true,
+      "accepted": false,
+      "frames": 1036,
+      "failure": "RuntimeError: IK failed: pose residual 0.00127, target [ 4.92089067 -2.97140333  1.56473924]",
+      "final_door_rad": -0.6537315249443054
+    },
+    {
+      "episode": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_23",
+      "result_sha256": "1b3f70a534710448e33a2e8ecf690f033a4821dfdd42ed0495e6afb8948589d5",
+      "task_success": false,
+      "accepted": false,
+      "frames": 114,
+      "failure": "RuntimeError: EXECUTION_COLLISION {\"action_index\": 114, \"phase\": \"approach_handle\", \"valid\": false, \"failure\": {\"valid\": false, \"distance_m\": 0.009932496376355907, \"required_m\": 0.01, \"slack_m\": -6.750362364409297e-05, \"robot_part\": \"arm\", \"obstacle\": \"/World/envs/env_0/barrier/Upright0\", \"intersecting\": false}, \"q\": [-0.1292082965373993, -0.030748942866921425, -0.933393120765686, -2.636723518371582, 2.0107409954071045, 1.8359986543655396, 0.45705685019493103, 9.92486093309708e-09, 5.711305561817426e-07, 2.2643762349616736e-05, 2.7849148409586633e-06, -4.346383866504766e-05, 3.1084675811143825e-06], \"door_body_pose\": [5.425000190734863, -0.2000001221895218, 1.3899999856948853, 2.9103830456733704e-11, -3.469446951953614e-18, 1.359853740723338e-07, 1.0], \"hazard_pose\": null, \"door_q\": 2.719707481446676e-07, \"door_hazard_pairs_near_15cm\": []}",
+      "final_door_rad": 2.719707481446676e-07
+    }
+  ]
+}
