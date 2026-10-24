@@ -1,0 +1,168 @@
+{
+  "scope": "Investigation snapshots only. No new task or variant delivered. Full originals remain at the recorded paths.",
+  "files": [
+    {
+      "path": "reports/doors/lwx_C02_release_retry06_20261024/unit_tests_all_18.log",
+      "sha256": "a35142aa4398171ba92024db0cbec8d81c29fdeca35b5f89cf72172aa29d3b59",
+      "bytes": 145,
+      "copied_as": "unit_tests_all_18.log"
+    },
+    {
+      "path": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_base_01/result.json",
+      "sha256": "ec4a8db9c8fa4cb3eef80edbacdc3b0c31018a6bf7de50b6b930dd1ddd6e520e",
+      "bytes": 2127,
+      "summary": {
+        "accepted": true,
+        "failure": null,
+        "frames": 296,
+        "final_door_rad": 0.3302997648715973
+      }
+    },
+    {
+      "path": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_base_01/task_validation_full.json",
+      "sha256": "3e53a14197fed00eae4ace3cae73239dccbbcc7adea85c0109db2d25465c008b",
+      "bytes": 46731,
+      "summary": {
+        "accepted": true,
+        "scope": "RGB/actions at15Hz; robot, target/background joint q/dq and raw normal-load contacts at120Hz including startup. Source-geometry contact localization, matching neutral controls, stand/avoidance audits and paired planning are separately required. Fixed layout only; no batch success rate claim."
+      }
+    },
+    {
+      "path": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_base_01/task_review_audit.json",
+      "sha256": "2f6ec011e6a8c95b5ecd6659deef9b9116dfd29b1d1f7a3ad7162758f76cd1fc",
+      "bytes": 42206,
+      "summary": {
+        "passed": true
+      }
+    },
+    {
+      "path": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_base_01/source_contact_audit.json",
+      "sha256": "88c2371284e72397e9f103bf918c0d2fd6ac6187636ca50fd5eb8735e9b50eb1",
+      "bytes": 1622,
+      "summary": {
+        "passed": true,
+        "scope": "Measured normal-load contacts at every physics substep, independently localized to source mesh solids or analytical scaled primitive solids transformed by actual door poses. This is source-geometry proximity, not identification of a PhysX cooked face or measurement of tangential friction."
+      }
+    },
+    {
+      "path": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_base_01/self_collision_audit.json",
+      "sha256": "e233a2694feecdae92d0910416347185f39adbeb4eb2dc04a3146c043e7fdf17",
+      "bytes": 278,
+      "summary": {
+        "passed": true,
+        "scope": "Measured physics substeps plus action postchecks at 120Hz: cuRobo self-collision and joint limits, with measured finger_joint driving locked mimic joints. Separate FCL world collision audits run at 120Hz."
+      }
+    },
+    {
+      "path": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_hazard_search_driver02.json",
+      "sha256": "a4a5956658b0d99445bc3956d6c0a150eae8601dbb662fae80236104542995b8",
+      "bytes": 240,
+      "summary": {
+        "stage": "startup_rejected",
+        "complete": false,
+        "error": "NameError in newly extended supervisor argument initialization before any search or collection; fixed initialization and continue driver03. Original startup log retained."
+      }
+    },
+    {
+      "path": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_hazard_search_driver03.json",
+      "sha256": "39c5860945576d19af555fd66adb8428f2d427dc3f8212947782e5da417b5bab",
+      "bytes": 663,
+      "summary": {
+        "stage": "candidates_require_paired_planning",
+        "complete": true
+      }
+    },
+    {
+      "path": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_19_campaign01.json",
+      "sha256": "12731b7e9d21908308b2ece78f88c2c8a7a697beb818bca04eaabef2f2133eb1",
+      "bytes": 2146,
+      "summary": {
+        "stage": "paired_18",
+        "complete": false,
+        "error": "RuntimeError('No candidate established actual obstruction and a small safe reroute across all seeds')",
+        "candidate_count": 3,
+        "candidates": [
+          {
+            "candidate_index": 7,
+            "config": "configs/extensions/doors/c02_robot_candidate_19_07.json",
+            "paired_report": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_19_candidate_07_paired01/report.json",
+            "exit_code": 1,
+            "eligible": false,
+            "actual_source_intersections_all_seeds": true,
+            "max_joint_length_ratio": 999.0,
+            "max_added_tcp_length_m": 999.0
+          },
+          {
+            "candidate_index": 13,
+            "config": "configs/extensions/doors/c02_robot_candidate_19_13.json",
+            "paired_report": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_19_candidate_13_paired01/report.json",
+            "exit_code": 0,
+            "eligible": false,
+            "actual_source_intersections_all_seeds": true,
+            "max_joint_length_ratio": 1.1169509097287227,
+            "max_added_tcp_length_m": 0.3450151015549523
+          },
+          {
+            "candidate_index": 18,
+            "config": "configs/extensions/doors/c02_robot_candidate_19_18.json",
+            "paired_report": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_19_candidate_18_paired01/report.json",
+            "exit_code": 0,
+            "eligible": false,
+            "actual_source_intersections_all_seeds": false,
+            "max_joint_length_ratio": 1.0514762965408577,
+            "max_added_tcp_length_m": 0.08506437232215935
+          }
+        ]
+      }
+    },
+    {
+      "path": "reports/doors/lwx_C01_low_grasp_retry31_20261024/C01_property_targeted_search34.json",
+      "sha256": "d060e7608dd55c4fe6ba404e92dd9171ecedcf2566b03cc12f07cce4c68ad535",
+      "bytes": 241170,
+      "summary": {
+        "stats": {
+          "tested": 9680,
+          "endpoints": 836,
+          "blocking": 429,
+          "scene_legal": 246
+        },
+        "search_complete": true,
+        "scope": "Offline candidates only, not scene or task acceptance",
+        "candidate_count": 0,
+        "rejection_counts": {
+          "scene_rejections": 165,
+          "door_rejections": 246
+        }
+      }
+    },
+    {
+      "path": "reports/doors/lwx_C01_low_grasp_retry31_20261024/C01_property_door_refine_search35.json",
+      "sha256": "49578b07f893d8e991c2dae1ad4198362f65087768ce23d9b6347caf7697097b",
+      "bytes": 1333595,
+      "summary": {
+        "stats": {
+          "tested": 2916,
+          "endpoints": 2193,
+          "blocking": 1970,
+          "scene_legal": 1837
+        },
+        "search_complete": true,
+        "scope": "Offline candidates only, not scene or task acceptance",
+        "candidate_count": 0,
+        "rejection_counts": {
+          "scene_rejections": 133,
+          "door_rejections": 1837
+        }
+      }
+    },
+    {
+      "path": "reports/doors/lwx_C07_roll180_retry16_20261024/C07_release_ik_diagnostic02.json",
+      "sha256": "cda082d9a9367cac866db2b599d1fd841d8e0e69875d44d72a7cbd3b4e1c1def",
+      "bytes": 3920,
+      "summary": {
+        "scope": "Offline bounded IK diagnostic only. No dynamic rollout, collision acceptance, contact acceptance or task success claim.",
+        "candidate_count": 15
+      }
+    }
+  ]
+}

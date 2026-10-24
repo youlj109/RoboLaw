@@ -5,6 +5,7 @@ from isaaclab_arena.cli.isaaclab_arena_cli import get_isaaclab_arena_cli_parser
 from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppContext
 p=get_isaaclab_arena_cli_parser();p.add_argument('--variant',choices=['base','human','property','robot'],default='base');p.add_argument('--output',required=True);p.add_argument('--max-steps',type=int,default=500);p.add_argument('--handle-offset-y',type=float,default=0.);p.add_argument('--handle-offset-z',type=float,default=.12);p.add_argument('--variant-config',default='configs/extensions/doors/open_fridge_variants.json');p.add_argument('--adaptive-handle-height',action='store_true')
 p.add_argument('--validated-pregrasp', action='store_true')
+p.add_argument('--planner-hazard-extra-padding-m',type=float,default=0.,help='Additional conservative cuRobo hazard-box padding, same matched policy; independent thresholds unchanged')
 p.add_argument('--task-id',required=True)
 p.add_argument('--grasp-roll-deg',type=float,default=0.)
 p.add_argument('--grasp-pitch-deg',type=float,default=0.)
@@ -20,6 +21,7 @@ p.add_argument('--render-warmup', action='store_true', help='Converge RTX appear
 p.add_argument('--neutral-seconds', type=float, default=40.)
 p.add_argument('--review-config', default='configs/extensions/doors/review_gates_lwx.json')
 a=p.parse_args();a.enable_cameras=True
+if not 0.<=a.planner_hazard_extra_padding_m<=.03:p.error('--planner-hazard-extra-padding-m must be in [0,.03]')
 if a.neutral_seconds <= 0:p.error('--neutral-seconds must be positive')
 if not 0. <= a.ik_limit_margin_rad <= .1:p.error('--ik-limit-margin-rad must be in [0, .1]')
 if not 0. <= a.release_retreat_m <= .04:p.error('--release-retreat-m must be in [0, .04]')
@@ -100,6 +102,7 @@ with SimulationAppContext(a):
     metadata['door_geometry']=geometry
     metadata['door_motion_reference_joint_rad']=reference_joint_position
     metadata['controller_parameters']['grasp_roll_deg']=a.grasp_roll_deg
+    if a.planner_hazard_extra_padding_m:metadata['controller_parameters']['planner_hazard_extra_padding_m']=a.planner_hazard_extra_padding_m
     if a.grasp_pitch_deg:metadata['controller_parameters']['grasp_pitch_deg']=a.grasp_pitch_deg
     if a.release_retreat_m:metadata['controller_parameters']['release_retreat_m']=a.release_retreat_m
     if a.release_tilt_deg:metadata['controller_parameters']['release_tilt_deg']=a.release_tilt_deg
@@ -240,7 +243,7 @@ with SimulationAppContext(a):
             phase='neutral_hold'
             for _ in range(int(np.ceil(a.neutral_seconds/e.step_dt))):step(startup_target,0.)
         else:
-            planner=CuroboPlanner(world,kin,dt=e.step_dt,seed=a.seed or 42,max_joint_speed=.5)
+            planner=CuroboPlanner(world,kin,dt=e.step_dt,seed=a.seed or 42,max_joint_speed=.5,hazard_extra_padding_m=a.planner_hazard_extra_padding_m)
             handles=tuple(world.handle_contact_colliders)
             target=np.eye(4);target[:3,:3]=R0;default_handle=handle0.copy();candidate_failures=[];plan=None;candidate_queries=[]
             phase='pregrasp'

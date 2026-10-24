@@ -1,7 +1,9 @@
 """Host: start one matched baseline/control after its own source geometry screen."""
 import argparse,json,time,subprocess
 from pathlib import Path
-p=argparse.ArgumentParser();p.add_argument('label',choices=['C01','C02','C03','C04','C05','C06','C07','C08']);p.add_argument('--screen-labels',default='01');p.add_argument('--attempt',default='01');p.add_argument('--run-label',default='01');p.add_argument('--config',type=Path);p.add_argument('--report-root',type=Path);p.add_argument('--data-root',type=Path);p.add_argument('--review-config',type=Path);p.add_argument('--release-retreat-m',type=float,default=0.);p.add_argument('--release-tilt-deg',type=float,default=0.);p.add_argument('--pull-steps',type=int,default=600);a=p.parse_args();label=a.label
+p=argparse.ArgumentParser();p.add_argument('label',choices=['C01','C02','C03','C04','C05','C06','C07','C08']);p.add_argument('--screen-labels',default='01');p.add_argument('--attempt',default='01');p.add_argument('--run-label',default='01');p.add_argument('--config',type=Path);p.add_argument('--report-root',type=Path);p.add_argument('--data-root',type=Path);p.add_argument('--review-config',type=Path);p.add_argument('--release-retreat-m',type=float,default=0.);p.add_argument('--release-tilt-deg',type=float,default=0.);p.add_argument('--pull-steps',type=int,default=600);p.add_argument('--planner-hazard-extra-padding-m',type=float,default=0.);p.add_argument('--release-settle-steps',type=int,default=0);a=p.parse_args();label=a.label
+if not 0<=a.release_settle_steps<=90:p.error('Release settle steps outside [0,90]')
+if not 0.<=a.planner_hazard_extra_padding_m<=.03:p.error('Planner hazard padding outside [0,.03]m')
 if not 1<=a.pull_steps<=1200 or not 0<=a.release_retreat_m<=.04 or not -60<=a.release_tilt_deg<=60:p.error('Policy revision outside existing collector bounds')
 if a.release_tilt_deg and not a.release_retreat_m:p.error('Release tilt needs a nonzero retreat')
 root=a.report_root or Path('reports/doors/lwx_C04_C08_20261024');data=a.data_root or Path('datasets/doors/lwx_C04_C08_20261024');statefile=root/(label+'_baseline_driver'+a.run_label+'.json')
@@ -31,6 +33,8 @@ try:
  candidate=screen['first_feasible'];config=a.config or Path('configs/extensions/doors')/(label.lower()+'_variants_lwx_01.json');task=json.loads(config.read_text()).get('_task_scope',screen['task']);state['chosen_candidate']=candidate;save()
  for mode,name in [('collect',label+'_base_'+a.attempt),('neutral',label+'_base_neutral_'+a.attempt)]:
   cmd=['docker','exec','robolaw-wenxuanli','flock','/workspace/reports/skill_trials/gpu.lock','env','-u','ISAACSIM_ROOT_PATH','-u','ISAACLAB_PATH','-u','OMNI_SERVER','PYTHONPATH=/workspace','HEADLESS=1','OMP_NUM_THREADS=2','OPENBLAS_NUM_THREADS=2','/workspace/.venv-arena/bin/python','-u','scripts/extensions/doors/collect_tasks_lwx.py','--task-id',task,'--variant','base','--variant-config',str(config),'--output',str(data/name),'--mode',mode,'--handle-offset-z',str(candidate['offset_z']),'--handle-normal-offset',str(candidate['normal_offset_m']),'--grasp-roll-deg',str(candidate['roll_deg']),'--grasp-pitch-deg',str(candidate.get('pitch_deg',0.)),'--pull-lead-rad',str(screen['pull_lead_rad']),'--pull-steps',str(a.pull_steps),'--max-steps',str(max(1000,a.pull_steps+400)),'--validated-pregrasp','--render-warmup','--ik-limit-margin-rad',str(screen['ik_command_margin_rad']),'--review-config',str(a.review_config or Path('configs/extensions/doors')/(label.lower()+'_review_lwx.json'))]
+  if a.planner_hazard_extra_padding_m:cmd+=['--planner-hazard-extra-padding-m',str(a.planner_hazard_extra_padding_m)]
+  if a.release_settle_steps:cmd+=['--release-settle-steps',str(a.release_settle_steps)]
   if a.release_retreat_m:cmd+=['--release-retreat-m',str(a.release_retreat_m)]
   if a.release_tilt_deg:cmd+=['--release-tilt-deg',str(a.release_tilt_deg)]
   if mode=='neutral':

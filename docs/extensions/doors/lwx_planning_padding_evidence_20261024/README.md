@@ -1,0 +1,11 @@
+# C02 matched planning padding and bounded discovery
+
+C02 physical approach attempts 12/14 were rejected at about 9.83/9.84 mm against the unchanged 10 mm execution clearance. The task-local planner now permits an explicit additional 0..30 mm conservative padding on already padded glass/barrier proxy boxes. Source FCL and PhysX geometry, execution and independent planning gates stay unchanged. Default zero preserves prior behavior. Dynamic box updates use the same padding. Baseline and variant metadata, paired plans and neutral controls inherit this policy.
+
+A new matched C02 baseline with 10 mm extra planner padding completed 296 frames and all five independent gates. It is not a delivered steel variant. Robot campaign 19 rejected three candidates: candidate 07 failed dense source planning clearance for seed 42; candidate 13 added 0.345015 m TCP distance; candidate 18 added at most 0.0850644 m but seed 44 had only a 2.305 mm near miss without source intersection. Bounded endpoint-aware discovery continues; no unsafe counterfactual is physically executed.
+
+The hazard-search and variant supervisors now inherit the baseline's exact scene config. This avoids losing C02's predeclared background mechanism adaptation. Driver 02 hit a startup NameError before searching; corrected driver 03 used c02_variants_lwx_03.json. Both records remain. The new v23 CPU discovery additionally checks source geometry at prior matched on-plan endpoints; references must match the baseline trajectory hash and controller parameters. This is discovery conservatism, never acceptance.
+
+46 CPU unit tests passed. The evidence manifest hashes original reports and records their relevant outcomes. Large trajectories and videos remain remote. Current C01 bottle searches 34/35 found blocking layouts but every otherwise legal candidate was rejected by the unchanged door-sweep check; finite failure does not establish impossibility. C07 45-degree release diagnostic is offline only and does not prove dynamics.
+
+C01 original opening and the user-approved steel presentation remain preserved. Human/property obstruction and matched same-target rerouting are still the repair scope. New exploratory grasp failures do not turn the original opening into a failed task.
