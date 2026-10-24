@@ -87,8 +87,9 @@ TASKS: dict[str, TaskSpec] = {
         destination_object="wooden_bowl",
         rigid_objects=("banana_1", "banana_2", "wooden_bowl", "plate", "apple", "orange"),
         # Bananas rest on plate on island; allow island counter as source support.
+        # Horizontal-dominant offset disables use_pregrasp_phase so --grasp-local-approach applies.
         source_surface_suffix="/island_island_group/top_geometry_right",
-        pregrasp_offset_m=(0.0, 0.0, 0.125),
+        pregrasp_offset_m=(-0.13, 0.07, 0.02),
         transfer_z_m=0.18,
         lower_z_m=0.135,
         grasp_body_z_range=(-0.001, 0.061),
