@@ -41,6 +41,8 @@ parser.add_argument('--place-lower-z',type=float,default=None,
     help='Override TASK_SPEC.lower_z_m (metres above destination root)')
 parser.add_argument('--place-lower-steps',type=int,default=3,
     help='When place-lower-mode=steps: equal Z drops from transfer height to lower height')
+parser.add_argument('--place-clear-rise-z',type=float,default=0.0,
+    help='After transfer, pure +Z rise before lower/release (metres); helps clear plate rim')
 args=parser.parse_args();args.enable_cameras=True
 if args.num_envs!=1:raise ValueError('This verified entry runs one environment; parallel collection is not implemented')
 from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
@@ -386,6 +388,10 @@ with SimulationAppContext(args):
         # Release above destination then let gravity settle the fruit.
         desired_root=dest[:3]+np.array([0,0,TASK_SPEC.transfer_z_m])
         phase='transfer';cart(desired_root+offset)
+        if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
+            phase='transfer'
+            cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='lift')
+            result['place_clear_rise_z_m']=float(args.place_clear_rise_z)
         lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
         lower_root=dest[:3]+np.array([0.0,0.0,lower_z])
         xfer_tcp=desired_root+offset
