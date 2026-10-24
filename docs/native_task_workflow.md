@@ -103,3 +103,7 @@ v2 结束时另外保存一次 `terminal_observation`，来源为最后动作后
 ### Articulation 操作范围诊断
 
 使用 `scripts/probe_native_operation_suite.py` 对当前目录中的开门、按键、旋钮任务运行短段实测保持命令，逐帧验证操作 ID 与阶段联合控制的距离省略、剩余表面、接触规则及独立 RS 范围。命令、输出与验收边界见 [native_operation_scope_probes.md](native_operation_scope_probes.md)。该诊断不执行完整任务，不计正式配额；运行时检查通过不能替代门板停止模型、正常结构接触及完整运动验证。
+
+### 外部关节运动诊断
+
+可选诊断命令及原始输出字段见 [native_articulation_motion.md](native_articulation_motion.md)。该模式明确标为 diagnostic_external_actuation；实际驱动命令在物理步前提交并读回，风险计算仍离线。默认采集不启用。诊断直接推动资产，不能把原生 success 字段解释成机器人任务成功。

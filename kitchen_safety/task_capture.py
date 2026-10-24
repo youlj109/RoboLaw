@@ -130,6 +130,8 @@ class TaskRawRecorder:
         self.robot=self.e.scene['robot'];self.telemetry=SceneCapture(self.robot._physics_sim_view,inventory)
         self.identity=dict(task_id=contract['task_id'],task_sha256=digest(contract),scope_sha256=scope['scope_sha256'])
         self.config=deepcopy(config);self.inventory=inventory
+        self.contract=deepcopy(contract);self.bindings=deepcopy(scope['bindings']);self.diagnostic_actuation=None
+        self.diagnostic_command_steps=0
         for name,value in [('task_contract.json',contract),('mesh_inventory.json',inventory),
                 ('relation_scope.json',scope),('rs_pair_scope.json',rs_scope),('telemetry_binding.json',self.telemetry.metadata)]:
             write_json(self.directory/name,value)
@@ -204,6 +206,11 @@ class TaskRawRecorder:
         def physical(*args,**kwargs):
             if self.active:
                 if self.waiting_update:raise RuntimeError('Physical step without a preceding state capture')
+                if self.diagnostic_actuation is not None:
+                    from kitchen_safety.task_articulation_probe import submit_command
+                    self.command_events.append(submit_command(self.diagnostic_actuation,device=self.e.device,
+                        physics_step=self.sink.steps,action_index=self.action_index))
+                    self.diagnostic_command_steps+=1
                 self.waiting_update=True
             return original_step(*args,**kwargs)
         def updated(*args,**kwargs):
@@ -221,13 +228,23 @@ class TaskRawRecorder:
             return result
         self._set(self.e.sim,'step',physical);self._set(self.e.scene,'update',updated)
 
-    def step(self,action,*,phase,operation_id=None,controller_evidence=None):
+    def step(self,action,*,phase,operation_id=None,controller_evidence=None,diagnostic_actuation=None):
         if self.closed or self.terminal:raise RuntimeError('Episode already closed or terminated; freeze a new reset')
         if self.active or self.sink.steps!=4*self.action_index:raise RuntimeError('Invalid action/physics alignment')
+        if self.diagnostic_actuation is not None:
+            from kitchen_safety.task_articulation_probe import validate_transition
+            validate_transition(self.diagnostic_actuation,diagnostic_actuation)
+        self.diagnostic_actuation=None
+        if diagnostic_actuation is not None:
+            from kitchen_safety.task_articulation_probe import resolve_command
+            if diagnostic_actuation.get('operation_id')!=operation_id:raise ValueError('Diagnostic operation context differs')
+            self.diagnostic_actuation=resolve_command(diagnostic_actuation,self.contract,self.bindings,self.inventory,
+                self.telemetry.articulation.views)
         self.phase=str(phase);self.operation_id=operation_id
         self.sink.submit(dict(kind='observation',action_index=self.action_index,phase=self.phase,operation_id=operation_id,
             source_physics_step=self.sink.steps-1,time_s=self.sink.steps*self.dt,state=deepcopy(self.latest),
-            nominal_action=array(action).tolist(),controller_evidence=deepcopy(controller_evidence)))
+            nominal_action=array(action).tolist(),controller_evidence=deepcopy(controller_evidence),
+            diagnostic_actuation=deepcopy(diagnostic_actuation)))
         self.active=True
         try:result=self.env.step(action)
         finally:self.active=False
@@ -272,7 +289,8 @@ class TaskRawRecorder:
                 reason='final physical window must receive an offline safety sample'))
         self.sink.finish();self.closed=True
         p=self.directory/'raw_capture_summary.json';report=json.loads(p.read_text())
-        report.update(schema_version='robolaw-native-raw-2',task_success=task_success,execution_error=execution_error,
+        report.update(diagnostic_external_actuation_steps=self.diagnostic_command_steps,
+            schema_version='robolaw-native-raw-2',task_success=task_success,execution_error=execution_error,
             complete_physics_windows=self.sink.steps%4==0,online_geometry_queries=0,online_risk_evaluations=0,
             collection_wall_s=time.perf_counter()-self.started,full_task_execution_verified=False,
             placement_validation=self.placement_validation,task_acceptance='not established by raw capture',

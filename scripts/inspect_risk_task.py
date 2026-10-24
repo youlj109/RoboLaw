@@ -151,7 +151,7 @@ def main():
                         if not isinstance(command,dict) or not {'action','phase'}<=command.keys():
                             raise ValueError('Policy must emit actual action and semantic phase')
                         last_result=recorder.step(command['action'],phase=command['phase'],operation_id=command.get('operation_id'),
-                            controller_evidence=command.get('evidence'))
+                            controller_evidence=command.get('evidence'),diagnostic_actuation=command.get('diagnostic_actuation'))
                         if recorder.terminal:
                             stop_reason="environment_terminal";break
                     task_success=(recorder.last_action_outcome or {}).get('success')
