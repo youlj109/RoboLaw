@@ -3144,5 +3144,56 @@
     },
     "pending": "Non-fixed articulated mating surfaces require independent exact binding; no inherited robot stopping guarantee",
     "evidence_root": "/media/user/新加卷/RoboLaw-runtime/task_suite_expansion_20261023/native_fixed_assembly_probe_20261024"
+  },
+  "native_rule_evidence_gates_20261024": {
+    "implemented": true,
+    "thresholds_changed": false,
+    "new_simulation_steps": 0,
+    "gpu_queries": 0,
+    "historical_outputs_modified": false,
+    "source_sha256": "83ae618b3e4da6c0146a45f9653ea717ab844e02b74f6fab8de168881ba6f99b",
+    "checks": {
+      "native_rule_contract_candidate_v2_20261024.json": {
+        "passed": true,
+        "total": 82,
+        "implementation_sha256": "83ae618b3e4da6c0146a45f9653ea717ab844e02b74f6fab8de168881ba6f99b",
+        "report_sha256": "fd173f07f5ba3f67b9be379d33e6f6ea2a295659a5b1d78e052e51c85b26f463"
+      },
+      "native_rules_human_comparison_20261024.json": {
+        "passed": true,
+        "tasks": 1,
+        "frames": 793,
+        "wall_s": 59.76655792299425,
+        "candidate_sha256": "83ae618b3e4da6c0146a45f9653ea717ab844e02b74f6fab8de168881ba6f99b",
+        "report_sha256": "8e886d5041d3ecd082c74fba09f0adf6339fd35e67df4aab865f8f2c8f9f02cb"
+      },
+      "native_rules_operation_comparison_20261024.json": {
+        "passed": true,
+        "tasks": 1,
+        "frames": 7,
+        "wall_s": 3.539358842012007,
+        "candidate_sha256": "83ae618b3e4da6c0146a45f9653ea717ab844e02b74f6fab8de168881ba6f99b",
+        "report_sha256": "297cd30a02b79afc818a8a43d4c1fe9ed38c2e439e8ab36d63951593dae8c9e5"
+      },
+      "native_rules_operation11_comparison_20261024.json": {
+        "passed": true,
+        "tasks": 11,
+        "frames": 77,
+        "wall_s": 29.29271745198639,
+        "candidate_sha256": "83ae618b3e4da6c0146a45f9653ea717ab844e02b74f6fab8de168881ba6f99b",
+        "report_sha256": "aff06d583d98e44f08c2b7a787e01bc09ef371b4c08e48279d5e94233c007399"
+      },
+      "native_rules_all32_comparison_20261024.json": {
+        "passed": false,
+        "tasks": 32,
+        "frames": 128,
+        "wall_s": 33.57733513499261,
+        "candidate_sha256": "83ae618b3e4da6c0146a45f9653ea717ab844e02b74f6fab8de168881ba6f99b",
+        "report_sha256": "16e0c70e2996b9d5a40fec04900acb5825a1d3f02444c44524a65855ffa2735d"
+      }
+    },
+    "historical_compatibility": "25/32 historical task features unchanged; 7 older schemas lack effective target coverage metadata. New contract intentionally leaves affected distance unknown.",
+    "scope": "Rule correctness and necessary verification only; no per-group 200 episode requirement",
+    "pending": "Unbound stopping models and unavailable fault/damage channels remain explicit coverage gaps; not certified physical safety."
   }
 }

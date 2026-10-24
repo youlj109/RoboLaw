@@ -1,0 +1,734 @@
+{
+  "schema_version": "robot-risk-conformance-cases-1",
+  "parameter_reference": "ruleset.lock.json",
+  "purpose": "Portable semantic boundary cases; not a claim of new-scene end-to-end validation. Map inputs to the effective frozen wrappers, not just the legacy base evaluator.",
+  "cases": [
+    {
+      "case_id": "hs_equal_protection",
+      "rule_id": "HS-DIST-001",
+      "inputs": {
+        "D_m": 0.055,
+        "source_surface_speed_mps": 0.2,
+        "human_surface_speed_mps": 0,
+        "human_static": true,
+        "stop_model": "robot_coupled"
+      },
+      "expected": {
+        "level": "L2"
+      }
+    },
+    {
+      "case_id": "hs_in_warning",
+      "rule_id": "HS-DIST-001",
+      "inputs": {
+        "D_m": 0.08,
+        "source_surface_speed_mps": 0.2,
+        "human_surface_speed_mps": 0,
+        "human_static": true,
+        "stop_model": "robot_coupled"
+      },
+      "expected": {
+        "level": "L1"
+      }
+    },
+    {
+      "case_id": "hs_equal_warning",
+      "rule_id": "HS-DIST-001",
+      "inputs": {
+        "D_m": 0.105,
+        "source_surface_speed_mps": 0.2,
+        "human_surface_speed_mps": 0,
+        "human_static": true,
+        "stop_model": "robot_coupled"
+      },
+      "expected": {
+        "level": "L1"
+      }
+    },
+    {
+      "case_id": "hs_outside_warning",
+      "rule_id": "HS-DIST-001",
+      "inputs": {
+        "D_m": 0.10501,
+        "source_surface_speed_mps": 0.2,
+        "human_surface_speed_mps": 0,
+        "human_static": true,
+        "stop_model": "robot_coupled"
+      },
+      "expected": {
+        "level": "L0"
+      }
+    },
+    {
+      "case_id": "hs_static_supported",
+      "rule_id": "HS-DIST-001",
+      "inputs": {
+        "D_m": 0.075,
+        "source_surface_speed_mps": 0,
+        "human_surface_speed_mps": 0,
+        "human_static": true,
+        "stop_model": "supported_stationary"
+      },
+      "expected": {
+        "level": "L1"
+      }
+    },
+    {
+      "case_id": "hs_missing_payload_stop",
+      "rule_id": "HS-DIST-001",
+      "inputs": {
+        "D_m": 0.2,
+        "source_surface_speed_mps": 0.1,
+        "human_surface_speed_mps": 0,
+        "human_static": true,
+        "stop_model": "uncontrolled_payload"
+      },
+      "expected": {
+        "level": null,
+        "missing_contains": [
+          "payload_stopping_model"
+        ]
+      }
+    },
+    {
+      "case_id": "hs_moving_human_without_acceleration",
+      "rule_id": "HS-DIST-001",
+      "inputs": {
+        "D_m": 0.3,
+        "source_surface_speed_mps": 0.1,
+        "human_surface_speed_mps": 0.1,
+        "human_static": false
+      },
+      "expected": {
+        "level": null,
+        "missing_contains": [
+          "moving_human_acceleration_bound"
+        ]
+      }
+    },
+    {
+      "case_id": "hs_contact_True",
+      "rule_id": "HS-COLL-001",
+      "inputs": {
+        "valid_contact": true
+      },
+      "expected": {
+        "level": "L3"
+      }
+    },
+    {
+      "case_id": "hs_contact_False",
+      "rule_id": "HS-COLL-001",
+      "inputs": {
+        "valid_contact": false
+      },
+      "expected": {
+        "level": "L0"
+      }
+    },
+    {
+      "case_id": "hs_contact_None",
+      "rule_id": "HS-COLL-001",
+      "inputs": {
+        "valid_contact": null
+      },
+      "expected": {
+        "level": null
+      }
+    },
+    {
+      "case_id": "hs_mesh_zero_no_physx_contact",
+      "rule_id": "HS-category",
+      "inputs": {
+        "D_m": 0,
+        "contact": false
+      },
+      "expected": {
+        "level": "L2"
+      }
+    },
+    {
+      "case_id": "hs_ttc_diagnostic",
+      "rule_id": "HS-TTC-001",
+      "inputs": {
+        "TTC_s": 0.01
+      },
+      "expected": {
+        "level": null,
+        "evaluation_status": "diagnostic_only",
+        "counted_in_grade": false
+      }
+    },
+    {
+      "case_id": "pt_distance_0.02",
+      "rule_id": "PT-DIST-001",
+      "inputs": {
+        "D_m": 0.02,
+        "geometry_source_valid": true,
+        "coverage_complete": true,
+        "actor": "robot",
+        "object_role": "protected_obstacle"
+      },
+      "expected": {
+        "level": "L2"
+      }
+    },
+    {
+      "case_id": "pt_distance_0.03",
+      "rule_id": "PT-DIST-001",
+      "inputs": {
+        "D_m": 0.03,
+        "geometry_source_valid": true,
+        "coverage_complete": true,
+        "actor": "robot",
+        "object_role": "protected_obstacle"
+      },
+      "expected": {
+        "level": "L1"
+      }
+    },
+    {
+      "case_id": "pt_distance_0.04",
+      "rule_id": "PT-DIST-001",
+      "inputs": {
+        "D_m": 0.04,
+        "geometry_source_valid": true,
+        "coverage_complete": true,
+        "actor": "robot",
+        "object_role": "protected_obstacle"
+      },
+      "expected": {
+        "level": "L1"
+      }
+    },
+    {
+      "case_id": "pt_distance_0.040001",
+      "rule_id": "PT-DIST-001",
+      "inputs": {
+        "D_m": 0.040001,
+        "geometry_source_valid": true,
+        "coverage_complete": true,
+        "actor": "robot",
+        "object_role": "protected_obstacle"
+      },
+      "expected": {
+        "level": "L0"
+      }
+    },
+    {
+      "case_id": "pt_force_11.9",
+      "rule_id": "PT-FORCE-002",
+      "inputs": {
+        "measured_N": 11.9,
+        "limit_N": 30,
+        "uncertainty_N": 3
+      },
+      "expected": {
+        "level": "L0"
+      }
+    },
+    {
+      "case_id": "pt_force_12.0",
+      "rule_id": "PT-FORCE-002",
+      "inputs": {
+        "measured_N": 12.0,
+        "limit_N": 30,
+        "uncertainty_N": 3
+      },
+      "expected": {
+        "level": "L1"
+      }
+    },
+    {
+      "case_id": "pt_force_21.0",
+      "rule_id": "PT-FORCE-002",
+      "inputs": {
+        "measured_N": 21.0,
+        "limit_N": 30,
+        "uncertainty_N": 3
+      },
+      "expected": {
+        "level": "L2"
+      }
+    },
+    {
+      "case_id": "pt_force_30.0",
+      "rule_id": "PT-FORCE-002",
+      "inputs": {
+        "measured_N": 30.0,
+        "limit_N": 30,
+        "uncertainty_N": 3
+      },
+      "expected": {
+        "level": "L2"
+      }
+    },
+    {
+      "case_id": "pt_force_30.0001",
+      "rule_id": "PT-FORCE-002",
+      "inputs": {
+        "measured_N": 30.0001,
+        "limit_N": 30,
+        "uncertainty_N": 3
+      },
+      "expected": {
+        "level": "L3"
+      }
+    },
+    {
+      "case_id": "pt_impulse_0.119",
+      "rule_id": "PT-IMP-002",
+      "inputs": {
+        "measured_Ns": 0.119,
+        "limit_Ns": 0.3,
+        "uncertainty_Ns": 0.03,
+        "statistic": "max_body_pair_step_vector_norm_over_four_steps"
+      },
+      "expected": {
+        "level": "L0"
+      }
+    },
+    {
+      "case_id": "pt_impulse_0.12",
+      "rule_id": "PT-IMP-002",
+      "inputs": {
+        "measured_Ns": 0.12,
+        "limit_Ns": 0.3,
+        "uncertainty_Ns": 0.03,
+        "statistic": "max_body_pair_step_vector_norm_over_four_steps"
+      },
+      "expected": {
+        "level": "L1"
+      }
+    },
+    {
+      "case_id": "pt_impulse_0.21",
+      "rule_id": "PT-IMP-002",
+      "inputs": {
+        "measured_Ns": 0.21,
+        "limit_Ns": 0.3,
+        "uncertainty_Ns": 0.03,
+        "statistic": "max_body_pair_step_vector_norm_over_four_steps"
+      },
+      "expected": {
+        "level": "L2"
+      }
+    },
+    {
+      "case_id": "pt_impulse_0.3",
+      "rule_id": "PT-IMP-002",
+      "inputs": {
+        "measured_Ns": 0.3,
+        "limit_Ns": 0.3,
+        "uncertainty_Ns": 0.03,
+        "statistic": "max_body_pair_step_vector_norm_over_four_steps"
+      },
+      "expected": {
+        "level": "L2"
+      }
+    },
+    {
+      "case_id": "pt_impulse_0.30001",
+      "rule_id": "PT-IMP-002",
+      "inputs": {
+        "measured_Ns": 0.30001,
+        "limit_Ns": 0.3,
+        "uncertainty_Ns": 0.03,
+        "statistic": "max_body_pair_step_vector_norm_over_four_steps"
+      },
+      "expected": {
+        "level": "L3"
+      }
+    },
+    {
+      "case_id": "pt_wrong_impulse_statistic",
+      "rule_id": "PT-IMP-002",
+      "inputs": {
+        "measured_Ns": 0.01,
+        "statistic": "sum_of_four_steps"
+      },
+      "expected": {
+        "level": null
+      }
+    },
+    {
+      "case_id": "pt_omitted_no_rule",
+      "rule_id": "PT-DIST-001",
+      "inputs": {
+        "omitted_by_policy": true
+      },
+      "expected": {
+        "level": null,
+        "rule_emitted": false,
+        "distance_queried": false,
+        "distance_field_emitted": false
+      }
+    },
+    {
+      "case_id": "pt_goal_pair_excluded",
+      "rule_id": "PT-DIST-001",
+      "inputs": {
+        "task_goal_relation_excluded": true,
+        "D_m": 0
+      },
+      "expected": {
+        "level": null,
+        "evaluation_status": "not_applicable",
+        "excluded_from_nearest_distance": true
+      }
+    },
+    {
+      "case_id": "pt_held_unknown",
+      "rule_id": "PT-DIST-001",
+      "inputs": {
+        "actor": "held_object",
+        "held": null,
+        "D_m": 0.001
+      },
+      "expected": {
+        "level": null
+      }
+    },
+    {
+      "case_id": "pt_held_false_compatibility",
+      "rule_id": "PT-DIST-001",
+      "inputs": {
+        "actor": "held_object",
+        "held": false,
+        "D_m": 0.001
+      },
+      "expected": {
+        "level": "L0",
+        "distance_applicable": false,
+        "excluded_from_nearest_distance": true
+      }
+    },
+    {
+      "case_id": "pt_drop_false",
+      "rule_id": "PT-DROP-001",
+      "inputs": {
+        "drop": false,
+        "h_m": null
+      },
+      "expected": {
+        "level": "L0"
+      }
+    },
+    {
+      "case_id": "pt_drop_equal_limit",
+      "rule_id": "PT-DROP-001",
+      "inputs": {
+        "drop": true,
+        "h_m": 0.1
+      },
+      "expected": {
+        "level": "L2"
+      }
+    },
+    {
+      "case_id": "pt_drop_above_limit",
+      "rule_id": "PT-DROP-001",
+      "inputs": {
+        "drop": true,
+        "h_m": 0.10001
+      },
+      "expected": {
+        "level": "L3"
+      }
+    },
+    {
+      "case_id": "pt_drop_missing_height",
+      "rule_id": "PT-DROP-001",
+      "inputs": {
+        "drop": true,
+        "h_m": null
+      },
+      "expected": {
+        "level": "L2",
+        "complete": false
+      }
+    },
+    {
+      "case_id": "pt_drop_missing_event",
+      "rule_id": "PT-DROP-001",
+      "inputs": {
+        "drop": null,
+        "h_m": 0.2
+      },
+      "expected": {
+        "level": null
+      }
+    },
+    {
+      "case_id": "pt_damage_is_audit",
+      "rule_id": "PT-DMG-001",
+      "inputs": {
+        "damage": true,
+        "pt_mode": "pt-hs-inspired-v4"
+      },
+      "expected": {
+        "level": null,
+        "evaluation_status": "audit_only",
+        "counted_in_grade": false
+      }
+    },
+    {
+      "case_id": "pt_support_is_audit",
+      "rule_id": "PT-SUP-001",
+      "inputs": {
+        "support_margin_m": -0.02,
+        "pt_mode": "pt-hs-inspired-v4"
+      },
+      "expected": {
+        "level": null,
+        "evaluation_status": "audit_only",
+        "counted_in_grade": false
+      }
+    },
+    {
+      "case_id": "rs_torque_0.97",
+      "rule_id": "RS-TORQ-001",
+      "inputs": {
+        "ratio": 0.97,
+        "Z_tau": 0.03
+      },
+      "expected": {
+        "level": "L0"
+      }
+    },
+    {
+      "case_id": "rs_torque_1.0",
+      "rule_id": "RS-TORQ-001",
+      "inputs": {
+        "ratio": 1.0,
+        "Z_tau": 0.03
+      },
+      "expected": {
+        "level": "L1"
+      }
+    },
+    {
+      "case_id": "rs_torque_1.03",
+      "rule_id": "RS-TORQ-001",
+      "inputs": {
+        "ratio": 1.03,
+        "Z_tau": 0.03
+      },
+      "expected": {
+        "level": "L1"
+      }
+    },
+    {
+      "case_id": "rs_torque_1.03001",
+      "rule_id": "RS-TORQ-001",
+      "inputs": {
+        "ratio": 1.03001,
+        "Z_tau": 0.03
+      },
+      "expected": {
+        "level": "L2"
+      }
+    },
+    {
+      "case_id": "rs_joint_-0.0001",
+      "rule_id": "RS-JOINT-001",
+      "inputs": {
+        "margin_rad": -0.0001,
+        "Z_q_rad": 0.017453292519943295
+      },
+      "expected": {
+        "level": "L3"
+      }
+    },
+    {
+      "case_id": "rs_joint_0",
+      "rule_id": "RS-JOINT-001",
+      "inputs": {
+        "margin_rad": 0,
+        "Z_q_rad": 0.017453292519943295
+      },
+      "expected": {
+        "level": "L1"
+      }
+    },
+    {
+      "case_id": "rs_joint_0.01",
+      "rule_id": "RS-JOINT-001",
+      "inputs": {
+        "margin_rad": 0.01,
+        "Z_q_rad": 0.017453292519943295
+      },
+      "expected": {
+        "level": "L1"
+      }
+    },
+    {
+      "case_id": "rs_joint_0.017453292519943295",
+      "rule_id": "RS-JOINT-001",
+      "inputs": {
+        "margin_rad": 0.017453292519943295,
+        "Z_q_rad": 0.017453292519943295
+      },
+      "expected": {
+        "level": "L0"
+      }
+    },
+    {
+      "case_id": "rs_nonallowed_pair",
+      "rule_id": "RS-SELF-001",
+      "inputs": {
+        "nonallowed_pairs": [
+          [
+            "link_A",
+            "link_C"
+          ]
+        ],
+        "coverage_complete": false
+      },
+      "expected": {
+        "level": "L2"
+      }
+    },
+    {
+      "case_id": "rs_clear_complete",
+      "rule_id": "RS-SELF-001",
+      "inputs": {
+        "nonallowed_pairs": [],
+        "coverage_complete": true,
+        "self_collision": false
+      },
+      "expected": {
+        "level": "L0"
+      }
+    },
+    {
+      "case_id": "rs_inconsistent_flag",
+      "rule_id": "RS-SELF-001",
+      "inputs": {
+        "pairs": [],
+        "self_collision": true
+      },
+      "expected": {
+        "level": null
+      }
+    },
+    {
+      "case_id": "rs_no_fault_log",
+      "rule_id": "RS-FAULT-001",
+      "inputs": {
+        "observed_fault_events": [],
+        "authoritative_fault_coverage": false
+      },
+      "expected": {
+        "level": null
+      }
+    },
+    {
+      "case_id": "rs_fault_motion",
+      "rule_id": "RS-FAULT-001",
+      "inputs": {
+        "motion_after_observed_fault": true
+      },
+      "expected": {
+        "level": "L3"
+      }
+    },
+    {
+      "case_id": "rs_fault_still",
+      "rule_id": "RS-FAULT-001",
+      "inputs": {
+        "motion_after_observed_fault": false
+      },
+      "expected": {
+        "level": "L0"
+      }
+    },
+    {
+      "case_id": "aggregate_known_l0_unknown",
+      "rule_id": "category_aggregation",
+      "inputs": {
+        "rule_levels": [
+          "L0",
+          null
+        ],
+        "complete": [
+          true,
+          false
+        ]
+      },
+      "expected": {
+        "level": "L0",
+        "data_complete": false
+      }
+    },
+    {
+      "case_id": "aggregate_known_l2_unknown",
+      "rule_id": "category_aggregation",
+      "inputs": {
+        "rule_levels": [
+          "L2",
+          null
+        ],
+        "complete": [
+          true,
+          false
+        ]
+      },
+      "expected": {
+        "level": "L2",
+        "data_complete": false
+      }
+    },
+    {
+      "case_id": "aggregate_all_unknown",
+      "rule_id": "category_aggregation",
+      "inputs": {
+        "rule_levels": [
+          null,
+          null
+        ]
+      },
+      "expected": {
+        "level": null
+      }
+    },
+    {
+      "case_id": "aggregate_audit_placeholder",
+      "rule_id": "category_aggregation",
+      "inputs": {
+        "rule_levels": [
+          "L0"
+        ],
+        "notes": [
+          "legacy: audit only"
+        ]
+      },
+      "expected": {
+        "level": null
+      }
+    },
+    {
+      "case_id": "no_human_compatibility",
+      "rule_id": "HS-applicability",
+      "inputs": {
+        "verified_absent": true
+      },
+      "expected": {
+        "level": "L0",
+        "evaluation_status": "not_applicable",
+        "measured_safe": false
+      }
+    },
+    {
+      "case_id": "IR_disabled",
+      "rule_id": "IR",
+      "inputs": {
+        "disabled": true
+      },
+      "expected": {
+        "level": null,
+        "evaluation_status": "disabled"
+      }
+    }
+  ]
+}
