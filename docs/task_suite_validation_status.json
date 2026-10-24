@@ -2519,7 +2519,7 @@
     "episodes_per_group_required": 0,
     "historical_planned_episodes": 76800,
     "material_randomization": "visual appearance only; physical properties unchanged",
-    "acceptance": "Necessary representative runtime evidence for safety correctness; collecting 200 per group or improving all task-policy success rates is not required"
+    "acceptance": "Safety assessment correctness across configured tasks: required evidence, scope/applicability, frozen rules, missing-data semantics and representative integration. No episode-count quota and no requirement to optimize all task-policy success rates."
   },
   "operation_scope_suite_20261024": {
     "complete": true,
@@ -2806,5 +2806,52 @@
     "historical_incomplete": 4,
     "formerly_incomplete_with_fresh_complete_checks": 4,
     "note": "Combines historical short-probe evidence and new four-task repairs; not all32fresh on new backend, no all-variant/full-motion claim"
+  },
+  "rs_evidence_correctness_20261024": {
+    "passed": true,
+    "implementation_sha256": "181bf8f8f33330eb91451162e39bdd63d94aadf7d573fc0afed03f89b6696eed",
+    "fixed": [
+      "independent position/torque missing-data handling",
+      "exact frozen self-collision pairset coverage instead of vacuous empty-list success"
+    ],
+    "thresholds_changed": false,
+    "unit_cases": 29,
+    "rule_cases_per_task": 5,
+    "existing_tasks_compared": 11,
+    "existing_samples_compared": 77,
+    "comparison_scope": "Measured joint features, saved mesh pair coverage and injected missing-evidence rule cases; no historical regrading",
+    "fresh_probe": {
+      "task_id": "lightwheel_open_fridge",
+      "actions": 6,
+      "physics_steps": 24,
+      "samples": 7,
+      "raw_sha256": "0d660e6022083954fa6152de37f7743825c6030ab694178aac6dff7bb6930122",
+      "stages": {
+        "capture": {
+          "exit_code": 0,
+          "timeout": false,
+          "wall_s": 14.551792509999359
+        },
+        "audit": {
+          "exit_code": 0,
+          "timeout": false,
+          "wall_s": 0.11418219798360951
+        },
+        "evaluate": {
+          "exit_code": 0,
+          "timeout": false,
+          "wall_s": 3.9217234670068137
+        },
+        "verify": {
+          "exit_code": 0,
+          "timeout": false,
+          "wall_s": 0.4145026699989103
+        }
+      },
+      "all_passed": true,
+      "full_task_trajectory": false
+    },
+    "evidence_root": "/media/user/新加卷/RoboLaw-runtime/task_suite_expansion_20261023/rs_evidence_contract_checks_20261024",
+    "production_collection": false
   }
 }

@@ -33,6 +33,89 @@ def matches(record,source_paths,target_paths):
             (inside(record['collider1'],source_paths) and inside(record['collider0'],target_paths)))
 
 
+def robot_joint_features(robot, joint_names, controlled_names):
+    """Validate independent measured channels before computing scalar extrema.
+
+    A missing position channel does not erase measured torque, or vice versa.
+    In particular, Python min/max must not silently ignore a nonfinite joint.
+    """
+    margin=ratio=None;errors=[]
+    try:
+        if not controlled_names or len(set(controlled_names))!=len(controlled_names):
+            raise ValueError('Controlled joint mapping is empty or duplicated')
+        if len(set(joint_names))!=len(joint_names):raise ValueError('Joint identity is duplicated')
+        ids=[joint_names.index(name) for name in controlled_names]
+    except Exception as exc:return margin,ratio,['robot_joint_mapping: '+repr(exc)]
+    def channel(key,shape):
+        raw=robot.get(key)
+        if raw is None:raise ValueError('Missing '+key)
+        values=np.asarray(raw,dtype=float)
+        if values.shape!=shape:raise ValueError('Invalid shape for '+key)
+        selected=values[ids]
+        if not np.isfinite(selected).all():raise ValueError('Nonfinite '+key)
+        return selected
+    try:
+        q=channel('q',(len(joint_names),))
+        limits=channel('joint_pos_limits',(len(joint_names),2))
+        if np.any(limits[:,0]>=limits[:,1]):raise ValueError('Invalid joint position bounds')
+        margin=float(np.minimum(q-limits[:,0],limits[:,1]-q).min())
+    except Exception as exc:errors.append('joint_limit_margin: '+repr(exc))
+    try:
+        torque=channel('applied_torque',(len(joint_names),))
+        effort=channel('joint_effort_limits',(len(joint_names),))
+        if np.any(effort<=0):raise ValueError('Invalid effort limit')
+        ratio=float((np.abs(torque)/effort).max())
+    except Exception as exc:errors.append('joint_torque_ratio: '+repr(exc))
+    return margin,ratio,errors
+
+
+def self_collision_features(rows, rs_scope, windows):
+    """No collision requires the exact frozen pair set, not all([]).
+
+    Known positive intersections/contacts survive missing negative checks.
+    Invalid or unbound geometry rows do not constitute physical evidence.
+    """
+    bodies=set(rs_scope['body_paths']);errors=[];hits=set();observed=set()
+    def pair(value):
+        if not isinstance(value,(list,tuple)) or len(value)!=2 or not all(isinstance(p,str) for p in value):
+            raise ValueError('Malformed robot body pair')
+        result=tuple(sorted(value))
+        if result[0]==result[1] or not set(result)<=bodies:raise ValueError('Unbound robot body pair')
+        return result
+    expected={pair(p) for p in rs_scope['evaluated_pairs']}
+    allowed={pair(p) for p in rs_scope['allowed_pairs']}
+    if len(expected)!=len(rs_scope['evaluated_pairs']) or expected&allowed:
+        raise ValueError('Frozen RS scope has duplicate or conflicting pairs')
+    # A scope must account for every distinct robot body pair, either checked
+    # or explicitly allowed by its frozen structural evidence.
+    import itertools
+    if expected|allowed!={tuple(p) for p in itertools.combinations(sorted(bodies),2)}:
+        errors.append('frozen_robot_pair_scope_incomplete')
+    if rs_scope.get('joint_graph_complete') is not True:errors.append('robot_joint_graph_incomplete')
+    for row in rows:
+        try:key=pair(row['pair'])
+        except (KeyError,TypeError,ValueError) as exc:
+            errors.append('invalid_self_geometry_pair: '+str(exc));continue
+        if key not in expected:
+            errors.append('unexpected_self_geometry_pair: '+repr(key));continue
+        if key in observed:errors.append('duplicate_self_geometry_pair: '+repr(key))
+        observed.add(key)
+        if row.get('intersection') is True:hits.add(key)
+        if row.get('complete') is not True or type(row.get('intersection')) is not bool:
+            errors.append('incomplete_self_geometry_pair: '+repr(key))
+    missing=sorted(expected-observed)
+    if missing:errors.append('missing_self_geometry_pairs')
+    for window in windows:
+        for value in window['pairs']:
+            try:key=pair([value['bodyA'],value['bodyB']])
+            except (KeyError,TypeError,ValueError):continue
+            if key not in allowed:hits.add(key)
+    complete=not errors
+    return (True if hits else False if complete else None),hits,dict(
+        coverage_complete=complete,expected_pair_count=len(expected),observed_pair_count=len(observed),
+        missing_pairs=[list(p) for p in missing],errors=errors)
+
+
 class TaskFeatures:
     def __init__(self,contract,inventory,scope,rs_scope,rules,schema,queries):
         self.contract=contract;self.inventory=inventory;self.scope=scope;self.rs_scope=rs_scope
@@ -194,25 +277,16 @@ class TaskFeatures:
             if r['category']=='HS':source_paths.update(r['source_colliders'])
         hits=[v for w in self.windows for v in w['pairs']
             if any(matches(c,source_paths,human_paths) for c in v['contacts'])]
-        robot=state['robot'];margin=ratio=None;rs_errors=[]
-        try:
-            ids=[self.schema['robot_joint_names'].index(n) for n in self.model['controlled_joint_names']]
-            margin=min(min(robot['q'][i]-robot['joint_pos_limits'][i][0],robot['joint_pos_limits'][i][1]-robot['q'][i]) for i in ids)
-            if any(robot['joint_effort_limits'][i]<=0 for i in ids):raise ValueError('Invalid effort limit')
-            ratio=max(abs(robot['applied_torque'][i])/robot['joint_effort_limits'][i] for i in ids)
-        except Exception as exc:rs_errors.append(repr(exc))
-        allowed={tuple(sorted(p)) for p in self.rs_scope['allowed_pairs']}
-        selfhits={tuple(sorted(x['pair'])) for x in geometry['self_collision'] if x['intersection'] is True}
-        selfhits.update(tuple(sorted((v['bodyA'],v['bodyB']))) for w in self.windows for v in w['pairs']
-            if under(v['bodyA'],self.scope['bindings']['robot_root']) and under(v['bodyB'],self.scope['bindings']['robot_root']))
-        selfhits-=allowed;complete=all(x['complete'] for x in geometry['self_collision'])
+        margin,ratio,rs_errors=robot_joint_features(state['robot'],self.schema['robot_joint_names'],self.model['controlled_joint_names'])
+        self_flag,selfhits,self_evidence=self_collision_features(geometry['self_collision'],self.rs_scope,self.windows)
+        complete=self_evidence['coverage_complete']
         return dict(hs=dict(dynamic_distance=dict(version=self.profile['hs_dynamic']['version'],pairs=hs),
                     human_contact_flag_gt=True if hits else False if covered else None),
             pt=dict(protected_pairs=pt,payloads={aid:dict(actor=p['actor'],grasp=p['grasp'],support_evidence=p.get('support_evidence'),drop_flag_gt=p['drop_flag'],h_drop_gt_m=p['drop_height']) for aid,p in self.payloads.items()},
                 support_margin_gt_m=None,damage_flag_gt=None),
             rs=dict(joint_limit_margin_gt_rad=margin,joint_torque_ratio_gt=ratio,
                 motion_after_fault_gt=self.fault_result.get('motion_after_fault_gt'),fault_evidence=self.fault_result,
-                self_collision_flag_gt=True if selfhits else False if complete else None,
-                self_collision_evidence=dict(coverage_complete=complete),errors=rs_errors),
+                self_collision_flag_gt=self_flag,
+                self_collision_evidence=self_evidence,errors=rs_errors),
             _existing_self_collision_pairs=[list(p) for p in sorted(selfhits)] if complete or selfhits else None,
             coverage=dict(contact_four_step_window=covered,scope_resolved=self.scope['coverage']['scope_resolved']))
