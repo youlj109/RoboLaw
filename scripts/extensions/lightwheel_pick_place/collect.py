@@ -275,7 +275,7 @@ with SimulationAppContext(args):
         else:
             # Shelf cavity: stop a few cm short of the fruit center along the approach axis.
             axis=pregrasp_offset/max(float(np.linalg.norm(pregrasp_offset)),1e-6)
-            contact_standoff=target_center[:3]+axis*0.01
+            contact_standoff=target_center[:3]+axis*0.02
             result['approach_contact_standoff_m']=contact_standoff.tolist()
             cart(contact_standoff)
         phase='close';grip=1.
