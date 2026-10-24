@@ -172,6 +172,17 @@ class TaskFeatures:
         current=self.windows[-1] if self.windows else dict(coverage=False,pairs=[])
         covered=current['coverage'];robot_root=self.scope['bindings']['robot_root'];model=self.model
         for aid,p in self.payloads.items():
+            # advance() supplies every physics step; features() refines that
+            # same source step with its offline mesh separation. Re-evaluate
+            # from the pre-step tracker state, never from the first call's
+            # mutated anchor. Otherwise opening can clear the old anchor and
+            # a second call can falsely confirm a grasp from residual contacts.
+            if p.get('tracker_source_step')!=self.step:
+                p['tracker_source_step']=self.step
+                p['tracker_before_step']=deepcopy(vars(p['tracker']))
+            else:
+                vars(p['tracker']).clear()
+                vars(p['tracker']).update(deepcopy(p['tracker_before_step']))
             pairs=[v for v in current['pairs'] if p['actor'] in (v['bodyA'],v['bodyB'])]
             gripping={v[k] for v in pairs if v['force_n']>.01 for k in ('bodyA','bodyB')
                 if v[k] in self.scope['bindings']['grip_actor_paths']}
@@ -209,6 +220,7 @@ class TaskFeatures:
                 bridge=dict(body_pose=[hand],mustard=pose,q=[q])
                 p['grasp']=p['tracker'].sample(self.step,self.dt,bridge,['base_link'],['finger_joint'],
                     set(model['bilateral_actor_paths'])<=gripping,covered,supported,gripping,phase,separated)
+                p['grasp']['sampling_semantics']='same_source_step_refined_from_pre_step_tracker_state'
                 z=pose[2];p['maximum_z']=max(z,p['maximum_z']) if p['maximum_z'] is not None else z
                 protocol=self.config['drop_protocol'];descent=p['maximum_z']-z
                 falling=pose[9]<-protocol['downward_speed_mps'] and descent>protocol['descent_m']

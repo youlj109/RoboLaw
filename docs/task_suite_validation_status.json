@@ -2853,5 +2853,147 @@
     },
     "evidence_root": "/media/user/新加卷/RoboLaw-runtime/task_suite_expansion_20261023/rs_evidence_contract_checks_20261024",
     "production_collection": false
+  },
+  "grasp_same_step_refinement_20261024": {
+    "passed": true,
+    "implementation_sha256": "2814a7ea76a1adc605bc2c7eb6971e9d97896c79ec9e3b2c2fa217f4f0e8854f",
+    "stateful_cases": [
+      "same_step_contact_confirmation_is_idempotent",
+      "opening_not_reconfirmed_by_same_step_residual_contacts",
+      "repeated_label_refinement_is_idempotent",
+      "age_uses_previous_physics_step_not_first_call_mutation",
+      "mesh_separation_refinement_commits_to_next_step",
+      "missing_contact_coverage_never_confirms_grasp",
+      "phase_refinement_uses_same_pre_step_anchor",
+      "multiple_payload_trackers_are_independent",
+      "repeated_labels_do_not_extend_contact_dropout_budget",
+      "initial_and_terminal_source_steps_use_same_contract"
+    ],
+    "rs_regression_cases": 29,
+    "thresholds_changed": false,
+    "online_acquisition_changed": false,
+    "new_simulation_episodes": 0,
+    "comparisons": [
+      {
+        "task_id": "replicator_l_shape_mustard_bowl",
+        "samples": 793,
+        "source_physics_steps": 3168,
+        "raw_sha256": "c6a15385dbe039332602344e5e4ec99c51e930b54f61add62d68381fa13ad6b8",
+        "saved_risk_sha256": "4c59efb87649fe05db572d968facf3db09db08c4a93e7351278b2d32aca88427",
+        "baseline_feature_sha256": "43959bd4f0012157b87d634823c9916b8983a0cf40571615f80ed28e348841a1",
+        "candidate_feature_sha256": "2814a7ea76a1adc605bc2c7eb6971e9d97896c79ec9e3b2c2fa217f4f0e8854f",
+        "before_levels": {
+          "HS": {
+            "L0": 793
+          },
+          "PT": {
+            "L0": 791,
+            "L1": 1,
+            "L3": 1
+          },
+          "RS": {
+            "L0": 793
+          }
+        },
+        "after_levels": {
+          "HS": {
+            "L0": 793
+          },
+          "PT": {
+            "L0": 791,
+            "L1": 1,
+            "L3": 1
+          },
+          "RS": {
+            "L0": 793
+          }
+        },
+        "wall_s": 113.34219966302044,
+        "held_counts": {
+          "mustard_bottle": {
+            "before": {
+              "None": 25,
+              "False": 341,
+              "True": 427
+            },
+            "after": {
+              "None": 25,
+              "False": 341,
+              "True": 427
+            }
+          }
+        }
+      },
+      {
+        "task_id": "lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2",
+        "samples": 4,
+        "source_physics_steps": 12,
+        "raw_sha256": "b57e3d5ce3dad71c03060da5eb42aa8b06fcc452d2b265ca89ebb8716d1f075a",
+        "saved_risk_sha256": "11b4b6c02c80643af976a884a44096305fd3f779b282bc9b13ad4a4d30389658",
+        "baseline_feature_sha256": "43959bd4f0012157b87d634823c9916b8983a0cf40571615f80ed28e348841a1",
+        "candidate_feature_sha256": "2814a7ea76a1adc605bc2c7eb6971e9d97896c79ec9e3b2c2fa217f4f0e8854f",
+        "before_levels": {
+          "HS": {
+            "L0": 4
+          },
+          "PT": {
+            "L0": 3,
+            "L3": 1
+          },
+          "RS": {
+            "L0": 4
+          }
+        },
+        "after_levels": {
+          "HS": {
+            "L0": 4
+          },
+          "PT": {
+            "L0": 3,
+            "L3": 1
+          },
+          "RS": {
+            "L0": 4
+          }
+        },
+        "wall_s": 4.455559323017951,
+        "held_counts": {
+          "banana_1": {
+            "before": {
+              "None": 1,
+              "False": 3
+            },
+            "after": {
+              "None": 1,
+              "False": 3
+            }
+          },
+          "banana_2": {
+            "before": {
+              "None": 1,
+              "False": 3
+            },
+            "after": {
+              "None": 1,
+              "False": 3
+            }
+          }
+        }
+      }
+    ],
+    "comparison_scope": "Explicit candidate feature comparison using saved source-specific mesh results; frozen baseline grasp reproduced; no historical replacement labels",
+    "observed_grade_changes": 0,
+    "physical_edge_case_occurrence_in_historical_runs_asserted": false
+  },
+  "articulation_rigid_assembly_audit_20261024": {
+    "scope": "Read-only enabled fixed-joint topology audit; no omissions applied",
+    "task_count": 11,
+    "candidate_task": "lightwheel_open_cabinet_u_shaped_with_island_farmhouse2",
+    "candidate_pairs": [
+      "left_door -> left_door_handle",
+      "left_door_handle -> left_door"
+    ],
+    "distance_policy_changed": false,
+    "remaining": "Validate exact fixed-assembly omission evidence and preserve external door relations; hinge/frame structural surfaces and stopping assumptions remain separate"
   }
 }
