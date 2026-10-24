@@ -68,7 +68,7 @@ TASKS: dict[str, TaskSpec] = {
         # Approach from robot side (-Y), not from above into board_1.
         pregrasp_offset_m=(0.0, -0.17, 0.0),
         transfer_z_m=0.08,
-        lower_z_m=0.04,
+        lower_z_m=0.055,
         grasp_body_z_range=(-0.001, 0.061),
         stand_output_basename="lemon_droid_original_stand",
         default_fixed_layout=ROOT / "configs/extensions/lightwheel_pick_place/fixed_layout_lemon.json",

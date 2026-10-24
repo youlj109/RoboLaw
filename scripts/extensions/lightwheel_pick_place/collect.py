@@ -231,10 +231,11 @@ with SimulationAppContext(args):
             target[:3,:3]=(kin.fk(q)[:3,:3] if rotation is None else rotation)
             # Shelf/lateral approach cannot use cuRobo vertical-column phases.
             # Pure +Z extract segments keep phase=lift (local cartesian); laterals use transfer.
+            # Shelf lower is ~1 cm under transfer; vertical-column IK residual fails — use MotionGen.
             planning_phase=phase
             if force_phase is not None:
                 planning_phase=force_phase
-            elif (not use_pregrasp_phase) and phase in ('pregrasp','approach','lift'):
+            elif (not use_pregrasp_phase) and phase in ('pregrasp','approach','lift','lower'):
                 planning_phase='transfer'
             try:
                 if planning_phase=='cartesian_line':
