@@ -29,6 +29,7 @@ START = [
         'fruits_veggies/orange_01.usd',
         'objaverse/apple_01.usd',
         'ycb/bowl.usd',
+        'ycb/banana.usd',
         'vomp/plate_large/plate_large.usd',
     )
 ]

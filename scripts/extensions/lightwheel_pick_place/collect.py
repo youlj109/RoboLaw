@@ -45,7 +45,7 @@ parser.add_argument('--place-clear-rise-z',type=float,default=0.0,
     help='After transfer, pure +Z rise before lower/release (metres); helps clear plate rim')
 args=parser.parse_args();args.enable_cameras=True
 if args.num_envs!=1:raise ValueError('This verified entry runs one environment; parallel collection is not implemented')
-from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
+from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task, picks as task_picks
 TASK_SPEC=resolve_task(args.task)
 TASK_ID=TASK_SPEC.task_id
 ROOT=Path(__file__).resolve().parents[3]
@@ -181,7 +181,7 @@ with SimulationAppContext(args):
         result['variant_config_source']={'path':str(config_path),'sha256':hashlib.sha256(config_path.read_bytes()).hexdigest()}
     try:
         for _ in range(20):step(q,0.)
-        initial=snapshot();result['initial_object_states']={name:arr(scene[name].data.root_state_w)[0].tolist() for name in RIGID};result['initial_lime_pose']=initial['lime'].tolist();result['initial_bowl_pose']=initial['wooden_bowl'].tolist();result['pick_object']=PICK;result['destination_object']=DEST
+        initial=snapshot();result['initial_object_states']={name:arr(scene[name].data.root_state_w)[0].tolist() for name in RIGID};result['initial_lime_pose']=initial['lime'].tolist();result['initial_bowl_pose']=initial['wooden_bowl'].tolist();result['pick_object']=PICK;result['destination_object']=DEST;result['pick_objects']=list(task_picks(TASK_SPEC))
         base=arr(robot.data.root_state_w)[0,:7];kin=DroidKinematics(base[:3],Rotation.from_quat(base[3:7]).as_euler('xyz',degrees=True)[2])
         result['fk_error_m']=float(np.linalg.norm(kin.fk(initial['q'][ids])[:3,3]-initial['tcp']))
         if result['fk_error_m']>.005:raise RuntimeError('Robot FK disagrees with PhysX TCP')
@@ -428,6 +428,63 @@ with SimulationAppContext(args):
         for _ in range(120):
             step(q,grip)
             if terminal.get('terms',{}).get('success',False) and np.linalg.norm(snapshot()['lime'][7:10])<.003:break
+        # DUAL_PICK_LOOP: place remaining picks (B03 banana_2) with same skill template.
+        remaining=list(task_picks(TASK_SPEC))[1:]
+        result['pick_objects']=list(task_picks(TASK_SPEC))
+        for pick_name in remaining:
+            PICK=pick_name
+            world.bind_pick(PICK)
+            contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK)
+            held0=snapshot();p=held0['lime'][:3].copy()
+            target_center=transform(held0['lime'][:3],held0['lime'][3:7])@np.r_[world.object_center,1]
+            target_center[2]+=args.grasp_height_offset
+            target_center[0]+=args.grasp_lateral_x
+            R=Rotation.from_euler('z',args.grasp_yaw,degrees=True).as_matrix()@Rotation.from_euler('x',args.grasp_tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],dtype=float)
+            center=target_center[:3]+float(args.grasp_finger_bias)*R[:,1]
+            if use_pregrasp_phase:
+                pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
+            else:
+                # Prefer local approach when flag set; else TASK_SPEC offset.
+                if args.grasp_local_approach:
+                    approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
+                    pregrasp_offset=-0.17*approach
+                else:
+                    pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
+            phase='pregrasp' if use_pregrasp_phase else 'approach'
+            cart(center+pregrasp_offset,rotation=R)
+            phase='approach';cart(center,rotation=R)
+            phase='close';grip=1.
+            for _ in range(40):step(q,grip)
+            held=snapshot();result.setdefault('extra_close_contacts',[]).append(contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=8))
+            if not result['extra_close_contacts'][-1]['both_fingers_near_body']:
+                raise RuntimeError(f'No bilateral physical grasp for {PICK}')
+            world.attachment=np.linalg.inv(kin.fk(held['q'][ids]))@transform(held['lime'][:3],held['lime'][3:7])
+            phase='lift';cart(held['tcp']+np.array([0.,0.,0.12]), force_phase='lift')
+            lifted=snapshot();result.setdefault('extra_lift_m',[]).append(float(lifted['lime'][2]-p[2]))
+            dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
+            desired_root=dest[:3]+np.array([0,0,TASK_SPEC.transfer_z_m])
+            phase='transfer';cart(desired_root+offset)
+            if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
+                phase='transfer';cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
+            lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
+            lower_root=dest[:3]+np.array([0.0,0.0,lower_z])
+            xfer_tcp=desired_root+offset; lower_tcp=lower_root+offset
+            phase='lower'
+            if args.place_lower_mode=='skip' or abs(xfer_tcp[2]-lower_tcp[2])<1e-4:
+                pass
+            elif args.place_lower_mode=='cartesian_line':
+                cart(lower_tcp, force_phase='cartesian_line')
+            else:
+                cart(lower_tcp, force_phase='transfer')
+            phase='release';grip=0.;world.attachment=None
+            for _ in range(35):step(q,grip)
+            phase='retreat'
+            try:cart(snapshot()['tcp']+[0,0,.14])
+            except RuntimeError:pass
+            phase='settle_final'
+            for _ in range(120):
+                step(q,grip)
+                if terminal.get('terms',{}).get('success',False) and np.linalg.norm(snapshot()['lime'][7:10])<.003:break
         final=snapshot();result['final_lime']=final['lime'].tolist();result['terminal_terms']=terminal.get('terms',{})
         result['final_live_success']=bool(arr(e.termination_manager.get_term('success'))[0])
         # Re-evaluate the original support/velocity predicate at the saved final

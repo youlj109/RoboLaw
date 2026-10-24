@@ -178,6 +178,25 @@ class CollisionWorld:
         self.last_clearance=None
         print('PLANNER_WORLD',len(self.objects),'collision shapes',flush=True)
 
+    def bind_pick(self, pick_object):
+        """Rebind convex pick hull to another rigid (B03 banana_1 -> banana_2)."""
+        import numpy as np
+        self.pick_object = pick_object
+        pick_root = (self.env_root or '/World/envs/env_0') + '/' + self.pick_object
+        if pick_root not in self._root_reference_transforms:
+            raise RuntimeError(f'Pick object root missing from collision world: {pick_root}')
+        reference = self._root_reference_transforms[pick_root]
+        inverse = np.linalg.inv(reference)
+        parts = [v @ inverse[:3, :3].T + inverse[:3, 3] for n, (v, f) in self.meshes.items()
+                 if self._matches(n, self.pick_object)]
+        if not parts:
+            raise RuntimeError(f'Original {self.pick_object} collision vertices are required')
+        self.lime_model, self.lime_vertices = self._convex(np.concatenate(parts))
+        lo, hi = self.lime_vertices.min(0), self.lime_vertices.max(0)
+        self.object_center = (lo + hi) / 2
+        self.object_size = hi - lo
+        self.attachment = None
+
     def set_obstacle_pose(self, key, pose):
         """Set one rigid obstacle root to an observed world xyz + xyzw pose.
 
