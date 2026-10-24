@@ -38,6 +38,8 @@ bash scripts/arena_python.sh scripts/risk_capture_workflow.py evaluate \
 
 最新模型核验结果见 [风险资产接口检查](docs/native_risk_asset_probes.md)。
 
+本轮 384 项资产关系组合检查全部通过，未新增仿真采集。验证范围和缺测边界见 [安全评估体系验证说明](docs/safety_system_verification.md)；合成拓扑检查不代表 384 个布局均已实跑。
+
 ## 可移植 Skill 与数据规范
 
 三份完整 Skill 目录位于 [`skills/`](skills/使用说明.md)，可复制到其他 agent。需要保留各目录的 `references`、`assets`、`scripts` 和元数据；不只复制 `SKILL.md`。
