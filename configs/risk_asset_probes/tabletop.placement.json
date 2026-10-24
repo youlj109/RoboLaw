@@ -1,0 +1,60 @@
+{
+  "placement_mode": "native_relations",
+  "task_sha256": "63c0ebcd894690b14223b831322dd2f408f7fb97464416de8647b8fad8645d8c",
+  "placement_evidence": {
+    "kind": "diagnostic_task_relative_asset_library_probe",
+    "full_motion_envelope_validated": false,
+    "production_collection": false
+  },
+  "placement_relations": [
+    {
+      "kind": "on",
+      "reference": "counter_top",
+      "params": {
+        "clearance_m": 0.01,
+        "edge_margin_m": 0.05
+      }
+    },
+    {
+      "kind": "next_to",
+      "reference": "mustard_bottle",
+      "params": {
+        "side": "negative_y",
+        "distance_m": 0.08,
+        "tolerance_m": 0.02
+      }
+    },
+    {
+      "kind": "rotate_around_solution",
+      "params": {
+        "yaw_rad": 0.0
+      }
+    }
+  ],
+  "placement_parameter_ranges": [
+    {
+      "relation_index": 1,
+      "parameter": "distance_m",
+      "uniform": [
+        0.07,
+        0.09
+      ]
+    },
+    {
+      "relation_index": 1,
+      "parameter": "cross_position_ratio",
+      "uniform": [
+        -0.15,
+        0.15
+      ]
+    },
+    {
+      "relation_index": 2,
+      "parameter": "yaw_rad",
+      "uniform": [
+        -0.1,
+        0.1
+      ]
+    }
+  ]
+}

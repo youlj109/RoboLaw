@@ -1,0 +1,72 @@
+# 风险障碍资产的原生评估接口检查
+
+## 验证对象
+
+覆盖当前六种财产障碍与四种机器人周边障碍：高水杯、高脚酒杯、带盖玻璃瓶、陶瓷杯、花瓶、平板支架、钢夹具、横杆、窄口和尖角外壳。人体另有明确的 HS 资产和运动诊断证据。
+
+这些检查补充具体模型接入证据，不等于所有 32×12 个任务/变体组合的可执行布局或完整运动验收。用户要求为评估体系正确性，无每组 200 条配额。
+
+## 任务绑定与放置
+
+`configs/risk_asset_probes/library-probes.json` 显式选择每个资产的任务及放置模板。桌面物体在 Replicator L 型任务的 counter_top 上、邻近该任务 mustard_bottle；落地钢夹具在 Coastal 的 floor 上、邻近该任务 fridge。这些是命名验证案例，其他厨房必须使用自己的任务角色和模板，不复制这两套身份或坐标。
+
+放置模板只含任务哈希、任务相对关系及已声明的有限随机范围。模型身份、USD 路径、动静态属性和类别由真实资产库读取，模板禁止覆盖；不继承旧库中的世界坐标。每条绑定记录 USD SHA-256、任务/模板哈希及实际抽样。财产资产保持动态刚体，机器人障碍保持静态模型，不为方便判级改变物理属性。
+
+`kitchen_safety.task_hold_probe_policy:create` 提交 3 次当前实测机械臂关节保持命令，每次实际推进 4 个物理步。包括终止状态，共输出 4 个安全时刻。它不是完成任务的控制器。
+
+## 运行方式
+
+```bash
+python scripts/probe_risk_asset_library.py \
+  --output /absolute/new-asset-probe-directory \
+  --asset-cache /absolute/asset-cache
+python scripts/verify_risk_asset_library.py \
+  --suite /absolute/new-asset-probe-directory \
+  --output /absolute/new-asset-verification.json
+```
+
+可用 `--variants property_vase robot_narrow_opening` 选择明确子集；默认 10 个。默认映射可通过 `--mapping` 替换，每个模板必须属于对应 task-contract。所有采集/审计/评价阶段通过默认 `risk_capture_workflow.py` 路由；输出目录不得已经存在。
+
+输入及命令契约检查：
+
+```bash
+python scripts/check_risk_asset_probe_inputs.py --output /absolute/new-input-check.json
+```
+
+## 核对内容
+
+- 实际 USD 文件身份、加载的碰撞表面及物理动静态类型一致。
+- 新资产的全部表面被当前 PT 关系覆盖，没有继承目标碗/支撑面豁免。
+- 动态障碍的逐物理步真实位姿、COM、线速度和角速度存在；静态障碍由本条冻结网格重建。
+- 需要测距的关系有完整 gDist mesh 距离、特征及 PT-DIST-001/PT-FORCE-002/PT-IMP-002。
+- 合法的固定端点关系若不查询距离，不得输出距离或距离规则；接触力、冲量继续保留。
+- RS 使用独立的机器人清单，新增障碍不混进机器人自身碰撞对；每帧覆盖完整。
+- 未加载人体时 HS 明确 not_applicable；IR disabled；不按场景分类直接生成危险等级。
+- 在线风险查询/特征/判级均为 0；12 个物理步、4 标签的时间与源哈希一致。
+
+`passed` 只表示上述证据检查通过。`placement_passed` 独立报告原生放置检查；`full_motion_envelope_verified` 保持 false，不能用接口检查替代运动范围验证。
+
+动态财产物体在初始化短段可能仍在下落/稳定，实测速度可能不满足 PT profile 的静止对象假设。此时保留该距离分项未知，即使网格距离有效；力、冲量和其他已知分项按原规则继续评价。不会把物体改成静态或修改速度上界来消除未知。
+
+## 2026-10-24 实际结果
+
+当前 32 个任务 / 9 种环境的源码哈希、角色和规则配置检查通过；384 是声明的任务/变体组合数，不是运行验收数。17 项输入/命令案例通过。
+
+| 资产 | 碰撞网格数 | 每帧 PT 测距关系 | 接口核验 | 布局核验 |
+| --- | ---: | ---: | --- | --- |
+| 陶瓷杯 | 93 | 19 | 通过 | 通过 |
+| 带盖玻璃瓶 | 8 | 19 | 通过 | 通过 |
+| 平板支架 | 5 | 19 | 通过 | 通过 |
+| 高水杯 | 41 | 19 | 通过 | 通过 |
+| 花瓶 | 121 | 19 | 通过 | 通过 |
+| 高脚酒杯 | 103 | 19 | 通过 | 通过 |
+| 窄口 | 8 | 18 | 通过 | 通过 |
+| 横杆 | 5 | 18 | 通过 | 未通过 |
+| 尖角外壳 | 3 | 18 | 通过 | 未通过 |
+| 钢夹具 | 7 | 18 | 通过 | 通过 |
+
+静态障碍另有 1 条固定端点距离关系被合法省略，接触力与冲量仍保留。每个案例 12 个物理步、4 个离线标签；这些短段只用于核对接口。
+
+横杆初始布局及相反侧布局的 `next_to`、`ik_reachable` 均失败；尖角外壳初始布局的 `on_relation`、`next_to`、`ik_reachable` 失败。备用结果保留为诊断数据，不能报告为有效布局。尖角外壳 G 型替代模板因引用不存在的任务资产被预检拒绝，未启动仿真；未放宽检查或把失败写成通过。示例映射为复现诊断输入，不是已验收的跨任务摆放库。
+
+机器可读结果、各原始/风险哈希及独立布局状态见 `task_suite_validation_status.json` 的 `risk_asset_library_evidence_20261024`。原始记录位于运行主机 `task_suite_expansion_20261023/native_risk_asset_library_20261024`；横杆替代记录位于同级 `native_crossbar_opposite_side_20261024`，不上传 Git。
