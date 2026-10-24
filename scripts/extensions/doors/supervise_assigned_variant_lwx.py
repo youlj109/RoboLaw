@@ -37,6 +37,7 @@ try:
   if cp.get('planner_hazard_extra_padding_m'):args+=['--planner-hazard-extra-padding-m',str(cp['planner_hazard_extra_padding_m'])]
   if cp.get('release_retreat_m'):args+=['--release-retreat-m',str(cp['release_retreat_m'])]
   if cp.get('release_tilt_deg'):args+=['--release-tilt-deg',str(cp['release_tilt_deg'])]
+  if cp.get('opening_reserve_rad'):args+=['--opening-reserve-rad',str(cp['opening_reserve_rad'])]
   if cp.get('release_settle_steps'):args+=['--release-settle-steps',str(cp['release_settle_steps'])]
   if mode=='neutral':args+=['--neutral-seconds',str(max(40.,json.loads((ep/'result.json').read_text())['frames']*m['dt']+2.))]
   run(mode,'collect_tasks_lwx.py',args,gpu=True)

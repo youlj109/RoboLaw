@@ -74,3 +74,12 @@ def joint_position_from_openness(value, lower, upper):
 def opening_command(measured, lead_rad, opening_limit, lower):
  """Advance in source opening direction without stepping beyond the chosen limit."""
  return max(measured-lead_rad,opening_limit) if lower<0. else min(measured+lead_rad,opening_limit)
+
+
+def opening_reserve_reached(measured, threshold, lower, reserve_rad):
+ """Additional measured opening before release; never replaces the native predicate."""
+ values=np.asarray([measured,threshold,lower,reserve_rad],dtype=float)
+ if not np.all(np.isfinite(values)) or not 0.<=reserve_rad<=.08:
+  raise ValueError('Opening reserve must be finite and within [0,.08]rad')
+ direction=-1. if lower<0. else 1.
+ return bool((measured-threshold)*direction>=reserve_rad)

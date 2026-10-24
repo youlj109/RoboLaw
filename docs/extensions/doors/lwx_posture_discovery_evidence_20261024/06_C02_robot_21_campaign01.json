@@ -1,0 +1,42 @@
+{
+  "stage": "paired_10",
+  "baseline": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_base_01",
+  "search": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_local_search21.json",
+  "search_sha256": "e83a501c01256a9a31ddc28a80214670d008bb933de8f14d30617242e883aa65",
+  "offline_candidate_budget": 3,
+  "physical_trial_budget": 1,
+  "small_detour_limits": {
+    "max_joint_length_ratio": 1.6,
+    "max_added_tcp_length_m": 0.15
+  },
+  "complete": false,
+  "candidates": [
+    {
+      "candidate_index": 17,
+      "config": "configs/extensions/doors/c02_robot_candidate_21_17.json",
+      "paired_report": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_21_candidate_17_paired01/report.json",
+      "exit_code": 0,
+      "eligible": true,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.0727590095734678,
+      "max_added_tcp_length_m": 0.13351470630602347
+    },
+    {
+      "candidate_index": 2,
+      "config": "configs/extensions/doors/c02_robot_candidate_21_02.json",
+      "paired_report": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_21_candidate_02_paired01/report.json",
+      "exit_code": 0,
+      "eligible": false,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.0902564739179765,
+      "max_added_tcp_length_m": 0.1998453076824241
+    }
+  ],
+  "baseline_gates": {
+    "result.json": true,
+    "task_validation_full.json": true,
+    "task_review_audit.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  }
+}

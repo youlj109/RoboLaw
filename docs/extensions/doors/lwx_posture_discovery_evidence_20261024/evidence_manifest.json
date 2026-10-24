@@ -1,0 +1,211 @@
+{
+  "scope": "Bounded discovery and controller diagnostics, not a new task delivery. Active campaign snapshot is explicitly time-local and may later finish; its copied bytes are preserved.",
+  "files": [
+    {
+      "original_path": "reports/doors/lwx_C07_reserve_retry41_20261024/unit_tests_all_41.log",
+      "sha256": "067b63cc292e017997a84304153d6af567ebcb2f78363fc19f313e7b91554bf3",
+      "bytes": 149,
+      "snapshot": "00_unit_tests_all_41.log"
+    },
+    {
+      "original_path": "reports/doors/lwx_C01_low_grasp_retry31_20261024/C01_full_transient_space40.json",
+      "sha256": "f29e1815368194203136a20caf57e3838e9d1c5caa183c58197087819f87594b",
+      "bytes": 83720,
+      "summary": {
+        "scope": "Finite 1 mm source-sphere samples inside transient measured robot shapes. Original endpoint planner spheres plus source endpoints, sampled later robot, initial environment and sampled moving door. No finite asset dimensions, support, continuous sweep, paired planning or physical acceptance. No surviving point does not prove impossibility.",
+        "max_combined_clearance_m": 0.05678719523374394,
+        "points_above_clearance": {
+          "0.023": 161,
+          "0.063": 0,
+          "0.103": 0
+        },
+        "sampling": {
+          "pregrasp_stride": 5,
+          "local_bbox_weights": [
+            0.15,
+            0.5,
+            0.85
+          ],
+          "later_robot_stride": 6,
+          "door_stride": 6,
+          "point_sphere_radius_m": 0.001
+        },
+        "best_sample": [
+          {
+            "action": 54,
+            "robot_part": "gripper/right_inner_finger",
+            "point": [
+              4.628280662601504,
+              -0.9758597524445556,
+              1.191510792211429
+            ],
+            "sphere_endpoint_clearance_m": 0.05678719523374394,
+            "endpoint_source_clearance_m": 0.06787892088355446,
+            "initial_environment_clearance_m": 0.1796340508971287,
+            "later_robot_clearance_m": 0.16565534308381852,
+            "minimum_clearance_m": 0.05678719523374394,
+            "door_sweep_clearance_m": 0.06543947232045111,
+            "nearest_door_action": 321,
+            "nearest_door_part": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_main"
+          }
+        ]
+      }
+    },
+    {
+      "original_path": "reports/doors/lwx_C07_contact_retry13_20261024/C07_full_transient_space40.json",
+      "sha256": "3af1c23ad68dae06c3b6274664270481359f6e48091e70258edb42759fe4d79f",
+      "bytes": 79998,
+      "summary": {
+        "scope": "Finite 1 mm source-sphere samples inside transient measured robot shapes. Original endpoint planner spheres plus source endpoints, sampled later robot, initial environment and sampled moving door. No finite asset dimensions, support, continuous sweep, paired planning or physical acceptance. No surviving point does not prove impossibility.",
+        "max_combined_clearance_m": 0.03734617745971035,
+        "points_above_clearance": {
+          "0.023": 4,
+          "0.063": 0,
+          "0.103": 0
+        },
+        "sampling": {
+          "pregrasp_stride": 5,
+          "local_bbox_weights": [
+            0.15,
+            0.5,
+            0.85
+          ],
+          "later_robot_stride": 6,
+          "door_stride": 6,
+          "point_sphere_radius_m": 0.001
+        },
+        "best_sample": [
+          {
+            "action": 54,
+            "robot_part": "robot_hull",
+            "point": [
+              4.932218977776192,
+              -2.921282336880407,
+              1.732528593646853
+            ],
+            "sphere_endpoint_clearance_m": 0.054285709169110755,
+            "endpoint_source_clearance_m": 0.0600278027818503,
+            "initial_environment_clearance_m": 0.3582187370548992,
+            "later_robot_clearance_m": 0.049941260759192196,
+            "minimum_clearance_m": 0.03734617745971035,
+            "door_sweep_clearance_m": 0.03734617745971035,
+            "nearest_door_action": 1041,
+            "nearest_door_part": "/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C010"
+          }
+        ]
+      }
+    },
+    {
+      "original_path": "reports/doors/lwx_C01_low_grasp_retry31_20261024/C01_property_posture_search42.json",
+      "sha256": "abd70492586513eeaa80e3fceec9f0e044fb9f2466c06aec21b72e69f96f711d",
+      "bytes": 32098,
+      "summary": {
+        "scope": "Offline candidates only, not scene or task acceptance",
+        "stats": {
+          "tested": 496,
+          "endpoints": 496,
+          "blocking": 30,
+          "scene_legal": 28
+        },
+        "search_complete": true,
+        "posture_adaptation_discovery": {
+          "enabled": true,
+          "scope": "Source initial robot and door/environment stay mandatory. Old redundant endpoint and later baseline arm postures are not constrained when enabled. Same Cartesian target, full on-plan endpoint validation, actual approach/pull and all final gates remain mandatory."
+        },
+        "candidate_count": 20
+      }
+    },
+    {
+      "original_path": "reports/doors/lwx_C01_low_grasp_retry31_20261024/C01_human_posture_search43.json",
+      "sha256": "fd8dbef3a48302832657af8ca5c0cd4fe8fc28fff0a8ce15acf20d3db221d5c1",
+      "bytes": 70033,
+      "summary": {
+        "scope": "Offline candidates only, not scene or task acceptance",
+        "stats": {
+          "tested": 1550,
+          "endpoints": 1528,
+          "blocking": 47,
+          "scene_legal": 31
+        },
+        "search_complete": true,
+        "posture_adaptation_discovery": {
+          "enabled": true,
+          "scope": "Source initial robot and door/environment stay mandatory. Old redundant endpoint and later baseline arm postures are not constrained when enabled. Same Cartesian target, full on-plan endpoint validation, actual approach/pull and all final gates remain mandatory."
+        },
+        "candidate_count": 20
+      }
+    },
+    {
+      "original_path": "reports/doors/lwx_C07_contact_retry13_20261024/C07_robot_posture_search10.json",
+      "sha256": "27f3650afc0d43ddac6ff8b5bfbcae9a9364e39720bd11bc96dc23da56da6329",
+      "bytes": 37516,
+      "summary": {
+        "scope": "Offline candidates only, not scene or task acceptance",
+        "stats": {
+          "tested": 576,
+          "endpoints": 576,
+          "blocking": 24,
+          "scene_legal": 20
+        },
+        "search_complete": true,
+        "posture_adaptation_discovery": {
+          "enabled": true,
+          "scope": "Source initial robot and door/environment stay mandatory. Old redundant endpoint and later baseline arm postures are not constrained when enabled. Same Cartesian target, full on-plan endpoint validation, actual approach/pull and all final gates remain mandatory."
+        },
+        "candidate_count": 20
+      }
+    },
+    {
+      "original_path": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_21_campaign01.json",
+      "sha256": "5a1ae8a60f677e3b9cca7a4ec91e424ce28b1acbae3e9a4c5c5fd11254553e4f",
+      "bytes": 1610,
+      "snapshot": "06_C02_robot_21_campaign01.json"
+    },
+    {
+      "original_path": "reports/doors/lwx_C01_center_grasp_retry33_20261024/C01_base_01_visual_review01.json",
+      "sha256": "ad76dcb262d14409b08339d8da6116dafb78633a5c687d128f4c9d1fbb3f16b0",
+      "bytes": 1006,
+      "snapshot": "07_C01_base_01_visual_review01.json"
+    },
+    {
+      "original_path": "datasets/doors/lwx_C07_roll180_retry16_20261024/C07_base_01/result.json",
+      "sha256": "1b7f8f128f31679abdd9409c9af5083acc943fd38fdde2c9586bdc13d27561f0",
+      "bytes": 1995,
+      "summary": {
+        "accepted": false,
+        "failure": "RuntimeError: Original door-open predicate is false after release",
+        "frames": 957,
+        "final_door_rad": -0.6123469471931458
+      }
+    },
+    {
+      "original_path": "datasets/doors/lwx_C07_roll180_retry16_20261024/C07_base_02/result.json",
+      "sha256": "fe02cf67dcccfe62cbe557422317b9fc57f50bf89844721c5b1a41542432a979",
+      "bytes": 1975,
+      "summary": {
+        "accepted": false,
+        "failure": "RuntimeError: cuRobo rejected release retreat",
+        "frames": 948,
+        "final_door_rad": -0.6573241949081421
+      }
+    },
+    {
+      "original_path": "reports/doors/lwx_C07_reserve_retry41_20261024/C07_contact_screen01.json",
+      "sha256": "ad2d3830fbfba1d7c9a26d469a4def97f8f719b2410a8eb4d6007b2f37e80a31",
+      "bytes": 23649,
+      "summary": {
+        "scope": "Offline projected geometry only; physical contact, stability and success unverified.",
+        "search_complete": true,
+        "candidate_count": 1,
+        "candidate_results": [
+          {
+            "pregrasp": true,
+            "approach": true,
+            "pull": false,
+            "error": "IK failed: pose residual 0.00121, target [ 4.92936071 -2.97516603  1.59994288]"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -15,6 +15,7 @@ p.add_argument('--pull-steps',type=int,default=500)
 p.add_argument('--ik-limit-margin-rad',type=float,default=0.,help='Contract only local command IK bounds; source robot limits remain unchanged')
 p.add_argument('--release-retreat-m',type=float,default=0.,help='Checked outward TCP retreat during finger release; same policy for baseline and variants')
 p.add_argument('--release-tilt-deg',type=float,default=0.,help='Tilt outward release direction toward world up; negative moves down, same matched policy')
+p.add_argument('--opening-reserve-rad',type=float,default=0.,help='Additional measured opening before release; native predicate and all collision checks stay active')
 p.add_argument('--release-settle-steps',type=int,default=0,help='Additional closed-gripper hold at one measured joint target before release; inherited by matched variants')
 p.add_argument('--mode', choices=['collect', 'neutral'], default='collect')
 p.add_argument('--render-warmup', action='store_true', help='Converge RTX appearance with no physics advancement before recording')
@@ -22,6 +23,7 @@ p.add_argument('--neutral-seconds', type=float, default=40.)
 p.add_argument('--review-config', default='configs/extensions/doors/review_gates_lwx.json')
 a=p.parse_args();a.enable_cameras=True
 if not 0.<=a.planner_hazard_extra_padding_m<=.03:p.error('--planner-hazard-extra-padding-m must be in [0,.03]')
+if not 0.<=a.opening_reserve_rad<=.08:p.error('--opening-reserve-rad must be in [0,.08]')
 if a.neutral_seconds <= 0:p.error('--neutral-seconds must be positive')
 if not 0. <= a.ik_limit_margin_rad <= .1:p.error('--ik-limit-margin-rad must be in [0, .1]')
 if not 0. <= a.release_retreat_m <= .04:p.error('--release-retreat-m must be in [0, .04]')
@@ -43,7 +45,7 @@ with SimulationAppContext(a):
     from isaaclab_arena.tasks.predicates.articulations import is_away_from_rest_openness
     from isaaclab.managers import SceneEntityCfg
     from kitchen_safety.extensions.doors.task_environment import build,ROOT
-    from kitchen_safety.extensions.doors.task_model import resolve,assignment,door_target_pose,grasp_rotation,joint_position_from_openness,opening_command
+    from kitchen_safety.extensions.doors.task_model import resolve,assignment,door_target_pose,grasp_rotation,joint_position_from_openness,opening_command,opening_reserve_reached
     TASK=ROOT/assignment(a.task_id)['source_yaml']
     from kitchen_safety.extensions.doors.task_collision import TaskCollisionWorld as DoorCollisionWorld
     from kitchen_safety.dataset import CameraWriter,numpy as arr,decode_video
@@ -106,6 +108,7 @@ with SimulationAppContext(a):
     if a.grasp_pitch_deg:metadata['controller_parameters']['grasp_pitch_deg']=a.grasp_pitch_deg
     if a.release_retreat_m:metadata['controller_parameters']['release_retreat_m']=a.release_retreat_m
     if a.release_tilt_deg:metadata['controller_parameters']['release_tilt_deg']=a.release_tilt_deg
+    if a.opening_reserve_rad:metadata['controller_parameters']['opening_reserve_rad']=a.opening_reserve_rad
     if a.release_settle_steps:metadata['controller_parameters']['release_settle_steps']=a.release_settle_steps
     metadata['controller_parameters']['pull_lead_rad']=a.pull_lead_rad
     metadata['controller_parameters']['pull_steps']=a.pull_steps
@@ -299,8 +302,9 @@ with SimulationAppContext(a):
                 planner._prepare_path_query(handles,1.,phase)
                 if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(command[None])).all()):raise RuntimeError('cuRobo rejected pull segment')
                 step(command,1.)
-                if source_success:break
+                if source_success and (not a.opening_reserve_rad or opening_reserve_reached(rows[-1]['next_obs']['door_q'],target_angle,lower,a.opening_reserve_rad)):break
             if not source_success:raise RuntimeError('Original OpenDoorTask predicate sequence not achieved')
+            if a.opening_reserve_rad and not opening_reserve_reached(rows[-1]['next_obs']['door_q'],target_angle,lower,a.opening_reserve_rad):raise RuntimeError('Measured opening reserve was not reached before pull budget ended')
             phase='success_hold'
             for _ in range(5):step(q,1.)
             if a.release_settle_steps:
