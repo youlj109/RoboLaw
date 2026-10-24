@@ -25,8 +25,6 @@ class TaskSpec:
     destination_object: str
     rigid_objects: tuple[str, ...]
     source_surface_suffix: str
-    # If set, absolute env prim used for PhysX source-support contacts (e.g. plate under bananas).
-    source_surface_abs: str | None = None
     # Pregrasp TCP offset from pick geometry center (metres, world-aligned axes).
     pregrasp_offset_m: tuple[float, float, float]
     # Placement release offsets (metres) above destination root.
@@ -39,6 +37,8 @@ class TaskSpec:
     default_variants: Path
     # Extra picks for parallel multi-object tasks (B03 dual bananas). Empty => (pick_object,).
     pick_objects: tuple[str, ...] = ()
+    # Absolute env prim for PhysX source-support when not under kitchen (bananas on plate).
+    source_surface_abs: str | None = None
 
 
 TASKS: dict[str, TaskSpec] = {
