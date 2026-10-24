@@ -1,0 +1,1775 @@
+{
+  "task": "kitchen_bench_lightwheel_open_fridge",
+  "variant": "human",
+  "seed": 42,
+  "source_yaml_sha256": "679575de18414f7ccb49a5d43bcb2e1b952eb4c82c680ab79c55734aa638d3ee",
+  "robot_base": [
+    4.603754043579102,
+    -1.4216437339782715,
+    0.809999942779541
+  ],
+  "robot_yaw_deg": 89.95437890588065,
+  "handle_initial": [
+    4.3485291062039,
+    -0.8699208928686093,
+    0.9531769456856987
+  ],
+  "hinge": [
+    4.954614215459582,
+    -0.7625535118003961,
+    1.2094958277304677
+  ],
+  "axis": [
+    0.0,
+    0.0,
+    1.0
+  ],
+  "dt": 0.06666666666666667,
+  "physics_dt": 0.008333333333333333,
+  "robot_body_names": [
+    "panda_link0",
+    "panda_link1",
+    "panda_link2",
+    "panda_link3",
+    "panda_link4",
+    "panda_link5",
+    "panda_link6",
+    "panda_link7",
+    "panda_link8",
+    "base_link",
+    "left_outer_knuckle",
+    "right_outer_knuckle",
+    "left_outer_finger",
+    "right_outer_finger",
+    "left_inner_finger",
+    "right_inner_finger",
+    "left_inner_knuckle",
+    "right_inner_knuckle"
+  ],
+  "robot_joint_names": [
+    "panda_joint1",
+    "panda_joint2",
+    "panda_joint3",
+    "panda_joint4",
+    "panda_joint5",
+    "panda_joint6",
+    "panda_joint7",
+    "finger_joint",
+    "right_outer_knuckle_joint",
+    "left_inner_finger_joint",
+    "right_inner_finger_joint",
+    "left_inner_finger_knuckle_joint",
+    "right_inner_finger_knuckle_joint"
+  ],
+  "fridge_joint_names": [
+    "freezer0_door_joint",
+    "fridge_door_joint",
+    "fridge_drawer0_joint"
+  ],
+  "initial_door_pose": [
+    4.603491306304932,
+    -0.4408581256866455,
+    0.8750001192092896,
+    1.3096722144279224e-10,
+    -1.909211050366038e-08,
+    5.929904748659759e-10,
+    0.9999999999999999
+  ],
+  "task_success_rule": "native OpenDoorTask predicate_sequence with unchanged YAML threshold",
+  "episode_mode": "fixed_only",
+  "door_state_writes": "source reset only",
+  "camera_alignment": "obs[t] before action[t], next_obs[t] after action[t]",
+  "software_versions": {
+    "isaacsim": "6.1.0.0",
+    "isaaclab": "17.0.2",
+    "isaaclab-arena": "0.3.0",
+    "nvidia-curobo": "0.7.7.post1.dev5",
+    "torch": "2.11.0+cu128",
+    "warp-lang": "1.16.0"
+  },
+  "variant_config": "configs/extensions/doors/c01_human_candidate_76_00.json",
+  "variant_spec": {
+    "name": "person",
+    "asset": "assets/extensions/doors/human_reach_tip_lwx_21/collidable.usda",
+    "position": [
+      3.433754043579101,
+      -1.821643733978271,
+      0.0
+    ],
+    "yaw_deg": 225.0,
+    "static": true,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "pose_provenance": "assets/extensions/doors/human_reach_tip_lwx_21/pose.json",
+    "unrotated_asset": "assets/extensions/doors/human_reach_tip_lwx_21/collidable.usda",
+    "baseline_intersection_actions": [
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "source_intersection_in_reference_off_seeds": {
+      "42": [
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ],
+      "43": [
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ],
+      "44": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53
+      ]
+    },
+    "pose_provenance_sha256": "ab6cf3975d77930d4d44fa6c659e9fd2bdf62afb5929260c34c054f40661ff31",
+    "candidate_search": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_shared_off_refine_search76.json",
+    "candidate_search_sha256": "705c847415f70a5f0cd25af6531c8a1a7632f2de1d184783fa6060e3d75264bd",
+    "candidate_index": 0
+  },
+  "actual_hazard_initial_pose": [
+    3.4337539672851562,
+    -1.8216437101364136,
+    0.0,
+    0.0,
+    0.0,
+    0.9238795350890829,
+    -0.3826834261417391
+  ],
+  "controller_parameters": {
+    "seed": 42,
+    "handle_offset_y": 0.0,
+    "handle_offset_z": -0.18,
+    "max_joint_speed": 0.5,
+    "grasp_roll_deg": 0.0,
+    "pull_lead_rad": 0.03,
+    "pull_steps": 600,
+    "ik_limit_margin_rad": 0.005,
+    "handle_normal_offset_m": -0.005,
+    "pregrasp_validation": {
+      "version": "dense_pregrasp_v4",
+      "resolution_rad": 0.005,
+      "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+    }
+  },
+  "robot_usd": "/home/user/.cache/isaaclab_arena/usd/robot_on_stand/doors_droid_on_stand_0.8_1.08x0.91032.usd",
+  "initial_q": [
+    0.0,
+    -0.6283185482025146,
+    0.0,
+    -2.5132741928100586,
+    0.0,
+    1.884955644607544,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "door_geometry": {
+    "task": "kitchen_bench_lightwheel_open_fridge",
+    "object_name": "fridge",
+    "object_path": "/World/envs/env_0/kitchen/fridge_main_group",
+    "joint_name": "fridge_door_joint",
+    "joint_path": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/fridge_door_joint",
+    "door_path": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door",
+    "moving_bodies": [
+      "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door"
+    ],
+    "handle_colliders": [
+      "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_main",
+      "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_1",
+      "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_2",
+      "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_3",
+      "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_4"
+    ],
+    "hinge": [
+      4.954614215459582,
+      -0.7625535118003961,
+      1.2094958277304677
+    ],
+    "axis": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "limits_rad": [
+      0.0,
+      1.5707963267948966
+    ],
+    "reset_openness": 0.0,
+    "openness_threshold": 0.2,
+    "handle_main": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_main",
+    "handle_center": [
+      4.3485330873949835,
+      -0.8649208944535978,
+      1.1331769456856986
+    ],
+    "handle_bounds": [
+      [
+        4.325534270443286,
+        -0.879088572348744,
+        0.8493620786244622
+      ],
+      [
+        4.371531964866052,
+        -0.792342366859305,
+        1.4212107882067926
+      ]
+    ],
+    "handle_shapes": [
+      {
+        "path": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_main",
+        "bounds": [
+          [
+            4.3255342988294805,
+            -0.879088572348744,
+            0.993307770525465
+          ],
+          [
+            4.371531875960486,
+            -0.8507532165584515,
+            1.2730461208459323
+          ]
+        ]
+      },
+      {
+        "path": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_1",
+        "bounds": [
+          [
+            4.33039167993672,
+            -0.8407733697902755,
+            0.8740351470185942
+          ],
+          [
+            4.355688897730734,
+            -0.7923424948909512,
+            0.8994302910093114
+          ]
+        ]
+      },
+      {
+        "path": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_2",
+        "bounds": [
+          [
+            4.33039167993672,
+            -0.8407732417586293,
+            1.368245071345601
+          ],
+          [
+            4.355688897730734,
+            -0.792342366859305,
+            1.3936402296665271
+          ]
+        ]
+      },
+      {
+        "path": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_3",
+        "bounds": [
+          [
+            4.325534270443286,
+            -0.8743925651268246,
+            1.2844319958221417
+          ],
+          [
+            4.371531964866052,
+            -0.8330168630626197,
+            1.4212107882067926
+          ]
+        ]
+      },
+      {
+        "path": "/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_4",
+        "bounds": [
+          [
+            4.325534287108121,
+            -0.8754618102860584,
+            0.8493620786244622
+          ],
+          [
+            4.371531827162477,
+            -0.8340860664743154,
+            0.9861408266701919
+          ]
+        ]
+      }
+    ]
+  },
+  "door_motion_reference_joint_rad": 0.0,
+  "command_ik_source_limits_rad": [
+    [
+      -2.897300087848498,
+      2.897300087848498
+    ],
+    [
+      -1.762799988219413,
+      1.762799988219413
+    ],
+    [
+      -2.897300087848498,
+      2.897300087848498
+    ],
+    [
+      -3.0717999898504136,
+      -0.06979999575475569
+    ],
+    [
+      -2.897300087848498,
+      2.897300087848498
+    ],
+    [
+      -0.01749999978815516,
+      3.752499969733032
+    ],
+    [
+      -2.897300087848498,
+      2.897300087848498
+    ]
+  ],
+  "command_ik_limits_rad": [
+    [
+      -2.892300087848498,
+      2.892300087848498
+    ],
+    [
+      -1.757799988219413,
+      1.757799988219413
+    ],
+    [
+      -2.892300087848498,
+      2.892300087848498
+    ],
+    [
+      -3.0667999898504137,
+      -0.0747999957547557
+    ],
+    [
+      -2.892300087848498,
+      2.892300087848498
+    ],
+    [
+      -0.01249999978815516,
+      3.747499969733032
+    ],
+    [
+      -2.892300087848498,
+      2.892300087848498
+    ]
+  ],
+  "delivery_accepted": false,
+  "delivery_gate_note": "Collector completion alone is not full acceptance; independent scene, causal, geometry, paired planning and video gates required.",
+  "mode": "collect",
+  "review_gates": {
+    "schema_version": 1,
+    "declared_before_collection": true,
+    "task": "kitchen_bench_lightwheel_open_fridge",
+    "neutral_seconds": 40.0,
+    "planning_seeds": [
+      42,
+      43,
+      44
+    ],
+    "neutral_revolute_drift_rad": 0.005,
+    "neutral_revolute_speed_rad_s": 0.05,
+    "neutral_prismatic_drift_m": 0.002,
+    "neutral_prismatic_speed_m_s": 0.02,
+    "door_motion_rad": 0.002,
+    "contact_force_noise_n": 0.0001,
+    "handle_contact_bounds_padding_m": 0.004,
+    "property_translation_m": 0.005,
+    "property_rotation_deg": 2.0,
+    "property_vertical_tilt_deg": 2.0,
+    "notes": "Diagnostic motion thresholds do not replace the original strict OpenDoorTask success predicate or source safety margins. Neutral tolerances apply from the first post-reset observation, including startup."
+  },
+  "review_config_sha256": "d67ffb61079f8a982df6f445e986b9aeb70453241e4b869ee15f88f5321a16d3",
+  "contact_units": "Native PhysX get_contact_data(dt=physics_dt): normal forces in N, points/separation in m; signed normals preserved.",
+  "recording_start": "Immediately after source env.reset; no additional unrecorded settling. Source reset internals are outside the recorded trial.",
+  "physics_recording_schema": 1,
+  "neutral_seconds_requested": null,
+  "source_handle_contact_bounds_m": [
+    [
+      4.325534270443286,
+      -0.879088572348744,
+      0.8493620786244622
+    ],
+    [
+      4.371531964866052,
+      -0.792342366859305,
+      1.4212107882067926
+    ]
+  ],
+  "contact_localization_scope": "PhysX finger-to-door body filter plus bounds computed from source collision mesh vertices, not authored USD extents; independent source-shape distance audit required.",
+  "door_joint_id": 1,
+  "door_joint_limits_rad": [
+    0.0,
+    1.5707963705062866
+  ],
+  "implementation_sha256": {
+    "/workspace/scripts/extensions/doors/collect_tasks_lwx.py": "2573a0450935895b7ab20f7defbdf84b87d6e03e9c12cf9827f0ec5247aa9281",
+    "kitchen_safety/extensions/doors/task_environment.py": "2c4d126158700e5e20ed825edc461c7fcace775ae8bed0cb61813d9fe1a2c691",
+    "kitchen_safety/extensions/doors/task_collision.py": "48062fcf2ab16b94c9f97d669dc7b3eabcbc00bdd6200ab4fe921d147c3fc244",
+    "kitchen_safety/extensions/doors/task_model.py": "63b65bb5bd59ad65f1140d6237649d7953bc1ab35107a1c3fd079f2197dde43e",
+    "kitchen_safety/extensions/doors/task_planner.py": "a2a59be073a4bde97153e62e7595b70af329290f10998e8f571bc45bc27f84d8",
+    "kitchen_safety/extensions/doors/task_observation.py": "32b983b0c8410b778a172a816cbb596e08534e60c5b2e12cebddb5c6ec43569c",
+    "kitchen_safety/extensions/doors/task_reconstruction.py": "2aea9294a2e0f048ec412ad475d1bddbdeae8dc45e5779a0ba3557e751b9f9ab",
+    "kitchen_safety/extensions/doors/evidence.py": "1d8f4510973d27a5cecdf7e621338dc7e7c1d6f72061ffd310c74da7c2def13b",
+    "configs/extensions/doors/c01_human_candidate_76_00.json": "d6b2a644cb968b242f6078e3282ddb425920dd7903cee460666f1141857de85a",
+    "kitchen_safety/extensions/doors/pregrasp.py": "2e28a4aff60a4ffa133763131ba068c95b3eab2bf3ed350f45391701896611dd"
+  },
+  "source_snapshot": {
+    "scripts/extensions/doors/collect_tasks_lwx.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/scripts/extensions/doors/collect_tasks_lwx.py",
+      "sha256": "2573a0450935895b7ab20f7defbdf84b87d6e03e9c12cf9827f0ec5247aa9281"
+    },
+    "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_fridge.yaml": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_fridge.yaml",
+      "sha256": "679575de18414f7ccb49a5d43bcb2e1b952eb4c82c680ab79c55734aa638d3ee"
+    },
+    "configs/extensions/doors/c01_human_candidate_76_00.json": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/configs/extensions/doors/c01_human_candidate_76_00.json",
+      "sha256": "d6b2a644cb968b242f6078e3282ddb425920dd7903cee460666f1141857de85a"
+    },
+    "configs/extensions/doors/c01_review_lwx.json": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/configs/extensions/doors/c01_review_lwx.json",
+      "sha256": "d67ffb61079f8a982df6f445e986b9aeb70453241e4b869ee15f88f5321a16d3"
+    },
+    "kitchen_safety/collision_planner.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/collision_planner.py",
+      "sha256": "169d9bc7f13a2a0af4a8da0df17265c45a814bdba69afd09abfbece85557877b"
+    },
+    "kitchen_safety/curobo_backend.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/curobo_backend.py",
+      "sha256": "e4abf9599fcd4832c0497ecef6dbb317a02d5438d96d6b4a611491cbd3905512"
+    },
+    "kitchen_safety/dataset.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/dataset.py",
+      "sha256": "da00fc4fd0b3c84dae88df7dfef0bd947593365afdd1d4a96949b8b69339369e"
+    },
+    "kitchen_safety/extensions/doors/collision.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/collision.py",
+      "sha256": "550242a1048c6a6701556996be5d88c673f9254392f3c049c11c67db09ab13fe"
+    },
+    "kitchen_safety/extensions/doors/environment.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/environment.py",
+      "sha256": "e1565bc62684e5fccd0e82ea9f75654da91287d5ac6d6dbd23a2a87932d7d9ab"
+    },
+    "kitchen_safety/extensions/doors/evidence.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/evidence.py",
+      "sha256": "1d8f4510973d27a5cecdf7e621338dc7e7c1d6f72061ffd310c74da7c2def13b"
+    },
+    "kitchen_safety/extensions/doors/invariant_envelopes_lwx.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/invariant_envelopes_lwx.py",
+      "sha256": "791008a31f705aea9f10e70da1a84bc2078e2993dff547165ae37e8776a423cd"
+    },
+    "kitchen_safety/extensions/doors/obstruction_broadphase_lwx.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/obstruction_broadphase_lwx.py",
+      "sha256": "1dc8437f4c5df59acd7c7e732e31f298aad058b3129a2a12c034881b1b5556df"
+    },
+    "kitchen_safety/extensions/doors/pregrasp.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/pregrasp.py",
+      "sha256": "2e28a4aff60a4ffa133763131ba068c95b3eab2bf3ed350f45391701896611dd"
+    },
+    "kitchen_safety/extensions/doors/pregrasp_shortcuts_lwx.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/pregrasp_shortcuts_lwx.py",
+      "sha256": "cbbb4f8569eb0fdf647d9fcdc5ff81f3d1d964ddf6f6d7da6eb2095dfa606429"
+    },
+    "kitchen_safety/extensions/doors/primitive_distance.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/primitive_distance.py",
+      "sha256": "21377f724d72bebbfa5af08eaa7a2df03a516c4a5e59704893fbf9d6e0c52fad"
+    },
+    "kitchen_safety/extensions/doors/reconstruction.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/reconstruction.py",
+      "sha256": "36716cf1612191d4acf105592627756e331001959cc9ff7f5d578730888c35d8"
+    },
+    "kitchen_safety/extensions/doors/release_hold_lwx.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/release_hold_lwx.py",
+      "sha256": "5a9a0c5734cc1d400269479180d81583b1726109ab9adedac7be623f541967f1"
+    },
+    "kitchen_safety/extensions/doors/release_pose_lwx.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/release_pose_lwx.py",
+      "sha256": "8f12efb6cc1a524768fbee11d6c958ec6f1bd9a34ecebc89b409cb8f25524168"
+    },
+    "kitchen_safety/extensions/doors/release_position_lwx.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/release_position_lwx.py",
+      "sha256": "21cc510c30e3fd16738809b5ddef8b5047a17d294250d7f90948a6030990b7c6"
+    },
+    "kitchen_safety/extensions/doors/source_sphere_screen_lwx.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/source_sphere_screen_lwx.py",
+      "sha256": "c10afb3a93b8c5efaf5aa1dd97d744050061972403058dcb37c5e9b8a077c659"
+    },
+    "kitchen_safety/extensions/doors/task_collision.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/task_collision.py",
+      "sha256": "48062fcf2ab16b94c9f97d669dc7b3eabcbc00bdd6200ab4fe921d147c3fc244"
+    },
+    "kitchen_safety/extensions/doors/task_environment.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/task_environment.py",
+      "sha256": "2c4d126158700e5e20ed825edc461c7fcace775ae8bed0cb61813d9fe1a2c691"
+    },
+    "kitchen_safety/extensions/doors/task_evidence.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/task_evidence.py",
+      "sha256": "c8330f38128aa55fbf6f994374773d042dbdadf60dfcfa6ca5a38816fdfb73c4"
+    },
+    "kitchen_safety/extensions/doors/task_model.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/task_model.py",
+      "sha256": "63b65bb5bd59ad65f1140d6237649d7953bc1ab35107a1c3fd079f2197dde43e"
+    },
+    "kitchen_safety/extensions/doors/task_observation.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/task_observation.py",
+      "sha256": "32b983b0c8410b778a172a816cbb596e08534e60c5b2e12cebddb5c6ec43569c"
+    },
+    "kitchen_safety/extensions/doors/task_planner.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/task_planner.py",
+      "sha256": "a2a59be073a4bde97153e62e7595b70af329290f10998e8f571bc45bc27f84d8"
+    },
+    "kitchen_safety/extensions/doors/task_reconstruction.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/task_reconstruction.py",
+      "sha256": "2aea9294a2e0f048ec412ad475d1bddbdeae8dc45e5779a0ba3557e751b9f9ab"
+    },
+    "kitchen_safety/extensions/doors/task_spheres.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/task_spheres.py",
+      "sha256": "bb1b2749e7e0e8c4199a38db942d9f17b2fd11b4a598e9f2a420b434087d2134"
+    },
+    "kitchen_safety/extensions/doors/video.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/extensions/doors/video.py",
+      "sha256": "42e5584abdc92f95a1fe3d5f1ee2691cbd8906a15e7fd5ba1474b8a3fcdb7070"
+    },
+    "kitchen_safety/grasp_contacts.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/grasp_contacts.py",
+      "sha256": "b312d40c319f0f908e5264d50fccb2d087ae26c4c3cbdeb42319a9aea360532f"
+    },
+    "kitchen_safety/planning.py": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_76/source_snapshot/kitchen_safety/planning.py",
+      "sha256": "ef4c0a6a93603de7c9aa996882279854d775e025df6fb758f3e6178973ffffaa"
+    }
+  },
+  "mechanism_inventory": [
+    {
+      "path": "/World/envs/env_0/kitchen/sink_main_group",
+      "joint_names": [
+        "handle_joint:0",
+        "handle_joint:1",
+        "spout_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stove_main_group",
+      "joint_names": [
+        "door_joint",
+        "knob_front_left_joint",
+        "knob_front_right_joint",
+        "knob_rear_left_joint",
+        "knob_rear_right_joint",
+        "knob_temp_joint",
+        "knob_time_joint",
+        "rack0_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute",
+        "revolute",
+        "revolute",
+        "revolute",
+        "revolute",
+        "revolute",
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/fridge_main_group",
+      "joint_names": [
+        "freezer0_door_joint",
+        "fridge_door_joint",
+        "fridge_drawer0_joint"
+      ],
+      "joint_kinds": [
+        "prismatic",
+        "revolute",
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/cab_1_main_group",
+      "joint_names": [
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/cab_2_main_group",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/cab_main_main_group",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/microwave_main_group",
+      "joint_names": [
+        "microjoint",
+        "Disc001_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/cab_micro_main_group",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/cab_4_main_group",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_1_main_group_1",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_1_main_group_2",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_1_main_group_3",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_1_main_group_4",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_2_main_group_1",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/dishwasher_main_group",
+      "joint_names": [
+        "door_joint",
+        "rack0_joint",
+        "rack1_joint",
+        "button_lock_joint",
+        "button_power_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "prismatic",
+        "prismatic",
+        "prismatic",
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_3_main_group_1",
+      "joint_names": [
+        "left_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_4_main_group_1",
+      "joint_names": [
+        "left_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_4_main_group_2",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/coffee_machine_main_group",
+      "joint_names": [
+        "Button001_joint",
+        "Button002_joint",
+        "Container001_Clear_joint",
+        "Lid002_joint",
+        "Lid003_joint",
+        "Lid001_joint"
+      ],
+      "joint_kinds": [
+        "prismatic",
+        "prismatic",
+        "prismatic",
+        "prismatic",
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/toaster_main_group",
+      "joint_names": [
+        "button_cancel_joint",
+        "knob_doneness_joint",
+        "lever_joint"
+      ],
+      "joint_kinds": [
+        "prismatic",
+        "revolute",
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    }
+  ],
+  "mechanism_mapping_issues": [],
+  "planner_stand_colliders": [
+    "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube"
+  ],
+  "render_warmup": {
+    "passed": true,
+    "render_frames": 256,
+    "elapsed_seconds": 15.073467970825732,
+    "physics_advanced": false,
+    "physics_step_count_before": 0,
+    "physics_step_count_after": 0,
+    "render_generation_before": 0,
+    "render_generation_after": 256,
+    "settings": {
+      "min_frames": 128,
+      "max_frames": 1024,
+      "sample_every": 16,
+      "stable_windows": 3,
+      "sample_size": [
+        160,
+        90
+      ],
+      "mean_difference_limit": 0.35,
+      "percentile95_limit": 1.5,
+      "units": "Absolute RGB intensity difference on 0..255 scale"
+    },
+    "samples": [
+      {
+        "render_frame": 16,
+        "windows": [],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 32,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.3658333420753479,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.4498148262500763,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.33173611760139465,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 48,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.2549305558204651,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.30476853251457214,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2533564865589142,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.49807870388031006,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.6068981289863586,
+                "percentile95_absolute_rgb_difference": 2.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.46162036061286926,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 64,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.22953703999519348,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2754861116409302,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2407175898551941,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.3755324184894562,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.4534490704536438,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.3765277862548828,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.6048842668533325,
+                "percentile95_absolute_rgb_difference": 2.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.7370138764381409,
+                "percentile95_absolute_rgb_difference": 2.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.5741435289382935,
+                "percentile95_absolute_rgb_difference": 2.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 80,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.2046990692615509,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2510416805744171,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.21724537014961243,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.31567129492759705,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.39319443702697754,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.3375000059604645,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.4602314829826355,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.5522685050964355,
+                "percentile95_absolute_rgb_difference": 2.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.4636342525482178,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 96,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.19793981313705444,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2337268590927124,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.20300926268100739,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.2910648286342621,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.34361112117767334,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2999768555164337,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.40203702449798584,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.482106477022171,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.41175925731658936,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 112,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.19506944715976715,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2321990728378296,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.21266204118728638,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.28671297430992126,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.3339814841747284,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2915046215057373,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.3761805593967438,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.42826390266418457,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.38245370984077454,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 128,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.20006944239139557,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.22564814984798431,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.21738426387310028,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.2724536955356598,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.3239583373069763,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.30189815163612366,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.35381942987442017,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.4169444441795349,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.36828702688217163,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 144,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.17645832896232605,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2265046238899231,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.19342592358589172,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.2632407546043396,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.3174768388271332,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.3015509247779846,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.3334027826786041,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.39537036418914795,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.3743518590927124,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 160,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.18412037193775177,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.22122685611248016,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.1928240805864334,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.25562500953674316,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2995833456516266,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2636111080646515,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.3251388967037201,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.3727777898311615,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.3504860997200012,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 176,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.1730092614889145,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.22652778029441833,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.19381944835186005,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.24449074268341064,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.3069675862789154,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.26516205072402954,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.3065972328186035,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.37925925850868225,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.31562501192092896,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 192,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.17118056118488312,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.22328703105449677,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.1950925886631012,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.23673610389232635,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.31069445610046387,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2573842704296112,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.29576388001441956,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.3738657534122467,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.31150463223457336,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 208,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.17840278148651123,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.20928241312503815,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.17872685194015503,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.24134258925914764,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2861805558204651,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.26131945848464966,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.2891203761100769,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.35131943225860596,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.30351850390434265,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 224,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.18064814805984497,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.20439815521240234,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.198564812541008,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.24275462329387665,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2756713032722473,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.23951388895511627,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.29435184597969055,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.33650463819503784,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.3032175898551941,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": true,
+        "consecutive_stable_checks": 1
+      },
+      {
+        "render_frame": 240,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.1854861080646515,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.22641204297542572,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.20587962865829468,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.25256943702697754,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.28307870030403137,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2616203725337982,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.30217593908309937,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.34111112356185913,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.30113425850868225,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": true,
+        "consecutive_stable_checks": 2
+      },
+      {
+        "render_frame": 256,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.17467592656612396,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.20668981969356537,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.17398148775100708,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.2337268590927124,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2948611080646515,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2538425922393799,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.2847916781902313,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.33763888478279114,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2975925803184509,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": true,
+        "consecutive_stable_checks": 3
+      }
+    ],
+    "error": null,
+    "final_spatial_channel_spans": {
+      "external_camera": 255,
+      "external_camera_2": 255,
+      "wrist_camera": 204
+    }
+  },
+  "selected_handle_initial": [
+    4.3485291062039,
+    -0.8699208928686093,
+    0.9531769456856987
+  ],
+  "selected_handle_offset_z_m": -0.18,
+  "handle_candidate_failures": [],
+  "handle_candidate_queries": [
+    {
+      "offset_z_m": -0.18,
+      "requested_handle_point_world": [
+        4.3485291062039,
+        -0.8699208928686093,
+        0.9531769456856987
+      ],
+      "requested_pregrasp_pose_world": [
+        [
+          0.0007962382166098458,
+          0.9999996830023009,
+          0.0,
+          4.3484255952357405
+        ],
+        [
+          0.9999996830023009,
+          -0.0007962382166098458,
+          0.0,
+          -0.9999208516589084
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.9531769456856987
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "handle_selection_policy": "First cuRobo plan passing dense independent pre-execution validation from the same ordered source-handle height candidates; no variant-label branch."
+}

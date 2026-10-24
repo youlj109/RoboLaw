@@ -1,0 +1,21 @@
+{
+  "command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "-u",
+    "scripts/extensions/doors/diagnose_bounded_release_angles_lwx.py",
+    "--episode",
+    "datasets/doors/lwx_C07_balanced_release_retry90_20261024/C07_robot_66",
+    "--output",
+    "reports/doors/lwx_C07_balanced_release_retry90_20261024/C07_robot66_bounded_angles93.json",
+    "--angles=-45,-40,-35,-30,-25"
+  ],
+  "producer_pid": 861539,
+  "scope": "Retain robot66 task success but rejected released_hold1.797mm<2mm. Offline release direction diagnostic only. Video986/985 mismatch is secondary to actual audit failure; no acceptance."
+}

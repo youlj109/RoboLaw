@@ -1,0 +1,62 @@
+{
+  "task_success": false,
+  "accepted": false,
+  "mode": "collect",
+  "neutral_completed": false,
+  "failure": "RuntimeError: EXECUTION_COLLISION {\"action_index\": 457, \"phase\": \"pull_door\", \"valid\": false, \"failure\": {\"valid\": false, \"distance_m\": 0.019984983991017502, \"required_m\": 0.02, \"slack_m\": -1.5016008982498413e-05, \"robot_part\": \"robot_hull\", \"obstacle\": \"/World/envs/env_0/person/Posed_KitchenAdult/base_001\", \"intersecting\": false}, \"q\": [1.2103064060211182, 0.26295989751815796, -0.3501215875148773, -3.046557903289795, -2.5724663734436035, 1.4817811250686646, 0.16246427595615387, 0.3799910247325897, 0.3799171447753906, -0.3827020525932312, 0.3848753571510315, -0.37985286116600037, -0.3797179162502289], \"door_body_pose\": [4.524966716766357, -0.5571797490119934, 0.8750000596046448, 2.601882442831993e-08, -1.7815182218328118e-08, 0.1473570019006729, 0.9890834093093872], \"hazard_pose\": null, \"door_q\": 0.2957910895347595, \"door_hazard_pairs_near_15cm\": [{\"door_shape\": \"/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_main\", \"hazard_shape\": \"/World/envs/env_0/person/Posed_KitchenAdult/base_001\", \"distance_m\": 0.1711183461468745, \"intersecting\": false}, {\"door_shape\": \"/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_3\", \"hazard_shape\": \"/World/envs/env_0/person/Posed_KitchenAdult/base_001\", \"distance_m\": 0.1821936949679525, \"intersecting\": false}, {\"door_shape\": \"/World/envs/env_0/kitchen/fridge_main_group/Refrigerator032_fridge_door/Collisions/fridge_door_handle_4\", \"hazard_shape\": \"/World/envs/env_0/person/Posed_KitchenAdult/base_001\", \"distance_m\": 0.2948676393446058, \"intersecting\": false}]}",
+  "frames": 457,
+  "final_door_rad": 0.2957910895347595,
+  "actual_trajectory_samples": 457,
+  "physical_contact_samples": 284,
+  "delivery_accepted": false,
+  "no_execution_state_writes": true,
+  "safety_audit_physics_dt": 0.008333333333333333,
+  "safety_checks": 4119,
+  "physics_samples": 3663,
+  "plans": [
+    {
+      "backend": "curobo",
+      "method": "motion_gen",
+      "collision_geometry": {
+        "hazard_mesh_policy": "per_collider_world_aabb_plus_planning_clearance",
+        "hazard_mesh_box_counts": {
+          "glass": 0,
+          "barrier": 0
+        },
+        "retained_triangle_mesh_count": 19,
+        "planning_box_count": 582,
+        "fcl_and_physx_geometry": "original"
+      },
+      "status": "SUCCESS",
+      "planning_seconds": 3.831543334759772,
+      "samples": 115,
+      "dt": 0.06666666666666667,
+      "gripper_joint_position": 0.0,
+      "attached_bottle": false,
+      "transport_object_padding_m": 0.0,
+      "pregrasp_validation": {
+        "valid": true,
+        "samples": 541,
+        "input_waypoints": 115,
+        "resolution_rad": 0.005,
+        "curobo_failures": [],
+        "fcl_failures": [],
+        "curobo_samples_checked": 541,
+        "fcl_samples_checked": 541,
+        "fcl_samples_unchecked": 0,
+        "validation_complete": true,
+        "early_rejection": null,
+        "sample_order": "cuRobo all original dense samples; FCL endpoints then interval midpoints",
+        "transport_object_padding_m": 0.0,
+        "gripper_joint_position": 0.0,
+        "validation_seconds": 0.9338476900011301,
+        "policy": {
+          "version": "dense_pregrasp_v4",
+          "resolution_rad": 0.005,
+          "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+        },
+        "accepted": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "scope": "Reconstructed command from the last retained actual state and controller parameters. CPU external geometry and joint limits only; no GPU self collision, exact failed-command observation, dynamics, execution or acceptance claim.",
+  "episode": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_78",
+  "trajectory_sha256": "6787d3c9106f946d2481d6645b9ce641b64e9ff0811f203ccc66c707240f24ac",
+  "metadata_sha256": "a21f678e69dc4a19b2f78c130e66120cbd395f1c4a794c5d56f10caad2cadbba",
+  "result_sha256": "b1b7516f36e79ce106711e08b319ea1873f42a852763c5c6a27ccb86f9704879",
+  "implementation_sha256": "84ec6d0e588c88ae687e2c0ac95ff4e7dfcedcfe277e9e438222e8c8032efae8",
+  "physics_replay": false,
+  "unsafe_path_executed": false,
+  "observed_door_q": 0.015063339844346046,
+  "requested_angle_rad": 0.045063339844346045,
+  "target_pose": [
+    [
+      -0.04425264549970501,
+      0.99902037184748,
+      0.0,
+      4.353981087390503
+    ],
+    [
+      0.99902037184748,
+      0.04425264549970501,
+      0.0,
+      -0.8971148719483663
+    ],
+    [
+      0.0,
+      0.0,
+      -1.0,
+      0.9531769456856987
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "command": [
+    0.6319008868763432,
+    0.40841180200392496,
+    0.06579982886696768,
+    -2.535073661804199,
+    -2.475737228347661,
+    1.7117288123146808,
+    -0.14297608171105194
+  ],
+  "maximum_joint_step_rad": 0.02499999999999991,
+  "joint_limit_slack_rad": 0.41656285950083705,
+  "external_checks": {
+    "execution": {
+      "valid": true,
+      "distance_m": 0.0156033481955542,
+      "required_m": 0.002,
+      "slack_m": 0.0136033481955542,
+      "robot_part": "robot_hull",
+      "obstacle": "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube",
+      "intersecting": false
+    },
+    "planning": {
+      "valid": true,
+      "distance_m": 0.0156033481955542,
+      "required_m": 0.002,
+      "slack_m": 0.0136033481955542,
+      "robot_part": "robot_hull",
+      "obstacle": "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube",
+      "intersecting": false
+    }
+  },
+  "complete": true
+}

@@ -1,0 +1,46 @@
+{
+  "stage": "collect",
+  "baseline": "datasets/doors/lwx_C07_balanced_release_retry90_20261024/C07_base_01",
+  "search": "reports/doors/lwx_C07_balanced_release_retry90_20261024/C07_robot_hold_search66.json",
+  "search_sha256": "6258b012f89417cdc3ac18bb852ae140d9757b1ea34b3038b50b836402adfd7e",
+  "offline_candidate_budget": 3,
+  "physical_trial_budget": 1,
+  "small_detour_limits": {
+    "max_joint_length_ratio": 1.6,
+    "max_added_tcp_length_m": 0.15
+  },
+  "complete": false,
+  "candidates": [
+    {
+      "candidate_index": 0,
+      "config": "configs/extensions/doors/c07_robot_candidate_66_00.json",
+      "paired_report": "reports/doors/lwx_C07_balanced_release_retry90_20261024/C07_robot_66_candidate_00_paired01/report.json",
+      "exit_code": 0,
+      "eligible": true,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.0042834321660534,
+      "max_added_tcp_length_m": -0.04739325305701092,
+      "contact_approach_diagnostic": "reports/doors/lwx_C07_balanced_release_retry90_20261024/C07_robot_66_candidate_00_approach01.json"
+    }
+  ],
+  "baseline_gates": {
+    "result.json": true,
+    "task_validation_full.json": true,
+    "task_review_audit.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "selection_rule": "First eligible candidate with <=.05m added TCP length and <=1.15 joint ratio; otherwise minimum added length among at most three eligible candidates",
+  "selected_candidate": {
+    "candidate_index": 0,
+    "config": "configs/extensions/doors/c07_robot_candidate_66_00.json",
+    "paired_report": "reports/doors/lwx_C07_balanced_release_retry90_20261024/C07_robot_66_candidate_00_paired01/report.json",
+    "exit_code": 0,
+    "eligible": true,
+    "actual_source_intersections_all_seeds": true,
+    "max_joint_length_ratio": 1.0042834321660534,
+    "max_added_tcp_length_m": -0.04739325305701092,
+    "contact_approach_diagnostic": "reports/doors/lwx_C07_balanced_release_retry90_20261024/C07_robot_66_candidate_00_approach01.json"
+  },
+  "error": "RuntimeError('collect exited 1')"
+}

@@ -1,0 +1,41 @@
+{
+  "commands": [
+    [
+      "docker",
+      "exec",
+      "robolaw-wenxuanli",
+      "env",
+      "PYTHONPATH=/workspace",
+      "OPENBLAS_NUM_THREADS=1",
+      "OMP_NUM_THREADS=1",
+      "/workspace/.venv-arena/bin/python",
+      "-u",
+      "scripts/extensions/doors/diagnose_recorded_pull_lwx.py",
+      "--episode",
+      "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_78",
+      "--output",
+      "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property78_pull_cpu_diagnostic80.json"
+    ],
+    [
+      "docker",
+      "exec",
+      "robolaw-wenxuanli",
+      "flock",
+      "/workspace/reports/skill_trials/gpu.lock",
+      "env",
+      "PYTHONPATH=/workspace",
+      "OPENBLAS_NUM_THREADS=1",
+      "OMP_NUM_THREADS=1",
+      "/workspace/.venv-arena/bin/python",
+      "-u",
+      "scripts/extensions/doors/diagnose_saved_command_gpu_lwx.py",
+      "--diagnostic",
+      "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property78_pull_cpu_diagnostic80.json",
+      "--output",
+      "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property78_pull_gpu_diagnostic80.json"
+    ]
+  ],
+  "driver_source": "import subprocess,json\nfrom pathlib import Path\ncommands=[['docker', 'exec', 'robolaw-wenxuanli', 'env', 'PYTHONPATH=/workspace', 'OPENBLAS_NUM_THREADS=1', 'OMP_NUM_THREADS=1', '/workspace/.venv-arena/bin/python', '-u', 'scripts/extensions/doors/diagnose_recorded_pull_lwx.py', '--episode', 'datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_78', '--output', 'reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property78_pull_cpu_diagnostic80.json'], ['docker', 'exec', 'robolaw-wenxuanli', 'flock', '/workspace/reports/skill_trials/gpu.lock', 'env', 'PYTHONPATH=/workspace', 'OPENBLAS_NUM_THREADS=1', 'OMP_NUM_THREADS=1', '/workspace/.venv-arena/bin/python', '-u', 'scripts/extensions/doors/diagnose_saved_command_gpu_lwx.py', '--diagnostic', 'reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property78_pull_cpu_diagnostic80.json', '--output', 'reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property78_pull_gpu_diagnostic80.json']]\nresult=[]\nfor cmd in commands:\n r=subprocess.run(cmd);result.append(r.returncode)\n if r.returncode:break\nPath('reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property78_diagnostic80_exit.json').write_text(json.dumps(result))\n",
+  "producer_pid": 860538,
+  "scope": "Reconstruct and isolate next pull rejection offline. Nominal source configuration reconstruction is not an exact observed rejected-command or dynamics proof. Failure78 remains."
+}

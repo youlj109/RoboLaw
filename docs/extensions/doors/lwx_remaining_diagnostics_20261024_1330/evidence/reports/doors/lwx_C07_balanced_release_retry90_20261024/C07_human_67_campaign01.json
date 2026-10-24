@@ -1,0 +1,45 @@
+{
+  "stage": "collect",
+  "baseline": "datasets/doors/lwx_C07_balanced_release_retry90_20261024/C07_base_01",
+  "search": "reports/doors/lwx_C07_balanced_release_retry90_20261024/C07_human_hold_search67.json",
+  "search_sha256": "b746f6073e84004ddeafd6662eb4494b576fdd063e4f0e61c83f3985a9128ee6",
+  "offline_candidate_budget": 3,
+  "physical_trial_budget": 1,
+  "small_detour_limits": {
+    "max_joint_length_ratio": 1.6,
+    "max_added_tcp_length_m": 0.15
+  },
+  "complete": false,
+  "candidates": [
+    {
+      "candidate_index": 0,
+      "config": "configs/extensions/doors/c07_human_candidate_67_00.json",
+      "paired_report": "reports/doors/lwx_C07_balanced_release_retry90_20261024/C07_human_67_candidate_00_paired01/report.json",
+      "exit_code": 0,
+      "eligible": true,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.2243544697667736,
+      "max_added_tcp_length_m": -0.028760300095039548,
+      "contact_approach_diagnostic": "reports/doors/lwx_C07_balanced_release_retry90_20261024/C07_human_67_candidate_00_approach01.json"
+    }
+  ],
+  "baseline_gates": {
+    "result.json": true,
+    "task_validation_full.json": true,
+    "task_review_audit.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "selected_candidate": {
+    "candidate_index": 0,
+    "config": "configs/extensions/doors/c07_human_candidate_67_00.json",
+    "paired_report": "reports/doors/lwx_C07_balanced_release_retry90_20261024/C07_human_67_candidate_00_paired01/report.json",
+    "exit_code": 0,
+    "eligible": true,
+    "actual_source_intersections_all_seeds": true,
+    "max_joint_length_ratio": 1.2243544697667736,
+    "max_added_tcp_length_m": -0.028760300095039548,
+    "contact_approach_diagnostic": "reports/doors/lwx_C07_balanced_release_retry90_20261024/C07_human_67_candidate_00_approach01.json"
+  },
+  "error": "RuntimeError('collect exited 1')"
+}
