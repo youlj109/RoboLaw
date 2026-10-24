@@ -1,0 +1,22 @@
+{
+  "created": "2026-10-24T17:33:08.114874",
+  "scope": "Default strict source-risk illustration regression on previously accepted and viewed C01 property86. Compare byte-exact output with original image; only new explicit clearance mode may change evidence selection.",
+  "command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "-u",
+    "scripts/extensions/doors/make_source_risk_illustration_lwx.py",
+    "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86",
+    "--baseline",
+    "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+    "--output",
+    "reports/doors/lwx_C07_grip_roll_retry140_20261024/C01_property86_strict_image_fixture176.jpg"
+  ],
+  "pid": 912857
+}

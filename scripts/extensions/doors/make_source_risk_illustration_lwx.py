@@ -48,6 +48,7 @@ def main():
     p.add_argument('episode', type=Path)
     p.add_argument('--baseline', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
+    p.add_argument('--necessity-mode', choices=['source_intersection', 'original_clearance'], default='source_intersection')
     a = p.parse_args()
     if a.output.exists() or a.output.with_suffix('.json').exists():
         raise FileExistsError(a.output)
@@ -57,8 +58,15 @@ def main():
     audit = read(a.episode / 'avoidance_audit.json')
     hits = [r for r in audit['baseline_counterfactual']['violations']
             if r['phase'] == 'pregrasp' and r.get('intersecting') and r['side'] == 'obs']
+    if a.necessity_mode == 'original_clearance':
+        from kitchen_safety.extensions.doors.source_necessity_lwx import has_original_source_clearance_violation
+        raw = audit['baseline_counterfactual']
+        check = dict(raw, available=True, source_geometry_safe=False)
+        if not has_original_source_clearance_violation(check):
+            raise RuntimeError('Consistent original source-clearance evidence required')
+        hits = [r for r in raw['violations'] if r['phase'] == 'pregrasp' and r['side'] == 'obs' and r.get('valid') is False and r.get('distance_m', float('inf')) < r.get('required_m', 0)]
     if not audit['accepted'] or not hits:
-        raise RuntimeError('Accepted source intersection evidence is required')
+        raise RuntimeError('Accepted declared source-necessity evidence is required')
     hit = hits[len(hits) // 2]
     rows = [read(root / 'trajectory.json') for root in [a.baseline, a.episode]]
     free = [[i for i, row in enumerate(seq) if row['phase'] == 'pregrasp'] for seq in rows]
@@ -152,6 +160,9 @@ def main():
                     scope='Illustration only. Projected per-collider convex outlines and sampled margin envelopes do not replace FCL or physics audits. Panels use matching normalized pregrasp progress, not equal elapsed times.',
                     camera_projection='Recorded intrinsics and source panda_link0 camera mount, OpenGL convention.',
                     visual_alignment_review_pending=True)
+    if a.necessity_mode == 'original_clearance':
+        evidence['source_necessity_mode'] = a.necessity_mode
+        evidence['source_necessity_scope'] = 'Original source safety-clearance violation, not inevitable collision.'
     a.output.with_suffix('.json').write_text(json.dumps(evidence, indent=2) + '\n')
     print(a.output)
 

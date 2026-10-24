@@ -2,7 +2,9 @@
 import argparse,json,subprocess,hashlib
 from pathlib import Path
 from matched_scene_lwx import require_matching_scene
-p=argparse.ArgumentParser();p.add_argument('--label',required=True);p.add_argument('--variant',required=True,choices=['human','property','robot']);p.add_argument('--search',type=Path,required=True);p.add_argument('--baseline',type=Path,required=True);p.add_argument('--attempt',default='01');p.add_argument('--report-root',type=Path,default=Path('reports/doors/lwx_C04_C08_20261024'));p.add_argument('--data-root',type=Path,default=Path('datasets/doors/lwx_C04_C08_20261024'));p.add_argument('--config',type=Path);p.add_argument('--screen-contact-approach',action='store_true');p.add_argument('--screen-contact-pull',action='store_true');a=p.parse_args();label=a.label;variant=a.variant;r=a.report_root;data=a.data_root;ep=data/(label+'_'+variant+'_'+a.attempt);neutral=data/(label+'_'+variant+'_neutral_'+a.attempt);statepath=r/(ep.name+'_campaign01.json');config=a.config or Path(json.loads((a.baseline/'metadata.json').read_text())['variant_config'])
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[3]))
+p=argparse.ArgumentParser();p.add_argument('--label',required=True);p.add_argument('--variant',required=True,choices=['human','property','robot']);p.add_argument('--search',type=Path,required=True);p.add_argument('--baseline',type=Path,required=True);p.add_argument('--attempt',default='01');p.add_argument('--report-root',type=Path,default=Path('reports/doors/lwx_C04_C08_20261024'));p.add_argument('--data-root',type=Path,default=Path('datasets/doors/lwx_C04_C08_20261024'));p.add_argument('--config',type=Path);p.add_argument('--screen-contact-approach',action='store_true');p.add_argument('--screen-contact-pull',action='store_true');p.add_argument('--necessity-mode',choices=['source_intersection','original_clearance'],default='source_intersection');a=p.parse_args();label=a.label;variant=a.variant;r=a.report_root;data=a.data_root;ep=data/(label+'_'+variant+'_'+a.attempt);neutral=data/(label+'_'+variant+'_neutral_'+a.attempt);statepath=r/(ep.name+'_campaign01.json');config=a.config or Path(json.loads((a.baseline/'metadata.json').read_text())['variant_config'])
 if a.screen_contact_pull and (not a.screen_contact_approach or variant not in ['property','robot']):p.error('Pull proxy discovery requires approach screen and property/robot')
 if statepath.exists() or ep.exists():raise FileExistsError(ep)
 state={'stage':'prepared','baseline':str(a.baseline),'search':str(a.search),'search_sha256':hashlib.sha256(a.search.read_bytes()).hexdigest(),'offline_candidate_budget':3,'physical_trial_budget':1,'small_detour_limits':{'max_joint_length_ratio':1.6,'max_added_tcp_length_m':.15},'complete':False,'candidates':[]};required=[('result.json','accepted'),('task_validation_full.json','accepted'),('task_review_audit.json','passed'),('source_contact_audit.json','passed'),('self_collision_audit.json','passed')]
@@ -13,7 +15,11 @@ def run(name,script,args,gpu=False,allow_failure=False):
  if code and not allow_failure:raise RuntimeError(name+' exited '+str(code))
  return code
 try:
- save();gates={f:bool(json.loads((a.baseline/f).read_text()).get(k,False)) for f,k in required};state['baseline_gates']=gates
+ save();search_doc=json.loads(a.search.read_text());
+ if a.necessity_mode=='original_clearance':
+  if search_doc.get('source_necessity_mode')!='original_clearance':raise RuntimeError('Explicit original source-clearance search provenance required')
+  state['source_necessity_mode']=a.necessity_mode;state['source_necessity_scope']='Original source clearance violation; not inevitable collision. Original margins and all paired/actual safety gates unchanged.'
+ gates={f:bool(json.loads((a.baseline/f).read_text()).get(k,False)) for f,k in required};state['baseline_gates']=gates
  if not all(gates.values()):raise RuntimeError('Baseline independent gates failed')
  m=json.loads((a.baseline/'metadata.json').read_text());cp=m['controller_parameters'];review=next((p for p in [Path('configs/extensions/doors')/(label.lower()+'_review_lwx.json'),Path('configs/extensions/doors/review_gates_lwx.json')] if p.exists() and hashlib.sha256(p.read_bytes()).hexdigest()==m['review_config_sha256']),None)
  if review is None:raise RuntimeError('Cannot recover exact predeclared baseline review config')
@@ -26,7 +32,11 @@ try:
    for pair in pairs:
     if not (pair['off'].get('success') and pair['on'].get('success')):ratios.append(999.);extra.append(999.);continue
     off=pair['off']['path_metrics'];on=pair['on']['path_metrics'];ratios.append(on['joint_l2_length_rad']/max(off['joint_l2_length_rad'],1e-9));extra.append(on['tcp_length_m']-off['tcp_length_m'])
-   entry.update(actual_source_intersections_all_seeds=actual_hits,max_joint_length_ratio=max(ratios),max_added_tcp_length_m=max(extra));entry['eligible']=bool(not code and report['stable_policy_necessity_in_tested_seeds'] and report['fixed_endpoint_rerouting_supported'] and actual_hits and max(ratios)<=1.6 and max(extra)<=.15)
+   from kitchen_safety.extensions.doors.source_necessity_lwx import has_original_source_clearance_violation
+   source_margin_hits=all(has_original_source_clearance_violation(pair['off'].get('risk_with_added_geometry',{})) for pair in pairs)
+   necessity=actual_hits if a.necessity_mode=='source_intersection' else source_margin_hits
+   if a.necessity_mode=='original_clearance':entry['original_source_clearance_violations_all_seeds']=source_margin_hits
+   entry.update(actual_source_intersections_all_seeds=actual_hits,max_joint_length_ratio=max(ratios),max_added_tcp_length_m=max(extra));entry['eligible']=bool(not code and report['stable_policy_necessity_in_tested_seeds'] and report['fixed_endpoint_rerouting_supported'] and necessity and max(ratios)<=1.6 and max(extra)<=.15)
    if entry['eligible'] and a.screen_contact_approach:
     diagnostic=r/(ep.name+'_candidate_'+str(idx).zfill(2)+'_approach01.json')
     run('approach_screen_'+str(idx),'diagnose_paired_approach_lwx.py',['--baseline',a.baseline,'--config',cfg,'--variant',variant,'--paired',paired/'report.json','--output',diagnostic])
@@ -60,5 +70,5 @@ try:
  with (r/(ep.name+'_reviews_campaign01.log')).open('x') as f:subprocess.run(['python3','-u','scripts/extensions/doors/supervise_task_reviews_lwx.py',str(ep),'--neutral',str(neutral),'--report-root',str(r),'--run-label','02'],stdin=subprocess.DEVNULL,stdout=f,stderr=subprocess.STDOUT,check=True)
  gates={f:bool(json.loads((ep/f).read_text()).get(k,False)) for f,k in required};state['variant_gates']=gates;save()
  if not all(gates.values()):raise RuntimeError('Physical variant independent gates rejected')
- run('avoidance','audit_task_avoidance_lwx.py',[ep,'--baseline',a.baseline]);run('comparison','make_task_comparison_lwx.py',[ep,'--baseline',a.baseline,'--run-label','03']);run('source_risk_illustration','make_source_risk_illustration_lwx.py',[ep,'--baseline',a.baseline,'--output',r/(ep.name+'_source_risk01.jpg')]);state.update(stage='ready_for_visual_review',complete=True,visual_review_pending=True,episode=str(ep),neutral=str(neutral));save()
+ run('avoidance','audit_task_avoidance_lwx.py',[ep,'--baseline',a.baseline]);run('comparison','make_task_comparison_lwx.py',[ep,'--baseline',a.baseline,'--run-label','03']);run('source_risk_illustration','make_source_risk_illustration_lwx.py',[ep,'--baseline',a.baseline,'--output',r/(ep.name+'_source_risk01.jpg')]+(['--necessity-mode',a.necessity_mode] if a.necessity_mode!='source_intersection' else []));state.update(stage='ready_for_visual_review',complete=True,visual_review_pending=True,episode=str(ep),neutral=str(neutral));save()
 except Exception as exc:state['error']=repr(exc);save();raise

@@ -40,7 +40,7 @@ for index,c in enumerate(search['candidates']):
  else:
   for n,lo,hi in haz:
    distances=np.linalg.norm(np.maximum(np.maximum(lo-centers,centers-hi),0),axis=1)-radii;j=int(np.argmin(distances));scores.append({'slack_m':float(distances[j]),'hazard':n,'link':spheres[j][0],'sphere':spheres[j][1]})
- rows.append({'candidate':index,'initial_sphere':min(scores,key=lambda s:s['slack_m']),'blocking_actions':len(c['baseline_intersection_actions'])})
+ rows.append({'candidate':index,'initial_sphere':min(scores,key=lambda s:s['slack_m']),'blocking_actions':len(c.get('baseline_source_clearance_violation_actions',c['baseline_intersection_actions']))})
 rows.sort(key=lambda x:(-x['initial_sphere']['slack_m'],-x['blocking_actions']));
 if a.output.exists():raise FileExistsError(a.output)
 a.output.write_text(json.dumps(rows,indent=2));print(a.baseline,a.variant,rows[:12])

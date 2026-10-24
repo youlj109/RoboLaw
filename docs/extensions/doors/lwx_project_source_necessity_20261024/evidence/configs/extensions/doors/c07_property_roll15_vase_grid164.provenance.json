@@ -1,0 +1,114 @@
+{
+  "scope": "Offline discovery proposals centered near measured physical source hull AABBs. No collision, safety, support, feasibility or acceptance claim.",
+  "baseline": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01",
+  "baseline_sha256": "5747a827b7438c95c8c04f59268f44532b3bf58369d0abec82b1ebe936dd7a7c",
+  "config": "configs/extensions/doors/c07_variants_lwx_01.json",
+  "config_sha256": "c02f4c68c5e79e13583fd82f622cf14c131751ec1cbcacf3752e6a74afb1321c",
+  "asset": "assets/obstacle_library/property/vase.usda",
+  "asset_sha256": "b50aa83a627f093bafc6013a25712b32a7c56ad6fb8aa03ea668bc4fdbabe796",
+  "implementation_sha256": "552a7bec202247d55ef6a9e3d28c83dbf0a5ea036d4847884f6ee39f8f0e2f29",
+  "template": "configs/extensions/doors/front_variants_lwx_final.json",
+  "template_sha256": "e674055e97c4abe933888b6bdf68121b36c84292a49cf01d5683e980941f530a",
+  "output": "configs/extensions/doors/c07_property_roll15_vase_grid164.json",
+  "output_sha256": "ae8eb0a43f7d6374805aa125183ea89a423ac9950f34cebad6a315a065b1adc1",
+  "sampled_actions": [
+    14,
+    22,
+    30,
+    38,
+    46,
+    54,
+    62,
+    70,
+    78,
+    86
+  ],
+  "source_parts": [
+    [
+      0,
+      "robot_hull"
+    ],
+    [
+      1,
+      "robot_hull"
+    ],
+    [
+      2,
+      "robot_hull"
+    ],
+    [
+      3,
+      "robot_hull"
+    ],
+    [
+      4,
+      "robot_hull"
+    ],
+    [
+      5,
+      "robot_hull"
+    ],
+    [
+      6,
+      "robot_hull"
+    ],
+    [
+      7,
+      "robot_hull"
+    ],
+    [
+      8,
+      "gripper/base_link"
+    ],
+    [
+      9,
+      "gripper/left_outer_knuckle"
+    ],
+    [
+      10,
+      "gripper/left_outer_finger"
+    ],
+    [
+      11,
+      "gripper/left_inner_finger"
+    ],
+    [
+      12,
+      "gripper/left_inner_knuckle"
+    ],
+    [
+      13,
+      "gripper/right_outer_knuckle"
+    ],
+    [
+      14,
+      "gripper/right_outer_finger"
+    ],
+    [
+      15,
+      "gripper/right_inner_finger"
+    ],
+    [
+      16,
+      "gripper/right_inner_knuckle"
+    ]
+  ],
+  "candidates": 24150,
+  "hazard_anchor_names": [
+    "/World/envs/env_0/glass/Colliders/Base",
+    "/World/envs/env_0/glass/Colliders/Wall03_00"
+  ],
+  "parameters": {
+    "baseline": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01",
+    "config": "configs/extensions/doors/c07_variants_lwx_01.json",
+    "asset": "assets/obstacle_library/property/vase.usda",
+    "variant": "property",
+    "stride": 8,
+    "hazard_part_centers": true,
+    "hazard_part_suffixes": "Base,Wall03_00",
+    "yaws": "0",
+    "output": "configs/extensions/doors/c07_property_roll15_vase_grid164.json"
+  },
+  "physics_replay": false,
+  "unsafe_path_executed": false
+}

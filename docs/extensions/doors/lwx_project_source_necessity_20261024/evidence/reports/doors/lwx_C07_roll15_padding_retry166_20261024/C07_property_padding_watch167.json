@@ -1,0 +1,28 @@
+{
+  "created": "2026-10-24T17:13:09.131055",
+  "scope": "Wait for all five NEW actual baseline166 gates; reuse157 finite placements only as layout proposals, then replan every paired off/on with matching +30mm conservative planning padding. Full original approach/pull and actual gates remain mandatory. No claim original157 search certifies revised policy. At most one actual accepted property sample.",
+  "command": [
+    "python3",
+    "-u",
+    "scripts/extensions/doors/supervise_search_candidates_lwx.py",
+    "--label",
+    "C07",
+    "--variant",
+    "property",
+    "--attempt",
+    "167",
+    "--search",
+    "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_property_roll15_tall_glass_refine157.json",
+    "--baseline",
+    "datasets/doors/lwx_C07_roll15_padding_retry166_20261024/C07_base_01",
+    "--config",
+    "configs/extensions/doors/c07_variants_lwx_01.json",
+    "--report-root",
+    "reports/doors/lwx_C07_roll15_padding_retry166_20261024",
+    "--data-root",
+    "datasets/doors/lwx_C07_roll15_padding_retry166_20261024",
+    "--screen-contact-approach",
+    "--screen-contact-pull"
+  ],
+  "pid": 909409
+}

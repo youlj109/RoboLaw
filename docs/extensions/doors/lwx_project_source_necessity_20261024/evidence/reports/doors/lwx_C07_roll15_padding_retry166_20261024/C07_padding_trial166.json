@@ -1,0 +1,41 @@
+{
+  "created": "2026-10-24T17:12:12.349230",
+  "scope": "Source166 changes only already-supported conservative hazard planning padding to +30mm, retaining roll15 source target/controller and unchanged execution/source clearances. New ACTUAL matching baseline and neutral are required; no metadata relabeling or unsafe off replay. Original140 no-hazard contact screen is copied byte-for-byte with provenance because extra hazard padding has no hazard object in baseline screen. All final gates unchanged.",
+  "baseline_command": [
+    "python3",
+    "-u",
+    "scripts/extensions/doors/supervise_assigned_baseline_lwx.py",
+    "C07",
+    "--config",
+    "configs/extensions/doors/c07_variants_lwx_01.json",
+    "--report-root",
+    "reports/doors/lwx_C07_roll15_padding_retry166_20261024",
+    "--data-root",
+    "datasets/doors/lwx_C07_roll15_padding_retry166_20261024",
+    "--pull-steps",
+    "1100",
+    "--release-retreat-m",
+    ".04",
+    "--release-tilt-deg",
+    "-30",
+    "--release-settle-steps",
+    "15",
+    "--release-retreat-profile",
+    "ease_out",
+    "--release-command-policy",
+    "bounded_position_hold_v2",
+    "--planner-hazard-extra-padding-m",
+    ".03"
+  ],
+  "pid": 908835,
+  "copied_source_screen": {
+    "source": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_contact_screen01.json",
+    "copy": "reports/doors/lwx_C07_roll15_padding_retry166_20261024/C07_contact_screen01.json",
+    "sha256": "d5d7a1827793f380bd3588183647f0c0861f952bc71b69ab13e97827dff30457"
+  },
+  "prior_rejected_discovery": [
+    "161",
+    "163",
+    "165"
+  ]
+}
