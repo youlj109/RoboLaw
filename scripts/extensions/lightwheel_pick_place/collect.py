@@ -363,15 +363,15 @@ with SimulationAppContext(args):
                 try:
                     # Phase from consecutive step, not absolute offset (rise keeps prior Y).
                     prev=np.zeros(3) if wi==0 else np.asarray(waypoints[wi-1],dtype=float)
-                    step=np.asarray(w,dtype=float)-prev
-                    if abs(float(step[0]))<1e-9 and abs(float(step[1]))<1e-9:
+                    step_delta=np.asarray(w,dtype=float)-prev
+                    if abs(float(step_delta[0]))<1e-9 and abs(float(step_delta[1]))<1e-9:
                         force='lift'
                     else:
                         force='cartesian_line'
                     cart(held['tcp']+w, force_phase=force)
                 except RuntimeError as exc:
                     result['shelf_lift_failed_waypoint']= {'index':wi,'delta_m':w.tolist(),
-                        'step_m':step.tolist(),'error':str(exc),'plan_phase':force}
+                        'step_m':step_delta.tolist(),'error':str(exc),'plan_phase':force}
                     raise
         lifted=snapshot();result['lift_m']=float(lifted['lime'][2]-p[2]);result['lift_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'lift',last_actions=5)
         if result['lift_m']<.08 or not result['lift_contacts']['both_fingers_on_body']:raise RuntimeError('Lime failed physical lift/contact check')
