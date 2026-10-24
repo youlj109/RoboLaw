@@ -23,6 +23,7 @@ def main():
     p.add_argument('--asset', type=Path, required=True)
     p.add_argument('--variant', choices=['property', 'robot'], default='property')
     p.add_argument('--stride', type=int, default=4)
+    p.add_argument('--hazard-part-centers', action='store_true', help='Also propose contact near each original hazard collider, including narrow bottle necks')
     p.add_argument('--yaws', default='0,90,180,270')
     p.add_argument('--output', type=Path, required=True)
     a = p.parse_args()
@@ -46,6 +47,7 @@ def main():
     low = np.min([lo for _, _, lo, _ in hazard], axis=0)
     high = np.max([hi for _, _, _, hi in hazard], axis=0)
     local_center = (low + high) / 2
+    local_centers = [(lo+hi)/2 for _, _, lo, hi in hazard] if a.hazard_part_centers else [local_center]
     pre = [i for i, row in enumerate(rows) if row['phase'] == 'pregrasp'][5:-5:a.stride]
     if not pre:
         raise ValueError('No measured interior pregrasp samples')
@@ -60,12 +62,13 @@ def main():
             parts.add((index, name))
             center = (lo + hi) / 2
             for yaw in map(float, a.yaws.split(',')):
-                origin = center - Rotation.from_euler('z', yaw, degrees=True).apply(local_center)
-                for delta in offsets:
-                    value = tuple(np.round(origin + delta, 6)) + (yaw,)
-                    if value not in seen:
-                        seen.add(value)
-                        values.append(value)
+                for local_center in local_centers:
+                    origin = center - Rotation.from_euler('z', yaw, degrees=True).apply(local_center)
+                    for delta in offsets:
+                        value = tuple(np.round(origin + delta, 6)) + (yaw,)
+                        if value not in seen:
+                            seen.add(value)
+                            values.append(value)
     a.output.write_text(json.dumps(values, indent=2) + '\n')
     report = dict(scope='Offline discovery proposals centered near measured physical source hull AABBs. No collision, safety, support, feasibility or acceptance claim.',
                   baseline=str(a.baseline), baseline_sha256=sha(a.baseline / 'trajectory.json'),

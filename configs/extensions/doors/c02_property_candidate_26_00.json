@@ -1,0 +1,128 @@
+{
+  "_fixed_source_layout": "configs/extensions/doors/c02_source_layout_lwx.json",
+  "_kitchen_asset": "assets/extensions/doors/c02_mechanisms_lwx_01.usda",
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      5.014860019683838,
+      -0.44374709367751985,
+      1.459999942779541
+    ],
+    "static": false,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "yaw_deg": 0.0,
+    "baseline_intersection_actions": [
+      64,
+      65,
+      66,
+      67
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right"
+    ],
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/c02_property_candidate_26_00_property_support.usda",
+      "position": [
+        5.014860019683838,
+        -0.44374709367751985,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.784860019683838,
+          -0.4737470936775199,
+          0.92
+        ],
+        [
+          5.0448600196838385,
+          -0.41374709367751983,
+          1.459999942779541
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right",
+      "component_bounds_world_m": [
+        {
+          "low": [
+            4.784860019683838,
+            -0.4737470936775199,
+            0.922
+          ],
+          "high": [
+            4.844860019683838,
+            -0.41374709367751983,
+            1.437999942779541
+          ]
+        },
+        {
+          "low": [
+            4.784860019683838,
+            -0.4737470936775199,
+            1.437999942779541
+          ],
+          "high": [
+            5.0448600196838385,
+            -0.41374709367751983,
+            1.457999942779541
+          ]
+        }
+      ],
+      "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+    },
+    "candidate_search": "reports/doors/lwx_C02_shortcut_retry26_20261024/C02_property_shortcut_search26.json",
+    "candidate_search_sha256": "c0730553130fb0dcc4cd0fb68823c79f4dd838fed1f54ff98e6ce950e70e6abc",
+    "candidate_index": 0
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.704860019683838,
+      -0.5137470936775199,
+      1.379999942779541
+    ],
+    "yaw_deg": 90.0,
+    "static": true,
+    "semantic_anchor": "Actual baseline pregrasp obstruction; fixed source task layout and fixed handle target retained. Candidate requires paired planning and physical validation.",
+    "baseline_intersection_actions": [
+      46,
+      50,
+      54,
+      58,
+      62,
+      66,
+      70
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right"
+    ],
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/c02_robot_support_lwx_01.usda",
+      "position": [
+        4.704860019683838,
+        -0.5137470936775199,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.619860019683838,
+          -0.5987470936775199,
+          0.92
+        ],
+        [
+          4.789860019683838,
+          -0.4287470936775199,
+          1.379999942779541
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right"
+    },
+    "candidate_search": "reports/doors/lwx_C02_C03_20261023/C02_robot_search_02.json",
+    "candidate_index": 11
+  },
+  "_selection_note": "Discovery candidate only; not task or physical acceptance."
+}

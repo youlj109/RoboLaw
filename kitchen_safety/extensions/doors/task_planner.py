@@ -1,9 +1,11 @@
 """Task-local cuRobo adapter with exact, fully qualified handle collider matching."""
 from kitchen_safety.curobo_backend import CuroboPlanner
 class TaskPlanner(CuroboPlanner):
- def __init__(self,*args,hazard_extra_padding_m=0.,**kwargs):
+ def __init__(self,*args,hazard_extra_padding_m=0.,pregrasp_shortcut_policy="none",**kwargs):
   self.hazard_extra_padding_m=float(hazard_extra_padding_m)
   if not 0.<=self.hazard_extra_padding_m<=.03:raise ValueError('Hazard planning padding must be in [0,.03]m')
+  if pregrasp_shortcut_policy not in ("none","bounded_chords_v1"):raise ValueError("Unknown pregrasp shortcut policy")
+  self.pregrasp_shortcut_policy=pregrasp_shortcut_policy
   super().__init__(*args,**kwargs)
   if self.hazard_extra_padding_m:
    self.collision_geometry['door_local_hazard_extra_padding_m']=self.hazard_extra_padding_m
@@ -16,3 +18,18 @@ class TaskPlanner(CuroboPlanner):
  @staticmethod
  def _ignored(name,ignore_names):
   return any(name==key or name.startswith(key.rstrip('/')+'/') for key in ignore_names)
+
+ def plan_pose(self,q_arm7,T_W_TCP,ignore_names=(),grip_binary=0,phase=None):
+  trajectory=super().plan_pose(q_arm7,T_W_TCP,ignore_names,grip_binary,phase)
+  if self.pregrasp_shortcut_policy=="none" or phase!="door_pregrasp":return trajectory
+  import numpy as np
+  from kitchen_safety.extensions.doors.pregrasp_shortcuts_lwx import POLICY,metrics,shortcut
+  original=np.asarray(trajectory['positions'])
+  validate=lambda path:self.validate_path(path,ignore_names=ignore_names,grip_binary=grip_binary,phase=phase,resolution=POLICY['resolution_rad'])
+  positions,trials=shortcut(original,self.kin,validate,budget=POLICY['max_proposals'])
+  if np.abs(np.diff(positions,axis=0)).max()>np.abs(np.diff(original,axis=0)).max()+1e-9:raise RuntimeError('Shortcut increased peak joint step')
+  final=validate(positions)
+  if not (final['valid'] and final['validation_complete'] and final['fcl_samples_unchecked']==0):raise RuntimeError('Shortcut full path geometry gate rejected')
+  trajectory['positions']=positions
+  trajectory['metadata']['pregrasp_shortcut']={'policy':POLICY.copy(),'before':metrics(original,self.kin),'after':metrics(positions,self.kin),'trials':trials,'final_validation':final,'same_endpoints':True,'same_action_times':True}
+  return trajectory

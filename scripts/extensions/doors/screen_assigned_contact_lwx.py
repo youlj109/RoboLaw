@@ -11,16 +11,18 @@ from kitchen_safety.extensions.doors.task_planner import TaskPlanner as CuroboPl
 p=argparse.ArgumentParser();p.add_argument('--metadata',type=Path,required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--offsets',default='0,.03,-.03,.06,-.06,.09,-.09');p.add_argument('--rolls',default='0,180,90,-90');p.add_argument('--pitches',default='0');p.add_argument('--seed',type=int,default=42);p.add_argument('--normal-offsets',default='0,-.005,-.01,-.015,-.02,-.025');p.add_argument('--limit-margin-rad',type=float,default=.005);p.add_argument('--pull-lead-rad',type=float,default=.05);p.add_argument('--check-release',action='store_true')
 p.add_argument('--check-release-settled',action='store_true');p.add_argument('--release-extra-margin-m',type=float,default=0.)
 p.add_argument('--opening-reserve-rad',type=float,default=0.)
+p.add_argument('--pregrasp-shortcut-policy',choices=['none','bounded_chords_v1'],default='none')
 a=p.parse_args()
 if not 0.<=a.opening_reserve_rad<=.08:p.error('Opening reserve outside [0,.08]rad')
 if a.output.exists():p.error('Evidence already exists')
-m=json.loads(a.metadata.read_text());config=json.loads(a.config.read_text());stage,kin,world,g=reconstruct(m,config);kin.limits[:,0]+=a.limit_margin_rad;kin.limits[:,1]-=a.limit_margin_rad;planner=CuroboPlanner(world,kin,dt=m['dt'],seed=a.seed,max_joint_speed=.5)
+m=json.loads(a.metadata.read_text());config=json.loads(a.config.read_text());stage,kin,world,g=reconstruct(m,config);kin.limits[:,0]+=a.limit_margin_rad;kin.limits[:,1]-=a.limit_margin_rad;planner=CuroboPlanner(world,kin,dt=m['dt'],seed=a.seed,max_joint_speed=.5,pregrasp_shortcut_policy=a.pregrasp_shortcut_policy)
 initial=np.asarray(m['initial_q']);q0=initial[:7];fingers={n:initial[m['robot_joint_names'].index(n)] for n in world.GRIPPER_JOINT_NAMES}
 reference=Path('datasets/doors/lwx_C02_C03_20261023/C02_base_04/trajectory.json');rows=json.loads(reference.read_text());qref=next(r['next_obs']['q'] for r in reversed(rows) if r['phase']=='grasp_handle');closed={n:qref[m['robot_joint_names'].index(n)] for n in world.GRIPPER_JOINT_NAMES}
 approach=Rotation.from_euler('z',m['robot_yaw_deg'],degrees=True).apply([1.,0.,0.]);Rbase=np.column_stack([approach,np.cross([0,0,-1.],approach),[0,0,-1.]])
 handles=tuple(g['handle_colliders']);hinge=np.asarray(g['hinge']);axis=np.asarray(g['axis']);lower,limit_upper=g['limits_rad'];upper=joint_position_from_openness(g['openness_threshold'],lower,limit_upper)+(-1. if lower<0. else 1.)*max(.015,a.opening_reserve_rad)
 reference_joint=joint_position_from_openness(g['reset_openness'],*g['limits_rad'])
 report={'opening_reserve_rad':a.opening_reserve_rad,'reference_joint_rad':reference_joint,'ik_command_margin_rad':a.limit_margin_rad,'pull_lead_rad':a.pull_lead_rad,'candidate_order':{'rolls':a.rolls,'pitches':a.pitches,'normal_offsets':a.normal_offsets,'height_offsets':a.offsets},'scope':'Offline projected geometry only; physical contact, stability and success unverified.','task':m['task'],'seed':a.seed,'candidates':[]}
+if a.pregrasp_shortcut_policy!='none':report['pregrasp_shortcut_policy']=a.pregrasp_shortcut_policy
 def save():a.output.write_text(json.dumps(report,indent=2))
 def update_door(delta):
  for b in g['moving_bodies']:world.move_body(b,delta)

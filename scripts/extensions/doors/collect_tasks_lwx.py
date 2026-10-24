@@ -5,6 +5,7 @@ from isaaclab_arena.cli.isaaclab_arena_cli import get_isaaclab_arena_cli_parser
 from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppContext
 p=get_isaaclab_arena_cli_parser();p.add_argument('--variant',choices=['base','human','property','robot'],default='base');p.add_argument('--output',required=True);p.add_argument('--max-steps',type=int,default=500);p.add_argument('--handle-offset-y',type=float,default=0.);p.add_argument('--handle-offset-z',type=float,default=.12);p.add_argument('--variant-config',default='configs/extensions/doors/open_fridge_variants.json');p.add_argument('--adaptive-handle-height',action='store_true')
 p.add_argument('--validated-pregrasp', action='store_true')
+p.add_argument('--pregrasp-shortcut-policy',choices=['none','bounded_chords_v1'],default='none')
 p.add_argument('--planner-hazard-extra-padding-m',type=float,default=0.,help='Additional conservative cuRobo hazard-box padding, same matched policy; independent thresholds unchanged')
 p.add_argument('--task-id',required=True)
 p.add_argument('--grasp-roll-deg',type=float,default=0.)
@@ -17,6 +18,7 @@ p.add_argument('--release-retreat-m',type=float,default=0.,help='Checked outward
 p.add_argument('--release-tilt-deg',type=float,default=0.,help='Tilt outward release direction toward world up; negative moves down, same matched policy')
 p.add_argument('--opening-reserve-rad',type=float,default=0.,help='Additional measured opening before release; native predicate and all collision checks stay active')
 p.add_argument('--release-retreat-profile',choices=['linear','ease_out'],default='linear',help='Same bounded retreat endpoint; optional early progress with a slower finish, inherited by matched variants')
+p.add_argument('--release-command-policy',choices=['full_pose','bounded_position_v1'],default='full_pose')
 p.add_argument('--release-settle-steps',type=int,default=0,help='Additional closed-gripper hold at one measured joint target before release; inherited by matched variants')
 p.add_argument('--mode', choices=['collect', 'neutral'], default='collect')
 p.add_argument('--render-warmup', action='store_true', help='Converge RTX appearance with no physics advancement before recording')
@@ -25,6 +27,7 @@ p.add_argument('--review-config', default='configs/extensions/doors/review_gates
 a=p.parse_args();a.enable_cameras=True
 if not 0.<=a.planner_hazard_extra_padding_m<=.03:p.error('--planner-hazard-extra-padding-m must be in [0,.03]')
 if not 0.<=a.opening_reserve_rad<=.08:p.error('--opening-reserve-rad must be in [0,.08]')
+if a.release_command_policy!='full_pose' and not a.release_retreat_m:p.error('Bounded position release needs a nonzero retreat')
 if a.neutral_seconds <= 0:p.error('--neutral-seconds must be positive')
 if not 0. <= a.ik_limit_margin_rad <= .1:p.error('--ik-limit-margin-rad must be in [0, .1]')
 if not 0. <= a.release_retreat_m <= .04:p.error('--release-retreat-m must be in [0, .04]')
@@ -107,12 +110,14 @@ with SimulationAppContext(a):
     metadata['door_geometry']=geometry
     metadata['door_motion_reference_joint_rad']=reference_joint_position
     metadata['controller_parameters']['grasp_roll_deg']=a.grasp_roll_deg
+    if a.pregrasp_shortcut_policy!='none':metadata['controller_parameters']['pregrasp_shortcut_policy']=a.pregrasp_shortcut_policy
     if a.planner_hazard_extra_padding_m:metadata['controller_parameters']['planner_hazard_extra_padding_m']=a.planner_hazard_extra_padding_m
     if a.grasp_pitch_deg:metadata['controller_parameters']['grasp_pitch_deg']=a.grasp_pitch_deg
     if a.release_retreat_m:metadata['controller_parameters']['release_retreat_m']=a.release_retreat_m
     if a.release_tilt_deg:metadata['controller_parameters']['release_tilt_deg']=a.release_tilt_deg
     if a.opening_reserve_rad:metadata['controller_parameters']['opening_reserve_rad']=a.opening_reserve_rad
     if a.release_settle_steps:metadata['controller_parameters']['release_settle_steps']=a.release_settle_steps
+    if a.release_command_policy!='full_pose':metadata['controller_parameters']['release_command_policy']=a.release_command_policy
     if a.release_retreat_profile!='linear':metadata['controller_parameters']['release_retreat_profile']=a.release_retreat_profile
     metadata['controller_parameters']['pull_lead_rad']=a.pull_lead_rad
     metadata['controller_parameters']['pull_steps']=a.pull_steps
@@ -142,6 +147,13 @@ with SimulationAppContext(a):
     # Preserve the exact currently loaded entry point and local dependency sources.
     # Historical episodes keep their original hashes; never retrofit their metadata.
     import shutil
+    if a.pregrasp_shortcut_policy!='none':
+        shortcut_source=Path('kitchen_safety/extensions/doors/pregrasp_shortcuts_lwx.py')
+        metadata['implementation_sha256'][str(shortcut_source)]=hashlib.sha256(shortcut_source.read_bytes()).hexdigest()
+    if a.release_command_policy!='full_pose':
+        release_source=Path('kitchen_safety/extensions/doors/release_position_lwx.py')
+        metadata['implementation_sha256'][str(release_source)]=hashlib.sha256(release_source.read_bytes()).hexdigest()
+    release_commands=[]
     snapshot_root=out/'source_snapshot'
     snapshot_files={Path(__file__),Path(a.variant_config),Path(a.review_config),TASK}
     snapshot_files.update(Path('kitchen_safety/extensions/doors').glob('*.py'))
@@ -250,7 +262,7 @@ with SimulationAppContext(a):
             phase='neutral_hold'
             for _ in range(int(np.ceil(a.neutral_seconds/e.step_dt))):step(startup_target,0.)
         else:
-            planner=CuroboPlanner(world,kin,dt=e.step_dt,seed=a.seed or 42,max_joint_speed=.5,hazard_extra_padding_m=a.planner_hazard_extra_padding_m)
+            planner=CuroboPlanner(world,kin,dt=e.step_dt,seed=a.seed or 42,max_joint_speed=.5,hazard_extra_padding_m=a.planner_hazard_extra_padding_m,pregrasp_shortcut_policy=a.pregrasp_shortcut_policy)
             handles=tuple(world.handle_contact_colliders)
             target=np.eye(4);target[:3,:3]=R0;default_handle=handle0.copy();candidate_failures=[];plan=None;candidate_queries=[]
             phase='pregrasp'
@@ -342,7 +354,11 @@ with SimulationAppContext(a):
                 if a.release_retreat_m:
                     target=release_start.copy()
                     target[:3,3]+=release_direction*a.release_retreat_m*release_progress(float(fraction),a.release_retreat_profile)
-                    command=kin.ik(target,q,attempts=1)
+                    if a.release_command_policy=='bounded_position_v1':
+                        from kitchen_safety.extensions.doors.release_position_lwx import bounded_position_command
+                        command=bounded_position_command(kin,q,target[:3,3],release_start[:3,:3])
+                        release_commands.append({'action_index':len(rows),'target_pose':target.tolist(),'command':command.tolist(),'command_pose':kin.fk(command).tolist()})
+                    else:command=kin.ik(target,q,attempts=1)
                     delta_q=command-q;command=q+delta_q/max(1.,float(np.max(np.abs(delta_q)))/.025)
                     world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])
                     sync(update_planner=True);planner._prepare_path_query(handles,0.,phase)
@@ -355,6 +371,7 @@ with SimulationAppContext(a):
     except Exception as exc:
         failure=f'{type(exc).__name__}: {exc}';traceback.print_exc()
     finally:
+        if a.release_command_policy!='full_pose':(out/'release_command_diagnostics.json').write_text(json.dumps({'policy':a.release_command_policy,'commands':release_commands},indent=2))
         (out/'physics.json').write_text(json.dumps({'schema_version':1,'physics_dt':cfg.sim.dt,'samples':physics_records}))
         if cam is not None:cam.close()
         result={'task_success':source_success,'accepted':bool(a.mode=='collect' and source_success and failure is None),'mode':a.mode,'neutral_completed':bool(a.mode=='neutral' and failure is None),'failure':failure,'frames':len(rows),'final_door_rad':snapshot()['door_q'],'actual_trajectory_samples':len(rows),'physical_contact_samples':sum(r['contacts']['count']>0 for r in rows),'delivery_accepted':False,'no_execution_state_writes':True,'safety_audit_physics_dt':cfg.sim.dt,'safety_checks':len(checks),'physics_samples':len(physics_records),'plans':plans}

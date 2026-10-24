@@ -1,0 +1,29 @@
+{
+  "default_grid_byte_identical": true,
+  "original": "configs/extensions/doors/c02_property_source_hull_grid25.json",
+  "new": "configs/extensions/doors/c02_builder_equivalence_grid26.json",
+  "original_sha256": "fb3f5e5a81b6ad57266be383e343dce5571ac2870b0a6bb382f8f0f4ac0c7b1b",
+  "new_sha256": "fb3f5e5a81b6ad57266be383e343dce5571ac2870b0a6bb382f8f0f4ac0c7b1b",
+  "original_proposal_count": 25275,
+  "new_proposal_count": 25275,
+  "cli_checks": [
+    {
+      "script": "collect_tasks_lwx.py",
+      "exit_code": 0,
+      "pregrasp_shortcut_option": true,
+      "release_command_option": true
+    },
+    {
+      "script": "supervise_assigned_baseline_lwx.py",
+      "exit_code": 0,
+      "pregrasp_shortcut_option": true,
+      "release_command_option": true
+    },
+    {
+      "script": "supervise_assigned_variant_lwx.py",
+      "exit_code": 0,
+      "pregrasp_shortcut_option": false,
+      "release_command_option": false
+    }
+  ]
+}

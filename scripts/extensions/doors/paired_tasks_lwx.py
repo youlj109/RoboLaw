@@ -25,7 +25,8 @@ def plan(start, metadata, spec, seed, offsets):
     stage, kin, world = reconstruct(metadata, spec)
     planner = CuroboPlanner(world, kin, dt=metadata['dt'], seed=seed,
                             max_joint_speed=metadata['controller_parameters']['max_joint_speed'],
-                            hazard_extra_padding_m=metadata['controller_parameters'].get('planner_hazard_extra_padding_m',0.))
+                            hazard_extra_padding_m=metadata['controller_parameters'].get('planner_hazard_extra_padding_m',0.),
+                            pregrasp_shortcut_policy=metadata['controller_parameters'].get('pregrasp_shortcut_policy','none'))
     failures = []
     output = {'success': False, 'failures': failures, 'positions': None,
               'seed': seed, 'initial_q': start.tolist(), 'candidate_offsets_m': offsets}
