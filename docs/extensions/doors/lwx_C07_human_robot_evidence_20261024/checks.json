@@ -1,0 +1,13 @@
+{
+  "standard_diff_check": {
+    "exit_code": 2,
+    "output": "assets/extensions/doors/c07_robot_candidate_72_00_robot_support.usda:21: new blank line at EOF.\n"
+  },
+  "other_whitespace_check": {
+    "command": "git -c core.whitespace=-blank-at-eof diff --cached --check",
+    "exit_code": 0
+  },
+  "reason": "Keep captured support USD bytes exactly; trimming its historical extra EOF blank line would invalidate runtime asset provenance.",
+  "actual_validation": "Both variants and matching baselines rechecked against all five gates, matched neutrals, pair provenance/source intersections, original-speed video hashes, reviewed raw/risk image hashes and immutable runtime snapshots.",
+  "visualization_correction": "Raw FCL negative collision sentinel is stored separately and labelled INTERSECTION only after an independent collide query; never presented as penetration depth."
+}

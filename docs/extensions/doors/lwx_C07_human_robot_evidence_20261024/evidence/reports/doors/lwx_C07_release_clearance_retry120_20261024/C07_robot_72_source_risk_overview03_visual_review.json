@@ -1,0 +1,23 @@
+{
+  "image": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_robot_72_source_risk_overview03.png",
+  "image_sha256": "e485c309e5e773d9e010543edaa694679f03344b83fd821d15ef8d2bf542b572",
+  "illustration_report": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_robot_72_source_risk_overview03.json",
+  "illustration_report_sha256": "c3bceacd86eb5b7cf0842acb754efa12338d564e5bd9133849539f9a24fddf84",
+  "reviewed_alignment": true,
+  "review_kind": "Actual review of four-panel offline source-geometry reconstruction; not camera alignment",
+  "observations": [
+    "Source narrow-opening frame and robot visible in full view and matching close-up.",
+    "Original baseline elbow hull intersects the lower source frame; independent FCL collision query confirms intersection.",
+    "Recorded safe frame88 has a changed elbow posture and74.080mm source distance, above original10mm execution margin.",
+    "Corrected titles label FCL intersection without reporting the raw -1 sentinel as penetration depth."
+  ],
+  "limitations": [
+    "Original native camera samples and default source-risk RGB view do not clearly show the barrier; they cannot visually prove its clearance.",
+    "This labelled reconstruction is supplementary source-geometry evidence, not recorded RGB or physics replay; full world and physics audits remain separate.",
+    "Yellow boxes are explanatory conservative per-collider AABBs, not exact safety shells."
+  ],
+  "retained_display_error": {
+    "image": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_robot_72_source_risk_overview02.png",
+    "reason": "Old visualization incorrectly labelled raw FCL collision sentinel -1 as -1000mm distance. Retained, superseded and not accepted for delivery."
+  }
+}

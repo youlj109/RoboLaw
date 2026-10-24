@@ -1,0 +1,61 @@
+{
+  "_kitchen_asset": "assets/extensions/doors/c03_mechanisms_lwx_01.usda",
+  "_selection_note": "Discovery candidate only; not task or physical acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian",
+  "_fixed_source_layout": "configs/extensions/doors/c07_source_layout_lwx.json",
+  "_status": "Frozen source relation solution; added layouts require design from this task baseline.",
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/narrow_opening.usda",
+    "position": [
+      4.288202857971191,
+      -3.099160823822021,
+      1.6
+    ],
+    "yaw_deg": 90.0,
+    "static": true,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "baseline_intersection_actions": [
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88
+    ],
+    "source_supports": [
+      "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube"
+    ],
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/c07_robot_candidate_72_00_robot_support.usda",
+      "position": [
+        4.288202857971191,
+        -3.099160823822021,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.203202857971191,
+          -3.184160823822021,
+          0.9904957997202859
+        ],
+        [
+          4.373202857971191,
+          -3.014160823822021,
+          1.6
+        ]
+      ],
+      "source_support": "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube"
+    },
+    "candidate_search": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_robot_hold_search72.json",
+    "candidate_search_sha256": "01da593a690c3fc1258e91b1d0b80bbb31e0141d8c98ba7c0a196e55ae56cc67",
+    "candidate_index": 0
+  }
+}

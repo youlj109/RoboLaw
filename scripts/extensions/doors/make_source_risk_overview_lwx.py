@@ -86,11 +86,20 @@ def main():
         robot, risks, distances = [], [], []
         for body, model, verts, T in clouds:
             obj = world.fcl.CollisionObject(model, world.fcl.Transform(T[:3, :3], T[:3, 3]))
-            distance = min(world.fcl.distance(obj, h, world.fcl.DistanceRequest(),
-                                              world.fcl.DistanceResult()) for _, h, *_ in hazards)
+            raw_distances, contacts = [], []
+            for _, h, *_ in hazards:
+                raw = world.fcl.distance(obj, h, world.fcl.DistanceRequest(), world.fcl.DistanceResult())
+                intersecting = bool(world.fcl.collide(obj, h, world.fcl.CollisionRequest(),
+                                                     world.fcl.CollisionResult())) if raw <= 0 else False
+                if raw < 0 and not intersecting:
+                    raise ValueError('Negative FCL distance without independently confirmed intersection')
+                raw_distances.append(float(raw)); contacts.append(intersecting)
+            # FCL may return -1 as a collision sentinel, NOT a penetration distance.
+            distance = max(0., min(raw_distances))
             pts = verts @ T[:3, :3].T + T[:3, 3]
             robot.append((pts, ConvexHull(pts).simplices, distance < margin))
-            distances.append(dict(body=body, source_distance_m=float(distance)))
+            distances.append(dict(body=body, source_distance_m=float(distance),
+                                  raw_fcl_distance_min=min(raw_distances), intersecting=any(contacts)))
             if distance < margin:
                 risks.append(body)
                 if panel == 0:
@@ -100,6 +109,7 @@ def main():
         meshes.append((entities, robot))
         panels.append(dict(episode=str(episode), frame=index, risky_robot_bodies=risks,
                            minimum_source_distance_m=min(d['source_distance_m'] for d in distances),
+                           source_intersection=any(d['intersecting'] for d in distances),
                            source_distances=distances,
                            trajectory_sha256=sha(episode / 'trajectory.json')))
     if not panels[0]['risky_robot_bodies'] or panels[1]['risky_robot_bodies']:
@@ -147,11 +157,12 @@ def main():
             label = 'OFFLINE COUNTERFACTUAL' if panel == 0 else 'RECORDED SAFE STATE (reconstructed)'
             ax.set_title(f'{label} | frame {detail["frame"]}\n'
                          f'{"Overview" if row == 0 else "Same-region close-up"}; '
-                         f'min source distance = {detail["minimum_source_distance_m"] * 1000:.2f} mm', fontsize=11)
+                         + ('source INTERSECTION (FCL); depth not computed' if detail['source_intersection'] else
+                            f'min source distance = {detail["minimum_source_distance_m"] * 1000:.2f} mm'), fontsize=11)
     fig.text(.02, .025, 'Green: source mesh | Blue: robot hulls | Red: arm part within original margin\n'
              f'Yellow dashed: conservative per-collider AABB + {margin*1000:.0f} mm, illustration only. '
              'Unshown kitchen surfaces still participate in independent audits.\n'
-             'Frames match normalized pregrasp progress. Raw native cameras do not show the human clearly; '
+             'Frames match normalized pregrasp progress. Raw native cameras do not show the entity clearly; '
              'this supplemental view does not replace those recordings.', fontsize=10)
     fig.subplots_adjust(top=.90, bottom=.11, left=.01, right=.99, wspace=.03, hspace=.14)
     fig.savefig(args.output, dpi=150)
@@ -160,11 +171,12 @@ def main():
                   rendering='Offline matplotlib source-mesh and robot-hull reconstruction, NOT recorded RGB',
                   source_audit=str(args.episode / 'avoidance_audit.json'),
                   audit_sha256=sha(args.episode / 'avoidance_audit.json'),
-                  config_sha256=sha(metadata['variant_config']), implementation_sha256=sha(__file__),
+                  config_sha256=sha(metadata['variant_config']), metadata_sha256=sha(args.episode / 'metadata.json'),
+                  variant_asset_sha256=sha(metadata['variant_spec']['asset']), implementation_sha256=sha(__file__),
                   physics_replay=False, unsafe_path_executed=False, safety_margin_m=margin,
                   panels=panels, topology=topology_counts,
                   visual_alignment_review_pending=True,
-                  native_camera_limitation='Human outside/obscured in sampled original recordings; source-risk '
+                  native_camera_limitation='Added entity outside/obscured in sampled original recordings; source-risk '
                   'annotations in both original external views are outside or at the edge of FOV.',
                   scope='Supplementary geometry visibility only. FCL uses complete source meshes; rendering '
                   'may thin displayed faces. Conservative yellow AABBs are not exact safety shells. '
