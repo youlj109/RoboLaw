@@ -70,3 +70,11 @@ python scripts/check_risk_asset_probe_inputs.py --output /absolute/new-input-che
 横杆初始布局及相反侧布局的 `next_to`、`ik_reachable` 均失败；尖角外壳初始布局的 `on_relation`、`next_to`、`ik_reachable` 失败。备用结果保留为诊断数据，不能报告为有效布局。尖角外壳 G 型替代模板因引用不存在的任务资产被预检拒绝，未启动仿真；未放宽检查或把失败写成通过。示例映射为复现诊断输入，不是已验收的跨任务摆放库。
 
 机器可读结果、各原始/风险哈希及独立布局状态见 `task_suite_validation_status.json` 的 `risk_asset_library_evidence_20261024`。原始记录位于运行主机 `task_suite_expansion_20261023/native_risk_asset_library_20261024`；横杆替代记录位于同级 `native_crossbar_opposite_side_20261024`，不上传 Git。
+
+### 后续通过的 G 型布局
+
+`g-island-wide.placement.json` 使用 G 型任务自己的 `island_top`。G 型机械臂位于岛台正 Y 侧，横杆/外壳放在目标物负 Y 侧，保留模型朝向，避免其负 Y 突出部分从机械臂侧挡住俯抓位置。原有容差、风险阈值和检查项未放宽。
+
+`native_g_island_away_side_20261024` 的横杆及尖角外壳均通过原生布局、原始审计、离线评估和专项接口核验，各有 12 个物理步、4 个标签、每帧 18 条实际 PT 测距关系与独立完整 RS 结果。默认示例映射已为这两个资产选择该任务模板；其余资产维持原映射。
+
+因此现有 **10 种模型均有一个通过的代表性布局及接口案例**，不是 384 种任务/变体组合全部验收。旧失败数据仍保留；初始结果表描述的仍是原初始输入，不能覆盖成通过。实际通过的随机种子为 42，不能据此认为整个随机区间已验收。

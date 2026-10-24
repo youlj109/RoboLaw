@@ -58,6 +58,8 @@ v2 结束时另外保存一次 `terminal_observation`，来源为最后动作后
 
 评价器拒绝源代码、规则、几何或后端身份不匹配。历史数据可在隔离的匹配版本中回放；显式迁移另存目录并给出迁移来源。不要覆盖当前运行环境去回放历史数据。
 
+`evaluate` 会在加载 GPU 后端前自动执行同一原始预检，结果保存为 `risk/native_000/raw_preflight.json`，摘要记录于 `evaluation_summary.json.raw_preflight`。独立 audit 可提前诊断，但不能省去评价入口自己的核对。详见 [强制原始预检](native_evaluation_preflight.md)。
+
 `audit` 只审计原始时间序列、实测通道和命令存在性；`passed` 不等于控制器成功、材料阈值标定或场景安全准入。
 
 渲染使用保存的 USD 和实测位姿，必须证明物理步数不变并对齐标签源时间。当前三路相机为明确标记的离线概览相机，不冒充原始腕部观测。画面遮挡、噪声、动态帧新鲜度须额外验收。视频只保存服务器和用户本地。
@@ -74,7 +76,7 @@ v2 结束时另外保存一次 `terminal_observation`，来源为最后动作后
 
 新采集在 `variation_snapshot.json` 和 `raw_capture_summary.json` 同时保存 `placement_validation`：`available`、`passed`、`failed_checks`、`attempts`、`final_loss`、`fallback_used`。这些是读取原生放置器本次 reset 已有结果；不在线计算风险距离、风险特征或等级。
 
-`audit_native_task.py` 的 `passed` 只说明原始证据时序/覆盖/一致性审计通过；另看 `placement_accepted`，它不能被审计成功覆盖。备用摆放、不可达或未知检查结果仍保留原始数据供失败分析，但不能据此声明完整任务已验收。正式 200 条的配额分母尚未确认，当前探针均不计入正式配额。
+`audit_native_task.py` 的 `passed` 只说明原始证据时序/覆盖/一致性审计通过；另看 `placement_accepted`，它不能被审计成功覆盖。备用摆放、不可达或未知检查结果仍保留原始数据供失败分析，但不能据此声明完整任务已验收。用户当前要求为评估体系正确性，无每组 200 条配额；这些记录只用于必要验证。
 
 ### 跨任务障碍放置
 

@@ -5,18 +5,19 @@ import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from kitchen_safety.hs_data_policy import omitted_contact
 
-def main():
-    p=argparse.ArgumentParser();p.add_argument('--episode',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
-    a=p.parse_args();summary=json.loads((a.episode/'raw_capture_summary.json').read_text());errors=[];h=hashlib.sha256()
-    schema=json.loads((a.episode/'raw_capture_schema.json').read_text())
-    scope=json.loads((a.episode/'relation_scope.json').read_text())
+def audit_episode(episode):
+    """Read-only mandatory chronology gate shared with offline evaluation."""
+    episode=Path(episode)
+    summary=json.loads((episode/'raw_capture_summary.json').read_text());errors=[];h=hashlib.sha256()
+    schema=json.loads((episode/'raw_capture_schema.json').read_text())
+    scope=json.loads((episode/'relation_scope.json').read_text())
     omissions=scope.get('hs_acquisition_omissions',{})
     if schema.get('hs_acquisition_omissions',{})!=omissions:errors.append('HS acquisition scope differs from frozen relation scope')
     if schema.get('physics_hz')!=120 or schema.get('action_hz')!=30:errors.append('unsupported source clocks')
     def time_matches(value,expected):
         return isinstance(value,(int,float)) and math.isfinite(value) and abs(value-expected)<1e-8
     steps=frames=command_writes=terminals=fault_events=0;latest=None;initial_count=0;terminal_outcome=None
-    for line in (a.episode/'raw_evidence.jsonl').open('rb'):
+    for line in (episode/'raw_evidence.jsonl').open('rb'):
         h.update(line);r=json.loads(line)
         if terminals:errors.append('record after terminal observation')
         if r['kind']=='initial_state':initial_count+=1;latest=r['state']
@@ -67,17 +68,29 @@ def main():
     if not command_writes:errors.append('no actual command submissions captured')
     if h.hexdigest()!=summary['raw_writer']['sha256']:errors.append('raw digest mismatch')
     if summary.get('execution_error'):errors.append('execution aborted')
-    variation=json.loads((a.episode/'variation_snapshot.json').read_text())
+    variation=json.loads((episode/'variation_snapshot.json').read_text())
     placement=variation.get('placement_validation',dict(available=False,passed=None))
     if 'placement_validation' in summary and summary['placement_validation']!=placement:
         errors.append('placement validation differs from frozen reset evidence')
-    report=dict(passed=not errors,errors=errors,physics_steps=steps,observations=frames,terminal_samples=terminals,command_writes=command_writes,
+    # Structural corruption blocks replay. Missing channels remain explicit
+    # coverage gaps so independent known evidence can still be evaluated.
+    coverage_gaps=[e for e in errors if e.startswith(('measured state incomplete at ', 'contact stream incomplete at '))]
+    blocking_errors=[e for e in errors if e not in coverage_gaps]
+    report=dict(passed=not errors,errors=errors,evaluation_admissible=not blocking_errors,
+        blocking_errors=blocking_errors,coverage_gaps=coverage_gaps,physics_steps=steps,observations=frames,terminal_samples=terminals,command_writes=command_writes,
         raw_sha256=h.hexdigest(),fault_events=fault_events,fault_chronology_checked=True,hs_acquisition_scope_checked=bool(omissions),geometry_computed=False,risk_evaluated=False,task_success=summary.get('task_success'),
         placement_validation=placement,placement_accepted=placement.get('passed'),
         native_episode_boundary_checked=bool(schema.get('episode_boundary_required')),native_outcome=terminal_outcome,
         scope='raw chronology, measured state/contact coverage and actual command presence; not full scene/rule/material acceptance')
+    return report
+
+
+def main():
+    p=argparse.ArgumentParser();p.add_argument('--episode',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+    a=p.parse_args();report=audit_episode(a.episode)
     if a.output.exists():raise ValueError('Audit output already exists')
     a.output.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n');print(json.dumps(report,ensure_ascii=False))
-    return 0 if report['passed'] else 1
+    # Exit success means the input is structurally replayable, not complete.
+    return 0 if report['evaluation_admissible'] else 1
 
 if __name__=='__main__':raise SystemExit(main())

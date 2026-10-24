@@ -23,6 +23,12 @@ def main():
         source=ROOT/name
         if not source.is_file() or hashlib.sha256(source.read_bytes()).hexdigest()!=expected:
             raise ValueError('Frozen implementation differs; explicit migration is required: '+name)
+    # A direct evaluate invocation must enforce the same raw clock/contact gate
+    # as the optional standalone audit stage, before loading a GPU backend.
+    from scripts.audit_native_task import audit_episode
+    raw_audit=audit_episode(args.episode)
+    if not raw_audit['evaluation_admissible']:
+        raise ValueError('Raw evidence preflight failed: '+json.dumps(raw_audit['blocking_errors']))
     from kitchen_safety.task_mesh import TaskMeshQueries
     from kitchen_safety.geometry_backend import get_backend
     from kitchen_safety.task_features import TaskFeatures
@@ -35,6 +41,11 @@ def main():
     args.output.mkdir(parents=True,exist_ok=False)
     receipt=dict(complete=False,evaluation_mode='offline_replay',source_episode=str(args.episode.resolve()),
         full_task_execution_verified=summary.get('full_task_execution_verified',False))
+    write_json(args.output/'raw_preflight.json',raw_audit)
+    receipt['raw_preflight']=dict(passed=raw_audit['passed'],evaluation_admissible=True,
+        coverage_gaps=raw_audit['coverage_gaps'],raw_sha256=raw_audit['raw_sha256'],
+        physics_steps=raw_audit['physics_steps'],observations=raw_audit['observations'],
+        report_file='raw_preflight.json',geometry_computed=False,risk_evaluated=False)
     write_json(args.output/'evaluation_summary.json',receipt)
     try:
         queries=TaskMeshQueries(inventory,scope,args.episode/'meshes',backend)

@@ -1,0 +1,62 @@
+{
+  "placement_mode": "native_relations",
+  "task_sha256": "3390cc902db06729332ee49b88c5bc025e21ddb090bee712c969391f7bcdee34",
+  "placement_evidence": {
+    "kind": "diagnostic_task_relative_asset_library_probe",
+    "full_motion_envelope_validated": false,
+    "production_collection": false,
+    "candidate_reason": "Validate projecting housing on the explicitly declared G-kitchen counter, opposite side of its task payload; native support/reachability tolerances unchanged.",
+    "reason": "G task robot stands on positive_y of island; place wide obstacle on negative_y of payload so its authored negative_y projection does not cover the target grasp from robot side; native checks retained"
+  },
+  "placement_relations": [
+    {
+      "kind": "on",
+      "reference": "island_top",
+      "params": {
+        "clearance_m": 0.01,
+        "edge_margin_m": 0.05
+      }
+    },
+    {
+      "kind": "next_to",
+      "reference": "mustard_bottle",
+      "params": {
+        "side": "negative_y",
+        "distance_m": 0.08,
+        "tolerance_m": 0.02
+      }
+    },
+    {
+      "kind": "rotate_around_solution",
+      "params": {
+        "yaw_rad": 0.0
+      }
+    }
+  ],
+  "placement_parameter_ranges": [
+    {
+      "relation_index": 1,
+      "parameter": "distance_m",
+      "uniform": [
+        0.07,
+        0.09
+      ]
+    },
+    {
+      "relation_index": 1,
+      "parameter": "cross_position_ratio",
+      "uniform": [
+        -0.15,
+        0.15
+      ]
+    },
+    {
+      "relation_index": 2,
+      "parameter": "yaw_rad",
+      "uniform": [
+        -0.1,
+        0.1
+      ]
+    }
+  ]
+}
