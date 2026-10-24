@@ -1,0 +1,49 @@
+{
+  "episode": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01",
+  "neutral": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_neutral_01",
+  "stages": [
+    {
+      "name": "neutral_review",
+      "exit_code": 0,
+      "report": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_neutral_01/task_review_audit.json",
+      "report_exists": true,
+      "log": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01_neutral_review_pipeline02.log"
+    },
+    {
+      "name": "task_review",
+      "exit_code": 0,
+      "report": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01/task_review_audit.json",
+      "report_exists": true,
+      "log": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01_task_review_pipeline02.log"
+    },
+    {
+      "name": "full_validation",
+      "exit_code": 0,
+      "report": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01/task_validation_full.json",
+      "report_exists": true,
+      "log": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01_full_validation_pipeline02.log"
+    },
+    {
+      "name": "source_contact",
+      "exit_code": 0,
+      "report": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01/source_contact_audit.json",
+      "report_exists": true,
+      "log": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01_source_contact_pipeline02.log"
+    },
+    {
+      "name": "visual_extract",
+      "exit_code": 0,
+      "report": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01_visual.jpg",
+      "report_exists": true,
+      "log": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01_visual_extract_pipeline02.log"
+    },
+    {
+      "name": "self_collision",
+      "exit_code": 0,
+      "report": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01/self_collision_audit.json",
+      "report_exists": true,
+      "log": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01_self_collision_pipeline02.log"
+    }
+  ],
+  "complete": true
+}

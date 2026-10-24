@@ -1,0 +1,142 @@
+{
+  "created": "2026-10-24T16:46:08.941454",
+  "whole_task_complete": false,
+  "original_opening_succeeded": true,
+  "original_scene_and_data_preserved": true,
+  "episode": "datasets/doors/lwx_20261023/robot_01",
+  "baseline": "datasets/doors/lwx_20261023/base_03",
+  "original_gates": {
+    "result.json": {
+      "passed": true,
+      "source": "datasets/doors/lwx_20261023/robot_01/result.json",
+      "sha256": "925dc543ec3db6d079e71fcd2d9326b6a6eec0fa0820b63f16b4879883cbfd94"
+    },
+    "validation_full.json": {
+      "passed": true,
+      "source": "datasets/doors/lwx_20261023/robot_01/validation_full.json",
+      "sha256": "55f8fe4e39256ce6446e694eb8ea3ecc0b91098d480b5c6fde03743dc3670ce0"
+    },
+    "review_audit.json": {
+      "passed": true,
+      "source": "datasets/doors/lwx_20261023/robot_01/review_audit.json",
+      "sha256": "3252e1fb14bf435cfafe23cebffffd19766c89c916f852cda5aa8774e3d78956"
+    },
+    "contact_geometry_audit.json": {
+      "passed": true,
+      "source": "datasets/doors/lwx_20261023/robot_01/contact_geometry_audit.json",
+      "sha256": "b1b7e6c8ada59387bbafaba49228104da9ab0328e6e0bf9b4304cf1c32bbf380"
+    },
+    "self_collision_audit.json": {
+      "passed": true,
+      "source": "datasets/doors/lwx_20261023/robot_01/self_collision_audit.json",
+      "sha256": "7a35b5e40d10d692bbad18ebc998c2fb37c17e5b38fc377e89f0658950ec302a"
+    },
+    "avoidance_audit.json": {
+      "passed": true,
+      "source": "datasets/doors/lwx_20261023/robot_01/avoidance_audit.json",
+      "sha256": "6e34e3e6d982e684164a9e521e397a3ddffc88e80ea822256aa167c29b336e16"
+    },
+    "comparison_audit.json": {
+      "passed": true,
+      "source": "datasets/doors/lwx_20261023/robot_01/comparison_audit.json",
+      "sha256": "b8eacc29c223bf450bb52dbb0a58cebbdc034e04faaba672e754fc4df5950ac8"
+    }
+  },
+  "matching_neutral": {
+    "path": "datasets/doors/lwx_20261023/neutral_robot_01",
+    "same_parameters": true,
+    "covers_operation_duration": true,
+    "passed": true
+  },
+  "paired_summary": [
+    {
+      "seed": 42,
+      "off_success": true,
+      "on_success": true,
+      "minimum_source_distance_m": 0.0011980216223465832,
+      "original_required_distance_m": 0.01,
+      "actual_source_intersections": 0,
+      "added_tcp_length_m": 0.3204575672336006,
+      "joint_length_ratio": 1.0832688409514983
+    },
+    {
+      "seed": 43,
+      "off_success": true,
+      "on_success": true,
+      "minimum_source_distance_m": 0.003143575951269494,
+      "original_required_distance_m": 0.01,
+      "actual_source_intersections": 0,
+      "added_tcp_length_m": 0.3154426472127303,
+      "joint_length_ratio": 1.132451024350065
+    },
+    {
+      "seed": 44,
+      "off_success": true,
+      "on_success": true,
+      "minimum_source_distance_m": 0.0018753865737047022,
+      "original_required_distance_m": 0.01,
+      "actual_source_intersections": 0,
+      "added_tcp_length_m": 0.3171481078630222,
+      "joint_length_ratio": 1.1105001022818972
+    }
+  ],
+  "scope": "Read-only review of existing original steel evidence; no recapture, geometry modification, altered gate, collision claim or new physical success.",
+  "requirement_distinction": {
+    "project_workflow": "Original safety-distance violation OR actual source intersection qualifies for source-geometric necessity when other matched checks pass. Safety-distance violation must not be called inevitable physical collision.",
+    "current_stricter_helper": "The local finalizer additionally requires actual source intersection in every off seed, joint-length ratio<=1.6 and extra TCP<=.15m. This report preserves its rejection and does not silently rewrite those checks.",
+    "user_preference": "The user approved the original steel placement. Its actual opening and original audits remain valid; any supplementary version must preserve the original. A clarification about an additional version is pending."
+  },
+  "original_hashes": [
+    {
+      "source": "datasets/doors/lwx_20261023/robot_01/metadata.json",
+      "sha256": "03255a61676b696c9370ef52c486a157e6cf322a2e0a932f72624fe21a822210"
+    },
+    {
+      "source": "datasets/doors/lwx_20261023/robot_01/trajectory.json",
+      "sha256": "353d3f1898bc5b983f76612af64dc3f7cbee7d629447e82504547d8b20db3e6d"
+    },
+    {
+      "source": "datasets/doors/lwx_20261023/base_03/metadata.json",
+      "sha256": "2b689ae1fbd1d752186a6d0c733c6e47e150b749639ad386ae8a7a856c367dbe"
+    },
+    {
+      "source": "datasets/doors/lwx_20261023/base_03/trajectory.json",
+      "sha256": "dbbd3830b5390eb68fca02b69e8470fda0c928579058f7a4f4280fb9037f6f63"
+    },
+    {
+      "source": "reports/doors/lwx_20261023/paired_robot_01/report.json",
+      "sha256": "f58cb5f8164782a67df91b50f8e4d3d81c43c7a6aabddcc2393d49163b01cab2"
+    },
+    {
+      "source": "student_skills/robolaw-doors/references/workflow.md",
+      "sha256": "347d705576998446ea3721c84031f09c64b62ea5e31af2f327b4af3b031f5d39"
+    },
+    {
+      "source": "student_skills/robolaw-doors/references/review-gates.md",
+      "sha256": "3516a9988044a89e5d6f46450e1bdb5f1cd92bcd123d238f2a023c6462ab3a46"
+    },
+    {
+      "source": "scripts/extensions/doors/finalize_task_delivery_lwx.py",
+      "sha256": "94f5a7e6753e23420bf597813d6e521c6065273cd28631d4b36e52cf2a0774b7"
+    },
+    {
+      "source": "datasets/doors/lwx_20261023/robot_01/visual_review_contact_sheet.jpg",
+      "sha256": "a17c8abf82ad237a0bc60786c8728e4c022b57c4152e1b304eeab6055ca89a8a"
+    },
+    {
+      "source": "datasets/doors/lwx_20261023/robot_01/comparison_9s.png",
+      "sha256": "1be851d270c0d46439e6d644059439f58002e27bc3ffa500ba56122a9bcf94b9"
+    }
+  ],
+  "visual_review": {
+    "actually_viewed_now": [
+      "datasets/doors/lwx_20261023/robot_01/visual_review_contact_sheet.jpg",
+      "datasets/doors/lwx_20261023/robot_01/comparison_9s.png"
+    ],
+    "observations": [
+      "All12 native keyframe panels inspected: steel crossbar is visible beside the gripper route; approach, actual opening and release are shown.",
+      "The9-second original same-camera comparison was inspected. It shows approach_handle at110.9/111.5mm clearance, not the minimum-clearance risk instant.",
+      "The visual record supports the user description of a sensibly placed barrier; minimum distances and the absence of source intersection come from independent geometric reports, not this image."
+    ]
+  }
+}

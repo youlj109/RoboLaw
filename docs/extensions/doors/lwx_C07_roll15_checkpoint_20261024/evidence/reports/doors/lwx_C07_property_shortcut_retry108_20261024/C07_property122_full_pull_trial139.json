@@ -1,0 +1,29 @@
+{
+  "created": "2026-10-24T16:34:28.652144",
+  "scope": "Actual138 stopped safely at980frames,door-.51696rad with1.02mm IK residual, confirming the optional CPU reach-tail warning. Restore original optional pull prefilter for future candidates. Diagnose the existing accepted lower-grip baseline108, not changing variant target alone.139 continues original bounded CPU proposals solely for finite envelope discovery, keeping all observed overlaps in eligibility. No physics replay or capture.",
+  "command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "-u",
+    "scripts/extensions/doors/diagnose_paired_pull_envelope_lwx.py",
+    "--baseline",
+    "datasets/doors/lwx_C07_property_shortcut_retry108_20261024/C07_base_01",
+    "--config",
+    "configs/extensions/doors/c07_property_candidate_122_17.json",
+    "--variant",
+    "property",
+    "--paired",
+    "reports/doors/lwx_C07_property_shortcut_retry108_20261024/C07_property_122_candidate_17_paired01/report.json",
+    "--approach",
+    "reports/doors/lwx_C07_property_shortcut_retry108_20261024/C07_property_122_candidate_17_approach01.json",
+    "--output",
+    "reports/doors/lwx_C07_property_shortcut_retry108_20261024/C07_property122_full_pull_envelope139.json"
+  ],
+  "pid": 903740
+}

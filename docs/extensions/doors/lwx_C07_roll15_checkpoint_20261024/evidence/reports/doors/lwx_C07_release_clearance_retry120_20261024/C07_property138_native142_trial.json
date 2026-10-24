@@ -1,0 +1,19 @@
+{
+  "command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "scripts/extensions/doors/make_native_keyframe_sheet_lwx.py",
+    "--episode",
+    "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_138",
+    "--output",
+    "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_138_rejected_native142.jpg"
+  ],
+  "pid": 904540,
+  "scope": "Extract actual rejected138 RGB frames. No visual review claim before image inspection."
+}

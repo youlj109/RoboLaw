@@ -1,0 +1,45 @@
+{
+  "stage": "collect",
+  "baseline": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+  "search": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_selected_feedback_trial138.json",
+  "search_sha256": "baa850d782d66344feaa79ec30207278dda978b4739c3f37022ac32ed8a37e66",
+  "offline_candidate_budget": 3,
+  "physical_trial_budget": 1,
+  "small_detour_limits": {
+    "max_joint_length_ratio": 1.6,
+    "max_added_tcp_length_m": 0.15
+  },
+  "complete": false,
+  "candidates": [
+    {
+      "candidate_index": 0,
+      "config": "configs/extensions/doors/c07_property_candidate_138_00.json",
+      "paired_report": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_138_candidate_00_paired01/report.json",
+      "exit_code": 0,
+      "eligible": true,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 1.4144815727914206,
+      "max_added_tcp_length_m": -0.0625720290547368,
+      "contact_approach_diagnostic": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_138_candidate_00_approach01.json"
+    }
+  ],
+  "baseline_gates": {
+    "result.json": true,
+    "task_validation_full.json": true,
+    "task_review_audit.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "selected_candidate": {
+    "candidate_index": 0,
+    "config": "configs/extensions/doors/c07_property_candidate_138_00.json",
+    "paired_report": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_138_candidate_00_paired01/report.json",
+    "exit_code": 0,
+    "eligible": true,
+    "actual_source_intersections_all_seeds": true,
+    "max_joint_length_ratio": 1.4144815727914206,
+    "max_added_tcp_length_m": -0.0625720290547368,
+    "contact_approach_diagnostic": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_property_138_candidate_00_approach01.json"
+  },
+  "error": "RuntimeError('collect exited 1')"
+}

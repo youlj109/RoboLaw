@@ -1,0 +1,33 @@
+{
+  "stage": "paired_0",
+  "baseline": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01",
+  "search": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_property_roll15_tall_glass_search150.json",
+  "search_sha256": "77b11531cad2f8b5a0246cc6845c5fc3871aca1c316cc3fb1a73e5cf03008578",
+  "offline_candidate_budget": 3,
+  "physical_trial_budget": 1,
+  "small_detour_limits": {
+    "max_joint_length_ratio": 1.6,
+    "max_added_tcp_length_m": 0.15
+  },
+  "complete": false,
+  "candidates": [
+    {
+      "candidate_index": 0,
+      "config": "configs/extensions/doors/c07_property_candidate_155_00.json",
+      "paired_report": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_property_155_candidate_00_paired01/report.json",
+      "exit_code": 1,
+      "eligible": false,
+      "actual_source_intersections_all_seeds": true,
+      "max_joint_length_ratio": 999.0,
+      "max_added_tcp_length_m": 999.0
+    }
+  ],
+  "baseline_gates": {
+    "result.json": true,
+    "task_validation_full.json": true,
+    "task_review_audit.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "error": "RuntimeError('No candidate established actual obstruction and a small safe reroute across all seeds')"
+}
