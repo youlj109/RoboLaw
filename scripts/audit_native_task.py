@@ -15,7 +15,7 @@ def main():
     if schema.get('physics_hz')!=120 or schema.get('action_hz')!=30:errors.append('unsupported source clocks')
     def time_matches(value,expected):
         return isinstance(value,(int,float)) and math.isfinite(value) and abs(value-expected)<1e-8
-    steps=frames=command_writes=terminals=0;latest=None;initial_count=0;terminal_outcome=None
+    steps=frames=command_writes=terminals=fault_events=0;latest=None;initial_count=0;terminal_outcome=None
     for line in (a.episode/'raw_evidence.jsonl').open('rb'):
         h.update(line);r=json.loads(line)
         if terminals:errors.append('record after terminal observation')
@@ -39,7 +39,15 @@ def main():
             if r['action_index']!=frames or r['source_physics_step']!=steps-1 or r['state']!=latest:
                 errors.append('terminal observation is not the measured final action state')
             if not time_matches(r.get('time_s'),steps/120):errors.append('terminal timestamp differs')
-        elif r['kind']!='fault_event':errors.append('unrecognized raw record')
+        elif r['kind']=='fault_event':
+            fault_events+=1;event=r.get('payload',{})
+            if (not isinstance(event,dict) or initial_count!=1 or not frames
+                    or event.get('kind')!='command_write_exception'
+                    or type(event.get('before_physics_step')) is not int or event['before_physics_step']!=steps
+                    or type(event.get('action_index')) is not int or event['action_index']!=frames-1
+                    or event.get('method') not in ('set_dof_position_targets','set_dof_velocity_targets','set_dof_actuation_forces')):
+                errors.append('unsupported or noncausal fault event')
+        else:errors.append('unrecognized raw record')
     if initial_count!=1 or not frames or steps!=4*frames:errors.append('incomplete initial/action windows')
     if schema.get('terminal_sample_required') and terminals!=1:errors.append('missing terminal safety sample')
     if schema.get('episode_boundary_required'):
@@ -64,7 +72,7 @@ def main():
     if 'placement_validation' in summary and summary['placement_validation']!=placement:
         errors.append('placement validation differs from frozen reset evidence')
     report=dict(passed=not errors,errors=errors,physics_steps=steps,observations=frames,terminal_samples=terminals,command_writes=command_writes,
-        raw_sha256=h.hexdigest(),hs_acquisition_scope_checked=bool(omissions),geometry_computed=False,risk_evaluated=False,task_success=summary.get('task_success'),
+        raw_sha256=h.hexdigest(),fault_events=fault_events,fault_chronology_checked=True,hs_acquisition_scope_checked=bool(omissions),geometry_computed=False,risk_evaluated=False,task_success=summary.get('task_success'),
         placement_validation=placement,placement_accepted=placement.get('passed'),
         native_episode_boundary_checked=bool(schema.get('episode_boundary_required')),native_outcome=terminal_outcome,
         scope='raw chronology, measured state/contact coverage and actual command presence; not full scene/rule/material acceptance')

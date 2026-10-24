@@ -3195,5 +3195,82 @@
     "historical_compatibility": "25/32 historical task features unchanged; 7 older schemas lack effective target coverage metadata. New contract intentionally leaves affected distance unknown.",
     "scope": "Rule correctness and necessary verification only; no per-group 200 episode requirement",
     "pending": "Unbound stopping models and unavailable fault/damage channels remain explicit coverage gaps; not certified physical safety."
+  },
+  "native_fault_chronology_20261024": {
+    "implemented": true,
+    "thresholds_changed": false,
+    "raw_format_changed": false,
+    "shared_historical_fault_tracker_changed": false,
+    "cases": 24,
+    "old_failures": 19,
+    "regressions": {
+      "rs": 29,
+      "grasp": 10,
+      "rules": 82
+    },
+    "existing_human_comparison": {
+      "passed": true,
+      "frames": 793,
+      "physics_steps_read": 3168,
+      "raw_fault_events": 0,
+      "final_observed_fault_active": false,
+      "changes": [],
+      "source_raw_sha256": "c6a15385dbe039332602344e5e4ec99c51e930b54f61add62d68381fa13ad6b8",
+      "saved_risk_sha256": "4c59efb87649fe05db572d968facf3db09db08c4a93e7351278b2d32aca88427",
+      "scope": "Read-only native fault channel comparison and unchanged RS-FAULT rule; not complete feature replay"
+    },
+    "fresh_probe": {
+      "physics_steps": 24,
+      "labels": 7,
+      "raw_sha256": "aee1d0751977974d56ddefe0a50cc20008733132a3ae8679fde91dfe982d0757",
+      "online": {
+        "risk_queries_online": 0,
+        "features_online": 0,
+        "grades_online": 0
+      },
+      "stages": {
+        "lightwheel_open_fridge": {
+          "passed": true,
+          "complete": true,
+          "stages": {
+            "capture": {
+              "exit_code": 0,
+              "timeout": false,
+              "wall_s": 15.545882894017268
+            },
+            "audit": {
+              "exit_code": 0,
+              "timeout": false,
+              "wall_s": 0.11549723398638889
+            },
+            "evaluate": {
+              "exit_code": 0,
+              "timeout": false,
+              "wall_s": 4.3230056230095215
+            },
+            "verify": {
+              "exit_code": 0,
+              "timeout": false,
+              "wall_s": 0.46519931199145503
+            }
+          },
+          "task_sha256": "aa7fbe95b74f0681e60f1a92326edf78a517a9be562283646a6bdf73d205221e",
+          "config_sha256": "fa75f60039b67ab71f04b88a7db65b14d4156d95f23d99aa9cbb0f0f6f55bc2b"
+        }
+      },
+      "full_task_motion": false
+    },
+    "source_sha256": {
+      "kitchen_safety/task_features.py": "27032bb3e614a864de725a89f55070cfd46477188ab0e465e20585833d5ce37c",
+      "scripts/evaluate_native_task.py": "94e0504cbd5160f16feab291d1e4f89c7b70a4582e713df40f6c694247723dae",
+      "scripts/audit_native_task.py": "a7386a10a1f139ea4b6f6914c880f4fc17753fcbaefe14da7508c60f5f521c5a"
+    },
+    "pending": "Authoritative drive fault channel unavailable; no event remains unknown. Actual articulated-operation motion still requires representative validation."
+  },
+  "articulation_observed_motion_audit_20261024": {
+    "tasks": 11,
+    "actual_operation_motion_demonstrated": false,
+    "evidence_file": "articulation_observed_motion_audit_20261024.json",
+    "note": "Previously captured holds show only tiny solver motion; cannot substitute for opening/pressing/turning trajectories."
   }
 }

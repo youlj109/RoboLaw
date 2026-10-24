@@ -47,8 +47,13 @@ def main():
                 if terminals:raise ValueError('Raw evidence follows terminal state')
                 if kind=='initial_state':
                     if initial is not None or steps:raise ValueError('Repeated initial state')
-                    initial=packet['state'];continue
-                if kind=='fault_event':features.fault_event(packet['payload']);continue
+                    if packet.get('physics_step')!=-1:raise ValueError('Invalid initial source step')
+                    initial=packet['state'];features.initialize(initial);continue
+                if kind=='fault_event':
+                    event=packet['payload']
+                    if initial is None or not observations or type(event.get('action_index')) is not int or event['action_index']!=observations-1:
+                        raise ValueError('Fault event has no matching active action')
+                    features.fault_event(event);continue
                 if kind=='physics':
                     t=time.perf_counter();features.advance(packet);steps+=1;timings['temporal_features_s']+=time.perf_counter()-t;continue
                 if kind not in ('observation','terminal_observation'):raise ValueError('Unknown raw packet type: '+kind)

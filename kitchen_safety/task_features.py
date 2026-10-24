@@ -137,6 +137,13 @@ class TaskFeatures:
         self.fault=FaultEvidence(self.config['rs_evidence']['fault_motion']);self.fault_result={}
         self.previous_hs={};self.previous_hs_step=None
 
+    def initialize(self,state):
+        """Use the measured initial state as the causal pre-command anchor."""
+        if self.step!=-1 or self.current is not None or getattr(self,'initialized',False):
+            raise ValueError('Repeated or late initial fault state')
+        self.fault_result=self.fault.sample(state['robot'],-1)
+        self.initialized=True
+
     def advance(self,packet):
         step=packet['physics_step']
         if step!=self.step+1:raise ValueError('Raw physics gap/reordering')
@@ -146,7 +153,15 @@ class TaskFeatures:
         self._grasp(packet['state'],packet.get('phase'),geometry=None)
 
     def fault_event(self,event):
-        self.fault.event(event['before_physics_step'],event['kind'],event.get('error',''))
+        before=event.get('before_physics_step')
+        if (type(before) is not int or before!=self.step+1
+                or event.get('kind')!='command_write_exception'
+                or event.get('method') not in ('set_dof_position_targets','set_dof_velocity_targets','set_dof_actuation_forces')):
+            raise ValueError('Unsupported or noncausal native fault event')
+        # FaultEvidence expects the last completed source step. Native capture
+        # records the NEXT step, before whose execution the command failed.
+        # Therefore sample(before) is already a post-fault measurement.
+        self.fault.event(before-1,event['kind'],event.get('error',''))
 
     def surface_speed(self,paths,state,cache):
         key=tuple(paths)
