@@ -33,6 +33,8 @@ parser.add_argument('--shelf-retract-clear-z',type=float,default=0.02,
     help='Shelf extract: small Z clearance held during level retract (deck clear, below board_1)')
 parser.add_argument('--shelf-preclear-z',type=float,default=0.03,
     help='Shelf extract: pure +Z micro-rise first so attached fruit clears board_0 before -Y retract')
+parser.add_argument('--shelf-lift-template',type=Path,default=None,
+    help='Optional JSON with waypoints_delta_m from scan_shelf_extract; overrides CLI retract grid')
 args=parser.parse_args();args.enable_cameras=True
 if args.num_envs!=1:raise ValueError('This verified entry runs one environment; parallel collection is not implemented')
 from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
@@ -234,7 +236,11 @@ with SimulationAppContext(args):
                 planning_phase=force_phase
             elif (not use_pregrasp_phase) and phase in ('pregrasp','approach','lift'):
                 planning_phase='transfer'
-            try:trajectory=planner.plan_pose(q,target,ignores(),grip,phase=planning_phase)
+            try:
+                if planning_phase=='cartesian_line':
+                    trajectory=planner.plan_cartesian_line(q,target,ignores(),grip,phase='lift')
+                else:
+                    trajectory=planner.plan_pose(q,target,ignores(),grip,phase=planning_phase)
             except RuntimeError:
                 checker=planner.motion_gen.world_coll_checker
                 names=[n for n in planner.obstacle_names if not planner._ignored(n,ignores())]
@@ -331,27 +337,35 @@ with SimulationAppContext(args):
         if use_pregrasp_phase:
             phase='lift';cart(held['tcp']+[0,0,.16])
         else:
-            # Shelf extract: (1) pure +Z preclear off board_0 (2) -Y retract at clear height (3) rise past board_1.
-            # Attached fruit still contacts the deck at close; any -Y before preclear yields FINETUNE_TRAJOPT_FAIL.
+            # Shelf extract: scan template waypoints if provided; else preclear→retract→rise.
             phase='lift'
-            n=max(1,int(args.shelf_retract_steps))
-            y_final=float(args.shelf_retract_y); z_rise=float(args.shelf_rise_z)
-            z_clear=float(args.shelf_retract_clear_z); z_pre=float(args.shelf_preclear_z)
-            waypoints=[]
-            if z_pre>0:
-                waypoints.append(np.array([0.0, 0.0, z_pre]))
-            hold_z=max(z_pre, z_clear)
-            for i in range(1,n+1):
-                frac=i/n
-                t=0.5*frac+0.5*(frac*frac)
-                waypoints.append(np.array([0.0, y_final*t, hold_z]))
-            waypoints.append(np.array([0.0, y_final, z_rise]))
-            result['shelf_lift_retract_m']={'y_final':y_final,'z_rise':z_rise,'z_clear':z_clear,
-                'z_preclear':z_pre,'steps':n,'waypoints':[w.tolist() for w in waypoints]}
+            if args.shelf_lift_template is not None:
+                tmpl=json.loads(Path(args.shelf_lift_template).read_text())
+                waypoints=[np.asarray(w,dtype=float) for w in tmpl['waypoints_delta_m']]
+                result['shelf_lift_retract_m']={'template':str(args.shelf_lift_template),
+                    'waypoints':[w.tolist() for w in waypoints], **{k:tmpl[k] for k in tmpl if k!='waypoints_delta_m'}}
+            else:
+                n=max(1,int(args.shelf_retract_steps))
+                y_final=float(args.shelf_retract_y); z_rise=float(args.shelf_rise_z)
+                z_clear=float(args.shelf_retract_clear_z); z_pre=float(args.shelf_preclear_z)
+                waypoints=[]
+                if z_pre>0:
+                    waypoints.append(np.array([0.0, 0.0, z_pre]))
+                hold_z=max(z_pre, z_clear)
+                for i in range(1,n+1):
+                    frac=i/n
+                    t=0.5*frac+0.5*(frac*frac)
+                    waypoints.append(np.array([0.0, y_final*t, hold_z]))
+                waypoints.append(np.array([0.0, y_final, z_rise]))
+                result['shelf_lift_retract_m']={'y_final':y_final,'z_rise':z_rise,'z_clear':z_clear,
+                    'z_preclear':z_pre,'steps':n,'waypoints':[w.tolist() for w in waypoints]}
             for wi,w in enumerate(waypoints):
                 try:
-                    # Pure Z → cartesian lift; any XY component → free MotionGen transfer.
-                    force=('lift' if abs(float(w[0]))<1e-9 and abs(float(w[1]))<1e-9 else 'transfer')
+                    # Pure Z → cartesian lift; XY extract → cartesian_line (MotionGen fails in cavity).
+                    if abs(float(w[0]))<1e-9 and abs(float(w[1]))<1e-9:
+                        force='lift'
+                    else:
+                        force='cartesian_line'
                     cart(held['tcp']+w, force_phase=force)
                 except RuntimeError as exc:
                     result['shelf_lift_failed_waypoint']= {'index':wi,'delta_m':w.tolist(),'error':str(exc),'plan_phase':force}

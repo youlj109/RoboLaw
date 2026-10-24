@@ -133,3 +133,59 @@ class LimePlanner(CuroboPlanner):
         spheres[:len(centers),:3]=centers
         spheres[:len(centers),3]=radii+object_padding_m
         self.motion_gen.attach_spheres_to_robot(sphere_tensor=self.args.to_device(spheres))
+
+    def plan_cartesian_line(self,q_arm7,target,ignore_names=(),grip_binary=0,phase='lift',*,step_m=.002,max_line_dev_m=.005):
+        """Local warm-started TCP line (hold orientation). For shelf extract laterals.
+
+        Like _cartesian_vertical but allows XY motion along the start→goal segment.
+        cuRobo sphere checks + caller FCL validate_path; not a MotionGen certificate.
+        """
+        import time
+        from scipy.spatial.transform import Rotation
+        import numpy as np
+        started=time.perf_counter()
+        self._prepare_path_query(ignore_names,grip_binary,phase)
+        initial=self.kin.fk(q_arm7)
+        goal=np.array(target,copy=True); goal[:3,:3]=initial[:3,:3]
+        delta=goal[:3,3]-initial[:3,3]
+        dist=float(np.linalg.norm(delta))
+        count=max(2,int(np.ceil(dist/max(step_m,1e-4)))+1)
+        path=[np.asarray(q_arm7).copy()]
+        for fraction in np.linspace(0.,1.,count)[1:]:
+            tcp=initial.copy()
+            tcp[:3,3]=initial[:3,3]+fraction*delta
+            q=self.kin.ik(tcp,path[-1],attempts=1)
+            if np.max(np.abs(q-path[-1]))>.15:
+                raise RuntimeError(f'Local Cartesian IK switched joint branches during {phase} line')
+            path.append(q)
+        path=np.asarray(path)
+        segment_times=np.maximum(3./(len(path)-1),
+            np.max(np.abs(np.diff(path,axis=0)),axis=1)/self.max_joint_speed)
+        knot_times=np.r_[0.,np.cumsum(segment_times)]
+        times=np.minimum(np.arange(int(np.ceil(knot_times[-1]/self.dt))+1)*self.dt,knot_times[-1])
+        positions=np.stack([np.interp(times,knot_times,path[:,j]) for j in range(7)],axis=-1)
+        poses=np.array([self.kin.fk(q) for q in positions])
+        # deviation from the line segment
+        if dist<1e-9:
+            line_dev=np.linalg.norm(poses[:,:3,3]-goal[:3,3],axis=1)
+        else:
+            u=delta/dist
+            w=poses[:,:3,3]-initial[:3,3]
+            proj=(w@u)[:,None]*u
+            line_dev=np.linalg.norm(w-proj,axis=1)
+        rotation=Rotation.from_matrix(poses[:,:3,:3]@goal[:3,:3].T).magnitude()
+        if float(line_dev.max())>max_line_dev_m or float(rotation.max())>np.deg2rad(2.):
+            raise RuntimeError(f'Cartesian line {phase} left the {max_line_dev_m} m / 2 degree tube')
+        feasible=self.motion_gen.ik_solver.check_valid(self.args.to_device(positions))
+        if not bool(feasible.all()):
+            raise RuntimeError('cuRobo rejected the local Cartesian line collision/joint constraints')
+        self.last_plan={
+            'backend':'curobo','method':'cartesian_line_ik','status':'SUCCESS',
+            'collision_geometry':self.collision_geometry,
+            'planning_seconds':time.perf_counter()-started,
+            'samples':len(positions),'dt':self.dt,'ik_waypoints':count,
+            'gripper_joint_position':self._last_grip,'attached_bottle':self.world.attachment is not None,
+            'line_phase':phase,'max_line_deviation_m':float(line_dev.max()),
+            'max_orientation_deviation_deg':float(np.rad2deg(rotation.max())),
+        }
+        return {'positions':positions,'dt':self.dt,'metadata':self.last_plan,'effective_goal_pose':goal}

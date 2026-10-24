@@ -217,40 +217,48 @@ if chosen is not None:
         path0=planner.plan_pose(q, target0, ignore, 1, phase='lift')
         stage2_q=np.asarray(path0['positions'][-1]).copy()
         stage2_tcp=kin.fk(stage2_q)
-        lat_dy=[-0.04,-0.06,-0.08,-0.10,-0.12,-0.16,-0.20]
-        lat_dz=[0.0,0.02,0.04,0.06]  # relative to stage2 tcp
-        lat_dx=[0.0,-0.02,0.02]
+        # Prefer small laterals; try cartesian_line (zero-padding lift phase) before MotionGen.
+        lat_dy=[-0.02,-0.03,-0.04,-0.05,-0.06,-0.08,-0.10,-0.12,-0.16]
+        lat_dz=[0.0,0.01,0.02,0.04]
+        lat_dx=[0.0]
         s2=[]
-        for dx in lat_dx:
-            for dy in lat_dy:
-                for dz in lat_dz:
+        for dy in lat_dy:
+            for dz in lat_dz:
+                for dx in lat_dx:
                     s2.append((dx,dy,dz))
-        # rank: more -y, small |dx|, modest dz
-        s2=sorted(s2, key=lambda c: (-abs(c[1]), abs(c[2]), abs(c[0])))[:36]
+        # small |dy| first (chainable micro steps), then deeper retracts
+        s2=sorted(s2, key=lambda c: (abs(c[1]), abs(c[2]), abs(c[0])))[:40]
         for i,(dx,dy,dz) in enumerate(s2):
             delta=np.array([dx,dy,dz],dtype=float)
             target=stage2_tcp.copy(); target[:3,3]=stage2_tcp[:3,3]+delta
             row={'index':i,'delta_m':delta.tolist(),'delta_mm':[round(1000*x) for x in delta],
-                 'plan_phase':'transfer','ok':False,'relative_to':'wp0'}
+                 'ok':False,'relative_to':'wp0'}
             started=time.perf_counter()
-            try:
-                path=planner.plan_pose(stage2_q, target, ignore, 1, phase='transfer')
-                row['plan_status']=(path.get('metadata') or {}).get('status')
-                validation=planner.validate_path(path['positions'], ignore, 1, phase='lift')
-                row['validation_valid']=bool(validation.get('valid'))
-                if validation.get('valid'):
-                    row['ok']=True; stage2_ok.append(row)
-                else:
-                    raw=str(validation)
-                    row['error']='FCL_INVALID'
+            path=None; used=None
+            for method in ('cartesian_line','transfer'):
+                try:
+                    if method=='cartesian_line':
+                        path=planner.plan_cartesian_line(stage2_q, target, ignore, 1, phase='lift')
+                    else:
+                        path=planner.plan_pose(stage2_q, target, ignore, 1, phase='transfer')
+                    validation=planner.validate_path(path['positions'], ignore, 1, phase='lift')
+                    if validation.get('valid'):
+                        row['ok']=True; row['plan_phase']=method; used=method
+                        row['plan_status']=(path.get('metadata') or {}).get('status')
+                        stage2_ok.append(row); break
+                    else:
+                        raw=str(validation)
+                        row['error']='FCL_INVALID'
+                        row['board_hits']=sorted({b for b in ('board_0','board_1','board_2','shelves') if b in raw})
+                        row['plan_phase']=method
+                except RuntimeError as exc:
+                    row['error']=short_err(exc); row['plan_phase']=method
+                    raw=str(exc)
                     row['board_hits']=sorted({b for b in ('board_0','board_1','board_2','shelves') if b in raw})
-            except RuntimeError as exc:
-                row['error']=short_err(exc)
-                raw=str(exc)
-                row['board_hits']=sorted({b for b in ('board_0','board_1','board_2','shelves') if b in raw})
+                    path=None
             row['seconds']=round(time.perf_counter()-started,3)
             stage2_rows.append(row)
-            print(f"S2 {i:02d} dmm={row['delta_mm']} ok={row['ok']} err={row.get('error')} t={row['seconds']}", flush=True)
+            print(f"S2 {i:02d} dmm={row['delta_mm']} ok={row['ok']} phase={row.get('plan_phase')} err={row.get('error')} t={row['seconds']}", flush=True)
             if len(stage2_ok)>=5:
                 print('STAGE2_EARLY_STOP', flush=True); break
 
@@ -279,7 +287,7 @@ if chosen is not None:
             'shelf_rise_z': float(waypoints[-1][2]),
             'shelf_retract_steps': 1,
             'plan_phase_wp0': chosen['plan_phase'],
-            'plan_phase_wp1': 'transfer',
+            'plan_phase_wp1': stage2_chosen.get('plan_phase') or 'cartesian_line',
             'rationale': (
                 'Stage1 WP0 pure-Z cartesian lift+FCL; stage2 lateral from WP0 end-q via transfer+FCL; '
                 'then rise at cleared Y.'
