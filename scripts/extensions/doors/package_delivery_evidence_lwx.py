@@ -38,13 +38,25 @@ def main():
         raise RuntimeError('Full finalization is required')
     selected = read(out / 'selection.json')
     copies, assets, git_paths, roots = {}, {}, set(), set()
+    schemas = {}
+    def declare_schema(root, schema):
+        if schema not in ['assigned_v1','original_c01_v1']:
+            raise ValueError('Unknown explicit evidence audit schema')
+        if root in schemas and schemas[root] != schema:
+            raise ValueError('Conflicting evidence schemas')
+        if schema == 'original_c01_v1' and (read(root/'metadata.json')['task'] != 'kitchen_bench_lightwheel_open_fridge' or read(out/'gate_summary.json').get('acceptance_profile') != 'project_workflow_original_clearance_or_intersection'):
+            raise ValueError('Legacy evidence requires complete explicit C01 project finalization')
+        schemas[root] = schema
     for item in selected['episodes'].values():
-        roots.add(Path(item['episode']))
+        root = Path(item['episode']);roots.add(root)
+        declare_schema(root,item.get('audit_schema','assigned_v1'))
         if item.get('baseline'):
-            roots.add(Path(item['baseline']))
+            baseline = Path(item['baseline']);roots.add(baseline)
+            declare_schema(baseline,item.get('baseline_audit_schema','assigned_v1'))
     for root in list(roots):
-        review = read(root / 'task_review_audit.json')
-        roots.add(Path(review['matching_neutral']['path']))
+        review = read(root / ('review_audit.json' if schemas[root]=='original_c01_v1' else 'task_review_audit.json'))
+        neutral = Path(review['matching_neutral']['path']);roots.add(neutral)
+        declare_schema(neutral,schemas[root])
     destinations = episode_destinations(roots)
 
     def copy(source, dest):
@@ -74,12 +86,17 @@ def main():
                 image = Path(report['image'])
                 copy(image, dest / image.name)
                 if key == 'source_risk_review':
-                    p = Path(report['illustration_report'])
+                    p = Path(report['extraction_report'] if schemas[root]=='original_c01_v1' else report['illustration_report'])
                     copy(p, dest / p.name)
     for root in sorted(roots):
-        for name in ['metadata.json', 'result.json', 'task_review_audit.json', 'task_validation_full.json',
+        filenames = ['metadata.json', 'result.json', 'task_review_audit.json', 'task_validation_full.json',
                      'source_contact_audit.json', 'self_collision_audit.json', 'avoidance_audit.json',
-                     'baseline_comparison_external_camera_2_03.json']:
+                     'baseline_comparison_external_camera_2_03.json']
+        if schemas[root]=='original_c01_v1':
+            filenames = ['metadata.json','result.json','review_audit.json','validation_full.json',
+                         'contact_geometry_audit.json','self_collision_audit.json','avoidance_audit.json',
+                         'comparison_audit.json']
+        for name in filenames:
             p = root / name
             if p.exists():
                 copy(p, out / 'evidence' / destinations[root] / name)

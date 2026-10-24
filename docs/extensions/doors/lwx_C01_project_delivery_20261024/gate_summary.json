@@ -1,0 +1,275 @@
+{
+  "student": "lwx",
+  "label": "C01",
+  "task": "kitchen_bench_lightwheel_open_fridge",
+  "complete": true,
+  "acceptance_profile": "project_workflow_original_clearance_or_intersection",
+  "additional_strict_screen_passed": false,
+  "episodes": {
+    "base": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+      "gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "frames": 438,
+      "physics_samples": 3505,
+      "safety_checks": 3942,
+      "final_door_rad": 0.31822270154953003,
+      "neutral": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_neutral_01",
+      "controller_parameters": {
+        "seed": 42,
+        "handle_offset_y": 0.0,
+        "handle_offset_z": -0.18,
+        "max_joint_speed": 0.5,
+        "grasp_roll_deg": 0.0,
+        "pull_lead_rad": 0.03,
+        "pull_steps": 600,
+        "ik_limit_margin_rad": 0.005,
+        "handle_normal_offset_m": -0.005,
+        "pregrasp_validation": {
+          "version": "dense_pregrasp_v4",
+          "resolution_rad": 0.005,
+          "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+        }
+      },
+      "implementation_sha256": {
+        "/workspace/scripts/extensions/doors/collect_tasks_lwx.py": "063397a3f742ab21ab75abe548ea09e076a1d73e3db02f33bd1a7a3406f44900",
+        "kitchen_safety/extensions/doors/task_environment.py": "2c4d126158700e5e20ed825edc461c7fcace775ae8bed0cb61813d9fe1a2c691",
+        "kitchen_safety/extensions/doors/task_collision.py": "48062fcf2ab16b94c9f97d669dc7b3eabcbc00bdd6200ab4fe921d147c3fc244",
+        "kitchen_safety/extensions/doors/task_model.py": "63b65bb5bd59ad65f1140d6237649d7953bc1ab35107a1c3fd079f2197dde43e",
+        "kitchen_safety/extensions/doors/task_planner.py": "a2a59be073a4bde97153e62e7595b70af329290f10998e8f571bc45bc27f84d8",
+        "kitchen_safety/extensions/doors/task_observation.py": "32b983b0c8410b778a172a816cbb596e08534e60c5b2e12cebddb5c6ec43569c",
+        "kitchen_safety/extensions/doors/task_reconstruction.py": "2aea9294a2e0f048ec412ad475d1bddbdeae8dc45e5779a0ba3557e751b9f9ab",
+        "kitchen_safety/extensions/doors/evidence.py": "1d8f4510973d27a5cecdf7e621338dc7e7c1d6f72061ffd310c74da7c2def13b",
+        "configs/extensions/doors/c01_variants_lwx_01.json": "87089592661367388565565896502d1d6121977df3f29ded4bf3596eec2fe34b",
+        "kitchen_safety/extensions/doors/pregrasp.py": "2e28a4aff60a4ffa133763131ba068c95b3eab2bf3ed350f45391701896611dd"
+      },
+      "visual_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01_visual_review01.json"
+    },
+    "human": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_87",
+      "gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "frames": 592,
+      "physics_samples": 4737,
+      "safety_checks": 5328,
+      "final_door_rad": 0.31802302598953247,
+      "neutral": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_neutral_87",
+      "controller_parameters": {
+        "seed": 42,
+        "handle_offset_y": 0.0,
+        "handle_offset_z": -0.18,
+        "max_joint_speed": 0.5,
+        "grasp_roll_deg": 0.0,
+        "pull_lead_rad": 0.03,
+        "pull_steps": 600,
+        "ik_limit_margin_rad": 0.005,
+        "handle_normal_offset_m": -0.005,
+        "pregrasp_validation": {
+          "version": "dense_pregrasp_v4",
+          "resolution_rad": 0.005,
+          "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+        }
+      },
+      "implementation_sha256": {
+        "/workspace/scripts/extensions/doors/collect_tasks_lwx.py": "2573a0450935895b7ab20f7defbdf84b87d6e03e9c12cf9827f0ec5247aa9281",
+        "kitchen_safety/extensions/doors/task_environment.py": "2c4d126158700e5e20ed825edc461c7fcace775ae8bed0cb61813d9fe1a2c691",
+        "kitchen_safety/extensions/doors/task_collision.py": "48062fcf2ab16b94c9f97d669dc7b3eabcbc00bdd6200ab4fe921d147c3fc244",
+        "kitchen_safety/extensions/doors/task_model.py": "63b65bb5bd59ad65f1140d6237649d7953bc1ab35107a1c3fd079f2197dde43e",
+        "kitchen_safety/extensions/doors/task_planner.py": "a2a59be073a4bde97153e62e7595b70af329290f10998e8f571bc45bc27f84d8",
+        "kitchen_safety/extensions/doors/task_observation.py": "32b983b0c8410b778a172a816cbb596e08534e60c5b2e12cebddb5c6ec43569c",
+        "kitchen_safety/extensions/doors/task_reconstruction.py": "2aea9294a2e0f048ec412ad475d1bddbdeae8dc45e5779a0ba3557e751b9f9ab",
+        "kitchen_safety/extensions/doors/evidence.py": "1d8f4510973d27a5cecdf7e621338dc7e7c1d6f72061ffd310c74da7c2def13b",
+        "configs/extensions/doors/c01_human_candidate_87_00.json": "2aa7937cb439de53851e7c9efad7de5117d057ce763c51e57f03567ba32dd66b",
+        "kitchen_safety/extensions/doors/pregrasp.py": "2e28a4aff60a4ffa133763131ba068c95b3eab2bf3ed350f45391701896611dd"
+      },
+      "visual_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_87_visual_review01.json",
+      "baseline": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+      "paired_report": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_87_candidate_00_paired01/report.json",
+      "pairs": [
+        {
+          "seed": 42,
+          "joint_length_ratio": 1.1682688211683037,
+          "added_tcp_length_m": 0.12904663039320874,
+          "original_source_clearance_necessity": true,
+          "actual_source_intersection": true,
+          "additional_strict_screen_passed": true
+        },
+        {
+          "seed": 43,
+          "joint_length_ratio": 1.1685641488248049,
+          "added_tcp_length_m": 0.1287205495183058,
+          "original_source_clearance_necessity": true,
+          "actual_source_intersection": true,
+          "additional_strict_screen_passed": true
+        },
+        {
+          "seed": 44,
+          "joint_length_ratio": 1.1475890772451802,
+          "added_tcp_length_m": 0.08129630112154429,
+          "original_source_clearance_necessity": true,
+          "actual_source_intersection": true,
+          "additional_strict_screen_passed": true
+        }
+      ],
+      "source_risk_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_87_source_risk_camera1_02_visual_review.json"
+    },
+    "property": {
+      "path": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86",
+      "gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "frames": 464,
+      "physics_samples": 3713,
+      "safety_checks": 4176,
+      "final_door_rad": 0.31818580627441406,
+      "neutral": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_neutral_86",
+      "controller_parameters": {
+        "seed": 42,
+        "handle_offset_y": 0.0,
+        "handle_offset_z": -0.18,
+        "max_joint_speed": 0.5,
+        "grasp_roll_deg": 0.0,
+        "pull_lead_rad": 0.03,
+        "pull_steps": 600,
+        "ik_limit_margin_rad": 0.005,
+        "handle_normal_offset_m": -0.005,
+        "pregrasp_validation": {
+          "version": "dense_pregrasp_v4",
+          "resolution_rad": 0.005,
+          "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+        }
+      },
+      "implementation_sha256": {
+        "/workspace/scripts/extensions/doors/collect_tasks_lwx.py": "2573a0450935895b7ab20f7defbdf84b87d6e03e9c12cf9827f0ec5247aa9281",
+        "kitchen_safety/extensions/doors/task_environment.py": "2c4d126158700e5e20ed825edc461c7fcace775ae8bed0cb61813d9fe1a2c691",
+        "kitchen_safety/extensions/doors/task_collision.py": "48062fcf2ab16b94c9f97d669dc7b3eabcbc00bdd6200ab4fe921d147c3fc244",
+        "kitchen_safety/extensions/doors/task_model.py": "63b65bb5bd59ad65f1140d6237649d7953bc1ab35107a1c3fd079f2197dde43e",
+        "kitchen_safety/extensions/doors/task_planner.py": "a2a59be073a4bde97153e62e7595b70af329290f10998e8f571bc45bc27f84d8",
+        "kitchen_safety/extensions/doors/task_observation.py": "32b983b0c8410b778a172a816cbb596e08534e60c5b2e12cebddb5c6ec43569c",
+        "kitchen_safety/extensions/doors/task_reconstruction.py": "2aea9294a2e0f048ec412ad475d1bddbdeae8dc45e5779a0ba3557e751b9f9ab",
+        "kitchen_safety/extensions/doors/evidence.py": "1d8f4510973d27a5cecdf7e621338dc7e7c1d6f72061ffd310c74da7c2def13b",
+        "configs/extensions/doors/c01_property_candidate_86_06.json": "295d7bf695464237ed20cad21df683e8a109c6a71c69135e52bdd9e539f1477b",
+        "kitchen_safety/extensions/doors/pregrasp.py": "2e28a4aff60a4ffa133763131ba068c95b3eab2bf3ed350f45391701896611dd"
+      },
+      "visual_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_visual_review01.json",
+      "baseline": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+      "paired_report": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_candidate_06_paired01/report.json",
+      "pairs": [
+        {
+          "seed": 42,
+          "joint_length_ratio": 1.0186494919990527,
+          "added_tcp_length_m": -0.10283826575579835,
+          "original_source_clearance_necessity": true,
+          "actual_source_intersection": true,
+          "additional_strict_screen_passed": true
+        },
+        {
+          "seed": 43,
+          "joint_length_ratio": 1.0223486077483201,
+          "added_tcp_length_m": -0.10414127067723761,
+          "original_source_clearance_necessity": true,
+          "actual_source_intersection": true,
+          "additional_strict_screen_passed": true
+        },
+        {
+          "seed": 44,
+          "joint_length_ratio": 1.000669242790437,
+          "added_tcp_length_m": -0.15000409942414294,
+          "original_source_clearance_necessity": true,
+          "actual_source_intersection": true,
+          "additional_strict_screen_passed": true
+        }
+      ],
+      "source_risk_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_source_risk01_visual_review.json"
+    },
+    "robot": {
+      "path": "datasets/doors/lwx_20261023/robot_01",
+      "gates": {
+        "result.json": true,
+        "validation_full.json": true,
+        "review_audit.json": true,
+        "contact_geometry_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "frames": 360,
+      "physics_samples": 2881,
+      "safety_checks": 3240,
+      "final_door_rad": 0.31773248314857483,
+      "neutral": "datasets/doors/lwx_20261023/neutral_robot_01",
+      "controller_parameters": {
+        "seed": 42,
+        "handle_offset_y": 0.0,
+        "handle_offset_z": 0.12,
+        "max_joint_speed": 0.5,
+        "handle_height_candidates_m": [
+          0.12,
+          0.18,
+          0.22
+        ]
+      },
+      "implementation_sha256": {
+        "/workspace/scripts/extensions/doors/collect.py": "82f8c5362a03e2c4bc8a6b9c0a85819da45fde7be9ac2c8736fad6a393951832",
+        "kitchen_safety/extensions/doors/environment.py": "e1565bc62684e5fccd0e82ea9f75654da91287d5ac6d6dbd23a2a87932d7d9ab",
+        "kitchen_safety/extensions/doors/collision.py": "550242a1048c6a6701556996be5d88c673f9254392f3c049c11c67db09ab13fe",
+        "configs/extensions/doors/avoidance_variants.json": "251a33fe67144b7a179f041db17e96e329f88779f0cf7040c2629c5488d4c740"
+      },
+      "visual_review": "reports/doors/lwx_C01_original_steel_review168_20261024/C01_original_steel_visual_review168.json",
+      "baseline": "datasets/doors/lwx_20261023/base_03",
+      "paired_report": "reports/doors/lwx_20261023/paired_robot_01/report.json",
+      "pairs": [
+        {
+          "seed": 42,
+          "joint_length_ratio": 1.0832688409514983,
+          "added_tcp_length_m": 0.3204575672336006,
+          "original_source_clearance_necessity": true,
+          "actual_source_intersection": false,
+          "additional_strict_screen_passed": false
+        },
+        {
+          "seed": 43,
+          "joint_length_ratio": 1.132451024350065,
+          "added_tcp_length_m": 0.3154426472127303,
+          "original_source_clearance_necessity": true,
+          "actual_source_intersection": false,
+          "additional_strict_screen_passed": false
+        },
+        {
+          "seed": 44,
+          "joint_length_ratio": 1.1105001022818972,
+          "added_tcp_length_m": 0.3171481078630222,
+          "original_source_clearance_necessity": true,
+          "actual_source_intersection": false,
+          "additional_strict_screen_passed": false
+        }
+      ],
+      "source_risk_review": "reports/doors/lwx_C01_original_steel_review168_20261024/C01_original_steel_minimum_visual_review168.json",
+      "audit_schema": "original_c01_v1"
+    }
+  },
+  "failures_or_unverified": [
+    "Original steel physically succeeds and original audits pass. All three off seeds violate original10mm source clearance but do not intersect; added TCP .315-.320m. Additional strict helper screen fails, and that result is retained rather than silently relabelled.",
+    "User approved original steel appearance; preserve original scene/data. Human87/property86 use their own matched lower-handle baseline70.",
+    "Raw original steel/base and exact minimum comparison were visually rechecked168; no unsafe off trajectory was executed.",
+    "datasets/doors/lwx_20261023/robot_01: historical implementation hashes retained; immutable runtime source copies were not captured.",
+    "One original fixed layout; planning seeds are not physical success rates or proof about all paths.",
+    "Tangential forces and ordering inside one physics substep remain unmeasured.",
+    "FCL source geometry checks do not assert equivalence to PhysX cooked shapes.",
+    "Project workflow original source-margin necessity does not imply physical source intersection.",
+    "Additional local intersection/1.6 ratio/15cm screen is reported separately; old strict finalizer is unchanged."
+  ],
+  "unit_test_log": "reports/doors/lwx_project_finalization_20261024/unit_tests_project178.log"
+}

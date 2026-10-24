@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/youlj/projects/wenxuanli/RoboLaw/scripts/extensions/doors/finalize_project_task_delivery_lwx.py", line 203, in <module>
+    main()
+  File "/home/youlj/projects/wenxuanli/RoboLaw/scripts/extensions/doors/finalize_project_task_delivery_lwx.py", line 62, in main
+    required = audit_schema(root,schema)
+  File "/home/youlj/projects/wenxuanli/RoboLaw/scripts/extensions/doors/finalize_project_task_delivery_lwx.py", line 36, in audit_schema
+    require(schema == 'original_c01_v1' and read(root/'metadata.json')['task'] ==
+  File "/home/youlj/projects/wenxuanli/RoboLaw/scripts/extensions/doors/finalize_project_task_delivery_lwx.py", line 27, in require
+    raise RuntimeError(reason)
+RuntimeError: Unknown or inapplicable audit schema

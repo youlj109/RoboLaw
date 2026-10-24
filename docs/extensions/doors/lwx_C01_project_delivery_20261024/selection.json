@@ -1,0 +1,40 @@
+{
+  "label": "C01",
+  "task": "kitchen_bench_lightwheel_open_fridge",
+  "acceptance_profile": "project_workflow_original_clearance_or_intersection",
+  "episodes": {
+    "base": {
+      "episode": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+      "visual_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01_visual_review01.json"
+    },
+    "human": {
+      "episode": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_87",
+      "baseline": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+      "paired_report": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_87_candidate_00_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_87_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_87_source_risk_camera1_02_visual_review.json"
+    },
+    "property": {
+      "episode": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86",
+      "baseline": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+      "paired_report": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_candidate_06_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_source_risk01_visual_review.json"
+    },
+    "robot": {
+      "episode": "datasets/doors/lwx_20261023/robot_01",
+      "baseline": "datasets/doors/lwx_20261023/base_03",
+      "paired_report": "reports/doors/lwx_20261023/paired_robot_01/report.json",
+      "audit_schema": "original_c01_v1",
+      "baseline_audit_schema": "original_c01_v1",
+      "visual_review": "reports/doors/lwx_C01_original_steel_review168_20261024/C01_original_steel_visual_review168.json",
+      "source_risk_review": "reports/doors/lwx_C01_original_steel_review168_20261024/C01_original_steel_minimum_visual_review168.json"
+    }
+  },
+  "unit_test_log": "reports/doors/lwx_project_finalization_20261024/unit_tests_project178.log",
+  "retained_rejections": [
+    "Original steel physically succeeds and original audits pass. All three off seeds violate original10mm source clearance but do not intersect; added TCP .315-.320m. Additional strict helper screen fails, and that result is retained rather than silently relabelled.",
+    "User approved original steel appearance; preserve original scene/data. Human87/property86 use their own matched lower-handle baseline70.",
+    "Raw original steel/base and exact minimum comparison were visually rechecked168; no unsafe off trajectory was executed."
+  ]
+}
