@@ -1,0 +1,259 @@
+{
+  "time_beijing": "2026-10-24T09:31:40.241431+08:00",
+  "scope": "Intermediate progress only; five complete tasks remain C03/C04/C05/C06/C08",
+  "new_baseline": {
+    "episode": "datasets/doors/lwx_C07_release55_retry52_20261024/C07_base_01",
+    "result_sha256": "97c5a5a19b99ccf04ae6815758311143eab0b57825ff6f60217f4aa322804e3a",
+    "accepted": true,
+    "frames": 1042,
+    "task_success": true,
+    "final_door_rad": -0.6613227725028992,
+    "independent_gates": {
+      "task_validation_full.json": null,
+      "task_review_audit.json": null,
+      "source_contact_audit.json": null,
+      "self_collision_audit.json": null
+    }
+  },
+  "campaigns": {
+    "reports/doors/lwx_C01_roll180_retry39_20261024/C01_human_49_campaign01.json": {
+      "sha256": "2c44ec016575c54b20fbdfdc4926221d89c6e65b56a8d93ef4496e3bf412a9d1",
+      "stage": "paired_11",
+      "complete": false,
+      "error": "RuntimeError('No candidate established actual obstruction and a small safe reroute across all seeds')",
+      "candidates": [
+        {
+          "candidate_index": 9,
+          "eligible": false,
+          "actual_source_intersections_all_seeds": true,
+          "max_joint_length_ratio": 999.0,
+          "max_added_tcp_length_m": 999.0
+        },
+        {
+          "candidate_index": 6,
+          "eligible": false,
+          "actual_source_intersections_all_seeds": true,
+          "max_joint_length_ratio": 999.0,
+          "max_added_tcp_length_m": 999.0
+        },
+        {
+          "candidate_index": 11,
+          "eligible": false,
+          "actual_source_intersections_all_seeds": true,
+          "max_joint_length_ratio": 999.0,
+          "max_added_tcp_length_m": 999.0
+        }
+      ]
+    },
+    "reports/doors/lwx_C01_roll180_retry39_20261024/C01_property_52_campaign01.json": {
+      "sha256": "aec4de4c45dfaeee1dfdf8ff2f96cd1b5ae14d63a3f97e9ba7352b5de21e5651",
+      "stage": "paired_1",
+      "complete": false,
+      "candidates": [
+        {
+          "candidate_index": 0,
+          "eligible": false,
+          "actual_source_intersections_all_seeds": true,
+          "max_joint_length_ratio": 999.0,
+          "max_added_tcp_length_m": 999.0
+        }
+      ]
+    },
+    "reports/doors/lwx_C02_release_retry06_20261024/C02_property_20_campaign01.json": {
+      "sha256": "18177c3887bd46f4e5a925163a95a827ab13ac8d35c79a7651d4d2f9ec4fc5b7",
+      "stage": "paired_6",
+      "complete": false,
+      "error": "RuntimeError('No candidate established actual obstruction and a small safe reroute across all seeds')",
+      "candidates": [
+        {
+          "candidate_index": 13,
+          "eligible": false,
+          "actual_source_intersections_all_seeds": true,
+          "max_joint_length_ratio": 1.2652907124027315,
+          "max_added_tcp_length_m": 0.17574229589434992
+        },
+        {
+          "candidate_index": 14,
+          "eligible": false,
+          "actual_source_intersections_all_seeds": true,
+          "max_joint_length_ratio": 1.1538997018027735,
+          "max_added_tcp_length_m": 0.1939440019978949
+        },
+        {
+          "candidate_index": 6,
+          "eligible": false,
+          "actual_source_intersections_all_seeds": true,
+          "max_joint_length_ratio": 1.1309496600735185,
+          "max_added_tcp_length_m": 0.20078320800311156
+        }
+      ]
+    },
+    "reports/doors/lwx_C02_release_retry06_20261024/C02_property_22_campaign01.json": {
+      "sha256": "72ba1d6091d485fa53de244c6196dcf57619baa978a47c7e541044ce6c0a7f4d",
+      "stage": "paired_6",
+      "complete": false,
+      "candidates": []
+    },
+    "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_24_campaign01.json": {
+      "sha256": "6aa812ee787f84f67a0f60a44f21d79f4fd594f36eb47a8caaaf52f23ee0a595",
+      "stage": "collect",
+      "complete": false,
+      "selected_candidate": {
+        "candidate_index": 2,
+        "config": "configs/extensions/doors/c02_robot_candidate_24_02.json",
+        "paired_report": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_24_candidate_02_paired01/report.json",
+        "exit_code": 0,
+        "eligible": true,
+        "actual_source_intersections_all_seeds": true,
+        "max_joint_length_ratio": 1.0545083852434283,
+        "max_added_tcp_length_m": 0.04669160032761549
+      },
+      "candidates": [
+        {
+          "candidate_index": 2,
+          "eligible": true,
+          "actual_source_intersections_all_seeds": true,
+          "max_joint_length_ratio": 1.0545083852434283,
+          "max_added_tcp_length_m": 0.04669160032761549
+        }
+      ]
+    },
+    "reports/doors/lwx_C07_contact_retry13_20261024/C07_human_14_campaign01.json": {
+      "sha256": "da98cb3116b1ad71311eae49eadd1bf50e4aec795374e4c4f11689995f86e856",
+      "stage": "collect",
+      "complete": false,
+      "error": "RuntimeError('collect exited 1')",
+      "selected_candidate": {
+        "candidate_index": 0,
+        "config": "configs/extensions/doors/c07_human_candidate_14_00.json",
+        "paired_report": "reports/doors/lwx_C07_contact_retry13_20261024/C07_human_14_candidate_00_paired01/report.json",
+        "exit_code": 0,
+        "eligible": true,
+        "actual_source_intersections_all_seeds": true,
+        "max_joint_length_ratio": 1.2243544697667736,
+        "max_added_tcp_length_m": -0.035215738111669836
+      },
+      "candidates": [
+        {
+          "candidate_index": 8,
+          "eligible": true,
+          "actual_source_intersections_all_seeds": true,
+          "max_joint_length_ratio": 1.2243544697667736,
+          "max_added_tcp_length_m": -0.028760300095039548
+        },
+        {
+          "candidate_index": 0,
+          "eligible": true,
+          "actual_source_intersections_all_seeds": true,
+          "max_joint_length_ratio": 1.2243544697667736,
+          "max_added_tcp_length_m": -0.035215738111669836
+        },
+        {
+          "candidate_index": 5,
+          "eligible": true,
+          "actual_source_intersections_all_seeds": true,
+          "max_joint_length_ratio": 1.2243542954807518,
+          "max_added_tcp_length_m": -0.03322711017162283
+        }
+      ]
+    },
+    "reports/doors/lwx_C07_release55_retry52_20261024/C07_baseline_driver01.json": {
+      "sha256": "6c6c08c22f26e46387540a06d20b072069c1def6102fd2775c9eb51a36f1dd33",
+      "stage": "C07_base_neutral_01",
+      "complete": false,
+      "candidates": []
+    },
+    "reports/doors/lwx_C07_release55_retry52_20261024/C07_human_55_search_wait01.json": {
+      "sha256": "4a1bf4754ffdd5d6692adee400410b4ba783f7936e9e2725723ae5c7b8905b8f",
+      "stage": "waiting_baseline_gates",
+      "complete": false,
+      "candidates": []
+    }
+  },
+  "source_searches": {
+    "reports/doors/lwx_C01_roll180_retry39_20261024/C01_property_offset_wine_glass_search55.json": {
+      "sha256": "39a3ec8de6fbbfb6366ed5d874c2d99395966ca1e361ecff877e7a87acf804b1",
+      "search_complete": true,
+      "stats": {
+        "tested": 8,
+        "endpoints": 8,
+        "blocking": 8,
+        "scene_legal": 8
+      },
+      "candidates": 8,
+      "scope": "Discovery only; full paired/physical gates remain required"
+    },
+    "reports/doors/lwx_C01_roll180_retry39_20261024/C01_property_offset_ceramic_mug_search56.json": {
+      "sha256": "f29b7ba64bbc4e9c63c292114f955aa1527343427500c024e2dbc44a47ab8b4d",
+      "search_complete": true,
+      "stats": {
+        "tested": 20,
+        "endpoints": 20,
+        "blocking": 20,
+        "scene_legal": 20
+      },
+      "candidates": 20,
+      "scope": "Discovery only; full paired/physical gates remain required"
+    },
+    "reports/doors/lwx_C01_roll180_retry39_20261024/C01_property_tablet_search58.json": {
+      "sha256": "47fbbfd109367b5a914a964de416b72673190ba26713fbf99710fa95257e8d40",
+      "search_complete": true,
+      "stats": {
+        "tested": 9450,
+        "endpoints": 5452,
+        "blocking": 18,
+        "scene_legal": 14
+      },
+      "candidates": 14,
+      "scope": "Discovery only; full paired/physical gates remain required"
+    },
+    "reports/doors/lwx_C01_roll180_retry39_20261024/C01_human_common_tip_search57.json": {
+      "sha256": "71abf372aa9d9ec58c94cf1feb1e71d821a93288bd8b1b94f120c0b2cfc635e1",
+      "search_complete": true,
+      "stats": {
+        "tested": 6493,
+        "endpoints": 5965,
+        "blocking": 24,
+        "scene_legal": 20
+      },
+      "candidates": 20,
+      "scope": "Discovery only; full paired/physical gates remain required"
+    },
+    "reports/doors/lwx_C02_release_retry06_20261024/C02_property_tall_glass_search22.json": {
+      "sha256": "aa19c97fc1eddf03d38a1dae98e5f6643a02c0f2e72ce7a0ec513a51db978b3a",
+      "search_complete": true,
+      "stats": {
+        "tested": 59,
+        "endpoints": 20,
+        "blocking": 20,
+        "scene_legal": 20
+      },
+      "candidates": 20,
+      "scope": "Discovery only; full paired/physical gates remain required"
+    },
+    "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_envelope_search24.json": {
+      "sha256": "7ec4ef91387e071e52b93f41d904afdb33f559cdc98d3ef33603a117098d4d9b",
+      "search_complete": true,
+      "stats": {
+        "tested": 215,
+        "endpoints": 40,
+        "blocking": 31,
+        "scene_legal": 20
+      },
+      "candidates": 20,
+      "scope": "Discovery only; full paired/physical gates remain required"
+    }
+  },
+  "live_gpu_and_search_processes": [
+    "799994      62 /workspace/.venv-arena/bin/python -u scripts/extensions/doors/collect_tasks_lwx.py --task-id kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian --variant base --variant-config configs/extensions/doors/c07_variants_lwx_01.json --output datasets/doors/lwx_C07_release55_retry52_20261024/C07_base_neutral_01 --mode neutral --handle-offset-z -0.03 --handle-normal-offset -0.008 --grasp-roll-deg 0.0 --grasp-pitch-deg 0.0 --pull-lead-rad 0.015 --pull-steps 1100 --max-steps 1500 --validated-pregrasp --render-warmup --ik-limit-margin-rad 0.005 --review-config configs/extensions/doors/c07_review_lwx.json --release-retreat-m 0.03 --release-tilt-deg -55.0 --neutral-seconds 71.46666666666667"
+  ],
+  "retained_human14_failure": {
+    "episode": "datasets/doors/lwx_C07_contact_retry13_20261024/C07_human_14",
+    "result_sha256": "c13ba891eaf13a6278c129659812e0a0e3a5871841f4f7ac783f17801301c1ae",
+    "accepted": false,
+    "task_success": true,
+    "frames": 970,
+    "failure": "RuntimeError: EXECUTION_COLLISION {\"action_index\": 970, \"phase\": \"release_handle\", \"valid\": false, \"failure\": {\"valid\": false, \"distance_m\": 0.0018329421325617478, \"required_m\": 0.002, \"slack_m\": -0.00016705786743825227, \"robot_part\": \"finger\", \"obstacle\": \"/World/envs/env_0/kitchen/microwave_right_group/Microwave039_door/Collisions/Microwave039_door_C003\", \"intersecting\": false}, \"q\": [-0.46454259753227234, -1.4804203510284424, 0.5429158806800842, -2.5834851264953613, 2.7871499061584473, 3.7476792335510254, 0.8483598828315735, 3.9770473025946274e-10, -3.385886839998853e-12, 1.1370606443961151e-05, 2.5758858100743964e-05, -1.1765051567635965e-05, 3.51560338458512e-05], \"door_body_pose\": [5.247939586639404, -2.993903636932373, 1.6250001192092896, 1.3224780559539795e-07, -2.898741513490677e-08, 0.9037845134735107, -0.427988201379776], \"hazard_pose\": null, \"door_q\": -0.6862615942955017, \"door_hazard_pairs_near_15cm\": []}",
+    "final_door_rad": -0.6862615942955017
+  }
+}

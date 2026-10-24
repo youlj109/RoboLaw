@@ -146,7 +146,7 @@ for x,y,z,yaw in candidates:
    if any(np.any(hi<=lo) for lo,hi in boxes):continue
    support_shapes=[('added_support_'+str(i),fcl.CollisionObject(fcl.Box(*(hi-lo)),fcl.Transform((lo+hi)/2)),lo,hi) for i,(lo,hi) in enumerate(boxes)]
    support_info={'low':np.min([lo for lo,hi in boxes],axis=0).tolist(),'high':np.max([hi for lo,hi in boxes],axis=0).tolist(),'rests_on':support_name}
-   if offset:support_info.update(parts=[{'low':lo.tolist(),'high':hi.tolist()} for lo,hi in boxes],design='Floor-anchored offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory.')
+   if offset:support_info.update(parts=[{'low':lo.tolist(),'high':hi.tolist()} for lo,hi in boxes],design='Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory.')
    if not initial_safe(boxes,0.):continue
    if a.allow_endpoint_posture_adaptation and any(not clearance(shapes,support_shapes,.005)['valid'] for shapes in hand_states):continue
    if any(not clearance(robot[i],support_shapes,.002)['valid'] for i in ([0] if a.allow_endpoint_posture_adaptation else [0,*pre[::4],*late])):continue

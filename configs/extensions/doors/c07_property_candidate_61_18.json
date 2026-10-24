@@ -1,0 +1,112 @@
+{
+  "_kitchen_asset": "assets/extensions/doors/c03_mechanisms_lwx_01.usda",
+  "_selection_note": "Discovery candidate only; not task or physical acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian",
+  "_fixed_source_layout": "configs/extensions/doors/c07_source_layout_lwx.json",
+  "_status": "Frozen source relation solution; added layouts require design from this task baseline.",
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/wine_glass.usda",
+    "position": [
+      4.76820286,
+      -3.18916082,
+      1.425
+    ],
+    "static": false,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "yaw_deg": 0.0,
+    "baseline_intersection_actions": [
+      83,
+      84,
+      85,
+      86,
+      87,
+      88
+    ],
+    "source_supports": [
+      "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube"
+    ],
+    "source_intersection_in_reference_off_seeds": {
+      "42": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42
+      ],
+      "43": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42
+      ],
+      "44": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42
+      ]
+    },
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/c07_property_candidate_61_18_property_support.usda",
+      "position": [
+        4.76820286,
+        -3.18916082,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.5282028599999995,
+          -3.22916082,
+          0.9904957997202859
+        ],
+        [
+          4.80820286,
+          -3.14916082,
+          1.425
+        ]
+      ],
+      "source_support": "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube",
+      "component_bounds_world_m": [
+        {
+          "low": [
+            4.5282028599999995,
+            -3.22916082,
+            0.9924957997202859
+          ],
+          "high": [
+            4.60820286,
+            -3.14916082,
+            1.403
+          ]
+        },
+        {
+          "low": [
+            4.5282028599999995,
+            -3.22916082,
+            1.403
+          ],
+          "high": [
+            4.80820286,
+            -3.14916082,
+            1.423
+          ]
+        }
+      ],
+      "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+    },
+    "candidate_search": "reports/doors/lwx_C07_release55_retry52_20261024/C07_property_table_edge_search07.json",
+    "candidate_search_sha256": "a1c839962e1f24da362b1adb48800b5ccec2171aa9d66fe7d4a77efeb4a729bb",
+    "candidate_index": 18
+  }
+}

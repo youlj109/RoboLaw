@@ -1,0 +1,351 @@
+{
+  "task": "kitchen_bench_lightwheel_open_cabinet_u_shaped_with_island_farmhouse2",
+  "variant": "robot",
+  "baseline": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_base_01",
+  "scope": "Offline candidates only, not scene or task acceptance",
+  "discovery_broadphase": "Vectorized conservative source AABB overlap; every counted intersection still requires exact FCL",
+  "endpoint_sphere_screen": "AABB lower bounds only prune safe pairs; close pairs use exact source FCL at unchanged margin+3mm",
+  "discovery_min_blocking_samples": 3,
+  "discovery_mid_stride": 1,
+  "stats": {
+    "tested": 6,
+    "endpoints": 6,
+    "blocking": 6,
+    "scene_legal": 6
+  },
+  "candidates": [
+    {
+      "name": "barrier",
+      "asset": "assets/obstacle_library/robot/narrow_opening.usda",
+      "position": [
+        4.96086002,
+        -0.74674709,
+        1.355
+      ],
+      "yaw_deg": 92.0,
+      "static": true,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "baseline_intersection_actions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.87586002,
+          -0.8317470899999999,
+          0.001999999552965164
+        ],
+        "high": [
+          5.04586002,
+          -0.66174709,
+          1.353
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry"
+      }
+    },
+    {
+      "name": "barrier",
+      "asset": "assets/obstacle_library/robot/narrow_opening.usda",
+      "position": [
+        4.96586002,
+        -0.7417470899999999,
+        1.355
+      ],
+      "yaw_deg": 92.0,
+      "static": true,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "baseline_intersection_actions": [
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.88086002,
+          -0.8267470899999999,
+          0.001999999552965164
+        ],
+        "high": [
+          5.05086002,
+          -0.65674709,
+          1.353
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry"
+      }
+    },
+    {
+      "name": "barrier",
+      "asset": "assets/obstacle_library/robot/narrow_opening.usda",
+      "position": [
+        4.95586002,
+        -0.75174709,
+        1.3599999999999999
+      ],
+      "yaw_deg": 92.0,
+      "static": true,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "baseline_intersection_actions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.87086002,
+          -0.8367470899999999,
+          0.001999999552965164
+        ],
+        "high": [
+          5.04086002,
+          -0.66674709,
+          1.3579999999999999
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry"
+      }
+    },
+    {
+      "name": "barrier",
+      "asset": "assets/obstacle_library/robot/narrow_opening.usda",
+      "position": [
+        4.96086002,
+        -0.74674709,
+        1.35
+      ],
+      "yaw_deg": 92.0,
+      "static": true,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "baseline_intersection_actions": [
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.87586002,
+          -0.8317470899999999,
+          0.001999999552965164
+        ],
+        "high": [
+          5.04586002,
+          -0.66174709,
+          1.348
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry"
+      }
+    },
+    {
+      "name": "barrier",
+      "asset": "assets/obstacle_library/robot/narrow_opening.usda",
+      "position": [
+        4.96086002,
+        -0.74674709,
+        1.3599999999999999
+      ],
+      "yaw_deg": 92.0,
+      "static": true,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "baseline_intersection_actions": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.87586002,
+          -0.8317470899999999,
+          0.001999999552965164
+        ],
+        "high": [
+          5.04586002,
+          -0.66174709,
+          1.3579999999999999
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry"
+      }
+    },
+    {
+      "name": "barrier",
+      "asset": "assets/obstacle_library/robot/narrow_opening.usda",
+      "position": [
+        4.95586002,
+        -0.74674709,
+        1.355
+      ],
+      "yaw_deg": 90.0,
+      "static": true,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "baseline_intersection_actions": [
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.87086002,
+          -0.8317470899999999,
+          0.001999999552965164
+        ],
+        "high": [
+          5.04086002,
+          -0.66174709,
+          1.353
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry"
+      }
+    }
+  ],
+  "posture_adaptation_discovery": {
+    "enabled": false,
+    "scope": "Source initial robot and door/environment stay mandatory. Old redundant endpoint and later baseline arm postures are not constrained when enabled. Same Cartesian target, full on-plan endpoint validation, actual approach/pull and all final gates remain mandatory."
+  },
+  "additional_paired_endpoint_reference": [],
+  "paired_endpoint_discovery_clearance_m": 0.025,
+  "additional_approach_reference": [],
+  "additional_approach_clearance_m": 0.015,
+  "search_parameters": {
+    "baseline": "datasets/doors/lwx_C02_planning_padding_retry18_20261024/C02_base_01",
+    "config": "configs/extensions/doors/c02_variants_lwx_03.json",
+    "variant": "robot",
+    "output": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_v26_equivalence27.json",
+    "pedestal": true,
+    "heights": null,
+    "min_blocking_samples": 3,
+    "mid_stride": 1,
+    "human_asset": null,
+    "refine_from": null,
+    "candidate_list": "configs/extensions/doors/c02_v27_equivalence_grid27.json",
+    "paired_reference": null,
+    "hazard_asset": "assets/obstacle_library/robot/narrow_opening.usda",
+    "support_width_m": null,
+    "yaws": null,
+    "xy_step_m": 0.04,
+    "screen_approach_proxies": false,
+    "support_offset_xy": [
+      0.0,
+      0.0
+    ],
+    "approach_reference": [],
+    "paired_endpoint_reference": [],
+    "paired_endpoint_extra_clearance_m": 0.005,
+    "allow_endpoint_posture_adaptation": false
+  },
+  "invariant_gripper_screen": {
+    "enabled": false,
+    "sampled_actions": [
+      100,
+      106,
+      112,
+      118,
+      124,
+      130,
+      136,
+      142,
+      148,
+      154,
+      160,
+      166,
+      172,
+      178,
+      184,
+      190,
+      196,
+      202,
+      208,
+      214,
+      220,
+      226,
+      232,
+      238,
+      244,
+      250,
+      256,
+      262,
+      268,
+      274,
+      280,
+      286,
+      292,
+      295
+    ],
+    "goal_sphere_links": [
+      "base_link",
+      "left_inner_finger",
+      "left_inner_knuckle",
+      "left_outer_finger",
+      "left_outer_knuckle",
+      "panda_link8",
+      "panda_panda_link7",
+      "right_inner_finger",
+      "right_inner_knuckle",
+      "right_outer_finger",
+      "right_outer_knuckle"
+    ],
+    "goal_spheres": 53,
+    "source_extra_clearance_m": 0.003,
+    "scope": "Discovery only: fixed Cartesian policy uses measured baseline articulated gripper poses. Redundant arm postures remain unconstrained. Source hand plus original margin+3mm, support+5mm and distal goal proxy checks prune impossible placements; full same-target on-plans and actual dynamics still required."
+  },
+  "planning_proxy_discovery_screen": {
+    "enabled": false,
+    "scope": "Also check initial and invariant distal goal spheres against the same per-collider padded AABBs used by cuRobo for glass/barrier, including baseline extra padding. This is a conservative discovery filter, not source-intersection evidence or final acceptance."
+  },
+  "approach_reference_geometry": "All original source robot shapes and conservative execution envelopes; necessity still uses physical source hulls/primitives only.",
+  "search_complete": true
+}

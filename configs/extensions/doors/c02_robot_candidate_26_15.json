@@ -1,0 +1,135 @@
+{
+  "_fixed_source_layout": "configs/extensions/doors/c02_source_layout_lwx.json",
+  "_kitchen_asset": "assets/extensions/doors/c02_mechanisms_lwx_01.usda",
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      5.064860019683838,
+      -0.55374709367752,
+      1.459999942779541
+    ],
+    "static": false,
+    "semantic_anchor": "Actual baseline pregrasp obstruction; fixed source task layout and fixed handle target retained. Candidate requires paired planning and physical validation.",
+    "yaw_deg": 0.0,
+    "baseline_intersection_actions": [
+      42,
+      46,
+      50,
+      54,
+      58,
+      62,
+      66,
+      70,
+      74,
+      78,
+      82
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right"
+    ],
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/c02_property_support_lwx_01.usda",
+      "position": [
+        5.064860019683838,
+        -0.55374709367752,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          5.014860019683838,
+          -0.60374709367752,
+          0.92
+        ],
+        [
+          5.114860019683838,
+          -0.5037470936775199,
+          1.459999942779541
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right"
+    },
+    "candidate_search": "reports/doors/lwx_C02_C03_20261023/C02_property_search_02.json",
+    "candidate_index": 5
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.664860019683838,
+      -0.4737470936775199,
+      1.35
+    ],
+    "yaw_deg": 90.0,
+    "static": true,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "baseline_intersection_actions": [
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right"
+    ],
+    "source_intersection_in_reference_off_seeds": {
+      "42": [
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "43": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "44": [
+        24,
+        25,
+        26,
+        27
+      ]
+    },
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/c02_robot_candidate_26_15_robot_support.usda",
+      "position": [
+        4.664860019683838,
+        -0.4737470936775199,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          4.579860019683838,
+          -0.5587470936775198,
+          0.92
+        ],
+        [
+          4.749860019683838,
+          -0.38874709367751986,
+          1.35
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/counter_main_main_group/top_geometry_right"
+    },
+    "candidate_search": "reports/doors/lwx_C02_planning_padding_retry18_20261024/C02_robot_crossbar_search26.json",
+    "candidate_search_sha256": "0f2e75436ea5c72aa64bc3a80142a8a4681e34baf1cefd294f2802079cbdfde4",
+    "candidate_index": 15
+  },
+  "_selection_note": "Discovery candidate only; not task or physical acceptance."
+}

@@ -2,7 +2,7 @@
 import argparse,json,subprocess,hashlib
 from pathlib import Path
 from matched_scene_lwx import require_matching_scene
-p=argparse.ArgumentParser();p.add_argument('--label',required=True);p.add_argument('--variant',required=True,choices=['human','property','robot']);p.add_argument('--search',type=Path,required=True);p.add_argument('--baseline',type=Path,required=True);p.add_argument('--attempt',default='01');p.add_argument('--report-root',type=Path,default=Path('reports/doors/lwx_C04_C08_20261024'));p.add_argument('--data-root',type=Path,default=Path('datasets/doors/lwx_C04_C08_20261024'));p.add_argument('--config',type=Path);a=p.parse_args();label=a.label;variant=a.variant;r=a.report_root;data=a.data_root;ep=data/(label+'_'+variant+'_'+a.attempt);neutral=data/(label+'_'+variant+'_neutral_'+a.attempt);statepath=r/(ep.name+'_campaign01.json');config=a.config or Path(json.loads((a.baseline/'metadata.json').read_text())['variant_config'])
+p=argparse.ArgumentParser();p.add_argument('--label',required=True);p.add_argument('--variant',required=True,choices=['human','property','robot']);p.add_argument('--search',type=Path,required=True);p.add_argument('--baseline',type=Path,required=True);p.add_argument('--attempt',default='01');p.add_argument('--report-root',type=Path,default=Path('reports/doors/lwx_C04_C08_20261024'));p.add_argument('--data-root',type=Path,default=Path('datasets/doors/lwx_C04_C08_20261024'));p.add_argument('--config',type=Path);p.add_argument('--screen-contact-approach',action='store_true');a=p.parse_args();label=a.label;variant=a.variant;r=a.report_root;data=a.data_root;ep=data/(label+'_'+variant+'_'+a.attempt);neutral=data/(label+'_'+variant+'_neutral_'+a.attempt);statepath=r/(ep.name+'_campaign01.json');config=a.config or Path(json.loads((a.baseline/'metadata.json').read_text())['variant_config'])
 if statepath.exists() or ep.exists():raise FileExistsError(ep)
 state={'stage':'prepared','baseline':str(a.baseline),'search':str(a.search),'search_sha256':hashlib.sha256(a.search.read_bytes()).hexdigest(),'offline_candidate_budget':3,'physical_trial_budget':1,'small_detour_limits':{'max_joint_length_ratio':1.6,'max_added_tcp_length_m':.15},'complete':False,'candidates':[]};required=[('result.json','accepted'),('task_validation_full.json','accepted'),('task_review_audit.json','passed'),('source_contact_audit.json','passed'),('self_collision_audit.json','passed')]
 def save():statepath.write_text(json.dumps(state,indent=2)+'\n')
@@ -26,6 +26,11 @@ try:
     if not (pair['off'].get('success') and pair['on'].get('success')):ratios.append(999.);extra.append(999.);continue
     off=pair['off']['path_metrics'];on=pair['on']['path_metrics'];ratios.append(on['joint_l2_length_rad']/max(off['joint_l2_length_rad'],1e-9));extra.append(on['tcp_length_m']-off['tcp_length_m'])
    entry.update(actual_source_intersections_all_seeds=actual_hits,max_joint_length_ratio=max(ratios),max_added_tcp_length_m=max(extra));entry['eligible']=bool(not code and report['stable_policy_necessity_in_tested_seeds'] and report['fixed_endpoint_rerouting_supported'] and actual_hits and max(ratios)<=1.6 and max(extra)<=.15)
+   if entry['eligible'] and a.screen_contact_approach:
+    diagnostic=r/(ep.name+'_candidate_'+str(idx).zfill(2)+'_approach01.json')
+    run('approach_screen_'+str(idx),'diagnose_paired_approach_lwx.py',['--baseline',a.baseline,'--config',cfg,'--variant',variant,'--paired',paired/'report.json','--output',diagnostic])
+    entry['contact_approach_diagnostic']=str(diagnostic)
+    entry['eligible']=bool(json.loads(diagnostic.read_text())['all_predicted_approaches_discovery_eligible'])
    if entry['eligible']:choices.append(entry)
   save()
   if entry['eligible'] and entry['max_added_tcp_length_m']<=.05 and entry['max_joint_length_ratio']<=1.15:

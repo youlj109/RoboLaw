@@ -1,0 +1,21 @@
+#usda 1.0
+(
+    defaultPrim = "Support"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Support"
+{
+    def Cube "Column" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        color3f[] primvars:displayColor = [(0.28, 0.3, 0.32)]
+        double size = 1
+        float3 xformOp:scale = (0.17, 0.17, 0.43)
+        double3 xformOp:translate = (0, 0, 1.135)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
+
