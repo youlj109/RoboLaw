@@ -30,6 +30,8 @@ bash scripts/arena_python.sh scripts/risk_capture_workflow.py evaluate \
 - **正确性验证**：82 项规则边界/缺测检查、24 项故障时序检查；门、按钮、旋钮实际运动及人体关系诊断；10 种障碍真实模型的原始证据、网格距离与规则路由检查。
 - **明确的缺口**：操纵资产的停止模型尚未标定，部分权威故障/损伤输入不可用；对应分项保持未知或原定审计状态。10 种障碍均已有通过的代表性布局，横杆与尖角外壳使用单独验证的 G 型模板；384 个组合不等于全部完成运行验收。完整任务控制器成功率、每组 200 条及全量视频不属于本次要求。
 
+先用 [统一任务/变体准备入口](docs/native_task_variants.md) 选择任务与风险资产，并提供本任务放置配置；它支持全部 32×12 种输入选择，不自动采集或声称布局通过。
+
 入口见 [原生任务在线/离线工作流](docs/native_task_workflow.md)，逐项证据见 [扩展进度](docs/task_suite_expansion.md) 与 [验收状态 JSON](docs/task_suite_validation_status.json)。[障碍放置](docs/task_variant_placement.md) 和 [离线外观/相机](docs/native_offline_appearance.md) 均绑定本条任务和真实来源，不能套用旧场景世界坐标或豁免表。
 
 直接离线评价已加入 [强制原始证据预检](docs/native_evaluation_preflight.md)，即使未单独运行 audit，也会在 GPU 测距前核对时钟、接触和命令证据。

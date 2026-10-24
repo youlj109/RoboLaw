@@ -53,6 +53,9 @@ def local_object_assets(spec,asset_cache=None):
 
 
 def build_environment(contract, *, enable_cameras=False, obstacle=None,asset_cache=None,placement_seed=None):
+    if obstacle is not None:
+        from kitchen_safety.task_variant_bundle import verify_prepared_binding
+        verify_prepared_binding(contract,obstacle)
     from kitchen_safety.curobo_backend import ensure_warp_torch_compat
     ensure_warp_torch_compat()
     from isaaclab_arena.environment_spec.arena_env_graph_spec import ArenaEnvGraphSpec
