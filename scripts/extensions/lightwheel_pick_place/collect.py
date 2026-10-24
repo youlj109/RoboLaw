@@ -390,7 +390,7 @@ with SimulationAppContext(args):
         phase='transfer';cart(desired_root+offset)
         if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
             phase='transfer'
-            cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='cartesian_line')
+            cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
             result['place_clear_rise_z_m']=float(args.place_clear_rise_z)
         lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
         lower_root=dest[:3]+np.array([0.0,0.0,lower_z])
