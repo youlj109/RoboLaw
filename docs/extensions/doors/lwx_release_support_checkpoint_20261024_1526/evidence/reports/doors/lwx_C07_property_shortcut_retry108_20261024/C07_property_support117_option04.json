@@ -1,0 +1,3487 @@
+{
+  "task": "kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian",
+  "variant": "property",
+  "baseline": "datasets/doors/lwx_C07_property_shortcut_retry108_20261024/C07_base_01",
+  "scope": "Offline candidates only, not scene or task acceptance",
+  "discovery_broadphase": "Vectorized conservative source AABB overlap; every counted intersection still requires exact FCL",
+  "endpoint_sphere_screen": "AABB lower bounds only prune safe pairs; close pairs use exact source FCL at unchanged margin+3mm",
+  "discovery_min_blocking_samples": 1,
+  "discovery_mid_stride": 1,
+  "stats": {
+    "tested": 54,
+    "endpoints": 36,
+    "blocking": 23,
+    "scene_legal": 9,
+    "shared_off_blocking": 23,
+    "support_conservative_envelope_rejected": 14
+  },
+  "candidates": [
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.813743,
+        -3.122685,
+        1.703953
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.763743,
+          -3.292685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.8637429999999995,
+          -3.0726850000000003,
+          1.701953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.763743,
+              -3.292685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.8637429999999995,
+              -3.1926850000000004,
+              1.681953
+            ]
+          },
+          {
+            "low": [
+              4.763743,
+              -3.292685,
+              1.681953
+            ],
+            "high": [
+              4.8637429999999995,
+              -3.0726850000000003,
+              1.701953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.823743,
+        -3.122685,
+        1.703953
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.7737430000000005,
+          -3.292685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.873743,
+          -3.0726850000000003,
+          1.701953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.7737430000000005,
+              -3.292685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.873743,
+              -3.1926850000000004,
+              1.681953
+            ]
+          },
+          {
+            "low": [
+              4.7737430000000005,
+              -3.292685,
+              1.681953
+            ],
+            "high": [
+              4.873743,
+              -3.0726850000000003,
+              1.701953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.843743,
+        -3.122685,
+        1.703953
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.793743,
+          -3.292685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.893743,
+          -3.0726850000000003,
+          1.701953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.793743,
+              -3.292685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.893743,
+              -3.1926850000000004,
+              1.681953
+            ]
+          },
+          {
+            "low": [
+              4.793743,
+              -3.292685,
+              1.681953
+            ],
+            "high": [
+              4.893743,
+              -3.0726850000000003,
+              1.701953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.843743,
+        -3.122685,
+        1.713953
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.793743,
+          -3.292685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.893743,
+          -3.0726850000000003,
+          1.711953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.793743,
+              -3.292685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.893743,
+              -3.1926850000000004,
+              1.691953
+            ]
+          },
+          {
+            "low": [
+              4.793743,
+              -3.292685,
+              1.691953
+            ],
+            "high": [
+              4.893743,
+              -3.0726850000000003,
+              1.711953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.853743,
+        -3.122685,
+        1.703953
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.803743,
+          -3.292685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.9037429999999995,
+          -3.0726850000000003,
+          1.701953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.803743,
+              -3.292685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.9037429999999995,
+              -3.1926850000000004,
+              1.681953
+            ]
+          },
+          {
+            "low": [
+              4.803743,
+              -3.292685,
+              1.681953
+            ],
+            "high": [
+              4.9037429999999995,
+              -3.0726850000000003,
+              1.701953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.853743,
+        -3.122685,
+        1.713953
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.803743,
+          -3.292685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.9037429999999995,
+          -3.0726850000000003,
+          1.711953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.803743,
+              -3.292685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.9037429999999995,
+              -3.1926850000000004,
+              1.691953
+            ]
+          },
+          {
+            "low": [
+              4.803743,
+              -3.292685,
+              1.691953
+            ],
+            "high": [
+              4.9037429999999995,
+              -3.0726850000000003,
+              1.711953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.863743,
+        -3.122685,
+        1.703953
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.8137430000000005,
+          -3.292685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.913743,
+          -3.0726850000000003,
+          1.701953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.8137430000000005,
+              -3.292685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.913743,
+              -3.1926850000000004,
+              1.681953
+            ]
+          },
+          {
+            "low": [
+              4.8137430000000005,
+              -3.292685,
+              1.681953
+            ],
+            "high": [
+              4.913743,
+              -3.0726850000000003,
+              1.701953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.863743,
+        -3.122685,
+        1.713953
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.8137430000000005,
+          -3.292685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.913743,
+          -3.0726850000000003,
+          1.711953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.8137430000000005,
+              -3.292685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.913743,
+              -3.1926850000000004,
+              1.691953
+            ]
+          },
+          {
+            "low": [
+              4.8137430000000005,
+              -3.292685,
+              1.691953
+            ],
+            "high": [
+              4.913743,
+              -3.0726850000000003,
+              1.711953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.863743,
+        -3.122685,
+        1.723953
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/kitchen/floor_room/geometry"
+      ],
+      "proposed_support": {
+        "low": [
+          4.8137430000000005,
+          -3.292685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.913743,
+          -3.0726850000000003,
+          1.721953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.8137430000000005,
+              -3.292685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.913743,
+              -3.1926850000000004,
+              1.701953
+            ]
+          },
+          {
+            "low": [
+              4.8137430000000005,
+              -3.292685,
+              1.701953
+            ],
+            "high": [
+              4.913743,
+              -3.0726850000000003,
+              1.721953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      }
+    }
+  ],
+  "posture_adaptation_discovery": {
+    "enabled": true,
+    "scope": "Source initial robot and door/environment stay mandatory. Old redundant endpoint and later baseline arm postures are not constrained when enabled. Same Cartesian target, full on-plan endpoint validation, actual approach/pull and all final gates remain mandatory."
+  },
+  "additional_paired_endpoint_reference": [],
+  "paired_endpoint_discovery_clearance_m": 0.065,
+  "additional_approach_reference": [],
+  "additional_approach_clearance_m": 0.055,
+  "search_parameters": {
+    "baseline": "datasets/doors/lwx_C07_property_shortcut_retry108_20261024/C07_base_01",
+    "config": "configs/extensions/doors/c07_variants_lwx_01.json",
+    "variant": "property",
+    "output": "reports/doors/lwx_C07_property_shortcut_retry108_20261024/C07_property_support117_option04.json",
+    "pedestal": true,
+    "heights": null,
+    "min_blocking_samples": 1,
+    "mid_stride": 1,
+    "human_asset": null,
+    "refine_from": null,
+    "candidate_list": "configs/extensions/doors/c07_property_support_local_grid117.json",
+    "paired_reference": "reports/doors/lwx_C07_property_shortcut_retry108_20261024/C07_property_reference109_paired01/report.json",
+    "hazard_asset": "assets/obstacle_library/property/wine_glass.usda",
+    "support_width_m": 0.1,
+    "yaws": null,
+    "xy_step_m": 0.04,
+    "screen_approach_proxies": false,
+    "support_offset_xy": [
+      0.0,
+      -0.12
+    ],
+    "approach_reference": [],
+    "paired_endpoint_reference": [],
+    "paired_endpoint_extra_clearance_m": 0.005,
+    "allow_endpoint_posture_adaptation": true,
+    "approach_command_reference": [],
+    "screen_invariant_envelopes": true,
+    "measured_contact_reference": [],
+    "command_sphere_reference": [],
+    "screen_baseline_contact_proxies": false
+  },
+  "invariant_gripper_screen": {
+    "enabled": true,
+    "sampled_actions": [
+      99,
+      105,
+      111,
+      117,
+      123,
+      129,
+      135,
+      141,
+      147,
+      153,
+      159,
+      165,
+      171,
+      177,
+      183,
+      189,
+      195,
+      201,
+      207,
+      213,
+      219,
+      225,
+      231,
+      237,
+      243,
+      249,
+      255,
+      261,
+      267,
+      273,
+      279,
+      285,
+      291,
+      297,
+      303,
+      309,
+      315,
+      321,
+      327,
+      333,
+      339,
+      345,
+      351,
+      357,
+      363,
+      369,
+      375,
+      381,
+      387,
+      393,
+      399,
+      405,
+      411,
+      417,
+      423,
+      429,
+      435,
+      441,
+      447,
+      453,
+      459,
+      465,
+      471,
+      477,
+      483,
+      489,
+      495,
+      501,
+      507,
+      513,
+      519,
+      525,
+      531,
+      537,
+      543,
+      549,
+      555,
+      561,
+      567,
+      573,
+      579,
+      585,
+      591,
+      597,
+      603,
+      609,
+      615,
+      621,
+      627,
+      633,
+      639,
+      645,
+      651,
+      657,
+      663,
+      669,
+      675,
+      681,
+      687,
+      693,
+      699,
+      705,
+      711,
+      717,
+      723,
+      729,
+      735,
+      741,
+      747,
+      753,
+      759,
+      765,
+      771,
+      777,
+      783,
+      789,
+      795,
+      801,
+      807,
+      813,
+      819,
+      825,
+      831,
+      837,
+      843,
+      849,
+      855,
+      861,
+      867,
+      873,
+      879,
+      885,
+      891,
+      897,
+      903,
+      909,
+      915,
+      921,
+      927,
+      933,
+      939,
+      945,
+      951,
+      957,
+      963,
+      969,
+      975,
+      981,
+      987,
+      993,
+      999,
+      1005,
+      1011,
+      1017,
+      1023,
+      1029,
+      1033
+    ],
+    "goal_sphere_links": [
+      "base_link",
+      "left_inner_finger",
+      "left_inner_knuckle",
+      "left_outer_finger",
+      "left_outer_knuckle",
+      "panda_link8",
+      "panda_panda_link7",
+      "right_inner_finger",
+      "right_inner_knuckle",
+      "right_outer_finger",
+      "right_outer_knuckle"
+    ],
+    "goal_spheres": 53,
+    "source_extra_clearance_m": 0.003,
+    "scope": "Discovery only: fixed Cartesian policy uses measured baseline articulated gripper poses. Redundant arm postures remain unconstrained. Source hand plus original margin+3mm, support+5mm and distal goal proxy checks prune impossible placements; full same-target on-plans and actual dynamics still required."
+  },
+  "planning_proxy_discovery_screen": {
+    "enabled": true,
+    "scope": "Also check initial and invariant distal goal spheres against the same per-collider padded AABBs used by cuRobo for glass/barrier, including baseline extra padding. This is a conservative discovery filter, not source-intersection evidence or final acceptance."
+  },
+  "approach_reference_geometry": "All original source robot shapes and conservative execution envelopes; necessity still uses physical source hulls/primitives only.",
+  "invariant_conservative_envelope_screen": {
+    "enabled": true,
+    "source_segment": [
+      7,
+      8,
+      0.055
+    ],
+    "sampled_actions": [
+      99,
+      105,
+      111,
+      117,
+      123,
+      129,
+      135,
+      141,
+      147,
+      153,
+      159,
+      165,
+      171,
+      177,
+      183,
+      189,
+      195,
+      201,
+      207,
+      213,
+      219,
+      225,
+      231,
+      237,
+      243,
+      249,
+      255,
+      261,
+      267,
+      273,
+      279,
+      285,
+      291,
+      297,
+      303,
+      309,
+      315,
+      321,
+      327,
+      333,
+      339,
+      345,
+      351,
+      357,
+      363,
+      369,
+      375,
+      381,
+      387,
+      393,
+      399,
+      405,
+      411,
+      417,
+      423,
+      429,
+      435,
+      441,
+      447,
+      453,
+      459,
+      465,
+      471,
+      477,
+      483,
+      489,
+      495,
+      501,
+      507,
+      513,
+      519,
+      525,
+      531,
+      537,
+      543,
+      549,
+      555,
+      561,
+      567,
+      573,
+      579,
+      585,
+      591,
+      597,
+      603,
+      609,
+      615,
+      621,
+      627,
+      633,
+      639,
+      645,
+      651,
+      657,
+      663,
+      669,
+      675,
+      681,
+      687,
+      693,
+      699,
+      705,
+      711,
+      717,
+      723,
+      729,
+      735,
+      741,
+      747,
+      753,
+      759,
+      765,
+      771,
+      777,
+      783,
+      789,
+      795,
+      801,
+      807,
+      813,
+      819,
+      825,
+      831,
+      837,
+      843,
+      849,
+      855,
+      861,
+      867,
+      873,
+      879,
+      885,
+      891,
+      897,
+      903,
+      909,
+      915,
+      921,
+      927,
+      933,
+      939,
+      945,
+      951,
+      957,
+      963,
+      969,
+      975,
+      981,
+      987,
+      993,
+      999,
+      1005,
+      1011,
+      1017,
+      1023,
+      1029,
+      1033
+    ],
+    "initial_full_shapes": 26,
+    "distal_shape_count": 4,
+    "hazard_extra_m": 0.003,
+    "support_m": 0.005,
+    "scope": "Conservative placement discovery only: full initial robot plus fixed Cartesian distal arm/gripper/finger proxies. Not source intersection evidence or global infeasibility. Original final margins and all paired/physical acceptance gates unchanged."
+  },
+  "measured_contact_discovery_references": [],
+  "command_sphere_discovery_references": [],
+  "baseline_contact_proxy_screen": {
+    "enabled": false,
+    "sampled_actions": [],
+    "sphere_count": 0,
+    "baseline_trajectory_sha256": "fb7e4132d3787767df14c6eba413a638a4c33bbb59dd60dcf0cf37e44aa7ea78",
+    "scope": "Optional conservative placement discovery: full arm/gripper cuRobo spheres at sampled baseline contact states versus original padded per-collider hazard AABBs. Constrains baseline redundant posture as a finite filter only; not a candidate trajectory, global infeasibility or physical/GPU acceptance."
+  },
+  "support_rejections": [
+    {
+      "position": [
+        4.803743,
+        -3.112685,
+        1.703953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.753743,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.853743,
+          -3.062685,
+          1.701953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.753743,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.853743,
+              -3.182685,
+              1.681953
+            ]
+          },
+          {
+            "low": [
+              4.753743,
+              -3.282685,
+              1.681953
+            ],
+            "high": [
+              4.853743,
+              -3.062685,
+              1.701953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.0033663145600715044,
+            "required_m": 0.005,
+            "slack_m": -0.0016336854399284957,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.004085216805833219,
+            "required_m": 0.005,
+            "slack_m": -0.0009147831941667814,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.813743,
+        -3.112685,
+        1.703953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.763743,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.8637429999999995,
+          -3.062685,
+          1.701953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.763743,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.8637429999999995,
+              -3.182685,
+              1.681953
+            ]
+          },
+          {
+            "low": [
+              4.763743,
+              -3.282685,
+              1.681953
+            ],
+            "high": [
+              4.8637429999999995,
+              -3.062685,
+              1.701953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.002112207550646173,
+            "required_m": 0.005,
+            "slack_m": -0.0028877924493538273,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.002026764382015231,
+            "required_m": 0.005,
+            "slack_m": -0.002973235617984769,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.813743,
+        -3.112685,
+        1.713953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.763743,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.8637429999999995,
+          -3.062685,
+          1.711953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.763743,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.8637429999999995,
+              -3.182685,
+              1.691953
+            ]
+          },
+          {
+            "low": [
+              4.763743,
+              -3.282685,
+              1.691953
+            ],
+            "high": [
+              4.8637429999999995,
+              -3.062685,
+              1.711953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.0021122081838709154,
+            "required_m": 0.005,
+            "slack_m": -0.0028877918161290847,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.0020287307837695244,
+            "required_m": 0.005,
+            "slack_m": -0.0029712692162304757,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.823743,
+        -3.112685,
+        1.703953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.7737430000000005,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.873743,
+          -3.062685,
+          1.701953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.7737430000000005,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.873743,
+              -3.182685,
+              1.681953
+            ]
+          },
+          {
+            "low": [
+              4.7737430000000005,
+              -3.282685,
+              1.681953
+            ],
+            "high": [
+              4.873743,
+              -3.062685,
+              1.701953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.002067476758524616,
+            "required_m": 0.005,
+            "slack_m": -0.002932523241475384,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.0016016387308793523,
+            "required_m": 0.005,
+            "slack_m": -0.0033983612691206476,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 3,
+          "baseline_action": 111,
+          "check": {
+            "distance_m": 0.0027359211920947677,
+            "required_m": 0.005,
+            "slack_m": -0.0022640788079052324,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.823743,
+        -3.112685,
+        1.713953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.7737430000000005,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.873743,
+          -3.062685,
+          1.711953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.7737430000000005,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.873743,
+              -3.182685,
+              1.691953
+            ]
+          },
+          {
+            "low": [
+              4.7737430000000005,
+              -3.282685,
+              1.691953
+            ],
+            "high": [
+              4.873743,
+              -3.062685,
+              1.711953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        92,
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.002067479909651864,
+            "required_m": 0.005,
+            "slack_m": -0.002932520090348136,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.0016016388366956757,
+            "required_m": 0.005,
+            "slack_m": -0.0033983611633043244,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 3,
+          "baseline_action": 111,
+          "check": {
+            "distance_m": 0.002733770742058258,
+            "required_m": 0.005,
+            "slack_m": -0.002266229257941742,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.843743,
+        -3.112685,
+        1.703953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.793743,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.893743,
+          -3.062685,
+          1.701953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.793743,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.893743,
+              -3.182685,
+              1.681953
+            ]
+          },
+          {
+            "low": [
+              4.793743,
+              -3.282685,
+              1.681953
+            ],
+            "high": [
+              4.893743,
+              -3.062685,
+              1.701953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.0020674489194428417,
+            "required_m": 0.005,
+            "slack_m": -0.0029325510805571584,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.0016017125230203065,
+            "required_m": 0.005,
+            "slack_m": -0.0033982874769796934,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 3,
+          "baseline_action": 111,
+          "check": {
+            "distance_m": 0.0015778683259441142,
+            "required_m": 0.005,
+            "slack_m": -0.003422131674055886,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 4,
+          "baseline_action": 117,
+          "check": {
+            "distance_m": 0.002043295428508414,
+            "required_m": 0.005,
+            "slack_m": -0.002956704571491586,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.843743,
+        -3.112685,
+        1.713953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.793743,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.893743,
+          -3.062685,
+          1.711953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.793743,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.893743,
+              -3.182685,
+              1.691953
+            ]
+          },
+          {
+            "low": [
+              4.793743,
+              -3.282685,
+              1.691953
+            ],
+            "high": [
+              4.893743,
+              -3.062685,
+              1.711953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.002067448918132405,
+            "required_m": 0.005,
+            "slack_m": -0.002932551081867595,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.0016017102790002132,
+            "required_m": 0.005,
+            "slack_m": -0.003398289720999787,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 3,
+          "baseline_action": 111,
+          "check": {
+            "distance_m": 0.0015778680081379019,
+            "required_m": 0.005,
+            "slack_m": -0.0034221319918620982,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 4,
+          "baseline_action": 117,
+          "check": {
+            "distance_m": 0.0020453080468992506,
+            "required_m": 0.005,
+            "slack_m": -0.0029546919531007495,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.843743,
+        -3.112685,
+        1.723953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.793743,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.893743,
+          -3.062685,
+          1.721953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.793743,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.893743,
+              -3.182685,
+              1.701953
+            ]
+          },
+          {
+            "low": [
+              4.793743,
+              -3.282685,
+              1.701953
+            ],
+            "high": [
+              4.893743,
+              -3.062685,
+              1.721953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.0020674489168035397,
+            "required_m": 0.005,
+            "slack_m": -0.0029325510831964604,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.0016017082466622855,
+            "required_m": 0.005,
+            "slack_m": -0.0033982917533377146,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 3,
+          "baseline_action": 111,
+          "check": {
+            "distance_m": 0.0015778680122511366,
+            "required_m": 0.005,
+            "slack_m": -0.0034221319877488637,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 4,
+          "baseline_action": 117,
+          "check": {
+            "distance_m": 0.0020446123511521862,
+            "required_m": 0.005,
+            "slack_m": -0.002955387648847814,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.853743,
+        -3.112685,
+        1.703953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.803743,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.9037429999999995,
+          -3.062685,
+          1.701953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.803743,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.9037429999999995,
+              -3.182685,
+              1.681953
+            ]
+          },
+          {
+            "low": [
+              4.803743,
+              -3.282685,
+              1.681953
+            ],
+            "high": [
+              4.9037429999999995,
+              -3.062685,
+              1.701953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.002067448795333654,
+            "required_m": 0.005,
+            "slack_m": -0.002932551204666346,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.0016017643948768028,
+            "required_m": 0.005,
+            "slack_m": -0.0033982356051231975,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 3,
+          "baseline_action": 111,
+          "check": {
+            "distance_m": 0.0015779007774982187,
+            "required_m": 0.005,
+            "slack_m": -0.0034220992225017814,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 4,
+          "baseline_action": 117,
+          "check": {
+            "distance_m": 0.0015807788992007435,
+            "required_m": 0.005,
+            "slack_m": -0.0034192211007992566,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 5,
+          "baseline_action": 123,
+          "check": {
+            "distance_m": 0.003092875602947847,
+            "required_m": 0.005,
+            "slack_m": -0.001907124397052153,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.853743,
+        -3.112685,
+        1.713953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.803743,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.9037429999999995,
+          -3.062685,
+          1.711953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.803743,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.9037429999999995,
+              -3.182685,
+              1.691953
+            ]
+          },
+          {
+            "low": [
+              4.803743,
+              -3.282685,
+              1.691953
+            ],
+            "high": [
+              4.9037429999999995,
+              -3.062685,
+              1.711953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.002067448802509426,
+            "required_m": 0.005,
+            "slack_m": -0.002932551197490574,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.001601760078301135,
+            "required_m": 0.005,
+            "slack_m": -0.003398239921698865,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 3,
+          "baseline_action": 111,
+          "check": {
+            "distance_m": 0.001577902202919026,
+            "required_m": 0.005,
+            "slack_m": -0.003422097797080974,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 4,
+          "baseline_action": 117,
+          "check": {
+            "distance_m": 0.0015807788924215953,
+            "required_m": 0.005,
+            "slack_m": -0.0034192211075784046,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 5,
+          "baseline_action": 123,
+          "check": {
+            "distance_m": 0.0030926738670228084,
+            "required_m": 0.005,
+            "slack_m": -0.0019073261329771917,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.853743,
+        -3.112685,
+        1.723953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.803743,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.9037429999999995,
+          -3.062685,
+          1.721953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.803743,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.9037429999999995,
+              -3.182685,
+              1.701953
+            ]
+          },
+          {
+            "low": [
+              4.803743,
+              -3.282685,
+              1.701953
+            ],
+            "high": [
+              4.9037429999999995,
+              -3.062685,
+              1.721953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.0020674488106790464,
+            "required_m": 0.005,
+            "slack_m": -0.0029325511893209537,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.0016017558798258494,
+            "required_m": 0.005,
+            "slack_m": -0.003398244120174151,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 3,
+          "baseline_action": 111,
+          "check": {
+            "distance_m": 0.0015779037960732226,
+            "required_m": 0.005,
+            "slack_m": -0.0034220962039267777,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 4,
+          "baseline_action": 117,
+          "check": {
+            "distance_m": 0.001580778888713413,
+            "required_m": 0.005,
+            "slack_m": -0.0034192211112865868,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 5,
+          "baseline_action": 123,
+          "check": {
+            "distance_m": 0.003092977667145298,
+            "required_m": 0.005,
+            "slack_m": -0.001907022332854702,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.863743,
+        -3.112685,
+        1.703953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.8137430000000005,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.913743,
+          -3.062685,
+          1.701953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.8137430000000005,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.913743,
+              -3.182685,
+              1.681953
+            ]
+          },
+          {
+            "low": [
+              4.8137430000000005,
+              -3.282685,
+              1.681953
+            ],
+            "high": [
+              4.913743,
+              -3.062685,
+              1.701953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.00207252033262665,
+            "required_m": 0.005,
+            "slack_m": -0.00292747966737335,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.0016018448250524953,
+            "required_m": 0.005,
+            "slack_m": -0.0033981551749475048,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 3,
+          "baseline_action": 111,
+          "check": {
+            "distance_m": 0.0015778679674137716,
+            "required_m": 0.005,
+            "slack_m": -0.0034221320325862285,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 4,
+          "baseline_action": 117,
+          "check": {
+            "distance_m": 0.0015837819687746515,
+            "required_m": 0.005,
+            "slack_m": -0.0034162180312253486,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 5,
+          "baseline_action": 123,
+          "check": {
+            "distance_m": 0.001672557688407248,
+            "required_m": 0.005,
+            "slack_m": -0.0033274423115927524,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 6,
+          "baseline_action": 129,
+          "check": {
+            "distance_m": 0.004715752301061097,
+            "required_m": 0.005,
+            "slack_m": -0.0002842476989389029,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.863743,
+        -3.112685,
+        1.713953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.8137430000000005,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.913743,
+          -3.062685,
+          1.711953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.8137430000000005,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.913743,
+              -3.182685,
+              1.691953
+            ]
+          },
+          {
+            "low": [
+              4.8137430000000005,
+              -3.282685,
+              1.691953
+            ],
+            "high": [
+              4.913743,
+              -3.062685,
+              1.711953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.0020724167768990695,
+            "required_m": 0.005,
+            "slack_m": -0.0029275832231009306,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.0016018394083341398,
+            "required_m": 0.005,
+            "slack_m": -0.0033981605916658603,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 3,
+          "baseline_action": 111,
+          "check": {
+            "distance_m": 0.0015778679715014632,
+            "required_m": 0.005,
+            "slack_m": -0.003422132028498537,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 4,
+          "baseline_action": 117,
+          "check": {
+            "distance_m": 0.0015806827850183699,
+            "required_m": 0.005,
+            "slack_m": -0.0034193172149816304,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 5,
+          "baseline_action": 123,
+          "check": {
+            "distance_m": 0.001672422291268172,
+            "required_m": 0.005,
+            "slack_m": -0.0033275777087318284,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 6,
+          "baseline_action": 129,
+          "check": {
+            "distance_m": 0.0047160259133522,
+            "required_m": 0.005,
+            "slack_m": -0.00028397408664780025,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    },
+    {
+      "position": [
+        4.863743,
+        -3.112685,
+        1.723953
+      ],
+      "yaw_deg": 0.0,
+      "reason": "support_conservative_envelopes",
+      "proposed_support": {
+        "low": [
+          4.8137430000000005,
+          -3.282685,
+          0.001999999552965164
+        ],
+        "high": [
+          4.913743,
+          -3.062685,
+          1.721953
+        ],
+        "rests_on": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "parts": [
+          {
+            "low": [
+              4.8137430000000005,
+              -3.282685,
+              0.001999999552965164
+            ],
+            "high": [
+              4.913743,
+              -3.182685,
+              1.701953
+            ]
+          },
+          {
+            "low": [
+              4.8137430000000005,
+              -3.282685,
+              1.701953
+            ],
+            "high": [
+              4.913743,
+              -3.062685,
+              1.721953
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "baseline_intersection_actions": [
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ]
+      },
+      "failures": [
+        {
+          "state_index": 1,
+          "baseline_action": 99,
+          "check": {
+            "distance_m": 0.0020723216188751913,
+            "required_m": 0.005,
+            "slack_m": -0.0029276783811248088,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 2,
+          "baseline_action": 105,
+          "check": {
+            "distance_m": 0.0016018340748100404,
+            "required_m": 0.005,
+            "slack_m": -0.0033981659251899597,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 3,
+          "baseline_action": 111,
+          "check": {
+            "distance_m": 0.0015778679800928464,
+            "required_m": 0.005,
+            "slack_m": -0.0034221320199071537,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 4,
+          "baseline_action": 117,
+          "check": {
+            "distance_m": 0.001580694863051687,
+            "required_m": 0.005,
+            "slack_m": -0.003419305136948313,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 5,
+          "baseline_action": 123,
+          "check": {
+            "distance_m": 0.0016731389368173308,
+            "required_m": 0.005,
+            "slack_m": -0.0033268610631826696,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        },
+        {
+          "state_index": 6,
+          "baseline_action": 129,
+          "check": {
+            "distance_m": 0.004716553800142728,
+            "required_m": 0.005,
+            "slack_m": -0.0002834461998572719,
+            "valid": false,
+            "robot_part": "arm_distal_envelope",
+            "hazard_part": "added_support_0",
+            "intersecting": false
+          }
+        }
+      ]
+    }
+  ],
+  "search_complete": true
+}

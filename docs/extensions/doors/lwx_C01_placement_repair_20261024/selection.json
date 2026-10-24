@@ -1,0 +1,101 @@
+{
+  "task": "kitchen_bench_lightwheel_open_fridge",
+  "label": "C01",
+  "whole_task_complete": false,
+  "scope": "Completed human/property placement repair evidence only. Original steel data are retained and their supplementary current-gate deficiencies are separate.",
+  "baseline": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+  "variants": {
+    "human": {
+      "episode": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_87",
+      "baseline": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+      "gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "paired_report": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_87_candidate_00_paired01/report.json",
+      "paired": [
+        {
+          "seed": 42,
+          "joint_ratio": 1.1682688211683037,
+          "extra_tcp_m": 0.12904663039320874
+        },
+        {
+          "seed": 43,
+          "joint_ratio": 1.1685641488248049,
+          "extra_tcp_m": 0.1287205495183058
+        },
+        {
+          "seed": 44,
+          "joint_ratio": 1.1475890772451802,
+          "extra_tcp_m": 0.08129630112154429
+        }
+      ],
+      "visual_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_87_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_human_87_source_risk_camera1_02_visual_review.json"
+    },
+    "property": {
+      "episode": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86",
+      "baseline": "datasets/doors/lwx_C01_lower_handle_retry70_20261024/C01_base_01",
+      "gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "paired_report": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_candidate_06_paired01/report.json",
+      "paired": [
+        {
+          "seed": 42,
+          "joint_ratio": 1.0186494919990527,
+          "extra_tcp_m": -0.10283826575579835
+        },
+        {
+          "seed": 43,
+          "joint_ratio": 1.0223486077483201,
+          "extra_tcp_m": -0.10414127067723761
+        },
+        {
+          "seed": 44,
+          "joint_ratio": 1.000669242790437,
+          "extra_tcp_m": -0.15000409942414294
+        }
+      ],
+      "visual_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C01_lower_handle_retry70_20261024/C01_property_86_source_risk01_visual_review.json"
+    }
+  },
+  "preserved_steel": {
+    "episode": "datasets/doors/lwx_20261023/robot_01",
+    "actual_opening_success": true,
+    "paired_report": "reports/doors/lwx_20261023/paired_robot_01/report.json",
+    "paired_report_sha256": "f58cb5f8164782a67df91b50f8e4d3d81c43c7a6aabddcc2393d49163b01cab2",
+    "supplementary_gate_snapshot": [
+      {
+        "seed": 42,
+        "source_margin_violation": true,
+        "actual_source_intersection": false,
+        "extra_tcp_m": 0.3204575672336006,
+        "original_margin_m": 0.01
+      },
+      {
+        "seed": 43,
+        "source_margin_violation": true,
+        "actual_source_intersection": false,
+        "extra_tcp_m": 0.3154426472127303,
+        "original_margin_m": 0.01
+      },
+      {
+        "seed": 44,
+        "source_margin_violation": true,
+        "actual_source_intersection": false,
+        "extra_tcp_m": 0.3171481078630222,
+        "original_margin_m": 0.01
+      }
+    ],
+    "changed_or_recaptured": false
+  }
+}

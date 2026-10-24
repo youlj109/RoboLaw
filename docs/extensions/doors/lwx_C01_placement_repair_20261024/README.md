@@ -1,0 +1,7 @@
+# C01 human/property placement repair
+
+Both repaired variants actually open the original fridge with the same matched lower-handle controller: human87 has592 recorded actions and property86 has464. Five independent gates, matched neutral controls, actual source intersection in all three off seeds, small on-path detours, original-speed comparison videos and actual raw/risk visual reviews pass. Selected data, exact hashes and copied reports are in selection.json and manifest.json. Full data/videos and large assets remain remotely.
+
+The original steel scene and successful data are preserved. Its existing source-margin necessity evidence is valid at the original10mm threshold, but the stored off paths do not intersect the source, and added TCP is0.315-0.320m. This does not meet the stricter current whole-task finalizer. This package therefore does not declare C01 complete, and it does not reinterpret the original opening as a failure.
+
+For human87, original camera1 clearly shows the sleeve/hand and the route change; camera2 has significant occlusion. The camera-selectable illustration reproduces the old default image byte-for-byte. The selected camera1 risk image is an offline annotation of real recorded RGB, not an unsafe replay. Source hulls are not claimed identical to PhysX cooked shapes, sampled RGB does not prove continuous clearances, and one fixed-layout capture is not a success-rate experiment.

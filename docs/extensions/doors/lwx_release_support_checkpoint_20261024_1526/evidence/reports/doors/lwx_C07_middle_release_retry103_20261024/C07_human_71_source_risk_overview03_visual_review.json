@@ -1,0 +1,25 @@
+{
+  "image": "reports/doors/lwx_C07_middle_release_retry103_20261024/C07_human_71_source_risk_overview03.png",
+  "image_sha256": "04527f4e16e07320676a0bbc7db684a15f9aeb86a7d95ec4882d701a726cc810",
+  "illustration_report": "reports/doors/lwx_C07_middle_release_retry103_20261024/C07_human_71_source_risk_overview03.json",
+  "illustration_report_sha256": "bfdeeef5d5ecb5b95059a97fc4a127a783fe35b2761a844bce8a2a9a6661cc5a",
+  "reviewed_alignment": true,
+  "review_kind": "Actual inspection of four-panel offline source-mesh reconstruction, NOT camera RGB alignment",
+  "reviewed_at": "2026-10-24T15:25:45.231013",
+  "observations": [
+    "Whole human and robot visible in the overview; both raised hands approach the elbow region.",
+    "Offline baseline frame82 has the original source hand intersecting the red panda_link4 hull.",
+    "Recorded safe state frame83 has changed elbow posture and independently recomputed minimum source distance47.5968mm, above original20mm margin.",
+    "Matching overview and close-up axes; source topology retained for every shown collider."
+  ],
+  "limitations": [
+    "Human is not clearly visible in sampled native camera recordings. Both external-camera annotation attempts are offscreen or edge-clipped and are NOT accepted as adequate alignment views.",
+    "This image is explicitly offline geometry reconstruction; no new camera capture, PhysX replay, continuous clearance proof, or force evidence.",
+    "Yellow per-collider expanded AABBs are conservative explanatory proxies, not exact safety shells.",
+    "Kitchen surfaces omitted from this explanatory view; original full-world audits remain required."
+  ],
+  "native_views_not_accepted": [
+    "reports/doors/lwx_C07_middle_release_retry103_20261024/C07_human_71_source_risk01.jpg",
+    "reports/doors/lwx_C07_middle_release_retry103_20261024/C07_human_71_source_risk_camera1_02.jpg"
+  ]
+}

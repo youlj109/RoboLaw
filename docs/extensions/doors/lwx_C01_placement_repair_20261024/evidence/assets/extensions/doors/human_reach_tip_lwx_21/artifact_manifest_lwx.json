@@ -1,0 +1,97 @@
+{
+  "build_command": [
+    "runtime/tools/blender-4.0.2-linux-x64/blender",
+    "--background",
+    "--threads",
+    "2",
+    "assets/people/mpfb_corridor/posed.blend",
+    "--python",
+    "scripts/extensions/doors/repose_human_both_lwx.py",
+    "--",
+    "--asset-dir",
+    "assets/extensions/doors/human_reach_tip_lwx_21",
+    "--wrist",
+    "-.90",
+    ".15",
+    "1.2725",
+    "--auto-reachable-target",
+    "--elbow-up",
+    "--clavicle-y-deg",
+    "45",
+    "--torso-y-deg",
+    "-18"
+  ],
+  "search_command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "-u",
+    "scripts/extensions/doors/search_task_hazards_v21_lwx.py",
+    "--baseline",
+    "datasets/doors/lwx_C01_low_grasp_retry31_20261024/C01_base_01",
+    "--config",
+    "configs/extensions/doors/c01_variants_lwx_01.json",
+    "--variant",
+    "human",
+    "--human-asset",
+    "assets/extensions/doors/human_reach_tip_lwx_21/collidable.usda",
+    "--output",
+    "reports/doors/lwx_C01_low_grasp_retry31_20261024/C01_human_fingertip_search36.json",
+    "--candidate-list",
+    "reports/doors/lwx_C01_low_grasp_retry31_20261024/C01_human_fingertip_search36.grid.json",
+    "--mid-stride",
+    "1"
+  ],
+  "files": {
+    "assets/extensions/doors/human_reach_tip_lwx_21/collidable.usda": {
+      "bytes": 2757,
+      "sha256": "69b3fb9503e2a25c700881392f48679b55db02ae8336229b51029bb7f7f887c1"
+    },
+    "assets/extensions/doors/human_reach_tip_lwx_21/pose.json": {
+      "bytes": 25843,
+      "sha256": "ab6cf3975d77930d4d44fa6c659e9fd2bdf62afb5929260c34c054f40661ff31"
+    },
+    "assets/extensions/doors/human_reach_tip_lwx_21/person.usdc": {
+      "bytes": 2479836,
+      "sha256": "e8dbdc92f8ff6c76dc010ecc868a59605ecbf147ae8f4ac29f369ca0d5e55a3c"
+    },
+    "assets/extensions/doors/human_reach_tip_lwx_21/textures/young_lightskinned_male_diffuse3.png": {
+      "bytes": 3593099,
+      "sha256": "f50016a5507fc687dc8df06599c8ea48de950cd185de33a71cafc1319ddab4d5"
+    },
+    "assets/extensions/doors/human_reach_tip_lwx_21/textures/male_casualsuit01_diffuse.png": {
+      "bytes": 5531728,
+      "sha256": "3fd0bba5dcbdea0ac427f644a6c7c298938f7369b8f96626621ce1e88989394e"
+    },
+    "assets/extensions/doors/human_reach_tip_lwx_21/textures/shoes01_diffuse.png": {
+      "bytes": 1335772,
+      "sha256": "50c9a406a7f1cb6aa7b42912348e78f09d0252aa3963c8229cf18dfe8353cdbf"
+    },
+    "assets/extensions/doors/human_reach_tip_lwx_21/textures/brown_eye.png": {
+      "bytes": 610817,
+      "sha256": "4659691c7295ad6206c78b003e5fd0e5f91dcd53032fa914a229bb48cabe424b"
+    },
+    "assets/extensions/doors/human_reach_tip_lwx_21/textures/eyebrow001.png": {
+      "bytes": 89619,
+      "sha256": "9940f7d0b1b223709a19b05156ba6f6e9e4dbdbced02d7574f4d51d72c58967b"
+    },
+    "assets/extensions/doors/human_reach_tip_lwx_21/textures/short02_diffuse.png": {
+      "bytes": 3553543,
+      "sha256": "47fe33831a3929567c733356dd66243116e05df2ace1f884ddca0080b728229f"
+    }
+  },
+  "probe": "reports/doors/lwx_C01_low_grasp_retry31_20261024/C01_endpoint_motion_space02.json",
+  "probe_sha256": "15e1bd6ba1c9bbaadb57b3146cdb1945fcd5d201e8b297d8ea346a5a2077fce5",
+  "baseline_trajectory_sha256": "8ed5fa5698fd6e665fbbdb8e2738f52fbc234863bd3a1709cf0cbd88195b3c6d",
+  "target_transient_point_world_m": [
+    4.513008774518521,
+    -0.932876587471404,
+    1.2308576674163316
+  ],
+  "scope": "Original rig bone lengths and fixed feet. Finite discovery only; no visual, scene, planning, dynamics or acceptance claim."
+}

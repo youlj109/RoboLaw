@@ -1,0 +1,17 @@
+{
+  "six_new_helpers_compile": true,
+  "standard_diff_check": {
+    "exit_code": 2,
+    "output": "assets/extensions/doors/c01_property_candidate_86_06_property_support.usda:32: new blank line at EOF.\nassets/extensions/doors/human_reach_tip_lwx_21/collidable.usda:111: new blank line at EOF.\ndocs/extensions/doors/lwx_C01_placement_repair_20261024/evidence/assets/extensions/doors/c01_property_candidate_86_06_property_support.usda:32: new blank line at EOF.\ndocs/extensions/doors/lwx_C01_placement_repair_20261024/evidence/assets/extensions/doors/human_reach_tip_lwx_21/collidable.usda:111: new blank line at EOF.\n"
+  },
+  "other_whitespace_check": {
+    "command": "git -c core.whitespace=-blank-at-eof diff --cached --check",
+    "exit_code": 0
+  },
+  "immutable_asset_eof_preserved": true,
+  "reason": "The four warnings are original captured USDs and exact evidence copies. Trimming them would invalidate actual runtime asset hashes; no production source whitespace error is waived.",
+  "c01_verified": {
+    "small_copies": 64,
+    "retained_original_hashes": 375
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "created": "2026-10-24T15:05:16.551415",
+  "command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "flock",
+    "/workspace/reports/skill_trials/gpu.lock",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "-u",
+    "scripts/extensions/doors/diagnose_release_continuation_gpu_lwx.py",
+    "--proposals",
+    "reports/doors/lwx_C07_middle_release_retry103_20261024/C07_robot70_continuation118.json",
+    "--output",
+    "reports/doors/lwx_C07_middle_release_retry103_20261024/C07_robot70_continuation_gpu119.json"
+  ],
+  "pid": 890330
+}

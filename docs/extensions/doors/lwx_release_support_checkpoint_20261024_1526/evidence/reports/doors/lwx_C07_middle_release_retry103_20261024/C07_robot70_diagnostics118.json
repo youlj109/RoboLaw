@@ -1,0 +1,22 @@
+{
+  "created": "2026-10-24T14:59:18.212286",
+  "command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "-u",
+    "scripts/extensions/doors/diagnose_bounded_release_continuation_lwx.py",
+    "--episode",
+    "datasets/doors/lwx_C07_middle_release_retry103_20261024/C07_robot_70",
+    "--output",
+    "reports/doors/lwx_C07_middle_release_retry103_20261024/C07_robot70_continuation118.json",
+    "--angles=-40,-37.5,-35,-32.5,-30"
+  ],
+  "pid": 888394,
+  "scope": "Diagnose recorded final-hold rejection; all25 proposals include the first unexecuted fifth hold. Unobserved future door and fingers are frozen, not predicted dynamics."
+}
