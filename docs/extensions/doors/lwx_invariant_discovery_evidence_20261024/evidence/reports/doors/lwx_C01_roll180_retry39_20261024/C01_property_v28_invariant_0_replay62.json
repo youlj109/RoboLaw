@@ -1,0 +1,807 @@
+{
+  "task": "kitchen_bench_lightwheel_open_fridge",
+  "variant": "property",
+  "baseline": "datasets/doors/lwx_C01_roll180_retry39_20261024/C01_base_01",
+  "scope": "Offline candidates only, not scene or task acceptance",
+  "discovery_broadphase": "Vectorized conservative source AABB overlap; every counted intersection still requires exact FCL",
+  "endpoint_sphere_screen": "AABB lower bounds only prune safe pairs; close pairs use exact source FCL at unchanged margin+3mm",
+  "discovery_min_blocking_samples": 3,
+  "discovery_mid_stride": 1,
+  "stats": {
+    "tested": 6,
+    "endpoints": 6,
+    "blocking": 6,
+    "scene_legal": 6,
+    "shared_off_blocking": 6
+  },
+  "candidates": [
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.283754043579101,
+        -1.341643733978271,
+        1.15
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube"
+      ],
+      "proposed_support": {
+        "low": [
+          4.243754043579101,
+          -1.5016437339782711,
+          0.7963965945839868
+        ],
+        "high": [
+          4.323754043579101,
+          -1.301643733978271,
+          1.148
+        ],
+        "rests_on": "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube",
+        "parts": [
+          {
+            "low": [
+              4.243754043579101,
+              -1.5016437339782711,
+              0.7963965945839868
+            ],
+            "high": [
+              4.323754043579101,
+              -1.421643733978271,
+              1.128
+            ]
+          },
+          {
+            "low": [
+              4.243754043579101,
+              -1.5016437339782711,
+              1.128
+            ],
+            "high": [
+              4.323754043579101,
+              -1.301643733978271,
+              1.148
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.323754043579101,
+        -1.341643733978271,
+        1.05
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube"
+      ],
+      "proposed_support": {
+        "low": [
+          4.283754043579101,
+          -1.5016437339782711,
+          0.7963965945839868
+        ],
+        "high": [
+          4.363754043579101,
+          -1.301643733978271,
+          1.048
+        ],
+        "rests_on": "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube",
+        "parts": [
+          {
+            "low": [
+              4.283754043579101,
+              -1.5016437339782711,
+              0.7963965945839868
+            ],
+            "high": [
+              4.363754043579101,
+              -1.421643733978271,
+              1.028
+            ]
+          },
+          {
+            "low": [
+              4.283754043579101,
+              -1.5016437339782711,
+              1.028
+            ],
+            "high": [
+              4.363754043579101,
+              -1.301643733978271,
+              1.048
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.323754043579101,
+        -1.341643733978271,
+        1.15
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube"
+      ],
+      "proposed_support": {
+        "low": [
+          4.283754043579101,
+          -1.5016437339782711,
+          0.7963965945839868
+        ],
+        "high": [
+          4.363754043579101,
+          -1.301643733978271,
+          1.148
+        ],
+        "rests_on": "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube",
+        "parts": [
+          {
+            "low": [
+              4.283754043579101,
+              -1.5016437339782711,
+              0.7963965945839868
+            ],
+            "high": [
+              4.363754043579101,
+              -1.421643733978271,
+              1.128
+            ]
+          },
+          {
+            "low": [
+              4.283754043579101,
+              -1.5016437339782711,
+              1.128
+            ],
+            "high": [
+              4.363754043579101,
+              -1.301643733978271,
+              1.148
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.323754043579101,
+        -1.341643733978271,
+        1.35
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube"
+      ],
+      "proposed_support": {
+        "low": [
+          4.283754043579101,
+          -1.5016437339782711,
+          0.7963965945839868
+        ],
+        "high": [
+          4.363754043579101,
+          -1.301643733978271,
+          1.348
+        ],
+        "rests_on": "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube",
+        "parts": [
+          {
+            "low": [
+              4.283754043579101,
+              -1.5016437339782711,
+              0.7963965945839868
+            ],
+            "high": [
+              4.363754043579101,
+              -1.421643733978271,
+              1.328
+            ]
+          },
+          {
+            "low": [
+              4.283754043579101,
+              -1.5016437339782711,
+              1.328
+            ],
+            "high": [
+              4.363754043579101,
+              -1.301643733978271,
+              1.348
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.363754043579101,
+        -1.381643733978271,
+        1.15
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube"
+      ],
+      "proposed_support": {
+        "low": [
+          4.323754043579101,
+          -1.5416437339782711,
+          0.7963965945839868
+        ],
+        "high": [
+          4.403754043579101,
+          -1.341643733978271,
+          1.148
+        ],
+        "rests_on": "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube",
+        "parts": [
+          {
+            "low": [
+              4.323754043579101,
+              -1.5416437339782711,
+              0.7963965945839868
+            ],
+            "high": [
+              4.403754043579101,
+              -1.461643733978271,
+              1.128
+            ]
+          },
+          {
+            "low": [
+              4.323754043579101,
+              -1.5416437339782711,
+              1.128
+            ],
+            "high": [
+              4.403754043579101,
+              -1.341643733978271,
+              1.148
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ]
+      }
+    },
+    {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/wine_glass.usda",
+      "position": [
+        4.363754043579101,
+        -1.341643733978271,
+        1.15
+      ],
+      "static": false,
+      "semantic_anchor": "Unscaled original library asset; placement searched against actual source meshes and all reference off paths. Physical stability and same-target small rerouting still require independent acceptance.",
+      "yaw_deg": 0.0,
+      "baseline_intersection_actions": [
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94
+      ],
+      "source_supports": [
+        "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube"
+      ],
+      "proposed_support": {
+        "low": [
+          4.323754043579101,
+          -1.5016437339782711,
+          0.7963965945839868
+        ],
+        "high": [
+          4.403754043579101,
+          -1.301643733978271,
+          1.148
+        ],
+        "rests_on": "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube",
+        "parts": [
+          {
+            "low": [
+              4.323754043579101,
+              -1.5016437339782711,
+              0.7963965945839868
+            ],
+            "high": [
+              4.403754043579101,
+              -1.421643733978271,
+              1.128
+            ]
+          },
+          {
+            "low": [
+              4.323754043579101,
+              -1.5016437339782711,
+              1.128
+            ],
+            "high": [
+              4.403754043579101,
+              -1.301643733978271,
+              1.148
+            ]
+          }
+        ],
+        "design": "Source-supported offset column with a short horizontal tray; full source collision checks, dynamic object stability and matched controls remain mandatory."
+      },
+      "source_intersection_in_reference_off_seeds": {
+        "42": [
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "43": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "44": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ]
+      }
+    }
+  ],
+  "posture_adaptation_discovery": {
+    "enabled": true,
+    "scope": "Source initial robot and door/environment stay mandatory. Old redundant endpoint and later baseline arm postures are not constrained when enabled. Same Cartesian target, full on-plan endpoint validation, actual approach/pull and all final gates remain mandatory."
+  },
+  "additional_paired_endpoint_reference": [],
+  "paired_endpoint_discovery_clearance_m": 0.065,
+  "additional_approach_reference": [],
+  "additional_approach_clearance_m": 0.055,
+  "search_parameters": {
+    "baseline": "datasets/doors/lwx_C01_roll180_retry39_20261024/C01_base_01",
+    "config": "configs/extensions/doors/c01_variants_lwx_01.json",
+    "variant": "property",
+    "output": "reports/doors/lwx_C01_roll180_retry39_20261024/C01_property_v28_invariant_0_replay62.json",
+    "pedestal": true,
+    "heights": null,
+    "min_blocking_samples": 3,
+    "mid_stride": 1,
+    "human_asset": null,
+    "refine_from": null,
+    "candidate_list": "configs/extensions/doors/c01_property_invariant_replay62.json",
+    "paired_reference": "reports/doors/lwx_C01_roll180_retry39_20261024/C01_property_50_candidate_07_paired01/report.json",
+    "hazard_asset": "assets/obstacle_library/property/wine_glass.usda",
+    "support_width_m": 0.08,
+    "yaws": null,
+    "xy_step_m": 0.04,
+    "screen_approach_proxies": false,
+    "support_offset_xy": [
+      0.0,
+      -0.12
+    ],
+    "approach_reference": [],
+    "paired_endpoint_reference": [],
+    "paired_endpoint_extra_clearance_m": 0.005,
+    "allow_endpoint_posture_adaptation": true,
+    "approach_command_reference": [],
+    "screen_invariant_envelopes": false
+  },
+  "invariant_gripper_screen": {
+    "enabled": true,
+    "sampled_actions": [
+      99,
+      105,
+      111,
+      117,
+      123,
+      129,
+      135,
+      141,
+      147,
+      153,
+      159,
+      165,
+      171,
+      177,
+      183,
+      189,
+      195,
+      201,
+      207,
+      213,
+      219,
+      225,
+      231,
+      237,
+      243,
+      249,
+      255,
+      261,
+      267,
+      273,
+      279,
+      285,
+      291,
+      297,
+      303,
+      309,
+      309
+    ],
+    "goal_sphere_links": [
+      "base_link",
+      "left_inner_finger",
+      "left_inner_knuckle",
+      "left_outer_finger",
+      "left_outer_knuckle",
+      "panda_link8",
+      "panda_panda_link7",
+      "right_inner_finger",
+      "right_inner_knuckle",
+      "right_outer_finger",
+      "right_outer_knuckle"
+    ],
+    "goal_spheres": 53,
+    "source_extra_clearance_m": 0.003,
+    "scope": "Discovery only: fixed Cartesian policy uses measured baseline articulated gripper poses. Redundant arm postures remain unconstrained. Source hand plus original margin+3mm, support+5mm and distal goal proxy checks prune impossible placements; full same-target on-plans and actual dynamics still required."
+  },
+  "planning_proxy_discovery_screen": {
+    "enabled": true,
+    "scope": "Also check initial and invariant distal goal spheres against the same per-collider padded AABBs used by cuRobo for glass/barrier, including baseline extra padding. This is a conservative discovery filter, not source-intersection evidence or final acceptance."
+  },
+  "approach_reference_geometry": "All original source robot shapes and conservative execution envelopes; necessity still uses physical source hulls/primitives only.",
+  "invariant_conservative_envelope_screen": {
+    "enabled": false,
+    "source_segment": [
+      7,
+      8,
+      0.055
+    ],
+    "sampled_actions": [
+      99,
+      105,
+      111,
+      117,
+      123,
+      129,
+      135,
+      141,
+      147,
+      153,
+      159,
+      165,
+      171,
+      177,
+      183,
+      189,
+      195,
+      201,
+      207,
+      213,
+      219,
+      225,
+      231,
+      237,
+      243,
+      249,
+      255,
+      261,
+      267,
+      273,
+      279,
+      285,
+      291,
+      297,
+      303,
+      309,
+      309
+    ],
+    "initial_full_shapes": 0,
+    "distal_shape_count": 0,
+    "hazard_extra_m": 0.003,
+    "support_m": 0.005,
+    "scope": "Conservative placement discovery only: full initial robot plus fixed Cartesian distal arm/gripper/finger proxies. Not source intersection evidence or global infeasibility. Original final margins and all paired/physical acceptance gates unchanged."
+  },
+  "search_complete": true
+}

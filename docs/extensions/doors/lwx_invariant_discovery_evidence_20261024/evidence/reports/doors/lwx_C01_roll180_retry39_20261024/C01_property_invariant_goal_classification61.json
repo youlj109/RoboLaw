@@ -1,0 +1,3099 @@
+{
+  "diagnostic": "reports/doors/lwx_C01_roll180_retry39_20261024/C01_property_goal_diagnostic61.json",
+  "diagnostic_sha256": "e2e87861c0a31eff98c5bae0a67d6360421e3071bcbe5667c265e24ba4ef6d7e",
+  "implementation_sha256": "6bd54f1fd1c0cfc3d26a48cd7861d2ffd26810bf7d2843266da7c10dded1f2ac",
+  "helper_sha256": "791008a31f705aea9f10e70da1a84bc2078e2993dff547165ae37e8776a423cd",
+  "scope": "Bounded CPU unchanged-target IK classification only. Conservative envelopes are not source intersection evidence, and do not prove global infeasibility.",
+  "physics_replay": false,
+  "unsafe_path_executed": false,
+  "arm_envelope_order": [
+    [
+      0,
+      1,
+      0.075
+    ],
+    [
+      1,
+      3,
+      0.065
+    ],
+    [
+      3,
+      4,
+      0.065
+    ],
+    [
+      4,
+      5,
+      0.065
+    ],
+    [
+      5,
+      7,
+      0.065
+    ],
+    [
+      7,
+      8,
+      0.055
+    ]
+  ],
+  "invariant_names": [
+    "arm_distal_envelope",
+    "gripper",
+    "finger",
+    "finger"
+  ],
+  "required_m": 0.06,
+  "ik_solution_count": 38,
+  "maximum_invariant_aabb_spread_m": 0.00011282580492166794,
+  "minimum_distances_m": [
+    0.027993629922582867,
+    Infinity,
+    Infinity,
+    Infinity
+  ],
+  "maximum_distances_m": [
+    0.028071125626672556,
+    Infinity,
+    Infinity,
+    Infinity
+  ],
+  "samples": [
+    {
+      "index": 0,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.05432363932072862,
+          "required_m": 0.06,
+          "slack_m": -0.0056763606792713805,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.01930688567150995,
+          "required_m": 0.06,
+          "slack_m": -0.04069311432849004,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02803621420404044,
+          "required_m": 0.06,
+          "slack_m": -0.03196378579595956,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02803621420404044,
+          "required_m": 0.06,
+          "slack_m": -0.03196378579595956,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.0,
+          "required_m": 0.06,
+          "slack_m": -0.06,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Stem",
+          "intersecting": true
+        },
+        {
+          "distance_m": 0.0016349604359114538,
+          "required_m": 0.06,
+          "slack_m": -0.05836503956408855,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028055256237613155,
+          "required_m": 0.06,
+          "slack_m": -0.031944743762386846,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028055256237613155,
+          "required_m": 0.06,
+          "slack_m": -0.031944743762386846,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.056740821311613426,
+          "required_m": 0.06,
+          "slack_m": -0.0032591786883865714,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.01929958650567627,
+          "required_m": 0.06,
+          "slack_m": -0.040700413494323726,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02802808108774765,
+          "required_m": 0.06,
+          "slack_m": -0.031971918912252345,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02802808108774765,
+          "required_m": 0.06,
+          "slack_m": -0.031971918912252345,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.20348596252350665,
+          "required_m": 0.06,
+          "slack_m": 0.14348596252350665,
+          "valid": true,
+          "robot_part": "arm_segment_1",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.0,
+          "required_m": 0.06,
+          "slack_m": -0.06,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": true
+        },
+        {
+          "distance_m": 0.0022850199487033005,
+          "required_m": 0.06,
+          "slack_m": -0.057714980051296695,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02804752101461766,
+          "required_m": 0.06,
+          "slack_m": -0.03195247898538234,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02804752101461766,
+          "required_m": 0.06,
+          "slack_m": -0.03195247898538234,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.06265259381168505,
+          "required_m": 0.06,
+          "slack_m": 0.0026525938116850473,
+          "valid": true,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019308236131320138,
+          "required_m": 0.06,
+          "slack_m": -0.040691763868679856,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028037167219869815,
+          "required_m": 0.06,
+          "slack_m": -0.03196283278013018,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028037167219869815,
+          "required_m": 0.06,
+          "slack_m": -0.03196283278013018,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.2034785907125992,
+          "required_m": 0.06,
+          "slack_m": 0.1434785907125992,
+          "valid": true,
+          "robot_part": "arm_segment_1",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.0,
+          "required_m": 0.06,
+          "slack_m": -0.06,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": true
+        },
+        {
+          "distance_m": 0.002305339424199947,
+          "required_m": 0.06,
+          "slack_m": -0.05769466057580005,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02806040144744521,
+          "required_m": 0.06,
+          "slack_m": -0.031939598552554786,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02806040144744521,
+          "required_m": 0.06,
+          "slack_m": -0.031939598552554786,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.0,
+          "required_m": 0.06,
+          "slack_m": -0.06,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Stem",
+          "intersecting": true
+        },
+        {
+          "distance_m": 0.0016232093024630733,
+          "required_m": 0.06,
+          "slack_m": -0.05837679069753692,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028071125626672556,
+          "required_m": 0.06,
+          "slack_m": -0.03192887437332744,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028071125626672556,
+          "required_m": 0.06,
+          "slack_m": -0.03192887437332744,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.053098925223317904,
+          "required_m": 0.06,
+          "slack_m": -0.006901074776682094,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019304531128416937,
+          "required_m": 0.06,
+          "slack_m": -0.04069546887158306,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.0280318307617913,
+          "required_m": 0.06,
+          "slack_m": -0.031968169238208693,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.0280318307617913,
+          "required_m": 0.06,
+          "slack_m": -0.031968169238208693,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.05317988661690504,
+          "required_m": 0.06,
+          "slack_m": -0.006820113383094961,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019295760133879774,
+          "required_m": 0.06,
+          "slack_m": -0.04070423986612022,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028023145880009412,
+          "required_m": 0.06,
+          "slack_m": -0.031976854119990586,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028023145880009412,
+          "required_m": 0.06,
+          "slack_m": -0.031976854119990586,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.055387546848662976,
+          "required_m": 0.06,
+          "slack_m": -0.004612453151337022,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019297346253913154,
+          "required_m": 0.06,
+          "slack_m": -0.04070265374608684,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028023756913977745,
+          "required_m": 0.06,
+          "slack_m": -0.03197624308602225,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028023756913977745,
+          "required_m": 0.06,
+          "slack_m": -0.03197624308602225,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.05314349830363696,
+          "required_m": 0.06,
+          "slack_m": -0.006856501696363038,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.0192682013577828,
+          "required_m": 0.06,
+          "slack_m": -0.040731798642217196,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.027993629922582867,
+          "required_m": 0.06,
+          "slack_m": -0.032006370077417134,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.027993629922582867,
+          "required_m": 0.06,
+          "slack_m": -0.032006370077417134,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.20348938551807708,
+          "required_m": 0.06,
+          "slack_m": 0.14348938551807708,
+          "valid": true,
+          "robot_part": "arm_segment_1",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.0,
+          "required_m": 0.06,
+          "slack_m": -0.06,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": true
+        },
+        {
+          "distance_m": 0.002275418432974083,
+          "required_m": 0.06,
+          "slack_m": -0.057724581567025916,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028044486065372697,
+          "required_m": 0.06,
+          "slack_m": -0.0319555139346273,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028044486065372697,
+          "required_m": 0.06,
+          "slack_m": -0.0319555139346273,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 17,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.029483681199857885,
+          "required_m": 0.06,
+          "slack_m": -0.030516318800142113,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.01903672937654814,
+          "required_m": 0.06,
+          "slack_m": -0.040963270623451856,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028030871681266143,
+          "required_m": 0.06,
+          "slack_m": -0.03196912831873386,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028030871681266143,
+          "required_m": 0.06,
+          "slack_m": -0.03196912831873386,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 18,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.21103787002000918,
+          "required_m": 0.06,
+          "slack_m": 0.15103787002000918,
+          "valid": true,
+          "robot_part": "arm_segment_1",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.03328652654899778,
+          "required_m": 0.06,
+          "slack_m": -0.026713473451002216,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019307919370436154,
+          "required_m": 0.06,
+          "slack_m": -0.040692080629563844,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028035141160799235,
+          "required_m": 0.06,
+          "slack_m": -0.03196485883920076,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028035141160799235,
+          "required_m": 0.06,
+          "slack_m": -0.03196485883920076,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 19,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.0,
+          "required_m": 0.06,
+          "slack_m": -0.06,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Stem",
+          "intersecting": true
+        },
+        {
+          "distance_m": 0.0015888561686869286,
+          "required_m": 0.06,
+          "slack_m": -0.05841114383131307,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028051494690407578,
+          "required_m": 0.06,
+          "slack_m": -0.03194850530959242,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028051494690407578,
+          "required_m": 0.06,
+          "slack_m": -0.03194850530959242,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 22,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.04977990924669447,
+          "required_m": 0.06,
+          "slack_m": -0.01022009075330553,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.01928510536418382,
+          "required_m": 0.06,
+          "slack_m": -0.04071489463581618,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028012050269077715,
+          "required_m": 0.06,
+          "slack_m": -0.03198794973092228,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028012050269077715,
+          "required_m": 0.06,
+          "slack_m": -0.03198794973092228,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 23,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.059739210860397296,
+          "required_m": 0.06,
+          "slack_m": -0.0002607891396027018,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019287362551488437,
+          "required_m": 0.06,
+          "slack_m": -0.04071263744851156,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028013590984285623,
+          "required_m": 0.06,
+          "slack_m": -0.031986409015714375,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028013590984285623,
+          "required_m": 0.06,
+          "slack_m": -0.031986409015714375,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 24,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.03619357503965491,
+          "required_m": 0.06,
+          "slack_m": -0.023806424960345088,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.01929803908369284,
+          "required_m": 0.06,
+          "slack_m": -0.04070196091630716,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02802208077300538,
+          "required_m": 0.06,
+          "slack_m": -0.03197791922699462,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02802208077300538,
+          "required_m": 0.06,
+          "slack_m": -0.03197791922699462,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 25,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.2104638892412321,
+          "required_m": 0.06,
+          "slack_m": 0.1504638892412321,
+          "valid": true,
+          "robot_part": "arm_segment_1",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.03561941676553361,
+          "required_m": 0.06,
+          "slack_m": -0.024380583234466388,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Stem",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019296268031964974,
+          "required_m": 0.06,
+          "slack_m": -0.04070373196803502,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028023899190353783,
+          "required_m": 0.06,
+          "slack_m": -0.03197610080964622,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028023899190353783,
+          "required_m": 0.06,
+          "slack_m": -0.03197610080964622,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 26,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.060067703268877545,
+          "required_m": 0.06,
+          "slack_m": 6.770326887754752e-05,
+          "valid": true,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019295111676846083,
+          "required_m": 0.06,
+          "slack_m": -0.040704888323153915,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028021700798343083,
+          "required_m": 0.06,
+          "slack_m": -0.031978299201656915,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028021700798343083,
+          "required_m": 0.06,
+          "slack_m": -0.031978299201656915,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 27,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.2106244893525393,
+          "required_m": 0.06,
+          "slack_m": 0.1506244893525393,
+          "valid": true,
+          "robot_part": "arm_segment_1",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.0,
+          "required_m": 0.06,
+          "slack_m": -0.06,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Stem",
+          "intersecting": true
+        },
+        {
+          "distance_m": 0.014801591925187728,
+          "required_m": 0.06,
+          "slack_m": -0.04519840807481227,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02805373032962691,
+          "required_m": 0.06,
+          "slack_m": -0.03194626967037309,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02805373032962691,
+          "required_m": 0.06,
+          "slack_m": -0.03194626967037309,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 28,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.2034870933450602,
+          "required_m": 0.06,
+          "slack_m": 0.1434870933450602,
+          "valid": true,
+          "robot_part": "arm_segment_1",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.0,
+          "required_m": 0.06,
+          "slack_m": -0.06,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": true
+        },
+        {
+          "distance_m": 0.0022780728572102935,
+          "required_m": 0.06,
+          "slack_m": -0.0577219271427897,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02800856027867556,
+          "required_m": 0.06,
+          "slack_m": -0.03199143972132444,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02800856027867556,
+          "required_m": 0.06,
+          "slack_m": -0.03199143972132444,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 30,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.03454136351459769,
+          "required_m": 0.06,
+          "slack_m": -0.02545863648540231,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019306614793265044,
+          "required_m": 0.06,
+          "slack_m": -0.040693385206734954,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02803352343857935,
+          "required_m": 0.06,
+          "slack_m": -0.03196647656142065,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02803352343857935,
+          "required_m": 0.06,
+          "slack_m": -0.03196647656142065,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 31,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.05571209079438863,
+          "required_m": 0.06,
+          "slack_m": -0.004287909205611368,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.01931326232906781,
+          "required_m": 0.06,
+          "slack_m": -0.040686737670932185,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.0280422537638809,
+          "required_m": 0.06,
+          "slack_m": -0.0319577462361191,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.0280422537638809,
+          "required_m": 0.06,
+          "slack_m": -0.0319577462361191,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 32,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.0,
+          "required_m": 0.06,
+          "slack_m": -0.06,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Stem",
+          "intersecting": true
+        },
+        {
+          "distance_m": 0.0016358970010630037,
+          "required_m": 0.06,
+          "slack_m": -0.058364102998937,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028041490007201946,
+          "required_m": 0.06,
+          "slack_m": -0.03195850999279805,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028041490007201946,
+          "required_m": 0.06,
+          "slack_m": -0.03195850999279805,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 33,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.05971767857620063,
+          "required_m": 0.06,
+          "slack_m": -0.0002823214237993657,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019309489664849296,
+          "required_m": 0.06,
+          "slack_m": -0.0406905103351507,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02803850674139552,
+          "required_m": 0.06,
+          "slack_m": -0.03196149325860448,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02803850674139552,
+          "required_m": 0.06,
+          "slack_m": -0.03196149325860448,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 35,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.23271898036657707,
+          "required_m": 0.06,
+          "slack_m": 0.17271898036657707,
+          "valid": true,
+          "robot_part": "arm_segment_1",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_18",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.0,
+          "required_m": 0.06,
+          "slack_m": -0.06,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Stem",
+          "intersecting": true
+        },
+        {
+          "distance_m": 0.009907511971927999,
+          "required_m": 0.06,
+          "slack_m": -0.050092488028072,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02805652431875876,
+          "required_m": 0.06,
+          "slack_m": -0.03194347568124124,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02805652431875876,
+          "required_m": 0.06,
+          "slack_m": -0.03194347568124124,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 36,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.053158510187943625,
+          "required_m": 0.06,
+          "slack_m": -0.006841489812056373,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019281432896947403,
+          "required_m": 0.06,
+          "slack_m": -0.04071856710305259,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028007243738231515,
+          "required_m": 0.06,
+          "slack_m": -0.03199275626176848,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028007243738231515,
+          "required_m": 0.06,
+          "slack_m": -0.03199275626176848,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 37,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.022083828376092948,
+          "required_m": 0.06,
+          "slack_m": -0.03791617162390705,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall01_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.01801547775847946,
+          "required_m": 0.06,
+          "slack_m": -0.041984522241520536,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02800442417849894,
+          "required_m": 0.06,
+          "slack_m": -0.03199557582150106,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02800442417849894,
+          "required_m": 0.06,
+          "slack_m": -0.03199557582150106,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 38,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.21048088401081236,
+          "required_m": 0.06,
+          "slack_m": 0.15048088401081236,
+          "valid": true,
+          "robot_part": "arm_segment_1",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.03696997956363945,
+          "required_m": 0.06,
+          "slack_m": -0.02303002043636055,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Stem",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019296920549800888,
+          "required_m": 0.06,
+          "slack_m": -0.04070307945019911,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02802127263536805,
+          "required_m": 0.06,
+          "slack_m": -0.03197872736463195,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02802127263536805,
+          "required_m": 0.06,
+          "slack_m": -0.03197872736463195,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 39,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.010112296502066343,
+          "required_m": 0.06,
+          "slack_m": -0.04988770349793366,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Stem",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.009902562358747048,
+          "required_m": 0.06,
+          "slack_m": -0.05009743764125295,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028047239587676697,
+          "required_m": 0.06,
+          "slack_m": -0.0319527604123233,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028047239587676697,
+          "required_m": 0.06,
+          "slack_m": -0.0319527604123233,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 40,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.05869537400090147,
+          "required_m": 0.06,
+          "slack_m": -0.0013046259990985298,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019279083114908852,
+          "required_m": 0.06,
+          "slack_m": -0.04072091688509115,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02800418611107677,
+          "required_m": 0.06,
+          "slack_m": -0.031995813888923225,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02800418611107677,
+          "required_m": 0.06,
+          "slack_m": -0.031995813888923225,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 41,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.05573103540605865,
+          "required_m": 0.06,
+          "slack_m": -0.004268964593941348,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019316400604811247,
+          "required_m": 0.06,
+          "slack_m": -0.04068359939518875,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.0280461928950582,
+          "required_m": 0.06,
+          "slack_m": -0.0319538071049418,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.0280461928950582,
+          "required_m": 0.06,
+          "slack_m": -0.0319538071049418,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 42,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.05316112449960014,
+          "required_m": 0.06,
+          "slack_m": -0.006838875500399855,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.01928518116320055,
+          "required_m": 0.06,
+          "slack_m": -0.04071481883679945,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02801093400152751,
+          "required_m": 0.06,
+          "slack_m": -0.03198906599847249,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02801093400152751,
+          "required_m": 0.06,
+          "slack_m": -0.03198906599847249,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 43,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.06157374230595932,
+          "required_m": 0.06,
+          "slack_m": 0.0015737423059593234,
+          "valid": true,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.0192914390947844,
+          "required_m": 0.06,
+          "slack_m": -0.0407085609052156,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028017763756992466,
+          "required_m": 0.06,
+          "slack_m": -0.03198223624300753,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028017763756992466,
+          "required_m": 0.06,
+          "slack_m": -0.03198223624300753,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 44,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.04339550223819737,
+          "required_m": 0.06,
+          "slack_m": -0.01660449776180263,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall02_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019272721834594966,
+          "required_m": 0.06,
+          "slack_m": -0.04072727816540503,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.027996623868139243,
+          "required_m": 0.06,
+          "slack_m": -0.03200337613186076,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.027996623868139243,
+          "required_m": 0.06,
+          "slack_m": -0.03200337613186076,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 45,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.19768556585539557,
+          "required_m": 0.06,
+          "slack_m": 0.13768556585539557,
+          "valid": true,
+          "robot_part": "arm_segment_1",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.043370173056930694,
+          "required_m": 0.06,
+          "slack_m": -0.016629826943069304,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_00",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.019301313217073766,
+          "required_m": 0.06,
+          "slack_m": -0.040698686782926236,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.028027220428516793,
+          "required_m": 0.06,
+          "slack_m": -0.0319727795714832,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.028027220428516793,
+          "required_m": 0.06,
+          "slack_m": -0.0319727795714832,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "index": 47,
+      "arm_clearances": [
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.20484336604187015,
+          "required_m": 0.06,
+          "slack_m": 0.14484336604187015,
+          "valid": true,
+          "robot_part": "arm_segment_1",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": 0.0,
+          "required_m": 0.06,
+          "slack_m": -0.06,
+          "valid": false,
+          "robot_part": "arm_segment_3",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Foot",
+          "intersecting": true
+        },
+        {
+          "distance_m": 0.0017043726358386053,
+          "required_m": 0.06,
+          "slack_m": -0.05829562736416139,
+          "valid": false,
+          "robot_part": "arm_segment_4",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_01",
+          "intersecting": false
+        },
+        {
+          "distance_m": 0.02802540247516449,
+          "required_m": 0.06,
+          "slack_m": -0.03197459752483551,
+          "valid": false,
+          "robot_part": "arm_segment_5",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        }
+      ],
+      "invariant_envelope_clearances": [
+        {
+          "distance_m": 0.02802540247516449,
+          "required_m": 0.06,
+          "slack_m": -0.03197459752483551,
+          "valid": false,
+          "robot_part": "arm_distal_envelope",
+          "hazard_part": "/World/envs/env_0/glass/Colliders/Wall00_03",
+          "intersecting": false
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        },
+        {
+          "distance_m": Infinity,
+          "required_m": 0.06,
+          "slack_m": Infinity,
+          "valid": true
+        }
+      ]
+    }
+  ]
+}

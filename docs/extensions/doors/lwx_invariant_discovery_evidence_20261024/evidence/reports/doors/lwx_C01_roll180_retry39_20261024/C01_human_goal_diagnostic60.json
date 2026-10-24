@@ -1,0 +1,1785 @@
+{
+  "scope": "Bounded CPU endpoint feasibility diagnosis only. No path, GPU self-collision, dynamics or acceptance claim.",
+  "physics_replay": false,
+  "unsafe_path_executed": false,
+  "baseline": "datasets/doors/lwx_C01_roll180_retry39_20261024/C01_base_01",
+  "baseline_sha256": "742b13a67fd89e6dc8d8e1950bf4106c37b53e5a4dc6a5e1acd1942f10298b45",
+  "config": "configs/extensions/doors/c01_human_candidate_57_12.json",
+  "config_sha256": "cb590e814e5f389ab2e7f995171f2ffebfb94ae753f05ddcb9aa6afeb8a26e5c",
+  "paired": "reports/doors/lwx_C01_roll180_retry39_20261024/C01_human_57_candidate_12_paired01/report.json",
+  "paired_sha256": "02564da5435b0479f0403b71595a6b77c2b9d97746f32746a92d651475a2839b",
+  "implementation_sha256": "343e2d61315d87df7f84be7b6eb4e83eefde2128bd33b2293736b9244d4fc450",
+  "controller_parameters": {
+    "seed": 42,
+    "handle_offset_y": 0.0,
+    "handle_offset_z": 0.18,
+    "max_joint_speed": 0.5,
+    "grasp_roll_deg": -15.0,
+    "pull_lead_rad": 0.03,
+    "pull_steps": 600,
+    "ik_limit_margin_rad": 0.005,
+    "handle_normal_offset_m": -0.01,
+    "pregrasp_validation": {
+      "version": "dense_pregrasp_v4",
+      "resolution_rad": 0.005,
+      "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+    }
+  },
+  "target": [
+    [
+      0.0007962382166098458,
+      0.9659255200928037,
+      0.258818963057479,
+      4.348421614044658
+    ],
+    [
+      0.9999996830023009,
+      -0.0007691070573017994,
+      -0.00020608161489709436,
+      -1.00492085007392
+    ],
+    [
+      0.0,
+      0.25881904510252074,
+      -0.9659258262890682,
+      1.3131769456856985
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "random_seed": 17,
+  "trials": [
+    {
+      "index": 0,
+      "seed_q": [
+        0.8078358173370361,
+        -0.7116995453834534,
+        0.026458794251084328,
+        -2.6936559677124023,
+        -1.9087563753128052,
+        2.246070384979248,
+        -1.2948861122131348
+      ],
+      "arm_q": [
+        0.8078372121835861,
+        -0.7116943300710814,
+        0.026465435431289916,
+        -2.6936566683309646,
+        -1.908754948861572,
+        2.2460607275921864,
+        -1.294875538523855
+      ],
+      "position_error_m": 8.02191987458235e-11,
+      "rotation_error_rad": 5.452396103945874e-10,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23477e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 1,
+      "seed_q": [
+        0.0,
+        -0.6283185482025146,
+        0.0,
+        -2.5132741928100586,
+        0.0,
+        1.884955644607544,
+        0.0
+      ],
+      "arm_q": [
+        -0.3164200870533759,
+        -0.7634166862296015,
+        1.2541259955427655,
+        -2.6310963306067157,
+        1.3521479352113697,
+        3.7469375755504113,
+        2.484034349895289
+      ],
+      "position_error_m": 1.7338635235773324e-05,
+      "rotation_error_rad": 0.00012150659504323564,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.02663468432732167,
+        "required_m": 0.03,
+        "slack_m": -0.0033653156726783304,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 2,
+      "seed_q": [
+        1.9823167153354295,
+        -1.17832191634478,
+        0.33171933694249844,
+        -1.9602280042307547,
+        -1.6375444462069058,
+        1.4427654082842045,
+        -0.4126662311281386
+      ],
+      "arm_q": [
+        1.4033481499909009,
+        -0.8061945035641004,
+        -0.42491036488696116,
+        -2.7262425660076683,
+        -2.0289434888713656,
+        1.892788769133004,
+        -1.4340831372431115
+      ],
+      "position_error_m": 4.4606700075242554e-06,
+      "rotation_error_rad": 3.066941475012437e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23477e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 3,
+      "seed_q": [
+        0.6396216406458932,
+        0.8215827259864501,
+        -2.784467123876682,
+        -2.296871213834487,
+        0.5982762944260664,
+        0.31900050189582235,
+        2.859453328885714
+      ],
+      "arm_q": [
+        2.5220602743544593,
+        1.7577979132432542,
+        -1.8482249486696645,
+        -2.6402184039779466,
+        1.7929476804375157,
+        2.823906924182658,
+        2.5209056529901126
+      ],
+      "position_error_m": 1.3892130050878414e-05,
+      "rotation_error_rad": 0.00010741032134811262,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.025705176191686684,
+        "required_m": 0.03,
+        "slack_m": -0.004294823808313315,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 4,
+      "seed_q": [
+        1.9091956051989594,
+        -1.6099766047773767,
+        0.38798922247909706,
+        -1.2480279088910207,
+        -2.8325096579538536,
+        0.6736920057108134,
+        -1.9248879110484278
+      ],
+      "arm_q": [
+        2.1789785658875407,
+        -1.4215489101019056,
+        -0.9275774655374899,
+        -2.8136958506842786,
+        -2.5034854121173615,
+        1.2240298348148329,
+        -1.8860353339970375
+      ],
+      "position_error_m": 4.920324271901301e-06,
+      "rotation_error_rad": 2.230643469385266e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.2221e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 5,
+      "seed_q": [
+        -0.21853659957564497,
+        0.23287776698089413,
+        -0.27626228119450325,
+        -0.331622187601492,
+        1.8091136541117998,
+        1.4998377107245624,
+        -1.7052181749029898
+      ],
+      "error": "IK failed: pose residual 0.31117, target [ 4.34842161 -1.00492085  1.31317695]"
+    },
+    {
+      "index": 6,
+      "seed_q": [
+        -0.8138631363364399,
+        1.2582889634166226,
+        -0.868494191705584,
+        -0.12117427943579795,
+        0.37781568699052714,
+        0.8885665670024514,
+        0.9116525664796531
+      ],
+      "arm_q": [
+        2.5219954935723132,
+        1.7577989881859548,
+        -1.8481909984814298,
+        -2.6401775341452667,
+        1.793325466712038,
+        2.8239468821727796,
+        2.520555842243998
+      ],
+      "position_error_m": 2.273323688113961e-05,
+      "rotation_error_rad": 4.556174304138026e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.02570972775154596,
+        "required_m": 0.03,
+        "slack_m": -0.00429027224845404,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 7,
+      "seed_q": [
+        0.9204372426423717,
+        0.05077008111767056,
+        -1.269022553819542,
+        -1.187281476514218,
+        -0.11954039798359295,
+        2.4377343716418323,
+        0.2426535031859598
+      ],
+      "arm_q": [
+        -0.316029556818178,
+        -0.7627144623606487,
+        1.2538685844131174,
+        -2.6310015655726393,
+        1.352183953789873,
+        3.74749881754994,
+        2.4835685190077994
+      ],
+      "position_error_m": 2.5924124959571466e-05,
+      "rotation_error_rad": 0.00017499228652105488,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.026629629849422902,
+        "required_m": 0.03,
+        "slack_m": -0.003370370150577097,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 8,
+      "seed_q": [
+        -2.1759905240028186,
+        1.4206098728869365,
+        -2.773416789201819,
+        -2.129434615191019,
+        -1.8878849427664535,
+        1.2836458876076007,
+        0.6750751651732432
+      ],
+      "error": "IK failed: pose residual 0.05477, target [ 4.34842161 -1.00492085  1.31317695]"
+    },
+    {
+      "index": 9,
+      "seed_q": [
+        0.29204011248529094,
+        0.7510607470044592,
+        -0.060584081960054714,
+        -0.5626979044026603,
+        -0.8734624089043541,
+        2.0462274672404894,
+        0.025501950685515418
+      ],
+      "arm_q": [
+        0.49047708999731515,
+        -0.7383464219263741,
+        0.265529265970707,
+        -2.6776338997666316,
+        -1.8608104044030076,
+        2.430011222931715,
+        -1.2287900748376164
+      ],
+      "position_error_m": 1.2446661845662933e-05,
+      "rotation_error_rad": 3.52300473494098e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23536e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 10,
+      "seed_q": [
+        -2.745599076185921,
+        -0.945436407677321,
+        -2.391722715354139,
+        -2.312283968694452,
+        -2.83445579825819,
+        1.098234840637672,
+        -0.7244673087898095
+      ],
+      "arm_q": [
+        -2.6290803585985825,
+        0.734774646280391,
+        -2.892299087836819,
+        -2.6788175189674837,
+        -1.864066722024337,
+        2.416653443623838,
+        -1.233450506710882
+      ],
+      "position_error_m": 1.3257581690333088e-05,
+      "rotation_error_rad": 6.42044340861462e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23536e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 11,
+      "seed_q": [
+        0.8434427335335744,
+        1.194635298909324,
+        -0.48547558031376026,
+        -1.182114633099889,
+        0.11354401623488686,
+        0.8658047784928848,
+        -1.729555196684572
+      ],
+      "arm_q": [
+        1.0946863147416679,
+        -0.7316593420109229,
+        -0.19311366572179103,
+        -2.7081190341365975,
+        -1.9588760839192216,
+        2.08295520936508,
+        -1.356091354275441
+      ],
+      "position_error_m": 1.2739962704981688e-05,
+      "rotation_error_rad": 9.01300442703052e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23477e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 12,
+      "seed_q": [
+        -0.2740907153002903,
+        1.0230895836095233,
+        0.5358412620327706,
+        -0.9824012801130255,
+        1.322546269271721,
+        2.318606864852528,
+        -1.468957963851502
+      ],
+      "error": "IK failed: pose residual 0.15283, target [ 4.34842161 -1.00492085  1.31317695]"
+    },
+    {
+      "index": 13,
+      "seed_q": [
+        -0.3348899032487904,
+        0.047462262189085,
+        -2.808464340402155,
+        -2.1744705331714362,
+        -0.808447406628384,
+        0.045966165240922466,
+        0.3571268737537787
+      ],
+      "arm_q": [
+        -2.628931046780817,
+        0.7347328833028819,
+        -2.89229732072565,
+        -2.6788208108145715,
+        -1.8639271545603335,
+        2.4164312674330564,
+        -1.2335140687751527
+      ],
+      "position_error_m": 2.1564203611811767e-05,
+      "rotation_error_rad": 0.00013252353791308943,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23536e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 14,
+      "seed_q": [
+        0.2809258002561532,
+        -1.4267908340543536,
+        -1.440564797320832,
+        -0.37734828622675387,
+        -0.3546510165557648,
+        0.9763889754159261,
+        2.0834800937340296
+      ],
+      "arm_q": [
+        -0.6195007210995126,
+        -1.75778327661147,
+        1.293344923598055,
+        -2.6402323869812707,
+        1.792847230685505,
+        2.8238996701131436,
+        2.5209576855437654
+      ],
+      "position_error_m": 1.8938783016708232e-05,
+      "rotation_error_rad": 0.00012598374847522971,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.02569912648073059,
+        "required_m": 0.03,
+        "slack_m": -0.004300873519269409,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 15,
+      "seed_q": [
+        -0.2546491372988,
+        0.43566135769091674,
+        2.319962166385063,
+        -1.4380262653105251,
+        -1.9674564889089412,
+        2.663311441507269,
+        2.501817312197867
+      ],
+      "error": "IK failed: pose residual 0.12429, target [ 4.34842161 -1.00492085  1.31317695]"
+    },
+    {
+      "index": 16,
+      "seed_q": [
+        -0.4691851519232917,
+        0.5621535086012657,
+        2.1500275763079126,
+        -2.58590915305626,
+        1.6226220005806202,
+        1.7701972719613703,
+        0.30209972141092534
+      ],
+      "error": "IK failed: pose residual 0.05758, target [ 4.34842161 -1.00492085  1.31317695]"
+    },
+    {
+      "index": 17,
+      "seed_q": [
+        2.4371541983349094,
+        1.0883979991874495,
+        -2.10290787957904,
+        -1.8224111274464883,
+        1.0097800543763245,
+        3.0271021835082177,
+        -1.9490238446310002
+      ],
+      "arm_q": [
+        2.712589008257607,
+        1.2418111879348153,
+        -2.0006963884830915,
+        -2.8391679958094835,
+        0.40026059211321136,
+        3.384492758353029,
+        -2.7497768851555033
+      ],
+      "position_error_m": 4.665216795782359e-06,
+      "rotation_error_rad": 2.936232093415857e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.017365803627708336,
+        "required_m": 0.03,
+        "slack_m": -0.012634196372291663,
+        "valid": false,
+        "robot_part": "panda_panda_link4/3",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 18,
+      "seed_q": [
+        1.1561310131110871,
+        0.06575561359412219,
+        -2.425611169951228,
+        -1.5133625921658258,
+        -0.29411146646958075,
+        1.658633346774453,
+        -1.3353380041178775
+      ],
+      "arm_q": [
+        2.606497939779556,
+        1.369485044676845,
+        -2.262008209156093,
+        -2.784453539865262,
+        -0.8299684072089833,
+        3.4055673579246664,
+        -1.7132548724968806
+      ],
+      "position_error_m": 1.062703953538181e-05,
+      "rotation_error_rad": 7.199742878593221e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.018114269670888437,
+        "required_m": 0.03,
+        "slack_m": -0.011885730329111562,
+        "valid": false,
+        "robot_part": "panda_panda_link4/3",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 19,
+      "seed_q": [
+        -0.7743077998086614,
+        0.9101772076016854,
+        -0.9060085379810823,
+        -0.5115033557522191,
+        1.1607694970056746,
+        2.8063609974989343,
+        -0.5592268361565114
+      ],
+      "arm_q": [
+        -0.3161188507834865,
+        -0.7626543249321426,
+        1.254011649857065,
+        -2.630659512331999,
+        1.352915936010656,
+        3.747498952526869,
+        2.4828391100100937
+      ],
+      "position_error_m": 3.412756760561535e-05,
+      "rotation_error_rad": 0.0002737742748652608,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.026691201852646833,
+        "required_m": 0.03,
+        "slack_m": -0.003308798147353166,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 20,
+      "seed_q": [
+        -1.8800696207278516,
+        -1.7041838606388031,
+        -0.53399843259109,
+        -1.6721085152050428,
+        -0.6601841420771133,
+        0.3921653359824287,
+        -2.622833802869046
+      ],
+      "error": "IK failed: pose residual 0.15548, target [ 4.34842161 -1.00492085  1.31317695]"
+    },
+    {
+      "index": 21,
+      "seed_q": [
+        2.1692879484565,
+        -0.37933882873051084,
+        2.111751144025525,
+        -0.5879657178001185,
+        0.42882753624573766,
+        3.2224501682642948,
+        2.595646047463719
+      ],
+      "error": "IK failed: pose residual 0.60901, target [ 4.34842161 -1.00492085  1.31317695]"
+    },
+    {
+      "index": 22,
+      "seed_q": [
+        0.7875364915904868,
+        -1.7280564034305235,
+        0.8098317726898321,
+        -1.590471516461226,
+        1.67005341723157,
+        1.3434622845417752,
+        1.1112758602411086
+      ],
+      "arm_q": [
+        0.10892952912187956,
+        -0.8473599693189053,
+        0.5310283949261931,
+        -2.6544774521474226,
+        -1.8095902641122374,
+        2.686514130543547,
+        -1.1346848842911952
+      ],
+      "position_error_m": 1.3024351852650556e-05,
+      "rotation_error_rad": 9.705329749310707e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.2557e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 23,
+      "seed_q": [
+        -0.7749227840771358,
+        0.2919676061705767,
+        -0.2775564580117802,
+        -2.424669705513055,
+        -1.0322421855085624,
+        0.24482397166813474,
+        0.7104604398978545
+      ],
+      "arm_q": [
+        -1.218440022174245,
+        1.1222225552806115,
+        2.363692279654436,
+        -2.7737486284420987,
+        -2.251823737568917,
+        1.478943780642728,
+        -1.6570879680061352
+      ],
+      "position_error_m": 1.555505396912161e-05,
+      "rotation_error_rad": 8.624824110598985e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23427e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 24,
+      "seed_q": [
+        2.2533551258178846,
+        0.33182565102498063,
+        -1.8952937506371246,
+        -1.4583322646584829,
+        -1.3794133851000832,
+        1.4342052326942607,
+        -2.857817626101466
+      ],
+      "arm_q": [
+        2.8922975071537764,
+        1.0499185583777046,
+        -2.4111990471788345,
+        -2.6162736074210313,
+        -1.795358757477993,
+        2.999532495039166,
+        -0.9818518927937715
+      ],
+      "position_error_m": 1.7594454268754298e-05,
+      "rotation_error_rad": 0.00016418282392705069,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.26234e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 25,
+      "seed_q": [
+        2.6368723035005526,
+        0.07966659826632516,
+        0.41080663377421844,
+        -2.7672144692693976,
+        -2.115320446108722,
+        3.2892682731273095,
+        1.987085185282297
+      ],
+      "arm_q": [
+        2.5945045256022334,
+        1.2392157258181122,
+        -2.126577446397351,
+        -2.360855729388007,
+        -2.89226743809377,
+        3.2972213975114166,
+        0.4254566866423951
+      ],
+      "position_error_m": 1.123154730434605e-05,
+      "rotation_error_rad": 4.620464171724438e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.01332561321602789,
+        "required_m": 0.03,
+        "slack_m": -0.01667438678397211,
+        "valid": false,
+        "robot_part": "panda_panda_link4/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 26,
+      "seed_q": [
+        0.9975317156933423,
+        0.6775114014869084,
+        2.47887425644428,
+        -1.0502630007828846,
+        0.5831295466659085,
+        0.559709571945949,
+        -1.5541026485293445
+      ],
+      "arm_q": [
+        -1.1843276770173576,
+        1.1552921601962627,
+        2.3430833204283688,
+        -2.7782162682282836,
+        -2.2763578592220735,
+        1.4461538586042342,
+        -1.6804382463836707
+      ],
+      "position_error_m": 1.7675686682410585e-05,
+      "rotation_error_rad": 0.00011617104201969119,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.2339e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 27,
+      "seed_q": [
+        -1.613607598979654,
+        -1.586142407780811,
+        -0.49535340165104413,
+        -2.911123238937272,
+        2.3457577495092683,
+        2.3249462701991073,
+        -0.9562459315801624
+      ],
+      "arm_q": [
+        -0.5455165780340393,
+        -1.2365073672719633,
+        1.1401567830826467,
+        -2.3608957757703446,
+        2.892299087847578,
+        3.2971732708887957,
+        1.017935912421587
+      ],
+      "position_error_m": 1.0232831691011794e-05,
+      "rotation_error_rad": 5.7019317302537236e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.0009583290170602221,
+        "required_m": 0.03,
+        "slack_m": -0.029041670982939777,
+        "valid": false,
+        "robot_part": "panda_panda_link4/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 28,
+      "seed_q": [
+        -1.352394485944317,
+        0.8247244094381052,
+        2.2883209406280307,
+        -0.11004646140681595,
+        -2.389384306266518,
+        1.6639205878342382,
+        2.7181226666828793
+      ],
+      "arm_q": [
+        2.522070178987506,
+        1.7577980495646275,
+        -1.8481401120152412,
+        -2.640190874057886,
+        1.7924784715271305,
+        2.824025846648285,
+        2.5214254729320262
+      ],
+      "position_error_m": 2.3606396791209628e-05,
+      "rotation_error_rad": 0.00021965156225790212,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.0257493757427534,
+        "required_m": 0.03,
+        "slack_m": -0.0042506242572466005,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 29,
+      "seed_q": [
+        0.5005692288882404,
+        1.0451565557531792,
+        -0.6600359848716235,
+        -0.46424503030532493,
+        2.670101095150724,
+        1.006227389143983,
+        -0.9544131355986898
+      ],
+      "error": "IK failed: pose residual 0.05758, target [ 4.34842161 -1.00492085  1.31317695]"
+    },
+    {
+      "index": 30,
+      "seed_q": [
+        -0.4679794656603855,
+        1.6080909235082006,
+        -2.4868252414874483,
+        -1.2553719747017162,
+        0.4325444476486222,
+        2.859887372210047,
+        -2.4183736744609146
+      ],
+      "arm_q": [
+        2.6980121255845586,
+        1.280746970020041,
+        -2.074465996433819,
+        -2.8549459729619118,
+        0.08115276274510005,
+        3.380032909932254,
+        -2.486102032740902
+      ],
+      "position_error_m": 1.4103458939319255e-05,
+      "rotation_error_rad": 4.6178819608673144e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.020608344542783687,
+        "required_m": 0.03,
+        "slack_m": -0.009391655457216312,
+        "valid": false,
+        "robot_part": "panda_panda_link4/3",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 31,
+      "seed_q": [
+        -1.9588534012694545,
+        1.0123886863288132,
+        2.558059525557695,
+        -1.454635427378766,
+        0.08634520384881661,
+        2.6494555840078844,
+        -1.727053073634544
+      ],
+      "arm_q": [
+        -1.9729469433953308,
+        0.7441142264825038,
+        2.8921377284640784,
+        -2.7121492605202744,
+        -1.973726418298516,
+        2.0395903875869825,
+        -1.3731978493344341
+      ],
+      "position_error_m": 6.323875131891904e-06,
+      "rotation_error_rad": 6.239164238749508e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23477e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 32,
+      "seed_q": [
+        1.8802035959832621,
+        -1.6517870907250527,
+        0.7417006811906224,
+        -0.5610485921377544,
+        -2.1360731012836767,
+        1.3487713155775927,
+        -1.30134035322167
+      ],
+      "arm_q": [
+        2.8252106056041155,
+        0.7628225455004524,
+        -1.8873953631423117,
+        -2.6308649395740455,
+        1.3523362710207274,
+        3.7474989697330265,
+        2.4835921062039015
+      ],
+      "position_error_m": 2.3150058666396055e-05,
+      "rotation_error_rad": 0.0001393738141350965,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.026691525320271477,
+        "required_m": 0.03,
+        "slack_m": -0.003308474679728522,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 33,
+      "seed_q": [
+        1.5886078190133808,
+        -1.115858080329494,
+        -0.5783795733920973,
+        -1.3247162033394984,
+        -2.648471804486145,
+        1.4040350063883305,
+        -1.8609811307753787
+      ],
+      "arm_q": [
+        1.8690521559304147,
+        -1.0737259591038162,
+        -0.7444341293136327,
+        -2.767082512887919,
+        -2.2165895403302813,
+        1.5296118759685537,
+        -1.623593251776132
+      ],
+      "position_error_m": 3.890377473826726e-06,
+      "rotation_error_rad": 5.6136080278949965e-06,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23427e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 34,
+      "seed_q": [
+        -1.332625629923115,
+        -1.146736161891318,
+        -0.6315605768577992,
+        -2.929642984534108,
+        -1.4654158740098375,
+        0.8096792072318116,
+        1.0244777681145254
+      ],
+      "error": "IK failed: pose residual 0.17249, target [ 4.34842161 -1.00492085  1.31317695]"
+    },
+    {
+      "index": 35,
+      "seed_q": [
+        1.0813072440916067,
+        -0.3137203386579064,
+        -2.2581345793421304,
+        -1.4878106673056495,
+        0.11560154286793756,
+        1.9319087892454279,
+        -0.6917319929288812
+      ],
+      "arm_q": [
+        2.6008008910363354,
+        1.2395252559475558,
+        -1.9518853177710236,
+        -2.3841809997296264,
+        2.677433314169614,
+        3.292474942098302,
+        1.2731880160346203
+      ],
+      "position_error_m": 1.2983253013028656e-05,
+      "rotation_error_rad": 7.428133812381359e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.5478e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link4/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 36,
+      "seed_q": [
+        -1.3230829044013033,
+        -1.6731321326134443,
+        -2.1256571536786826,
+        -2.6326602760022717,
+        -1.0997545359025958,
+        1.0180041486761506,
+        -0.3950050806526382
+      ],
+      "arm_q": [
+        -2.6289903124923977,
+        0.7347409217631259,
+        -2.892298985876683,
+        -2.6788041006929344,
+        -1.8639417211004685,
+        2.4165264207928505,
+        -1.2335307232553294
+      ],
+      "position_error_m": 1.8220277654318674e-05,
+      "rotation_error_rad": 9.496060944463557e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23536e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 37,
+      "seed_q": [
+        2.094996617572567,
+        1.4579110797624864,
+        -0.6293117207531664,
+        -1.377818508710538,
+        2.5109582499595304,
+        2.5155795285073164,
+        -2.598417167375112
+      ],
+      "arm_q": [
+        2.716927945304689,
+        1.2190488248049658,
+        -1.9641649722525034,
+        -2.822415305300364,
+        0.5678535843475846,
+        3.3897849982296733,
+        -2.8922990878484973
+      ],
+      "position_error_m": 1.6003882469777468e-05,
+      "rotation_error_rad": 0.00012134409847098441,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.015109693656389735,
+        "required_m": 0.03,
+        "slack_m": -0.014890306343610264,
+        "valid": false,
+        "robot_part": "panda_panda_link4/3",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 38,
+      "seed_q": [
+        -0.43515218449728765,
+        0.9478530915129701,
+        -0.6042446673206232,
+        -0.27867182136309987,
+        -1.5952544027230422,
+        2.8945881008519025,
+        0.9700985253094339
+      ],
+      "arm_q": [
+        2.5947073786113646,
+        1.2394495862550126,
+        -2.131467163972684,
+        -2.362323297433407,
+        -2.8726345907078352,
+        3.297017276501682,
+        0.4021591869940465
+      ],
+      "position_error_m": 1.92572368957022e-05,
+      "rotation_error_rad": 9.356370112928711e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.01397269425545189,
+        "required_m": 0.03,
+        "slack_m": -0.01602730574454811,
+        "valid": false,
+        "robot_part": "panda_panda_link4/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 39,
+      "seed_q": [
+        0.9680217637073913,
+        -0.6017332336503884,
+        -1.097342267691954,
+        -1.7799991129637935,
+        1.098252545217938,
+        1.383505959545826,
+        2.6320779150057416
+      ],
+      "arm_q": [
+        -0.41596392251467945,
+        -1.1117875482753814,
+        1.2675976739006984,
+        -2.7295887174361404,
+        1.0988259935452398,
+        3.444947563096328,
+        2.8922986772537245
+      ],
+      "position_error_m": 1.6347095347315517e-05,
+      "rotation_error_rad": 0.00010222156278732274,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.008136781604297788,
+        "required_m": 0.03,
+        "slack_m": -0.02186321839570221,
+        "valid": false,
+        "robot_part": "panda_panda_link4/3",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 40,
+      "seed_q": [
+        0.5351945132337641,
+        -0.21351941844883826,
+        0.7668041873022902,
+        -2.6641423825171495,
+        1.1621734056859094,
+        0.560415521664922,
+        1.8371671259760238
+      ],
+      "arm_q": [
+        -1.3968530333016644,
+        0.9777652727494887,
+        2.4773627147707185,
+        -2.7535195924250773,
+        -2.1496272305369404,
+        1.6388258550767203,
+        -1.5582483716313935
+      ],
+      "position_error_m": 2.1496053907482477e-05,
+      "rotation_error_rad": 0.00012984439407977088,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23477e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 41,
+      "seed_q": [
+        -2.570833175155008,
+        0.5942855853226787,
+        1.4746883093998293,
+        -2.45469812026315,
+        -2.185847482787078,
+        2.82613751994057,
+        -1.208216462590342
+      ],
+      "arm_q": [
+        -1.971407296708161,
+        0.7444218285116423,
+        2.8909177530228534,
+        -2.712275932805605,
+        -1.9741886093609908,
+        2.038697694684786,
+        -1.3734829620866462
+      ],
+      "position_error_m": 6.482509736190391e-06,
+      "rotation_error_rad": 3.0075250849945324e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23477e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 42,
+      "seed_q": [
+        0.016968595015366184,
+        -0.5786002399143271,
+        -1.9325064702006607,
+        -0.23956001375992697,
+        -1.081098986919269,
+        1.7757021461230487,
+        -0.7705384589443942
+      ],
+      "arm_q": [
+        -2.628997228198643,
+        0.7347482123874134,
+        -2.8922990877511223,
+        -2.678786060269254,
+        -1.8638862095494833,
+        2.4165560734119707,
+        -1.2335933681332927
+      ],
+      "position_error_m": 1.922393706362558e-05,
+      "rotation_error_rad": 8.57472757042883e-05,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.23536e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 43,
+      "seed_q": [
+        1.845729342496242,
+        1.0798129860371553,
+        2.1133029708833617,
+        -2.191733535268323,
+        0.7268134585291004,
+        0.04883729200825855,
+        -1.2754310227628747
+      ],
+      "arm_q": [
+        -1.0475620470524807,
+        1.3083513514238663,
+        2.262831492435942,
+        -2.7988564122904096,
+        -2.399937806540562,
+        1.3095670934282122,
+        -1.7939980344879098
+      ],
+      "position_error_m": 1.970866905683182e-05,
+      "rotation_error_rad": 0.0001280885205716309,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.2252e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 44,
+      "seed_q": [
+        0.1188056690157171,
+        -0.5807787528157247,
+        2.7959861201410345,
+        -1.1039859283241973,
+        2.4260958090740616,
+        0.8287495168906369,
+        0.7702641506933485
+      ],
+      "arm_q": [
+        -0.10942308909396525,
+        -0.9578235388729851,
+        0.6607945142642735,
+        -2.635227116609502,
+        -1.7899834353029245,
+        2.86676213822258,
+        -1.0575562988502698
+      ],
+      "position_error_m": 2.365482989476839e-05,
+      "rotation_error_rad": 0.00017400916143917044,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 1.25987e-319,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 45,
+      "seed_q": [
+        -0.6978475696873216,
+        0.5986112994259567,
+        1.4028434486729675,
+        -0.9236640915897678,
+        -1.2922985733791537,
+        3.267712956006272,
+        -0.7045550227812263
+      ],
+      "arm_q": [
+        -0.6528598102256307,
+        -1.4588012164026856,
+        0.8367978751750682,
+        -2.687194962799585,
+        -1.2532753666926524,
+        3.5087310876257805,
+        -1.2686768255617504
+      ],
+      "position_error_m": 1.923027730099731e-05,
+      "rotation_error_rad": 0.00016566655194407255,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.008404858426643458,
+        "required_m": 0.03,
+        "slack_m": -0.02159514157335654,
+        "valid": false,
+        "robot_part": "panda_panda_link4/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    },
+    {
+      "index": 46,
+      "seed_q": [
+        0.476765662181017,
+        1.538717367051097,
+        1.6578902216193199,
+        -2.5306336909420595,
+        1.6997110820774055,
+        1.1519083811432185,
+        -1.0479045171148436
+      ],
+      "error": "IK failed: pose residual 0.05758, target [ 4.34842161 -1.00492085  1.31317695]"
+    },
+    {
+      "index": 47,
+      "seed_q": [
+        -0.7253783928624058,
+        -0.27336840361724346,
+        2.2305096973124434,
+        -1.2717525955221407,
+        -1.0046619680747182,
+        0.9751512080711415,
+        2.268862339626344
+      ],
+      "arm_q": [
+        -0.6007058103787968,
+        -1.6839205442457834,
+        1.2988396619730131,
+        -2.6321665489282533,
+        1.7891826378136384,
+        2.891502482047074,
+        2.488813787886258
+      ],
+      "position_error_m": 1.6938936151834857e-05,
+      "rotation_error_rad": 0.00015645665064348692,
+      "conservative_world": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.03,
+        "slack_m": -0.03,
+        "robot_part": "arm",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "source_hazard_sphere_minimum": {
+        "distance_m": 0.02652164290565332,
+        "required_m": 0.03,
+        "slack_m": -0.0034783570943466777,
+        "valid": false,
+        "robot_part": "panda_panda_link5/0",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "cpu_external_feasible": false
+    }
+  ],
+  "complete": true,
+  "cpu_external_feasible_count": 0
+}
