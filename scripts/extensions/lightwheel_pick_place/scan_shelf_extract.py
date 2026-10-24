@@ -63,7 +63,7 @@ surface = support.get('surface') or ''
 suffix = '/shelves_main_group/corpus/board_0'
 if '/kitchen/' in surface:
     suffix = '/' + surface.split('/kitchen/', 1)[1]
-movable = tuple(n for n in ('plate', 'bowl', 'orange', 'apple', 'lime', 'wooden_bowl') if n != pick) + ('glass',)
+movable = tuple(n for n in ('plate', 'bowl', 'orange', 'apple') if n != pick) + ('glass',)
 world = CollisionWorld(
     stage, kin,
     pick_object=pick,
@@ -72,10 +72,12 @@ world = CollisionWorld(
     movable_objects=movable,
 )
 
-rigid = ('lemon', 'plate', 'bowl', 'orange', 'apple', 'lime', 'wooden_bowl')
+rigid = ('lemon', 'plate', 'bowl', 'orange', 'apple')
 with h5py.File(ep / 'trajectory.h5') as f:
     q_full = np.asarray(f['next_obs/q'][-1])
     for name in rigid:
+        if name == pick:
+            continue  # carried via attachment
         if name in f['next_obs']:
             world.set_obstacle_pose(name, np.asarray(f[f'next_obs/{name}'][-1, :7]))
     tcp0 = np.asarray(f['next_obs/tcp'][-1])
