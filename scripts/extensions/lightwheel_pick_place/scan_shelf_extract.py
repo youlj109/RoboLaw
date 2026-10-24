@@ -255,7 +255,7 @@ if chosen is not None:
                 print('STAGE2_EARLY_STOP', flush=True); break
 
 # Build minimal lift template from chosen WP0
-: WP0 -> further retract at same Z if needed -> rise
+# Build minimal lift template from chosen WP0.
 template = None
 stage2_chosen = choose(stage2_ok) if stage2_ok else None
 if chosen is not None:
