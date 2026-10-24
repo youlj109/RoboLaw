@@ -1,0 +1,112 @@
+{
+  "student": "lwx",
+  "label": "C07",
+  "scope": "One robot/steel physical pilot; original C01-C08 retained. Await user visual approval before extending other variants or tasks.",
+  "physical_verification_passed": true,
+  "user_visual_acceptance": "pending",
+  "automatic_all_seed_10cm_screen_passed": false,
+  "automatic_screen_note": "Discovery-only visibility threshold, not a safety threshold. Planning TCP deviations approx .0952/.1005/.0991m. All original safety gates unchanged.",
+  "campaign": {
+    "stage": "ready_for_visual_review",
+    "complete": true,
+    "baseline": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+    "config": "configs/extensions/doors/c07_robot_candidate_obvious13_11.json",
+    "paired": "reports/doors/lwx_C07_obvious_demo_20261025/C07_robot_obvious13_candidate_11_paired01/report.json",
+    "physical_trial_budget": 1,
+    "visual_review_pending": true,
+    "automatic_visible_detour_threshold_passed": false,
+    "scope": "Safe physical pilot for manual visual review. Three-seed maximum TCP deviations approximately .0952/.1005/.0991m; strict all-seed .10m automatic discovery screen was not met. Safety gates remain unchanged.",
+    "variant_gates": {
+      "result.json": true,
+      "task_validation_full.json": true,
+      "task_review_audit.json": true,
+      "source_contact_audit.json": true,
+      "self_collision_audit.json": true
+    },
+    "episode": "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_pilot13",
+    "neutral": "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_neutral_pilot13"
+  },
+  "actual_metrics": {
+    "scope": "Actual recorded joint-state FK during pregrasp and original-camera projection. Source collision audits remain separate. No dangerous baseline was physically replayed with an obstacle.",
+    "episode": "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_pilot13",
+    "baseline": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+    "original_cameras_preserved": true,
+    "same_controller_parameters": true,
+    "visual_review_pending": true,
+    "physics_result_accepted": true,
+    "baseline_tcp_length_m": 0.4605424328750484,
+    "new_tcp_length_m": 0.6657120533087125,
+    "max_actual_tcp_distance_to_baseline_polyline_m": 0.09853834518131951,
+    "pregrasp_frames": [
+      85,
+      87
+    ],
+    "added_actual_tcp_length_m": 0.2051696204336641
+  },
+  "source_cameras": {
+    "external_camera": {
+      "baseline_visible_fraction": 1.0,
+      "new_visible_fraction": 1.0,
+      "max_actual_projected_distance_to_baseline_polyline_px": 61.15219198008436
+    },
+    "external_camera_2": {
+      "baseline_visible_fraction": 1.0,
+      "new_visible_fraction": 1.0,
+      "max_actual_projected_distance_to_baseline_polyline_px": 86.64377667996006
+    }
+  },
+  "paired_seeds": [
+    42,
+    43,
+    44
+  ],
+  "source_intersection_all_seeds": true,
+  "physics_result": {
+    "task_success": true,
+    "accepted": true,
+    "mode": "collect",
+    "neutral_completed": false,
+    "failure": null,
+    "frames": 1060,
+    "final_door_rad": -0.6522419452667236,
+    "actual_trajectory_samples": 1060,
+    "physical_contact_samples": 890,
+    "delivery_accepted": false,
+    "no_execution_state_writes": true,
+    "safety_audit_physics_dt": 0.008333333333333333,
+    "safety_checks": 9540,
+    "physics_samples": 8481
+  },
+  "evidence_hashes": {
+    "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_pilot13/metadata.json": "d066c7517b44e406de779a59a4486d2cc8e61a6704d247c95e5023a5af48af07",
+    "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_pilot13/result.json": "459ec2eb7f3c381933efb43d57c258b985bd787576a1406b7f03f4bc314621d3",
+    "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_pilot13/task_validation_full.json": "331cf2fad24ce546d8829585e7b2d4a5b3786c14c2e35270d722477e7f43286c",
+    "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_pilot13/task_review_audit.json": "1d86b2865bdecf8a134b8ea79312845969be3b24d49ac522966488f516e8b74a",
+    "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_pilot13/source_contact_audit.json": "2cf383372eba53d1ca832a67bb42594e7780f4c9fd6a6d0040e781db7c1eb13b",
+    "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_pilot13/self_collision_audit.json": "c18c60e55fe35375de5b081a9a9a33fa901d8f92437a1b9dbaf1c898d8b86609",
+    "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_pilot13/avoidance_audit.json": "ce5d065294bcc72fec7ba2aae70f29fe68da163900cf991ee1ae59a9837857e3",
+    "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_pilot13/all_cameras.mp4": "9ac125dca8f4d53daa9c89417189ebd88e0130e95bcec6f798a0d457ed7a4c34",
+    "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_pilot13/baseline_comparison_external_camera_2_03.mp4": "eae2fb242abd463e9758fe55a2d4c13d94f3f0a32269693b585db24b1042fab1",
+    "configs/extensions/doors/c07_robot_candidate_obvious13_11.json": "4d600f02a248148416435a9e69c3aaeebb97b347d0a4e1e6e97040f2276fc4ce",
+    "reports/doors/lwx_C07_obvious_demo_20261025/C07_robot_obvious13_candidate_11_paired01/report.json": "562e32d9c08c1157a90b93a586b3abc83f22d1c1d0deae6ab8f3b73962f09b93",
+    "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_neutral_pilot13/task_review_audit.json": "e7b3e6e1bf7e5cb00deb753a14318472dc5545f2caab17e2067421c164e8f6f1",
+    "reports/doors/lwx_C07_obvious_demo_20261025/physical_visual_review13/actual_detour_metrics.json": "05564b4ffe8559d8eca76d4a7d0050f629d91d92bf734bb71427293f9202c6ea",
+    "reports/doors/lwx_C07_obvious_demo_20261025/physical_visual_review13/C07_approach_compare_first9s.mp4": "5b1094014b55c1f2ebddb1390aa5601e856cc2a79d9742302b51ff86da78985f"
+  },
+  "visual_review": {
+    "type": "Sampled native recorded RGB",
+    "approach_frames": [
+      9,
+      37,
+      66,
+      95
+    ],
+    "other_frames": [
+      145,
+      1020,
+      1059
+    ],
+    "observed": "Steel visible; gripper moves toward lower side before returning to original handle target; opening and released hold visible.",
+    "limitation": "Native external cameras crop parts of upper arm; no camera changes. Source hulls/primitive audits are not exact PhysX cooked-face identification."
+  }
+}

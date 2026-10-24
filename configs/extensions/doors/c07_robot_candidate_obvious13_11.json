@@ -1,0 +1,68 @@
+{
+  "_kitchen_asset": "assets/extensions/doors/c03_mechanisms_lwx_01.usda",
+  "_selection_note": "Discovery candidate only; not task or physical acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian",
+  "_fixed_source_layout": "configs/extensions/doors/c07_source_layout_lwx.json",
+  "_status": "Frozen source relation solution; added layouts require design from this task baseline.",
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      5.1388,
+      -2.8485,
+      1.0883
+    ],
+    "yaw_deg": 180.0,
+    "static": true,
+    "semantic_anchor": "Original successful pregrasp actually intersects added source geometry. Fixed baseline task, layout, target and control policy; independent paired planning and physical audits required.",
+    "baseline_intersection_actions": [
+      32,
+      33,
+      34
+    ],
+    "source_supports": [
+      "/World/envs/env_0/kitchen/floor_room/geometry"
+    ],
+    "source_intersection_in_reference_off_seeds": {
+      "42": [
+        10,
+        11
+      ],
+      "43": [
+        10,
+        11,
+        12
+      ],
+      "44": [
+        10,
+        11
+      ]
+    },
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/c07_robot_candidate_obvious13_11_robot_support.usda",
+      "position": [
+        5.1388,
+        -2.8485,
+        0.0
+      ],
+      "static": true,
+      "bounds_world_m": [
+        [
+          5.0538,
+          -2.9335,
+          -4.470348362317633e-10
+        ],
+        [
+          5.2238,
+          -2.7635,
+          1.0883
+        ]
+      ],
+      "source_support": "/World/envs/env_0/kitchen/floor_room/geometry"
+    },
+    "candidate_search": "reports/doors/lwx_C07_obvious_demo_20261025/robot_crossbar_deeper_search13.json",
+    "candidate_search_sha256": "a03a0168e5a33cd37439cbbedf69c373cf1a8a098f86a907f7dd0c6fbf433e5f",
+    "candidate_index": 11
+  }
+}
