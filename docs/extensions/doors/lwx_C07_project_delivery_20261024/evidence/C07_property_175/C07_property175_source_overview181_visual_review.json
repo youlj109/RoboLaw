@@ -1,0 +1,16 @@
+{
+  "image": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_property175_source_overview181.png",
+  "image_sha256": "ff5e2a9ad043eb6368189c369f06102d68e2aba00abb6b7d53dba12a6a6e8871",
+  "illustration_report": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_property175_source_overview181.json",
+  "illustration_report_sha256": "0ccffa3ccb72ac8704666453a0c8264e00281928da35e9beff21666942de29c9",
+  "reviewed_alignment": true,
+  "observations": [
+    "All four source-reconstruction panels actually inspected. Wine glass source mesh is visible above the robot; left arm part violates original50mm margin with source gap39.5053mm, right normalized-progress frame has gap118.0035mm and no risky body.",
+    "Neither selected panel shows physical source intersection. Red means margin violation; yellow is conservative per-collider AABB plus margin, not exact geometry.",
+    "Native camera source-risk01 also actually inspected: risk arm outline partly outside image; wine glass not clearly visible. This overview supplements recorded RGB without replacing it."
+  ],
+  "limitations": [
+    "Offline source-mesh/robot-hull reconstruction only, not recorded RGB or dynamics/physics replay. Unsafe baseline is counterfactual and was not executed.",
+    "118.0035mm is selected-frame distance, not global minimum. Actual independent audit minimum source gap108.3072mm against original50mm. Support and kitchen omitted from drawing remain in independent audits."
+  ]
+}

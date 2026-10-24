@@ -40,6 +40,8 @@ def main():
     parser.add_argument('episode', type=Path)
     parser.add_argument('--baseline', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--necessity-mode', choices=['source_intersection', 'original_clearance'],
+                        default='source_intersection')
     args = parser.parse_args()
     if args.output.exists() or args.output.with_suffix('.json').exists():
         raise FileExistsError(args.output)
@@ -48,10 +50,18 @@ def main():
     audit = read(args.episode / 'avoidance_audit.json')
     if not audit['accepted']:
         raise ValueError('Accepted independent avoidance audit is required')
-    hits = [v for v in audit['baseline_counterfactual']['violations']
-            if v['phase'] == 'pregrasp' and v['side'] == 'obs' and v.get('intersecting')]
+    observations = [v for v in audit['baseline_counterfactual']['violations']
+                    if v['phase'] == 'pregrasp' and v['side'] == 'obs']
+    if args.necessity_mode == 'original_clearance':
+        hits = [v for v in observations if v.get('valid') is False and
+                all(np.isfinite(v.get(k, np.nan)) for k in ['distance_m', 'required_m', 'slack_m']) and
+                0 <= v['distance_m'] < v['required_m'] and
+                abs(v['distance_m'] - v['required_m'] - v['slack_m']) < 1e-8 and
+                v.get('hazard_part') and v.get('robot_part')]
+    else:
+        hits = [v for v in observations if v.get('intersecting')]
     if not hits:
-        raise ValueError('Actual source intersection in recorded off path is required')
+        raise ValueError('Required original-source necessity missing in recorded off path')
     sequences = [read(p / 'trajectory.json') for p in [args.baseline, args.episode]]
     free = [[i for i, row in enumerate(seq) if row['phase'] == 'pregrasp'] for seq in sequences]
     bi = hits[len(hits) // 2]['action_index']
@@ -181,6 +191,12 @@ def main():
                   scope='Supplementary geometry visibility only. FCL uses complete source meshes; rendering '
                   'may thin displayed faces. Conservative yellow AABBs are not exact safety shells. '
                   'RGB, PhysX cooked shapes, continuous clearance and dynamics are not proved by this image.')
+    if args.necessity_mode == 'original_clearance':
+        report.update(source_necessity_mode=args.necessity_mode,
+                      source_necessity_scope='Original source clearance violation, not inevitable physical intersection.',
+                      selected_audit_violation=hits[len(hits) // 2])
+        if any(abs(v['required_m'] - margin) > 1e-9 for v in hits):
+            raise ValueError('Audit margin does not match original source margin')
     args.output.with_suffix('.json').write_text(json.dumps(report, indent=2) + '\n')
     print(args.output)
 

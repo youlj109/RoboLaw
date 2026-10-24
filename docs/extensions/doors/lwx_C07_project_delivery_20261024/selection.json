@@ -1,0 +1,40 @@
+{
+  "label": "C07",
+  "episodes": {
+    "human": {
+      "episode": "datasets/doors/lwx_C07_middle_release_retry103_20261024/C07_human_71",
+      "baseline": "datasets/doors/lwx_C07_middle_release_retry103_20261024/C07_base_01",
+      "paired_report": "reports/doors/lwx_C07_middle_release_retry103_20261024/C07_human_71_candidate_00_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C07_middle_release_retry103_20261024/C07_human_71_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C07_middle_release_retry103_20261024/C07_human_71_source_risk_overview03_visual_review.json",
+      "baseline_visual_review": "reports/doors/lwx_C07_middle_release_retry103_20261024/C07_base_01_visual_review01.json"
+    },
+    "robot": {
+      "episode": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_robot_72",
+      "baseline": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+      "paired_report": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_robot_72_candidate_00_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_robot_72_visual_review01.json",
+      "source_risk_review": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_robot_72_source_risk_overview03_visual_review.json",
+      "baseline_visual_review": "reports/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01_visual_review02.json"
+    },
+    "base": {
+      "episode": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01",
+      "visual_review": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_base140_visual_review01.json"
+    },
+    "property": {
+      "episode": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_property_175",
+      "baseline": "datasets/doors/lwx_C07_grip_roll_retry140_20261024/C07_base_01",
+      "paired_report": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_property_175_candidate_04_paired01/report.json",
+      "visual_review": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_property175_native179_visual_review.json",
+      "source_risk_review": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_property175_source_overview181_visual_review.json",
+      "baseline_visual_review": "reports/doors/lwx_C07_grip_roll_retry140_20261024/C07_base140_visual_review01.json"
+    }
+  },
+  "task": "kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian",
+  "unit_test_log": "reports/doors/lwx_project_finalization_20261024/unit_tests_project182.log",
+  "retained_rejections": [
+    "Earlier C07 failed actual runs and offline candidates retained. Property138 stopped at IK boundary without final success.",
+    "Property175 necessity is violation of original50mm source margin, not actual source intersection. Additional strict-intersection screen remains false.",
+    "Human/robot/property native camera hazard visibility is limited; separately labelled source reconstructions supplement recorded RGB."
+  ]
+}
