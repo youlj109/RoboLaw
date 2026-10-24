@@ -206,31 +206,100 @@ def choose(oks):
 
 
 chosen = choose(ok_rows)
-# Build minimal lift template from chosen WP0: WP0 -> further retract at same Z if needed -> rise
+
+# Stage-2: if WP0 is pure +Z, advance to that end-q and scan lateral deltas from there.
+stage2_rows=[]; stage2_ok=[]; stage2_q=None; stage2_tcp=None
+if chosen is not None:
+    dx0,dy0,dz0=chosen['delta_m']
+    if abs(dx0)<1e-9 and abs(dy0)<1e-9 and dz0>0:
+        print('STAGE2 from WP0', chosen['delta_mm'], flush=True)
+        target0=tcp_T.copy(); target0[:3,3]=tcp_T[:3,3]+np.array(chosen['delta_m'])
+        path0=planner.plan_pose(q, target0, ignore, 1, phase='lift')
+        stage2_q=np.asarray(path0['positions'][-1]).copy()
+        stage2_tcp=kin.fk(stage2_q)
+        lat_dy=[-0.04,-0.06,-0.08,-0.10,-0.12,-0.16,-0.20]
+        lat_dz=[0.0,0.02,0.04,0.06]  # relative to stage2 tcp
+        lat_dx=[0.0,-0.02,0.02]
+        s2=[]
+        for dx in lat_dx:
+            for dy in lat_dy:
+                for dz in lat_dz:
+                    s2.append((dx,dy,dz))
+        # rank: more -y, small |dx|, modest dz
+        s2=sorted(s2, key=lambda c: (-abs(c[1]), abs(c[2]), abs(c[0])))[:36]
+        for i,(dx,dy,dz) in enumerate(s2):
+            delta=np.array([dx,dy,dz],dtype=float)
+            target=stage2_tcp.copy(); target[:3,3]=stage2_tcp[:3,3]+delta
+            row={'index':i,'delta_m':delta.tolist(),'delta_mm':[round(1000*x) for x in delta],
+                 'plan_phase':'transfer','ok':False,'relative_to':'wp0'}
+            started=time.perf_counter()
+            try:
+                path=planner.plan_pose(stage2_q, target, ignore, 1, phase='transfer')
+                row['plan_status']=(path.get('metadata') or {}).get('status')
+                validation=planner.validate_path(path['positions'], ignore, 1, phase='lift')
+                row['validation_valid']=bool(validation.get('valid'))
+                if validation.get('valid'):
+                    row['ok']=True; stage2_ok.append(row)
+                else:
+                    raw=str(validation)
+                    row['error']='FCL_INVALID'
+                    row['board_hits']=sorted({b for b in ('board_0','board_1','board_2','shelves') if b in raw})
+            except RuntimeError as exc:
+                row['error']=short_err(exc)
+                raw=str(exc)
+                row['board_hits']=sorted({b for b in ('board_0','board_1','board_2','shelves') if b in raw})
+            row['seconds']=round(time.perf_counter()-started,3)
+            stage2_rows.append(row)
+            print(f"S2 {i:02d} dmm={row['delta_mm']} ok={row['ok']} err={row.get('error')} t={row['seconds']}", flush=True)
+            if len(stage2_ok)>=5:
+                print('STAGE2_EARLY_STOP', flush=True); break
+
+# Build minimal lift template from chosen WP0
+: WP0 -> further retract at same Z if needed -> rise
 template = None
+stage2_chosen = choose(stage2_ok) if stage2_ok else None
 if chosen is not None:
     dx, dy, dz = chosen['delta_m']
-    # If WP0 already cleared laterally (|dy|>=0.10), rise from there; else extend -Y at hold_z then rise.
-    hold_z = max(dz, 0.04)
-    y_final = dy if abs(dy) >= 0.10 else min(dy, -0.12)  # more negative
     waypoints = [[dx, dy, dz]]
-    if abs(y_final - dy) > 1e-6:
-        waypoints.append([dx, y_final, hold_z if dz < hold_z else dz])
-    waypoints.append([dx, y_final if abs(y_final) >= abs(dy) else dy, max(0.12, hold_z + 0.08)])
-    template = {
-        'wp0_delta_m': [dx, dy, dz],
-        'waypoints_delta_m': waypoints,
-        'shelf_retract_y': float(y_final if abs(y_final) >= abs(dy) else dy),
-        'shelf_preclear_z': float(dz if abs(dy) < 1e-9 else 0.0),
-        'shelf_retract_clear_z': float(max(dz, 0.0)),
-        'shelf_rise_z': float(waypoints[-1][2]),
-        'shelf_retract_steps': 1 if abs(dy) >= 0.05 else 3,
-        'plan_phase_wp0': chosen['plan_phase'],
-        'rationale': (
-            'WP0 from feasibility scan (plan+FCL). '
-            'Minimal template: keep WP0, optional extend -Y at hold Z, then rise clear of board_1.'
-        ),
-    }
+    if stage2_chosen is not None:
+        dx2, dy2, dz2 = stage2_chosen['delta_m']
+        # Absolute from original TCP: WP0 + stage2 relative
+        abs2 = [dx+dx2, dy+dy2, dz+dz2]
+        waypoints.append(abs2)
+        # Final rise at retracted Y
+        waypoints.append([abs2[0], abs2[1], max(abs2[2]+0.08, 0.12)])
+        template = {
+            'wp0_delta_m': [dx, dy, dz],
+            'wp1_delta_m': abs2,
+            'wp1_relative_to_wp0_m': [dx2, dy2, dz2],
+            'waypoints_delta_m': waypoints,
+            'shelf_preclear_z': float(dz),
+            'shelf_retract_y': float(abs2[1]),
+            'shelf_retract_clear_z': float(abs2[2]),
+            'shelf_rise_z': float(waypoints[-1][2]),
+            'shelf_retract_steps': 1,
+            'plan_phase_wp0': chosen['plan_phase'],
+            'plan_phase_wp1': 'transfer',
+            'rationale': (
+                'Stage1 WP0 pure-Z cartesian lift+FCL; stage2 lateral from WP0 end-q via transfer+FCL; '
+                'then rise at cleared Y.'
+            ),
+        }
+    else:
+        # Fallback: WP0 only + hopeful retract (may still fail)
+        waypoints.append([0.0, -0.12, max(dz, 0.04)])
+        waypoints.append([0.0, -0.12, 0.12])
+        template = {
+            'wp0_delta_m': [dx, dy, dz],
+            'waypoints_delta_m': waypoints,
+            'shelf_preclear_z': float(dz),
+            'shelf_retract_y': -0.12,
+            'shelf_retract_clear_z': float(max(dz, 0.04)),
+            'shelf_rise_z': 0.12,
+            'shelf_retract_steps': 1,
+            'plan_phase_wp0': chosen['plan_phase'],
+            'rationale': 'Only stage1 WP0 reachable; stage2 lateral unresolved.',
+        }
 
 out = {
     'source_episode': str(ep),
@@ -246,6 +315,9 @@ out = {
     ),
     'reachable_count': len(ok_rows),
     'chosen': chosen,
+    'stage2_chosen': stage2_chosen if chosen is not None else None,
+    'stage2_reachable_count': len(stage2_ok),
+    'stage2_candidates': stage2_rows,
     'lift_template': template,
     'candidates': rows,
     'elapsed_s': round(time.perf_counter() - t0, 2),
@@ -254,5 +326,5 @@ args.output.parent.mkdir(parents=True, exist_ok=True)
 args.output.write_text(json.dumps(out, indent=2))
 print('CHOSEN', json.dumps(chosen, indent=2) if chosen else None, flush=True)
 print('TEMPLATE', json.dumps(template, indent=2) if template else None, flush=True)
-print('WROTE', args.output, 'reachable', len(ok_rows), '/', len(rows), flush=True)
-raise SystemExit(0 if chosen is not None else 3)
+print('WROTE', args.output, 'reachable', len(ok_rows), '/', len(rows), 'stage2', len(stage2_ok), flush=True)
+raise SystemExit(0 if (chosen is not None and (stage2_chosen is not None or abs(chosen['delta_m'][1])>=0.05)) else (0 if chosen is not None else 3))

@@ -218,7 +218,7 @@ with SimulationAppContext(args):
             overview_initial=arr(scene['overview_camera'].data.output['rgb'])[0,:,:,:3].astype(np.uint8)
             if not cv2.imwrite(str(out/'overview_initial.png'),cv2.cvtColor(overview_initial,cv2.COLOR_RGB2BGR)):
                 raise RuntimeError('Could not save actual initial overview for visibility review')
-        def cart(position,*,rotation=None):
+        def cart(position,*,rotation=None,force_phase=None):
             global q
             world.allowed_phase=phase
             s=snapshot();q=s['q'][ids].copy()
@@ -228,8 +228,11 @@ with SimulationAppContext(args):
             target=np.eye(4);target[:3,3]=position
             target[:3,:3]=(kin.fk(q)[:3,:3] if rotation is None else rotation)
             # Shelf/lateral approach cannot use cuRobo vertical-column phases.
+            # Pure +Z extract segments keep phase=lift (local cartesian); laterals use transfer.
             planning_phase=phase
-            if (not use_pregrasp_phase) and phase in ('pregrasp','approach','lift'):
+            if force_phase is not None:
+                planning_phase=force_phase
+            elif (not use_pregrasp_phase) and phase in ('pregrasp','approach','lift'):
                 planning_phase='transfer'
             try:trajectory=planner.plan_pose(q,target,ignores(),grip,phase=planning_phase)
             except RuntimeError:
@@ -347,9 +350,11 @@ with SimulationAppContext(args):
                 'z_preclear':z_pre,'steps':n,'waypoints':[w.tolist() for w in waypoints]}
             for wi,w in enumerate(waypoints):
                 try:
-                    cart(held['tcp']+w)
+                    # Pure Z → cartesian lift; any XY component → free MotionGen transfer.
+                    force=('lift' if abs(float(w[0]))<1e-9 and abs(float(w[1]))<1e-9 else 'transfer')
+                    cart(held['tcp']+w, force_phase=force)
                 except RuntimeError as exc:
-                    result['shelf_lift_failed_waypoint']= {'index':wi,'delta_m':w.tolist(),'error':str(exc)}
+                    result['shelf_lift_failed_waypoint']= {'index':wi,'delta_m':w.tolist(),'error':str(exc),'plan_phase':force}
                     raise
         lifted=snapshot();result['lift_m']=float(lifted['lime'][2]-p[2]);result['lift_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'lift',last_actions=5)
         if result['lift_m']<.08 or not result['lift_contacts']['both_fingers_on_body']:raise RuntimeError('Lime failed physical lift/contact check')
