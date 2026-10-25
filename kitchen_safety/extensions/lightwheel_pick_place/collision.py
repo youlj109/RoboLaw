@@ -81,6 +81,8 @@ class CollisionWorld:
         self.pick_object = pick_object
         self.destination_object = destination_object
         self.source_surface_suffix = source_surface_suffix
+        base=env_root or '/World/envs/env_0'
+        self.source_surface_root=next((x for x in (base+source_surface_suffix,base+'/kitchen'+source_surface_suffix) if stage.GetPrimAtPath(x).IsValid()),None)
         if movable_objects is None:
             movable_objects = (destination_object, 'broccoli', 'sweet_potato', 'red_bell_pepper', 'glass')
         self.movable_objects = tuple(movable_objects)
@@ -178,6 +180,10 @@ class CollisionWorld:
         self.last_clearance=None
         print('PLANNER_WORLD',len(self.objects),'collision shapes',flush=True)
 
+    def _is_source_surface(self,name):
+        root=self.source_surface_root
+        return (name==root or name.startswith(root.rstrip('/')+'/')) if root else name.endswith(self.source_surface_suffix)
+
     def bind_pick(self, pick_object):
         """Rebind convex pick hull to another rigid (B03 banana_1 -> banana_2)."""
         import numpy as np
@@ -187,8 +193,10 @@ class CollisionWorld:
             raise RuntimeError(f'Pick object root missing from collision world: {pick_root}')
         reference = self._root_reference_transforms[pick_root]
         inverse = np.linalg.inv(reference)
-        parts = [v @ inverse[:3, :3].T + inverse[:3, 3] for n, (v, f) in self.meshes.items()
-                 if self._matches(n, self.pick_object)]
+        # Rebinding must use authored geometry, not a previously moved world mesh.
+        parts = [reference_mesh[0] @ inverse[:3, :3].T + inverse[:3, 3]
+                 for (name, *_), (*_, reference_mesh) in zip(self.objects, self._object_reference)
+                 if reference_mesh is not None and self._matches(name, self.pick_object)]
         if not parts:
             raise RuntimeError(f'Original {self.pick_object} collision vertices are required')
         self.lime_model, self.lime_vertices = self._convex(np.concatenate(parts))
@@ -489,7 +497,7 @@ class CollisionWorld:
             name,obj,ob_lo,ob_hi=self.objects[indices[k]]
             if label=='carried_lime':
                 if self._matches(name,self.destination_object) and self.allowed_phase in ('lower','release','retreat','settle_final'):continue
-                source_surface=name.endswith(self.source_surface_suffix)
+                source_surface=self._is_source_surface(name)
                 if source_surface and getattr(self,'source_support_mode',None)=='native_rest_until_detached':
                     from .source_support import support_allowed
                     actual_root=self._object_pose(q,object_pose)[:3,3]

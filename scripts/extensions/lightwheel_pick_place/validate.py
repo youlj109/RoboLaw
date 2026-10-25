@@ -51,7 +51,7 @@ def validate(out):
     records = json.loads((out / 'contacts.json').read_text())
     contacts = LimeGraspContacts.__new__(LimeGraspContacts)
     contacts.records = records
-    body_range = [-.001, .061]
+    body_range = list(spec.grasp_body_z_range)
     close = contacts.summarize(body_range, 'close', last_actions=5)
     lift = contacts.summarize(body_range, 'lift', last_actions=5)
     carried = contacts.carried_region(body_range)
@@ -102,7 +102,8 @@ def validate(out):
         checks['state_continuity'] = all(np.allclose(arrays['next_obs/' + name][:-1],
             arrays['obs/' + name][1:], atol=1e-6, rtol=1e-6)
             for name in ('q', pick, dest, 'tcp', 'robot_body_pose_w'))
-        lift_indices = [i for i, phase in enumerate(phases) if phase == 'lift']
+        active=result.get('pick_action_ranges',{}).get(pick,{'start':0,'end':n})
+        lift_indices = [i for i, phase in enumerate(phases) if phase == 'lift' and active['start']<=i<active['end']]
         pick_ds = h5_pose_dataset(trajectory['next_obs'], pick, result)
         actual_lift = (float(arrays['next_obs/' + pick_ds][lift_indices[-1], 2])
                       - float(initial_pick_pose(result)[2])) if lift_indices else None
@@ -140,12 +141,16 @@ def validate(out):
                         expected - fields['points_lime_local_m'].reshape(-1, 3), axis=1)))
                     local_errors.append(error)
         expected_indices = {i for i, phase in enumerate(phases)
-                            if phase in ('close', 'lift', 'transfer', 'lower')}
+                            if phase in ('close', 'lift', 'transfer', 'lower') and active['start']<=i<active['end']}
         checks['contact_action_alignment'] = (contact_valid
             and len(contact_indices) == len(set(contact_indices))
             and expected_indices.issubset(set(contact_indices))
             and max(local_errors, default=0.) < 1e-5)
         details['contact_local_position_max_error_m'] = max(local_errors, default=None)
+        if len(spec.pick_objects)>1:
+            from kitchen_safety.extensions.lightwheel_pick_place.multi_evidence import audit as audit_multi
+            multi=audit_multi(out,result,spec,arrays,phases)
+            checks['all_picks_physical_evidence']=multi['passed'];details['all_picks']=multi
         checks['physics_rate_audit'] = result.get('physics_safety_checks', 0) >= n * 8
         audit = json.loads((out / 'full_world_audit.json').read_text())
         measurements = audit.get('measurements', [])
@@ -184,7 +189,13 @@ def validate(out):
             'maximum_checks_per_action': int(audit_counts.max()) if n else 0,
             'scope': audit.get('scope')}
         if 'lift_support_contact_model' in result:
-            if pick == 'lime':
+            if len(spec.pick_objects)>1:
+                from audit_multi_source import audit as audit_multi_source
+                from audit_source_support import save_report
+                support=audit_multi_source(out);support_path=save_report(support,out/'source_support_audit.json')
+                checks['measured_source_support_bounds']=support['passed'];details['source_support']={k:v for k,v in support.items() if k!='measurements'}
+                details['source_support']['report_path']=str(support_path)
+            elif pick == 'lime':
                 from audit_source_support import audit as audit_source_support, save_report
                 support = audit_source_support(out)
                 support_path = save_report(support, out / 'source_support_audit.json')

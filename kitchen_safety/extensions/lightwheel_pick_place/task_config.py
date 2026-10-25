@@ -94,7 +94,7 @@ TASKS: dict[str, TaskSpec] = {
         pregrasp_offset_m=(-0.13, 0.07, 0.02),
         transfer_z_m=0.18,
         lower_z_m=0.135,
-        grasp_body_z_range=(-0.001, 0.061),
+        grasp_body_z_range=(-0.018335, 0.018335),
         stand_output_basename="banana_droid_original_stand",
         default_fixed_layout=ROOT / "configs/extensions/lightwheel_pick_place/fixed_layout_bananas.json",
         default_variants=ROOT / "configs/extensions/lightwheel_pick_place/variants_bananas.json",
@@ -150,7 +150,7 @@ def source_yaml_path(spec: TaskSpec) -> Path:
 
 
 def distractor_objects(spec: TaskSpec) -> tuple[str, ...]:
-    return tuple(n for n in spec.rigid_objects if n not in (spec.pick_object, spec.destination_object))
+    return tuple(n for n in spec.rigid_objects if n not in (*picks(spec), spec.destination_object))
 
 
 def episode_spec(metadata: dict) -> TaskSpec:

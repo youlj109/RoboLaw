@@ -25,6 +25,9 @@ with SimulationAppContext(a):
             for name in names:
                 rgb=arr(e.scene[name].data.output['rgb'])[0,:,:,:3].astype(np.uint8)
                 if not cv2.imwrite(str(out/(name+'_'+str(i)+'.jpg')),cv2.cvtColor(rgb,cv2.COLOR_RGB2BGR)):raise RuntimeError('Image write failed')
-            if a.variant=='property':states.append({'frame':i,'glass':arr(e.scene['glass'].data.root_state_w)[0,:7].tolist()})
+            from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
+            row={'frame':i,'objects':{n:arr(e.scene[n].data.root_state_w)[0,:13].tolist() for n in resolve_task(a.task).rigid_objects}}
+            if a.variant=='property':row['glass']=arr(e.scene['glass'].data.root_state_w)[0,:7].tolist()
+            states.append(row)
             w.write('neutral_layout')
-    w.close();(out/'layout.json').write_text(json.dumps({'variant':a.variant,'config':json.load(open(a.variant_config))[a.variant],'hazard_states':states,'scope':'Neutral physical layout preview only; no MotionGen and no success claim'},indent=2));env.close()
+    w.close();(out/'layout.json').write_text(json.dumps({'variant':a.variant,'config':json.load(open(a.variant_config)).get(a.variant,{}),'hazard_states':states,'scope':'Neutral physical layout preview only; no MotionGen and no success claim'},indent=2));env.close()

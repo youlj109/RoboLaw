@@ -21,6 +21,8 @@ parser.add_argument('--grasp-lateral-x',type=float,default=0.0,
     help='World-frame +X TCP bias at pick center for finger centerline; metres')
 parser.add_argument('--grasp-local-approach',action='store_true',
     help='Shelf: build pregrasp/standoff along -TCP_Z from selected wrist R (not fixed world offset)')
+parser.add_argument('--pregrasp-planner',choices=('auto','motion_gen','cartesian_line'),default='auto')
+parser.add_argument('--pregrasp-standoff',type=float,default=None)
 parser.add_argument('--grasp-finger-bias',type=float,default=0.0,
     help='Offset along grasp-frame finger-open axis (TCP Y col); metres')
 parser.add_argument('--shelf-retract-y',type=float,default=-0.12,
@@ -129,7 +131,7 @@ with SimulationAppContext(args):
         # Full environment robot check; intended grasp/support masks are phase-specific.
         full=world.clearance(s['q'][ids],ignores(),object_pose=s['lime'][:7],**geometry(s))
         physics_audits.append({'action':len(records),'phase':phase,'q_arm':s['q'][ids].tolist(),
-            'gripper_q':{k:float(v) for k,v in geometry(s)['gripper_q'].items()},'lime_pose':s['lime'][:7].tolist(),
+            'gripper_q':{k:float(v) for k,v in geometry(s)['gripper_q'].items()},'lime_pose':s['lime'][:7].tolist(),'pick_object':PICK,
             **({'hazard_pose':s['hazard_pose'].tolist()} if args.variant=='property' else {}),
             'source_contact':source_contact,'source_hull_min_z_m':actual_min_z,
             'source_detached_before':detached_before,
@@ -145,6 +147,8 @@ with SimulationAppContext(args):
             if not c['valid']:raise RuntimeError(f'Unsafe lime/robot clearance: {c}')
     scene.update=checked_update
     contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK)
+    contact_trackers={PICK:contacts}
+    pick_action_ranges={PICK:{'start':0}}
     source_contacts=LimeSourceContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,
         pick_object=PICK,source_surface=SOURCE_SURFACE_PATH)
     def step(command,gripper):
@@ -236,6 +240,10 @@ with SimulationAppContext(args):
             world.gripper_joint_position=float(s['q'][robot.joint_names.index('finger_joint')])
             if args.variant=='property':
                 world.set_obstacle_pose('glass',s['hazard_pose']);planner.update_dynamic_obstacle('glass')
+            if len(task_picks(TASK_SPEC))>1:
+                for name in RIGID:
+                    if name!=PICK:
+                        world.set_obstacle_pose(name,s[name][:7]);planner.update_dynamic_obstacle(name)
             target=np.eye(4);target[:3,3]=position
             target[:3,:3]=(kin.fk(q)[:3,:3] if rotation is None else rotation)
             # Shelf/lateral approach cannot use cuRobo vertical-column phases.
@@ -305,13 +313,13 @@ with SimulationAppContext(args):
             if args.grasp_local_approach and (not use_pregrasp_phase):
                 # TCP Z (col 2) should point into the object; hover back along -TCP_Z.
                 approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
-                pregrasp_offset=(-0.17 if PICK=='lemon' else -0.18)*approach
+                pregrasp_offset=-(args.pregrasp_standoff if args.pregrasp_standoff is not None else (.17 if PICK=='lemon' else .18))*approach
             else:
                 pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
             try:
                 phase='pregrasp' if use_pregrasp_phase else 'approach'
-                # B03 combo: cartesian hover + IK tol 0.0025; pin tilt/yaw at CLI.
-                cart(center+pregrasp_offset,rotation=R, force_phase=('cartesian_line' if (args.grasp_local_approach and not use_pregrasp_phase and PICK!='lemon') else None))
+                # Use an oriented hover before the short local contact approach.
+                cart(center+pregrasp_offset,rotation=R, force_phase=('transfer' if args.pregrasp_planner=='motion_gen' else ('cartesian_line' if args.pregrasp_planner=='cartesian_line' or (args.pregrasp_planner=='auto' and args.grasp_local_approach and not use_pregrasp_phase and PICK!='lemon') else None)))
                 result['selected_grasp']={'tilt':tilt,'yaw':yaw,'phase':phase,'use_pregrasp_phase':use_pregrasp_phase,
                     'tcp_z_world':approach.tolist() if (args.grasp_local_approach and not use_pregrasp_phase) else None}
                 result['pregrasp_offset_m']=pregrasp_offset.tolist()
@@ -333,7 +341,7 @@ with SimulationAppContext(args):
             cart(contact_standoff, force_phase=('transfer' if PICK=='lemon' else 'cartesian_line'))
         phase='close';grip=1.
         for _ in range(30):step(q,grip)
-        held=snapshot();result['close_contacts']=contacts.summarize([-.001,.061],'close',last_actions=5)
+        held=snapshot();result['close_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=5)
         if not result['close_contacts']['both_fingers_near_body']:raise RuntimeError('No bilateral physical lime grasp')
         world.attachment=np.linalg.inv(kin.fk(held['q'][ids]))@transform(held['lime'][:3],held['lime'][3:7])
         result['planning_attachment_tcp_to_lime']=world.attachment.tolist()
@@ -346,7 +354,9 @@ with SimulationAppContext(args):
             'initial_lower_bound_m':world.source_lift_floor_z,'jitter_tolerance_m':.0005,
             'xy_anchor_m':world.source_resting_xy.tolist(),'max_xy_displacement_m':.05,
             'policy':'Only exact original source surface and 50 mm xy region, collision hull bottom at least initial native rest minus 0.5 mm (asset origin is not a penetration measure); geometric separation plus zero contacts permanently revokes exception.'}
-        if use_pregrasp_phase:
+        if len(task_picks(TASK_SPEC))>1:
+            phase='lift';cart(held['tcp']+np.array([0.,0.,.12]),force_phase='lift')
+        elif use_pregrasp_phase:
             phase='lift';cart(held['tcp']+[0,0,.16])
         else:
             # Shelf extract: scan template waypoints if provided; else preclear→retract→rise.
@@ -389,14 +399,14 @@ with SimulationAppContext(args):
         if result['lift_m']<.08 or not result['lift_contacts']['both_fingers_on_body']:raise RuntimeError('Lime failed physical lift/contact check')
         dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
         # Release above destination then let gravity settle the fruit.
-        desired_root=dest[:3]+np.array([0,0,TASK_SPEC.transfer_z_m])
+        desired_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0,TASK_SPEC.transfer_z_m])
         phase='transfer';cart(desired_root+offset)
         if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
             phase='transfer'
             cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
             result['place_clear_rise_z_m']=float(args.place_clear_rise_z)
         lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
-        lower_root=dest[:3]+np.array([0.0,0.0,lower_z])
+        lower_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])
         xfer_tcp=desired_root+offset
         lower_tcp=lower_root+offset
         result['place_lower']={'mode':args.place_lower_mode,'lower_z_m':lower_z,
@@ -435,10 +445,20 @@ with SimulationAppContext(args):
         remaining=list(task_picks(TASK_SPEC))[1:]
         result['pick_objects']=list(task_picks(TASK_SPEC))
         for pick_name in remaining:
+            pick_action_ranges[PICK]['end']=len(records)
             PICK=pick_name
+            pick_action_ranges[PICK]={'start':len(records)}
             world.bind_pick(PICK)
             contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK)
+            contact_trackers[PICK]=contacts
+            source_contacts=LimeSourceContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK,source_surface=SOURCE_SURFACE_PATH)
             held0=snapshot();p=held0['lime'][:3].copy()
+            points=world.lime_vertices@Rotation.from_quat(held0['lime'][3:7]).as_matrix().T+p
+            world.source_resting_min_z=float(points[:,2].min());world.source_resting_xy=p[:2].copy()
+            world.source_resting_root=p.copy();world.source_detached=False
+            world.source_lift_floor_z=world.source_resting_min_z-JITTER_M
+            result.setdefault('extra_source_support_models',{})[PICK]={'source_resting_min_z_m':world.source_resting_min_z,'source_resting_root_m':p.tolist(),'source_surface_top_m':float(world.source_surface_top),'jitter_tolerance_m':JITTER_M}
+            if not source_contacts.sample()['count']:raise RuntimeError(f'No measured original source support for {PICK}')
             target_center=transform(held0['lime'][:3],held0['lime'][3:7])@np.r_[world.object_center,1]
             target_center[2]+=args.grasp_height_offset
             target_center[0]+=args.grasp_lateral_x
@@ -450,12 +470,16 @@ with SimulationAppContext(args):
                 # Prefer local approach when flag set; else TASK_SPEC offset.
                 if args.grasp_local_approach:
                     approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
-                    pregrasp_offset=(-0.17 if PICK=='lemon' else -0.18)*approach
+                    pregrasp_offset=-(args.pregrasp_standoff if args.pregrasp_standoff is not None else (.17 if PICK=='lemon' else .18))*approach
                 else:
                     pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
             phase='pregrasp' if use_pregrasp_phase else 'approach'
             cart(center+pregrasp_offset,rotation=R)
-            phase='approach';cart(center,rotation=R)
+            phase='approach'
+            if args.grasp_local_approach:
+                axis=pregrasp_offset/np.linalg.norm(pregrasp_offset)
+                cart(center+axis*.02,force_phase='cartesian_line')
+            else:cart(center,rotation=R)
             phase='close';grip=1.
             for _ in range(40):step(q,grip)
             held=snapshot();result.setdefault('extra_close_contacts',[]).append(contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=8))
@@ -464,13 +488,16 @@ with SimulationAppContext(args):
             world.attachment=np.linalg.inv(kin.fk(held['q'][ids]))@transform(held['lime'][:3],held['lime'][3:7])
             phase='lift';cart(held['tcp']+np.array([0.,0.,0.12]), force_phase='lift')
             lifted=snapshot();result.setdefault('extra_lift_m',[]).append(float(lifted['lime'][2]-p[2]))
+            lift_contact=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'lift',last_actions=5)
+            result.setdefault('extra_lift_contacts',[]).append(lift_contact)
+            if result['extra_lift_m'][-1]<.08 or not lift_contact['both_fingers_on_body']:raise RuntimeError(f'Physical lift/contact check failed for {PICK}')
             dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
-            desired_root=dest[:3]+np.array([0,0,TASK_SPEC.transfer_z_m])
+            desired_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0,TASK_SPEC.transfer_z_m])
             phase='transfer';cart(desired_root+offset)
             if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
                 phase='transfer';cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
             lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
-            lower_root=dest[:3]+np.array([0.0,0.0,lower_z])
+            lower_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])
             xfer_tcp=desired_root+offset; lower_tcp=lower_root+offset
             phase='lower'
             if args.place_lower_mode=='skip' or abs(xfer_tcp[2]-lower_tcp[2])<1e-4:
@@ -494,14 +521,20 @@ with SimulationAppContext(args):
         # physical state: a previously completed predicate sequence can latch.
         from isaaclab.managers import SceneEntityCfg
         from isaaclab_arena.tasks.predicates.spatial import object_on_destination
-        task=envdef.task
-        result['final_on_destination']=bool(arr(object_on_destination(e,
-            object_cfg=SceneEntityCfg(task.pick_up_object.name),
-            destination_cfg=SceneEntityCfg(task.destination_location.name),
-            contact_sensor_cfg=task.contact_sensor_cfg,force_threshold=task.force_threshold,
-            velocity_threshold=task.velocity_threshold,
-            support_cone_half_angle_rad=task.support_cone_half_angle_rad))[0])
-        result['final_destination_contact_force_matrix_w_n']=arr(scene[task.contact_sensor_cfg.name].data.force_matrix_w).tolist()
+        native_tasks=getattr(envdef.task,'subtasks',[envdef.task])
+        native={}
+        for task in native_tasks:
+            name=task.pick_up_object.name
+            native[name]={'passed':bool(arr(object_on_destination(e,
+                object_cfg=SceneEntityCfg(name),destination_cfg=SceneEntityCfg(task.destination_location.name),
+                contact_sensor_cfg=task.contact_sensor_cfg,force_threshold=task.force_threshold,
+                velocity_threshold=task.velocity_threshold,support_cone_half_angle_rad=task.support_cone_half_angle_rad))[0]),
+                'force_matrix_w_n':arr(scene[task.contact_sensor_cfg.name].data.force_matrix_w).tolist(),
+                'final_state':final[name].tolist()}
+        result['final_native_destination_checks']=native
+        result['final_on_destination']=bool(set(native)==set(task_picks(TASK_SPEC)) and all(x['passed'] for x in native.values()))
+        result['final_destination_contact_force_matrix_w_n']=native[TASK_SPEC.pick_object]['force_matrix_w_n']
+        result['final_lime']=final[TASK_SPEC.pick_object].tolist()
         result['success']=bool(result['terminal_terms'].get('success',False) and result['final_live_success'] and result['final_on_destination'] and abs(final['q'][robot.joint_names.index('finger_joint')])<.05)
         if args.variant=='property':
             result['property_displacement_m']=float(np.linalg.norm(final['hazard_pose'][:3]-initial['hazard_pose'][:3]))
@@ -534,7 +567,12 @@ with SimulationAppContext(args):
         # Persist result/trajectory before slow MP4 decode so host timeouts still leave usable artifacts.
         (out/'result.json').write_text(json.dumps(result,indent=2,default=lambda x:x.tolist() if hasattr(x,'tolist') else str(x)))
         (out/'clearances.json').write_text(json.dumps(clearances,indent=2))
-        (out/'contacts.json').write_text(json.dumps(contacts.records,indent=2))
+        pick_action_ranges[PICK]['end']=len(records)
+        result['pick_action_ranges']=pick_action_ranges
+        (out/'result.json').write_text(json.dumps(result,indent=2,default=lambda x:x.tolist() if hasattr(x,'tolist') else str(x)))
+        (out/'contacts.json').write_text(json.dumps(contact_trackers[TASK_SPEC.pick_object].records,indent=2))
+        if len(contact_trackers)>1:
+            for name,tracker in contact_trackers.items():(out/('contacts_'+name+'.json')).write_text(json.dumps(tracker.records,indent=2))
         with h5py.File(out/'trajectory.h5','w') as f:
             f.attrs.update(task=TASK_ID,variant=args.variant,success=result['success'],dt=e.step_dt)
             f.create_dataset('time',data=np.arange(len(records))*e.step_dt)
