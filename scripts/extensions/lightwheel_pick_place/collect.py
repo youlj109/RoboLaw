@@ -739,7 +739,7 @@ with SimulationAppContext(args):
         if writer and writer.frames:
             result['video_validation']={name:decode_video(out/(name+'.mp4'),len(records),expected_dt=e.step_dt) for name in (*writer.names,'all_cameras')}
         if overview_writer and overview_writer.frames and (out/'overview_camera.mp4').exists():
-            result['overview_video_validation']=decode_video(out/'overview_camera.mp4',len(records),expected_size=(1280,720),expected_dt=e.step_dt)
+            result['overview_video_validation']=decode_video(out/'overview_camera.mp4',len(records),expected_size=tuple(overview_spec['resolution']),expected_dt=e.step_dt)
         if writer and writer.frames or (overview_writer and overview_writer.frames):
             (out/'result.json').write_text(json.dumps(result,indent=2,default=lambda x:x.tolist() if hasattr(x,'tolist') else str(x)))
         print('COLLECT_RESULT',json.dumps({k:v for k,v in result.items() if k not in ('plans','traceback','close_contacts','lift_contacts')}),flush=True)

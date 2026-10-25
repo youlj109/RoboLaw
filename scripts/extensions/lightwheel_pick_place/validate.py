@@ -244,6 +244,8 @@ def validate(out):
             checks['human_overview_present'] = isinstance(result.get('overview_camera'), dict)
         if result.get('overview_camera'):
             spec = result['overview_camera']
+            overview_size=tuple(spec.get('resolution',[1280,720]))
+            if overview_size not in ((1280,720),(640,360)):raise ValueError('Unexpected authored supplementary overview resolution')
             extra = out / 'overview'
             extra_metadata = json.loads((extra / 'cameras.json').read_text())
             alignment = json.loads((extra / 'frame_alignment.json').read_text())['measurements']
@@ -265,11 +267,11 @@ def validate(out):
                     and abs(float(extra_images.attrs['dt']) - dt) < 1e-9
                     and len(group['jpeg']) == n and group['position_world'].shape == (n, 3)
                     and group['quaternion_world_ros_xyzw'].shape == (n, 4)
-                    and (camera['width'], camera['height']) == (1280, 720))
+                    and (camera['width'], camera['height']) == overview_size)
                 for blob in group['jpeg']:
                     with Image.open(io.BytesIO(blob.tobytes())) as frame:
                         frame.load()
-                        overview_ok &= frame.size == (1280, 720)
+                        overview_ok &= frame.size == overview_size
                 positions = group['position_world'][:]
                 quaternions = group['quaternion_world_ros_xyzw'][:]
                 ros_rotation = (Rotation.from_quat(spec['quaternion_opengl_xyzw'])
@@ -282,7 +284,7 @@ def validate(out):
                     and overview_pose['rotation_max_error_deg'] < .1)
             checks['overview_jpeg_arrays_and_pose'] = overview_ok
             root_video = out / 'overview_camera.mp4'
-            overview_frames = decode_video(root_video, n, expected_dt=dt, expected_size=(1280, 720))
+            overview_frames = decode_video(root_video, n, expected_dt=dt, expected_size=overview_size)
             panel_frames = decode_video(extra / 'all_cameras.mp4', n,
                 expected_dt=dt, expected_size=(640, 360))
             checks['overview_videos'] = (overview_frames == n and panel_frames == n
