@@ -99,3 +99,6 @@ B04 CPU endpoint search tested24 redundant seeds per destination height/yaw: all
 
 ## 2026-10-26 03:39 Shanghai first B05 native success
 B05 baseline `base_lgd_b05_can_20261025T191952Z` original current success=true, final_on_destination=true,595frames, real lift99.45mm. Full120Hz audit running, so no full acceptance claim yet. Human193345 queued behind B04 low-transfer baseline192918. B04 continuation148326 waits146613 and, on original success, verifies baseline and independently attempts human/property/robot; each failure retained, next variant still attempted. B05 continuation146582 likewise remains active. All GPU operations serialized by existing lock.
+
+## 2026-10-26 03:50 Shanghai B04 release sweep
+Low-transfer baseline192918 successfully carried ladle to plate, then failed opening-gripper sweep: finger/plate1.322mm<2mm. This is not native success. Actual held object root≈.99544m,TCP1.03887m at destination. Raise transfer AND release by5mm (.08→.085m above plate), and skip the redundant zero-distance lower hold; preserve same original plate and hazard poses and unchanged collision margins. New baseline queued; future variants use identical revised controls.
