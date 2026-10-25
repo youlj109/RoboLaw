@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "task_id": "kitchen_bench_replicator_g_shape_mustard_bowl",
+  "planning_seeds": [
+    42,
+    43,
+    44
+  ],
+  "assignment": "student_skills/robolaw-replicator/references/assignment.json",
+  "asset_manifest": "configs/extensions/replicator/external_assets.json",
+  "asset_verification": "reports/replicator_execution_20261023/g_mustard/asset_verification.json",
+  "neutral": "reports/replicator_execution_20261023/g_mustard/neutral_02",
+  "mobility": "reports/replicator_execution_20261023/g_mustard/mobility_01",
+  "baselines": {
+    "base": {
+      "episode": "datasets/avoidance_trials/replicator/base/a20261023_base01",
+      "reports": "reports/avoidance_trials/replicator/base/a20261023_base01",
+      "actual_review": "reports/replicator_execution_20261023/g_mustard/base01_actual_review.json",
+      "raw_review": "reports/replicator_execution_20261023/g_mustard/base01_raw_review/task_review.json",
+      "visual_review": "reports/replicator_execution_20261023/g_mustard/base01_visual_review.json"
+    },
+    "human": {
+      "episode": "datasets/avoidance_trials/replicator/base/a20261023_humanbase01",
+      "reports": "reports/avoidance_trials/replicator/base/a20261023_humanbase01",
+      "actual_review": "reports/replicator_execution_20261023/g_mustard/humanbase01_actual_review.json",
+      "raw_review": "reports/replicator_execution_20261023/g_mustard/humanbase01_raw_review/task_review.json",
+      "visual_review": "reports/replicator_execution_20261023/g_mustard/humanbase01_visual_review.json"
+    }
+  },
+  "variants": {
+    "human": {
+      "episode": "datasets/avoidance_trials/replicator/human/a20261023_01",
+      "reports": "reports/avoidance_trials/replicator/human/a20261023_01",
+      "actual_review": "reports/replicator_execution_20261023/g_mustard/human_actual_review.json",
+      "raw_review": "reports/replicator_execution_20261023/g_mustard/human_raw_review/task_review.json",
+      "visual_review": "reports/replicator_execution_20261023/g_mustard/human_visual_review.json",
+      "baseline": "human",
+      "layout": "configs/extensions/replicator/avoidance/human_repaired03.json",
+      "source_risk": "reports/replicator_execution_20261023/g_mustard/human_baseline_source.json",
+      "source_safe": "reports/replicator_execution_20261023/g_mustard/human_actual_source.json",
+      "paired_report": "reports/replicator_execution_20261023/g_mustard/human_pairs/paired_plans.json",
+      "comparison": "reports/replicator_execution_20261023/g_mustard/human_comparison.mp4",
+      "comparison_visual_review": "reports/replicator_execution_20261023/g_mustard/human_comparison_visual_review.json"
+    },
+    "property": {
+      "episode": "datasets/avoidance_trials/replicator/property/a20261023_01",
+      "reports": "reports/avoidance_trials/replicator/property/a20261023_01",
+      "actual_review": "reports/replicator_execution_20261023/g_mustard/property_actual_review.json",
+      "raw_review": "reports/replicator_execution_20261023/g_mustard/property_raw_review/task_review.json",
+      "visual_review": "reports/replicator_execution_20261023/g_mustard/property_visual_review.json",
+      "baseline": "base",
+      "layout": "configs/extensions/replicator/avoidance/property_candidate02.json",
+      "source_risk": "reports/replicator_execution_20261023/g_mustard/property_baseline_source.json",
+      "source_safe": "reports/replicator_execution_20261023/g_mustard/property_actual_source.json",
+      "paired_report": "reports/replicator_execution_20261023/g_mustard/property_pairs/paired_plans.json",
+      "comparison": "reports/replicator_execution_20261023/g_mustard/property_comparison.mp4",
+      "comparison_visual_review": "reports/replicator_execution_20261023/g_mustard/property_comparison_visual_review.json"
+    },
+    "robot": {
+      "episode": "datasets/avoidance_trials/replicator/robot/a20261023_01",
+      "reports": "reports/avoidance_trials/replicator/robot/a20261023_01",
+      "actual_review": "reports/replicator_execution_20261023/g_mustard/robot_actual_review.json",
+      "raw_review": "reports/replicator_execution_20261023/g_mustard/robot_raw_review/task_review.json",
+      "visual_review": "reports/replicator_execution_20261023/g_mustard/robot_visual_review.json",
+      "baseline": "base",
+      "layout": "configs/extensions/replicator/avoidance/robot_candidate01.json",
+      "source_risk": "reports/replicator_execution_20261023/g_mustard/robot_baseline_source.json",
+      "source_safe": "reports/replicator_execution_20261023/g_mustard/robot_actual_source.json",
+      "paired_report": "reports/replicator_execution_20261023/g_mustard/robot_pairs/paired_plans.json",
+      "comparison": "reports/replicator_execution_20261023/g_mustard/robot_comparison.mp4",
+      "comparison_visual_review": "reports/replicator_execution_20261023/g_mustard/robot_comparison_visual_review.json"
+    }
+  },
+  "retained_failed_attempts": [
+    "reports/replicator_execution_20261023/g_mustard/neutral_01.log"
+  ],
+  "provenance_files": [
+    "configs/extensions/replicator/g_shape_mustard.json",
+    "kitchen_safety/extensions/replicator/environment.py",
+    "kitchen_safety/extensions/replicator/background_physics.py",
+    "kitchen_safety/extensions/replicator/curobo_backend.py",
+    "kitchen_safety/extensions/replicator/collision_planner.py",
+    "kitchen_safety/extensions/replicator/source_geometry.py",
+    "kitchen_safety/curobo_backend.py",
+    "kitchen_safety/geometry_audit.py",
+    "kitchen_safety/grasp_geometry.py",
+    "kitchen_safety/placement_geometry.py",
+    "scripts/extensions/replicator/collect.py",
+    "scripts/extensions/replicator/run_trial.py",
+    "scripts/extensions/replicator/review_episode.py",
+    "scripts/extensions/replicator/render_comparison.py",
+    "scripts/extensions/replicator/build_delivery_manifest.py"
+  ]
+}
