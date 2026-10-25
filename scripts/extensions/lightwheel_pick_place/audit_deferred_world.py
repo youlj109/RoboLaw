@@ -29,17 +29,32 @@ def check_batch(rows):
   ignore=(pick,)+((spec.destination_object,) if row['phase'] in ('lower','release','retreat','settle_final') else ())
   measured=world.clearance(row['q_arm'],ignore,mode='execution',gripper_q=row['gripper_q'],object_pose=row['lime_pose'])
   if row.get('valid') is not None and (row['valid']!=measured['valid'] or abs(row['slack_m']-measured['slack_m'])>1e-7):raise ValueError('Offline/live full-world checks disagree')
-  output.append({**row,**measured,'audit_pending':False})
+  added={}
+  if result.get('defer_added_hazard_audit') and result.get('variant')!='base':
+   hazard={'human':'person','property':'glass','robot':'barrier'}[result['variant']]
+   hc=world.clearance(row['q_arm'],(pick,),mode='execution',gripper_q=row['gripper_q'],object_pose=row['lime_pose'],obstacle_filter=(hazard,))
+   live=row.get('live_added_hazard_clearance')
+   if live and (live['valid']!=hc['valid'] or abs(live['slack_m']-hc['slack_m'])>1e-7):raise ValueError('Offline/live added-hazard checkpoint mismatch')
+   added={'added_hazard_clearance':hc}
+  output.append({**row,**measured,**added,'audit_pending':False})
  return output
 
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('episode',type=Path);p.add_argument('--workers',type=int,default=4);a=p.parse_args();source=a.episode/'full_world_audit.json';report=json.loads(source.read_text());rows=report['measurements']
+ p=argparse.ArgumentParser();p.add_argument('episode',type=Path);p.add_argument('--workers',type=int,default=4);a=p.parse_args();result_probe=json.loads((a.episode/'result.json').read_text());source=a.episode/'full_world_audit.json';report=json.loads(source.read_text());rows=report['measurements']
  if not report.get('pending_samples'):raise SystemExit('No deferred samples; preserve the original audit')
  chunks=[rows[i:i+128] for i in range(0,len(rows),128)];completed=[]
  with ProcessPoolExecutor(max_workers=a.workers,mp_context=multiprocessing.get_context('spawn'),initializer=initialize,initargs=(str(a.episode),)) as pool:
   for batch in pool.map(check_batch,chunks):completed.extend(batch);print('AUDITED',len(completed),len(rows),flush=True)
  report.update(passed=bool(completed and all(x['valid'] for x in completed)),minimum=min(completed,key=lambda x:x['slack_m']),pending_samples=0,measurements=completed,sampling_frequency_hz=120,live_checkpoint_parity_verified=True,scope='Complete offline 120 Hz full-world FCL using every actual measured arm, finger, fruit, property and task-rigid pose. Same geometry and safety margins as online checking. Every available live 15 Hz full-world result must agree within 1e-7 m. Added hazard checks remained live at 120 Hz.')
+ if result_probe.get('defer_added_hazard_audit') and result_probe.get('variant')!='base':
+  hc=[{'action':row['action'],'phase':row['phase'],**row['added_hazard_clearance']} for row in completed]
+  original=a.episode/'clearances.json';saved=a.episode/'clearances.before_deferred_recheck.json';temporary=a.episode/'clearances.completed.json'
+  if saved.exists():raise FileExistsError(saved)
+  with temporary.open('x') as stream:json.dump(hc,stream,indent=2)
+  original.rename(saved);temporary.rename(original)
+  report.update(passed=bool(report['passed'] and all(x['valid'] for x in hc)),added_hazard_sampling_frequency_hz=120,live_added_hazard_checkpoint_parity_verified=True)
+  report['scope']=report['scope'].replace('Added hazard checks remained live at 120 Hz.','Added hazards also independently completed at120Hz; all live15Hz checkpoints agree within1e-7m. No pending checks are accepted.')
  backup=a.episode/'full_world_audit.before_deferred_recheck.json'
  if backup.exists():raise FileExistsError(backup)
  temp=a.episode/'full_world_audit.completed.json'

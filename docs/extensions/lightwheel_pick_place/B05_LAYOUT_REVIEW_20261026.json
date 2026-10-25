@@ -1,0 +1,69 @@
+{
+  "layout_fixed_for_planning": true,
+  "reviewed_by": "agent during explicitly authorized overnight continuation",
+  "user_manually_approved": false,
+  "task": "B05 Pepsi can to original basket",
+  "variant_config": "configs/extensions/lightwheel_pick_place/variants_pepsi_overnight_layout.json",
+  "fixed_layout": "configs/extensions/lightwheel_pick_place/fixed_layout_pepsi.json",
+  "variants": {
+    "human": {
+      "name": "person",
+      "asset": "assets/extensions/lightwheel_pick_place/person_yaw30.usda",
+      "position": [
+        4.85,
+        -2.6,
+        0.0
+      ],
+      "yaw_deg": 0
+    },
+    "property": {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/vase.usda",
+      "position": [
+        4.0,
+        -2.35,
+        0.93
+      ]
+    },
+    "robot": {
+      "name": "barrier",
+      "asset": "assets/extensions/lightwheel_pick_place/short_projecting_crossbar.usda",
+      "position": [
+        4.06,
+        -2.65,
+        0.93
+      ],
+      "yaw_deg": 180
+    }
+  },
+  "image_review": {
+    "human": {
+      "reviewed_image": "/root/autodl-tmp/B05-review/human_transfer_layout_v2/overview_camera.jpg",
+      "agent_visual_review": "Natural aisle/table placement, no obvious penetration, original can/basket and distractors retained; intended carry corridor obstruction. Actual avoidance necessity not yet measured."
+    },
+    "property": {
+      "reviewed_image": "/root/autodl-tmp/B05-review/safety_scenes/property/external_camera_2.jpg",
+      "agent_visual_review": "Natural aisle/table placement, no obvious penetration, original can/basket and distractors retained; intended carry corridor obstruction. Actual avoidance necessity not yet measured."
+    },
+    "robot": {
+      "reviewed_image": "/root/autodl-tmp/B05-review/safety_scenes/robot/external_camera_2.jpg",
+      "agent_visual_review": "Natural aisle/table placement, no obvious penetration, original can/basket and distractors retained; intended carry corridor obstruction. Actual avoidance necessity not yet measured."
+    }
+  },
+  "initial_geometry_screen_passed": true,
+  "native_success": null,
+  "avoidance_necessity_proven": false,
+  "scope": "Layout review only. Keep hazards fixed; adjust grasp/arm/route strategy if needed. No physical success or acceptance claim.",
+  "sha256": {
+    "configs/extensions/lightwheel_pick_place/variants_pepsi_overnight_layout.json": "ad8dad7149ec6d5d8f1c67e40fe851202be0dd281627cde4640cdfa1293e7967",
+    "configs/extensions/lightwheel_pick_place/fixed_layout_pepsi.json": "a3eb10dd928b3b4e087ed8efd0df52a24fcff4c5e017b9cb195fdcd844e8c8ef",
+    "/root/autodl-tmp/B05-review/layout_geometry_check.json": "9de477ef0cd7bf11995b55b0e76b9cf352fada83cc33e5f4d29b7a019648fe84",
+    "assets/extensions/lightwheel_pick_place/person_yaw30.usda": "831501f8a6f0044dc1215496f2585ada9c70627443e624b661a75fc3164ecd75",
+    "assets/obstacle_library/property/vase.usda": "b50aa83a627f093bafc6013a25712b32a7c56ad6fb8aa03ea668bc4fdbabe796",
+    "assets/extensions/lightwheel_pick_place/short_projecting_crossbar.usda": "b2afe3e91d4e609af00d188e6801d1f7242c4329cb15921a14a7ababfe6cb5d8",
+    "assets/people/mpfb_corridor/collidable.usda": "a2075de7849333569ce78488e4e105b2971ab7a2c434e14a7f87b672238035bd",
+    "/root/autodl-tmp/B05-review/human_transfer_layout_v2/overview_camera.jpg": "e20bc16808caaaff53df232b36d80fe9b3c0f76160c3b52df4ac42dd707ab3da",
+    "/root/autodl-tmp/B05-review/safety_scenes/property/external_camera_2.jpg": "a5c47fa421b43d864291831a168227f6268c4b9666f205185974c74c006226f5",
+    "/root/autodl-tmp/B05-review/safety_scenes/robot/external_camera_2.jpg": "fb0a6f5afb9da610ea823d09038756b6ea961edec83aad1ca2ca93c0fd4617ad"
+  }
+}

@@ -3,7 +3,7 @@ import numpy as np
 from kitchen_safety.planning import transform
 
 
-def preflight_grasp(planner,q,rotation,center,offset,pick_pose,pick,closed_grip=.383,contact_standoff_m=.02,closed_grip_candidates=None):
+def preflight_grasp(planner,q,rotation,center,offset,pick_pose,pick,closed_grip=.383,contact_standoff_m=.02,closed_grip_candidates=None,lift_m=.12):
     world=planner.world;old_attachment=world.attachment;old_grip=getattr(world,'gripper_joint_position',None);old_phase=world.allowed_phase
     try:
         world.allowed_phase='approach';world.attachment=None;world.gripper_joint_position=0.
@@ -16,7 +16,7 @@ def preflight_grasp(planner,q,rotation,center,offset,pick_pose,pick,closed_grip=
         checked2=planner.validate_path(second['positions'],(pick,),0.,phase='transfer')
         if not checked2['valid']:raise RuntimeError('Contact path rejected: '+str(checked2))
         end=second['positions'][-1];tcp=planner.kin.fk(end);world.attachment=np.linalg.inv(tcp)@transform(pick_pose[:3],pick_pose[3:7]);world.allowed_phase='lift'
-        lift=tcp.copy();lift[2,3]+=.12;lift_checks=[]
+        lift=tcp.copy();lift[2,3]+=lift_m;lift_checks=[]
         for grip in (closed_grip_candidates or (closed_grip,)):
             world.gripper_joint_position=grip
             third=planner.plan_pose(end,lift,(pick,),1.,phase='lift')
@@ -51,8 +51,8 @@ def plan_transfer(planner,q,target,ignore,grip):
     raise RuntimeError('No direct or upper route at fixed scene: '+str(failures))
 
 PAD_CALIBRATION_PATH='configs/extensions/lightwheel_pick_place/b03_pad_contact_calibration.json'
-TOPDOWN_CANDIDATES=[(0,180,.002,0.),(0,180,0.,.03),(0,180,.003,-.03),(15,180,0.,0.),(45,180,-.003,.03),(45,180,-.003,-.03),(45,180,-.003,0.),(60,180,-.003,.03),(75,180,.003,.03)]+[(tilt,yaw,z,y) for y in (.03,-.03,0.) for z in (-.003,0.,.003) for tilt,yaw in ((60,180),(70,180),(75,180),(80,180),(45,180),(-60,0),(-70,0)) if (tilt,yaw,z,y)!=(45,180,0.,0.)]
-TOPDOWN_POLICY={'name':'b03-padcenter-v3','grasp_point':'Actual collision-mesh cross-section centroid aligned to measured bilateral pad center','candidates':[list(x) for x in TOPDOWN_CANDIDATES],'closed_grip_preflight_range_rad':[.30,.383,.46,.55],'pregrasp_world_z_m':.125,'contact_standoff_m':0.,'lift_m':.12,'upper_route_rises_m':[.08,.16,.24]}
+TOPDOWN_CANDIDATES=[(0,180,.002,0.),(0,0,.002,.03),(0,180,.002,.03),(0,0,.002,0.),(0,0,.003,-.03),(0,180,0.,.03),(0,180,.003,-.03),(15,180,0.,0.),(45,180,-.003,.03),(45,180,-.003,-.03),(45,180,-.003,0.),(60,180,-.003,.03),(75,180,.003,.03)]+[(tilt,yaw,z,y) for y in (.03,-.03,0.) for z in (-.003,0.,.003) for tilt,yaw in ((60,180),(70,180),(75,180),(80,180),(45,180),(-60,0),(-70,0)) if (tilt,yaw,z,y)!=(45,180,0.,0.)]
+TOPDOWN_POLICY={'name':'b03-padcenter-v5','grasp_point':'Actual collision-mesh cross-section centroid aligned to measured bilateral pad center','candidates':[list(x) for x in TOPDOWN_CANDIDATES],'closed_grip_preflight_range_rad':[.30,.383,.46,.55],'pregrasp_world_z_m':.08,'contact_standoff_m':0.,'lift_m':.10,'upper_route_rises_m':[.08,.16,.24]}
 
 
 def search_topdown(world,kin,q,pick_pose,*,bias_x_m,finger_bias_m,dt,seed):
@@ -62,13 +62,14 @@ def search_topdown(world,kin,q,pick_pose,*,bias_x_m,finger_bias_m,dt,seed):
     from pathlib import Path
     calibration_path=Path(PAD_CALIBRATION_PATH);calibration=json.loads(calibration_path.read_text());pad_offset=np.array(calibration['pad_center_tcp_m']);TOPDOWN_POLICY['pad_calibration_sha256']=hashlib.sha256(calibration_path.read_bytes()).hexdigest();attempts=[]
     for tilt,yaw,pinch_z,y_shift in TOPDOWN_CANDIDATES:
+        if world.pick_object=='banana_1' and (tilt,yaw,pinch_z,y_shift)==(15,180,0.,0.):continue
         local_grasp=collision_mesh_waist(world,y_shift=y_shift);nominal=(transform(pick_pose[:3],pick_pose[3:7])@np.r_[local_grasp,1.])[:3];nominal[0]+=bias_x_m
         rotation=Rotation.from_euler('z',yaw,degrees=True).as_matrix()@Rotation.from_euler('x',tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],float)
-        center=nominal+np.array([0,0,pinch_z])-rotation@pad_offset+finger_bias_m*rotation[:,1];height=float(center[2]-nominal[2]);offset=np.array([0.,0.,.125]);row={'tilt':tilt,'yaw':yaw,'height_offset_m':height,'pinch_z_offset_m':pinch_z,'waist_y_shift_m':y_shift,'grasp_point_body_m':local_grasp.tolist()}
+        center=nominal+np.array([0,0,pinch_z])-rotation@pad_offset+finger_bias_m*rotation[:,1];height=float(center[2]-nominal[2]);offset=np.array([0.,0.,.08]);row={'tilt':tilt,'yaw':yaw,'height_offset_m':height,'pinch_z_offset_m':pinch_z,'waist_y_shift_m':y_shift,'grasp_point_body_m':local_grasp.tolist()}
         print('TOPDOWN_CANDIDATE',world.pick_object,tilt,yaw,height,flush=True)
-        planner=LimePlanner(world,kin,dt=dt,seed=seed,max_joint_speed=.4)
+        planner=LimePlanner(world,kin,dt=dt,seed=seed,max_joint_speed=.4);planner.pose_ik_joint_fallback=True
         try:
-            checked=preflight_grasp(planner,q,rotation,center,offset,pick_pose,world.pick_object,contact_standoff_m=0.,closed_grip_candidates=(.30,.383,.46,.55))
+            checked=preflight_grasp(planner,q,rotation,center,offset,pick_pose,world.pick_object,contact_standoff_m=0.,closed_grip_candidates=(.30,.383,.46,.55),lift_m=.10)
             row.update(passed=True,preflight=checked);attempts.append(row)
             print('TOPDOWN_SELECTED',world.pick_object,tilt,yaw,height,flush=True)
             return {'rotation':rotation,'center':center,'offset':offset,**row},attempts
@@ -124,3 +125,5 @@ def close_recenter_delta(world,kin,state,arm_ids,joint_names,contact_row,solutio
     return delta,{'finger_gaps_m':{n:g for side,g,n in entries},'delta_world_m':delta.tolist()}
 
 TOPDOWN_POLICY.update(max_recenter_retries=2,recenter_max_step_m=.012,recenter_open_steps=12,recenter_close_steps=30,close_requires_bilateral_load=True)
+
+TOPDOWN_POLICY.update(pose_ik_joint_goal_fallback={'enabled':True,'seed_scales':[0.,.2,.4,.7],'max_position_error_m':.002,'max_orientation_error_deg':1.},physical_exclusions={'banana_1':[[15,180,0.,0.]]})

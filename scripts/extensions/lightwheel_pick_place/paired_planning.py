@@ -138,8 +138,11 @@ def plan_segment(planner: LimePlanner, world: CollisionWorld, segment: str, q0, 
     if recorded_method == 'cartesian_line_ik':
         path = planner.plan_cartesian_line(np.asarray(q0), np.asarray(target), ignore, grip_binary, phase=phase)
     else:
-        planning_phase = 'transfer' if recorded_method == 'motion_gen' else phase
-        path = planner.plan_pose(np.asarray(q0), np.asarray(target), ignore, grip_binary, phase=planning_phase)
+        planning_phase = 'transfer' if recorded_method in ('motion_gen','motion_gen_joint_goal','motion_gen_upper_route') else phase
+        if planning_phase=='transfer' and getattr(planner,'allow_upper_route_policy',False):
+            from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import plan_transfer
+            path=plan_transfer(planner,np.asarray(q0),np.asarray(target),ignore,grip_binary)
+        else:path = planner.plan_pose(np.asarray(q0), np.asarray(target), ignore, grip_binary, phase=planning_phase)
     validation = planner.validate_path(path['positions'], ignore, grip_binary, phase=phase)
     tcp = np.array([planner.kin.fk(x)[:3, 3] for x in path['positions']])
     return {
@@ -170,7 +173,8 @@ def main():
     from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
     result_probe = json.loads((a.baseline / 'result.json').read_text())
     task_id = a.task or result_probe.get('task')
-    TASK_SPEC = resolve_task(task_id)
+    from kitchen_safety.extensions.lightwheel_pick_place.task_config import episode_spec
+    TASK_SPEC = episode_spec({**result_probe,'task':task_id})
     PICK = result_probe.get('pick_object') or TASK_SPEC.pick_object
     DEST = result_probe.get('destination_object') or TASK_SPEC.destination_object
     BACKGROUND = tuple(TASK_SPEC.rigid_objects)
@@ -222,7 +226,7 @@ def main():
 
     summary = {
         'scope': (
-            'Offline paired planning with explicit task and optional recorded-leg method.  Identical measured start, authored TCP '
+            'Offline paired planning with explicit task and matching bounded route/pose-IK fallback policy; recorded method identifies the source leg.  Identical measured start, authored TCP '
             'goal from the successful baseline plans, attachment/gripper and max_joint_speed per seed. '
             'Only planning seed and added-hazard presence change. Hazard-off paths with hazard geometry '
             'are true-shape FCL checks only — never played back. Free-transfer and pregrasp are separate '
@@ -279,6 +283,9 @@ def main():
                     world.set_obstacle_pose(active_pick, st['active_pick_pose'])
                     world.source_detached = st['source_detached']
                     planner = LimePlanner(world, kin, dt=result['dt'], seed=int(seed), max_joint_speed=a.max_joint_speed)
+                    search_policy=result.get('grasp_search_policy',{})
+                    planner.pose_ik_joint_fallback=bool(search_policy.get('pose_ik_joint_goal_fallback',{}).get('enabled') or result.get('transfer_route_policy',{}).get('pose_ik_joint_goal_fallback'))
+                    planner.allow_upper_route_policy=bool(search_policy or result.get('transfer_route_policy',{}).get('mode')=='upper')
                     q0 = st['q']
                     grip = st['gripper_joint_position'] if segment in ('transfer', 'lift') else 0.0
                     target = targets[segment]

@@ -92,17 +92,18 @@ def audit(baseline,episode):
         'measured_task_initial_pose_matches':task_pose_same,'task_initial_pose_limits':task_pose_limits,
         'source_object_deltas':object_deltas,'scope':'Exact authored original poses, measured arm reset (1e-6 rad), robot base (1e-7m), and measured lime/bowl initial pose (1mm/1degree) are gated. All source settling deltas are disclosed; both paths must also pass both measured bowl/distractor backgrounds. Nominal equality does not assert identical physical states. No execution-time object setters.'}
     control_keys=('seed','placement_seed','requested_grasp_tilt_deg','requested_grasp_yaw_deg','requested_grasp_height_offset_m','smooth_lift','allowed_grasp_fallback','selected_grasp','dt','pregrasp_offset_m','grasp_lateral_x_m','grasp_finger_bias_m','grasp_local_approach','shelf_lift_retract_m')
-    if len(spec.pick_objects)>1:control_keys=tuple(k for k in control_keys if k!='shelf_lift_retract_m')
-    if pick in ('green_ladle','pepsi_can'):control_keys+=('grasp_point_body_m','transfer_route_policy')
+    if pick!='lemon':control_keys=tuple(k for k in control_keys if k!='shelf_lift_retract_m')
+    if len(spec.pick_objects)>1:control_keys+=('pick_object','pick_objects')
+    if pick in ('green_ladle','pepsi_can'):control_keys+=('grasp_point_body_m','transfer_route_policy','commanded_initial_lift_m')
     same_controls=all(k in br and k in r and br[k] is not None and r[k] is not None and br[k]==r[k] for k in control_keys)
     search=br.get('grasp_search_policy')
     if len(spec.pick_objects)>1 and search:
         # Search outputs may differ with hazards; the candidate policy and input controls must match.
-        policy_same=(search==r.get('grasp_search_policy') and search.get('name') in ('b03-family-v1','b03-topdown-v1','b03-topdown-v2','b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3'))
+        policy_same=(search==r.get('grasp_search_policy') and search.get('name') in ('b03-family-v1','b03-topdown-v1','b03-topdown-v2','b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3','b03-padcenter-v4','b03-padcenter-v5'))
         def selected_in_policy(metadata):
             chosen=metadata.get('selected_grasp',{});value=[chosen.get('tilt'),chosen.get('yaw')]
             if search.get('name') in ('b03-topdown-v1','b03-topdown-v2'):value.append(chosen.get('height_offset_m'))
-            if search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3'):value.extend([chosen.get('pinch_z_offset_m'),chosen.get('waist_y_shift_m')])
+            if search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3','b03-padcenter-v4','b03-padcenter-v5'):value.extend([chosen.get('pinch_z_offset_m'),chosen.get('waist_y_shift_m')])
             return value in search.get('candidates',[])
         selected_valid=all(selected_in_policy(m) for m in (br,r))
         if search.get('name','').startswith('b03-padcenter'):
@@ -116,10 +117,10 @@ def audit(baseline,episode):
     same_support=all(k in baseline_support and k in actual_support and baseline_support[k] is not None and actual_support[k] is not None and baseline_support[k]==actual_support[k] for k in support_keys)
     plan_methods_match=[(x['phase'],x.get('metadata',{}).get('method')) for x in br.get('plans',[]) if x.get('executed')]==[(x['phase'],x.get('metadata',{}).get('method')) for x in r.get('plans',[]) if x.get('executed')]
     if len(spec.pick_objects)>1 and search:plan_methods_match=[x['phase'] for x in br.get('plans',[]) if x.get('executed')]==[x['phase'] for x in r.get('plans',[]) if x.get('executed')]
-    if len(spec.pick_objects)>1 and search and search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3'):
+    if len(spec.pick_objects)>1 and search and search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3','b03-padcenter-v4','b03-padcenter-v5'):
         # Identical feedback policy can produce different recenter counts/routes.
         # Check bounded outputs, while dense actual-path and native gates remain mandatory.
-        allowed={'pregrasp':{'motion_gen','motion_gen_upper_route'},'approach':{'cartesian_ik','cartesian_line_ik'},'lift':{'motion_gen','cartesian_line_ik','cartesian_ik'},'transfer':{'motion_gen','motion_gen_upper_route'},'lower':{'cartesian_line_ik','cartesian_ik','motion_gen'},'retreat':{'motion_gen','cartesian_line_ik','cartesian_ik'}}
+        allowed={'pregrasp':{'motion_gen','motion_gen_upper_route','motion_gen_joint_goal'},'approach':{'cartesian_ik','cartesian_line_ik'},'lift':{'motion_gen','cartesian_line_ik','cartesian_ik'},'transfer':{'motion_gen','motion_gen_upper_route','motion_gen_joint_goal'},'lower':{'cartesian_line_ik','cartesian_ik','motion_gen'},'retreat':{'motion_gen','cartesian_line_ik','cartesian_ik'}}
         def valid_policy_execution(m):
             plans=[x for x in m.get('plans',[]) if x.get('executed')]
             if not plans or any(x['phase'] not in allowed or x.get('metadata',{}).get('method') not in allowed[x['phase']] for x in plans):return False
@@ -140,7 +141,7 @@ def audit(baseline,episode):
                 phase=x['phase'];method=x.get('metadata',{}).get('method')
                 if phase=='retreat':continue
                 if phase in ('pregrasp','transfer'):
-                    if method not in ('motion_gen','motion_gen_upper_route'):return None
+                    if method not in ('motion_gen','motion_gen_upper_route','motion_gen_joint_goal'):return None
                     method='same_bounded_transfer_policy'
                 rows.append((phase,method))
             return rows

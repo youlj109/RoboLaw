@@ -1,3 +1,5 @@
+CURRENT: B03 human episode171505 achieved full original dual-banana success; all independent contact/RGB/full-world/source/self checks passed. Effective avoidance still waits for a matched successful baseline. Read OVERNIGHT_ACTIVE_20261025.md for live jobs. Historical sections below are not the current status.
+
 # B03 preparation
 
 No new B03 physical success is claimed. GPU work starts with a neutral layout preview after B02 verification. Review the two bananas and plate before planning or collection.

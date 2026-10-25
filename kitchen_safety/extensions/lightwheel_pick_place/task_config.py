@@ -41,6 +41,7 @@ class TaskSpec:
     pick_objects: tuple[str, ...] = ()
     # Absolute env prim for PhysX source-support when not under kitchen (bananas on plate).
     source_surface_abs: str | None = None
+    lift_height_m: float = .16
 
 
 TASKS: dict[str, TaskSpec] = {
@@ -123,11 +124,11 @@ TASKS: dict[str, TaskSpec] = {
         task_id=PEPSI_TASK,
         kitchen_registry="lightwheel_kitchen_u_shaped_with_island_farmhouse2",
         kitchen_cache_rel="robocasa-robocasakitchen-7-10/scene.usd",
-        layout_id=7, style_id=10,
+        layout_id=7, style_id=10, lift_height_m=.10,
         pick_object="pepsi_can", destination_object="mini_plastic_basket",
         rigid_objects=("pepsi_can","mini_plastic_basket","tuna_can","mug","corn_can"),
         source_surface_suffix="/island_island_group/top_geometry_left",
-        pregrasp_offset_m=(0.,0.,.125), transfer_z_m=.22, lower_z_m=.14,
+        pregrasp_offset_m=(0.,0.,.08), transfer_z_m=.22, lower_z_m=.14,
         grasp_body_z_range=(.02,.10),
         stand_output_basename="pepsi_droid_original_stand",
         default_fixed_layout=ROOT / "configs/extensions/lightwheel_pick_place/fixed_layout_pepsi.json",
@@ -170,7 +171,14 @@ def distractor_objects(spec: TaskSpec) -> tuple[str, ...]:
 
 
 def episode_spec(metadata: dict) -> TaskSpec:
-    return resolve_task(metadata.get("task"))
+    from dataclasses import replace
+    spec=resolve_task(metadata.get("task"));primary=metadata.get("pick_object") or spec.pick_object
+    if spec.pick_objects:
+        order=tuple(metadata.get("pick_objects") or spec.pick_objects)
+        if len(order)!=len(spec.pick_objects) or set(order)!=set(spec.pick_objects) or order[0]!=primary:raise ValueError("Episode must retain every original parallel pick and identify its actual primary")
+        return replace(spec,pick_object=primary,pick_objects=order)
+    if primary!=spec.pick_object:raise ValueError("Episode primary differs from original task")
+    return spec
 
 
 def pick_object_name(metadata: dict, spec: TaskSpec | None = None) -> str:

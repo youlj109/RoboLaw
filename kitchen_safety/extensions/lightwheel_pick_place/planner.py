@@ -2,6 +2,26 @@
 import numpy as np
 from kitchen_safety.curobo_backend import CuroboPlanner
 class LimePlanner(CuroboPlanner):
+    pose_ik_joint_fallback=False
+
+    def _pose_goal_via_joint_planner(self,q,target,ignore,grip,phase,pose_error):
+        """Same TCP goal, alternate redundant IK; ordinary cuRobo/FCL gates retained."""
+        from scipy.spatial.transform import Rotation
+        failures=[];rng=np.random.default_rng(self.seed)
+        for scale in (0.,.2,.4,.7):
+            try:
+                goal=self.kin.ik(target,np.asarray(q)+rng.normal(0,scale,7),attempts=12)
+                actual=self.kin.fk(goal);position_error=float(np.linalg.norm(actual[:3,3]-np.asarray(target)[:3,3]));angle_error=float(np.rad2deg(Rotation.from_matrix(actual[:3,:3]@np.asarray(target)[:3,:3].T).magnitude()))
+                if position_error>.002 or angle_error>1.:raise RuntimeError('Redundant IK missed unchanged TCP goal')
+                self.world.allowed_phase=phase
+                if not self.world.valid(goal,ignore):raise RuntimeError('Redundant IK failed full FCL endpoint')
+                self.query_start_q=np.asarray(q).copy()
+                path=self.plan_joint_goal(q,goal,ignore,grip,phase=phase)
+                path['metadata']['pose_ik_joint_goal_fallback']={'original_pose_error':str(pose_error),'same_tcp_goal':np.asarray(target).tolist(),'goal_position_error_m':position_error,'goal_orientation_error_deg':angle_error,'seed_scale':scale,'failed_candidates':failures,'scope':'Same TCP goal; complete caller dense path validation still required.'}
+                return path
+            except RuntimeError as exc:failures.append({'scale':scale,'error':str(exc)})
+        raise RuntimeError('No valid redundant joint goal at unchanged TCP: '+str(failures))
+
     def _prepare_path_query(self, ignore_names, grip_binary, phase):
         self.active_ignore_names=tuple(ignore_names)
         self.active_phase=phase
@@ -9,11 +29,15 @@ class LimePlanner(CuroboPlanner):
 
     def plan_pose(self,q_arm7,target,ignore_names=(),grip_binary=0,phase=None):
         self.query_start_q=np.asarray(q_arm7).copy()
-        if phase!='pregrasp':return super().plan_pose(q_arm7,target,ignore_names,grip_binary,phase)
+        if phase!='pregrasp':
+            try:return super().plan_pose(q_arm7,target,ignore_names,grip_binary,phase)
+            except RuntimeError as exc:
+                if self.pose_ik_joint_fallback and phase=='transfer' and 'IK_FAIL' in str(exc):return self._pose_goal_via_joint_planner(q_arm7,target,ignore_names,grip_binary,phase,exc)
+                raise
         # A collision-free pregrasp endpoint alone does not guarantee the
         # contact column is feasible. Keep the original TCP pose/orientation;
         # search only redundant arm IK postures when a hazard blocks the column.
-        contact_target=np.asarray(target).copy();contact_target[2,3]-=.125
+        contact_target=np.asarray(target).copy();contact_target[:3,3]-=getattr(self,'pregrasp_contact_offset_m',np.array([0.,0.,.125]))
         attempts=[];nominal=None
         def column(q_goal):
             self._prepare_path_query(ignore_names,grip_binary,'approach')

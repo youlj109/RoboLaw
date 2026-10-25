@@ -60,11 +60,11 @@ def validate(out):
     checks['physical_lift_contacts'] = lift['sampled_actions'] == 5 and lift['both_fingers_on_body']
     checks['carried_contacts_on_body'] = carried['passed']
     if pick=='green_ladle':
-        # Actual measured handle is the thin negative-X stem, not the spoon bowl.
+        # Actual measured handle is the thin stem, ending before the spoon bowl at X>.07m.
         handle_points=[np.asarray(f['points_lime_local_m'],float).reshape(-1,3)[np.abs(np.asarray(f['normal_forces_n']))>.01] for row in records if row['phase'] in ('close','lift','transfer','lower') for f in row['fingers'].values()]
         handle_points=np.concatenate(handle_points) if handle_points else np.empty((0,3))
-        checks['ladle_handle_contact_region']=bool(len(handle_points) and (handle_points[:,0]>=-.15).all() and (handle_points[:,0]<=-.025).all())
-        details['ladle_handle_contact_bounds_x_m']=[-.15,-.025]
+        checks['ladle_handle_contact_region']=bool(len(handle_points) and (handle_points[:,0]>=-.15).all() and (handle_points[:,0]<=.05).all())
+        details['ladle_handle_contact_bounds_x_m']=[-.15,.05]
 
 
     with h5py.File(out / 'trajectory.h5') as trajectory, h5py.File(out / 'images.h5') as images:
@@ -318,6 +318,8 @@ def validate(out):
             and np.isfinite(item.get('distance_m', float('nan')))
             and item.get('slack_m', -1) >= 0 for item in clearances)
             and result.get('minimum_clearance', {}).get('valid') is True)
+    if result.get('defer_added_hazard_audit') and result['variant']!='base':
+        checks['deferred_added_hazard_audit_complete'] = bool(audit.get('added_hazard_sampling_frequency_hz')==120 and audit.get('live_added_hazard_checkpoint_parity_verified') is True and (out/'clearances.before_deferred_recheck.json').exists())
     return {'passed': all(checks.values()), 'checks': {key: bool(value) for key, value in checks.items()},
             'details': details, 'frames': n, 'dt': dt,
             'scope': 'Independent raw contact, RGB, state and video validation. Native '

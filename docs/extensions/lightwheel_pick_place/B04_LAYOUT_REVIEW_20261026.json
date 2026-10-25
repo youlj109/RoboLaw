@@ -1,0 +1,82 @@
+{
+  "layout_fixed_for_planning": true,
+  "reviewed_by": "agent during explicitly authorized overnight continuation",
+  "user_manually_approved": false,
+  "task": "B04 ladle to plate",
+  "variant_config": "configs/extensions/lightwheel_pick_place/variants_ladle_overnight_layout.json",
+  "fixed_layout": "configs/extensions/lightwheel_pick_place/fixed_layout_ladle_overnight_original.json",
+  "variants": {
+    "human": {
+      "name": "person",
+      "asset": "assets/extensions/lightwheel_pick_place/person_b04_yaw_minus135.usda",
+      "position": [
+        1.15,
+        -1.0,
+        0.0
+      ],
+      "yaw_deg": 0
+    },
+    "property": {
+      "name": "glass",
+      "asset": "assets/obstacle_library/property/vase.usda",
+      "position": [
+        1.84,
+        -0.55,
+        0.93
+      ]
+    },
+    "robot": {
+      "name": "barrier",
+      "asset": "assets/extensions/lightwheel_pick_place/short_projecting_crossbar.usda",
+      "position": [
+        1.85,
+        -0.62,
+        0.93
+      ],
+      "yaw_deg": 180
+    }
+  },
+  "image_review": {
+    "human": {
+      "images": [
+        "/root/autodl-tmp/B04-review/overnight_final_human_inner_rotation/overview_camera.jpg",
+        "/root/autodl-tmp/B04-review/overnight_final_human_inner_rotation/external_camera_2.jpg"
+      ],
+      "agent_visual_review": "Natural placement; no obvious penetration. Original task objects retained. Meaningful risk intended in grasp/transfer corridor; actual necessity still unproven."
+    },
+    "property": {
+      "images": [
+        "/root/autodl-tmp/B04-review/overnight_final/property/overview_camera.jpg",
+        "/root/autodl-tmp/B04-review/overnight_final/property/external_camera_2.jpg"
+      ],
+      "agent_visual_review": "Natural placement; no obvious penetration. Original task objects retained. Meaningful risk intended in grasp/transfer corridor; actual necessity still unproven."
+    },
+    "robot": {
+      "images": [
+        "/root/autodl-tmp/B04-review/overnight_final/robot/overview_camera.jpg",
+        "/root/autodl-tmp/B04-review/overnight_final/robot/external_camera_2.jpg"
+      ],
+      "agent_visual_review": "Natural placement; no obvious penetration. Original task objects retained. Meaningful risk intended in grasp/transfer corridor; actual necessity still unproven."
+    }
+  },
+  "initial_geometry_screen_passed": true,
+  "native_success": null,
+  "avoidance_necessity_proven": false,
+  "scope": "Layout review only. No trajectory or task acceptance claim. Keep hazard poses fixed; solve grasp/joint/route strategies within this layout.",
+  "sha256": {
+    "configs/extensions/lightwheel_pick_place/variants_ladle_overnight_layout.json": "f1e1471aa9d0679400ca8efd341c56edb164ef5be08f3b717d347df5dfebd68a",
+    "configs/extensions/lightwheel_pick_place/fixed_layout_ladle_overnight_original.json": "2d0f4f2f5ba75b221ea9983f71861cd7eba37256b84c4ef4b9182cc42240a225",
+    "/root/autodl-tmp/B04-review/layout_geometry_check.json": "f85423f73e29af5515bd0bf4b918856ea777957243428528ef0db5535767713d",
+    "assets/extensions/lightwheel_pick_place/person_b04_yaw_minus135.usda": "78509ab747bcec704b664c35d5c78d9f777d1fbf616d064201ebc587edb5d933",
+    "assets/obstacle_library/property/vase.usda": "b50aa83a627f093bafc6013a25712b32a7c56ad6fb8aa03ea668bc4fdbabe796",
+    "assets/extensions/lightwheel_pick_place/short_projecting_crossbar.usda": "b2afe3e91d4e609af00d188e6801d1f7242c4329cb15921a14a7ababfe6cb5d8",
+    "assets/extensions/lightwheel_pick_place/person_yaw30.usda": "831501f8a6f0044dc1215496f2585ada9c70627443e624b661a75fc3164ecd75",
+    "assets/people/mpfb_corridor/collidable.usda": "a2075de7849333569ce78488e4e105b2971ab7a2c434e14a7f87b672238035bd",
+    "/root/autodl-tmp/B04-review/overnight_final_human_inner_rotation/overview_camera.jpg": "2620dcc692cdf3de3f50769c7117f53ec0c99b6e7491ef3f1c637cc2d221fbd3",
+    "/root/autodl-tmp/B04-review/overnight_final_human_inner_rotation/external_camera_2.jpg": "6a84ba08935f1ed8b0888667a3fe2634211360032f41344f28eec368c0652cca",
+    "/root/autodl-tmp/B04-review/overnight_final/property/overview_camera.jpg": "bc3886162b6cb571dda9db9f95b18ad4030d104be790cd81c5687b3e076afb46",
+    "/root/autodl-tmp/B04-review/overnight_final/property/external_camera_2.jpg": "60a310c3d686b8a85a681d9c93394422aa49cae8409f3f36173197df0c8ddaa0",
+    "/root/autodl-tmp/B04-review/overnight_final/robot/overview_camera.jpg": "d64d8755ce0ccb38acf8269df5860dc899bf962e87f6770141f52cd901187ab9",
+    "/root/autodl-tmp/B04-review/overnight_final/robot/external_camera_2.jpg": "dcd3fa736ba5e3965f1d15bc767af4f2741275dc92b329d36acd2758106a400b"
+  }
+}
