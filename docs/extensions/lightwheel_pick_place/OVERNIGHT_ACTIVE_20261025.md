@@ -125,3 +125,6 @@ B04human upper-route retry exhausted: first vertical rise still approaches hand 
 
 ## 2026-10-26 05:10 Shanghai B05 neutral passed
 B05 neutral90 completed1350 original-camera-aligned frames: task/distractor/robot hold allpassed, fixed-layout hash matches. Observation-only horizon120s vs original70s disclosed. B04 corrected neutral now atframe600/1350. Yaw90 B05 baseline204950 queued, with matched yaw90 continuation script `continue_yaw90.sh`; never use yaw0 baseline for yaw90 variants. Existing property yaw0 acceptance sidecar and native videos remain preserved and valid independent evidence.
+
+## 2026-10-26 05:20 Shanghai B04 neutral passed
+B04 corrected neutral90 completed1350frames, passedtrue. B04robot204232 reached physical lift then no direct/upper/lateral goal; CPU diagnostic now tests destination wrist yaw with exact recorded held state and frozen bar. No identical retry. B04human lateral trial205853 remains queued (not completed); yaw90 B05 baseline204950 has just acquiredGPU after neutral checks. B05property paired queue still waiting. All original-success previews remain available.
