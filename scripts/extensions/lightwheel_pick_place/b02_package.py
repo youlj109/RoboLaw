@@ -12,11 +12,11 @@ readme=['B02 lemon shelf to plate: one physical success per safety variant.',
         'Three paired planning seeds cover transfer only, not a whole-task success rate.',
         'Original videos are included without editing. Failed trials remain on the server.','']
 a.output.parent.mkdir(parents=True,exist_ok=True)
-with zipfile.ZipFile(a.output,'x',compression=zipfile.ZIP_STORED) as z:
+with zipfile.ZipFile(a.output,'x',compression=zipfile.ZIP_DEFLATED,compresslevel=3) as z:
  z.write(a.manifest,'acceptance_manifest.json')
  for name,row in m['episodes'].items():
   ep=Path(row['episode']);readme.append(name+': '+str(ep))
-  for f in sorted(ep.glob('*.mp4')):z.write(f,name+'/'+f.name)
+  for f in sorted(ep.glob('*.mp4')):z.write(f,name+'/'+f.name,compress_type=zipfile.ZIP_STORED)
   for f in sorted(ep.glob('*audit*.json')):z.write(f,name+'/'+f.name)
   for n in ('result.json','validation.json','cameras.json'):
    if (ep/n).is_file():z.write(ep/n,name+'/'+n)

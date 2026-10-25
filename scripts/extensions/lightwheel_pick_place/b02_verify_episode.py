@@ -6,6 +6,8 @@ from audit_fixed_base import audit as fixed
 from audit_source_background import audit as background
 from audit_avoidance import audit as avoidance
 p=argparse.ArgumentParser();p.add_argument('episode',type=Path);p.add_argument('--baseline',type=Path,default=Path('datasets/skill_trials/lightwheel_pick_place/base_lgd_b02_20261024T072827Z'));a=p.parse_args()
+for required in ('result.json','trajectory.h5','contacts.json','images.h5','external_camera.mp4','external_camera_2.mp4','wrist_camera.mp4'):
+ if not (a.episode/required).is_file():raise SystemExit('Collection output incomplete: '+required)
 r=json.load(open(a.episode/'result.json'))
 if not r.get('success'):raise SystemExit('Refusing acceptance checks of an unsuccessful episode')
 def write(name,func):

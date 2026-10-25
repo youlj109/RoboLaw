@@ -5,7 +5,7 @@ from zoneinfo import ZoneInfo
 import json,re
 root=Path('/root/autodl-tmp/RoboLaw-lgd');logs=Path('/root/autodl-tmp/lgd-b02-logs');out=Path('/root/autodl-tmp/B02-review/status.txt')
 def read(p):return json.loads(p.read_text()) if p.exists() else {}
-rows=['B02 progress at '+datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(timespec='seconds'),'Branch: lgd; B03 CPU preparation; layout preview queued after B02 verification.','']
+rows=['B02 progress at '+datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(timespec='seconds'),'Branch: lgd; B03 base layout preview approved by user; preparing dual-pick validation.','']
 for v in ('human','property','robot'):
  candidates=sorted(logs.glob(v+'_review_20261025T*.log'));log=candidates[-1] if candidates else None
  text=log.read_text(errors='replace') if log else '';steps=re.findall(r'^STEP .*$',text,re.M);matches=re.findall(r'^COLLECT_RESULT (.*)$',text,re.M)
