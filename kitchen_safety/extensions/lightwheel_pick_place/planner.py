@@ -8,7 +8,8 @@ class LimePlanner(CuroboPlanner):
         """Same TCP goal, alternate redundant IK; ordinary cuRobo/FCL gates retained."""
         from scipy.spatial.transform import Rotation
         failures=[];rng=np.random.default_rng(self.seed)
-        for scale in (0.,.2,.4,.7):
+        scales=(0.,.2,.4,.7)+((.45,)*12+(.9,)*12 if self.world.pick_object=='green_ladle' else ())
+        for scale in scales:
             try:
                 goal=self.kin.ik(target,np.asarray(q)+rng.normal(0,scale,7),attempts=12)
                 actual=self.kin.fk(goal);position_error=float(np.linalg.norm(actual[:3,3]-np.asarray(target)[:3,3]));angle_error=float(np.rad2deg(Rotation.from_matrix(actual[:3,:3]@np.asarray(target)[:3,:3].T).magnitude()))

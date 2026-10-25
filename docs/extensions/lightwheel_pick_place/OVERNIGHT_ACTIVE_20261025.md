@@ -128,3 +128,7 @@ B05 neutral90 completed1350 original-camera-aligned frames: task/distractor/robo
 
 ## 2026-10-26 05:20 Shanghai B04 neutral passed
 B04 corrected neutral90 completed1350frames, passedtrue. B04robot204232 reached physical lift then no direct/upper/lateral goal; CPU diagnostic now tests destination wrist yaw with exact recorded held state and frozen bar. No identical retry. B04human lateral trial205853 remains queued (not completed); yaw90 B05 baseline204950 has just acquiredGPU after neutral checks. B05property paired queue still waiting. All original-success previews remain available.
+
+## 2026-10-26 05:31 Shanghai bounded evidence-led repairs
+B05 yaw90 baseline204950 passed real lift/transfer/lower but opening sweep got0.671mm to basket<2mm. Distinct retry keeps yaw90, increases release root .14→.16m above original basket (20mm more clearance), keeps native settling/support checks. New matched continuation `continue_yaw90clear.sh` uses yaw90/release.16 for every variant; old yaw0 acceptedproperty retained separately.
+B04 fixed-bar CPU endpoint search found legal redundant solutions at unchanged destination/TCP orientation, e.g.minimum3.754mm vs2mm. Existing fallback tried only4seeds and missed them; ladle-only bounded extension adds12seeds atscale.45 and12at.9, same exactTCP2mm/1degree and original cuRobo/fullFCL. Robot retry queued165397. No mass/friction/obstacle changes.
