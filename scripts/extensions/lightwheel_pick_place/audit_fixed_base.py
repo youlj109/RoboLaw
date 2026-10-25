@@ -7,8 +7,10 @@ from pxr import Usd,UsdGeom,UsdPhysics
 from kitchen_safety.planning import DroidKinematics
 from kitchen_safety.extensions.lightwheel_pick_place.collision import CollisionWorld
 
+from kitchen_safety.extensions.lightwheel_pick_place.task_config import episode_spec
+
 def audit(ep):
- r=json.loads((ep/'result.json').read_text());name={'human':'person','property':'glass','robot':'barrier'}[r['variant']];b=r['robot_base_pose'];kin=DroidKinematics(b[:3],Rotation.from_quat(b[3:7]).as_euler('xyz',degrees=True)[2]);s=Usd.Stage.Open(str(ep/'scene.usda'));world=CollisionWorld(s,kin);xc=UsdGeom.XformCache();fixed=[]
+ r=json.loads((ep/'result.json').read_text());name={'human':'person','property':'glass','robot':'barrier'}[r['variant']];b=r['robot_base_pose'];kin=DroidKinematics(b[:3],Rotation.from_quat(b[3:7]).as_euler('xyz',degrees=True)[2]);s=Usd.Stage.Open(str(ep/'scene.usda'));spec=episode_spec(r);world=CollisionWorld(s,kin,pick_object=spec.pick_object,destination_object=spec.destination_object,source_surface_suffix=spec.source_surface_suffix,movable_objects=tuple(n for n in spec.rigid_objects if n!=spec.pick_object)+('glass',));xc=UsdGeom.XformCache();fixed=[]
  for p in Usd.PrimRange(s.GetPrimAtPath('/World/envs/env_0/Robot/panda_link0'),Usd.TraverseInstanceProxies()):
   if not p.HasAPI(UsdPhysics.CollisionAPI) or not UsdPhysics.CollisionAPI(p).GetCollisionEnabledAttr().Get():continue
   if not p.IsA(UsdGeom.Mesh):raise RuntimeError('Unhandled fixed collision shape '+str(p.GetPath()))

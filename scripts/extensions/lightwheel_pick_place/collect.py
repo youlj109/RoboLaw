@@ -69,6 +69,7 @@ with SimulationAppContext(args):
     from kitchen_safety.extensions.lightwheel_pick_place.planner import LimePlanner
     from kitchen_safety.extensions.lightwheel_pick_place.contacts import LimeGraspContacts,LimeSourceContacts
     from kitchen_safety.extensions.lightwheel_pick_place.source_support import JITTER_M,MAX_XY_M,DETACH_CLEARANCE_M,update_detached
+    from kitchen_safety.extensions.lightwheel_pick_place.lemon_kinematics import LemonKinematics
     from kitchen_safety.planning import DroidKinematics,transform
     from kitchen_safety.dataset import CameraWriter,numpy as arr,decode_video
     torch.set_num_threads(2)
@@ -182,7 +183,7 @@ with SimulationAppContext(args):
     try:
         for _ in range(20):step(q,0.)
         initial=snapshot();result['initial_object_states']={name:arr(scene[name].data.root_state_w)[0].tolist() for name in RIGID};result['initial_lime_pose']=initial['lime'].tolist();result['initial_bowl_pose']=initial['wooden_bowl'].tolist();result['pick_object']=PICK;result['destination_object']=DEST;result['pick_objects']=list(task_picks(TASK_SPEC))
-        base=arr(robot.data.root_state_w)[0,:7];kin=DroidKinematics(base[:3],Rotation.from_quat(base[3:7]).as_euler('xyz',degrees=True)[2])
+        base=arr(robot.data.root_state_w)[0,:7];kin=(LemonKinematics if PICK=='lemon' else DroidKinematics)(base[:3],Rotation.from_quat(base[3:7]).as_euler('xyz',degrees=True)[2])
         result['fk_error_m']=float(np.linalg.norm(kin.fk(initial['q'][ids])[:3,3]-initial['tcp']))
         if result['fk_error_m']>.005:raise RuntimeError('Robot FK disagrees with PhysX TCP')
         result['robot_base_pose']=base.tolist()
@@ -304,13 +305,13 @@ with SimulationAppContext(args):
             if args.grasp_local_approach and (not use_pregrasp_phase):
                 # TCP Z (col 2) should point into the object; hover back along -TCP_Z.
                 approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
-                pregrasp_offset=-0.18*approach
+                pregrasp_offset=(-0.17 if PICK=='lemon' else -0.18)*approach
             else:
                 pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
             try:
                 phase='pregrasp' if use_pregrasp_phase else 'approach'
                 # B03 combo: cartesian hover + IK tol 0.0025; pin tilt/yaw at CLI.
-                cart(center+pregrasp_offset,rotation=R, force_phase=('cartesian_line' if (args.grasp_local_approach and not use_pregrasp_phase) else None))
+                cart(center+pregrasp_offset,rotation=R, force_phase=('cartesian_line' if (args.grasp_local_approach and not use_pregrasp_phase and PICK!='lemon') else None))
                 result['selected_grasp']={'tilt':tilt,'yaw':yaw,'phase':phase,'use_pregrasp_phase':use_pregrasp_phase,
                     'tcp_z_world':approach.tolist() if (args.grasp_local_approach and not use_pregrasp_phase) else None}
                 result['pregrasp_offset_m']=pregrasp_offset.tolist()
@@ -329,7 +330,7 @@ with SimulationAppContext(args):
             contact_standoff=target_center[:3]+axis*0.02
             result['approach_contact_standoff_m']=contact_standoff.tolist()
             # Banana feasibility: MotionGen transfer IK_FAIL on hover->contact; cartesian_line succeeds near tol.
-            cart(contact_standoff, force_phase='cartesian_line')
+            cart(contact_standoff, force_phase=('transfer' if PICK=='lemon' else 'cartesian_line'))
         phase='close';grip=1.
         for _ in range(30):step(q,grip)
         held=snapshot();result['close_contacts']=contacts.summarize([-.001,.061],'close',last_actions=5)
@@ -449,7 +450,7 @@ with SimulationAppContext(args):
                 # Prefer local approach when flag set; else TASK_SPEC offset.
                 if args.grasp_local_approach:
                     approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
-                    pregrasp_offset=-0.18*approach
+                    pregrasp_offset=(-0.17 if PICK=='lemon' else -0.18)*approach
                 else:
                     pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
             phase='pregrasp' if use_pregrasp_phase else 'approach'

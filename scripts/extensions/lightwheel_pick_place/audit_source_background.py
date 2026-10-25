@@ -17,12 +17,15 @@ BACKGROUND=('wooden_bowl','broccoli','sweet_potato','red_bell_pepper')
 
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
+from kitchen_safety.extensions.lightwheel_pick_place.task_config import episode_spec
+
 def audit(baseline,episode):
     paths={'baseline':Path(baseline),'augmented':Path(episode)}
     results={k:json.loads((p/'result.json').read_text()) for k,p in paths.items()}
     traces={k:json.loads((p/'full_world_audit.json').read_text())['measurements'] for k,p in paths.items()}
     b=results['baseline']['robot_base_pose'];kin=DroidKinematics(b[:3],Rotation.from_quat(b[3:7]).as_euler('xyz',degrees=True)[2])
-    world=CollisionWorld(Usd.Stage.Open(str(paths['baseline']/'scene.usda')),kin)
+    spec=episode_spec(results['baseline']);pick=spec.pick_object;BACKGROUND=tuple(n for n in spec.rigid_objects if n!=pick)
+    world=CollisionWorld(Usd.Stage.Open(str(paths['baseline']/'scene.usda')),kin,pick_object=pick,destination_object=spec.destination_object,source_surface_suffix=spec.source_surface_suffix,movable_objects=BACKGROUND)
     combinations={}
     for background,metadata in results.items():
         for name in BACKGROUND:world.set_obstacle_pose(name,metadata['initial_object_states'][name][:7])
@@ -30,7 +33,7 @@ def audit(baseline,episode):
             rows=[]
             for index,state in enumerate(states):
                 world.allowed_phase=state['phase']
-                clearance=world.clearance(state['q_arm'],('lime',),mode='execution',
+                clearance=world.clearance(state['q_arm'],(pick,),mode='execution',
                     gripper_q=state['gripper_q'],object_pose=state['lime_pose'],obstacle_filter=BACKGROUND)
                 rows.append({'physics_index':index,'action':state['action'],'phase':state['phase'],**clearance})
             combinations[trajectory+'_path_in_'+background+'_background']={'passed':all(x['valid'] for x in rows),

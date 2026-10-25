@@ -21,6 +21,7 @@ from scipy.spatial.transform import Rotation
 
 from kitchen_safety.extensions.lightwheel_pick_place.collision import CollisionWorld
 from kitchen_safety.extensions.lightwheel_pick_place.planner import LimePlanner
+from kitchen_safety.extensions.lightwheel_pick_place.lemon_kinematics import LemonKinematics
 from kitchen_safety.planning import DroidKinematics
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -104,10 +105,19 @@ def build_world(baseline: Path, kin: DroidKinematics, variant: str | None, varia
         source_surface_suffix=task_spec.source_surface_suffix,
         movable_objects=movable,
     )
+    calibration = json.loads((baseline / 'result.json').read_text()).get('source_support_contact_model', {})
+    if calibration.get('mode') == 'native_rest_until_detached':
+        world.source_support_mode = calibration['mode']
+        world.source_resting_min_z = calibration['source_resting_min_z_m']
+        world.source_resting_xy = np.asarray(calibration['source_resting_xy_m'])
+        world.source_resting_root = np.asarray(calibration['source_resting_root_m'])
+        world.source_surface_top = calibration['surface_top_m']
+        world.source_detached = False
+        world.source_lift_floor_z = calibration['source_resting_min_z_m'] - calibration['source_resting_extra_tolerance_m']
     return world, stage
 
 
-def plan_segment(planner: LimePlanner, world: CollisionWorld, segment: str, q0, target, grip: float, attachment):
+def plan_segment(planner: LimePlanner, world: CollisionWorld, segment: str, q0, target, grip: float, attachment, recorded_method=None):
     pick = getattr(world, 'pick_object', 'lime')
     if segment in ('transfer', 'lift'):
         world.attachment = np.asarray(attachment, dtype=float)
@@ -125,7 +135,11 @@ def plan_segment(planner: LimePlanner, world: CollisionWorld, segment: str, q0, 
         phase = segment
     else:
         raise ValueError(segment)
-    path = planner.plan_pose(np.asarray(q0), np.asarray(target), ignore, grip_binary, phase=phase)
+    if recorded_method == 'cartesian_line_ik':
+        path = planner.plan_cartesian_line(np.asarray(q0), np.asarray(target), ignore, grip_binary, phase=phase)
+    else:
+        planning_phase = 'transfer' if recorded_method == 'motion_gen' else phase
+        path = planner.plan_pose(np.asarray(q0), np.asarray(target), ignore, grip_binary, phase=planning_phase)
     validation = planner.validate_path(path['positions'], ignore, grip_binary, phase=phase)
     tcp = np.array([planner.kin.fk(x)[:3, 3] for x in path['positions']])
     return {
@@ -141,6 +155,7 @@ def plan_segment(planner: LimePlanner, world: CollisionWorld, segment: str, q0, 
 
 def main():
     p = argparse.ArgumentParser()
+    p.add_argument('--recorded-plan-index', type=int, default=None, help='Replay one exact recorded plan leg, preserving its start, goal and planning method; duplicate phase labels are not merged')
     p.add_argument('--task', default=None,
                    help='Override task id; default reads result.json task field from --baseline')
     p.add_argument('--baseline', type=Path, required=True)
@@ -168,10 +183,16 @@ def main():
     variants = load_variants(a.variant_config)
     result = json.loads((baseline / 'result.json').read_text())
     base_pose = result['robot_base_pose']
-    kin = DroidKinematics(base_pose[:3], Rotation.from_quat(base_pose[3:7]).as_euler('xyz', degrees=True)[2])
+    kin = (LemonKinematics if PICK=='lemon' else DroidKinematics)(base_pose[:3], Rotation.from_quat(base_pose[3:7]).as_euler('xyz', degrees=True)[2])
     finger = result['robot_joint_names'].index('finger_joint')
     attachment = result['planning_attachment_tcp_to_lime']
     targets = {row['phase']: np.asarray(row['target'], dtype=float) for row in result['plans']}
+    recorded = None
+    if a.recorded_plan_index is not None:
+        recorded = result['plans'][a.recorded_plan_index]
+        if not recorded.get('executed'): raise ValueError('Selected recorded plan was not executed')
+        a.segments = [recorded['phase']]
+        targets = {recorded['phase']: np.asarray(recorded['target'], dtype=float)}
 
     with h5py.File(baseline / 'trajectory.h5') as f:
         phases = f['phase'].asstr()[:]
@@ -180,8 +201,16 @@ def main():
             if segment not in a.segments:
                 continue
             i = phase_start_index(phases, segment)
+            if recorded is not None:
+                previous = [x for x in result['plans'][:a.recorded_plan_index] if x['phase'] == segment and x.get('executed')]
+                i += sum(int(x['metadata']['samples']) + 12 for x in previous)
+                expected = sum(int(x['metadata']['samples']) + 12 for x in result['plans'] if x['phase'] == segment and x.get('executed'))
+                if int(np.count_nonzero(phases == segment)) != expected:
+                    raise ValueError('Recorded phase frame count does not match plan samples plus 12 hold frames')
+                if phases[i] != segment: raise ValueError('Recorded leg start phase mismatch')
             starts[segment] = {
                 'frame_index': i,
+                'source_detached': (json.loads((baseline / 'full_world_audit.json').read_text())['measurements'][i * 8].get('source_detached_before', False)),
                 'q': f['obs/q'][i, :7].copy(),
                 'gripper_joint_position': float(f['obs/q'][i, finger]),
                 'background': {n: f['obs/' + n][i, :7].copy() for n in BACKGROUND},
@@ -191,12 +220,15 @@ def main():
 
     summary = {
         'scope': (
-            'Offline paired MotionGen planning for lime. Identical measured start, authored TCP '
+            'Offline paired planning with explicit task and optional recorded-leg method.  Identical measured start, authored TCP '
             'goal from the successful baseline plans, attachment/gripper and max_joint_speed per seed. '
             'Only planning seed and added-hazard presence change. Hazard-off paths with hazard geometry '
             'are true-shape FCL checks only — never played back. Free-transfer and pregrasp are separate '
             'scopes; this is not a full-task physical recollect.'
         ),
+        'recorded_plan_index': a.recorded_plan_index,
+        'recorded_method': recorded['metadata']['method'] if recorded else None,
+        'task': TASK_SPEC.task_id,
         'baseline_episode': str(baseline),
         'baseline_result_sha256': digest(baseline / 'result.json'),
         'baseline_trajectory_sha256': digest(baseline / 'trajectory.h5'),
@@ -241,11 +273,12 @@ def main():
                     for name, pose in st['background'].items():
                         world.set_obstacle_pose(name, pose)
                     world.set_obstacle_pose(PICK, st[PICK])
+                    world.source_detached = st['source_detached']
                     planner = LimePlanner(world, kin, dt=result['dt'], seed=int(seed), max_joint_speed=a.max_joint_speed)
                     q0 = st['q']
                     grip = st['gripper_joint_position'] if segment in ('transfer', 'lift') else 0.0
                     target = targets[segment]
-                    planned = plan_segment(planner, world, segment, q0, target, grip, attachment)
+                    planned = plan_segment(planner, world, segment, q0, target, grip, attachment, recorded['metadata']['method'] if recorded else None)
                     positions = planned.pop('positions')
                     fname = f'{segment}_{variant}_seed{seed}_positions.npy'
                     np.save(out / fname, positions)
@@ -321,8 +354,9 @@ def main():
         }
 
     # Primary evidence segment per hazard (from geometry risk phases / redesign).
-    primary = {'human': 'approach', 'property': 'transfer', 'robot': 'transfer'}
+    primary = {v: recorded['phase'] for v in ('human','property','robot')} if recorded else {'human': 'approach', 'property': 'transfer', 'robot': 'transfer'}
     variant_reports = {}
+    primary = {v:s for v,s in primary.items() if v in a.variants}
     for variant, segment in primary.items():
         if segment not in a.segments:
             variant_reports[variant] = {'passed': False, 'reason': f'primary segment {segment} not run'}
@@ -366,7 +400,7 @@ def main():
     summary['segment_reports'] = segment_reports
     summary['variant_reports'] = variant_reports
     summary['primary_segments'] = primary
-    summary['passed'] = bool(all(v.get('passed') for v in variant_reports.values()))
+    summary['passed'] = bool(variant_reports) and all(v.get('passed') for v in variant_reports.values())
     (out / 'paired_planning.json').write_text(json.dumps(summary, indent=2))
     print('PAIR_SUMMARY', json.dumps({k: summary[k] for k in ('passed', 'variant_reports', 'primary_segments')}, indent=2), flush=True)
     raise SystemExit(0 if summary['passed'] else 2)

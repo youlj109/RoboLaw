@@ -87,12 +87,15 @@ def audit(baseline,episode):
         'arm_max_difference_rad':arm_error,'arm_numerical_tolerance_rad':1e-6,'baseline_arm_q':bq.tolist(),'augmented_arm_q':aq.tolist(),
         'measured_task_initial_pose_matches':task_pose_same,'task_initial_pose_limits':task_pose_limits,
         'source_object_deltas':object_deltas,'scope':'Exact authored original poses, measured arm reset (1e-6 rad), robot base (1e-7m), and measured lime/bowl initial pose (1mm/1degree) are gated. All source settling deltas are disclosed; both paths must also pass both measured bowl/distractor backgrounds. Nominal equality does not assert identical physical states. No execution-time object setters.'}
-    control_keys=('seed','placement_seed','requested_grasp_tilt_deg','requested_grasp_yaw_deg','requested_grasp_height_offset_m','smooth_lift','allowed_grasp_fallback','selected_grasp')
+    control_keys=('seed','placement_seed','requested_grasp_tilt_deg','requested_grasp_yaw_deg','requested_grasp_height_offset_m','smooth_lift','allowed_grasp_fallback','selected_grasp','dt','pregrasp_offset_m','grasp_lateral_x_m','grasp_finger_bias_m','grasp_local_approach','shelf_lift_retract_m')
     same_controls=all(k in br and k in r and br[k] is not None and r[k] is not None and br[k]==r[k] for k in control_keys)
     support_keys=('mode','root_z_gate','source_resting_extra_tolerance_m','source_resting_max_xy_displacement_m','surface','detach_clearance_m')
     baseline_support=br.get('source_support_contact_model',{});actual_support=r.get('source_support_contact_model',{})
     same_support=all(k in baseline_support and k in actual_support and baseline_support[k] is not None and actual_support[k] is not None and baseline_support[k]==actual_support[k] for k in support_keys)
-    same_controls=bool(same_controls and same_support)
+    plan_methods_match=[(x['phase'],x.get('metadata',{}).get('method')) for x in br.get('plans',[]) if x.get('executed')]==[(x['phase'],x.get('metadata',{}).get('method')) for x in r.get('plans',[]) if x.get('executed')]
+    lower_keys=('mode','lower_z_m','skipped')
+    lower_controls_match=all(br.get('place_lower',{}).get(k)==r.get('place_lower',{}).get(k) for k in lower_keys)
+    same_controls=bool(same_controls and same_support and plan_methods_match and lower_controls_match)
     def audit_passes(ep,name):
         path=ep/name
         return path.exists() and json.loads(path.read_text()).get('passed') is True

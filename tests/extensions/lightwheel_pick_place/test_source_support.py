@@ -1,6 +1,6 @@
 """Source-only support invariants, including the measured false-rejection case."""
 import unittest
-from kitchen_safety.extensions.lightwheel_pick_place.source_support import support_allowed,update_detached
+from kitchen_safety.extensions.lightwheel_pick_place.source_support import support_allowed,update_detached,near_support_slab
 
 class NativeSupportTests(unittest.TestCase):
     def allowed(self,**overrides):
@@ -23,4 +23,12 @@ class NativeSupportTests(unittest.TestCase):
     def test_detachment_cannot_be_reversed_by_a_fall(self):
         self.assertTrue(update_detached(detached=True,hull_min_z=.916,surface_top=.92,source_contact_count=3))
         self.assertFalse(self.allowed(detached=True))
+class ShelfSlabTests(unittest.TestCase):
+    def test_transfer_below_high_shelf_is_not_source_contact(self):
+        self.assertFalse(near_support_slab(hull_min_z=.98,hull_max_z=1.05,surface_bottom=1.40,surface_top=1.42))
+    def test_source_rest_requires_support_policy(self):
+        self.assertTrue(near_support_slab(hull_min_z=1.419,hull_max_z=1.48,surface_bottom=1.40,surface_top=1.42))
+    def test_above_shelf_is_detached(self):
+        self.assertFalse(near_support_slab(hull_min_z=1.425,hull_max_z=1.49,surface_bottom=1.40,surface_top=1.42))
+
 if __name__=='__main__':unittest.main()

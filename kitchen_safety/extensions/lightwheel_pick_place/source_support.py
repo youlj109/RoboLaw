@@ -20,3 +20,13 @@ def support_allowed(*,phase,detached,hull_min_z,root,initial_hull_min_z,initial_
 
 def update_detached(*,detached,hull_min_z,surface_top,source_contact_count):
     return bool(detached or (hull_min_z>=surface_top+DETACH_CLEARANCE_M and source_contact_count==0))
+
+
+def near_support_slab(*, hull_min_z, hull_max_z, surface_bottom, surface_top, clearance_m=.002):
+    """Height overlap with the finite source collider, including its margin.
+
+    A fruit below a high shelf is not in contact with that shelf merely because
+    its height is less than the shelf top. Full-world collision remains separate.
+    """
+    return bool(hull_min_z < surface_top + clearance_m
+                and hull_max_z >= surface_bottom - clearance_m)

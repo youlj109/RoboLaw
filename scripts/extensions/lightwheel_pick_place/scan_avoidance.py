@@ -62,15 +62,17 @@ def initial_intersections(source,hazards):
 def main():
     p=argparse.ArgumentParser();p.add_argument('--baseline',default='datasets/skill_trials/lightwheel_pick_place/base_attempt12');p.add_argument('--variant',choices=['human','property','robot'],required=True);p.add_argument('--output',required=True);p.add_argument('--stride',type=int,default=8);p.add_argument('--candidates',help='Optional JSON list of xyz/yaw candidate dicts');p.add_argument('--asset',help='Explicit alternate added hazard asset, original assets unchanged');p.add_argument('--endpoints-only',action='store_true',help='Require initial/final states only; contact phases may need a new collision-free redundant IK branch');a=p.parse_args()
     ep=Path(a.baseline);r=json.loads((ep/'result.json').read_text());b=r['robot_base_pose'];kin=DroidKinematics(b[:3],Rotation.from_quat(b[3:7]).as_euler('xyz',degrees=True)[2])
-    spec=json.loads((ROOT/'configs/extensions/lightwheel_pick_place/variants.json').read_text())[a.variant]
+    from kitchen_safety.extensions.lightwheel_pick_place.task_config import episode_spec
+    task=episode_spec(r);pick=task.pick_object
+    spec=json.loads(task.default_variants.read_text())[a.variant]
     if a.asset:spec['asset']=a.asset
     stage=Usd.Stage.Open(str(ep/'scene.usda'));stage.SetEditTarget(stage.GetSessionLayer());x=UsdGeom.Xform.Define(stage,'/World/envs/env_0/'+spec['name']);x.GetPrim().GetReferences().AddReference(str(ROOT/spec['asset']));x.AddTranslateOp().Set(Gf.Vec3d(0,0,0));x.AddRotateZOp().Set(0.)
-    world=CollisionWorld(stage,kin)
+    world=CollisionWorld(stage,kin,pick_object=pick,destination_object=task.destination_object,source_surface_suffix=task.source_surface_suffix,movable_objects=tuple(n for n in task.rigid_objects if n!=pick)+('glass',))
     for name,state in r['initial_object_states'].items():world.set_obstacle_pose(name,state[:7])
     fixed=fixed_shapes(stage);source=[v for v in world.objects if not world._matches(v[0],spec['name'])]+fixed
     with h5py.File(ep/'trajectory.h5') as f:
-        q=f['next_obs/q'][:];lime=f['next_obs/lime'][:,:7];phases=f['phase'].asstr()[:]
-        initial_q=f['obs/q'][0];initial_lime=f['obs/lime'][0,:7]
+        q=f['next_obs/q'][:];lime=f['next_obs/'+pick][:,:7];phases=f['phase'].asstr()[:]
+        initial_q=f['obs/q'][0];initial_lime=f['obs/'+pick][0,:7]
     joints=r['robot_joint_names'];arm=[joints.index('panda_joint'+str(i)) for i in range(1,8)];fingers=[joints.index(n) for n in world.GRIPPER_JOINT_NAMES]
     selected=sorted(set([0,len(q)-1,*range(0,len(q),a.stride),*[i for i in range(1,len(q)) if phases[i]!=phases[i-1]],*[i-1 for i in range(1,len(q)) if phases[i]!=phases[i-1]]]))
     shapes={i:world.shapes(q[i,arm],dict(zip(world.GRIPPER_JOINT_NAMES,q[i,fingers])),lime[i]) for i in selected}
