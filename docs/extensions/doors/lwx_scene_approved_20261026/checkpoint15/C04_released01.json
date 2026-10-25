@@ -1,0 +1,76 @@
+{
+  "task_id": "kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian",
+  "label": "C04",
+  "base_config": "configs/extensions/doors/c04_property_lower67_563_lwx_20261026.json",
+  "baseline": "datasets/doors/lwx_controller_release03_20261026/C04_base_p01",
+  "observer": {
+    "position_world_m": [
+      3.2330455780029297,
+      -2.9448182344436646,
+      2.35
+    ],
+    "look_at_world_m": [
+      4.81511530995011,
+      -1.5948182344436646,
+      1.15
+    ],
+    "focal_length": 2.8
+  },
+  "second_observer": {
+    "position_world_m": [
+      3.7830455780029295,
+      -0.3948182344436646,
+      2.5
+    ],
+    "look_at_world_m": [
+      4.833045578002929,
+      -1.5948182344436646,
+      1.15
+    ],
+    "focal_length": 2.8
+  },
+  "old_handle_world_m": [
+    5.1471850418972895,
+    -1.6055982080022282,
+    1.4117813398627037
+  ],
+  "new_handle_world_m": [
+    5.1471850418972895,
+    -1.6055982080022282,
+    1.4517813398627037
+  ],
+  "start_tcp_world_m": [
+    4.580779702762184,
+    -1.594818220757544,
+    1.1761021415760637
+  ],
+  "candidates": [
+    {
+      "id": "C04_property_lower68",
+      "variant": "property",
+      "config": "configs/extensions/doors/c04_property_lower67_563_lwx_20261026.json"
+    }
+  ],
+  "user_visual_approval": "pending",
+  "planning_permitted": true,
+  "preview_initial_q": [
+    0.0,
+    0.4,
+    0.0,
+    -2.5,
+    0.0,
+    1.2,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "initial_pose_design_note": "Static folded start proposed to create a clear corridor without moving the source robot base. No trajectory or reachability computed.",
+  "start_reference": "Analytic source FK of proposed frozen initial joints. No IK/trajectory.",
+  "authorization": "Latest direct user authorization on 2026-10-26: previous other scenes approved; correct C02/C06 human and C01 frontal variants, then run planning/collection without further confirmation. Static gates required before each execution.",
+  "source_manifest": "reports/doors/lwx_scene_first_20261025/C04_manifest04.json",
+  "revision_note": "Lower frozen start and +4cm legal point on original vertical handle. Original bottle size and source base retained. Common pregrasp endpoint from full base preflight, no route waypoints. New actual matched baseline required. Post clearance in discovery67 is projected, not physical evidence."
+}

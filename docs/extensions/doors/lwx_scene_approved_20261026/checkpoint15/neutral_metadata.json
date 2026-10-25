@@ -1,0 +1,2118 @@
+{
+  "task": "kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian",
+  "variant": "property",
+  "seed": 42,
+  "source_yaml_sha256": "f9b1d691f9976b45ef8b67b1f338788c8c1bc6a71b5cb9e54b322f4b6cdb7f8c",
+  "robot_base": [
+    4.48304557800293,
+    -1.5948182344436646,
+    0.809999942779541
+  ],
+  "robot_yaw_deg": 0.0,
+  "handle_initial": [
+    5.1471850418972895,
+    -1.6055982080022282,
+    1.4517813398627037
+  ],
+  "hinge": [
+    5.283099788320015,
+    -1.1928059892646903,
+    0.9282168651755152
+  ],
+  "axis": [
+    0.0,
+    0.0,
+    -1.0
+  ],
+  "dt": 0.06666666666666667,
+  "physics_dt": 0.008333333333333333,
+  "robot_body_names": [
+    "panda_link0",
+    "panda_link1",
+    "panda_link2",
+    "panda_link3",
+    "panda_link4",
+    "panda_link5",
+    "panda_link6",
+    "panda_link7",
+    "panda_link8",
+    "base_link",
+    "left_outer_knuckle",
+    "right_outer_knuckle",
+    "left_outer_finger",
+    "right_outer_finger",
+    "left_inner_finger",
+    "right_inner_finger",
+    "left_inner_knuckle",
+    "right_inner_knuckle"
+  ],
+  "robot_joint_names": [
+    "panda_joint1",
+    "panda_joint2",
+    "panda_joint3",
+    "panda_joint4",
+    "panda_joint5",
+    "panda_joint6",
+    "panda_joint7",
+    "finger_joint",
+    "right_outer_knuckle_joint",
+    "left_inner_finger_joint",
+    "right_inner_finger_joint",
+    "left_inner_finger_knuckle_joint",
+    "right_inner_finger_knuckle_joint"
+  ],
+  "fridge_joint_names": [
+    "freezer_door_joint",
+    "freezer_drawer0_joint",
+    "freezer_drawer1_joint",
+    "fridge_door_joint"
+  ],
+  "initial_door_pose": [
+    5.599513053894043,
+    -1.5949987173080444,
+    0.8898850083351135,
+    -5.471519758282096e-09,
+    -1.1581504754315859e-08,
+    0.7071081520919564,
+    -0.7071054102784808
+  ],
+  "task_success_rule": "native OpenDoorTask predicate_sequence with unchanged YAML threshold",
+  "episode_mode": "fixed_only",
+  "door_state_writes": "source reset only",
+  "camera_alignment": "obs[t] before action[t], next_obs[t] after action[t]",
+  "software_versions": {
+    "isaacsim": "6.1.0.0",
+    "isaaclab": "17.0.2",
+    "isaaclab-arena": "0.3.0",
+    "nvidia-curobo": "0.7.7.post1.dev5",
+    "torch": "2.11.0+cu128",
+    "warp-lang": "1.16.0"
+  },
+  "supplementary_observer": {
+    "position_world_m": [
+      3.2330455780029297,
+      -2.9448182344436646,
+      2.35
+    ],
+    "look_at_world_m": [
+      4.81511530995011,
+      -1.5948182344436646,
+      1.15
+    ],
+    "focal_length": 2.8,
+    "quaternion_xyzw": [
+      0.4541322759407842,
+      -0.20948018624395703,
+      -0.36271612097222933,
+      0.7863325906427252
+    ],
+    "sensor_name": "visible_review_camera",
+    "scope": "Supplementary real RGB sensor synchronized before the same action; no collision or physical state changes. Native cameras retained."
+  },
+  "variant_config": "configs/extensions/doors/c04_property_lower67_563_lwx_20261026.json",
+  "variant_spec": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      5.0200000000000005,
+      -1.7799999999999998,
+      0.91
+    ],
+    "yaw_deg": 0.0,
+    "static": false,
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/lwx_lower67/C04_support_h2.usda",
+      "position": [
+        5.0200000000000005,
+        -1.7799999999999998,
+        0.0
+      ],
+      "static": true
+    },
+    "semantic_anchor": "Original-size bottle directly in front of initial working corridor; higher/side legal handle proposed. Scene only."
+  },
+  "actual_hazard_initial_pose": [
+    5.019999980926514,
+    -1.7799999713897705,
+    0.9100000262260437,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "controller_parameters": {
+    "seed": 42,
+    "handle_offset_y": 0.0,
+    "handle_offset_z": 0.3697057921683893,
+    "max_joint_speed": 0.5,
+    "grasp_roll_deg": 45.0,
+    "pregrasp_goal_q": [
+      -0.5438150763511658,
+      -0.5831001996994019,
+      0.21525557339191437,
+      -2.510125160217285,
+      -0.7559180855751038,
+      3.681955575942993,
+      -1.5503309965133667
+    ],
+    "pregrasp_shortcut_policy": "bounded_chords_v1",
+    "pull_lead_rad": 0.03,
+    "pull_steps": 600,
+    "ik_limit_margin_rad": 0.005,
+    "handle_normal_offset_m": -0.01,
+    "pregrasp_validation": {
+      "version": "dense_pregrasp_v4",
+      "resolution_rad": 0.005,
+      "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+    }
+  },
+  "robot_usd": "/home/user/.cache/isaaclab_arena/usd/robot_on_stand/doors_droid_on_stand_0.8_1.08x0.91032.usd",
+  "initial_q": [
+    0.0,
+    0.4000000059604645,
+    0.0,
+    -2.5,
+    0.0,
+    1.2000000476837158,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "approved_scene_manifest": "reports/doors/lwx_approved_run_20261026/C04_property_lower68/C04_released01.json",
+  "approved_scene_manifest_sha256": "69a1396ad36f280b326e04e5dbdbeaeed37dd6eb37b294fb89189a040b179bbd",
+  "initialization_policy": "Configured robot default joints before source reset; no robot state assignment after reset.",
+  "door_geometry": {
+    "task": "kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian",
+    "object_name": "fridge",
+    "object_path": "/World/envs/env_0/kitchen/fridge_right_group",
+    "joint_name": "fridge_door_joint",
+    "joint_path": "/World/envs/env_0/kitchen/fridge_right_group/Refrigerator050_fridge_door/fridge_door_joint",
+    "door_path": "/World/envs/env_0/kitchen/fridge_right_group/Refrigerator050_fridge_door",
+    "moving_bodies": [
+      "/World/envs/env_0/kitchen/fridge_right_group/Refrigerator050_fridge_door"
+    ],
+    "handle_colliders": [
+      "/World/envs/env_0/kitchen/fridge_right_group/Refrigerator050_fridge_door/Collisions/fridge_door_handle_1",
+      "/World/envs/env_0/kitchen/fridge_right_group/Refrigerator050_fridge_door/Collisions/fridge_door_handle_main",
+      "/World/envs/env_0/kitchen/fridge_right_group/Refrigerator050_fridge_door/Collisions/fridge_door_handle_2"
+    ],
+    "hinge": [
+      5.283099788320015,
+      -1.1928059892646903,
+      0.9282168651755152
+    ],
+    "axis": [
+      0.0,
+      0.0,
+      -1.0
+    ],
+    "limits_rad": [
+      0.0,
+      1.5707963267948966
+    ],
+    "reset_openness": 0.0,
+    "openness_threshold": 0.4,
+    "handle_main": "/World/envs/env_0/kitchen/fridge_right_group/Refrigerator050_fridge_door/Collisions/fridge_door_handle_main",
+    "handle_center": [
+      5.157185041897289,
+      -1.6055982080022282,
+      1.0820755476943145
+    ],
+    "handle_bounds": [
+      [
+        5.139453627950385,
+        -1.6221417579848452,
+        0.6852209896815856
+      ],
+      [
+        5.261712648122149,
+        -1.5891663204512456,
+        1.4767813398627037
+      ]
+    ],
+    "handle_shapes": [
+      {
+        "path": "/World/envs/env_0/kitchen/fridge_right_group/Refrigerator050_fridge_door/Collisions/fridge_door_handle_1",
+        "bounds": [
+          [
+            5.139453627950385,
+            -1.6221417579848452,
+            1.4431887635011185
+          ],
+          [
+            5.261712648122149,
+            -1.5891663204512456,
+            1.4767813398627037
+          ]
+        ]
+      },
+      {
+        "path": "/World/envs/env_0/kitchen/fridge_right_group/Refrigerator050_fridge_door/Collisions/fridge_door_handle_main",
+        "bounds": [
+          [
+            5.145704040135289,
+            -1.6164091306545405,
+            0.7262586157771649
+          ],
+          [
+            5.1686660436592895,
+            -1.5947872853499159,
+            1.437892479611464
+          ]
+        ]
+      },
+      {
+        "path": "/World/envs/env_0/kitchen/fridge_right_group/Refrigerator050_fridge_door/Collisions/fridge_door_handle_2",
+        "bounds": [
+          [
+            5.139453730181582,
+            -1.6221417321993439,
+            0.6852209896815856
+          ],
+          [
+            5.261712545890951,
+            -1.589166346236747,
+            0.7188134617201384
+          ]
+        ]
+      }
+    ]
+  },
+  "door_motion_reference_joint_rad": 0.0,
+  "command_ik_source_limits_rad": [
+    [
+      -2.897300087848498,
+      2.897300087848498
+    ],
+    [
+      -1.762799988219413,
+      1.762799988219413
+    ],
+    [
+      -2.897300087848498,
+      2.897300087848498
+    ],
+    [
+      -3.0717999898504136,
+      -0.06979999575475569
+    ],
+    [
+      -2.897300087848498,
+      2.897300087848498
+    ],
+    [
+      -0.01749999978815516,
+      3.752499969733032
+    ],
+    [
+      -2.897300087848498,
+      2.897300087848498
+    ]
+  ],
+  "command_ik_limits_rad": [
+    [
+      -2.892300087848498,
+      2.892300087848498
+    ],
+    [
+      -1.757799988219413,
+      1.757799988219413
+    ],
+    [
+      -2.892300087848498,
+      2.892300087848498
+    ],
+    [
+      -3.0667999898504137,
+      -0.0747999957547557
+    ],
+    [
+      -2.892300087848498,
+      2.892300087848498
+    ],
+    [
+      -0.01249999978815516,
+      3.747499969733032
+    ],
+    [
+      -2.892300087848498,
+      2.892300087848498
+    ]
+  ],
+  "delivery_accepted": false,
+  "delivery_gate_note": "Collector completion alone is not full acceptance; independent scene, causal, geometry, paired planning and video gates required.",
+  "mode": "neutral",
+  "review_gates": {
+    "schema_version": 1,
+    "declared_before_collection": true,
+    "task": "kitchen_bench_lightwheel_open_fridge",
+    "neutral_seconds": 40.0,
+    "planning_seeds": [
+      42,
+      43,
+      44
+    ],
+    "neutral_revolute_drift_rad": 0.005,
+    "neutral_revolute_speed_rad_s": 0.05,
+    "neutral_prismatic_drift_m": 0.002,
+    "neutral_prismatic_speed_m_s": 0.02,
+    "door_motion_rad": 0.002,
+    "contact_force_noise_n": 0.0001,
+    "handle_contact_bounds_padding_m": 0.004,
+    "property_translation_m": 0.005,
+    "property_rotation_deg": 2.0,
+    "property_vertical_tilt_deg": 2.0,
+    "notes": "Diagnostic motion thresholds do not replace the original strict OpenDoorTask success predicate or source safety margins. Neutral tolerances apply from the first post-reset observation, including startup."
+  },
+  "review_config_sha256": "d67ffb61079f8a982df6f445e986b9aeb70453241e4b869ee15f88f5321a16d3",
+  "contact_units": "Native PhysX get_contact_data(dt=physics_dt): normal forces in N, points/separation in m; signed normals preserved.",
+  "recording_start": "Immediately after source env.reset with approved initial joints; no additional unrecorded settling. Source reset internals are outside the recorded trial.",
+  "physics_recording_schema": 1,
+  "neutral_seconds_requested": 40.0,
+  "source_handle_contact_bounds_m": [
+    [
+      5.139453627950385,
+      -1.6221417579848452,
+      0.6852209896815856
+    ],
+    [
+      5.261712648122149,
+      -1.5891663204512456,
+      1.4767813398627037
+    ]
+  ],
+  "contact_localization_scope": "PhysX finger-to-door body filter plus bounds computed from source collision mesh vertices, not authored USD extents; independent source-shape distance audit required.",
+  "door_joint_id": 3,
+  "door_joint_limits_rad": [
+    0.0,
+    1.5707963705062866
+  ],
+  "implementation_sha256": {
+    "/workspace/scripts/extensions/doors/collect_scene_approved_lwx.py": "55810f541b7a47c3ccf1f815352c8c54fa0df35d0501614e8e32ed83a906d53d",
+    "kitchen_safety/extensions/doors/task_environment.py": "2c4d126158700e5e20ed825edc461c7fcace775ae8bed0cb61813d9fe1a2c691",
+    "kitchen_safety/extensions/doors/task_collision.py": "48062fcf2ab16b94c9f97d669dc7b3eabcbc00bdd6200ab4fe921d147c3fc244",
+    "kitchen_safety/extensions/doors/task_model.py": "63b65bb5bd59ad65f1140d6237649d7953bc1ab35107a1c3fd079f2197dde43e",
+    "kitchen_safety/extensions/doors/task_planner.py": "fa6fd4819179565e50d99f8fa220edbf666ddb4d38239851496bb74d820eabb4",
+    "kitchen_safety/extensions/doors/task_observation.py": "32b983b0c8410b778a172a816cbb596e08534e60c5b2e12cebddb5c6ec43569c",
+    "kitchen_safety/extensions/doors/task_reconstruction.py": "2aea9294a2e0f048ec412ad475d1bddbdeae8dc45e5779a0ba3557e751b9f9ab",
+    "kitchen_safety/extensions/doors/evidence.py": "1d8f4510973d27a5cecdf7e621338dc7e7c1d6f72061ffd310c74da7c2def13b",
+    "configs/extensions/doors/c04_property_lower67_563_lwx_20261026.json": "f82e38de673da01279fc53647780adc582e3f22ee8afc23054bbfe9548caeae9",
+    "kitchen_safety/extensions/doors/pregrasp_shortcuts_lwx.py": "cbbb4f8569eb0fdf647d9fcdc5ff81f3d1d964ddf6f6d7da6eb2095dfa606429",
+    "kitchen_safety/extensions/doors/review_camera_lwx.py": "6ab932bc25155d1f5f9b45a8140e9cfd160f98d8d2c26caa1944aa4213a73afd",
+    "kitchen_safety/extensions/doors/pregrasp.py": "2e28a4aff60a4ffa133763131ba068c95b3eab2bf3ed350f45391701896611dd"
+  },
+  "source_snapshot": {
+    "scripts/extensions/doors/collect_scene_approved_lwx.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/scripts/extensions/doors/collect_scene_approved_lwx.py",
+      "sha256": "55810f541b7a47c3ccf1f815352c8c54fa0df35d0501614e8e32ed83a906d53d"
+    },
+    "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian.yaml": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian.yaml",
+      "sha256": "f9b1d691f9976b45ef8b67b1f338788c8c1bc6a71b5cb9e54b322f4b6cdb7f8c"
+    },
+    "configs/extensions/doors/c04_property_lower67_563_lwx_20261026.json": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/configs/extensions/doors/c04_property_lower67_563_lwx_20261026.json",
+      "sha256": "f82e38de673da01279fc53647780adc582e3f22ee8afc23054bbfe9548caeae9"
+    },
+    "configs/extensions/doors/review_gates_lwx.json": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/configs/extensions/doors/review_gates_lwx.json",
+      "sha256": "d67ffb61079f8a982df6f445e986b9aeb70453241e4b869ee15f88f5321a16d3"
+    },
+    "kitchen_safety/collision_planner.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/collision_planner.py",
+      "sha256": "169d9bc7f13a2a0af4a8da0df17265c45a814bdba69afd09abfbece85557877b"
+    },
+    "kitchen_safety/curobo_backend.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/curobo_backend.py",
+      "sha256": "e4abf9599fcd4832c0497ecef6dbb317a02d5438d96d6b4a611491cbd3905512"
+    },
+    "kitchen_safety/dataset.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/dataset.py",
+      "sha256": "da00fc4fd0b3c84dae88df7dfef0bd947593365afdd1d4a96949b8b69339369e"
+    },
+    "kitchen_safety/extensions/doors/collision.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/collision.py",
+      "sha256": "550242a1048c6a6701556996be5d88c673f9254392f3c049c11c67db09ab13fe"
+    },
+    "kitchen_safety/extensions/doors/environment.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/environment.py",
+      "sha256": "e1565bc62684e5fccd0e82ea9f75654da91287d5ac6d6dbd23a2a87932d7d9ab"
+    },
+    "kitchen_safety/extensions/doors/evidence.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/evidence.py",
+      "sha256": "1d8f4510973d27a5cecdf7e621338dc7e7c1d6f72061ffd310c74da7c2def13b"
+    },
+    "kitchen_safety/extensions/doors/invariant_envelopes_lwx.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/invariant_envelopes_lwx.py",
+      "sha256": "791008a31f705aea9f10e70da1a84bc2078e2993dff547165ae37e8776a423cd"
+    },
+    "kitchen_safety/extensions/doors/obstruction_broadphase_lwx.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/obstruction_broadphase_lwx.py",
+      "sha256": "1dc8437f4c5df59acd7c7e732e31f298aad058b3129a2a12c034881b1b5556df"
+    },
+    "kitchen_safety/extensions/doors/pregrasp.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/pregrasp.py",
+      "sha256": "2e28a4aff60a4ffa133763131ba068c95b3eab2bf3ed350f45391701896611dd"
+    },
+    "kitchen_safety/extensions/doors/pregrasp_shortcuts_lwx.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/pregrasp_shortcuts_lwx.py",
+      "sha256": "cbbb4f8569eb0fdf647d9fcdc5ff81f3d1d964ddf6f6d7da6eb2095dfa606429"
+    },
+    "kitchen_safety/extensions/doors/primitive_distance.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/primitive_distance.py",
+      "sha256": "21377f724d72bebbfa5af08eaa7a2df03a516c4a5e59704893fbf9d6e0c52fad"
+    },
+    "kitchen_safety/extensions/doors/pull_backoff_lwx.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/pull_backoff_lwx.py",
+      "sha256": "af5a4d2ddc4afda91dd35a8ca3d4aca12a9cd2d2bbd479ab73bf0a0c0ee18fab"
+    },
+    "kitchen_safety/extensions/doors/reconstruction.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/reconstruction.py",
+      "sha256": "36716cf1612191d4acf105592627756e331001959cc9ff7f5d578730888c35d8"
+    },
+    "kitchen_safety/extensions/doors/release_hold_lwx.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/release_hold_lwx.py",
+      "sha256": "5a9a0c5734cc1d400269479180d81583b1726109ab9adedac7be623f541967f1"
+    },
+    "kitchen_safety/extensions/doors/release_pose_lwx.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/release_pose_lwx.py",
+      "sha256": "8f12efb6cc1a524768fbee11d6c958ec6f1bd9a34ecebc89b409cb8f25524168"
+    },
+    "kitchen_safety/extensions/doors/release_position_lwx.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/release_position_lwx.py",
+      "sha256": "21cc510c30e3fd16738809b5ddef8b5047a17d294250d7f90948a6030990b7c6"
+    },
+    "kitchen_safety/extensions/doors/review_camera_lwx.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/review_camera_lwx.py",
+      "sha256": "6ab932bc25155d1f5f9b45a8140e9cfd160f98d8d2c26caa1944aa4213a73afd"
+    },
+    "kitchen_safety/extensions/doors/source_necessity_lwx.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/source_necessity_lwx.py",
+      "sha256": "76764dd1414aebf3bee977c669d2cb6f07656a368fe1741847a1d8796fb25e79"
+    },
+    "kitchen_safety/extensions/doors/source_sphere_screen_lwx.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/source_sphere_screen_lwx.py",
+      "sha256": "c10afb3a93b8c5efaf5aa1dd97d744050061972403058dcb37c5e9b8a077c659"
+    },
+    "kitchen_safety/extensions/doors/task_collision.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/task_collision.py",
+      "sha256": "48062fcf2ab16b94c9f97d669dc7b3eabcbc00bdd6200ab4fe921d147c3fc244"
+    },
+    "kitchen_safety/extensions/doors/task_environment.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/task_environment.py",
+      "sha256": "2c4d126158700e5e20ed825edc461c7fcace775ae8bed0cb61813d9fe1a2c691"
+    },
+    "kitchen_safety/extensions/doors/task_evidence.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/task_evidence.py",
+      "sha256": "c8330f38128aa55fbf6f994374773d042dbdadf60dfcfa6ca5a38816fdfb73c4"
+    },
+    "kitchen_safety/extensions/doors/task_model.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/task_model.py",
+      "sha256": "63b65bb5bd59ad65f1140d6237649d7953bc1ab35107a1c3fd079f2197dde43e"
+    },
+    "kitchen_safety/extensions/doors/task_observation.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/task_observation.py",
+      "sha256": "32b983b0c8410b778a172a816cbb596e08534e60c5b2e12cebddb5c6ec43569c"
+    },
+    "kitchen_safety/extensions/doors/task_planner.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/task_planner.py",
+      "sha256": "fa6fd4819179565e50d99f8fa220edbf666ddb4d38239851496bb74d820eabb4"
+    },
+    "kitchen_safety/extensions/doors/task_reconstruction.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/task_reconstruction.py",
+      "sha256": "2aea9294a2e0f048ec412ad475d1bddbdeae8dc45e5779a0ba3557e751b9f9ab"
+    },
+    "kitchen_safety/extensions/doors/task_spheres.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/task_spheres.py",
+      "sha256": "bb1b2749e7e0e8c4199a38db942d9f17b2fd11b4a598e9f2a420b434087d2134"
+    },
+    "kitchen_safety/extensions/doors/video.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/extensions/doors/video.py",
+      "sha256": "42e5584abdc92f95a1fe3d5f1ee2691cbd8906a15e7fd5ba1474b8a3fcdb7070"
+    },
+    "kitchen_safety/grasp_contacts.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/grasp_contacts.py",
+      "sha256": "b312d40c319f0f908e5264d50fccb2d087ae26c4c3cbdeb42319a9aea360532f"
+    },
+    "kitchen_safety/planning.py": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/kitchen_safety/planning.py",
+      "sha256": "ef4c0a6a93603de7c9aa996882279854d775e025df6fb758f3e6178973ffffaa"
+    },
+    "reports/doors/lwx_approved_run_20261026/C04_property_lower68/C04_observer01.json": {
+      "path": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral/source_snapshot/reports/doors/lwx_approved_run_20261026/C04_property_lower68/C04_observer01.json",
+      "sha256": "75757286d60a10eb169a6a5381b785ab710dbad3a411a2223584ddaa3443a774"
+    }
+  },
+  "mechanism_inventory": [
+    {
+      "path": "/World/envs/env_0/kitchen/stovetop_main_group",
+      "joint_names": [
+        "knob_front_center_joint",
+        "knob_front_right_joint",
+        "knob_left_joint",
+        "knob_rear_center_joint",
+        "knob_rear_right_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute",
+        "revolute",
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/cab_1_main_group",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/cab_main_main_group",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/cab_2_main_group",
+      "joint_names": [
+        "left_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/hood_main_group",
+      "joint_names": [
+        "Button001_joint",
+        "Button002_joint",
+        "Button003_joint",
+        "Button004_joint",
+        "Button005_joint"
+      ],
+      "joint_kinds": [
+        "prismatic",
+        "prismatic",
+        "prismatic",
+        "prismatic",
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_1_main_group_1",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_1_main_group_2",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_1_main_group_3",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_1_main_group_4",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_2_main_group_1",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_2_main_group_2",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_2_main_group_3",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_3_main_group_1",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_3_main_group_2",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_3_main_group_3",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_4_main_group_1",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_5_main_group_1",
+      "joint_names": [
+        "left_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_5_main_group_2",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/coffee_machine_main_group",
+      "joint_names": [
+        "Button001_joint",
+        "Container001_Clear_joint",
+        "Lever001_joint",
+        "Lever002_joint",
+        "Lid001_joint",
+        "Lid002_joint"
+      ],
+      "joint_kinds": [
+        "prismatic",
+        "prismatic",
+        "revolute",
+        "revolute",
+        "revolute",
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/toaster_main_group",
+      "joint_names": [
+        "sideL_button_cancel_joint",
+        "sideL_knob_doneness_joint",
+        "sideL_lever_joint",
+        "sideR_button_cancel_joint",
+        "sideR_knob_doneness_joint",
+        "sideR_lever_joint"
+      ],
+      "joint_kinds": [
+        "prismatic",
+        "revolute",
+        "prismatic",
+        "prismatic",
+        "revolute",
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/toaster_oven_main_group",
+      "joint_names": [
+        "door_joint",
+        "knob_temp_joint",
+        "knob_time_joint",
+        "rack0_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute",
+        "revolute",
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/sink_left_group",
+      "joint_names": [
+        "Shelf001_joint",
+        "spout_joint",
+        "handle_temp_joint",
+        "handle_joint"
+      ],
+      "joint_kinds": [
+        "prismatic",
+        "revolute",
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {
+        "handle_temp_joint": "handle_joint"
+      },
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_1_left_group_1",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_1_left_group_2",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_1_left_group_3",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_2_left_group_1",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/dishwasher_left_group",
+      "joint_names": [
+        "button_power_joint",
+        "door_joint",
+        "rack0_joint",
+        "rack1_joint"
+      ],
+      "joint_kinds": [
+        "prismatic",
+        "revolute",
+        "prismatic",
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_3_left_group_1",
+      "joint_names": [
+        "left_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/cab_1_left_group",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/cab_2_left_group",
+      "joint_names": [
+        "left_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_left_right_group_1",
+      "joint_names": [
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_left_right_group_2",
+      "joint_names": [
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/fridge_right_group",
+      "joint_names": [
+        "freezer_door_joint",
+        "freezer_drawer0_joint",
+        "freezer_drawer1_joint",
+        "fridge_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "prismatic",
+        "prismatic",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/fridge_top_right_group",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_right_right_group_1",
+      "joint_names": [
+        "left_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/stack_right_right_group_2",
+      "joint_names": [
+        "left_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/bottom_right_group_1",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/bottom_right_group_2",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/oven_right_group",
+      "joint_names": [
+        "door_joint",
+        "knob_temp_joint",
+        "knob_time_joint",
+        "rack0_joint",
+        "rack1_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute",
+        "revolute",
+        "prismatic",
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/microwave_right_group",
+      "joint_names": [
+        "microjoint",
+        "Disc001_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/top_right_group",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/side_bottom_right_group_1",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/side_bottom_right_group_2",
+      "joint_names": [
+        "drawer_door_joint"
+      ],
+      "joint_kinds": [
+        "prismatic"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    },
+    {
+      "path": "/World/envs/env_0/kitchen/side_bottom_right_group_3",
+      "joint_names": [
+        "left_door_joint",
+        "right_door_joint"
+      ],
+      "joint_kinds": [
+        "revolute",
+        "revolute"
+      ],
+      "source_aliases": {},
+      "axis_mapping_note": "Raw PhysX DOFs; generic faucet rotX/rotY expansion axes are not relabelled."
+    }
+  ],
+  "mechanism_mapping_issues": [],
+  "planner_stand_colliders": [
+    "/World/envs/env_0/Robot/panda_link0/stand_instanceable/franka_table/collisions/Cube"
+  ],
+  "render_warmup": {
+    "passed": true,
+    "render_frames": 224,
+    "elapsed_seconds": 18.08961406396702,
+    "physics_advanced": false,
+    "physics_step_count_before": 0,
+    "physics_step_count_after": 0,
+    "render_generation_before": 0,
+    "render_generation_after": 224,
+    "settings": {
+      "min_frames": 128,
+      "max_frames": 1024,
+      "sample_every": 16,
+      "stable_windows": 3,
+      "sample_size": [
+        160,
+        90
+      ],
+      "mean_difference_limit": 0.35,
+      "percentile95_limit": 1.5,
+      "units": "Absolute RGB intensity difference on 0..255 scale"
+    },
+    "samples": [
+      {
+        "render_frame": 16,
+        "windows": [],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 32,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.38430556654930115,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.39907407760620117,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.435231477022171,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 48,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.28138887882232666,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2885185182094574,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.29407408833503723,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.5278703570365906,
+                "percentile95_absolute_rgb_difference": 2.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.5564814805984497,
+                "percentile95_absolute_rgb_difference": 2.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.5622222423553467,
+                "percentile95_absolute_rgb_difference": 2.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 64,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.23791666328907013,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2445833384990692,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.26314815878868103,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.4188425838947296,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.42055556178092957,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.4258333444595337,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.6481018662452698,
+                "percentile95_absolute_rgb_difference": 2.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.6708333492279053,
+                "percentile95_absolute_rgb_difference": 2.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.6646759510040283,
+                "percentile95_absolute_rgb_difference": 2.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 80,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.2277083396911621,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.23101851344108582,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.25296297669410706,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.36363425850868225,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.3588888943195343,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.37523147463798523,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.5343286991119385,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.5226389169692993,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.5131018757820129,
+                "percentile95_absolute_rgb_difference": 2.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 96,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.21400463581085205,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.23624999821186066,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2283564805984497,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.33796295523643494,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.342546284198761,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.33141204714775085,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.4668055474758148,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.46578702330589294,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.44594907760620117,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 112,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.20300926268100739,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.20370370149612427,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.21377314627170563,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.3107175827026367,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.32995370030403137,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.30944445729255676,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.4322222173213959,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.42564815282821655,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.4015740752220154,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 128,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.19627314805984497,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.19620370864868164,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2241666615009308,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.29456019401550293,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2956944406032562,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.30812498927116394,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.39060184359550476,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.41273146867752075,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.37638887763023376,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 144,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.1936342567205429,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.20581018924713135,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.21298611164093018,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.2843518555164337,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.29506945610046387,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2919212877750397,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.3705555498600006,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.386736124753952,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.35180556774139404,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 160,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.19111111760139465,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.20456019043922424,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.22009259462356567,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.26863425970077515,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.28203704953193665,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2997453808784485,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.34046295285224915,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.3500925898551941,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.35881945490837097,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 176,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.19407407939434052,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.19594907760620117,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.20354166626930237,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.26754629611968994,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2768518626689911,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2885879576206207,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.3271990716457367,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.33622685074806213,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.35277777910232544,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": false,
+        "consecutive_stable_checks": 0
+      },
+      {
+        "render_frame": 192,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.18539351224899292,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.205949068069458,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.2093055546283722,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.24877314269542694,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2803240716457367,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.28094908595085144,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.31446757912635803,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.33400464057922363,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.3420138955116272,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": true,
+        "consecutive_stable_checks": 1
+      },
+      {
+        "render_frame": 208,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.19312499463558197,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.1988425999879837,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.20282407104969025,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.2531944513320923,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2804398238658905,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.28050926327705383,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.31430554389953613,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.3387500047683716,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.3306713104248047,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": true,
+        "consecutive_stable_checks": 2
+      },
+      {
+        "render_frame": 224,
+        "windows": [
+          {
+            "lag_render_frames": 16,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.1924305558204651,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.200300931930542,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.24201388657093048,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 32,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.2609722316265106,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.2773842513561249,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.29136574268341064,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          },
+          {
+            "lag_render_frames": 48,
+            "cameras": {
+              "external_camera": {
+                "mean_absolute_rgb_difference": 0.31067129969596863,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "external_camera_2": {
+                "mean_absolute_rgb_difference": 0.34384259581565857,
+                "percentile95_absolute_rgb_difference": 1.0
+              },
+              "wrist_camera": {
+                "mean_absolute_rgb_difference": 0.32826387882232666,
+                "percentile95_absolute_rgb_difference": 1.0
+              }
+            }
+          }
+        ],
+        "stable": true,
+        "consecutive_stable_checks": 3
+      }
+    ],
+    "error": null,
+    "supplementary_observer_warmup": {
+      "passed": true,
+      "render_frames": 128,
+      "elapsed_seconds": 10.396266323048621,
+      "physics_advanced": false,
+      "physics_step_count_before": 0,
+      "physics_step_count_after": 0,
+      "render_generation_before": 224,
+      "render_generation_after": 352,
+      "settings": {
+        "min_frames": 128,
+        "max_frames": 1024,
+        "sample_every": 16,
+        "stable_windows": 3,
+        "sample_size": [
+          160,
+          90
+        ],
+        "mean_difference_limit": 0.35,
+        "percentile95_limit": 1.5,
+        "units": "Absolute RGB intensity difference on 0..255 scale"
+      },
+      "samples": [
+        {
+          "render_frame": 16,
+          "windows": [],
+          "stable": false,
+          "consecutive_stable_checks": 0
+        },
+        {
+          "render_frame": 32,
+          "windows": [
+            {
+              "lag_render_frames": 16,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.21594907343387604,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            }
+          ],
+          "stable": false,
+          "consecutive_stable_checks": 0
+        },
+        {
+          "render_frame": 48,
+          "windows": [
+            {
+              "lag_render_frames": 16,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.20099537074565887,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            },
+            {
+              "lag_render_frames": 32,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.2837037146091461,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            }
+          ],
+          "stable": false,
+          "consecutive_stable_checks": 0
+        },
+        {
+          "render_frame": 64,
+          "windows": [
+            {
+              "lag_render_frames": 16,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.21546296775341034,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            },
+            {
+              "lag_render_frames": 32,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.2990972101688385,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            },
+            {
+              "lag_render_frames": 48,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.35717591643333435,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            }
+          ],
+          "stable": false,
+          "consecutive_stable_checks": 0
+        },
+        {
+          "render_frame": 80,
+          "windows": [
+            {
+              "lag_render_frames": 16,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.20592592656612396,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            },
+            {
+              "lag_render_frames": 32,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.27504628896713257,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            },
+            {
+              "lag_render_frames": 48,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.33275464177131653,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            }
+          ],
+          "stable": true,
+          "consecutive_stable_checks": 1
+        },
+        {
+          "render_frame": 96,
+          "windows": [
+            {
+              "lag_render_frames": 16,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.2113194465637207,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            },
+            {
+              "lag_render_frames": 32,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.28090277314186096,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            },
+            {
+              "lag_render_frames": 48,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.32576388120651245,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            }
+          ],
+          "stable": true,
+          "consecutive_stable_checks": 2
+        },
+        {
+          "render_frame": 112,
+          "windows": [
+            {
+              "lag_render_frames": 16,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.21231481432914734,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            },
+            {
+              "lag_render_frames": 32,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.28381943702697754,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            },
+            {
+              "lag_render_frames": 48,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.32631945610046387,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            }
+          ],
+          "stable": true,
+          "consecutive_stable_checks": 3
+        },
+        {
+          "render_frame": 128,
+          "windows": [
+            {
+              "lag_render_frames": 16,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.1993750035762787,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            },
+            {
+              "lag_render_frames": 32,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.27747684717178345,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            },
+            {
+              "lag_render_frames": 48,
+              "cameras": {
+                "visible_review_camera": {
+                  "mean_absolute_rgb_difference": 0.3311111032962799,
+                  "percentile95_absolute_rgb_difference": 1.0
+                }
+              }
+            }
+          ],
+          "stable": true,
+          "consecutive_stable_checks": 4
+        }
+      ],
+      "error": null
+    },
+    "final_spatial_channel_spans": {
+      "external_camera": 255,
+      "external_camera_2": 255,
+      "wrist_camera": 231
+    }
+  }
+}

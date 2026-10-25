@@ -1,0 +1,55 @@
+{
+  "recorded_unix": 1792967097.9002926,
+  "variant": "C04 property",
+  "status": "Independent and paired validation passed; agent actual sampled visual review passed; user review pending",
+  "episode": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_p01",
+  "baseline": "datasets/doors/lwx_C04_property_lower68_20261026/C04_base_p01",
+  "neutral": "datasets/doors/lwx_C04_property_lower68_20261026/C04_property_n01_neutral",
+  "config": "configs/extensions/doors/c04_property_lower67_563_lwx_20261026.json",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C04_property_lower68/C04_strict_static05.json",
+  "paired_report": "reports/doors/lwx_approved_run_20261026/C04_property_lower68/C04_property_pairs01/report.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.45072048337478177,
+    "tcp_max_deviation_m": 0.1837891433711364,
+    "baseline_samples": 117,
+    "augmented_samples": 117,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "time_unix": 1792967097.900292,
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C04_property_multiview15.jpg",
+    "scene_and_avoidance": "Inspected real synchronized native external2 and observer frames. Bottle with floor-supported pedestal ahead of approach is visible. Gripper lifts around and above bottle, then returns to legal high fridge handle for real opening. Agent sampled visual review only; user review pending.",
+    "scope": "Sampled actual synchronized video inspection; safety and causality independently checked",
+    "tcp_max_deviation_m": 0.1837891433711364
+  },
+  "evidence_sha256": {
+    "metadata.json": "f7068dbc2856f3b5c26ddc020b3848b0d8ae197acb59d58b6b00a95137469c62",
+    "result.json": "901216c2dcfea08dea19095c77b94132fb4432ecfcf4acab9612881c60c10f9f",
+    "task_review_audit.json": "ab99f8a53a4b3a73a38519dab08333509071567c305b2a989dfadf7a9abd04a3",
+    "task_validation_full.json": "7be1c19b888c1ce117580b62664588e71ae29e145bcb21b0c9ae7b46b3b6c1fd",
+    "source_contact_audit.json": "29b4063f504703789cb3b5f24f1132519710f56d5c946d5b1c80ce071f80c279",
+    "self_collision_audit.json": "78d0c618afb7190e9f6427a501393d16600e3a3a530fd26aca661b7be572691e",
+    "avoidance_audit.json": "79cec501d852796851e4ceb982696f10814ad22a4e36660413b7baee6c2ede93",
+    "paired_report.json": "3968042a9a6ebed43d6cd6719811f6f22d7199a7ec12b32af45b8d90ebe3b575",
+    "baseline_metadata.json": "7a7e0a877f4aa1856ad13f95d2466200e7b25fdd14ca82fe53cc307ae14f34a5",
+    "baseline_result.json": "161d935d765866c152b373ed252eba1f9810f63d9fabe7af2a809e46e67f2ad9",
+    "neutral_metadata.json": "981a81866c29dfae0b8789bd7dc5bf55b892f0ed1cdf77756bd9a2a63c0812cc",
+    "neutral_result.json": "8e041a538b121f8546ac84b01ad9a923e7a43132001676ffecb8c0dd9495cddf",
+    "baseline_task_review_audit.json": "933c47afe16c46ed0a9a342506b9aa6361b37ab9e92a0d3848b2dcc11b5c71c9",
+    "baseline_task_validation_full.json": "961e40cb58cd762d3d927fc5d9fd6ee68380c71eeb2f4a444dc2fe38c2934a26",
+    "baseline_source_contact_audit.json": "8fc34bdda0a4d4b2dd5d412f666ab0a377b1e00b1df986a6d049d88a4d8a20d2",
+    "baseline_self_collision_audit.json": "78d0c618afb7190e9f6427a501393d16600e3a3a530fd26aca661b7be572691e"
+  }
+}

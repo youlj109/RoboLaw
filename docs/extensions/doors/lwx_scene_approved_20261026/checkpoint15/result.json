@@ -1,0 +1,393 @@
+{
+  "task_success": true,
+  "accepted": true,
+  "mode": "collect",
+  "neutral_completed": false,
+  "failure": null,
+  "frames": 429,
+  "final_door_rad": 0.6397891044616699,
+  "actual_trajectory_samples": 429,
+  "physical_contact_samples": 229,
+  "delivery_accepted": false,
+  "no_execution_state_writes": true,
+  "safety_audit_physics_dt": 0.008333333333333333,
+  "safety_checks": 3861,
+  "physics_samples": 3433,
+  "plans": [
+    {
+      "backend": "curobo",
+      "method": "motion_gen_joint_goal",
+      "collision_geometry": {
+        "hazard_mesh_policy": "per_collider_world_aabb_plus_planning_clearance",
+        "hazard_mesh_box_counts": {
+          "glass": 8,
+          "barrier": 0
+        },
+        "retained_triangle_mesh_count": 20,
+        "planning_box_count": 954,
+        "fcl_and_physx_geometry": "original"
+      },
+      "status": "SUCCESS",
+      "planning_seconds": 2.352936358191073,
+      "samples": 117,
+      "dt": 0.06666666666666667,
+      "raw_samples": 49,
+      "source_dt": 0.06666666666666667,
+      "gripper_joint_position": 0.0,
+      "attached_bottle": false,
+      "transport_object_padding_m": 0.0,
+      "start_joint_error_rad": 0.0,
+      "goal_joint_error_rad": 0.0,
+      "goal_q_arm": [
+        -0.5438150763511658,
+        -0.5831001996994019,
+        0.21525557339191437,
+        -2.510125160217285,
+        -0.7559180855751038,
+        3.681955575942993,
+        -1.5503309965133667
+      ],
+      "door_fixed_redundancy_goal": {
+        "q": [
+          -0.5438150763511658,
+          -0.5831001996994019,
+          0.21525557339191437,
+          -2.510125160217285,
+          -0.7559180855751038,
+          3.681955575942993,
+          -1.5503309965133667
+        ],
+        "position_error_m": 5.918069571710903e-06,
+        "rotation_error_rad": 9.784968643120652e-06,
+        "scope": "Same fixed TCP and redundant joint endpoint in obstacle on/off; cuRobo plans entire route, no route waypoints."
+      },
+      "pregrasp_shortcut": {
+        "policy": {
+          "version": "bounded_chords_v1",
+          "max_proposals": 48,
+          "resolution_rad": 0.005,
+          "objective": "Reduce TCP length without increasing joint length; same endpoints and action times",
+          "acceptance": "Complete cuRobo and independent FCL checks at original planning margins"
+        },
+        "before": {
+          "joint_l2_length_rad": 3.268110986641132,
+          "tcp_length_m": 0.9273050753337732
+        },
+        "after": {
+          "joint_l2_length_rad": 3.268110986641132,
+          "tcp_length_m": 0.9273050753337732
+        },
+        "trials": [
+          {
+            "start": 0,
+            "end": 116,
+            "before": {
+              "joint_l2_length_rad": 3.268110986641132,
+              "tcp_length_m": 0.9273050753337732
+            },
+            "proposed": {
+              "joint_l2_length_rad": 3.2316713829669395,
+              "tcp_length_m": 0.9540667382356981
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 0,
+            "end": 87,
+            "before": {
+              "joint_l2_length_rad": 2.7924407232830344,
+              "tcp_length_m": 0.7715049645223002
+            },
+            "proposed": {
+              "joint_l2_length_rad": 2.772901102343383,
+              "tcp_length_m": 0.7874661266792166
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 14,
+            "end": 101,
+            "before": {
+              "joint_l2_length_rad": 3.0439047311855227,
+              "tcp_length_m": 0.8699884767663967
+            },
+            "proposed": {
+              "joint_l2_length_rad": 3.014975181545112,
+              "tcp_length_m": 0.8911457717822852
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 28,
+            "end": 115,
+            "before": {
+              "joint_l2_length_rad": 2.816469724297531,
+              "tcp_length_m": 0.8397335854004514
+            },
+            "proposed": {
+              "joint_l2_length_rad": 2.790766389178507,
+              "tcp_length_m": 0.8580711250676465
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 29,
+            "end": 116,
+            "before": {
+              "joint_l2_length_rad": 2.7850817053876638,
+              "tcp_length_m": 0.8330051254192108
+            },
+            "proposed": {
+              "joint_l2_length_rad": 2.7600466070373444,
+              "tcp_length_m": 0.8508217495190182
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 0,
+            "end": 58,
+            "before": {
+              "joint_l2_length_rad": 1.638938825924311,
+              "tcp_length_m": 0.40025998425285364
+            },
+            "proposed": {
+              "joint_l2_length_rad": 1.635790448837178,
+              "tcp_length_m": 0.40330615183350266
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 14,
+            "end": 72,
+            "before": {
+              "joint_l2_length_rad": 2.1307898268904113,
+              "tcp_length_m": 0.5704024341758771
+            },
+            "proposed": {
+              "joint_l2_length_rad": 2.123292580611622,
+              "tcp_length_m": 0.5776588433692307
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 28,
+            "end": 86,
+            "before": {
+              "joint_l2_length_rad": 2.3082210502895677,
+              "tcp_length_m": 0.6731975317737636
+            },
+            "proposed": {
+              "joint_l2_length_rad": 2.296367302187724,
+              "tcp_length_m": 0.6824378373687089
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 42,
+            "end": 100,
+            "before": {
+              "joint_l2_length_rad": 2.172252328761904,
+              "tcp_length_m": 0.675582391362445
+            },
+            "proposed": {
+              "joint_l2_length_rad": 2.159410770752456,
+              "tcp_length_m": 0.6841550463427281
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 56,
+            "end": 114,
+            "before": {
+              "joint_l2_length_rad": 1.7164303753198313,
+              "tcp_length_m": 0.5534582646413372
+            },
+            "proposed": {
+              "joint_l2_length_rad": 1.708389809920002,
+              "tcp_length_m": 0.5596562779745063
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 58,
+            "end": 116,
+            "before": {
+              "joint_l2_length_rad": 1.6291721607168208,
+              "tcp_length_m": 0.5270450910809196
+            },
+            "proposed": {
+              "joint_l2_length_rad": 1.62206940636468,
+              "tcp_length_m": 0.5326382858644848
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 0,
+            "end": 29,
+            "before": {
+              "joint_l2_length_rad": 0.48302928125346845,
+              "tcp_length_m": 0.09429994991456242
+            },
+            "proposed": {
+              "joint_l2_length_rad": 0.4829416013065075,
+              "tcp_length_m": 0.09430257291685709
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 14,
+            "end": 43,
+            "before": {
+              "joint_l2_length_rad": 0.8926001193748249,
+              "tcp_length_m": 0.19857249749546996
+            },
+            "proposed": {
+              "joint_l2_length_rad": 0.8921587592191749,
+              "tcp_length_m": 0.19898104164226607
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 28,
+            "end": 57,
+            "before": {
+              "joint_l2_length_rad": 1.1436655836163931,
+              "tcp_length_m": 0.29943692209672645
+            },
+            "proposed": {
+              "joint_l2_length_rad": 1.1425231182345725,
+              "tcp_length_m": 0.30060294409141664
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 42,
+            "end": 71,
+            "before": {
+              "joint_l2_length_rad": 1.2371479258228721,
+              "tcp_length_m": 0.3689316241903995
+            },
+            "proposed": {
+              "joint_l2_length_rad": 1.235482376641067,
+              "tcp_length_m": 0.3703178859457432
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 56,
+            "end": 85,
+            "before": {
+              "joint_l2_length_rad": 1.175048473888345,
+              "tcp_length_m": 0.3759870796297522
+            },
+            "proposed": {
+              "joint_l2_length_rad": 1.172985950393999,
+              "tcp_length_m": 0.3773904853952889
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 70,
+            "end": 99,
+            "before": {
+              "joint_l2_length_rad": 0.9570939015829516,
+              "tcp_length_m": 0.31369790582814155
+            },
+            "proposed": {
+              "joint_l2_length_rad": 0.955381251210605,
+              "tcp_length_m": 0.3150285281928163
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 84,
+            "end": 113,
+            "before": {
+              "joint_l2_length_rad": 0.5746157589760061,
+              "tcp_length_m": 0.18845289317579736
+            },
+            "proposed": {
+              "joint_l2_length_rad": 0.5741635745359455,
+              "tcp_length_m": 0.1890243823268871
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          },
+          {
+            "start": 87,
+            "end": 116,
+            "before": {
+              "joint_l2_length_rad": 0.4756702633580983,
+              "tcp_length_m": 0.155800110811473
+            },
+            "proposed": {
+              "joint_l2_length_rad": 0.4753793067828644,
+              "tcp_length_m": 0.15615235666416694
+            },
+            "accepted": false,
+            "reason": "No TCP improvement without extra joint distance"
+          }
+        ],
+        "final_validation": {
+          "valid": true,
+          "samples": 557,
+          "input_waypoints": 117,
+          "resolution_rad": 0.005,
+          "curobo_failures": [],
+          "fcl_failures": [],
+          "curobo_samples_checked": 557,
+          "fcl_samples_checked": 557,
+          "fcl_samples_unchecked": 0,
+          "validation_complete": true,
+          "early_rejection": null,
+          "sample_order": "cuRobo all original dense samples; FCL endpoints then interval midpoints",
+          "transport_object_padding_m": 0.0,
+          "gripper_joint_position": 0.0,
+          "validation_seconds": 0.608373477589339
+        },
+        "same_endpoints": true,
+        "same_action_times": true
+      },
+      "pregrasp_validation": {
+        "valid": true,
+        "samples": 557,
+        "input_waypoints": 117,
+        "resolution_rad": 0.005,
+        "curobo_failures": [],
+        "fcl_failures": [],
+        "curobo_samples_checked": 557,
+        "fcl_samples_checked": 557,
+        "fcl_samples_unchecked": 0,
+        "validation_complete": true,
+        "early_rejection": null,
+        "sample_order": "cuRobo all original dense samples; FCL endpoints then interval midpoints",
+        "transport_object_padding_m": 0.0,
+        "gripper_joint_position": 0.0,
+        "validation_seconds": 0.6169876889325678,
+        "policy": {
+          "version": "dense_pregrasp_v4",
+          "resolution_rad": 0.005,
+          "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+        },
+        "accepted": true
+      }
+    }
+  ]
+}
