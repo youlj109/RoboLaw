@@ -1,0 +1,16 @@
+#usda 1.0
+(
+    defaultPrim = "Person"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Person"
+{
+    def Xform "RotatedB04" (
+        prepend references = @person_yaw30.usda@
+    )
+    {
+        float xformOp:rotateZ = -135
+        uniform token[] xformOpOrder = ["xformOp:rotateZ"]
+    }
+}

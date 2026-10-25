@@ -3,7 +3,7 @@ import json,hashlib
 from pathlib import Path
 from isaaclab_arena.cli.isaaclab_arena_cli import get_isaaclab_arena_cli_parser
 from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppContext
-p=get_isaaclab_arena_cli_parser();p.add_argument('--task',required=True);p.add_argument('--variant',required=True);p.add_argument('--variant-config',required=True);p.add_argument('--fixed-layout',required=True);p.add_argument('--display-layout',required=True);p.add_argument('--output',type=Path,required=True)
+p=get_isaaclab_arena_cli_parser();p.add_argument('--task',required=True);p.add_argument('--variant',required=True);p.add_argument('--variant-config',required=True);p.add_argument('--fixed-layout',required=True);p.add_argument('--display-layout',required=True);p.add_argument('--export-scene',action='store_true');p.add_argument('--output',type=Path,required=True)
 a=p.parse_args();a.enable_cameras=True;a.output.mkdir(parents=True,exist_ok=False)
 with SimulationAppContext(a):
  import cv2,numpy as np,torch,copy
@@ -34,4 +34,5 @@ with SimulationAppContext(a):
   rgb=arr(e.scene[name].data.output['rgb'])[0,:,:,:3].astype(np.uint8)
   if not cv2.imwrite(str(a.output/(name+'.jpg')),cv2.cvtColor(rgb,cv2.COLOR_RGB2BGR)):raise RuntimeError('Image write failed')
  w.close();report={'variant':a.variant,'scope':'Static scene placement review only. Original task poses were set for display; physics was not advanced. No trajectory, physical stability or success claim. This entry is never used for data collection.','physics_steps_during_render':int(e.sim.get_physics_step_count())-start,'display_layout':a.display_layout,'variant_config':a.variant_config,'variant_config_sha256':hashlib.sha256(Path(a.variant_config).read_bytes()).hexdigest(),'variant_spec':json.load(open(a.variant_config))[a.variant],'overview':camera}
+ if a.export_scene:e.sim.stage.Export(str(a.output/'scene.usda'))
  (a.output/'layout.json').write_text(json.dumps(report,indent=2));print('LAYOUT_IMAGES_READY',a.output,flush=True);env.close()

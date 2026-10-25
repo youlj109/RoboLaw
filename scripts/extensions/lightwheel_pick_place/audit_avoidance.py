@@ -93,7 +93,7 @@ def audit(baseline,episode):
         'source_object_deltas':object_deltas,'scope':'Exact authored original poses, measured arm reset (1e-6 rad), robot base (1e-7m), and measured lime/bowl initial pose (1mm/1degree) are gated. All source settling deltas are disclosed; both paths must also pass both measured bowl/distractor backgrounds. Nominal equality does not assert identical physical states. No execution-time object setters.'}
     control_keys=('seed','placement_seed','requested_grasp_tilt_deg','requested_grasp_yaw_deg','requested_grasp_height_offset_m','smooth_lift','allowed_grasp_fallback','selected_grasp','dt','pregrasp_offset_m','grasp_lateral_x_m','grasp_finger_bias_m','grasp_local_approach','shelf_lift_retract_m')
     if len(spec.pick_objects)>1:control_keys=tuple(k for k in control_keys if k!='shelf_lift_retract_m')
-    if pick in ('green_ladle','pepsi_can'):control_keys+=('grasp_point_body_m',)
+    if pick in ('green_ladle','pepsi_can'):control_keys+=('grasp_point_body_m','transfer_route_policy')
     same_controls=all(k in br and k in r and br[k] is not None and r[k] is not None and br[k]==r[k] for k in control_keys)
     search=br.get('grasp_search_policy')
     if len(spec.pick_objects)>1 and search:
@@ -105,6 +105,8 @@ def audit(baseline,episode):
             if search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3'):value.extend([chosen.get('pinch_z_offset_m'),chosen.get('waist_y_shift_m')])
             return value in search.get('candidates',[])
         selected_valid=all(selected_in_policy(m) for m in (br,r))
+        if search.get('name','').startswith('b03-padcenter'):
+            selected_valid=bool(selected_valid and all(set(m.get('grasp_solutions',{}))==set(spec.pick_objects) and all(selected_in_policy({'selected_grasp':value}) for value in m['grasp_solutions'].values()) for m in (br,r)))
         control_keys=tuple(k for k in control_keys if k not in ('selected_grasp','pregrasp_offset_m'))
         same_controls=bool(policy_same and selected_valid and all(k in br and k in r and br[k]==r[k] for k in control_keys))
     reset_keys=('path','sha256')
@@ -117,7 +119,7 @@ def audit(baseline,episode):
     if len(spec.pick_objects)>1 and search and search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3'):
         # Identical feedback policy can produce different recenter counts/routes.
         # Check bounded outputs, while dense actual-path and native gates remain mandatory.
-        allowed={'pregrasp':{'motion_gen'},'approach':{'cartesian_ik','cartesian_line_ik'},'lift':{'motion_gen','cartesian_line_ik','cartesian_ik'},'transfer':{'motion_gen','motion_gen_upper_route'},'lower':{'cartesian_line_ik','cartesian_ik','motion_gen'},'retreat':{'motion_gen','cartesian_line_ik','cartesian_ik'}}
+        allowed={'pregrasp':{'motion_gen','motion_gen_upper_route'},'approach':{'cartesian_ik','cartesian_line_ik'},'lift':{'motion_gen','cartesian_line_ik','cartesian_ik'},'transfer':{'motion_gen','motion_gen_upper_route'},'lower':{'cartesian_line_ik','cartesian_ik','motion_gen'},'retreat':{'motion_gen','cartesian_line_ik','cartesian_ik'}}
         def valid_policy_execution(m):
             plans=[x for x in m.get('plans',[]) if x.get('executed')]
             if not plans or any(x['phase'] not in allowed or x.get('metadata',{}).get('method') not in allowed[x['phase']] for x in plans):return False
@@ -130,6 +132,20 @@ def audit(baseline,episode):
                     if 'delta_world_m' in event and np.linalg.norm(event['delta_world_m'])>search['recenter_max_step_m']+1e-8:return False
             return True
         plan_methods_match=all(valid_policy_execution(m) for m in (br,r))
+    if pick in ('green_ladle','pepsi_can') and br.get('transfer_route_policy')==r.get('transfer_route_policy') and br.get('transfer_route_policy',{}).get('mode')=='upper':
+        def normalized_route_methods(m):
+            rows=[];plans=[x for x in m.get('plans',[]) if x.get('executed')]
+            if not any(x['phase']=='retreat' for x in plans) and m.get('optional_retreat_skipped',{}).get('executed_actions')!=0:return None
+            for x in plans:
+                phase=x['phase'];method=x.get('metadata',{}).get('method')
+                if phase=='retreat':continue
+                if phase in ('pregrasp','transfer'):
+                    if method not in ('motion_gen','motion_gen_upper_route'):return None
+                    method='same_bounded_transfer_policy'
+                rows.append((phase,method))
+            return rows
+        bmethods=normalized_route_methods(br);amethods=normalized_route_methods(r)
+        plan_methods_match=bool(bmethods is not None and bmethods==amethods)
     lower_keys=('mode','lower_z_m','skipped')
     lower_controls_match=all(br.get('place_lower',{}).get(k)==r.get('place_lower',{}).get(k) for k in lower_keys)
     same_controls=bool(same_controls and same_support and plan_methods_match and lower_controls_match and reset_controls_match)

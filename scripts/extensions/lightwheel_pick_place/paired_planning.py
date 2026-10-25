@@ -173,7 +173,7 @@ def main():
     TASK_SPEC = resolve_task(task_id)
     PICK = result_probe.get('pick_object') or TASK_SPEC.pick_object
     DEST = result_probe.get('destination_object') or TASK_SPEC.destination_object
-    BACKGROUND = tuple(n for n in TASK_SPEC.rigid_objects if n != PICK)
+    BACKGROUND = tuple(TASK_SPEC.rigid_objects)
     if a.variant_config is None:
         a.variant_config = TASK_SPEC.default_variants
 
@@ -203,13 +203,15 @@ def main():
             i = phase_start_index(phases, segment)
             if recorded is not None:
                 previous = [x for x in result['plans'][:a.recorded_plan_index] if x['phase'] == segment and x.get('executed')]
-                i += sum(int(x['metadata']['samples']) + 12 for x in previous)
+                offset = sum(int(x['metadata']['samples']) + 12 for x in previous)
+                i = int(np.flatnonzero(phases == segment)[offset])
                 expected = sum(int(x['metadata']['samples']) + 12 for x in result['plans'] if x['phase'] == segment and x.get('executed'))
                 if int(np.count_nonzero(phases == segment)) != expected:
                     raise ValueError('Recorded phase frame count does not match plan samples plus 12 hold frames')
                 if phases[i] != segment: raise ValueError('Recorded leg start phase mismatch')
+            active_pick=next((name for name,bounds in result.get('pick_action_ranges',{}).items() if bounds['start']<=i<bounds['end']),PICK)
             starts[segment] = {
-                'frame_index': i,
+                'frame_index': i,'active_pick':active_pick,'active_pick_pose':f['obs/'+active_pick][i,:7].copy(),
                 'source_detached': (json.loads((baseline / 'full_world_audit.json').read_text())['measurements'][i * 8].get('source_detached_before', False)),
                 'q': f['obs/q'][i, :7].copy(),
                 'gripper_joint_position': float(f['obs/q'][i, finger]),
@@ -252,7 +254,7 @@ def main():
             s: {
                 'q': starts[s]['q'].tolist(),
                 'gripper_joint_position': starts[s]['gripper_joint_position'] if s in ('transfer', 'lift') else 0.0,
-                'frame_index': starts[s]['frame_index'],
+                'frame_index': starts[s]['frame_index'],'active_pick':starts[s]['active_pick'],
             }
             for s in starts
         },
@@ -272,13 +274,21 @@ def main():
                     st = starts[segment]
                     for name, pose in st['background'].items():
                         world.set_obstacle_pose(name, pose)
-                    world.set_obstacle_pose(PICK, st[PICK])
+                    active_pick=st['active_pick']
+                    if world.pick_object!=active_pick:world.bind_pick(active_pick)
+                    world.set_obstacle_pose(active_pick, st['active_pick_pose'])
                     world.source_detached = st['source_detached']
                     planner = LimePlanner(world, kin, dt=result['dt'], seed=int(seed), max_joint_speed=a.max_joint_speed)
                     q0 = st['q']
                     grip = st['gripper_joint_position'] if segment in ('transfer', 'lift') else 0.0
                     target = targets[segment]
-                    planned = plan_segment(planner, world, segment, q0, target, grip, attachment, recorded['metadata']['method'] if recorded else None)
+                    segment_attachment=attachment
+                    if len(TASK_SPEC.pick_objects)>1:
+                        from kitchen_safety.planning import transform
+                        segment_attachment=np.linalg.inv(kin.fk(q0))@transform(st['active_pick_pose'][:3],st['active_pick_pose'][3:7])
+                    run['active_pick']=active_pick
+                    run['attachment_source']='measured selected-pick pose at segment start' if len(TASK_SPEC.pick_objects)>1 else 'recorded close attachment'
+                    planned = plan_segment(planner, world, segment, q0, target, grip, segment_attachment, recorded['metadata']['method'] if recorded else None)
                     positions = planned.pop('positions')
                     fname = f'{segment}_{variant}_seed{seed}_positions.npy'
                     np.save(out / fname, positions)

@@ -23,6 +23,7 @@ parser.add_argument('--grasp-lateral-x',type=float,default=0.0,
 parser.add_argument('--grasp-local-approach',action='store_true',
     help='Shelf: build pregrasp/standoff along -TCP_Z from selected wrist R (not fixed world offset)')
 parser.add_argument('--defer-full-world-audit',action='store_true',help='Record every 120 Hz state; check added hazards at 120 Hz, full world at 15 Hz live, and require complete 120 Hz offline full-world audit before acceptance')
+parser.add_argument('--transfer-route-search',choices=('direct','upper'),default='direct',help='Try bounded upper waypoints at fixed hazards if direct transfer fails')
 parser.add_argument('--grasp-body-point',nargs=3,type=float,default=None,help='Measured object-local solid grasp point; recorded as a control')
 parser.add_argument('--grasp-search',choices=('fixed','b03-family','b03-topdown'),default='fixed')
 parser.add_argument('--pregrasp-planner',choices=('auto','motion_gen','cartesian_line'),default='auto')
@@ -170,8 +171,8 @@ with SimulationAppContext(args):
     contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK)
     contact_trackers={PICK:contacts}
     pick_action_ranges={PICK:{'start':0}}
-    source_contacts=LimeSourceContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,
-        pick_object=PICK,source_surface=SOURCE_SURFACE_PATH)
+    source_contact_trackers={name:LimeSourceContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=name,source_surface=SOURCE_SURFACE_PATH) for name in task_picks(TASK_SPEC)}
+    source_contacts=source_contact_trackers[PICK]
     def step(command,gripper):
         before=snapshot()
         if writer:
@@ -223,6 +224,7 @@ with SimulationAppContext(args):
         world.source_support_mode=('native_contact_calibrated_until_detached' if len(task_picks(TASK_SPEC))>1 else 'native_rest_until_detached');world.source_detached=False
         world.source_resting_root=initial['lime'][:3].copy()
         world.source_surface_top=max((v[3][2] for v in world.objects if v[0]==SOURCE_SURFACE_PATH or v[0].startswith(SOURCE_SURFACE_PATH.rstrip('/')+'/') or v[0].endswith(TASK_SPEC.source_surface_suffix)), default=float(initial['lime'][2]))
+        result['per_pick_initial_source_contacts']={name:view.sample() for name,view in source_contact_trackers.items()}
         initial_source_contacts=source_contacts.sample()
         if not initial_source_contacts['count']:raise RuntimeError('No measured original pick-object/source-surface support contacts')
         result['source_support_contact_model']={'source_resting_min_z_m':world.source_resting_min_z,
@@ -304,7 +306,7 @@ with SimulationAppContext(args):
                 if planning_phase=='cartesian_line':
                     trajectory=planner.plan_cartesian_line(q,target,ignores(),grip,phase='lift')
                 else:
-                    if args.grasp_search in ('b03-family','b03-topdown') and planning_phase=='transfer':
+                    if (args.grasp_search in ('b03-family','b03-topdown') or args.transfer_route_search=='upper') and planning_phase=='transfer':
                         from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import plan_transfer
                         trajectory=plan_transfer(planner,q,target,ignores(),grip)
                     else:trajectory=planner.plan_pose(q,target,ignores(),grip,phase=planning_phase)
@@ -346,6 +348,7 @@ with SimulationAppContext(args):
         p=initial['lime'][:3].copy()
         grasp_body_point=np.asarray(args.grasp_body_point if args.grasp_body_point is not None else world.object_center,float)
         result['grasp_point_body_m']=grasp_body_point.tolist()
+        result['transfer_route_policy']={'mode':args.transfer_route_search,'upper_rises_m':[.08,.16,.24] if args.transfer_route_search=='upper' else []}
         target_center=transform(initial['lime'][:3],initial['lime'][3:7])@np.r_[grasp_body_point,1]
         target_center[2]+=args.grasp_height_offset
         target_center[0]+=args.grasp_lateral_x
@@ -528,7 +531,7 @@ with SimulationAppContext(args):
             world.bind_pick(PICK)
             contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK)
             contact_trackers[PICK]=contacts
-            source_contacts=LimeSourceContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK,source_surface=SOURCE_SURFACE_PATH)
+            source_contacts=source_contact_trackers[PICK]
             held0=snapshot();p=held0['lime'][:3].copy()
             points=world.lime_vertices@Rotation.from_quat(held0['lime'][3:7]).as_matrix().T+p
             world.source_resting_min_z=float(points[:,2].min());world.source_resting_xy=p[:2].copy()
