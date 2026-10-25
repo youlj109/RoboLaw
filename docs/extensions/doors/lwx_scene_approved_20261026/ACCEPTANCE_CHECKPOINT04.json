@@ -1,0 +1,46 @@
+{
+  "recorded_unix": 1792955652.4981189,
+  "status": "Independent gates passed; agent sampled visual review passed; user video review pending",
+  "variant": "C01 property",
+  "config": "configs/extensions/doors/c01_property_clear05_00_lwx_20261026.json",
+  "episode": "datasets/doors/lwx_scene_approved_20261026/C01_property_clear05_00",
+  "baseline": "datasets/doors/lwx_scene_approved_20261026/C01_base_p01",
+  "neutral": "datasets/doors/lwx_scene_approved_20261026/C01_property_clear05_00_neutral",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C01_property_clear05_00_run/C01_strict_static05.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.41144533456464544,
+    "tcp_max_deviation_m": 0.2186080194721317,
+    "baseline_samples": 128,
+    "augmented_samples": 132,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "review_time": 1792955123.4047978,
+    "episode": "datasets/doors/lwx_scene_approved_20261026/C01_property_clear05_00",
+    "scope": "Agent inspection of actual observer video sampled frames; user review pending",
+    "contactsheet": "C01_property_actual_contactsheet03.jpg",
+    "obstacle_and_arm_visible": true,
+    "visible_lift_over_bottle_then_approach": true,
+    "actual_tcp_max_deviation_m": 0.2186080194721317,
+    "independent_physics_and_safety": "See episode audits; visual sampling is not substitute"
+  },
+  "evidence_sha256": {
+    "metadata.json": "c7f522fb7483719dd14ce53fb16e28550ea1f2544c6d10f843fa731a524f26c9",
+    "result.json": "75b3a742f035e4b28204ea07f67d404ec6f654af3fe1e1773e8cab4357de97a8",
+    "task_review_audit.json": "3d4903d6de9a6a34303f9f68291aee810393b35e1c6800f1eca677dfa3ec458d",
+    "task_validation_full.json": "1ee432c974981b01fbf4a4975cd70bde9115bb7fa1d8e8a4abdf76b808b997fd",
+    "source_contact_audit.json": "c96b29fa5241d6bba9983a131a9dfac24fe233264913242ac84455faa72e7342",
+    "self_collision_audit.json": "f2051b51ab728d7f28cd44bb99845bd8bd8515025d045e743df4894b433c06ea",
+    "avoidance_audit.json": "edd001481dd79a61f0b9ce6f4b4cb2859c0d448ed5a0a3097aa29186211f5cbd"
+  }
+}

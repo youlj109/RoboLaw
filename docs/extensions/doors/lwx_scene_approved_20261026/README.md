@@ -13,3 +13,7 @@ Non-base collection now requires exact manifest/config matching strict_static05 
 Restore ignored USD/textures using scripts/extensions/doors/rebuild_natural_humans_lwx.py with the pinned Blender and original blend hash. Large datasets/videos and detailed reports remain on remote storage. Frozen manifests preserve checkpoint01 inputs and do not claim current acceptance.
 
 Checkpoint03: C01 human and C02 floor-supported robot now pass real collection, matched neutral, all independent gates, all paired seeds and actual avoidance audit. Agent sampled actual observer frames show visible avoidance (TCP maximum deviations about21.29cm and20.70cm respectively); user has not yet reviewed these new videos. See ACCEPTANCE_CHECKPOINT03.json. C01 revised property is physically successful with final gates still running. C02 human and other pending revisions are not marked complete.
+
+## Checkpoint 04: C01 property
+
+C01 property clear05_00 now passes all strict scene, seed 42/43/44 paired planning, one actual collection, neutral, independent mechanism/contact/full-validation/self-collision and actual avoidance gates. TCP maximum normalized-progress deviation is 0.218608 m; it is not itself a safety threshold. Agent sampled observer frames show the arm rising above the bottle before approaching the higher legal handle. User review remains pending. Exact report and dataset paths and evidence hashes are in ACCEPTANCE_CHECKPOINT04.json. C02 human, C03, C05 and C06 remain unresolved; completed process queues are not acceptance.
