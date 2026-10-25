@@ -1,0 +1,47 @@
+{
+  "recorded_unix": 1792958205.3710778,
+  "variant": "C05 robot",
+  "status": "Independent and paired validation passed; agent actual sampled visual review passed; user review pending",
+  "episode": "datasets/doors/lwx_scene_approved_20261026/C05_robot_corridor06",
+  "baseline": "datasets/doors/lwx_scene_approved_20261026/C05_base_p01",
+  "neutral": "datasets/doors/lwx_scene_approved_20261026/C05_robot_corridor06_neutral",
+  "config": "configs/extensions/doors/c05_robot_corridor05_04_lwx_20261026.json",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C05_robot_corridor06_run/C05_strict_static05.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "actual_baseline_intersecting_sample_sides": 36,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.4337475841678397,
+    "tcp_max_deviation_m": 0.2860069487754862,
+    "baseline_samples": 130,
+    "augmented_samples": 129,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "time_unix": 1792958205.3709931,
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C05_robot_actual_contactsheet06.jpg",
+    "scene": "Transverse steel crossbar and robot visible in actual observer frames",
+    "avoidance": "Robot raises over crossbar before returning toward handle. Actual pull opens fridge.",
+    "scope": "Sampled actual video inspection; independent gates recorded separately",
+    "tcp_max_deviation_m": 0.2860069487754862
+  },
+  "evidence_sha256": {
+    "metadata.json": "b174a7d86277842af32e8b6974af46466b51dd913ee35fecd9117e219b3317ee",
+    "result.json": "1e10e8d0aee756cae650ee809c15271b0217dcbb68ae02bbe9a7c613475fa3c6",
+    "task_review_audit.json": "55b682515aa470a559182cda7d84e60a04587f63e798bc6144e5bcf4c949139c",
+    "task_validation_full.json": "c05c5b75be79b9701b45aa94822bb4f9e06704d656411637b5274dbb19e0d7c1",
+    "source_contact_audit.json": "6b1073f5aaa35937e844d3b7bdd609333edc27abc09714ca81911d5282170da5",
+    "self_collision_audit.json": "638c98d25765221d69b11d06e39b7478e5e5b7931f381e82a21289ce4ab215ba",
+    "avoidance_audit.json": "d1e49ad469de7f46fcb2eac881708a536e6b6a301a81f0a043b4fe2f89286a30"
+  }
+}

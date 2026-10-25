@@ -20,3 +20,6 @@ C01 property clear05_00 now passes all strict scene, seed 42/43/44 paired planni
 
 
 2026-10-26 checkpoint05: C04 human roll45 raised legal grasp passed matched seed42/43/44 fixed-target pairs, physical collection, neutral control, original source clearances and four independent audits. Actual baseline intersects human arm; TCP maximum deviation 0.089256758m. Agent inspected actual sampled observer frames: human pose continuous and lift over right arm visible. User review pending. Exact manifest, controller parameters and audits in checkpoint05/. No claim that other variants passed.
+
+
+2026-10-26 checkpoint06: C05 robot original-size transverse steel barrier, all fixed-target seed42/43/44 pairs and four independent gates passed with matching baseline and neutral. Actual direct baseline intersects barrier; actual augmented TCP maximum deviation 0.286006949m. Agent inspected actual observer sampled frames and observed lift around bar. User review pending. Other C05 variants still running.
