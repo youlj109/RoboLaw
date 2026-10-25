@@ -27,3 +27,5 @@ Fresh task meshes must be loaded into MotionGen after measured motion. The old b
 The first approved-scene side-grasp trial formed bilateral contacts but slipped during lift, and remains failed. The new b03-topdown-v1 policy searches upward hover/contact/lift candidates before executing, then direct/upper transfer routes, at fixed hazards. Both bananas use the same candidate family independently. Selected poses may differ between scenes; the policy/input controls must match for baseline comparison.
 
 To reduce collection latency, later trials retain 120 Hz raw task-rigid/finger/fruit states and live 120 Hz added-hazard checks, with 15 Hz live full-world checks. Before acceptance, audit_deferred_world.py must complete every 120 Hz full-world check using unchanged geometry/margins and exactly reproduce every live checkpoint within 1e-7 m. Original pending evidence is preserved. No pending audit can pass validation or acceptance.
+
+Read OVERNIGHT_ACTIVE_20261025.md for exact current overnight state and deadline.

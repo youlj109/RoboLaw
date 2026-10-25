@@ -30,3 +30,14 @@ def near_support_slab(*, hull_min_z, hull_max_z, surface_bottom, surface_top, cl
     """
     return bool(hull_min_z < surface_top + clearance_m
                 and hull_max_z >= surface_bottom - clearance_m)
+
+
+def native_contact_is_shallow(contact, *, tolerance_m=JITTER_M):
+    """Actual exact-source cooked-contact separations, not an orientation-dependent raw vertex height."""
+    count=contact.get('count',0)
+    if not isinstance(count,int) or count<1:return False
+    for key,width in (('points_world_m',3),('normals_world',3),('normal_forces_n',1),('separations_m',1)):
+        values=np.asarray(contact.get(key,[]),dtype=float)
+        if values.size!=count*width or not np.isfinite(values).all():return False
+    normals=np.asarray(contact['normals_world'],float).reshape(-1,3)
+    return bool(np.allclose(np.linalg.norm(normals,axis=1),1.,atol=1e-4) and np.min(contact['separations_m'])>=-tolerance_m)

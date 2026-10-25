@@ -25,7 +25,7 @@ def check_batch(rows):
    if name!=pick:world.set_obstacle_pose(name,pose)
   if 'hazard_pose' in row:world.set_obstacle_pose('glass',row['hazard_pose'])
   model=result['source_support_contact_model'] if pick==spec.pick_object else result['extra_source_support_models'][pick]
-  world.source_support_mode='native_rest_until_detached';world.source_resting_min_z=model['source_resting_min_z_m'];world.source_resting_root=np.asarray(model['source_resting_root_m']);world.source_resting_xy=world.source_resting_root[:2];world.source_detached=row['source_detached_before'];world.allowed_phase=row['phase']
+  world.source_support_mode=result['source_support_contact_model']['mode'];world.source_resting_min_z=row.get('source_support_calibrated_min_z_m',model['source_resting_min_z_m']);world.source_resting_root=np.asarray(model['source_resting_root_m']);world.source_resting_xy=world.source_resting_root[:2];world.source_detached=row['source_detached_before'];world.allowed_phase=row['phase']
   ignore=(pick,)+((spec.destination_object,) if row['phase'] in ('lower','release','retreat','settle_final') else ())
   measured=world.clearance(row['q_arm'],ignore,mode='execution',gripper_q=row['gripper_q'],object_pose=row['lime_pose'])
   if row.get('valid') is not None and (row['valid']!=measured['valid'] or abs(row['slack_m']-measured['slack_m'])>1e-7):raise ValueError('Offline/live full-world checks disagree')

@@ -37,8 +37,8 @@ def audit(baseline,episode):
                 if world.pick_object!=active:world.bind_pick(active)
                 if len(spec.pick_objects)>1:
                     model=results[trajectory]['source_support_contact_model'] if active==pick else results[trajectory]['extra_source_support_models'][active]
-                    world.source_support_mode='native_rest_until_detached';world.source_detached=state['source_detached_before']
-                    world.source_resting_min_z=model['source_resting_min_z_m'];world.source_resting_root=np.asarray(model['source_resting_root_m'])
+                    world.source_support_mode=results[trajectory]['source_support_contact_model']['mode'];world.source_detached=state['source_detached_before']
+                    world.source_resting_min_z=state.get('source_support_calibrated_min_z_m',model['source_resting_min_z_m']);world.source_resting_root=np.asarray(model['source_resting_root_m'])
 
                 clearance=world.clearance(state['q_arm'],(active,),mode='execution',
                     gripper_q=state['gripper_q'],object_pose=state['lime_pose'],obstacle_filter=BACKGROUND)

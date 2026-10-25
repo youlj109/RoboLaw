@@ -44,8 +44,17 @@ def audit(ep):
         contact_ok=isinstance(count,int) and count>=0
         for key,width in [('points_world_m',3),('normals_world',3),('normal_forces_n',1),('separations_m',1)]:
             values=np.asarray(source_contact.get(key,[]),float);contact_ok=bool(contact_ok and values.size==count*width and np.isfinite(values).all())
+        native_calibration=False
+        if r['source_support_contact_model']['mode']=='native_contact_calibrated_until_detached':
+            normals=np.asarray(source_contact.get('normals_world',[]),float).reshape(-1,3)
+            contact_ok=bool(contact_ok and (count==0 or (min(source_contact['separations_m'])>=-.0005 and np.allclose(np.linalg.norm(normals,axis=1),1.,atol=1e-4))))
+            native_calibration=bool(contact_ok and count>0 and not before and phase in ('pregrasp','approach','close','lift') and min(source_contact['separations_m'])>=-.0005 and np.allclose(np.linalg.norm(normals,axis=1),1.,atol=1e-4))
+            if native_calibration:calibrated[pick]['floor']=minimum-.0005
+            floor=calibrated[pick]['floor']
+            contact_ok=bool(contact_ok and item.get('source_calibration_native_contact')==native_calibration and abs(item.get('source_support_calibrated_min_z_m',float('inf'))-(floor+.0005))<1e-6)
+            region=phase in ('pregrasp','approach','close','lift') and not before and xy<.05 and minimum>=floor-1e-8
         supported[pick]|=bool(count>0 and not before and phase in ('approach','pregrasp','close'))
-        banana=fcl.CollisionObject(banana_models[pick],fcl.Transform(rotation,pose[:3]));plate_pose=plate[action,:7];plate_rotation=Rotation.from_quat(plate_pose[3:7]).as_matrix();distance=float('inf');intersecting=False
+        banana=fcl.CollisionObject(banana_models[pick],fcl.Transform(rotation,pose[:3]));plate_pose=np.asarray(item.get('rigid_poses',{}).get('plate',plate[action,:7]),float);plate_rotation=Rotation.from_quat(plate_pose[3:7]).as_matrix();distance=float('inf');intersecting=False
         for plate_model in plate_models:
             obj=fcl.CollisionObject(plate_model,fcl.Transform(plate_rotation,plate_pose[:3]));raw=float(fcl.distance(banana,obj,fcl.DistanceRequest(),fcl.DistanceResult()));hit=raw<0 or (raw==0 and bool(fcl.collide(banana,obj,fcl.CollisionRequest(),fcl.CollisionResult())));distance=min(distance,max(0.,raw));intersecting|=hit
         source_clear=not intersecting and distance>=.002

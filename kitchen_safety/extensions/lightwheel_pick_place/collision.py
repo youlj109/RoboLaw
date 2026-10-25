@@ -498,7 +498,7 @@ class CollisionWorld:
             if label=='carried_lime':
                 if self._matches(name,self.destination_object) and self.allowed_phase in ('lower','release','retreat','settle_final'):continue
                 source_surface=self._is_source_surface(name)
-                if source_surface and getattr(self,'source_support_mode',None)=='native_rest_until_detached':
+                if source_surface and getattr(self,'source_support_mode',None) in ('native_rest_until_detached','native_contact_calibrated_until_detached'):
                     from .source_support import support_allowed
                     actual_root=self._object_pose(q,object_pose)[:3,3]
                     if support_allowed(phase=self.allowed_phase,detached=self.source_detached,

@@ -73,7 +73,7 @@ with SimulationAppContext(args):
     from kitchen_safety.extensions.lightwheel_pick_place.collision import CollisionWorld
     from kitchen_safety.extensions.lightwheel_pick_place.planner import LimePlanner
     from kitchen_safety.extensions.lightwheel_pick_place.contacts import LimeGraspContacts,LimeSourceContacts
-    from kitchen_safety.extensions.lightwheel_pick_place.source_support import JITTER_M,MAX_XY_M,DETACH_CLEARANCE_M,update_detached
+    from kitchen_safety.extensions.lightwheel_pick_place.source_support import JITTER_M,MAX_XY_M,DETACH_CLEARANCE_M,update_detached,native_contact_is_shallow
     from kitchen_safety.extensions.lightwheel_pick_place.lemon_kinematics import LemonKinematics
     from kitchen_safety.planning import DroidKinematics,transform
     from kitchen_safety.dataset import CameraWriter,numpy as arr,decode_video
@@ -141,6 +141,11 @@ with SimulationAppContext(args):
         source_contact=source_contacts.sample()
         actual_lime_points=world.lime_vertices@Rotation.from_quat(s['lime'][3:7]).as_matrix().T+s['lime'][:3]
         actual_min_z=float(actual_lime_points[:,2].min());detached_before=world.source_detached
+        native_calibration=bool(world.source_support_mode=='native_contact_calibrated_until_detached' and not detached_before and phase in ('pregrasp','approach','close','lift') and native_contact_is_shallow(source_contact))
+        if native_calibration:
+            world.source_resting_min_z=actual_min_z
+            world.source_lift_floor_z=actual_min_z-JITTER_M
+
         # Full environment robot check; intended grasp/support masks are phase-specific.
         full=({'valid':None,'audit_pending':True} if args.defer_full_world_audit and physics_checks%8 else world.clearance(s['q'][ids],ignores(),object_pose=s['lime'][:7],**geometry(s)))
         physics_audits.append({'action':len(records),'phase':phase,'q_arm':s['q'][ids].tolist(),
@@ -148,7 +153,8 @@ with SimulationAppContext(args):
             **({'rigid_poses':{n:s[n][:7].tolist() for n in RIGID}} if args.defer_full_world_audit else {}),
             **({'hazard_pose':s['hazard_pose'].tolist()} if args.variant=='property' else {}),
             'source_contact':source_contact,'source_hull_min_z_m':actual_min_z,
-            'source_detached_before':detached_before,
+            'source_detached_before':detached_before,'source_calibration_native_contact':native_calibration,
+            'source_support_calibrated_min_z_m':float(world.source_resting_min_z),
             'source_lift_floor_z_m':getattr(world,'source_lift_floor_z',None),**full})
         if full['valid'] is False:raise RuntimeError(f'Executed collision/clearance: {full}')
         world.source_detached=update_detached(detached=world.source_detached,hull_min_z=actual_min_z,
@@ -213,14 +219,14 @@ with SimulationAppContext(args):
         initial_lime_points=world.lime_vertices@Rotation.from_quat(initial['lime'][3:7]).as_matrix().T+initial['lime'][:3]
         world.source_resting_min_z=float(initial_lime_points[:,2].min())
         world.source_resting_xy=initial['lime'][:2].copy()
-        world.source_support_mode='native_rest_until_detached';world.source_detached=False
+        world.source_support_mode=('native_contact_calibrated_until_detached' if len(task_picks(TASK_SPEC))>1 else 'native_rest_until_detached');world.source_detached=False
         world.source_resting_root=initial['lime'][:3].copy()
         world.source_surface_top=max((v[3][2] for v in world.objects if v[0]==SOURCE_SURFACE_PATH or v[0].startswith(SOURCE_SURFACE_PATH.rstrip('/')+'/') or v[0].endswith(TASK_SPEC.source_surface_suffix)), default=float(initial['lime'][2]))
         initial_source_contacts=source_contacts.sample()
         if not initial_source_contacts['count']:raise RuntimeError('No measured original pick-object/source-surface support contacts')
         result['source_support_contact_model']={'source_resting_min_z_m':world.source_resting_min_z,
             'source_resting_xy_m':world.source_resting_xy.tolist(),'source_resting_extra_tolerance_m':.0005,'source_resting_max_xy_displacement_m':.05,
-            'mode':world.source_support_mode,'root_z_gate':False,'source_resting_root_m':world.source_resting_root.tolist(),
+            'mode':world.source_support_mode,'native_contact_max_penetration_m':JITTER_M,'root_z_gate':False,'source_resting_root_m':world.source_resting_root.tolist(),
             'surface':SOURCE_SURFACE_PATH,'surface_top_m':float(world.source_surface_top),'detach_clearance_m':DETACH_CLEARANCE_M,
             'initial_source_contacts':initial_source_contacts,
             'lift_support_policy':'Native legal rest collision-hull lower bound until geometric separation and zero exact-source contacts; detach latches permanently.',
@@ -249,6 +255,24 @@ with SimulationAppContext(args):
             overview_initial=arr(scene['overview_camera'].data.output['rgb'])[0,:,:,:3].astype(np.uint8)
             if not cv2.imwrite(str(out/'overview_initial.png'),cv2.cvtColor(overview_initial,cv2.COLOR_RGB2BGR)):
                 raise RuntimeError('Could not save actual initial overview for visibility review')
+        def close_with_feedback(window):
+            global phase,grip
+            from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import close_recenter_delta
+            for attempt in range(3):
+                phase='close';grip=1.
+                for _ in range(30):step(q,grip)
+                measured=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=window)
+                note={'pick':PICK,'attempt':attempt,'bilateral_near':measured['both_fingers_near_body'],'bilateral_load':measured['both_fingers_on_body']}
+                result.setdefault('close_feedback',[]).append(note)
+                if measured['both_fingers_on_body']:return measured
+                if attempt==2:break
+                state=snapshot();solution=result['grasp_solutions'][PICK];delta,detail=close_recenter_delta(world,kin,state,ids,robot.joint_names,contacts.records[-1],solution);note.update(detail)
+                print('GRASP_RECENTER',PICK,attempt,detail,flush=True)
+                grip=0.
+                for _ in range(12):step(q,grip)
+                phase='approach';cart(snapshot()['tcp']+delta,force_phase='cartesian_line')
+            raise RuntimeError('Bilateral loaded grasp not established after bounded feedback recentering')
+
         def cart(position,*,rotation=None,force_phase=None):
             global q,planner
             world.allowed_phase=phase
@@ -366,6 +390,9 @@ with SimulationAppContext(args):
                 result['selected_grasp']={'tilt':tilt,'yaw':yaw,'phase':phase,'use_pregrasp_phase':use_pregrasp_phase,
                     'tcp_z_world':approach.tolist() if (args.grasp_local_approach and not use_pregrasp_phase) else None}
                 if topdown_solution:result['selected_grasp']['height_offset_m']=topdown_solution['height_offset_m']
+                if topdown_solution:
+                    for key in ('pinch_z_offset_m','waist_y_shift_m'):
+                        if key in topdown_solution:result['selected_grasp'][key]=topdown_solution[key]
                 result['pregrasp_offset_m']=pregrasp_offset.tolist()
                 selected_R=R; target_center[:3]=center; break
             except RuntimeError as exc:
@@ -383,9 +410,12 @@ with SimulationAppContext(args):
             result['approach_contact_standoff_m']=contact_standoff.tolist()
             # Banana feasibility: MotionGen transfer IK_FAIL on hover->contact; cartesian_line succeeds near tol.
             cart(contact_standoff, force_phase=('transfer' if PICK=='lemon' else 'cartesian_line'))
-        phase='close';grip=1.
-        for _ in range(30):step(q,grip)
-        held=snapshot();result['close_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=5)
+        if args.grasp_search=='b03-topdown':result['close_contacts']=close_with_feedback(5)
+        else:
+            phase='close';grip=1.
+            for _ in range(30):step(q,grip)
+            result['close_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=5)
+        held=snapshot()
         if not result['close_contacts']['both_fingers_near_body']:raise RuntimeError('No bilateral physical lime grasp')
         world.attachment=np.linalg.inv(kin.fk(held['q'][ids]))@transform(held['lime'][:3],held['lime'][3:7])
         result['planning_attachment_tcp_to_lime']=world.attachment.tolist()
@@ -530,9 +560,12 @@ with SimulationAppContext(args):
                 axis=pregrasp_offset/np.linalg.norm(pregrasp_offset)
                 cart(center+axis*.02,force_phase='cartesian_line')
             else:cart(center,rotation=R)
-            phase='close';grip=1.
-            for _ in range(40):step(q,grip)
-            held=snapshot();result.setdefault('extra_close_contacts',[]).append(contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=8))
+            if args.grasp_search=='b03-topdown':extra_close=close_with_feedback(8)
+            else:
+                phase='close';grip=1.
+                for _ in range(40):step(q,grip)
+                extra_close=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=8)
+            held=snapshot();result.setdefault('extra_close_contacts',[]).append(extra_close)
             if not result['extra_close_contacts'][-1]['both_fingers_near_body']:
                 raise RuntimeError(f'No bilateral physical grasp for {PICK}')
             world.attachment=np.linalg.inv(kin.fk(held['q'][ids]))@transform(held['lime'][:3],held['lime'][3:7])

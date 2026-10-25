@@ -97,10 +97,11 @@ def audit(baseline,episode):
     search=br.get('grasp_search_policy')
     if len(spec.pick_objects)>1 and search:
         # Search outputs may differ with hazards; the candidate policy and input controls must match.
-        policy_same=(search==r.get('grasp_search_policy') and search.get('name') in ('b03-family-v1','b03-topdown-v1'))
+        policy_same=(search==r.get('grasp_search_policy') and search.get('name') in ('b03-family-v1','b03-topdown-v1','b03-topdown-v2','b03-padcenter-v1'))
         def selected_in_policy(metadata):
             chosen=metadata.get('selected_grasp',{});value=[chosen.get('tilt'),chosen.get('yaw')]
-            if search.get('name')=='b03-topdown-v1':value.append(chosen.get('height_offset_m'))
+            if search.get('name') in ('b03-topdown-v1','b03-topdown-v2'):value.append(chosen.get('height_offset_m'))
+            if search.get('name')=='b03-padcenter-v1':value.extend([chosen.get('pinch_z_offset_m'),chosen.get('waist_y_shift_m')])
             return value in search.get('candidates',[])
         selected_valid=all(selected_in_policy(m) for m in (br,r))
         control_keys=tuple(k for k in control_keys if k not in ('selected_grasp','pregrasp_offset_m'))
