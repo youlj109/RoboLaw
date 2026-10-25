@@ -17,6 +17,10 @@ from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppCont
 ROOT = Path(__file__).resolve().parents[3]
 
 p = get_isaaclab_arena_cli_parser()
+p.add_argument('--solver-velocity-iterations',type=int,default=None,help='Diagnostic PhysX scene minimum velocity solver iterations; no joint locks or parameter changes')
+p.add_argument('--joint-inventory-only',action='store_true',help='Read actual PhysX joint parameters without a hold trial')
+p.add_argument('--repair-fixture-schemas',action='store_true',help='Diagnostic: map authored drive channels to canonical USD names and apply the authored PhysxJointAPI friction schema; preserve all numeric values')
+p.add_argument('--native-background-reset',action='store_true',help='Diagnostic: use the upstream Background default nested physics reset, without locking joints or changing assets')
 p.add_argument('--task', default='kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian')
 p.add_argument('--fixed-layout', type=Path, default=None,
                help='Defaults to task-specific fixed_layout path; omit for graph-solved reset')
@@ -59,6 +63,7 @@ with SimulationAppContext(a):
     envdef, assets = build_environment(
         enable_cameras=True,
         variant='base',
+        native_background_reset=a.native_background_reset,
         task_id=TASK_SPEC.task_id,
         fixed_layout_path=str(a.fixed_layout) if a.fixed_layout is not None else None,
     )
@@ -75,12 +80,19 @@ with SimulationAppContext(a):
         ),
     )
     cfg, kwargs = builder.compose_manager_cfg()
+    if a.solver_velocity_iterations is not None:
+        cfg.sim.physics.min_velocity_iteration_count=int(a.solver_velocity_iterations)
     cfg.observations.camera_obs = None
     cfg.sim.render_interval = cfg.decimation
     cfg.scene.robot_contacts = ContactSensorCfg(
         prim_path='{ENV_REGEX_NS}/Robot/.*', update_period=0, history_length=1
     )
+    fixture_schema_records=[]
+    if a.repair_fixture_schemas:
+        from kitchen_safety.extensions.lightwheel_pick_place.fixture_schema import install_fixture_schema_repair
+        fixture_schema_records=install_fixture_schema_repair(cfg.scene)
     env = builder.make_registered(cfg, kwargs)
+    (a.output/'fixture_schema_repair.json').write_text(json.dumps(fixture_schema_records,indent=2))
     env.reset()
     e = env.unwrapped
     robot = e.scene['robot']
@@ -115,13 +127,27 @@ with SimulationAppContext(a):
         prim = e.sim.stage.GetPrimAtPath(path)
         return np.asarray(cache.GetLocalToWorldTransform(prim), dtype=float)
 
+    from kitchen_safety.extensions.lightwheel_pick_place.joint_state import KitchenJointRecorder
+    joint_recorder=KitchenJointRecorder(e.sim.stage,e.sim)
+    (a.output/'source_joint_inventory.json').write_text(json.dumps(joint_recorder.inventory,indent=2))
+
+    if a.joint_inventory_only:
+        print('JOINT_INVENTORY_ONLY_COMPLETE',flush=True)
+        env.close()
+        raise SystemExit(0)
+
     info = dict(
         scope=(
-            'Neutral hold: same fixed_layout reset and PhysX backend as B01 collects; '
+            'Neutral hold: same task-specific fixed_layout reset and PhysX backend as collection; '
             'arm command held at reset q with open gripper; no object/joint setters after reset. '
             'Task objects + distractors use RigidObject root states; kitchen joint-connected '
-            'bodies use composed USD world transforms.'
+            'bodies retain USD transforms for comparison; actual PhysX body/joint state is recorded independently.'
         ),
+        task=TASK_SPEC.task_id,
+        native_background_reset=bool(a.native_background_reset),
+        repair_fixture_schemas=bool(a.repair_fixture_schemas),
+        solver_velocity_iterations=a.solver_velocity_iterations,
+        fixture_schema_repair=fixture_schema_records,
         fixed_layout=str(a.fixed_layout),
         fixed_layout_sha256=hashlib.sha256(Path(a.fixed_layout).read_bytes()).hexdigest(),
         reference_episode=str(a.reference_episode) if a.reference_episode else None,
@@ -136,6 +162,12 @@ with SimulationAppContext(a):
             robot_joint_rad=0.001,
             articulated_translation_m=0.002,
             articulated_rotation_deg=1.0,
+            actual_joint_angular_delta_rad=float(np.deg2rad(1.)),
+            actual_joint_linear_delta_m=.001,
+            actual_joint_angular_speed_rad_s_after_settling=float(np.deg2rad(1.)),
+            actual_joint_linear_speed_m_s_after_settling=.001,
+            actual_body_translation_m=.002,
+            actual_body_rotation_deg=1.,
         ),
         joint_connected_bodies=joint_connected,
     )
@@ -161,7 +193,9 @@ with SimulationAppContext(a):
         'capture_physics_steps': [],
         **{name: [] for name in TASK_OBJECTS},
         'articulated_transforms': [],
+        **{name:[] for name in ('kitchen_body_pose','kitchen_body_velocity','kitchen_joint_q','kitchen_joint_dq')},
     }
+    completed=False
     try:
         for i in range(frames):
             before = int(e.sim.get_physics_step_count())
@@ -169,6 +203,8 @@ with SimulationAppContext(a):
             after = int(e.sim.get_physics_step_count())
             if before != after:
                 raise RuntimeError('Camera capture advanced physics')
+            for name,value in joint_recorder.read().items():rows[name].append(value)
+            if i%150==0:print('NEUTRAL_STEP',i,'/',frames,flush=True)
             rows['capture_physics_steps'].append([before, after])
             rows['q'].append(arr(robot.data.joint_pos)[0])
             rows['dq'].append(arr(robot.data.joint_vel)[0])
@@ -182,12 +218,18 @@ with SimulationAppContext(a):
             _, _, done, truncated, _ = env.step(command)
             if bool(arr(done)[0]) or bool(arr(truncated)[0]):
                 raise RuntimeError('Neutral hold terminated/reset unexpectedly; reject this diagnostic')
+        completed=True
     finally:
+        if not completed:
+            np.savez_compressed(a.output/'neutral_states.partial.npz',**{k:np.asarray(v) for k,v in rows.items()})
         writer.close()
         env.close()
 
     rows = {k: np.asarray(v) for k, v in rows.items()}
     np.savez_compressed(a.output / 'neutral_states.npz', **rows)
+    joint_state_report=joint_recorder.summarize(rows,settle)
+    info['physx_joint_state']=joint_state_report
+    info['unoperated_joint_state_passed']=joint_state_report['passed']
 
     def pose_delta(values, start_index=0):
         start = values[start_index, :7]
@@ -262,6 +304,7 @@ with SimulationAppContext(a):
         and info['robot_hold_passed']
         and info['unoperated_articulated_bodies_passed']
         and info['camera_capture_alignment']
+        and info['unoperated_joint_state_passed']
     )
     (a.output / 'neutral_hold.json').write_text(json.dumps(info, indent=2) + '\n')
     print(

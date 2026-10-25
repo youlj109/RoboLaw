@@ -23,6 +23,7 @@ def build_environment(
     task_id=None,
     fixed_layout_path=None,
     variant_config_path=None,
+    native_background_reset=False,
 ):
     # cuRobo 0.7 imports Warp's pre-1.16 torch namespace. This compatibility
     # alias restores that namespace without changing any kernel or algorithm.
@@ -86,7 +87,7 @@ def build_environment(
             if name == spec_task.kitchen_registry:
                 return lambda **kwargs: Background(
                     name="kitchen", usd_path=str(kitchen_usd),
-                    object_min_z=-.2, initial_pose=Pose.identity(), reset_nested_physics=False, **kwargs)
+                    object_min_z=-.2, initial_pose=Pose.identity(), reset_nested_physics=bool(native_background_reset), **kwargs)
             if name in object_paths:
                 row = object_paths[name]
                 return type("Local_" + name, (AssetRegistry().get_asset_by_name(name),), {"usd_path": row["path"]})
