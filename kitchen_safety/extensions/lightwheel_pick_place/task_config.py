@@ -1,6 +1,6 @@
 """Per-task constants for Lightwheel pick-and-place B-group executors.
 
-B01 (lime) remains the default. B02 (lemon) is the next owned task.
+B01 lime, B02 lemon, B03 bananas, B04 ladle.
 """
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[3]
 LIME_TASK = "kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian"
 LEMON_TASK = "kitchen_bench_lightwheel_pick_lemon_shelf_on_plate_u_shaped_with_island_farmhouse2"
 BANANA_TASK = "kitchen_bench_lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2"
+LADLE_TASK = "kitchen_bench_lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian"
 
 
 @dataclass(frozen=True)
@@ -88,9 +89,6 @@ TASKS: dict[str, TaskSpec] = {
         pick_object="banana_1",
         destination_object="wooden_bowl",
         rigid_objects=("banana_1", "banana_2", "wooden_bowl", "plate", "apple", "orange"),
-        # Bananas rest on plate on island; allow island counter as source support.
-        # Horizontal-dominant offset disables use_pregrasp_phase so --grasp-local-approach applies.
-        # Bananas rest on plate (not island); island contacts are zero.
         source_surface_suffix="/plate",
         source_surface_abs="/World/envs/env_0/plate",
         pregrasp_offset_m=(-0.13, 0.07, 0.02),
@@ -101,6 +99,24 @@ TASKS: dict[str, TaskSpec] = {
         default_fixed_layout=ROOT / "configs/extensions/lightwheel_pick_place/fixed_layout_bananas.json",
         default_variants=ROOT / "configs/extensions/lightwheel_pick_place/variants_bananas.json",
         pick_objects=("banana_1", "banana_2"),
+    ),
+    LADLE_TASK: TaskSpec(
+        task_id=LADLE_TASK,
+        kitchen_registry="lightwheel_kitchen_g_shaped_large_scandinavian",
+        kitchen_cache_rel="robocasa-robocasakitchen-9-8/scene.usd",
+        layout_id=9,
+        style_id=8,
+        pick_object="green_ladle",
+        destination_object="plate",
+        rigid_objects=("green_ladle", "plate", "spoon_1", "spoon_2", "spoon_3"),
+        source_surface_suffix="/counter_main_main_group/top_geometry",
+        pregrasp_offset_m=(0.0, 0.0, 0.125),
+        transfer_z_m=0.14,
+        lower_z_m=0.08,
+        grasp_body_z_range=(-0.001, 0.061),
+        stand_output_basename="ladle_droid_original_stand",
+        default_fixed_layout=ROOT / "configs/extensions/lightwheel_pick_place/fixed_layout_ladle.json",
+        default_variants=ROOT / "configs/extensions/lightwheel_pick_place/variants_ladle.json",
     ),
 }
 
@@ -124,4 +140,6 @@ def short_name(task_id: str | None = None) -> str:
         return "lime"
     if spec.task_id == BANANA_TASK:
         return "bananas"
+    if spec.task_id == LADLE_TASK:
+        return "ladle"
     return spec.pick_object
