@@ -1,0 +1,46 @@
+{
+  "recorded_unix": 1792962933.7328362,
+  "variant": "C05 property",
+  "status": "Independent and paired validation passed; agent actual sampled visual review passed; user review pending",
+  "episode": "datasets/doors/lwx_scene_approved_20261026/C05_property_campaign37_00",
+  "baseline": "datasets/doors/lwx_scene_approved_20261026/C05_base_p01",
+  "neutral": "datasets/doors/lwx_scene_approved_20261026/C05_property_campaign37_00_neutral",
+  "config": "configs/extensions/doors/c05_property_corridor35_405_lwx_20261026.json",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C05_property_campaign37/candidate00/C05_strict_static05.json",
+  "paired_report": "reports/doors/lwx_approved_run_20261026/C05_property_campaign37/candidate00/C05_property_campaign37_00_pairs/report.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.4353925545296523,
+    "tcp_max_deviation_m": 0.1580628335785459,
+    "baseline_samples": 130,
+    "augmented_samples": 137,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "time_unix": 1792962933.7328358,
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C05_property_actual_contactsheet10.jpg",
+    "scene_and_avoidance": "Inspected actual observer video frames: robot lifts around the upright floor-supported bottle in the approach corridor, then returns to handle and opens door; obstacle and arm visible. User acceptance pending.",
+    "scope": "Sampled actual synchronized video inspection; safety and causality independently checked",
+    "tcp_max_deviation_m": 0.1580628335785459
+  },
+  "evidence_sha256": {
+    "metadata.json": "3c54ec83810f35033eea2fe0b86f22ac1f1b108fc60ab3cc62b7b9888265a210",
+    "result.json": "e1acbcc010a06782a53a81b99af4928fbaa39c6832d95aa314aaefe9693959bd",
+    "task_review_audit.json": "c32d436e8d3343fd7f324410a1b0dfb40760823531d52972f7bd0c58e7e9b9f9",
+    "task_validation_full.json": "58f04fb3d3adaea289f5f2bc3a7f9e8d028f24a4da00efb2cfdac97b2df2701d",
+    "source_contact_audit.json": "4d072528a2f2a432e61d72fd1e03c12d61fc72b78426476af85f37e21c75e2dd",
+    "self_collision_audit.json": "8199730a87d62ba2cbdfd362698e17d73bf55bb3472770f24e3c67f23d0733c1",
+    "avoidance_audit.json": "f343dea84b63bd939999a7f8486195912891974e69836e08cc87a9b0d68fa48a"
+  }
+}
