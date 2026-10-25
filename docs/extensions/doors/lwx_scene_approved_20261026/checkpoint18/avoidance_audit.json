@@ -1,0 +1,710 @@
+{
+  "accepted": true,
+  "baseline_episode": "datasets/doors/lwx_C08_property_frozen71_20261026/C08_base_p01",
+  "baseline_sha256": "8279a4130ea66aa4e9eac7907afda892d58370e0ae7419e5ac04311aca990a8e",
+  "same_source_layout": true,
+  "baseline_counterfactual": {
+    "passed": false,
+    "violates_safety_margin": true,
+    "violates_free_pregrasp": true,
+    "min_distance_m": 0.0,
+    "required_m": 0.01,
+    "violations": [
+      {
+        "action_index": 41,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0077328218478722255,
+        "required_m": 0.01,
+        "slack_m": -0.0022671781521277747,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 42,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0077328218478722255,
+        "required_m": 0.01,
+        "slack_m": -0.0022671781521277747,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 42,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.004208235351989404,
+        "required_m": 0.01,
+        "slack_m": -0.005791764648010596,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 43,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.004208235351989404,
+        "required_m": 0.01,
+        "slack_m": -0.005791764648010596,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 43,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0014742232365507553,
+        "required_m": 0.01,
+        "slack_m": -0.008525776763449245,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 44,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0014742232365507553,
+        "required_m": 0.01,
+        "slack_m": -0.008525776763449245,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 44,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 45,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 45,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 46,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_outer_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 46,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 47,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 47,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 48,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 48,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 49,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 49,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 50,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 50,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 51,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 51,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 52,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 52,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 53,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 53,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.007079993539278684,
+        "required_m": 0.01,
+        "slack_m": -0.0029200064607213163,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 54,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.007079993539278684,
+        "required_m": 0.01,
+        "slack_m": -0.0029200064607213163,
+        "valid": false,
+        "robot_part": "gripper/left_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 56,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.006531971384951068,
+        "required_m": 0.01,
+        "slack_m": -0.0034680286150489325,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 57,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.006531971384951068,
+        "required_m": 0.01,
+        "slack_m": -0.0034680286150489325,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 57,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0034578617468909905,
+        "required_m": 0.01,
+        "slack_m": -0.00654213825310901,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 58,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0034578617468909905,
+        "required_m": 0.01,
+        "slack_m": -0.00654213825310901,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 58,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0008860648726805904,
+        "required_m": 0.01,
+        "slack_m": -0.00911393512731941,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 59,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0008860648726805904,
+        "required_m": 0.01,
+        "slack_m": -0.00911393512731941,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 59,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 60,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": true
+      },
+      {
+        "action_index": 60,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.001482953221729772,
+        "required_m": 0.01,
+        "slack_m": -0.008517046778270228,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 61,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.001482953221729772,
+        "required_m": 0.01,
+        "slack_m": -0.008517046778270228,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 61,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.005558244533270107,
+        "required_m": 0.01,
+        "slack_m": -0.004441755466729893,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      {
+        "action_index": 62,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.005558244533270107,
+        "required_m": 0.01,
+        "slack_m": -0.004441755466729893,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      }
+    ],
+    "minimum": {
+      "action_index": 44,
+      "phase": "pregrasp",
+      "side": "next_obs",
+      "distance_m": 0.0,
+      "required_m": 0.01,
+      "slack_m": -0.01,
+      "valid": false,
+      "robot_part": "gripper/left_outer_finger",
+      "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+      "intersecting": true
+    },
+    "samples": 1084,
+    "geometry": "Actual robot collision hulls and articulated gripper meshes; exact USD cylinders/cubes/capsules and original hazard meshes. Coarse arm/finger capsules and primitive world-AABBs cannot establish necessity.",
+    "conservative_safety_model_minimum": {
+      "distance_m": 0.0,
+      "required_m": 0.01,
+      "slack_m": -0.01,
+      "valid": false,
+      "robot_part": "gripper/left_outer_finger",
+      "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+      "intersecting": true
+    }
+  },
+  "augmented_actual": {
+    "passed": true,
+    "min_distance_m": 0.07398716870417608,
+    "required_m": 0.01,
+    "minimum": {
+      "physics_record": 497,
+      "action_index": 55,
+      "phase": "pregrasp",
+      "distance_m": 0.07398716870417608,
+      "required_m": 0.01,
+      "slack_m": 0.06398716870417609,
+      "valid": true,
+      "robot_part": "gripper/left_outer_finger",
+      "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+      "intersecting": false
+    },
+    "conservative_safety_model_minimum": {
+      "physics_record": 497,
+      "action_index": 55,
+      "phase": "pregrasp",
+      "distance_m": 0.07398716870417608,
+      "required_m": 0.01,
+      "slack_m": 0.06398716870417609,
+      "valid": true,
+      "robot_part": "gripper/left_outer_finger",
+      "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+      "intersecting": false
+    },
+    "samples": 5022
+  },
+  "initial_and_goal_feasible": true,
+  "goal_tcp_error_m": 0.0005896038381367724,
+  "goal_tcp_rotation_error_rad": 0.00574305252497197,
+  "hazard_environment_legal": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.34355776127277404,
+    "tcp_max_deviation_m": 0.20041477379950143,
+    "baseline_samples": 119,
+    "augmented_samples": 125,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "baseline_independent_gates": {
+    "passed": true,
+    "reports": {
+      "result.json": {
+        "passed": true,
+        "sha256": "6ea4fc7b0e77e7cadc2d60a7b2f80312f774daf160fab8ea7244bb50784d7f8f"
+      },
+      "task_validation_full.json": {
+        "passed": true,
+        "sha256": "30bafb850bced57d9e806b67f3b02555d1cdc46ef89b391f1446a19e8c385ff5"
+      },
+      "self_collision_audit.json": {
+        "passed": true,
+        "sha256": "4f462ff1691ac698e34388a6b4ff9d9e81508c20c3422afeb15060736a800193"
+      }
+    }
+  },
+  "actual_independent_gates": {
+    "passed": true,
+    "reports": {
+      "result.json": {
+        "passed": true,
+        "sha256": "0137a6ea99e500185fe86cee48287b449e515ce2bf66f816908d582c98c5f8a8"
+      },
+      "task_validation_full.json": {
+        "passed": true,
+        "sha256": "edaa15f2904841154411fa9b5056e15af7fdb4e7ef17db90c635127c9c2cdf3c"
+      },
+      "self_collision_audit.json": {
+        "passed": true,
+        "sha256": "7bb89db8c31c0d921b7e0ae0dbcea4a15067aa62646d95a3ae837d33ae006c7a"
+      }
+    }
+  },
+  "same_controller_policy": true,
+  "recorded_controller_parameters": {
+    "baseline": {
+      "seed": 42,
+      "handle_offset_y": -0.18999999999999995,
+      "handle_offset_z": 0.004421058164160163,
+      "max_joint_speed": 0.5,
+      "grasp_roll_deg": 90.0,
+      "pregrasp_goal_q": [
+        0.38278719782829285,
+        -0.2185746431350708,
+        -0.7244749069213867,
+        -2.2564096450805664,
+        2.501572847366333,
+        2.575204610824585,
+        1.9794659614562988
+      ],
+      "pull_lead_rad": 0.025,
+      "pull_steps": 600,
+      "ik_limit_margin_rad": 0.005,
+      "handle_normal_offset_m": -0.01,
+      "pregrasp_validation": {
+        "version": "dense_pregrasp_v4",
+        "resolution_rad": 0.005,
+        "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+      }
+    },
+    "augmented": {
+      "seed": 42,
+      "handle_offset_y": -0.18999999999999995,
+      "handle_offset_z": 0.004421058164160163,
+      "max_joint_speed": 0.5,
+      "grasp_roll_deg": 90.0,
+      "pregrasp_goal_q": [
+        0.38278719782829285,
+        -0.2185746431350708,
+        -0.7244749069213867,
+        -2.2564096450805664,
+        2.501572847366333,
+        2.575204610824585,
+        1.9794659614562988
+      ],
+      "pull_lead_rad": 0.025,
+      "pull_steps": 600,
+      "ik_limit_margin_rad": 0.005,
+      "handle_normal_offset_m": -0.01,
+      "pregrasp_validation": {
+        "version": "dense_pregrasp_v4",
+        "resolution_rad": 0.005,
+        "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+      }
+    }
+  },
+  "handle_target_check": {
+    "selected_point": [
+      5.241200451705938,
+      -3.129712716699705,
+      1.165866657194226
+    ],
+    "source_handle_bounds": [
+      [
+        5.2394008888466495,
+        -3.248433332487062,
+        1.1520245408659058
+      ],
+      [
+        5.263000014565225,
+        -2.6309921009123483,
+        1.170866657194226
+      ]
+    ],
+    "point_on_source_handle": true,
+    "candidate_offsets_m": [
+      0.004421058164160163
+    ],
+    "selected_offset_m": 0.004421058164160163,
+    "candidate_failures": []
+  },
+  "entity_support": [
+    {
+      "entity": "barrier",
+      "supported": true,
+      "contacts": [
+        {
+          "entity_collider": "/World/envs/env_0/barrier/BoltedBase",
+          "support_collider": "/World/envs/env_0/robot_pedestal/Tray",
+          "distance_m": 4.7389417945353784e-08,
+          "bottom_minus_support_top_m": 4.7389417945353784e-08
+        }
+      ]
+    },
+    {
+      "entity": "robot_pedestal",
+      "supported": true,
+      "contacts": [
+        {
+          "entity_collider": "/World/envs/env_0/robot_pedestal/Column",
+          "support_collider": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 0.0,
+          "bottom_minus_support_top_m": -1.5288591410228536e-08
+        }
+      ]
+    }
+  ],
+  "property_stability": {
+    "required": false,
+    "passed": true
+  },
+  "source_task_success": true,
+  "initial_issues": [],
+  "support_contact_colliders": [
+    "/World/envs/env_0/kitchen/floor_room/geometry"
+  ],
+  "door_failures": [],
+  "support_failures": [],
+  "fixed_base_failures": [],
+  "sampling": "Baseline original observed states before and after each 15 Hz action; augmented actual robot and moving door recorded at every 120 Hz physics step plus action postchecks. Unsafe baseline never executed with hazards.",
+  "variant_spec": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.66,
+      -2.6999999999999993,
+      1.2
+    ],
+    "yaw_deg": 90.0,
+    "static": true,
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/lwx_robotcorridor63/C08_support_h2.usda",
+      "position": [
+        4.66,
+        -2.6999999999999993,
+        0.0
+      ],
+      "static": true
+    },
+    "semantic_anchor": "Original-size crossbar placed transverse to direct working corridor, with complete physical support. Scene only."
+  }
+}

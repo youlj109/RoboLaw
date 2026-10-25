@@ -1,0 +1,55 @@
+{
+  "recorded_unix": 1792968534.86927,
+  "variant": "C08 robot",
+  "status": "Independent and paired validation passed; agent actual sampled visual review passed; user review pending",
+  "episode": "datasets/doors/lwx_scene_approved_20261026/C08_robot_campaign72_00",
+  "baseline": "datasets/doors/lwx_C08_property_frozen71_20261026/C08_base_p01",
+  "neutral": "datasets/doors/lwx_scene_approved_20261026/C08_robot_campaign72_00_neutral",
+  "config": "configs/extensions/doors/c08_robot_corridor63_633_lwx_20261026.json",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C08_robot_campaign72/candidate00/C08_strict_static05.json",
+  "paired_report": "reports/doors/lwx_approved_run_20261026/C08_robot_campaign72/candidate00/C08_robot_campaign72_00_pairs/report.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.34355776127277404,
+    "tcp_max_deviation_m": 0.20041477379950143,
+    "baseline_samples": 119,
+    "augmented_samples": 125,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "time_unix": 1792968534.869269,
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C08_robot_multiview18.jpg",
+    "scene_and_avoidance": "Inspected synchronized actual native and observer frames. Floor-supported projecting crossbar visibly blocks approach between robot and oven. Gripper shifts around projecting end and returns to legal oven handle for real opening. External2 and observer capture relation; external1 is partly occluded by near frame. Agent sampled visual review only; user review pending.",
+    "scope": "Sampled actual synchronized video inspection; safety and causality independently checked",
+    "tcp_max_deviation_m": 0.20041477379950143
+  },
+  "evidence_sha256": {
+    "metadata.json": "88bb874cf3368a2bdcecf4b7edfc020623c4f6601d181b82f89396cec02b3ade",
+    "result.json": "0137a6ea99e500185fe86cee48287b449e515ce2bf66f816908d582c98c5f8a8",
+    "task_review_audit.json": "6f7d7cf103abc94bd02a59d6b90f997cec44570a942f8c7b7bc661d50665e3ce",
+    "task_validation_full.json": "edaa15f2904841154411fa9b5056e15af7fdb4e7ef17db90c635127c9c2cdf3c",
+    "source_contact_audit.json": "f237e448360f749a7c46a22ec7cd212dd8fe58d1e4124061f41b81e29dece76d",
+    "self_collision_audit.json": "7bb89db8c31c0d921b7e0ae0dbcea4a15067aa62646d95a3ae837d33ae006c7a",
+    "avoidance_audit.json": "fb2f183ae646bbd566443a307f80ce39b52ffbb544ad8b17370f4767d2c13b7d",
+    "paired_report.json": "d14fed995168f1eaae3bae5cfd462da2edd80eaf74766511793c2c04be38082f",
+    "baseline_metadata.json": "d5576f0745594d31c14dc862e7fb9645d3899b04afe689164f9e7c1b192dd0eb",
+    "baseline_result.json": "6ea4fc7b0e77e7cadc2d60a7b2f80312f774daf160fab8ea7244bb50784d7f8f",
+    "neutral_metadata.json": "d66fb8d463eb33a7383fe7f0c380d4234a5b4568599a157cdcf34c732ea81798",
+    "neutral_result.json": "b9379d9ffa23b9cdaa4a7bda044afa659010008a10a80b7761cad384eb2c694e",
+    "baseline_task_review_audit.json": "55eca9b7af66b5b467bb1d37f2dea0e0ab7a5859619bcc8c772ef096259148c4",
+    "baseline_task_validation_full.json": "30bafb850bced57d9e806b67f3b02555d1cdc46ef89b391f1446a19e8c385ff5",
+    "baseline_source_contact_audit.json": "ad70bbfbce7669ac7ce9494a21fc19247efe1bf75b2ec0b0f581205c936e8959",
+    "baseline_self_collision_audit.json": "4f462ff1691ac698e34388a6b4ff9d9e81508c20c3422afeb15060736a800193"
+  }
+}
