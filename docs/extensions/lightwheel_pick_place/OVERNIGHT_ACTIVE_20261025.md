@@ -90,3 +90,6 @@ B04 first baseline reached real closing then hit a software exception before lif
 - B03 robot184830 exhausted bounded preflight candidates; arm/crossbar endpoint interference, no physical collection success. Keep failure and frozen scene. Do not repeat identical candidate set.
 - B04 sourcefix185856 passed the prior crash and is physically lifting the ladle.
 - B05 first trial failed before planning because original Pepsi spawn lacked PhysX contact-report API. Enable only contact reporting before spawning Pepsi (no geometry/physics material changes), then queue matching baseline retry. Source/finger raw evidence remains mandatory.
+
+## 2026-10-26 03:22 Shanghai contact-path correction
+B04 physically lifted100.99mm with bilateral support, then transfer goal failed full geometry; CPU endpoint/orientation diagnostic launched145810 to change the actual destination approach, not repeat controls. B05 raw source views addressed the asset wrapper rather than original nested rigid body `/pepsi_can/Geometry/sm_food_beverage_can_m01_obj_00`; corrected both source and finger filters to discover exactly one original RigidBodyAPI descendant, fail closed otherwise. Spawn contact reporting retained. An intermediate syntax check failed before simulation and was corrected before next launch; no data claimed. Current B05 runner `base_rigidpath_fixed_runner.log`.

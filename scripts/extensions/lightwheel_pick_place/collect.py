@@ -203,10 +203,16 @@ with SimulationAppContext(args):
             clearances.append({'action':len(records),'phase':phase,**c})
             if c['valid'] is False:raise RuntimeError(f'Unsafe lime/robot clearance: {c}')
     scene.update=checked_update
-    contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK)
+    from pxr import Usd,UsdPhysics
+    pick_rigid_paths={}
+    for name in task_picks(TASK_SPEC):
+        candidates=[str(prim.GetPath()) for prim in Usd.PrimRange(e.sim.stage.GetPrimAtPath('/World/envs/env_0/'+name)) if prim.HasAPI(UsdPhysics.RigidBodyAPI)]
+        if len(candidates)!=1:raise RuntimeError('Expected exactly one original rigid body for '+name+': '+str(candidates))
+        pick_rigid_paths[name]=candidates[0]
+    contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK,rigid_body_path=pick_rigid_paths[PICK])
     contact_trackers={PICK:contacts}
     pick_action_ranges={PICK:{'start':0}}
-    source_contact_trackers={name:LimeSourceContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=name,source_surface=SOURCE_SURFACE_PATH) for name in task_picks(TASK_SPEC)}
+    source_contact_trackers={name:LimeSourceContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=name,source_surface=SOURCE_SURFACE_PATH,rigid_body_path=pick_rigid_paths[name]) for name in task_picks(TASK_SPEC)}
     source_contacts=source_contact_trackers[PICK]
     def step(command,gripper):
         before=snapshot()
@@ -584,7 +590,7 @@ with SimulationAppContext(args):
             PICK=pick_name
             pick_action_ranges[PICK]={'start':len(records)}
             world.bind_pick(PICK)
-            contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK)
+            contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK,rigid_body_path=pick_rigid_paths[PICK])
             contact_trackers[PICK]=contacts
             source_contacts=source_contact_trackers[PICK]
             held0=snapshot();p=held0['lime'][:3].copy()

@@ -16,8 +16,9 @@ class LimeGraspContacts:
     fingers = ('left_inner_finger', 'right_inner_finger')
 
     def __init__(self, physics_sim_view, physics_dt, *, env_root='/World/envs/env_0', env_origin=None,
-                 pick_object='lime'):
+                 pick_object='lime', rigid_body_path=None):
         self.physics_dt = physics_dt
+        rigid_body_path=rigid_body_path or f'{env_root}/{pick_object}'
         self.pick_object = pick_object
         self.env_origin = np.zeros(3) if env_origin is None else np.asarray(env_origin, dtype=float)
         if self.env_origin.shape != (3,) or not np.isfinite(self.env_origin).all():
@@ -25,7 +26,7 @@ class LimeGraspContacts:
         self.views = {
             name: physics_sim_view.create_rigid_contact_view(
                 [f'{env_root}/Robot/Gripper/Robotiq_2F_85/{name}'],
-                filter_patterns=[[f'{env_root}/{pick_object}']],
+                filter_patterns=[[rigid_body_path]],
                 max_contact_data_count=4096)
             for name in self.fingers
         }
@@ -171,11 +172,11 @@ class LimeGraspContacts:
 
 class LimeSourceContacts:
     """Raw PhysX pick-object/exact-source-surface contact observations, without forces."""
-    def __init__(self,physics_sim_view,physics_dt,*,pick_object='lime',source_surface=None):
+    def __init__(self,physics_sim_view,physics_dt,*,pick_object='lime',source_surface=None,rigid_body_path=None):
         from .source_support import SOURCE_SURFACE
         self.physics_dt=physics_dt
         surface=SOURCE_SURFACE if source_surface is None else source_surface
-        self.view=physics_sim_view.create_rigid_contact_view([f'/World/envs/env_0/{pick_object}'],
+        self.view=physics_sim_view.create_rigid_contact_view([rigid_body_path or f'/World/envs/env_0/{pick_object}'],
             filter_patterns=[[surface]],max_contact_data_count=4096)
 
     def sample(self):
