@@ -43,6 +43,10 @@ class LimePlanner(CuroboPlanner):
         def column(q_goal):
             self._prepare_path_query(ignore_names,grip_binary,'approach')
             local=CuroboPlanner._cartesian_vertical(self,q_goal,contact_target,'approach')
+            if self.world.pick_object=='pepsi_can':
+                positions=np.asarray(local['positions']);limits=np.asarray(self.kin.limits)
+                reserve=float(np.minimum(positions-limits[:,0],limits[:,1]-positions).min())
+                if reserve<.02:raise RuntimeError('Pepsi contact column lacks20mrad joint-limit reserve: '+str(reserve))
             checked=self.validate_path(local['positions'],ignore_names,grip_binary,phase='approach')
             if not checked['valid']:raise RuntimeError('Full pregrasp contact column rejected: '+str(checked))
             return checked
