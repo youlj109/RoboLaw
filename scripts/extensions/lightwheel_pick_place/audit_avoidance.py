@@ -94,7 +94,7 @@ def audit(baseline,episode):
     control_keys=('seed','placement_seed','requested_grasp_tilt_deg','requested_grasp_yaw_deg','requested_grasp_height_offset_m','smooth_lift','allowed_grasp_fallback','selected_grasp','dt','pregrasp_offset_m','grasp_lateral_x_m','grasp_finger_bias_m','grasp_local_approach','shelf_lift_retract_m')
     if pick!='lemon':control_keys=tuple(k for k in control_keys if k!='shelf_lift_retract_m')
     if len(spec.pick_objects)>1:control_keys+=('pick_object','pick_objects')
-    if pick in ('green_ladle','pepsi_can'):control_keys+=('grasp_point_body_m','transfer_route_policy','commanded_initial_lift_m')
+    if pick in ('green_ladle','pepsi_can'):control_keys+=('grasp_point_body_m','transfer_route_policy','commanded_initial_lift_m','pregrasp_planner_mode')
     same_controls=all(k in br and k in r and br[k] is not None and r[k] is not None and br[k]==r[k] for k in control_keys)
     search=br.get('grasp_search_policy')
     if len(spec.pick_objects)>1 and search:

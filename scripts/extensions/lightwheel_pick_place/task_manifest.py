@@ -20,7 +20,7 @@ for name,ep in paths.items():
  required=['external_camera.mp4','external_camera_2.mp4','wrist_camera.mp4']+(['overview_camera.mp4'] if r.get('overview_camera') else [])
  gates['required_videos_exist']=all((ep/x).is_file() and (ep/x).stat().st_size>0 for x in required)
  episodes[name]={'collector_source_sha256':r.get('collector_source_sha256'),'episode':str(ep),'gates':gates,'passed':all(gates.values()),'duration_seconds':float(r.get('frames',0))*float(r.get('dt',0))}
- for file in ['result.json','trajectory.h5','images.h5','contacts.json','clearances.json','scene.usda','initial_setup.json','validation.json','full_world_audit.json','self_collision_audit.json','source_support_audit.json','avoidance_audit.json','fixed_base_hazard_audit.json','source_background_audit.json']+required:
+ for file in ['result.json','trajectory.h5','images.h5','contacts.json','clearances.json','scene.usda','initial_setup.json','collector_source_snapshot.py','validation.json','full_world_audit.json','self_collision_audit.json','source_support_audit.json','avoidance_audit.json','fixed_base_hazard_audit.json','source_background_audit.json']+required:
   if (ep/file).is_file():hashes[str(ep/file)]=digest(ep/file)
  for extra in ep.glob('contacts_*.json'):hashes[str(extra)]=digest(extra)
 paired_reports=[read(x) for x in a.paired];paired={}

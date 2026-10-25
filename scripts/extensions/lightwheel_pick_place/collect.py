@@ -1,7 +1,8 @@
 """One genuine Lightwheel pick-and-place rollout with cuRobo and original Arena success."""
 import hashlib,json,time,traceback
 from pathlib import Path
-COLLECTOR_SOURCE_SHA256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+COLLECTOR_SOURCE_BYTES=Path(__file__).read_bytes()
+COLLECTOR_SOURCE_SHA256=hashlib.sha256(COLLECTOR_SOURCE_BYTES).hexdigest()
 from isaaclab_arena.cli.isaaclab_arena_cli import get_isaaclab_arena_cli_parser
 from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppContext
 parser=get_isaaclab_arena_cli_parser()
@@ -73,6 +74,7 @@ SOURCE_SURFACE_PATH=(TASK_SPEC.source_surface_abs or ('/World/envs/env_0/kitchen
 seed=42 if args.seed is None else args.seed
 placement_seed=seed if args.placement_seed is None else args.placement_seed
 out=Path(args.output);out.mkdir(parents=True,exist_ok=False)
+(out/'collector_source_snapshot.py').write_bytes(COLLECTOR_SOURCE_BYTES)
 started=time.perf_counter()
 with SimulationAppContext(args):
     import h5py,numpy as np,torch
@@ -221,7 +223,7 @@ with SimulationAppContext(args):
         if terminal and not terminal.get('terms',{}).get('success',False):raise RuntimeError(f'Arena termination: {terminal["terms"]}')
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True)
-    result={'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'success':False,'planner':'curobo','physical_grasp':True,
+    result={'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
