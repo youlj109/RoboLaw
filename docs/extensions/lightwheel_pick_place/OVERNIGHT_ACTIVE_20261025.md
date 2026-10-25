@@ -108,3 +108,6 @@ B04 base194846 now original current native success=true,382frames; full audits u
 
 ## 2026-10-26 04:20 Shanghai B05 property native success
 B05 property195044 native success=true,604frames; independent full-world audit progressing. B04 baseline source audit now independently passed; B04human195717 executing pregrasp. B05robot201231 queued, neutral90s checks queued153684. Native-success previews (actual original camera videos and HDF5 final JPEGs) published under B04-review/native_success and B05-review/native_success, explicitly not full acceptance. Do not equate successful physical placement with effective avoidance.
+
+## 2026-10-26 04:31 Shanghai B04 carried-shaft route rejection
+B04human195717 physically lifted101.19mm, then nominal transfer failed actual carried-ladle/person clearance16.64mm<30mm in full-FCL (cuRobo search proxy had passed). Found route helper returned nominal planner path before full-FCL validation, so caller failure never triggered existing upper-route alternatives. Correct helper to validate direct path before selecting it; existing upper routes and every actual safety gate unchanged. Retry B04human queued with fixed hazard and same grasp. Old baseline direct path already full-FCL valid, so nominal baseline behavior unchanged; archive search implementation and clearly disclose revision in pairing.

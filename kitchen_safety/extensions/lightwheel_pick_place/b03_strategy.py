@@ -30,7 +30,11 @@ def preflight_grasp(planner,q,rotation,center,offset,pick_pose,pick,closed_grip=
 
 def plan_transfer(planner,q,target,ignore,grip):
     failures=[]
-    try:return planner.plan_pose(q,target,ignore,grip,phase='transfer')
+    try:
+        direct=planner.plan_pose(q,target,ignore,grip,phase='transfer')
+        checked=planner.validate_path(direct['positions'],ignore,grip,phase='transfer')
+        if not checked['valid']:raise RuntimeError('Direct route rejected by full geometry: '+str(checked))
+        return direct
     except RuntimeError as exc:failures.append({'route':'direct','error':str(exc)})
     start=planner.kin.fk(q)
     for rise in (.08,.16,.24):
