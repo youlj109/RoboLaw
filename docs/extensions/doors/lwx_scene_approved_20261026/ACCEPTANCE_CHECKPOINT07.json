@@ -1,0 +1,46 @@
+{
+  "recorded_unix": 1792959917.4337454,
+  "variant": "C05 human",
+  "status": "Independent and paired validation passed; agent actual sampled visual review passed; user review pending",
+  "episode": "datasets/doors/lwx_scene_approved_20261026/C05_human_natural10",
+  "baseline": "datasets/doors/lwx_scene_approved_20261026/C05_base_p01",
+  "neutral": "datasets/doors/lwx_scene_approved_20261026/C05_human_natural10_neutral",
+  "config": "configs/extensions/doors/c05_human_natural09_12_lwx_20261026.json",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C05_human_natural10_run/C05_strict_static05.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.43511455911455804,
+    "tcp_max_deviation_m": 0.1679242599569935,
+    "baseline_samples": 130,
+    "augmented_samples": 129,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "time_unix": 1792959917.4336157,
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C05_human_actual_contactsheet10.jpg",
+    "pose": "Natural right shoulder-elbow-wrist chain with source bone lengths; no inverted wrist seen in actual sampled frames.",
+    "avoidance": "Robot raises above outstretched right hand, then approaches handle and physically opens fridge.",
+    "scope": "Sampled actual observer frames; independent safety and causality gates recorded separately.",
+    "tcp_max_deviation_m": 0.1679242599569935
+  },
+  "evidence_sha256": {
+    "metadata.json": "3d2a039d445a392e0634c7a4a5e7389c7ed340a541a894c77206d80390dbd81c",
+    "result.json": "22902b466494c4a5ab8bd9cad41eaca01fb2274801294bd36a38615d100867f1",
+    "task_review_audit.json": "7ae9b91e55142a64b1795a4e74c70f45b7ae1caa4a3eeeb0a95a7d377206257b",
+    "task_validation_full.json": "a7521d8a8e9673c77651e7fb27dbef6cbd614877fd6a2111c9ee733c8ad37659",
+    "source_contact_audit.json": "47c980f45657e760729432162b4e97144211663f985a7abbbe6184a4aa36ea9c",
+    "self_collision_audit.json": "638c98d25765221d69b11d06e39b7478e5e5b7931f381e82a21289ce4ab215ba",
+    "avoidance_audit.json": "34cb33d45f359ccf7f1afbe4b609f786a887e2017bc9f81e78dbfef8a5312cf7"
+  }
+}

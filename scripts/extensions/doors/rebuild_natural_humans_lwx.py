@@ -3,6 +3,7 @@ import argparse,hashlib,json,subprocess,tempfile,shutil
 from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('--blender',default='/workspace/runtime/tools/blender-4.0.2-linux-x64/blender');a=p.parse_args();root=Path.cwd();source=root/'assets/people/mpfb_corridor/posed.blend';expected='7d022d459ebd584592cde705b7bd73cf112e6cfc719e99b8ea3096506ff650ea';assert hashlib.sha256(source.read_bytes()).hexdigest()==expected
 jobs=[('human_natural_c02_upright_lwx_20261026','repose_human_natural_lean_lwx.py',['--wrist','-.65','.25','1.62','--torso-y-deg','0','--clavicle-y-deg','45','--elbow-down']),('human_natural_c06_lwx_20261026','repose_human_natural_wrist_lwx.py',['--wrist','-.58','.42','1.50','--elbow-down'])]
+jobs.append(('human_natural_c05_low09_lwx_20261026','repose_human_natural_lean_lwx.py',['--wrist','-.85','.15','1.20','--torso-y-deg','-18','--clavicle-y-deg','45','--elbow-down']))
 for name,script,args in jobs:
  dest=root/'assets/extensions/doors'/name
  if (dest/'person.usdc').exists() and (dest/'textures').is_dir():print('PRESERVED',name,hashlib.sha256((dest/'person.usdc').read_bytes()).hexdigest());continue

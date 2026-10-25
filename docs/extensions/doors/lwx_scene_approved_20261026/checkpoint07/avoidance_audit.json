@@ -1,0 +1,743 @@
+{
+  "accepted": true,
+  "baseline_episode": "datasets/doors/lwx_scene_approved_20261026/C05_base_p01",
+  "baseline_sha256": "aeb3822da21fc2f836e510042f88d9219c9724a6f84ccd5f832dc6893bc804c8",
+  "same_source_layout": true,
+  "baseline_counterfactual": {
+    "passed": false,
+    "violates_safety_margin": true,
+    "violates_free_pregrasp": true,
+    "min_distance_m": 0.0,
+    "required_m": 0.02,
+    "violations": [
+      {
+        "action_index": 41,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.01896720417394937,
+        "required_m": 0.02,
+        "slack_m": -0.0010327958260506302,
+        "valid": false,
+        "robot_part": "gripper/right_inner_knuckle",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 42,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.01896720417394937,
+        "required_m": 0.02,
+        "slack_m": -0.0010327958260506302,
+        "valid": false,
+        "robot_part": "gripper/right_inner_knuckle",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 42,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.014047631754954737,
+        "required_m": 0.02,
+        "slack_m": -0.005952368245045263,
+        "valid": false,
+        "robot_part": "gripper/right_inner_knuckle",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 43,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.014047631754954737,
+        "required_m": 0.02,
+        "slack_m": -0.005952368245045263,
+        "valid": false,
+        "robot_part": "gripper/right_inner_knuckle",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 43,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.008883383735159322,
+        "required_m": 0.02,
+        "slack_m": -0.011116616264840678,
+        "valid": false,
+        "robot_part": "gripper/right_inner_knuckle",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 44,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.008883383735159322,
+        "required_m": 0.02,
+        "slack_m": -0.011116616264840678,
+        "valid": false,
+        "robot_part": "gripper/right_inner_knuckle",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 44,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0034543768223146204,
+        "required_m": 0.02,
+        "slack_m": -0.01654562317768538,
+        "valid": false,
+        "robot_part": "gripper/right_inner_knuckle",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 45,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0034543768223146204,
+        "required_m": 0.02,
+        "slack_m": -0.01654562317768538,
+        "valid": false,
+        "robot_part": "gripper/right_inner_knuckle",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 45,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 46,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 46,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 47,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 47,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 48,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 48,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 49,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 49,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 50,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 50,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 51,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 51,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 52,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 52,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.005628858976438405,
+        "required_m": 0.02,
+        "slack_m": -0.014371141023561594,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 53,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.005628858976438405,
+        "required_m": 0.02,
+        "slack_m": -0.014371141023561594,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 53,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.010303979579799815,
+        "required_m": 0.02,
+        "slack_m": -0.009696020420200185,
+        "valid": false,
+        "robot_part": "gripper/right_inner_knuckle",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 54,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.010303979579799815,
+        "required_m": 0.02,
+        "slack_m": -0.009696020420200185,
+        "valid": false,
+        "robot_part": "gripper/right_inner_knuckle",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 54,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.003598779327949148,
+        "required_m": 0.02,
+        "slack_m": -0.016401220672050854,
+        "valid": false,
+        "robot_part": "gripper/right_inner_knuckle",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 55,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.003598779327949148,
+        "required_m": 0.02,
+        "slack_m": -0.016401220672050854,
+        "valid": false,
+        "robot_part": "gripper/right_inner_knuckle",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 55,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 56,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_inner_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 56,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 57,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 57,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 58,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 58,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 59,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 59,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 60,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      {
+        "action_index": 60,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.0003222343000911608,
+        "required_m": 0.02,
+        "slack_m": -0.01967776569990884,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 61,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.0003222343000911608,
+        "required_m": 0.02,
+        "slack_m": -0.01967776569990884,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 61,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.005343231484976074,
+        "required_m": 0.02,
+        "slack_m": -0.014656768515023927,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 62,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.005343231484976074,
+        "required_m": 0.02,
+        "slack_m": -0.014656768515023927,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 62,
+        "phase": "pregrasp",
+        "side": "next_obs",
+        "distance_m": 0.012718988966804371,
+        "required_m": 0.02,
+        "slack_m": -0.007281011033195629,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      {
+        "action_index": 63,
+        "phase": "pregrasp",
+        "side": "obs",
+        "distance_m": 0.012718988966804371,
+        "required_m": 0.02,
+        "slack_m": -0.007281011033195629,
+        "valid": false,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      }
+    ],
+    "minimum": {
+      "action_index": 45,
+      "phase": "pregrasp",
+      "side": "next_obs",
+      "distance_m": 0.0,
+      "required_m": 0.02,
+      "slack_m": -0.02,
+      "valid": false,
+      "robot_part": "gripper/right_inner_finger",
+      "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+      "intersecting": true
+    },
+    "samples": 780,
+    "geometry": "Actual robot collision hulls and articulated gripper meshes; exact USD cylinders/cubes/capsules and original hazard meshes. Coarse arm/finger capsules and primitive world-AABBs cannot establish necessity.",
+    "conservative_safety_model_minimum": {
+      "distance_m": 0.0,
+      "required_m": 0.02,
+      "slack_m": -0.02,
+      "valid": false,
+      "robot_part": "finger",
+      "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+      "intersecting": true
+    }
+  },
+  "augmented_actual": {
+    "passed": true,
+    "min_distance_m": 0.04319710260473374,
+    "required_m": 0.02,
+    "minimum": {
+      "physics_record": 396,
+      "action_index": 44,
+      "phase": "pregrasp",
+      "distance_m": 0.04319710260473374,
+      "required_m": 0.02,
+      "slack_m": 0.023197102604733743,
+      "valid": true,
+      "robot_part": "gripper/right_inner_finger",
+      "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+      "intersecting": false
+    },
+    "conservative_safety_model_minimum": {
+      "physics_record": 396,
+      "action_index": 44,
+      "phase": "pregrasp",
+      "distance_m": 0.04319710260473374,
+      "required_m": 0.02,
+      "slack_m": 0.023197102604733743,
+      "valid": true,
+      "robot_part": "gripper/right_inner_finger",
+      "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+      "intersecting": false
+    },
+    "samples": 3501
+  },
+  "initial_and_goal_feasible": true,
+  "goal_tcp_error_m": 0.0009964798880007356,
+  "goal_tcp_rotation_error_rad": 0.005753322512676236,
+  "hazard_environment_legal": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.43511455911455804,
+    "tcp_max_deviation_m": 0.1679242599569935,
+    "baseline_samples": 130,
+    "augmented_samples": 129,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "baseline_independent_gates": {
+    "passed": true,
+    "reports": {
+      "result.json": {
+        "passed": true,
+        "sha256": "dfe244186222523cdf4a76382a22a6f7401067cf0bb9919f86472880c1d433e3"
+      },
+      "task_validation_full.json": {
+        "passed": true,
+        "sha256": "4fff7f3f64faacb2982a8ec35834a2fd3e0bade69a1d3b42229a4fa006e97cd6"
+      },
+      "self_collision_audit.json": {
+        "passed": true,
+        "sha256": "8e08d286d43955cc7f0f9af033dfc058c538eafde799b0e3172649781c22b9a2"
+      }
+    }
+  },
+  "actual_independent_gates": {
+    "passed": true,
+    "reports": {
+      "result.json": {
+        "passed": true,
+        "sha256": "22902b466494c4a5ab8bd9cad41eaca01fb2274801294bd36a38615d100867f1"
+      },
+      "task_validation_full.json": {
+        "passed": true,
+        "sha256": "a7521d8a8e9673c77651e7fb27dbef6cbd614877fd6a2111c9ee733c8ad37659"
+      },
+      "self_collision_audit.json": {
+        "passed": true,
+        "sha256": "638c98d25765221d69b11d06e39b7478e5e5b7931f381e82a21289ce4ab215ba"
+      }
+    }
+  },
+  "same_controller_policy": true,
+  "recorded_controller_parameters": {
+    "baseline": {
+      "seed": 42,
+      "handle_offset_y": 0.0,
+      "handle_offset_z": 0.33583665248607497,
+      "max_joint_speed": 0.5,
+      "grasp_roll_deg": 0.0,
+      "pull_lead_rad": 0.03,
+      "pull_steps": 600,
+      "ik_limit_margin_rad": 0.005,
+      "handle_normal_offset_m": -0.005,
+      "pregrasp_validation": {
+        "version": "dense_pregrasp_v4",
+        "resolution_rad": 0.005,
+        "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+      }
+    },
+    "augmented": {
+      "seed": 42,
+      "handle_offset_y": 0.0,
+      "handle_offset_z": 0.33583665248607497,
+      "max_joint_speed": 0.5,
+      "grasp_roll_deg": 0.0,
+      "pull_lead_rad": 0.03,
+      "pull_steps": 600,
+      "ik_limit_margin_rad": 0.005,
+      "handle_normal_offset_m": -0.005,
+      "pregrasp_validation": {
+        "version": "dense_pregrasp_v4",
+        "resolution_rad": 0.005,
+        "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+      }
+    }
+  },
+  "handle_target_check": {
+    "selected_point": [
+      5.497805192951483,
+      -3.1555948644778393,
+      1.386354307633494
+    ],
+    "source_handle_bounds": [
+      [
+        5.483305041383227,
+        -3.1720264237412756,
+        0.6474988464816176
+      ],
+      [
+        5.584107026516239,
+        -3.1390521983989794,
+        1.451354307633494
+      ]
+    ],
+    "point_on_source_handle": true,
+    "candidate_offsets_m": [
+      0.33583665248607497
+    ],
+    "selected_offset_m": 0.33583665248607497,
+    "candidate_failures": []
+  },
+  "entity_support": [
+    {
+      "entity": "person",
+      "supported": true,
+      "contacts": [
+        {
+          "entity_collider": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+          "support_collider": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 3.3249449721273194e-09,
+          "bottom_minus_support_top_m": 3.3249449686578733e-09
+        }
+      ]
+    }
+  ],
+  "property_stability": {
+    "required": false,
+    "passed": true
+  },
+  "source_task_success": true,
+  "initial_issues": [],
+  "support_contact_colliders": [
+    "/World/envs/env_0/kitchen/floor_room/geometry"
+  ],
+  "door_failures": [],
+  "support_failures": [],
+  "fixed_base_failures": [],
+  "sampling": "Baseline original observed states before and after each 15 Hz action; augmented actual robot and moving door recorded at every 120 Hz physics step plus action postchecks. Unsafe baseline never executed with hazards.",
+  "variant_spec": {
+    "name": "person",
+    "asset": "assets/extensions/doors/human_natural_c05_low09_lwx_20261026/collidable.usda",
+    "position": [
+      4.850000083446503,
+      -4.037486522197723,
+      0.0
+    ],
+    "yaw_deg": 270,
+    "static": true,
+    "pose_provenance": "assets/extensions/doors/human_natural_c05_low09_lwx_20261026/pose.json",
+    "semantic_anchor": "Original-length natural right arm lowered at wrist, local wrist follows forearm; no world hand locking."
+  }
+}
