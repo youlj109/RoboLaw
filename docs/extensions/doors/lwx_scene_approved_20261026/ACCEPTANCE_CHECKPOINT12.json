@@ -1,0 +1,55 @@
+{
+  "recorded_unix": 1792964285.309022,
+  "variant": "C06 property",
+  "status": "Independent and paired validation passed; agent actual sampled visual review passed; user review pending",
+  "episode": "datasets/doors/lwx_C06_property_lower53_20261026/C06_property_p01",
+  "baseline": "datasets/doors/lwx_C06_property_lower53_20261026/C06_base_p01",
+  "neutral": "datasets/doors/lwx_C06_property_lower53_20261026/C06_property_n01_neutral",
+  "config": "configs/extensions/doors/c06_property_frozen49_191_lwx_20261026.json",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C06_property_lower53/C06_strict_static05.json",
+  "paired_report": "reports/doors/lwx_approved_run_20261026/C06_property_lower53/C06_property_pairs01/report.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.4664001166634408,
+    "tcp_max_deviation_m": 0.37014755749707734,
+    "baseline_samples": 104,
+    "augmented_samples": 106,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "time_unix": 1792964285.3090208,
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C06_property_multiview12.jpg",
+    "scene_and_avoidance": "Inspected actual native and wide observer frames. Original-size bottle with floor support stands in working corridor. Native views show robot end effector moves below/alongside bottle, rises around it, then returns to microwave handle; bottle and arm visible. Actual max TCP deviation 37.01cm, source baseline intersection and physical gates independently passed. User review pending.",
+    "scope": "Sampled actual synchronized video inspection; safety and causality independently checked",
+    "tcp_max_deviation_m": 0.37014755749707734
+  },
+  "evidence_sha256": {
+    "metadata.json": "ef9435a70b7099522563b5c5073b6fa090e8c633d8fa20bd2991987c6654d559",
+    "result.json": "e5ad140b9c9ca40e3a7b5d41eaf374eb27164fcb94aa08dda474698ab95022b5",
+    "task_review_audit.json": "d6ab3091e0e204fad19d4abf8bb026e07511d6e57f4a9ef77401430e4f276b45",
+    "task_validation_full.json": "029ebeea576d5f54c40318a521ff022335885077b12aa7cb68dc99dae70f6a30",
+    "source_contact_audit.json": "764555549a1c74ef049537dc367afb0cdeec60b7bd2354b7b1611c86d75ae8c1",
+    "self_collision_audit.json": "ee2bdc4e88a72ff29ff2118bdbfd3baf6b3c81e802f1f9390a9eb43a657ba7d3",
+    "avoidance_audit.json": "0c78001faa9ea9832b9049f4f8b5c0e430592501f8d8e5368e4a0b080906865d",
+    "paired_report.json": "c2a20639309cb934659fd62bd62a0f49f0410124f1b74c88096cff400a842b67",
+    "baseline_metadata.json": "ac95a8ccf41dda0bf26bb9401ea4f36d5a8ce14e38d4ee3f8fb03b855ff92206",
+    "baseline_result.json": "8f35bf4204537d00f6bedf1ec372432f3e0885c46d222379cbdeb9a0594ef7e9",
+    "neutral_metadata.json": "142ad3680efd37101cb3959524f6f9fde350b705ad2212cbb5f87a9788d8fb94",
+    "neutral_result.json": "06e79b403eb6271e2f504f8f72850a4521712d0cd6e9805433658f5a536a687e",
+    "baseline_task_review_audit.json": "511a0b5e125a55cc2affdc76112f19d1b3f0d984d12d33f575492729b494d506",
+    "baseline_task_validation_full.json": "b72b40cd99ef2162109e3ea8079802cca86fd69bdaf354a183280a9902c8581f",
+    "baseline_source_contact_audit.json": "666a298493b3093906a3061a275f2e685a79500dc699c69e0b109bbfcd1aefe2",
+    "baseline_self_collision_audit.json": "1596feb6040236551f276f1b156171c3f681a87b69f75dc3ca4ec91c8a69a151"
+  }
+}

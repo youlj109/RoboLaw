@@ -8,4 +8,13 @@ for n in ["metadata.json","result.json","task_review_audit.json","task_validatio
  record["evidence_sha256"][n]=hashlib.sha256((ep/n).read_bytes()).hexdigest()
  if (ep/n).stat().st_size<2000000:shutil.copyfile(ep/n,cp/n)
 for src in [a.manifest,a.strict]:shutil.copyfile(src,cp/src.name)
+for label,source in [("paired_report.json",a.pairs),("baseline_metadata.json",Path(a.baseline)/"metadata.json"),("baseline_result.json",Path(a.baseline)/"result.json"),("neutral_metadata.json",Path(a.neutral)/"metadata.json"),("neutral_result.json",Path(a.neutral)/"result.json")]:
+ assert source.is_file(),source
+ if source.stat().st_size<2000000:
+  shutil.copyfile(source,cp/label);record["evidence_sha256"][label]=hashlib.sha256(source.read_bytes()).hexdigest()
+for name in ["task_review_audit.json","task_validation_full.json","source_contact_audit.json","self_collision_audit.json"]:
+ source=Path(a.baseline)/name
+ assert source.is_file()
+ if source.stat().st_size<2000000:
+  label="baseline_"+name;shutil.copyfile(source,cp/label);record["evidence_sha256"][label]=hashlib.sha256(source.read_bytes()).hexdigest()
 (cp/"agent_actual_visual_review.json").write_text(json.dumps(review,indent=2));(D/("ACCEPTANCE_CHECKPOINT"+a.checkpoint+".json")).write_text(json.dumps(record,indent=2));print(json.dumps(record,indent=2))

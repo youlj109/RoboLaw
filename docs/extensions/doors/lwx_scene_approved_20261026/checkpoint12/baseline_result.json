@@ -1,0 +1,89 @@
+{
+  "task_success": true,
+  "accepted": true,
+  "mode": "collect",
+  "neutral_completed": false,
+  "failure": null,
+  "frames": 287,
+  "final_door_rad": -0.25255483388900757,
+  "actual_trajectory_samples": 287,
+  "physical_contact_samples": 127,
+  "delivery_accepted": false,
+  "no_execution_state_writes": true,
+  "safety_audit_physics_dt": 0.008333333333333333,
+  "safety_checks": 2583,
+  "physics_samples": 2297,
+  "plans": [
+    {
+      "backend": "curobo",
+      "method": "motion_gen_joint_goal",
+      "collision_geometry": {
+        "hazard_mesh_policy": "per_collider_world_aabb_plus_planning_clearance",
+        "hazard_mesh_box_counts": {
+          "glass": 0,
+          "barrier": 0
+        },
+        "retained_triangle_mesh_count": 13,
+        "planning_box_count": 582,
+        "fcl_and_physx_geometry": "original"
+      },
+      "status": "SUCCESS",
+      "planning_seconds": 2.500660132151097,
+      "samples": 104,
+      "dt": 0.06666666666666667,
+      "raw_samples": 49,
+      "source_dt": 0.06666666666666667,
+      "gripper_joint_position": 0.0,
+      "attached_bottle": false,
+      "transport_object_padding_m": 0.0,
+      "start_joint_error_rad": 0.0,
+      "goal_joint_error_rad": 0.0,
+      "goal_q_arm": [
+        -0.5409529209136963,
+        -0.28705501556396484,
+        0.12705042958259583,
+        -2.1630618572235107,
+        2.190843343734741,
+        2.618428945541382,
+        1.7061342000961304
+      ],
+      "door_fixed_redundancy_goal": {
+        "q": [
+          -0.5409529209136963,
+          -0.28705501556396484,
+          0.12705042958259583,
+          -2.1630618572235107,
+          2.190843343734741,
+          2.618428945541382,
+          1.7061342000961304
+        ],
+        "position_error_m": 1.8775817782952916e-06,
+        "rotation_error_rad": 1.2260757365702018e-05,
+        "scope": "Same fixed TCP and redundant joint endpoint in obstacle on/off; cuRobo plans entire route, no route waypoints."
+      },
+      "pregrasp_validation": {
+        "valid": true,
+        "samples": 491,
+        "input_waypoints": 104,
+        "resolution_rad": 0.005,
+        "curobo_failures": [],
+        "fcl_failures": [],
+        "curobo_samples_checked": 491,
+        "fcl_samples_checked": 491,
+        "fcl_samples_unchecked": 0,
+        "validation_complete": true,
+        "early_rejection": null,
+        "sample_order": "cuRobo all original dense samples; FCL endpoints then interval midpoints",
+        "transport_object_padding_m": 0.0,
+        "gripper_joint_position": 0.0,
+        "validation_seconds": 0.5108367302455008,
+        "policy": {
+          "version": "dense_pregrasp_v4",
+          "resolution_rad": 0.005,
+          "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+        },
+        "accepted": true
+      }
+    }
+  ]
+}
