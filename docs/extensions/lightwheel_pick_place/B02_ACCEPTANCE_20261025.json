@@ -1,0 +1,187 @@
+{
+  "acceptance_scope": "user-requested task scope",
+  "full_review_gates_passed": false,
+  "user_scope_exclusions": [
+    "Global unoperated kitchen-fixture joint neutral quality: known failed, excluded by explicit user instruction; original evidence preserved"
+  ],
+  "python": "3.12.15",
+  "python_executable": "/root/autodl-tmp/conda_envs/robolaw_data/bin/python",
+  "runtime_versions": {
+    "numpy": "2.3.1",
+    "scipy": "1.17.0",
+    "torch": "2.11.0+cu128",
+    "h5py": "3.16.0",
+    "python-fcl": "0.7.0.11",
+    "usd-core": null,
+    "curobo": null,
+    "isaacsim": "6.1.0.0",
+    "isaaclab": "17.0.2",
+    "isaaclab_arena": "0.3.0",
+    "imageio-ffmpeg": "0.6.0"
+  },
+  "implementation_git_commit": "a9b0896d488785b7a44d48216a96bbdaf41340d0",
+  "implementation_sha256": {
+    "scripts/extensions/lightwheel_pick_place/collect.py": "a103f149c8c279e2cdfb5af56f4e94ebe49359c6c31fdfdf1ce3aac6b77911db",
+    "scripts/extensions/lightwheel_pick_place/validate.py": "febe08622804a90f976897562013f697176ff2332ab111e0c7e3b5b869f70c14",
+    "scripts/extensions/lightwheel_pick_place/audit_avoidance.py": "fcffcd6b40d2aec40c506cdb8a3d746c766accd843b5a0436beaeca06baf3250",
+    "scripts/extensions/lightwheel_pick_place/audit_source_support.py": "6e623bc1a07b87c9b31cd48157fca4cfde98d2759dfdcff5b689ee83e1c3952a",
+    "scripts/extensions/lightwheel_pick_place/audit_source_background.py": "473cdbf6c7ab3984d995191195c182f24302d9c4eda776e77d0a7f12cec25f28",
+    "scripts/extensions/lightwheel_pick_place/audit_fixed_base.py": "fe7fcc32a4a7269ad73507706cca4b65d37281a2bd63acef4237c2bb8a2d94d0",
+    "scripts/extensions/lightwheel_pick_place/audit_self_collision.py": "454c8924da47364cc9f5e8dee03706f44f6df38fb348a1d10ee5a059fad382de",
+    "scripts/extensions/lightwheel_pick_place/paired_planning.py": "940ab46a89ee41d429bdc22f9c1f1dc55d6d24ca4da4b9489549ca78753069bc",
+    "scripts/extensions/lightwheel_pick_place/neutral_hold.py": "b65df87ab1f950ef8ca23cdf855c4c3b051ebfc5cb3e3f7b41ac69cff1b4a54a",
+    "scripts/extensions/lightwheel_pick_place/run_host.sh": "7f5d5c0927e77586a32896796cf6ac378f499126fea7bc8051f18a85e67f3315",
+    "scripts/extensions/lightwheel_pick_place/b02_manifest.py": "49d71d52e47d1005a71fe6048982f9401b857792e7f7aef9f3817445f9c7876a",
+    "kitchen_safety/extensions/lightwheel_pick_place/collision.py": "87f990a8fea34b040624c38416793824e9f2ff6efb8583d273856fd524966f6e",
+    "kitchen_safety/extensions/lightwheel_pick_place/planner.py": "5b884fe427ee8b64627602ce9a86a518a969f9a1a4d050ceda3f32d841a74ade",
+    "kitchen_safety/extensions/lightwheel_pick_place/lemon_kinematics.py": "9fb6abc7d8b3353577719a8d295a8316ac30c073c0645b12a05c008c22050ef8",
+    "kitchen_safety/extensions/lightwheel_pick_place/source_support.py": "a7d604562c790eb4286fb0aa8a630a7c8489e0b5ea28505c232e6ae6a6732aa6",
+    "kitchen_safety/extensions/lightwheel_pick_place/task_config.py": "95ea2744202cb227470055c36835929ae22fd348bba16c2ced50da591831ef6d",
+    "kitchen_safety/extensions/lightwheel_pick_place/joint_state.py": "cd35a4526087655b188ee07c89bb8033188b7de576be30b538bd2a65b03548d7",
+    "kitchen_safety/planning.py": "b6adc39e6bf03f554a1f7668615ab1aaa81881571207c4ba7229fecb6144c603",
+    "kitchen_safety/curobo_backend.py": "0e1175059debaccdf6e040c4e7da93351f19976e952a526efee90d362a0e770c"
+  },
+  "passed": true,
+  "task": "B02 lemon shelf to plate",
+  "branch": "lgd",
+  "fixed_only": true,
+  "episodes": {
+    "baseline": {
+      "episode": "datasets/skill_trials/lightwheel_pick_place/base_lgd_b02_20261024T072827Z",
+      "gates": {
+        "physical_success": true,
+        "task_and_variant_match": true,
+        "validation.json": true,
+        "full_world_audit.json": true,
+        "self_collision_audit.json": true,
+        "source_support_audit.json": true,
+        "required_videos_exist": true
+      },
+      "passed": true,
+      "duration_seconds": 49.733333333333334
+    },
+    "human": {
+      "episode": "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z",
+      "gates": {
+        "physical_success": true,
+        "task_and_variant_match": true,
+        "validation.json": true,
+        "full_world_audit.json": true,
+        "self_collision_audit.json": true,
+        "source_support_audit.json": true,
+        "fixed_base_hazard_audit.json": true,
+        "source_background_audit.json": true,
+        "effective_avoidance_acceptance": true,
+        "required_videos_exist": true
+      },
+      "passed": true,
+      "duration_seconds": 51.53333333333333
+    },
+    "property": {
+      "episode": "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z",
+      "gates": {
+        "physical_success": true,
+        "task_and_variant_match": true,
+        "validation.json": true,
+        "full_world_audit.json": true,
+        "self_collision_audit.json": true,
+        "source_support_audit.json": true,
+        "fixed_base_hazard_audit.json": true,
+        "source_background_audit.json": true,
+        "effective_avoidance_acceptance": true,
+        "required_videos_exist": true
+      },
+      "passed": true,
+      "duration_seconds": 50.53333333333333
+    },
+    "robot": {
+      "episode": "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z",
+      "gates": {
+        "physical_success": true,
+        "task_and_variant_match": true,
+        "validation.json": true,
+        "full_world_audit.json": true,
+        "self_collision_audit.json": true,
+        "source_support_audit.json": true,
+        "fixed_base_hazard_audit.json": true,
+        "source_background_audit.json": true,
+        "effective_avoidance_acceptance": true,
+        "required_videos_exist": true
+      },
+      "passed": true,
+      "duration_seconds": 50.93333333333333
+    }
+  },
+  "paired": {
+    "human": {
+      "stable_necessity": true,
+      "all_hazard_on_clear": true
+    },
+    "property": {
+      "stable_necessity": true,
+      "all_hazard_on_clear": true
+    },
+    "robot": {
+      "stable_necessity": true,
+      "all_hazard_on_clear": true
+    }
+  },
+  "neutral": {
+    "path": "reports/skill_trials/lightwheel_pick_place/b02_neutral_hold_69s_20261025/neutral_hold.json",
+    "passed_and_covers_longest_episode": true,
+    "duration_seconds": 69.0,
+    "required_seconds": 51.53333333333333
+  },
+  "sha256": {
+    "datasets/skill_trials/lightwheel_pick_place/base_lgd_b02_20261024T072827Z/result.json": "d9676ebda1c77b8690fdc526a6dd13b4392c3f24dc8c32582ffdc56bb6b1f07b",
+    "datasets/skill_trials/lightwheel_pick_place/base_lgd_b02_20261024T072827Z/trajectory.h5": "5aa6c6f36888275760a2cc07188a6f04600a0e647a22ae77213a1cf79bb477cc",
+    "datasets/skill_trials/lightwheel_pick_place/base_lgd_b02_20261024T072827Z/validation.json": "fe6a405ebfedf10ebcef982268cfeed8fbe211ad6caa3c00c85ce85aedda525f",
+    "datasets/skill_trials/lightwheel_pick_place/base_lgd_b02_20261024T072827Z/full_world_audit.json": "cf9149f706f7948821f87d914676f0aa5a48f603b014845645beb17063bd0ee9",
+    "datasets/skill_trials/lightwheel_pick_place/base_lgd_b02_20261024T072827Z/self_collision_audit.json": "ceebdcc9543f79acf74acc4d5036a34b7e50669cd7d9d3f5b42144a0c001558e",
+    "datasets/skill_trials/lightwheel_pick_place/base_lgd_b02_20261024T072827Z/source_support_audit.json": "c69592642cef468e902d7e19c6a3eb72e5513a1847004f0993d1562b47ac5e79",
+    "datasets/skill_trials/lightwheel_pick_place/base_lgd_b02_20261024T072827Z/external_camera.mp4": "6058471013bd9ae696422691213fbea55e265f7b31f8404a2c9f038ecc5cc940",
+    "datasets/skill_trials/lightwheel_pick_place/base_lgd_b02_20261024T072827Z/external_camera_2.mp4": "3794efd0b2a82460473c3ebaed711a95bc0ed0a4536bab8c75b43bca40eb65e6",
+    "datasets/skill_trials/lightwheel_pick_place/base_lgd_b02_20261024T072827Z/wrist_camera.mp4": "51fd646f9c10edcc7ec10a6202e9ca53bd2d34670f8b849e2872cf04c8e3efff",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/result.json": "3cae35d70ba75de2fda75cfc234effd5ac2983b7b3361ea66b35426ab949e439",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/trajectory.h5": "2d9221dc0a3e6fcba4a8a7b040c0e55ee9fc287368ec749dfa1cf04e5dfa5e16",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/validation.json": "6a3cdbfce756026d4ae641d207b0e762cbf914264b1113f851b31f197358b4f1",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/full_world_audit.json": "a81c447bc17acf9774bc3ff13acfbfa9e0a3e7ffae859a1c12336990b8f60c12",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/self_collision_audit.json": "0287d9c1418b66ff76f9c9666faff0b3380d705100d1a56aa490d5c00484cf79",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/source_support_audit.json": "d01b971b556ef2aeba0c8100a4119b418d61200287c475da3a397bc4ac05efb3",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/avoidance_audit.json": "12ef9d481401bfe8f38fb002089f502bdf4851ea32db1bed5dcd774cb17c7818",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/fixed_base_hazard_audit.json": "5ebf0a02db4169f0bb012b98d7af94e4296f2113ef90ccae1e22e022848b1b47",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/source_background_audit.json": "0faeebdd7c284fdd2d4e927aae2bdcdc5d456e6299b6cf5b989512c1e92ecee5",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/external_camera.mp4": "2a4132c19adc766970f56c42a11b9b9c29925861005ac7b26ae5d928fc370219",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/external_camera_2.mp4": "eb2f2f61d2d5da2273061910f080f3af72132383daa26dbc2a6456e38cd494ac",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/wrist_camera.mp4": "ea0073ab5f62d1b8dab727c778dd86edee4a98f3231c26a1fd809acbef859485",
+    "datasets/skill_trials/lightwheel_pick_place/human_lgd_b02_review_20261025T095249Z/overview_camera.mp4": "ed3e339d0b957bc40bdeba669886272d01c62f3a26e5f351b4eb9fd62c193232",
+    "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z/result.json": "b7456e8c392bd5f1e4edf5eba9c3cfae41d2989d5685f2820a591b515427e649",
+    "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z/trajectory.h5": "6cd4a848564cb0677cddcd48ba4f2751c39058fc4195353f7e8ee44a4b5afd57",
+    "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z/validation.json": "0b7185ea2af3ef3f2a626bbb7c9adba4f7f0a96f63f77e091da7f71d6497341c",
+    "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z/full_world_audit.json": "77a44ef173c8358adb42e0d26a291b9b20c52aa78613781fa637f364bdcaa867",
+    "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z/self_collision_audit.json": "a434d1018c890317700f2e36b2aba89311f263d58de724a10c41e27ef48bc721",
+    "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z/source_support_audit.json": "6337798f9c867d15d6eec0d07ede03c3f15100032315a373dd74b62ccd9d7b2c",
+    "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z/avoidance_audit.json": "8bbbd05f9c3dc6417b35bfbd5eaba77e8a3ac1e84411301003c57b34c74dc9de",
+    "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z/fixed_base_hazard_audit.json": "6183f164880d96efd5cd37b416e8cac76354eccc6d63700c4ba5feeb99a7b6d8",
+    "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z/source_background_audit.json": "191a5f92d92c57315b885382a2c4cdb63630de8bdc961f714dc5f511c89c898c",
+    "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z/external_camera.mp4": "5c4e9a348c1ceee8dfb3a51a7fad2910c56f56fbf63a3d7131e2d6d3f1f930f4",
+    "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z/external_camera_2.mp4": "4f1f9bec92e3ec2196d85ca79e310fa80e1308637f5253f5eca84153cf1fe9a8",
+    "datasets/skill_trials/lightwheel_pick_place/property_lgd_b02_review_20261025T092906Z/wrist_camera.mp4": "47d3637c4b94649f59366dd1f2fa90c8fd58de22b815447e874722ae1c8de64b",
+    "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z/result.json": "be643ba71f1be848934852318262b8da0f97441413893426e66edd943f2fbd15",
+    "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z/trajectory.h5": "68354c965eef8ae9487967d63dbe9f137bac3b2d6ad17dfd59bb8554fbd921c1",
+    "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z/validation.json": "c7a64e25bf9bfc4b4105f65a0dd371a2c79bd7f32cbb0ff558fe4f1cbb33532a",
+    "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z/full_world_audit.json": "cef6e3460b4f4b6eec539b516e179b0587e1ecc3b7063d864a390c7142fed8db",
+    "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z/self_collision_audit.json": "f431b8b89f9cdae265b35d7a067e090c6a69426409282fc96f91a0be4c4b584e",
+    "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z/source_support_audit.json": "d580b428a307b76ef49f0d49b1878da72b5b75e8df3289246695f389e4252fd4",
+    "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z/avoidance_audit.json": "3a7569593f5fc33d9c635ce68a53454723fed8ecff52457da9c944831ec35ede",
+    "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z/fixed_base_hazard_audit.json": "b51505b9ca00fc117dd0fee72aa4eced9785062d1b33bc14a28724da427b6f41",
+    "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z/source_background_audit.json": "dc6e32026cec41566cfc8fee127c1860114919b9cc54818490863f5fa669fb43",
+    "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z/external_camera.mp4": "352c497674a2837472effd914b0fc53b5265cc2a0f9a4c78d13a5cf33d298942",
+    "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z/external_camera_2.mp4": "be2c953840235eac2d51ecf85307f6e296bfffee7cc7d07adccc16aa5885f424",
+    "datasets/skill_trials/lightwheel_pick_place/robot_lgd_b02_review_20261025T114452Z/wrist_camera.mp4": "b2e095c32980d35d7e65ae04fe20f72cfc9eb9807a82168c4e6751f147e4c90c",
+    "reports/skill_trials/lightwheel_pick_place/b02_neutral_hold_69s_20261025/neutral_hold.json": "c00b41bf44ec68090d23aede67e07eebfe78fc0f20c497c7880495d946656ba7",
+    "reports/skill_trials/lightwheel_pick_place/b02_new_layout_transfer_20261025/paired_planning.json": "985353e31b4799624728031bfafb6c4f7cf6f7c1a75ad39af40e0914f5a026fe",
+    "reports/skill_trials/lightwheel_pick_place/b02_robot_v2_transfer_20261025/paired_planning.json": "f653b95311f796dbaeee77ab34fbed8bbfca06cd5231215e0e21374dfb47c987"
+  },
+  "scope": "Three planning seeds cover the reported transfer segment, not a full-task success-rate estimate. Physical evidence covers one complete successful episode per variant. Authored source collision geometry is checked; PhysX cooked-shape equivalence is not independently certified."
+}
