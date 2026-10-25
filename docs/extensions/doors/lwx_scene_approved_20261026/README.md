@@ -17,3 +17,6 @@ Checkpoint03: C01 human and C02 floor-supported robot now pass real collection, 
 ## Checkpoint 04: C01 property
 
 C01 property clear05_00 now passes all strict scene, seed 42/43/44 paired planning, one actual collection, neutral, independent mechanism/contact/full-validation/self-collision and actual avoidance gates. TCP maximum normalized-progress deviation is 0.218608 m; it is not itself a safety threshold. Agent sampled observer frames show the arm rising above the bottle before approaching the higher legal handle. User review remains pending. Exact report and dataset paths and evidence hashes are in ACCEPTANCE_CHECKPOINT04.json. C02 human, C03, C05 and C06 remain unresolved; completed process queues are not acceptance.
+
+
+2026-10-26 checkpoint05: C04 human roll45 raised legal grasp passed matched seed42/43/44 fixed-target pairs, physical collection, neutral control, original source clearances and four independent audits. Actual baseline intersects human arm; TCP maximum deviation 0.089256758m. Agent inspected actual sampled observer frames: human pose continuous and lift over right arm visible. User review pending. Exact manifest, controller parameters and audits in checkpoint05/. No claim that other variants passed.

@@ -1,0 +1,49 @@
+{
+  "recorded_unix": 1792957019.7041314,
+  "status": "Independent gates passed; agent sampled visual review passed; user video review pending",
+  "variant": "C04 human",
+  "config": "configs/extensions/doors/c04_scene_first04_lwx_20261025.json",
+  "episode": "datasets/doors/lwx_controller_release03_20261026/C04_human_p01",
+  "baseline": "datasets/doors/lwx_controller_release03_20261026/C04_base_p01",
+  "neutral": "datasets/doors/lwx_controller_release03_20261026/C04_human_n01_neutral",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/controller_release03/C04_strict_static05.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.8797900102024282,
+    "tcp_max_deviation_m": 0.08925675835328349,
+    "baseline_samples": 119,
+    "augmented_samples": 117,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "review_time_unix": 1792957019.7037828,
+    "episode": "datasets/doors/lwx_controller_release03_20261026/C04_human_p01",
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C04_human_actual_contactsheet04.jpg",
+    "scope": "Sampled actual observer frames, not full continuous video inspection",
+    "obstacle_and_robot_visible": true,
+    "human_pose": "Right arm extended; elbow and wrist look continuous without obvious break in sampled frames",
+    "avoidance": "Robot rises above extended right arm then returns toward handle, visible in sampled sequence",
+    "tcp_max_deviation_m": 0.08925675835328349,
+    "user_visual_review_pending": true
+  },
+  "evidence_sha256": {
+    "metadata.json": "2de2bd843c4aee9b3f0b78e56f5d975f9776fe3177651072c2ea4ec1ee367c37",
+    "result.json": "880e2c648e40b15ab8a559bf7b5e9bfe5dd3ea0ba37e1e5f78cf5743d5d38c67",
+    "task_review_audit.json": "73581a8117a3e4c98b1f5962ecc4a158714eed5f4ddc43adf3e088d84a191396",
+    "task_validation_full.json": "ea7634c6f751685c5c8e93fdf948cc6888f5437832befd4c9cd6b918f441f356",
+    "source_contact_audit.json": "c6d0dc6439d2c80d89dbebe8d6b68b7b8f36777bc0056c1eaf79edc999b7a4a8",
+    "self_collision_audit.json": "b4473a6d329fc7226d7df0f17c91db293e949050e0ed49b33526bffc1135eaca",
+    "avoidance_audit.json": "d92cc542a506a8656be3c4fb023ddd4c394c89979475b4464e0eb339f32edd7d"
+  }
+}
