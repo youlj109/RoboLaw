@@ -1,0 +1,46 @@
+{
+  "recorded_unix": 1792963246.0677373,
+  "variant": "C06 robot",
+  "status": "Independent and paired validation passed; agent actual sampled visual review passed; user review pending",
+  "episode": "datasets/doors/lwx_scene_approved_20261026/C06_robot_campaign37_00",
+  "baseline": "datasets/doors/lwx_C06_corridor09_20261026/C06_base_p01",
+  "neutral": "datasets/doors/lwx_scene_approved_20261026/C06_robot_campaign37_00_neutral",
+  "config": "configs/extensions/doors/c06_robot_corridor39_631_lwx_20261026.json",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C06_robot_campaign37/candidate00/C06_strict_static05.json",
+  "paired_report": "reports/doors/lwx_approved_run_20261026/C06_robot_campaign37/candidate00/C06_robot_campaign37_00_pairs/report.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.735808996425903,
+    "tcp_max_deviation_m": 0.21452826169734313,
+    "baseline_samples": 104,
+    "augmented_samples": 104,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "time_unix": 1792963246.0677366,
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C06_robot_multiview11.jpg",
+    "scene_and_avoidance": "Inspected actual three-camera pregrasp frames: native external cameras clearly show yellow-black crossbar intercepting approach, robot rises above it then returns to microwave handle. Wide observer partly occludes barrier; native views retained in fourcam review. User review pending.",
+    "scope": "Sampled actual synchronized video inspection; safety and causality independently checked",
+    "tcp_max_deviation_m": 0.21452826169734313
+  },
+  "evidence_sha256": {
+    "metadata.json": "e238ca6b686b255b460ef453f8c434eaecdd04365b7760055f6b920a94f04cde",
+    "result.json": "d93c6383fbb3f08b529fdb1b87ab507342b4a7fba7db836404839be60f962c2a",
+    "task_review_audit.json": "24e021a070ec12f665546839ce25f194bde727c25397d0f058ed62f2ed8847b1",
+    "task_validation_full.json": "d382c588613b4ff9c4086fb5ad08b3a6bbdbb463e26417a33d9bf03223bca3c3",
+    "source_contact_audit.json": "46fbb36aec75c1dd37b56f36f18772155d43df460686c618f2d0e6b668ec76c4",
+    "self_collision_audit.json": "6608a8194d8fbb12c0d2213d6de309c7071e4717b22e35e415e1daa6721b2914",
+    "avoidance_audit.json": "0df8d3c452d986baae623a757afd44f9e0ba7a1e8007b54abc13690befeab16b"
+  }
+}

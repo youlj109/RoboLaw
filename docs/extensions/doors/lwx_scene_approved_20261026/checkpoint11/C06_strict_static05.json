@@ -1,0 +1,74 @@
+{
+  "scope": "CPU sampled source geometry diagnostic. Not planning/physical acceptance.",
+  "curobo_invoked": false,
+  "ik_invoked": false,
+  "manifest_sha256": "251c32ba002884ddbe6e065e314b268f4454dc9c59e6daba36e24d2fb711c06f",
+  "candidates": [
+    {
+      "id": "C06_robot_campaign37_0",
+      "variant": "robot",
+      "config": "configs/extensions/doors/c06_robot_corridor39_631_lwx_20261026.json",
+      "config_sha256": "5b0ed47ea56698a90d4a7d363feb6aa8ebc4bf782eccd7b3bd0e69337257e818",
+      "source_initial": {
+        "distance_m": null,
+        "required_m": 0.02,
+        "slack_m": null,
+        "valid": true
+      },
+      "support_initial": {
+        "distance_m": null,
+        "required_m": 0.002,
+        "slack_m": null,
+        "valid": true
+      },
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [
+        {
+          "added": "/World/envs/env_0/robot_pedestal/Column",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 0.0
+        }
+      ],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 2.0,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "entity_support": [
+        {
+          "entity": "barrier",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/barrier/BoltedBase",
+              "support_collider": "/World/envs/env_0/robot_pedestal/Tray",
+              "distance_m": 0.0,
+              "bottom_minus_support_top_m": -2.942979193676365e-10
+            }
+          ]
+        },
+        {
+          "entity": "robot_pedestal",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/robot_pedestal/Column",
+              "support_collider": "/World/envs/env_0/kitchen/floor_room/geometry",
+              "distance_m": 0.0,
+              "bottom_minus_support_top_m": -1.5288591410228536e-08
+            }
+          ]
+        }
+      ],
+      "door_sweep_direction": -1.0,
+      "door_sweep_joint_limits_rad": [
+        -1.5707963267948966,
+        0.0
+      ],
+      "static_rejections_absent": true
+    }
+  ],
+  "complete": true
+}

@@ -1,0 +1,76 @@
+{
+  "task_id": "kitchen_bench_lightwheel_open_microwave",
+  "label": "C06",
+  "base_config": "configs/extensions/doors/c06_robot_corridor39_631_lwx_20261026.json",
+  "baseline": "datasets/doors/lwx_C06_corridor09_20261026/C06_base_p01",
+  "observer": {
+    "position_world_m": [
+      1.6324524879455566,
+      -2.325716233253479,
+      2.65
+    ],
+    "look_at_world_m": [
+      3.240621753213126,
+      -0.856438111051106,
+      1.35
+    ],
+    "focal_length": 2.8
+  },
+  "second_observer": {
+    "position_world_m": [
+      4.132452487945557,
+      -2.725716233253479,
+      2.6
+    ],
+    "look_at_world_m": [
+      3.1324524879455566,
+      -0.925716233253479,
+      1.35
+    ],
+    "focal_length": 2.8
+  },
+  "old_handle_world_m": [
+    3.3487910184806955,
+    -0.48715998884873296,
+    1.6784460207225012
+  ],
+  "new_handle_world_m": [
+    3.3487910184806955,
+    -0.48715998884873296,
+    1.6784460207225012
+  ],
+  "start_tcp_world_m": [
+    3.1323748581479554,
+    -1.323194707977009,
+    1.4198040141409396
+  ],
+  "candidates": [
+    {
+      "id": "C06_robot_campaign37_0",
+      "variant": "robot",
+      "config": "configs/extensions/doors/c06_robot_corridor39_631_lwx_20261026.json"
+    }
+  ],
+  "user_visual_approval": "User authorized correction then planning; agent must verify scene",
+  "planning_permitted": true,
+  "start_reference": "Analytic source FK of proposed frozen initial joints. No IK/trajectory.",
+  "preview_initial_q": [
+    0.0,
+    -1.5499999523162842,
+    0.0,
+    -2.950000047683716,
+    0.0,
+    1.2000000476837158,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "initial_pose_design_note": "Source base unchanged; lower frozen start self/limits checked. Bottle/support +10cm in x from corridor07, keeping fixed source dimensions. Exact full signed sweep and source clearance required.",
+  "authorization": "Latest direct user authorization on 2026-10-26: previous other scenes approved; correct C02/C06 human and C01 frontal variants, then run planning/collection without further confirmation. Static gates required before each execution.",
+  "source_manifest": "reports/doors/lwx_approved_run_20261026/C06_manifest03.json",
+  "revision_note": "Actual matched baseline path-driven rigid obstacle placement; all original source sizes and safety thresholds retained."
+}
