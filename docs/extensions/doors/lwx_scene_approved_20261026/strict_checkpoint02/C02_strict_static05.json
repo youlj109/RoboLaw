@@ -1,0 +1,109 @@
+{
+  "scope": "CPU sampled source geometry diagnostic. Not planning/physical acceptance.",
+  "curobo_invoked": false,
+  "ik_invoked": false,
+  "manifest_sha256": "c5e8b13d4d5ae89d5732fcc3c1dd6dad2bc3f1e60b4b6accd13fdfbb958f9eb6",
+  "candidates": [
+    {
+      "id": "C02_human_approved01",
+      "variant": "human",
+      "config": "configs/extensions/doors/c02_scene_natural18_lwx_20261026.json",
+      "config_sha256": "d9ece101ada64a3a07bcd0e0263b9cefcfb0675f243ff9e9fff56a8d18c6024e",
+      "source_initial": {
+        "distance_m": null,
+        "required_m": 0.03,
+        "slack_m": null,
+        "valid": true
+      },
+      "support_initial": null,
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [
+        {
+          "added": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 3.324944972127327e-09
+        }
+      ],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 2.0,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "entity_support": [
+        {
+          "entity": "person",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+              "support_collider": "/World/envs/env_0/kitchen/floor_room/geometry",
+              "distance_m": 3.324944972127327e-09,
+              "bottom_minus_support_top_m": 3.3249449686578725e-09
+            }
+          ]
+        }
+      ],
+      "door_sweep_direction": 1.0,
+      "door_sweep_joint_limits_rad": [
+        0.0,
+        1.5707963267948966
+      ],
+      "static_rejections_absent": true
+    },
+    {
+      "id": "C02_robot_approved01",
+      "variant": "robot",
+      "config": "configs/extensions/doors/c02_scene_natural18_lwx_20261026.json",
+      "config_sha256": "d9ece101ada64a3a07bcd0e0263b9cefcfb0675f243ff9e9fff56a8d18c6024e",
+      "source_initial": {
+        "distance_m": null,
+        "required_m": 0.02,
+        "slack_m": null,
+        "valid": true
+      },
+      "support_initial": {
+        "distance_m": null,
+        "required_m": 0.002,
+        "slack_m": null,
+        "valid": true
+      },
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 2.0,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "entity_support": [
+        {
+          "entity": "barrier",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/barrier/BoltedBase",
+              "support_collider": "/World/envs/env_0/robot_pedestal/Tray",
+              "distance_m": 0.0,
+              "bottom_minus_support_top_m": -2.942979193676365e-10
+            }
+          ]
+        },
+        {
+          "entity": "robot_pedestal",
+          "supported": false,
+          "contacts": []
+        }
+      ],
+      "door_sweep_direction": 1.0,
+      "door_sweep_joint_limits_rad": [
+        0.0,
+        1.5707963267948966
+      ],
+      "static_rejections_absent": false
+    }
+  ],
+  "complete": true
+}

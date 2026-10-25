@@ -31,6 +31,13 @@ p.add_argument('--scene-manifest',type=Path,required=True)
 a=p.parse_args();a.enable_cameras=True
 scene_manifest=json.loads(a.scene_manifest.read_text())
 if not scene_manifest.get('planning_permitted'):p.error('Scene is not released for planning')
+if a.variant != 'base':
+    gate_path = a.scene_manifest.parent / (scene_manifest['label']+'_strict_static05.json')
+    if not gate_path.exists():p.error('Missing signed door sweep and support gate: '+str(gate_path))
+    gate = json.loads(gate_path.read_text())
+    matching = [x for x in gate.get('candidates',[]) if x['variant']==a.variant and x.get('config')==a.variant_config and x.get('config_sha256')==hashlib.sha256(Path(a.variant_config).read_bytes()).hexdigest()]
+    if gate.get('manifest_sha256')!=hashlib.sha256(a.scene_manifest.read_bytes()).hexdigest() or not gate.get('complete') or not matching or not all(x['static_rejections_absent'] for x in matching):p.error('Signed source sweep/support gate rejected '+a.variant)
+
 if scene_manifest['task_id']!=a.task_id or scene_manifest['base_config']!=a.variant_config:p.error('Manifest/config/task mismatch')
 if not 0.<=a.planner_hazard_extra_padding_m<=.03:p.error('--planner-hazard-extra-padding-m must be in [0,.03]')
 if not 0.<=a.opening_reserve_rad<=.08:p.error('--opening-reserve-rad must be in [0,.08]')

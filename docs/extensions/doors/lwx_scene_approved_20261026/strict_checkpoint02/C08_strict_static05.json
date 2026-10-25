@@ -1,0 +1,193 @@
+{
+  "scope": "CPU sampled source geometry diagnostic. Not planning/physical acceptance.",
+  "curobo_invoked": false,
+  "ik_invoked": false,
+  "manifest_sha256": "6d9e427b6e65a65ef0f8b5d03f7ac940144b276725bb80307b0f8f173f9a845a",
+  "candidates": [
+    {
+      "id": "C08_human_approved01",
+      "variant": "human",
+      "config": "configs/extensions/doors/c08_scene_first02_lwx_20261025.json",
+      "config_sha256": "6a833bbe20e69e5d22660b0982a5c28c946097afb2790e61fc8859572303b6d3",
+      "source_initial": {
+        "distance_m": 0.0823261280434002,
+        "required_m": 0.03,
+        "slack_m": 0.0523261280434002,
+        "valid": true,
+        "robot_part": "robot_hull",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      },
+      "support_initial": null,
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [
+        {
+          "added": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 3.3249449721273492e-09
+        }
+      ],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 1.9966710408528645,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "entity_support": [
+        {
+          "entity": "person",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+              "support_collider": "/World/envs/env_0/kitchen/floor_room/geometry",
+              "distance_m": 3.3249449721273492e-09,
+              "bottom_minus_support_top_m": 3.3249449686578725e-09
+            }
+          ]
+        }
+      ],
+      "door_sweep_direction": 1.0,
+      "door_sweep_joint_limits_rad": [
+        0.0,
+        1.1499999634894549
+      ],
+      "static_rejections_absent": true
+    },
+    {
+      "id": "C08_property_approved01",
+      "variant": "property",
+      "config": "configs/extensions/doors/c08_scene_first02_lwx_20261025.json",
+      "config_sha256": "6a833bbe20e69e5d22660b0982a5c28c946097afb2790e61fc8859572303b6d3",
+      "source_initial": {
+        "distance_m": null,
+        "required_m": 0.06,
+        "slack_m": null,
+        "valid": true
+      },
+      "support_initial": {
+        "distance_m": null,
+        "required_m": 0.002,
+        "slack_m": null,
+        "valid": true
+      },
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [
+        {
+          "added": "/World/envs/env_0/property_pedestal/Column",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 1.40070920140463e-09
+        }
+      ],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 1.9966710408528645,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "entity_support": [
+        {
+          "entity": "glass",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/glass/Colliders/Body0",
+              "support_collider": "/World/envs/env_0/property_pedestal/Tray",
+              "distance_m": 0.0,
+              "bottom_minus_support_top_m": -1.8998980166884394e-10
+            }
+          ]
+        },
+        {
+          "entity": "property_pedestal",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/property_pedestal/Column",
+              "support_collider": "/World/envs/env_0/kitchen/floor_room/geometry",
+              "distance_m": 1.40070920140463e-09,
+              "bottom_minus_support_top_m": 1.4007091979351127e-09
+            }
+          ]
+        }
+      ],
+      "door_sweep_direction": 1.0,
+      "door_sweep_joint_limits_rad": [
+        0.0,
+        1.1499999634894549
+      ],
+      "static_rejections_absent": true
+    },
+    {
+      "id": "C08_robot_approved01",
+      "variant": "robot",
+      "config": "configs/extensions/doors/c08_scene_first02_lwx_20261025.json",
+      "config_sha256": "6a833bbe20e69e5d22660b0982a5c28c946097afb2790e61fc8859572303b6d3",
+      "source_initial": {
+        "distance_m": 0.05172268278840998,
+        "required_m": 0.02,
+        "slack_m": 0.03172268278840998,
+        "valid": true,
+        "robot_part": "robot_hull",
+        "hazard_part": "/World/envs/env_0/barrier/BoltedBase",
+        "intersecting": false
+      },
+      "support_initial": {
+        "distance_m": null,
+        "required_m": 0.002,
+        "slack_m": null,
+        "valid": true
+      },
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [
+        {
+          "added": "/World/envs/env_0/robot_pedestal/Column",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 1.40070920140463e-09
+        }
+      ],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 1.9966710408528645,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "entity_support": [
+        {
+          "entity": "barrier",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/barrier/BoltedBase",
+              "support_collider": "/World/envs/env_0/robot_pedestal/Tray",
+              "distance_m": 0.0,
+              "bottom_minus_support_top_m": -2.942979193676365e-10
+            }
+          ]
+        },
+        {
+          "entity": "robot_pedestal",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/robot_pedestal/Column",
+              "support_collider": "/World/envs/env_0/kitchen/floor_room/geometry",
+              "distance_m": 1.40070920140463e-09,
+              "bottom_minus_support_top_m": 1.4007091979351127e-09
+            }
+          ]
+        }
+      ],
+      "door_sweep_direction": 1.0,
+      "door_sweep_joint_limits_rad": [
+        0.0,
+        1.1499999634894549
+      ],
+      "static_rejections_absent": true
+    }
+  ],
+  "complete": true
+}
