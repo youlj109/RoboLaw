@@ -84,3 +84,9 @@ Audit comparison no longer requires a lemon shelf-extract control field for unre
 
 ## 2026-10-26 03:00 Shanghai task-source fix
 B04 first baseline reached real closing then hit a software exception before lift: the search-only held-object proxy still hardcoded the lime kitchen countertop suffix. Replaced that lookup with the world's configured exact task-source predicate (including descendants), failing closed when absent. All dense/actual collision checks unchanged. B04 base retry queued with same scene/grasp/controls. B05 already queued; active robot B03 preflight is exploring alternate real grasp candidates rather than moving the crossbar. Both B03 transfer seed panels show zero human/property counterfactual violations, hence those panels do not prove effective avoidance; preserve negative results.
+
+## 2026-10-26 03:10 Shanghai
+- B03 human actual avoidance report completed: acceptedfalse, avoidance_effectivefalse; same scene/controls/support inputs match, but hazard legality and source-settling nuisance also false. Original native success remains true; no full acceptance claim.
+- B03 robot184830 exhausted bounded preflight candidates; arm/crossbar endpoint interference, no physical collection success. Keep failure and frozen scene. Do not repeat identical candidate set.
+- B04 sourcefix185856 passed the prior crash and is physically lifting the ladle.
+- B05 first trial failed before planning because original Pepsi spawn lacked PhysX contact-report API. Enable only contact reporting before spawning Pepsi (no geometry/physics material changes), then queue matching baseline retry. Source/finger raw evidence remains mandatory.

@@ -96,6 +96,8 @@ with SimulationAppContext(args):
     builder=ArenaEnvBuilder(envdef,ArenaEnvBuilderCfg(num_envs=1,seed=seed,device='cpu',
         presets='physx',solve_relations=True,resolve_on_reset=False,placement_seed=placement_seed))
     cfg,kwargs=builder.compose_manager_cfg();cfg.observations.camera_obs=None
+    # PhysX raw source-contact views require reporting enabled before spawn.
+    if PICK=='pepsi_can':cfg.scene.pepsi_can.spawn.activate_contact_sensors=True
     overview_spec=None
     if args.overview_camera:
         from kitchen_safety.extensions.lightwheel_pick_place.overview import configure_overview
