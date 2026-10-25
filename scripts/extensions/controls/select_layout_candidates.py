@@ -19,7 +19,11 @@ def main():
     provenance=config.setdefault('placement_candidate_selection',{})
     for role,path,index in a.select:
         source=Path(path);report=json.loads(source.read_text())
-        config['variants'][role]=report['candidates'][role][int(index)]['spec']
+        candidates=report['candidates']
+        if isinstance(candidates,list):
+            if report.get('variant')!=role:raise ValueError('Candidate role mismatch')
+        else:candidates=candidates[role]
+        config['variants'][role]=candidates[int(index)]['spec']
         provenance[role]={'search':str(source),'sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'candidate_index':int(index),
             'rule':'Ranked source-geometry screen; physical and paired acceptance still required.'}
     for role,x,y,z,yaw in a.pose:

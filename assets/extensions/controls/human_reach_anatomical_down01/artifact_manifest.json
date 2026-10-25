@@ -1,0 +1,39 @@
+{
+  "source": "assets/people/mpfb_corridor/posed.blend",
+  "source_sha256": "7d022d459ebd584592cde705b7bd73cf112e6cfc719e99b8ea3096506ff650ea",
+  "tested_blender": "4.0.2",
+  "geometry_provenance": "Original armature two-bone IK; original skin weights and preserve-volume deformation; right shoulder pivot and arm lengths unchanged; source hand orientation relative to the newly posed forearm preserved; source root, feet and all other non-right-arm bones unchanged. Static evaluated mesh export. Shoulder frame maps the source elbow bend-plane normal to the target normal before hinge flexion; no independent arbitrary lower-arm swing.",
+  "rebuild_geometry_audit": "rebuild_geometry_audit.json",
+  "generated_files": {
+    "assets/extensions/controls/human_reach_anatomical_down01/person.usdc": "2d2d570214869bdb00178f10730f338b62c8176382f274e835409e26172a6c85",
+    "assets/extensions/controls/human_reach_anatomical_down01/collidable.usda": "69b3fb9503e2a25c700881392f48679b55db02ae8336229b51029bb7f7f887c1",
+    "assets/extensions/controls/human_reach_anatomical_down01/pose.json": "0c8ffdd2309c078e7d519f91f5c3a49915b669e7b704289c8bd4a777e7610db4",
+    "assets/extensions/controls/human_reach_anatomical_down01/rebuild_geometry_audit.json": "206e0fa7a410f88b9be24c3a0b103d30a15174d1bf7c4173d41db76910a03686",
+    "assets/extensions/controls/human_reach_anatomical_down01/textures/brown_eye.png": "4659691c7295ad6206c78b003e5fd0e5f91dcd53032fa914a229bb48cabe424b",
+    "assets/extensions/controls/human_reach_anatomical_down01/textures/eyebrow001.png": "9940f7d0b1b223709a19b05156ba6f6e9e4dbdbced02d7574f4d51d72c58967b",
+    "assets/extensions/controls/human_reach_anatomical_down01/textures/male_casualsuit01_diffuse.png": "3fd0bba5dcbdea0ac427f644a6c7c298938f7369b8f96626621ce1e88989394e",
+    "assets/extensions/controls/human_reach_anatomical_down01/textures/shoes01_diffuse.png": "50c9a406a7f1cb6aa7b42912348e78f09d0252aa3963c8229cf18dfe8353cdbf",
+    "assets/extensions/controls/human_reach_anatomical_down01/textures/short02_diffuse.png": "47fe33831a3929567c733356dd66243116e05df2ace1f884ddca0080b728229f",
+    "assets/extensions/controls/human_reach_anatomical_down01/textures/young_lightskinned_male_diffuse3.png": "f50016a5507fc687dc8df06599c8ea48de950cd185de33a71cafc1319ddab4d5"
+  },
+  "rebuild": "Blender 4.0.2 original posed.blend; repose_human_arm.py --wrist -.6 0 1.2 --elbow-down --arm-frame source-bend-plane --hand-orientation follow-forearm --asset-dir assets/extensions/controls/human_reach_anatomical_down01; wrap_reposed_human.py; audit_human_export_blender.py",
+  "wrist_structure": {
+    "mode": "follow-forearm",
+    "source_forearm_to_hand_deg": 16.502992082010795,
+    "posed_forearm_to_hand_deg": 16.503004034841844,
+    "source_relative_hand_quaternion_wxyz": [
+      0.7640376091003418,
+      0.007957428693771362,
+      -0.6290063858032227,
+      -0.14329794049263
+    ],
+    "posed_relative_hand_quaternion_wxyz": [
+      0.7640376687049866,
+      0.00795760378241539,
+      -0.6290063261985779,
+      -0.14329802989959717
+    ],
+    "relative_orientation_delta_deg": 0.0,
+    "scope": "Preserve the original rig wrist relationship; not a clinical range-of-motion certification."
+  }
+}

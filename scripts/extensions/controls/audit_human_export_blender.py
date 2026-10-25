@@ -3,10 +3,12 @@ import argparse
 import hashlib
 import json
 import sys
+import math
 from pathlib import Path
 
 import bpy
 from mathutils.kdtree import KDTree
+from mathutils import Quaternion,Vector
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--asset-dir', required=True)
@@ -59,6 +61,17 @@ checks = {
     'non_arm_bones_unchanged': pose['max_unchanged_bone_error_m'] < 1e-5,
     'wrist_target_reached': pose['wrist_error_m'] < 1e-5,
 }
+wrist=pose.get('wrist_structure',{})
+if wrist.get('mode')=='follow-forearm':
+    source=Quaternion(wrist['source_relative_hand_quaternion_wxyz'])
+    posed=Quaternion(wrist['posed_relative_hand_quaternion_wxyz'])
+    relative_error=math.degrees(source.rotation_difference(posed).angle)
+    def bend(bones):
+        lower=Vector(bones['lowerarm_r'][1])-Vector(bones['lowerarm_r'][0])
+        hand=Vector(bones['hand_r'][1])-Vector(bones['hand_r'][0])
+        return math.degrees(lower.angle(hand))
+    checks['source_wrist_frame_preserved']=relative_error<.001
+    checks['source_wrist_bend_preserved']=abs(bend(pose['before'])-bend(pose['after']))<.001
 result = {
     'passed': all(checks.values()), 'checks': checks,
     'source_vertices_below_20cm': len(original),
@@ -67,6 +80,7 @@ result = {
     'mesh_vertex_counts': {obj.name: len(obj.data.vertices) for obj in meshes},
     'source_sha256': hashlib.sha256((root / 'assets/people/mpfb_corridor/posed.blend').read_bytes()).hexdigest(),
     'export_sha256': hashlib.sha256((asset / 'person.usdc').read_bytes()).hexdigest(),
+    'wrist_structure':wrist,
     'scope': 'Independent Blender USD import; bidirectional world-space feet comparison. '
              'Bone checks use the separately saved pose generator report. '
              'Not byte equivalence to the unavailable upstream USDC or a clearance certificate.',

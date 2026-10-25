@@ -1,5 +1,30 @@
 # zxw D Group Execution
 
+## Button Human Pose Revision Complete
+
+The previous button human videos retain valid recorded button/contact evidence,
+but their arm pose is visually rejected: the hand was held at its old world
+orientation while the forearm moved. The wrist bend grew from approximately
+16.5 to 65.8 degrees. The historical completion summary below does not certify
+this anatomical appearance.
+
+The new `human_reach_anatomical_down01` asset preserves the source wrist-relative
+orientation and maps the shoulder/elbow bend plane before flexing the elbow.
+Independent export checks pass (six meshes, unchanged feet/non-arm bones,
+preserved arm lengths and wrist frame). Both button layouts pass the full
+baseline manipulation endpoint screen. New paired planning (12 plans per task),
+two physical human recordings and all independent safety reviews passed.
+Old recordings and failed candidate assets are retained. Oven data are unchanged.
+
+Current report: [ZXW_ALL_HAND_REVISION_RESULTS.json](ZXW_ALL_HAND_REVISION_RESULTS.json).
+Details and rejected attempts: [HAND_POSE_REVISION.md](HAND_POSE_REVISION.md).
+New videos: `datasets/controls_hand_revision_20261024/left/human01/all_cameras.mp4`
+and `datasets/controls_hand_revision_20261024/right/human02/all_cameras.mp4`.
+Each has a matching `comparison.mp4`. These files are local, not Git-uploaded.
+
+Current regression: 54 tests passed in the Arena container. Source-rig geometric
+consistency is not a clinical range-of-motion or injury certification.
+
 Latest synchronized base: `origin/ylj` at `eda19a6` (2026-10-24 local time),
 merged without conflicts as `1f010a8`. Its new changes only affect the other
 group's progress dashboard; all current controls changes/data were retained.
@@ -13,7 +38,7 @@ nine successful hazard episodes, one human/property/robot episode per task.
 Each task has paired planning seeds 42/43/44 (12 plans; 36 across the group).
 No 200-episode collection or batch-success-rate claim.
 
-Unified accepted report: [ZXW_ALL_RESULTS.json](ZXW_ALL_RESULTS.json).
+Historical pre-pose-revision report: [ZXW_ALL_RESULTS.json](ZXW_ALL_RESULTS.json).
 It indexes the three task reports, local data/videos, hashes, first source-risk
 times, resolved robot links and human wrist positions. Nine annotated evidence
 images and JSON sidecars are included in [evidence/](evidence/); full raw
@@ -25,8 +50,8 @@ data/videos remain local ignored files, not Git-uploaded.
 | Right toaster cancel button | Complete: baseline + three physical variants; all 26 ordered reviews and 12 paired plans passed |
 | Oven temperature knob, original target level 3 | Complete: matching fixed-branch baseline04 + human/property/robot; original level3, release/retreat, all independent gates and all 12 paired plans passed |
 
-All required physical tasks and safety gates are complete. Current controls
-regression: 48 tests passed in the actual Arena container. No required physics
+All required physical tasks and safety gates were complete before the visual
+revision. At that checkpoint 48 tests passed in the actual Arena container. No required physics
 gate is waived. Limitations and rejected attempts are listed separately below.
 
 ### Oven Final Delivery

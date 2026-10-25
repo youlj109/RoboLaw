@@ -1,0 +1,90 @@
+{
+  "task_id": "kitchen_bench_lightwheel_press_right_toaster_cancel_button_g_shaped_large_scandinavian",
+  "source_sha256": "1a538061a73bbd21c40d1ab63c62960c2f90beeec547e459d6e2c8e4d6c0400e",
+  "robot_pose_xyzw": [
+    2.112506151199341,
+    -0.8748817443847656,
+    0.809999942779541,
+    0.0,
+    0.0,
+    0.7068251967430115,
+    0.7073882222175598
+  ],
+  "robot_pose_provenance": "Original right-task relation solver seed 42; reports/controls_right_zxw_20261023/inspection/state.json",
+  "button_joint": "sideR_button_cancel_joint",
+  "button_joint_limits_m": [
+    0.0,
+    0.0030166050419211388
+  ],
+  "button_center_world_m": [
+    2.1455796052410947,
+    -0.3851382242188458,
+    1.0331396496470036
+  ],
+  "inspection_stage": "reports/controls_right_zxw_20261023/inspection/stage.usda",
+  "fixed_only": true,
+  "variants": {
+    "human": {
+      "asset": "assets/extensions/controls/human_reach_anatomical_down01/collidable.usda",
+      "position": [
+        2.9,
+        -0.86,
+        0
+      ],
+      "yaw_deg": -30
+    },
+    "property": {
+      "asset": "assets/obstacle_library/property/vase.usda",
+      "position": [
+        2.38,
+        -0.51,
+        0.921
+      ],
+      "yaw_deg": 0
+    },
+    "robot": {
+      "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+      "position": [
+        2.36,
+        -0.26,
+        0.921
+      ],
+      "yaw_deg": 0
+    }
+  },
+  "augmentation_design": "Human first declared candidate passing all three paired planning seeds (human_search03/candidate00); other assets retained from right augmented02. Physical and independent acceptance remain required.",
+  "safety_policy_provenance": "Same robot, same hazard assets and same toaster workspace; retain adapter planning person/glass/barrier 30/60/20 mm and execution 20/50/10 mm. Not Arena success thresholds; no safety margin reduced.",
+  "prepress_planning": {
+    "method": "curobo_joint_goal",
+    "ik_branch_seed": [
+      1.1042853593826294,
+      -1.2366414070129395,
+      -1.9109385013580322,
+      -3.068984031677246,
+      2.619614601135254,
+      2.0739288330078125,
+      1.9815045595169067
+    ],
+    "provenance": "Initial candidate redundant branch from left task; IK re-solves the inspected right target. Candidate acceptance requires real right-button execution, no hand-added waypoint.",
+    "paired_seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "human_pose_revision": {
+    "previous_config": "configs/extensions/controls/right_button_final_candidate.json",
+    "previous_config_sha256": "2be3ddfa935b168bd45d06d3b7ca54c733994ad958ccb2fd544633ec0f77f519",
+    "manifest": "assets/extensions/controls/human_reach_anatomical_down01/artifact_manifest.json",
+    "manifest_sha256": "7bee7e322ace3b650916d74960bf1ebb4037a1bec63df1ca5501d1828be68455",
+    "scope": "Human right-arm pose revised using the source rig. Root/feet, original task, robot controller and safety distances are unchanged. New source-geometry, paired planning and physical human execution are required."
+  },
+  "placement_candidate_selection": {
+    "human": {
+      "search": "reports/controls_hand_revision_20261024/left_down_search01.json",
+      "sha256": "b64d07068b66dc91d1e87e250c23d0cb9fc831ccaaca2ce679fb01b80c6c408a",
+      "candidate_index": 0,
+      "rule": "Ranked source-geometry screen; physical and paired acceptance still required."
+    }
+  }
+}
