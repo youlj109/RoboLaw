@@ -1,7 +1,7 @@
 """Host supervisor for already authorized one-trial audits; preserve each report."""
 import argparse,json,subprocess,time
 from pathlib import Path
-p=argparse.ArgumentParser();p.add_argument('episode',type=Path);p.add_argument('--neutral',type=Path,required=True);p.add_argument('--wait-seconds',type=int,default=10800);p.add_argument('--run-label',default='02');p.add_argument('--report-root',type=Path,default=Path('reports/doors/lwx_C02_C03_20261023'));a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('episode',type=Path);p.add_argument('--neutral',type=Path,required=True);p.add_argument('--wait-seconds',type=int,default=10800);p.add_argument('--run-label',default='02');p.add_argument('--report-root',type=Path,default=Path('reports/doors/lwx_C02_C03_20261023'));p.add_argument('--task-review-name',default='task_review_audit.json');a=p.parse_args()
 root=a.report_root;state_path=root/(a.episode.name+'_review_pipeline_'+a.run_label+'.json')
 if state_path.exists():raise FileExistsError(state_path)
 state={'episode':str(a.episode),'neutral':str(a.neutral),'stages':[],'complete':False};deadline=time.monotonic()+a.wait_seconds
@@ -22,7 +22,7 @@ def run(name,script,args,report,gpu=False):
 try:
  save();wait_result(a.episode);wait_result(a.neutral)
  run('neutral_review','audit_task_review_lwx.py',[a.neutral],a.neutral/'task_review_audit.json')
- run('task_review','audit_task_review_lwx.py',[a.episode,'--neutral',a.neutral],a.episode/'task_review_audit.json')
+ run('task_review','audit_task_review_lwx.py',[a.episode,'--neutral',a.neutral,'--output',a.episode/a.task_review_name],a.episode/a.task_review_name)
  run('full_validation','validate_task_trial_lwx.py',[a.episode],a.episode/'task_validation_full.json')
  run('source_contact','audit_task_contact_lwx.py',[a.episode],a.episode/'source_contact_audit.json')
  run('visual_extract','review_task_success_lwx.py',[a.episode,'--output-dir',root],root/(a.episode.name+'_visual.jpg'))

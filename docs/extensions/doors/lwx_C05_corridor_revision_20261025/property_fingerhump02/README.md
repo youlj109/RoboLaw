@@ -1,0 +1,7 @@
+# C05 property corridor revision
+
+An unchanged source-size glass bottle now occupies the measured middle pregrasp passage. Its offset physical pedestal is included in planning and source audits. Robot, kitchen, handle target, control policy and original camera streams remain unchanged. Full source-model 90-degree door motion is clear.
+
+One actual opening passes full-data validation, source contact, self collision, mechanism/contact causality, matching 40-second neutral control and source-geometry avoidance audits. Three paired seeds42/43/44 support fixed-Cartesian-target policy necessity. Actual minimum source clearance107.099mm exceeds the original50mm execution requirement. TCP maximum normalized-progress deviation350.547mm describes path change, not increased length: planned on routes happen to be shorter. User video review remains pending; do not infer visual approval from audit acceptance.
+
+Original29-second control evidence is retained under the report/dataset roots. It did not meet the predeclared40-second minimum, and is not used for acceptance. The final task review is task_review_audit_neutral40.json. All source files, launch commands and hashes are listed in summary.json. Raw datasets/videos remain on the remote device; the four-camera review combines synchronized real sensors at original speed without replay. This is one fixed layout and one successful physical sample, not randomized/batch validation.

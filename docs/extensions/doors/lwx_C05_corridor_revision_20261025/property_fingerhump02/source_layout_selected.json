@@ -1,0 +1,158 @@
+{
+  "source_report": "reports/doors/lwx_C01_C04_C05_revision_20261025/C05_geometry05.json",
+  "source_report_sha256": "7d2bed844c6a4343e223195f8f3961359e606e28d283bff3e06ff740a6c00a51",
+  "selected": {
+    "id": "c05_fingerhump_property_02",
+    "variant": "property",
+    "config": "configs/extensions/doors/c05_fingerhump_property_02_lwx_20261025.json",
+    "config_sha256": "ea4a566c3c7a5e2557f6a6d1c08aec8a237068e711f25b76ed6cfa15c62f5349",
+    "original_planning_clearance_m": 0.06,
+    "original_execution_clearance_m": 0.05,
+    "source_hazard_colliders": 8,
+    "source_support_colliders": 2,
+    "initial_hazard": {
+      "source": {
+        "distance_m": null,
+        "required_m": 0.06,
+        "slack_m": null,
+        "valid": true
+      },
+      "conservative": {
+        "distance_m": null,
+        "required_m": 0.06,
+        "slack_m": null,
+        "valid": true
+      }
+    },
+    "source_intersection_actions": [
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75
+    ],
+    "source_clearance_risk_actions": [
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95
+    ],
+    "scene_intersections": [],
+    "source_floor_contacts": [
+      {
+        "added": "/World/envs/env_0/property_pedestal/Column",
+        "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+        "distance_m": 0.0010000128448009876
+      }
+    ],
+    "measured_door_sweep_failures": [],
+    "contact_gripper_failures": [],
+    "initial_support": {
+      "source": {
+        "distance_m": null,
+        "required_m": 0.002,
+        "slack_m": null,
+        "valid": true
+      },
+      "conservative": {
+        "distance_m": null,
+        "required_m": 0.002,
+        "slack_m": null,
+        "valid": true
+      }
+    },
+    "recorded_pregrasp_goal": {
+      "source": {
+        "distance_m": null,
+        "required_m": 0.06,
+        "slack_m": null,
+        "valid": true
+      },
+      "conservative": {
+        "distance_m": null,
+        "required_m": 0.06,
+        "slack_m": null,
+        "valid": true
+      }
+    },
+    "door_sampling_scope": {
+      "recorded_action_states": 434,
+      "all_checked": true,
+      "continuous_interpolation_certified": false,
+      "physical_substeps_not_checked_in_this_diagnostic": true
+    },
+    "full_joint_range_door_sweep": {
+      "joint_limits_rad": [
+        0.0,
+        1.5707963267948966
+      ],
+      "angles_checked": 181,
+      "max_step_rad": 0.008726646259971648,
+      "source_radius_bound_m": 0.44301731555199286,
+      "between_sample_displacement_bound_m": 0.0019330261665109624,
+      "original_hazard_margin_m": 0.06,
+      "required_sample_hazard_margin_m": 0.06193302616651096,
+      "original_support_margin_m": 0.002,
+      "required_sample_support_margin_m": 0.003933026166510962,
+      "failed_angle_count": 0,
+      "first_failures": [],
+      "source_model_full_range_clear": true,
+      "scope": "Conservative continuous-angle check for the reconstructed rigid source FCL door model only; not PhysX cooked geometry or physical execution acceptance."
+    }
+  }
+}

@@ -1,0 +1,20 @@
+#usda 1.0
+( defaultPrim = "Support"
+ metersPerUnit = 1
+ upAxis = "Z" )
+def Xform "Support" {
+ def Cube "Column" ( prepend apiSchemas = ["PhysicsCollisionAPI"] ) {
+ double size = 1
+ double3 xformOp:translate = (0, 0.44, 0.664)
+ float3 xformOp:scale = (0.09, 0.09, 1.326)
+ uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+ color3f[] primvars:displayColor = [(0.28,0.30,0.32)]
+ }
+ def Cube "Tray" ( prepend apiSchemas = ["PhysicsCollisionAPI"] ) {
+ double size = 1
+ double3 xformOp:translate = (0, 0.21, 1.338)
+ float3 xformOp:scale = (0.09, 0.5, 0.02)
+ uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+ color3f[] primvars:displayColor = [(0.28,0.30,0.32)]
+ }
+}
