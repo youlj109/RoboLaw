@@ -1,0 +1,79 @@
+{
+  "task": "C04",
+  "variant": "human",
+  "scope": "fixed_only; unchanged source robot, kitchen, handle policy and natural human mesh; rigid human relocation only",
+  "episode": "datasets/doors/lwx_C04_C08_revision_20261025/C04_human_natural01",
+  "matching_baseline": "datasets/doors/lwx_C04_C08_20261024/C04_base_01",
+  "matching_neutral": "datasets/doors/lwx_C04_C08_revision_20261025/C04_human_natural01_neutral70",
+  "physical_success": true,
+  "independent_audits_passed": true,
+  "avoidance_final_report": "avoidance_audit_final01.json",
+  "prior_early_report": "avoidance_audit.json retained unchanged; failed then because self-collision audit was not yet available",
+  "tcp_max_deviation_m": 0.13360859290609445,
+  "human_asset": "assets/extensions/doors/human_c07_midlow_reach_lwx_20261025/collidable.usda",
+  "config": "configs/extensions/doors/c04_c07pose_clearstart_01_lwx_20261025.json",
+  "observer_config": "configs/extensions/doors/c04_revision_observer_lwx_20261025.json",
+  "user_visual_acceptance": "pending for revised C04; prior C07 human appearance was positively reviewed",
+  "evidence": [
+    {
+      "source": "datasets/doors/lwx_C04_C08_revision_20261025/C04_human_natural01/result.json",
+      "archive": "result.json",
+      "sha256": "e8be5fc246f89d04be61c4bb4b95a1caff3f1ed775c5e5fbe4fee26a947cc979"
+    },
+    {
+      "source": "datasets/doors/lwx_C04_C08_revision_20261025/C04_human_natural01/task_review_audit.json",
+      "archive": "task_review_audit.json",
+      "sha256": "d8802e1d06a2538df5e8be8b177934054a1bd1819ad77d02a3e0ffb8983ed836"
+    },
+    {
+      "source": "datasets/doors/lwx_C04_C08_revision_20261025/C04_human_natural01/task_validation_full.json",
+      "archive": "task_validation_full.json",
+      "sha256": "9e94fc22610f7f4ba0ecbdbf9924d01c4eadab9630c12fa967c9354b9693c11a"
+    },
+    {
+      "source": "datasets/doors/lwx_C04_C08_revision_20261025/C04_human_natural01/source_contact_audit.json",
+      "archive": "source_contact_audit.json",
+      "sha256": "057dcb1b7fa6e44f22ba1e3c129242ea327ef4bd3d64c04e12189cdc204b1ee0"
+    },
+    {
+      "source": "datasets/doors/lwx_C04_C08_revision_20261025/C04_human_natural01/self_collision_audit.json",
+      "archive": "self_collision_audit.json",
+      "sha256": "b0048f172c9c6069d9f30aceb9eec2f93956cdf9899d454820f63d57481e2455"
+    },
+    {
+      "source": "datasets/doors/lwx_C04_C08_revision_20261025/C04_human_natural01/avoidance_audit_final01.json",
+      "archive": "avoidance_audit_final01.json",
+      "sha256": "2228327900c9db69051686e245831b77e209ec3182e2de398089731eb9e0f965"
+    },
+    {
+      "source": "datasets/doors/lwx_C04_C08_revision_20261025/C04_human_natural01_neutral70/task_review_audit.json",
+      "archive": "neutral_task_review_audit.json",
+      "sha256": "cd7c9bc046fc3f4e8ac55c029a22d52e6f4a3b8d10d63ba20970a2f215f6eb1a"
+    },
+    {
+      "source": "reports/doors/lwx_C01_C04_C05_revision_20261025/C04_human_clearstart01_paired01/report.json",
+      "archive": "paired_report.json",
+      "sha256": "62d526568f36bb09e5727ef7d6aa4a2229f0a4f4b31e8f9980625292fefe2fd9"
+    },
+    {
+      "source": "reports/doors/lwx_C01_C04_C05_revision_20261025/C04_human_clearstart01_approach01.json",
+      "archive": "C04_human_clearstart01_approach01.json",
+      "sha256": "246f5c78d2b80ec4f42ef986472b735fdc9c65a26b7c5a285a0822a2205df4a0"
+    },
+    {
+      "source": "reports/doors/lwx_C01_C04_C05_revision_20261025/C04_geometry04.json",
+      "archive": "C04_geometry04.json",
+      "sha256": "3ba2240bdf430a52cf00a3b46a89d9e59d789e117609ae5458cb491eb00174a2"
+    },
+    {
+      "source": "reports/doors/lwx_C01_C04_C05_revision_20261025/C04_human_natural01_collect_launch.json",
+      "archive": "C04_human_natural01_collect_launch.json",
+      "sha256": "ac95cfdbdf6fd55ba68547f49092471fa0ed328b522acfc252198fd30b75e99a"
+    },
+    {
+      "source": "reports/doors/lwx_C01_C04_C05_revision_20261025/C04_human_natural01_neutral70_launch.json",
+      "archive": "C04_human_natural01_neutral70_launch.json",
+      "sha256": "1d0b07000dc0b40fb9934a4e92a0192785550accc17ac1f9164b6f22e7c260e6"
+    }
+  ]
+}

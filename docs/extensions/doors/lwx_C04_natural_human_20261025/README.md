@@ -1,0 +1,7 @@
+# C04 natural human revision (2026-10-25)
+
+The previous raised-elbow human looked deformed. This revision reuses the unchanged C07 human mesh and pose, changing only rigid placement. The source robot, kitchen, original cameras, low handle contact policy and safety thresholds are unchanged. One successful physical sample and one 70-second neutral control are retained separately from the old edition.
+
+All independent physical, mechanism, contact-causality, source-geometry, self-collision and full-data checks pass. `avoidance_audit_final01.json` is the complete final audit. The older episode `avoidance_audit.json` remains unmodified: it ran before the self-collision report existed and therefore failed its dependency gate. Actual human source clearance is at least 43.673 mm against 20 mm required. Seeds 42/43/44 all support fixed-endpoint policy necessity; see paired_report.json. TCP deviation is 0.1336086 m at normalized pregrasp progress, which describes path change and is not a safety threshold.
+
+Dataset and commands are identified in summary.json and the launch records. Videos remain with the dataset: all_cameras.mp4; supplementary_observer/visible_review_camera.mp4; baseline_comparison_external_camera_2_natural01.mp4. The observer supplements original cameras. User review of this new C04 video remains pending. This is one fixed layout, not randomized or batch validation. Other C04 variants and all old evidence remain intact.
