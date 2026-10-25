@@ -1,0 +1,74 @@
+{
+  "scope": "CPU sampled source geometry diagnostic. Not planning/physical acceptance.",
+  "curobo_invoked": false,
+  "ik_invoked": false,
+  "manifest_sha256": "2c90a3e690d233b620e070c0e9b151b51bebaf1c28587c3802dbc0595f5d2507",
+  "candidates": [
+    {
+      "id": "C08_property_frozen71",
+      "variant": "property",
+      "config": "configs/extensions/doors/c08_property_frozen49_1085_lwx_20261026.json",
+      "config_sha256": "8ef5383761cce21aa305a7859f19beadb38af8557b0755ab02e61911c9a27cb8",
+      "source_initial": {
+        "distance_m": null,
+        "required_m": 0.06,
+        "slack_m": null,
+        "valid": true
+      },
+      "support_initial": {
+        "distance_m": null,
+        "required_m": 0.002,
+        "slack_m": null,
+        "valid": true
+      },
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [
+        {
+          "added": "/World/envs/env_0/property_pedestal/Column",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 0.0
+        }
+      ],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 1.9966710408528645,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "entity_support": [
+        {
+          "entity": "glass",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/glass/Colliders/Body0",
+              "support_collider": "/World/envs/env_0/property_pedestal/Tray",
+              "distance_m": 0.0,
+              "bottom_minus_support_top_m": -1.8998980166884394e-10
+            }
+          ]
+        },
+        {
+          "entity": "property_pedestal",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/property_pedestal/Column",
+              "support_collider": "/World/envs/env_0/kitchen/floor_room/geometry",
+              "distance_m": 0.0,
+              "bottom_minus_support_top_m": -2.720952032089774e-08
+            }
+          ]
+        }
+      ],
+      "door_sweep_direction": 1.0,
+      "door_sweep_joint_limits_rad": [
+        0.0,
+        1.1499999634894549
+      ],
+      "static_rejections_absent": true
+    }
+  ],
+  "complete": true
+}
