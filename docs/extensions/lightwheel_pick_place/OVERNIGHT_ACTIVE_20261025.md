@@ -102,3 +102,6 @@ B05 baseline `base_lgd_b05_can_20261025T191952Z` original current success=true, 
 
 ## 2026-10-26 03:50 Shanghai B04 release sweep
 Low-transfer baseline192918 successfully carried ladle to plate, then failed opening-gripper sweep: finger/plate1.322mm<2mm. This is not native success. Actual held object root≈.99544m,TCP1.03887m at destination. Raise transfer AND release by5mm (.08→.085m above plate), and skip the redundant zero-distance lower hold; preserve same original plate and hazard poses and unchanged collision margins. New baseline queued; future variants use identical revised controls.
+
+## 2026-10-26 04:00 Shanghai B04 native baseline and remaining checks
+B04 base194846 now original current native success=true,382frames; full audits underway, no acceptance claim. B05 human193345 stopped at lift preflight with self/limits invalid initial waypoint, no physical lift execution beyond prior closing; property and robot continue independently under unchanged scene. Validator still routed non-lime single picks to an old fullworld-only placeholder despite source audit already task-parameterized; remove that placeholder and call actual source-support audit for all single-pick tasks. Recompute B05 source validation explicitly (prior source report absent, cannot mark passed). Existing reports retained by script sidecar behavior.

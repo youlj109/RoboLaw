@@ -202,19 +202,13 @@ def validate(out):
                 support=audit_multi_source(out);support_path=save_report(support,out/'source_support_audit.json')
                 checks['measured_source_support_bounds']=support['passed'];details['source_support']={k:v for k,v in support.items() if k!='measurements'}
                 details['source_support']['report_path']=str(support_path)
-            elif pick == 'lime':
+            else:
                 from audit_source_support import audit as audit_source_support, save_report
                 support = audit_source_support(out)
                 support_path = save_report(support, out / 'source_support_audit.json')
                 checks['measured_source_support_bounds'] = support.get('passed') is True
                 details['source_support'] = {key: value for key, value in support.items() if key != 'measurements'}
                 details['source_support']['report_path'] = str(support_path)
-            else:
-                checks['measured_source_support_bounds'] = checks.get('full_world_audit', False)
-                details['source_support'] = {
-                    'scope': 'Non-lime pick tasks defer to full_world_audit until audit_source_support is task-parameterized.',
-                    'pick_object': pick,
-                }
         plans = [item for item in result.get('plans', []) if item.get('executed', True)]
         checks['all_plans_valid'] = bool(plans) and all(
             item.get('validation', {}).get('valid') is True
