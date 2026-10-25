@@ -1,0 +1,55 @@
+{
+  "recorded_unix": 1792969304.7028058,
+  "variant": "C06 human",
+  "status": "Independent and paired validation passed; agent actual sampled visual review passed; user review pending",
+  "episode": "datasets/doors/lwx_C06_human_settle75_20261026/C06_human_p01",
+  "baseline": "datasets/doors/lwx_C06_human_settle75_20261026/C06_base_p01",
+  "neutral": "datasets/doors/lwx_C06_human_settle75_20261026/C06_human_n01_neutral",
+  "config": "configs/extensions/doors/c06_human_post55_natural_031_lwx_20261026.json",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C06_human_settle75/C06_strict_static05.json",
+  "paired_report": "reports/doors/lwx_approved_run_20261026/C06_human_settle75/C06_human_pairs01/report.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.3567931002447097,
+    "tcp_max_deviation_m": 0.1644247546933436,
+    "baseline_samples": 134,
+    "augmented_samples": 134,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "time_unix": 1792969304.7028039,
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C06_human_multiview16_settle75.jpg",
+    "scene_and_avoidance": "Actual synchronized samples show continuous natural right elbow/wrist and intact human mesh. Robot raises around reaching right arm and returns to legal microwave handle. Native views show forearm relation; wide observer shows person, robot and appliance. New physical endpoint error 0.098mm and 0.000313rad satisfies original gates after identical 30-step settling in baseline and human. Prior shortcut59 endpoint failure retained. User visual approval pending.",
+    "scope": "Sampled actual synchronized video inspection; safety and causality independently checked",
+    "tcp_max_deviation_m": 0.1644247546933436
+  },
+  "evidence_sha256": {
+    "metadata.json": "24c98916a4bf2a8d4a7d6f0fd467d52f321987c6008d70cb3685dea6de1cc3fe",
+    "result.json": "13543196da289c9c3d8bfc1847492d16710dd6e45d099c4ab4cd5bfb6a8e1853",
+    "task_review_audit.json": "8d68b08b34211044419ec333e645edef4957aa51ee3ada325f0c82205cbd9284",
+    "task_validation_full.json": "660b62cfc791027e573012549f947dfe0d19691caf3a998d94990b6ad31243f8",
+    "source_contact_audit.json": "95d340f2c7acb353b7187d1195b1258be0904fa5d045fa020c73aab8abcbba31",
+    "self_collision_audit.json": "3f8af229a211e8a5200689dad5fddf308b77485b47f4ee6726c8c146013d12f4",
+    "avoidance_audit.json": "2eff9446d89322be0d2245f9ac665ad949255996aebbf18658b07fb34c5529c9",
+    "paired_report.json": "7e67c9d3f0bcb74085c052b853b79f700a0c9685faafa6864f84517495f6ba81",
+    "baseline_metadata.json": "a6bed64504bdae8c9f5e1d500cddc371bd8124a3734cf5a3fd93516c2c1de46c",
+    "baseline_result.json": "e2214d472168511293e9e59fa619657220ad4a44397cba996c60297984da3a24",
+    "neutral_metadata.json": "48e5fd9bb197effce2d14eb99240c962d4f327fade0894d9df6db59c46a6b15e",
+    "neutral_result.json": "06e79b403eb6271e2f504f8f72850a4521712d0cd6e9805433658f5a536a687e",
+    "baseline_task_review_audit.json": "e7b60bafd9362d6165757a414ce142cc46548cb17c2484ba8a09ff1883837a0f",
+    "baseline_task_validation_full.json": "a1fb4e12cfcbe99bca8dba19b60e68e254d1b461bc83d89e0b5c415890377416",
+    "baseline_source_contact_audit.json": "d0db3770c60be002996d75397532a852ccb3e9ecc024ffc3eb26ee5f49b7d287",
+    "baseline_self_collision_audit.json": "4583434b4c295175363c7be4a234f1cd2567c4c8d3a4a527b952299c180a3bc7"
+  }
+}

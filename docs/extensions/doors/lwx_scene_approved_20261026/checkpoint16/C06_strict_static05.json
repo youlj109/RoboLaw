@@ -1,0 +1,60 @@
+{
+  "scope": "CPU sampled source geometry diagnostic. Not planning/physical acceptance.",
+  "curobo_invoked": false,
+  "ik_invoked": false,
+  "manifest_sha256": "1d4369e058572102bf878ebf970b233fb742f058ab8f0e9ded98dc4b57087f90",
+  "candidates": [
+    {
+      "id": "C06_human_shortcut59",
+      "variant": "human",
+      "config": "configs/extensions/doors/c06_human_post55_natural_031_lwx_20261026.json",
+      "config_sha256": "93a8147150e9fe9face1b1eed274c5a4e895a146d3897353d0b791dcd3522742",
+      "source_initial": {
+        "distance_m": 0.09331666870438732,
+        "required_m": 0.03,
+        "slack_m": 0.06331666870438732,
+        "valid": true,
+        "robot_part": "robot_hull",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      },
+      "support_initial": null,
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [
+        {
+          "added": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 3.324944972127321e-09
+        }
+      ],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 2.0,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "entity_support": [
+        {
+          "entity": "person",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+              "support_collider": "/World/envs/env_0/kitchen/floor_room/geometry",
+              "distance_m": 3.324944972127321e-09,
+              "bottom_minus_support_top_m": 3.3249449686578725e-09
+            }
+          ]
+        }
+      ],
+      "door_sweep_direction": -1.0,
+      "door_sweep_joint_limits_rad": [
+        -1.5707963267948966,
+        0.0
+      ],
+      "static_rejections_absent": true
+    }
+  ],
+  "complete": true
+}
