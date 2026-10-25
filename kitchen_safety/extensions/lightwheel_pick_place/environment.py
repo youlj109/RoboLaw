@@ -88,6 +88,15 @@ def build_environment(
                 return lambda **kwargs: Background(
                     name="kitchen", usd_path=str(kitchen_usd),
                     object_min_z=-.2, initial_pose=Pose.identity(), reset_nested_physics=bool(native_background_reset), **kwargs)
+            if name == "simready_usd_object":
+                def local_simready(**kwargs):
+                    import json
+                    url=kwargs["usd_path"]
+                    report=json.loads((ROOT / "reports/skill_trials/lightwheel_pick_place/b05_assets.json").read_text())
+                    row=next(x for x in report["files"] if x["url"]==url)
+                    kwargs["usd_path"]=str(ROOT / row["path"])
+                    return AssetRegistry().get_asset_by_name(name)(**kwargs)
+                return local_simready
             if name in object_paths:
                 row = object_paths[name]
                 return type("Local_" + name, (AssetRegistry().get_asset_by_name(name),), {"usd_path": row["path"]})

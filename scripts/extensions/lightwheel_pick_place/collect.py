@@ -23,6 +23,7 @@ parser.add_argument('--grasp-lateral-x',type=float,default=0.0,
 parser.add_argument('--grasp-local-approach',action='store_true',
     help='Shelf: build pregrasp/standoff along -TCP_Z from selected wrist R (not fixed world offset)')
 parser.add_argument('--defer-full-world-audit',action='store_true',help='Record every 120 Hz state; check added hazards at 120 Hz, full world at 15 Hz live, and require complete 120 Hz offline full-world audit before acceptance')
+parser.add_argument('--grasp-body-point',nargs=3,type=float,default=None,help='Measured object-local solid grasp point; recorded as a control')
 parser.add_argument('--grasp-search',choices=('fixed','b03-family','b03-topdown'),default='fixed')
 parser.add_argument('--pregrasp-planner',choices=('auto','motion_gen','cartesian_line'),default='auto')
 parser.add_argument('--pregrasp-standoff',type=float,default=None)
@@ -281,7 +282,7 @@ with SimulationAppContext(args):
             if args.variant=='property':
                 world.set_obstacle_pose('glass',s['hazard_pose'])
                 if len(task_picks(TASK_SPEC))==1:planner.update_dynamic_obstacle('glass')
-            if len(task_picks(TASK_SPEC))>1:
+            if len(task_picks(TASK_SPEC))>1 or PICK in ('green_ladle','pepsi_can'):
                 for name in RIGID:
                     if name!=PICK:
                         world.set_obstacle_pose(name,s[name][:7])
@@ -343,7 +344,9 @@ with SimulationAppContext(args):
             q=trajectory['positions'][-1].copy()
             for _ in range(12):step(q,grip)
         p=initial['lime'][:3].copy()
-        target_center=transform(initial['lime'][:3],initial['lime'][3:7])@np.r_[world.object_center,1]
+        grasp_body_point=np.asarray(args.grasp_body_point if args.grasp_body_point is not None else world.object_center,float)
+        result['grasp_point_body_m']=grasp_body_point.tolist()
+        target_center=transform(initial['lime'][:3],initial['lime'][3:7])@np.r_[grasp_body_point,1]
         target_center[2]+=args.grasp_height_offset
         target_center[0]+=args.grasp_lateral_x
         result['grasp_lateral_x_m']=float(args.grasp_lateral_x)

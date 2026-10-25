@@ -1,6 +1,6 @@
 """Per-task constants for Lightwheel pick-and-place B-group executors.
 
-B01 lime, B02 lemon, B03 bananas, B04 ladle.
+B01 lime, B02 lemon, B03 bananas, B04 ladle, B05 Pepsi.
 """
 from __future__ import annotations
 
@@ -14,6 +14,7 @@ LEMON_TASK = "kitchen_bench_lightwheel_pick_lemon_shelf_on_plate_u_shaped_with_i
 BANANA_TASK = "kitchen_bench_lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2"
 LADLE_TASK = "kitchen_bench_lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian"
 
+PEPSI_TASK = "kitchen_bench_lightwheel_place_pepsi_in_basket_u_shaped_with_island_farmhouse2"
 
 @dataclass(frozen=True)
 class TaskSpec:
@@ -113,11 +114,26 @@ TASKS: dict[str, TaskSpec] = {
         pregrasp_offset_m=(0.0, 0.0, 0.125),
         transfer_z_m=0.14,
         lower_z_m=0.08,
-        grasp_body_z_range=(-0.001, 0.061),
+        grasp_body_z_range=(0.003, 0.021),
         stand_output_basename="ladle_droid_original_stand",
         default_fixed_layout=ROOT / "configs/extensions/lightwheel_pick_place/fixed_layout_ladle.json",
         default_variants=ROOT / "configs/extensions/lightwheel_pick_place/variants_ladle.json",
     ),
+    PEPSI_TASK: TaskSpec(
+        task_id=PEPSI_TASK,
+        kitchen_registry="lightwheel_kitchen_u_shaped_with_island_farmhouse2",
+        kitchen_cache_rel="robocasa-robocasakitchen-7-10/scene.usd",
+        layout_id=7, style_id=10,
+        pick_object="pepsi_can", destination_object="mini_plastic_basket",
+        rigid_objects=("pepsi_can","mini_plastic_basket","tuna_can","mug","corn_can"),
+        source_surface_suffix="/island_island_group/top_geometry_left",
+        pregrasp_offset_m=(0.,0.,.125), transfer_z_m=.22, lower_z_m=.14,
+        grasp_body_z_range=(.02,.10),
+        stand_output_basename="pepsi_droid_original_stand",
+        default_fixed_layout=ROOT / "configs/extensions/lightwheel_pick_place/fixed_layout_pepsi.json",
+        default_variants=ROOT / "configs/extensions/lightwheel_pick_place/variants_pepsi.json",
+    ),
+
 }
 
 

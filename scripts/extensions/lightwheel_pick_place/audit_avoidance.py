@@ -85,7 +85,7 @@ def audit(baseline,episode):
                 delta.update(linear_velocity_difference_m_s=float(np.linalg.norm(av[7:10]-bs[7:10])),angular_velocity_difference_rad_s=float(np.linalg.norm(av[10:13]-bs[10:13])))
             object_deltas[key]=delta
     task_pose_limits={'position_m':.001,'orientation_deg':1.}
-    task_pose_same=all(object_deltas[key]['position_difference_m']<=task_pose_limits['position_m'] and object_deltas[key]['orientation_difference_deg']<=task_pose_limits['orientation_deg'] for key in tuple(spec.pick_objects or (pick,))+(dest,))
+    task_pose_same=all(object_deltas[key]['position_difference_m']<=task_pose_limits['position_m'] and object_deltas[key]['orientation_difference_deg']<=task_pose_limits['orientation_deg'] for key in tuple(spec.pick_objects or (pick,))+(dest,)+(('plate',) if len(spec.pick_objects)>1 else ()))
     same=nominal_same and arm_same and task_pose_same
     initial_state_comparison={'nominal_source_reset_identical':nominal_same,'measured_arm_reset_matches':arm_same,
         'arm_max_difference_rad':arm_error,'arm_numerical_tolerance_rad':1e-6,'baseline_arm_q':bq.tolist(),'augmented_arm_q':aq.tolist(),
@@ -93,15 +93,16 @@ def audit(baseline,episode):
         'source_object_deltas':object_deltas,'scope':'Exact authored original poses, measured arm reset (1e-6 rad), robot base (1e-7m), and measured lime/bowl initial pose (1mm/1degree) are gated. All source settling deltas are disclosed; both paths must also pass both measured bowl/distractor backgrounds. Nominal equality does not assert identical physical states. No execution-time object setters.'}
     control_keys=('seed','placement_seed','requested_grasp_tilt_deg','requested_grasp_yaw_deg','requested_grasp_height_offset_m','smooth_lift','allowed_grasp_fallback','selected_grasp','dt','pregrasp_offset_m','grasp_lateral_x_m','grasp_finger_bias_m','grasp_local_approach','shelf_lift_retract_m')
     if len(spec.pick_objects)>1:control_keys=tuple(k for k in control_keys if k!='shelf_lift_retract_m')
+    if pick in ('green_ladle','pepsi_can'):control_keys+=('grasp_point_body_m',)
     same_controls=all(k in br and k in r and br[k] is not None and r[k] is not None and br[k]==r[k] for k in control_keys)
     search=br.get('grasp_search_policy')
     if len(spec.pick_objects)>1 and search:
         # Search outputs may differ with hazards; the candidate policy and input controls must match.
-        policy_same=(search==r.get('grasp_search_policy') and search.get('name') in ('b03-family-v1','b03-topdown-v1','b03-topdown-v2','b03-padcenter-v1'))
+        policy_same=(search==r.get('grasp_search_policy') and search.get('name') in ('b03-family-v1','b03-topdown-v1','b03-topdown-v2','b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3'))
         def selected_in_policy(metadata):
             chosen=metadata.get('selected_grasp',{});value=[chosen.get('tilt'),chosen.get('yaw')]
             if search.get('name') in ('b03-topdown-v1','b03-topdown-v2'):value.append(chosen.get('height_offset_m'))
-            if search.get('name')=='b03-padcenter-v1':value.extend([chosen.get('pinch_z_offset_m'),chosen.get('waist_y_shift_m')])
+            if search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3'):value.extend([chosen.get('pinch_z_offset_m'),chosen.get('waist_y_shift_m')])
             return value in search.get('candidates',[])
         selected_valid=all(selected_in_policy(m) for m in (br,r))
         control_keys=tuple(k for k in control_keys if k not in ('selected_grasp','pregrasp_offset_m'))
@@ -113,6 +114,22 @@ def audit(baseline,episode):
     same_support=all(k in baseline_support and k in actual_support and baseline_support[k] is not None and actual_support[k] is not None and baseline_support[k]==actual_support[k] for k in support_keys)
     plan_methods_match=[(x['phase'],x.get('metadata',{}).get('method')) for x in br.get('plans',[]) if x.get('executed')]==[(x['phase'],x.get('metadata',{}).get('method')) for x in r.get('plans',[]) if x.get('executed')]
     if len(spec.pick_objects)>1 and search:plan_methods_match=[x['phase'] for x in br.get('plans',[]) if x.get('executed')]==[x['phase'] for x in r.get('plans',[]) if x.get('executed')]
+    if len(spec.pick_objects)>1 and search and search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3'):
+        # Identical feedback policy can produce different recenter counts/routes.
+        # Check bounded outputs, while dense actual-path and native gates remain mandatory.
+        allowed={'pregrasp':{'motion_gen'},'approach':{'cartesian_ik','cartesian_line_ik'},'lift':{'motion_gen','cartesian_line_ik','cartesian_ik'},'transfer':{'motion_gen','motion_gen_upper_route'},'lower':{'cartesian_line_ik','cartesian_ik','motion_gen'},'retreat':{'motion_gen','cartesian_line_ik','cartesian_ik'}}
+        def valid_policy_execution(m):
+            plans=[x for x in m.get('plans',[]) if x.get('executed')]
+            if not plans or any(x['phase'] not in allowed or x.get('metadata',{}).get('method') not in allowed[x['phase']] for x in plans):return False
+            feedback=m.get('close_feedback',[])
+            for name in (spec.pick_objects or (pick,)):
+                events=[x for x in feedback if x.get('pick')==name]
+                if not events or len(events)>search['max_recenter_retries']+1:return False
+                if not events[-1].get('bilateral_load'):return False
+                for event in events:
+                    if 'delta_world_m' in event and np.linalg.norm(event['delta_world_m'])>search['recenter_max_step_m']+1e-8:return False
+            return True
+        plan_methods_match=all(valid_policy_execution(m) for m in (br,r))
     lower_keys=('mode','lower_z_m','skipped')
     lower_controls_match=all(br.get('place_lower',{}).get(k)==r.get('place_lower',{}).get(k) for k in lower_keys)
     same_controls=bool(same_controls and same_support and plan_methods_match and lower_controls_match and reset_controls_match)

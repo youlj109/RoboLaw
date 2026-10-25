@@ -59,6 +59,13 @@ def validate(out):
     checks['physical_close_contacts'] = close['sampled_actions'] == 5 and close['both_fingers_near_body']
     checks['physical_lift_contacts'] = lift['sampled_actions'] == 5 and lift['both_fingers_on_body']
     checks['carried_contacts_on_body'] = carried['passed']
+    if pick=='green_ladle':
+        # Actual measured handle is the thin negative-X stem, not the spoon bowl.
+        handle_points=[np.asarray(f['points_lime_local_m'],float).reshape(-1,3)[np.abs(np.asarray(f['normal_forces_n']))>.01] for row in records if row['phase'] in ('close','lift','transfer','lower') for f in row['fingers'].values()]
+        handle_points=np.concatenate(handle_points) if handle_points else np.empty((0,3))
+        checks['ladle_handle_contact_region']=bool(len(handle_points) and (handle_points[:,0]>=-.15).all() and (handle_points[:,0]<=-.025).all())
+        details['ladle_handle_contact_bounds_x_m']=[-.15,-.025]
+
 
     with h5py.File(out / 'trajectory.h5') as trajectory, h5py.File(out / 'images.h5') as images:
         n = len(trajectory['action'])

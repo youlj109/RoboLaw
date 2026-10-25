@@ -51,8 +51,8 @@ def plan_transfer(planner,q,target,ignore,grip):
     raise RuntimeError('No direct or upper route at fixed scene: '+str(failures))
 
 PAD_CALIBRATION_PATH='configs/extensions/lightwheel_pick_place/b03_pad_contact_calibration.json'
-TOPDOWN_CANDIDATES=[(75,180,.003,.03)]+[(tilt,yaw,z,y) for y in (0.,.03,-.03) for z in (0.,.003,-.003) for tilt,yaw in ((60,180),(70,180),(75,180),(80,180),(45,180),(-60,0),(-70,0))]
-TOPDOWN_POLICY={'name':'b03-padcenter-v1','grasp_point':'Actual collision-mesh cross-section centroid aligned to measured bilateral pad center','candidates':[list(x) for x in TOPDOWN_CANDIDATES],'closed_grip_preflight_range_rad':[.30,.383,.46,.55],'pregrasp_world_z_m':.125,'contact_standoff_m':0.,'lift_m':.12,'upper_route_rises_m':[.08,.16,.24]}
+TOPDOWN_CANDIDATES=[(0,180,.002,0.),(0,180,0.,.03),(0,180,.003,-.03),(15,180,0.,0.),(45,180,-.003,.03),(45,180,-.003,-.03),(45,180,-.003,0.),(60,180,-.003,.03),(75,180,.003,.03)]+[(tilt,yaw,z,y) for y in (.03,-.03,0.) for z in (-.003,0.,.003) for tilt,yaw in ((60,180),(70,180),(75,180),(80,180),(45,180),(-60,0),(-70,0)) if (tilt,yaw,z,y)!=(45,180,0.,0.)]
+TOPDOWN_POLICY={'name':'b03-padcenter-v3','grasp_point':'Actual collision-mesh cross-section centroid aligned to measured bilateral pad center','candidates':[list(x) for x in TOPDOWN_CANDIDATES],'closed_grip_preflight_range_rad':[.30,.383,.46,.55],'pregrasp_world_z_m':.125,'contact_standoff_m':0.,'lift_m':.12,'upper_route_rises_m':[.08,.16,.24]}
 
 
 def search_topdown(world,kin,q,pick_pose,*,bias_x_m,finger_bias_m,dt,seed):

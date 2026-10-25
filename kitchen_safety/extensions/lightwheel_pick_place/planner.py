@@ -144,6 +144,7 @@ class LimePlanner(CuroboPlanner):
         from scipy.spatial.transform import Rotation
         import numpy as np
         started=time.perf_counter()
+        self.query_start_q=np.asarray(q_arm7).copy()
         self._prepare_path_query(ignore_names,grip_binary,phase)
         initial=self.kin.fk(q_arm7)
         goal=np.array(target,copy=True); goal[:3,:3]=initial[:3,:3]
