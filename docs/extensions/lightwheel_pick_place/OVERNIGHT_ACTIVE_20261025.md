@@ -138,3 +138,7 @@ B04 fixed-bar CPU endpoint search found legal redundant solutions at unchanged d
 
 ## 2026-10-26 06:01 Shanghai
 B05 yaw90/release.16 baseline212845 originalsuccess=true,493frames; human214816 has now acquiredGPU and is approaching. Matched continuation165429 remains active (property/robot follow). B04robot redundant retry212845 still failed, though it found joint goals: directGRAPH_FAIL and some alternative full-FCL paths came within19.15mm of bar vs20mm requirement. Do not repeat identical routes or loosenmargin. All B04 variants currently unpassed; baseline andneutral fullypassed. B05property downloadable ZIP43MB integritypassed. Latest owned source tests15passed; preexisting local/server modifications preserved.
+
+## 2026-10-26 06:11 Shanghai disk space and remaining failure
+Data volume reached98% (4.4GB free). Preserve ALL episode evidence: relocating only regenerable pip HTTP cache17GB to `/root/lgd-preserved-cache/http-v2` on root volume (27GBfree), replacing original cache path with symlink after successful move; no cache deletion, no project/data moves. Log `/root/autodl-tmp/lgd-cache-relocation.log`.
+B05human yaw90/release.16 got through lift/transfer/lower then actual can hit original tabletop during release; failed, not accepted. Property220718 active, robot will follow. This differs from yaw0 initial-self failure; retain both original videos/state traces and diagnose actual orientation/opening dynamics before any further human retry.
