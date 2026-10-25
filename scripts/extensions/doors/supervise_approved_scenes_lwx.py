@@ -24,6 +24,7 @@ def collect(t,m,c,variant,tag,neutral=False,seconds=40.):
  ep=D/(t+'_'+variant+'_'+tag+('_neutral' if neutral else ''));args=['--task-id',m['task_id'],'--variant',variant,'--variant-config',m['base_config'],'--scene-manifest',str(R/(t+'_released01.json')),'--observer-config',str(R/(t+'_observer01.json')),'--seed','42','--validated-pregrasp','--render-warmup','--max-steps','1800','--output',str(ep)]
  for k,v in KEYS.items():
   if k in c:args+=['--'+v,str(c[k])]
+ if c.get('pregrasp_goal_q'):args+=['--pregrasp-goal-q',*map(str,c['pregrasp_goal_q'])]
  if c.get('pull_command_policy'):args+=['--pull-command-policy','lead_backoff_v1']
  if neutral:args+=['--mode','neutral','--neutral-seconds',str(seconds)]
  code=run(ep.name,'scripts/extensions/doors/collect_scene_approved_lwx.py',args,gpu=True)

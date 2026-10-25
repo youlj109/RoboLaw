@@ -28,6 +28,7 @@ p.add_argument('--render-warmup', action='store_true', help='Converge RTX appear
 p.add_argument('--neutral-seconds', type=float, default=40.)
 p.add_argument('--review-config', default='configs/extensions/doors/review_gates_lwx.json')
 p.add_argument('--scene-manifest',type=Path,required=True)
+p.add_argument('--pregrasp-goal-q',type=float,nargs=7)
 a=p.parse_args();a.enable_cameras=True
 scene_manifest=json.loads(a.scene_manifest.read_text())
 if not scene_manifest.get('planning_permitted'):p.error('Scene is not released for planning')
@@ -139,6 +140,7 @@ with SimulationAppContext(a):
     metadata['door_geometry']=geometry
     metadata['door_motion_reference_joint_rad']=reference_joint_position
     metadata['controller_parameters']['grasp_roll_deg']=a.grasp_roll_deg
+    if a.pregrasp_goal_q is not None:metadata['controller_parameters']['pregrasp_goal_q']=a.pregrasp_goal_q
     if a.pregrasp_settle_steps:metadata['controller_parameters']['pregrasp_settle_steps']=a.pregrasp_settle_steps
     if a.pregrasp_shortcut_policy!='none':metadata['controller_parameters']['pregrasp_shortcut_policy']=a.pregrasp_shortcut_policy
     if a.planner_hazard_extra_padding_m:metadata['controller_parameters']['planner_hazard_extra_padding_m']=a.planner_hazard_extra_padding_m
@@ -321,7 +323,7 @@ with SimulationAppContext(a):
             phase='neutral_hold'
             for _ in range(int(np.ceil(a.neutral_seconds/e.step_dt))):step(startup_target,0.)
         else:
-            planner=CuroboPlanner(world,kin,dt=e.step_dt,seed=a.seed or 42,max_joint_speed=.5,hazard_extra_padding_m=a.planner_hazard_extra_padding_m,pregrasp_shortcut_policy=a.pregrasp_shortcut_policy)
+            planner=CuroboPlanner(world,kin,dt=e.step_dt,seed=a.seed or 42,max_joint_speed=.5,hazard_extra_padding_m=a.planner_hazard_extra_padding_m,pregrasp_shortcut_policy=a.pregrasp_shortcut_policy,pregrasp_goal_q=a.pregrasp_goal_q)
             handles=tuple(world.handle_contact_colliders)
             target=np.eye(4);target[:3,:3]=R0;default_handle=handle0.copy();candidate_failures=[];plan=None;candidate_queries=[]
             phase='pregrasp'

@@ -13,6 +13,7 @@ def collect(tag,neutral=False,seconds=40.):
  keys={'handle_offset_y':'handle-offset-y','handle_offset_z':'handle-offset-z','grasp_roll_deg':'grasp-roll-deg','grasp_pitch_deg':'grasp-pitch-deg','handle_normal_offset_m':'handle-normal-offset','pull_lead_rad':'pull-lead-rad','pull_steps':'pull-steps','ik_limit_margin_rad':'ik-limit-margin-rad','release_retreat_m':'release-retreat-m','release_tilt_deg':'release-tilt-deg','release_retreat_profile':'release-retreat-profile','release_settle_steps':'release-settle-steps','opening_reserve_rad':'opening-reserve-rad','pregrasp_settle_steps':'pregrasp-settle-steps','pregrasp_shortcut_policy':'pregrasp-shortcut-policy','planner_hazard_extra_padding_m':'planner-hazard-extra-padding-m','release_command_policy':'release-command-policy'}
  for k,v in keys.items():
   if k in POL:args+=['--'+v,POL[k]]
+ if POL.get('pregrasp_goal_q'):args+=['--pregrasp-goal-q',*POL['pregrasp_goal_q']]
  if POL.get('pull_command_policy'):args+=['--pull-command-policy','lead_backoff_v1']
  if neutral:args+=['--mode','neutral','--neutral-seconds',seconds]
  run(ep.name,'scripts/extensions/doors/collect_scene_approved_lwx.py',args,gpu=True);res=json.loads((ep/'result.json').read_text()) if (ep/'result.json').exists() else {'accepted':False,'failure':'missing result'};return ep,res
