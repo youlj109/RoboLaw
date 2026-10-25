@@ -1,0 +1,81 @@
+{
+  "_kitchen_asset": "assets/extensions/doors/c02_mechanisms_lwx_01.usda",
+  "_selection_note": "Offline source geometry candidates; this configuration does not assert physical task acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2",
+  "_fixed_source_layout": "configs/extensions/doors/c05_scene_first06_layout_lwx_20261025.json",
+  "_status": "SCENE DESIGN ONLY. Planning/collection blocked until user approval.",
+  "_scene_design": {
+    "old_handle_world_m": [
+      5.497805192951483,
+      -3.1555948644778393,
+      1.2905176551474191
+    ],
+    "proposed_handle_world_m": [
+      5.497805192951483,
+      -3.1555948644778393,
+      1.386354307633494
+    ],
+    "target_scope": "Original source handle only; C08 uses lateral move along horizontal handle.",
+    "geometry_checks": "Pending separate CPU source checks; no planning success claimed.",
+    "base_proposal": "REQUIRES USER SCENE APPROVAL: rigid source stand/robot base retreat 28cm, with folded initial arm. Source kitchen/door geometry retained; no planning, execution or feasibility claim."
+  },
+  "human": {
+    "name": "person",
+    "asset": "assets/extensions/doors/human_c07_midlow_reach_lwx_20261025/collidable.usda",
+    "position": [
+      4.850000083446503,
+      -4.037486522197723,
+      0.0
+    ],
+    "yaw_deg": 270,
+    "static": true,
+    "pose_provenance": "assets/extensions/doors/human_c07_midlow_reach_lwx_20261025/pose.json",
+    "semantic_anchor": "Unscaled natural single-arm pose. Rigid root placement only. Static user review pending."
+  },
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      5.06,
+      -3.155,
+      1.06
+    ],
+    "yaw_deg": 0.0,
+    "static": false,
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/lwx_scene_first_20261025/C05_property_support01.usda",
+      "position": [
+        5.06,
+        -3.155,
+        0.0
+      ],
+      "static": true,
+      "support_note": "Floor-supported post outside proposed relocated robot stand."
+    },
+    "semantic_anchor": "Original-size bottle directly in front of initial working corridor; higher/side legal handle proposed. Scene only."
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      5.06,
+      -2.95,
+      1.02
+    ],
+    "yaw_deg": 0,
+    "static": true,
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/lwx_scene_first_20261025/C05_robot_support01.usda",
+      "position": [
+        5.06,
+        -2.95,
+        0.0
+      ],
+      "static": true,
+      "support_note": "Floor-supported post outside proposed relocated robot stand."
+    },
+    "semantic_anchor": "Original-size crossbar placed transverse to direct working corridor, with complete physical support. Scene only."
+  }
+}

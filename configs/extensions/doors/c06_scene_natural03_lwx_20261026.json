@@ -1,0 +1,76 @@
+{
+  "_task_scope": "kitchen_bench_lightwheel_open_microwave",
+  "_fixed_source_layout": "configs/extensions/doors/c06_source_layout_lwx.json",
+  "_status": "User authorized corrections and subsequent planning on 2026-10-26; static validation pending.",
+  "_scene_design": {
+    "old_handle_world_m": [
+      3.3487910184806955,
+      -0.48715998884873296,
+      1.5416508608432513
+    ],
+    "proposed_handle_world_m": [
+      3.3487910184806955,
+      -0.48715998884873296,
+      1.6784460207225012
+    ],
+    "target_scope": "Original source handle only; C08 uses lateral move along horizontal handle.",
+    "geometry_checks": "Pending separate CPU source checks; no planning success claimed."
+  },
+  "human": {
+    "name": "person",
+    "asset": "assets/extensions/doors/human_natural_c06_lwx_20261026/collidable.usda",
+    "position": [
+      2.25,
+      -0.88,
+      0.0
+    ],
+    "yaw_deg": 225,
+    "static": true,
+    "pose_provenance": "assets/extensions/doors/human_natural_c06_lwx_20261026/pose.json",
+    "semantic_anchor": "Right arm with natural local wrist pose; unchanged shoulder and bone lengths. C02 body moved to opposite side."
+  },
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      3.25,
+      -0.7,
+      1.4
+    ],
+    "yaw_deg": 0.0,
+    "static": false,
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/lwx_scene_first_20261025/C06_property_support01.usda",
+      "position": [
+        3.25,
+        -0.7,
+        0.0
+      ],
+      "static": true
+    },
+    "semantic_anchor": "Original-size bottle directly in front of initial working corridor; higher/side legal handle proposed. Scene only."
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      3.44,
+      -0.7,
+      1.34
+    ],
+    "yaw_deg": 270,
+    "static": true,
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/lwx_scene_first_20261025/C06_robot_support01.usda",
+      "position": [
+        3.44,
+        -0.7,
+        0.0
+      ],
+      "static": true
+    },
+    "semantic_anchor": "Original-size crossbar placed transverse to direct working corridor, with complete physical support. Scene only."
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "scope": "CPU sampled source geometry diagnostic. Not planning/physical acceptance.",
+  "curobo_invoked": false,
+  "ik_invoked": false,
+  "candidates": [
+    {
+      "id": "C03_property_approved01",
+      "variant": "property",
+      "source_initial": {
+        "distance_m": null,
+        "required_m": 0.06,
+        "slack_m": null,
+        "valid": true
+      },
+      "support_initial": {
+        "distance_m": null,
+        "required_m": 0.002,
+        "slack_m": null,
+        "valid": true
+      },
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [
+        {
+          "added": "/World/envs/env_0/property_pedestal/Column",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 3.784894939129545e-09
+        }
+      ],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 2,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "static_rejections_absent": true
+    },
+    {
+      "id": "C03_robot_approved01",
+      "variant": "robot",
+      "source_initial": {
+        "distance_m": null,
+        "required_m": 0.02,
+        "slack_m": null,
+        "valid": true
+      },
+      "support_initial": {
+        "distance_m": null,
+        "required_m": 0.002,
+        "slack_m": null,
+        "valid": true
+      },
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [
+        {
+          "added": "/World/envs/env_0/robot_pedestal/Column",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 9.745359394464086e-09
+        }
+      ],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 2,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "static_rejections_absent": true
+    }
+  ],
+  "complete": true
+}

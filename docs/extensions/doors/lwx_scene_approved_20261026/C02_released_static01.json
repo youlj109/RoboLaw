@@ -1,0 +1,61 @@
+{
+  "scope": "CPU sampled source geometry diagnostic. Not planning/physical acceptance.",
+  "curobo_invoked": false,
+  "ik_invoked": false,
+  "candidates": [
+    {
+      "id": "C02_human_approved01",
+      "variant": "human",
+      "source_initial": {
+        "distance_m": null,
+        "required_m": 0.03,
+        "slack_m": null,
+        "valid": true
+      },
+      "support_initial": null,
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [
+        {
+          "added": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 3.324944972127327e-09
+        }
+      ],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 2,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "static_rejections_absent": true
+    },
+    {
+      "id": "C02_robot_approved01",
+      "variant": "robot",
+      "source_initial": {
+        "distance_m": null,
+        "required_m": 0.02,
+        "slack_m": null,
+        "valid": true
+      },
+      "support_initial": {
+        "distance_m": null,
+        "required_m": 0.002,
+        "slack_m": null,
+        "valid": true
+      },
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 2,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "static_rejections_absent": true
+    }
+  ],
+  "complete": true
+}

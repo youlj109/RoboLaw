@@ -1,0 +1,85 @@
+{
+  "task_id": "kitchen_bench_lightwheel_open_microwave",
+  "label": "C06",
+  "base_config": "configs/extensions/doors/c06_scene_natural03_lwx_20261026.json",
+  "baseline": "datasets/doors/lwx_C04_C08_20261024/C06_base_03",
+  "observer": {
+    "position_world_m": [
+      1.6324524879455566,
+      -2.325716233253479,
+      2.65
+    ],
+    "look_at_world_m": [
+      3.240621753213126,
+      -0.856438111051106,
+      1.35
+    ],
+    "focal_length": 2.8
+  },
+  "second_observer": {
+    "position_world_m": [
+      4.132452487945557,
+      -2.725716233253479,
+      2.6
+    ],
+    "look_at_world_m": [
+      3.1324524879455566,
+      -0.925716233253479,
+      1.35
+    ],
+    "focal_length": 2.8
+  },
+  "old_handle_world_m": [
+    3.3487910184806955,
+    -0.48715998884873296,
+    1.5416508608432513
+  ],
+  "new_handle_world_m": [
+    3.3487910184806955,
+    -0.48715998884873296,
+    1.6784460207225012
+  ],
+  "start_tcp_world_m": [
+    3.1327388836364247,
+    -0.8660132194725575,
+    1.4507670670842834
+  ],
+  "candidates": [
+    {
+      "id": "C06_human_approved01",
+      "config": "configs/extensions/doors/c06_scene_natural03_lwx_20261026.json",
+      "variant": "human"
+    },
+    {
+      "id": "C06_property_approved01",
+      "config": "configs/extensions/doors/c06_scene_natural03_lwx_20261026.json",
+      "variant": "property"
+    },
+    {
+      "id": "C06_robot_approved01",
+      "config": "configs/extensions/doors/c06_scene_natural03_lwx_20261026.json",
+      "variant": "robot"
+    }
+  ],
+  "user_visual_approval": "User authorized correction then planning; agent must verify scene",
+  "planning_permitted": true,
+  "start_reference": "Analytic source FK of proposed frozen initial joints. No IK/trajectory.",
+  "preview_initial_q": [
+    0.0,
+    -0.6283185482025146,
+    0.0,
+    -2.5132741928100586,
+    0.0,
+    1.884955644607544,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "initial_pose_design_note": "Original source initial robot joints and base; natural single-arm human replaces prior both-arm pose.",
+  "authorization": "Latest direct user authorization on 2026-10-26: previous other scenes approved; correct C02/C06 human and C01 frontal variants, then run planning/collection without further confirmation. Static gates required before each execution.",
+  "source_manifest": "reports/doors/lwx_approved_run_20261026/C06_manifest03.json"
+}

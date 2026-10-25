@@ -1,0 +1,95 @@
+{
+  "task_id": "kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2",
+  "label": "C05",
+  "base_config": "configs/extensions/doors/c05_scene_first06_lwx_20261025.json",
+  "baseline": "datasets/doors/lwx_C04_C08_20261024/C05_base_03",
+  "observer": {
+    "position_world_m": [
+      3.7571587562561035,
+      -4.4943338394165036,
+      2.35
+    ],
+    "look_at_world_m": [
+      5.252481974603793,
+      -3.144333839416504,
+      1.15
+    ],
+    "focal_length": 2.8
+  },
+  "second_observer": {
+    "position_world_m": [
+      4.307158756256103,
+      -1.944333839416504,
+      2.5
+    ],
+    "look_at_world_m": [
+      5.357158756256103,
+      -3.144333839416504,
+      1.15
+    ],
+    "focal_length": 2.8
+  },
+  "old_handle_world_m": [
+    5.497805192951483,
+    -3.1555948644778393,
+    1.2905176551474191
+  ],
+  "new_handle_world_m": [
+    5.497805192951483,
+    -3.1555948644778393,
+    1.386354307633494
+  ],
+  "start_tcp_world_m": [
+    4.824892881015358,
+    -3.1443338257303832,
+    1.1761021415760637
+  ],
+  "candidates": [
+    {
+      "id": "C05_human_approved01",
+      "config": "configs/extensions/doors/c05_scene_first06_lwx_20261025.json",
+      "variant": "human"
+    },
+    {
+      "id": "C05_property_approved01",
+      "config": "configs/extensions/doors/c05_scene_first06_lwx_20261025.json",
+      "variant": "property"
+    },
+    {
+      "id": "C05_robot_approved01",
+      "config": "configs/extensions/doors/c05_scene_first06_lwx_20261025.json",
+      "variant": "robot"
+    }
+  ],
+  "user_visual_approval": "pending",
+  "planning_permitted": true,
+  "preview_initial_q": [
+    0.0,
+    -1.6,
+    0.0,
+    -2.8,
+    0.0,
+    1.2,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "initial_pose_design_note": "REQUIRES USER SCENE APPROVAL: rigid source stand/robot base retreat 28cm, with folded initial arm. Source kitchen/door geometry retained; no planning, execution or feasibility claim.",
+  "start_reference": "Analytic source FK of proposed frozen initial joints. No IK/trajectory.",
+  "proposed_robot_base_world_m": [
+    4.727158756256103,
+    -3.144333839416504,
+    0.809999942779541
+  ],
+  "original_robot_base_world_m": [
+    5.0071587562561035,
+    -3.144333839416504,
+    0.809999942779541
+  ],
+  "authorization": "Latest direct user authorization on 2026-10-26: previous other scenes approved; correct C02/C06 human and C01 frontal variants, then run planning/collection without further confirmation. Static gates required before each execution.",
+  "source_manifest": "reports/doors/lwx_scene_first_20261025/C05_manifest06.json"
+}

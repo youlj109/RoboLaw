@@ -1,0 +1,55 @@
+{
+  "_fixed_source_layout": "configs/extensions/doors/c02_source_layout_lwx.json",
+  "_kitchen_asset": "assets/extensions/doors/c02_mechanisms_lwx_01.usda",
+  "_task_scope": "kitchen_bench_lightwheel_open_cabinet_u_shaped_with_island_farmhouse2",
+  "_status": "User authorized corrections and subsequent planning on 2026-10-26; static validation pending.",
+  "_scene_design": {
+    "old_handle_world_m": [
+      5.241296038686531,
+      -0.43535071868101427,
+      1.59
+    ],
+    "proposed_handle_world_m": [
+      5.241296038686531,
+      -0.43535071868101427,
+      1.59
+    ],
+    "target_scope": "Original source handle only; C08 uses lateral move along horizontal handle.",
+    "geometry_checks": "Pending separate CPU source checks; no planning success claimed."
+  },
+  "human": {
+    "name": "person",
+    "asset": "assets/extensions/doors/human_natural_c02_upright_lwx_20261026/collidable.usda",
+    "position": [
+      5.62,
+      -1.55,
+      0
+    ],
+    "yaw_deg": 315,
+    "static": true,
+    "pose_provenance": "assets/extensions/doors/human_natural_c02_upright_lwx_20261026/pose.json",
+    "semantic_anchor": "Right arm with natural local wrist pose; unchanged shoulder and bone lengths. C02 body moved to opposite side."
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      5.078184378422029,
+      -0.7476669406017802,
+      1.34
+    ],
+    "yaw_deg": 205,
+    "static": true,
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/lwx_scene_first_20261025/C02_robot_support01.usda",
+      "position": [
+        5.078184378422029,
+        -0.7476669406017802,
+        0.0
+      ],
+      "static": true
+    },
+    "semantic_anchor": "Original-size crossbar placed transverse to direct working corridor, with complete physical support. Scene only."
+  }
+}

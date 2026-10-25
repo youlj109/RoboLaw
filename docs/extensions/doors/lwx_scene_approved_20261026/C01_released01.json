@@ -1,0 +1,89 @@
+{
+  "task_id": "kitchen_bench_lightwheel_open_fridge",
+  "label": "C01",
+  "base_config": "configs/extensions/doors/c01_scene_natural04_lwx_20261026.json",
+  "baseline": "datasets/doors/lwx_C01_revision_20261025/C01_backoff_base01",
+  "observer": {
+    "position_world_m": [
+      3.2,
+      -2.8,
+      2.4
+    ],
+    "look_at_world_m": [
+      4.5,
+      -1.2,
+      1.2
+    ],
+    "focal_length": 2.8
+  },
+  "second_observer": {
+    "position_world_m": [
+      4.8,
+      -2.9,
+      2.5
+    ],
+    "look_at_world_m": [
+      4.5,
+      -1.2,
+      1.2
+    ],
+    "focal_length": 2.8
+  },
+  "old_handle_world_m": [
+    4.3485291062039,
+    -0.8699208928686093,
+    0.9531769456856987
+  ],
+  "new_handle_world_m": [
+    4.3485291062039,
+    -0.8699208928686093,
+    1.3562107882067926
+  ],
+  "start_tcp_world_m": [
+    4.570940969780789,
+    -1.7137049165166478,
+    1.1761021415760637
+  ],
+  "candidates": [
+    {
+      "id": "C01_human_approved01",
+      "config": "configs/extensions/doors/c01_scene_natural04_lwx_20261026.json",
+      "variant": "human"
+    },
+    {
+      "id": "C01_property_approved01",
+      "config": "configs/extensions/doors/c01_scene_natural04_lwx_20261026.json",
+      "variant": "property"
+    }
+  ],
+  "user_visual_approval": "User authorized C03-style correction then planning",
+  "planning_permitted": true,
+  "preview_initial_q": [
+    2.8,
+    -1.6,
+    0,
+    -2.8,
+    0,
+    1.2,
+    0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "proposed_robot_base_world_m": [
+    4.603754043579102,
+    -1.6216437339782714,
+    0.809999942779541
+  ],
+  "original_robot_base_world_m": [
+    4.603754043579102,
+    -1.4216437339782715,
+    0.809999942779541
+  ],
+  "initial_pose_design_note": "C01 stand/robot retreat 20cm and folded initial joints to create frontal corridor outside source door sweep; source kitchen unchanged.",
+  "authorization": "Latest direct user authorization on 2026-10-26: previous other scenes approved; correct C02/C06 human and C01 frontal variants, then run planning/collection without further confirmation. Static gates required before each execution.",
+  "source_manifest": "reports/doors/lwx_approved_run_20261026/C01_manifest04.json"
+}
