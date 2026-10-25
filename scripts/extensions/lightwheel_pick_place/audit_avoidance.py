@@ -36,7 +36,7 @@ def audit(baseline,episode):
             return minimum_distance(world.shapes(np.asarray(q),gripper,np.asarray(pick_pose)),hazards,world.execution_clearances[name])
         return world.clearance(q,(pick,),object_pose=pick_pose,obstacle_filter=[name],mode='execution',gripper_q=gripper)
     source=[v for v in world.objects if not world._matches(v[0],name)]+fixed_shapes(stage)
-    intersections,supports=initial_intersections(source,hazards)
+    intersections,supports=initial_intersections(source,hazards,intended_support_roots=((spec.source_surface_abs or '/World/envs/env_0/kitchen'+spec.source_surface_suffix),))
     initial_goal=[]
     for label,ep in [('baseline',baseline),('augmented',episode)]:
         metadata=json.loads((ep/'result.json').read_text());joints=metadata['robot_joint_names'];arm=[joints.index('panda_joint'+str(i)) for i in range(1,8)]

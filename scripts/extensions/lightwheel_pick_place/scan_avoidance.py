@@ -45,7 +45,7 @@ def minimum(shapes,hazards,margin,cutoff=.08):
             if hit:break
     return best
 
-def initial_intersections(source,hazards):
+def initial_intersections(source,hazards,*,intended_support_roots=()):
     sl=np.array([s[2] for s in source]);sh=np.array([s[3] for s in source]);bad=[];support=[]
     for hn,ho,hl,hh in hazards:
         bounds=np.linalg.norm(np.maximum(np.maximum(sl-hh,hl-sh),0),axis=1)
@@ -54,7 +54,8 @@ def initial_intersections(source,hazards):
             raw=float(fcl.distance(ho,so,fcl.DistanceRequest(),fcl.DistanceResult()))
             hit=raw<0 or (raw==0 and bool(fcl.collide(ho,so,fcl.CollisionRequest(),fcl.CollisionResult())))
             if not hit:continue
-            intended=('/floor' in sn.lower() and hl[2]>=hi[2]-.006) or ('/counter_' in sn and hl[2]>=hi[2]-.006)
+            exact_support=any(sn==root or sn.startswith(root.rstrip('/')+'/') for root in intended_support_roots)
+            intended=(exact_support and hl[2]>=hi[2]-.006) or ('/floor' in sn.lower() and hl[2]>=hi[2]-.006) or ('/counter_' in sn and hl[2]>=hi[2]-.006)
             (support if intended else bad).append({'hazard':hn,'source':sn,'raw_distance_m':raw})
             if bad:return bad,support
     return bad,support
