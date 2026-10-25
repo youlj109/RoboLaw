@@ -1,3 +1,3 @@
 # C05 corridor revisions (2026-10-25)
 
-Current completed revision: property_fingerhump02. Robot/human revisions are still in progress until their own independent evidence is added. All original C05 variants and failures are preserved. See each variant summary; technical acceptance and user visual acceptance are separate.
+Completed independent reviews: property_fingerhump02 and robot_fingerhump04. Human tipclear02 completed one real successful opening and is undergoing its own 40-second neutral control and independent reviews. User visual review is pending for these revisions. See each summary for exact selected evidence; all original data and failed trials are retained.
