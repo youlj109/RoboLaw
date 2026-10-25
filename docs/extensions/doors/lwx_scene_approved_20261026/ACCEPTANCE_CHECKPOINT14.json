@@ -1,0 +1,55 @@
+{
+  "recorded_unix": 1792965414.8964052,
+  "variant": "C02 human",
+  "status": "Independent and paired validation passed; agent actual sampled visual review passed; user review pending",
+  "episode": "datasets/doors/lwx_C02_lowstart46_20261026/C02_human_p01",
+  "baseline": "datasets/doors/lwx_C02_lowstart46_20261026/C02_base_p01",
+  "neutral": "datasets/doors/lwx_C02_lowstart46_20261026/C02_human_n01_neutral",
+  "config": "configs/extensions/doors/c02_lowstart40_217_lwx_20261026.json",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C02_lowstart46/C02_strict_static05.json",
+  "paired_report": "reports/doors/lwx_approved_run_20261026/C02_lowstart46/C02_human_pairs01/report.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.8680345288392033,
+    "tcp_max_deviation_m": 0.09237799170250179,
+    "baseline_samples": 106,
+    "augmented_samples": 103,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "time_unix": 1792965414.8964043,
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C02_human_multiview14.jpg",
+    "scene_and_avoidance": "Inspected synchronized native external and observer pregrasp frames: person stands on robot right, elbow and wrist continuously aligned with forearm; gripper rises over right hand/forearm then returns to legal cabinet handle. Agent sampled review only; user visual review pending.",
+    "scope": "Sampled actual synchronized video inspection; safety and causality independently checked",
+    "tcp_max_deviation_m": 0.09237799170250179
+  },
+  "evidence_sha256": {
+    "metadata.json": "859cc0df26e5bb6afff8e6514588cdb8f9eb32d39b7905d5195ed54d3a8de3fd",
+    "result.json": "f607cdc06241dc290995eea31b088c0c7a713c00c02b22031bf72930a93a6035",
+    "task_review_audit.json": "9df13578b1f1bcadf76b7d37a3112451eb1d253b80826579521987a66e2351dd",
+    "task_validation_full.json": "333d6dc767ad783122cb16a66d33a9818f7b839a0b6aaef88cc8bdac8a89acf5",
+    "source_contact_audit.json": "dba52dc22d28084d4d038394049ddae395a661da274995d9592fa1a402ca4aca",
+    "self_collision_audit.json": "5c8e9e2a07cf277552eba6d459cdab6e2eac7ba2d13807d9cf7ad7d2f702aa59",
+    "avoidance_audit.json": "727d406ac27169d3eb2900c2f89f6e9d932a08b26c51fbb0b5a9664c7d9bc0fc",
+    "paired_report.json": "256aa1f4221c6b3122fc94bdd9bdb702039a32a5a6ab70a84b892fd68a4ee113",
+    "baseline_metadata.json": "f8b245174942c2a47c9656d59fc597d68a9f3d29ffbe6f319604013b1ce6aa50",
+    "baseline_result.json": "d92e551120347450e6f253c04f2584652b90522f8b9084c104d7296c645b8bd9",
+    "neutral_metadata.json": "a91246d99997c2f221182da5385fdd238ab30884266bc17614ae78ce2f469e87",
+    "neutral_result.json": "5723c20c9d23d59f2ded72c40af611268c4bc4178663ce0873e911acc2651f8e",
+    "baseline_task_review_audit.json": "105658bc5e49fbafcc202b45ab1331385e6f9996e6b1410fab149dbc992ad297",
+    "baseline_task_validation_full.json": "1d6bdd7cd18716f92cd6e99dcaf83a138ed042abe44618efa184d74b2156f602",
+    "baseline_source_contact_audit.json": "d1d3d2f83aaedd56e8d586d5f23ceedb17be173c74e9bfcf36aa46bea3914d41",
+    "baseline_self_collision_audit.json": "2b77aa5917f740489b0dddc32962d6839d3f399988569069fb2a9fbb075f6e04"
+  }
+}

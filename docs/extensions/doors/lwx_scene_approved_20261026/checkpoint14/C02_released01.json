@@ -1,0 +1,76 @@
+{
+  "task_id": "kitchen_bench_lightwheel_open_cabinet_u_shaped_with_island_farmhouse2",
+  "label": "C02",
+  "base_config": "configs/extensions/doors/c02_lowstart40_217_lwx_20261026.json",
+  "baseline": "datasets/doors/lwx_scene_approved_20261026/C02_base_p01",
+  "observer": {
+    "position_world_m": [
+      3.404860019683838,
+      -2.053747093677521,
+      2.65
+    ],
+    "look_at_world_m": [
+      5.073078029185185,
+      -0.6945489061792676,
+      1.35
+    ],
+    "focal_length": 2.8
+  },
+  "second_observer": {
+    "position_world_m": [
+      5.904860019683838,
+      -2.4537470936775208,
+      2.6
+    ],
+    "look_at_world_m": [
+      4.904860019683838,
+      -0.6537470936775207,
+      1.35
+    ],
+    "focal_length": 2.8
+  },
+  "old_handle_world_m": [
+    5.241296038686531,
+    -0.43535071868101427,
+    1.59
+  ],
+  "new_handle_world_m": [
+    5.241296038686531,
+    -0.43535071868101427,
+    1.6300000000000001
+  ],
+  "start_tcp_world_m": [
+    4.904944122460023,
+    -0.8481047948158923,
+    1.4945585869642144
+  ],
+  "candidates": [
+    {
+      "id": "C02_human_lowstart46",
+      "variant": "human",
+      "config": "configs/extensions/doors/c02_lowstart40_217_lwx_20261026.json"
+    }
+  ],
+  "user_visual_approval": "User authorized correction then planning; agent must verify scene",
+  "planning_permitted": true,
+  "start_reference": "Analytic source FK of proposed frozen initial joints. No IK/trajectory.",
+  "preview_initial_q": [
+    0.0,
+    0.4,
+    0.0,
+    -2.5,
+    0.0,
+    1.2,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "initial_pose_design_note": "Static first-joint yaw +1.2 rad proposal at unchanged source base; no IK or execution.",
+  "authorization": "Latest direct user authorization on 2026-10-26: previous other scenes approved; correct C02/C06 human and C01 frontal variants, then run planning/collection without further confirmation. Static gates required before each execution.",
+  "source_manifest": "reports/doors/lwx_approved_run_20261026/C02_manifest18.json",
+  "revision_note": "Natural right arm, rigid person on robot right; source base unchanged, frozen lower initial arm and legal handle +4cm. Requires new physically matching baseline."
+}

@@ -1,0 +1,60 @@
+{
+  "scope": "CPU sampled source geometry diagnostic. Not planning/physical acceptance.",
+  "curobo_invoked": false,
+  "ik_invoked": false,
+  "manifest_sha256": "c5a18392b375991d2001f54195a57898ad082055d62e49c2c275e5c12aac6bfc",
+  "candidates": [
+    {
+      "id": "C02_human_lowstart46",
+      "variant": "human",
+      "config": "configs/extensions/doors/c02_lowstart40_217_lwx_20261026.json",
+      "config_sha256": "e461b68745a6c7e03f2038b6c49bc9e0c464a6420034f493de8f5bd7fffe7474",
+      "source_initial": {
+        "distance_m": 0.09147301822455006,
+        "required_m": 0.03,
+        "slack_m": 0.06147301822455006,
+        "valid": true,
+        "robot_part": "gripper/right_outer_finger",
+        "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": false
+      },
+      "support_initial": null,
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [
+        {
+          "added": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 3.324944972127327e-09
+        }
+      ],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 2.0,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "entity_support": [
+        {
+          "entity": "person",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+              "support_collider": "/World/envs/env_0/kitchen/floor_room/geometry",
+              "distance_m": 3.324944972127327e-09,
+              "bottom_minus_support_top_m": 3.3249449686578725e-09
+            }
+          ]
+        }
+      ],
+      "door_sweep_direction": 1.0,
+      "door_sweep_joint_limits_rad": [
+        0.0,
+        1.5707963267948966
+      ],
+      "static_rejections_absent": true
+    }
+  ],
+  "complete": true
+}
