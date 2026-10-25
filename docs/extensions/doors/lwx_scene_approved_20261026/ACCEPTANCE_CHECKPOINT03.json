@@ -1,0 +1,81 @@
+{
+  "scope": "Checkpoint03. Per-variant evidence separated from user visual approval. Legacy unchanged variants omitted.",
+  "variants": {
+    "C01_human": {
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C01_human_p01",
+      "config": "configs/extensions/doors/c01_scene_natural04_lwx_20261026.json",
+      "config_sha256": "6c2090653295e2c18a0bcd41f0eb695405029ee2066fa66d649d85dce837e96c",
+      "collector_accepted": true,
+      "native_success": true,
+      "frames": 324,
+      "physical_action_contact_samples": 113,
+      "trajectory_sha256": "c3e26a3fb9d1d9c1f30523787d817bfd8faab2349cadeba3c4e34222f089c96d",
+      "independent_gates": {
+        "task_review_audit.json": true,
+        "task_validation_full.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "avoidance_accepted": true,
+      "actual_path": {
+        "free_phase": "pregrasp",
+        "joint_max_deviation_rad": 0.3901001274907929,
+        "tcp_max_deviation_m": 0.21285021677360405,
+        "baseline_samples": 128,
+        "augmented_samples": 128,
+        "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+        "figure": "path_comparison.png"
+      },
+      "agent_visual_review": {
+        "reviewer": "agent",
+        "user_approval": false,
+        "status": "visible_avoidance_observed_in_sampled_actual_observer_frames",
+        "contact_sheet": "reports/doors/lwx_approved_run_20261026/C01_human_actual_contactsheet01.jpg",
+        "video": "datasets/doors/lwx_scene_approved_20261026/C01_human_p01/review_all_four_cameras.mp4",
+        "description": "Actual frames show arm lifting around extended natural right arm, then approaching original legal source-handle point. Person and robot visible. Independent gates and fixed-target 42/43/44 planning passed separately.",
+        "tcp_max_deviation_m": 0.21285021677360405,
+        "scope": "Agent sampled frame review; user has not reviewed this new video.",
+        "time_utc": 1792953333.5337434
+      },
+      "video_sha256": "5de34b3f151415966b961b0b40fadd020adc9365c7e98f43814e94338e939ca3"
+    },
+    "C02_robot": {
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C02_robot_supported02",
+      "config": "configs/extensions/doors/c02_robot_supported02_lwx_20261026.json",
+      "config_sha256": "8dd6692c71d2e1eaa0ee9933fa3d2b989b40da35b40b6bc4d5ddfd1aa8d47861",
+      "collector_accepted": true,
+      "native_success": true,
+      "frames": 345,
+      "physical_action_contact_samples": 171,
+      "trajectory_sha256": "f345485ccde73f431deae8eadff3c01d770278eb175b5426f352e8a26a2b668e",
+      "independent_gates": {
+        "task_review_audit.json": true,
+        "task_validation_full.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "avoidance_accepted": true,
+      "actual_path": {
+        "free_phase": "pregrasp",
+        "joint_max_deviation_rad": 0.8333107555112441,
+        "tcp_max_deviation_m": 0.20700296992513445,
+        "baseline_samples": 100,
+        "augmented_samples": 90,
+        "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+        "figure": "path_comparison.png"
+      },
+      "agent_visual_review": {
+        "reviewer": "agent",
+        "user_approval": false,
+        "status": "visible_avoidance_observed_in_sampled_actual_observer_frames",
+        "video": "datasets/doors/lwx_scene_approved_20261026/C02_robot_supported02/review_all_four_cameras.mp4",
+        "contact_sheet": "reports/doors/lwx_approved_run_20261026/C02_robot_actual_contactsheet02.jpg",
+        "description": "Crossbar is visible across approach corridor. Sampled actual frames show robot rising around the bar before returning to cabinet handle. All independent and paired gates verified separately.",
+        "tcp_max_deviation_m": 0.20700296992513445,
+        "time_utc": 1792954616.0382566
+      },
+      "video_sha256": "6ce33851b29520e01e9831227e2886af57b1cf695e4965824469cbddb25d12cc"
+    }
+  },
+  "time_utc": 1792954616.0383425
+}
