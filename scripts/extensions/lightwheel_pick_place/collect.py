@@ -310,7 +310,7 @@ with SimulationAppContext(args):
             try:
                 phase='pregrasp' if use_pregrasp_phase else 'approach'
                 # B03: MotionGen transfer IK_FAIL on hover with plate-settled bananas; cartesian_line matches contact path.
-                cart(center+pregrasp_offset,rotation=R, force_phase=('cartesian_line' if (args.grasp_local_approach and not use_pregrasp_phase) else None))
+                cart(center+pregrasp_offset,rotation=R)
                 result['selected_grasp']={'tilt':tilt,'yaw':yaw,'phase':phase,'use_pregrasp_phase':use_pregrasp_phase,
                     'tcp_z_world':approach.tolist() if (args.grasp_local_approach and not use_pregrasp_phase) else None}
                 result['pregrasp_offset_m']=pregrasp_offset.tolist()
