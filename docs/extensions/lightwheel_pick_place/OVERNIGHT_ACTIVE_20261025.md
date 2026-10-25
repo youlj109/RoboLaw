@@ -96,3 +96,6 @@ B04 physically lifted100.99mm with bilateral support, then transfer goal failed 
 
 ## 2026-10-26 03:31 Shanghai transfer evidence
 B04 CPU endpoint search tested24 redundant seeds per destination height/yaw: all14cm and10cm transfer endpoints interfered with original upper cabinet bottom;8cm has full-FCL-valid endpoints at all tested yaws, including unchanged orientation4.74mm minimum. Changed ONLY B04 transfer height14cm→8cm (same as existing final release height); original source/destination/hazards fixed and all safety gates unchanged. Baseline retry queued. B05 corrected rigid-path run191952 now passed rawsource init, real closing/lift and entered actualtransfer; continuation146582 will verify and attempt3variants if baseline completes.
+
+## 2026-10-26 03:39 Shanghai first B05 native success
+B05 baseline `base_lgd_b05_can_20261025T191952Z` original current success=true, final_on_destination=true,595frames, real lift99.45mm. Full120Hz audit running, so no full acceptance claim yet. Human193345 queued behind B04 low-transfer baseline192918. B04 continuation148326 waits146613 and, on original success, verifies baseline and independently attempts human/property/robot; each failure retained, next variant still attempted. B05 continuation146582 likewise remains active. All GPU operations serialized by existing lock.
