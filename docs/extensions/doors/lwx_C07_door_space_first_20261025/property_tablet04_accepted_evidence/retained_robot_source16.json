@@ -1,0 +1,113 @@
+{
+  "scope": "Targeted OFFLINE source diagnostic only. No planner, no physical execution, no final acceptance. Goal arm checks constrain the recorded posture only; gripper checks constrain the recorded Cartesian contact policy.",
+  "manifest": "reports/doors/lwx_C07_door_space_first_20261025/retained_robot_manifest16.json",
+  "trajectory_planning_invoked": false,
+  "complete": true,
+  "candidates": [
+    {
+      "id": "robot_pilot13_retained",
+      "variant": "robot",
+      "config": "configs/extensions/doors/c07_robot_candidate_obvious13_11.json",
+      "config_sha256": "4d600f02a248148416435a9e69c3aaeebb97b347d0a4e1e6e97040f2276fc4ce",
+      "original_planning_clearance_m": 0.02,
+      "original_execution_clearance_m": 0.01,
+      "source_hazard_colliders": 5,
+      "source_support_colliders": 1,
+      "initial_hazard": {
+        "source": {
+          "distance_m": null,
+          "required_m": 0.02,
+          "slack_m": null,
+          "valid": true
+        },
+        "conservative": {
+          "distance_m": null,
+          "required_m": 0.02,
+          "slack_m": null,
+          "valid": true
+        }
+      },
+      "source_intersection_actions": [
+        32,
+        33,
+        34
+      ],
+      "source_clearance_risk_actions": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37
+      ],
+      "scene_intersections": [],
+      "source_floor_contacts": [
+        {
+          "added": "/World/envs/env_0/robot_pedestal/Column",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 5.373358744065198e-09
+        }
+      ],
+      "measured_door_sweep_failures": [],
+      "contact_gripper_failures": [],
+      "initial_support": {
+        "source": {
+          "distance_m": null,
+          "required_m": 0.002,
+          "slack_m": null,
+          "valid": true
+        },
+        "conservative": {
+          "distance_m": null,
+          "required_m": 0.002,
+          "slack_m": null,
+          "valid": true
+        }
+      },
+      "recorded_pregrasp_goal": {
+        "source": {
+          "distance_m": null,
+          "required_m": 0.02,
+          "slack_m": null,
+          "valid": true
+        },
+        "conservative": {
+          "distance_m": null,
+          "required_m": 0.02,
+          "slack_m": null,
+          "valid": true
+        }
+      },
+      "door_sampling_scope": {
+        "recorded_action_states": 1057,
+        "all_checked": true,
+        "continuous_interpolation_certified": false,
+        "physical_substeps_not_checked_in_this_diagnostic": true
+      },
+      "full_joint_range_door_sweep": {
+        "joint_limits_rad": [
+          -1.5707963267948966,
+          0.0
+        ],
+        "angles_checked": 181,
+        "max_step_rad": 0.008726646259971549,
+        "source_radius_bound_m": 0.583729988131524,
+        "between_sample_displacement_bound_m": 0.0025470005384088217,
+        "original_hazard_margin_m": 0.02,
+        "required_sample_hazard_margin_m": 0.022547000538408822,
+        "original_support_margin_m": 0.002,
+        "required_sample_support_margin_m": 0.004547000538408822,
+        "failed_angle_count": 0,
+        "first_failures": [],
+        "source_model_full_range_clear": true,
+        "scope": "Conservative continuous-angle check for the reconstructed rigid source FCL door model only; not PhysX cooked geometry or physical execution acceptance."
+      }
+    }
+  ]
+}

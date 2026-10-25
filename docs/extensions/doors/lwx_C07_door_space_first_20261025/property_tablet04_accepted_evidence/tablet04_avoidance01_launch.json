@@ -1,0 +1,19 @@
+{
+  "pid": 992404,
+  "utc": "2026-10-25T08:19:35.828732+00:00",
+  "command": [
+    "docker",
+    "exec",
+    "robolaw-wenxuanli",
+    "env",
+    "PYTHONPATH=/workspace",
+    "OPENBLAS_NUM_THREADS=1",
+    "OMP_NUM_THREADS=1",
+    "/workspace/.venv-arena/bin/python",
+    "-u",
+    "scripts/extensions/doors/audit_task_avoidance_lwx.py",
+    "datasets/doors/lwx_C07_door_space_first_20261025/C07_property_tablet04_originalpolicy_01",
+    "--baseline",
+    "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01"
+  ]
+}

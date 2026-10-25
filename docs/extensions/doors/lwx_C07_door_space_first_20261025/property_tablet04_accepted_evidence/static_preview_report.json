@@ -1,0 +1,91 @@
+{
+  "scope": "FROZEN LAYOUT / KINEMATIC PREVIEW ONLY. Not physical execution, planning or safety acceptance.",
+  "manifest": "reports/doors/lwx_C07_door_space_first_20261025/manifest15.json",
+  "manifest_sha256": "99d5ffab7eb6bb2d8a420ad3b208125e623398c08945ea0b1c70c217693e4cb0",
+  "trajectory_planning_invoked": false,
+  "physics_after_reset": false,
+  "source_reset_placement_validation": "Unchanged source placement setup can invoke cuRobo IK reachability once; no motion trajectory is generated.",
+  "complete": true,
+  "candidates": [
+    {
+      "id": "tablet_channel_04",
+      "variant": "property",
+      "config": "configs/extensions/doors/c07_tablet_channel_04_doorclear_lwx_20261025.json",
+      "config_sha256": "d7f0627b87a450e9970f989ec73fb8321c3523a9926e4af91f2414287ad7d772",
+      "source_assets": [
+        {
+          "asset": "/workspace/assets/obstacle_library/property/tablet_stand.usda",
+          "sha256": "6aeb4c980cfa46e7298f03d604e2b49b3a3aceea43bf972b72db9d7381a24833",
+          "position": [
+            5.188,
+            -2.87,
+            1.108
+          ],
+          "yaw_deg": 90.0
+        },
+        {
+          "asset": "/workspace/assets/extensions/doors/c07_tablet_channel_04_support_lwx_20261025.usda",
+          "sha256": "7e1bda15405cacee5c46e8ea242381a115aa11d029f0e154f82eefab7dfde80b",
+          "position": [
+            5.188,
+            -2.87,
+            0.0
+          ],
+          "yaw_deg": 0.0
+        }
+      ],
+      "baseline": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+      "baseline_sha256": "1c39b4c96cbb1525890cf455a01a62d258f9916ddd47cf083524e09cbe834925",
+      "poses": [
+        {
+          "phase": "initial",
+          "baseline_frame": 9,
+          "physics_step_count": 0
+        },
+        {
+          "phase": "baseline_channel",
+          "baseline_frame": 51,
+          "physics_step_count": 0
+        },
+        {
+          "phase": "pregrasp_goal",
+          "baseline_frame": 93,
+          "physics_step_count": 0
+        }
+      ],
+      "visual_review": "pending",
+      "physical_acceptance": "not_run"
+    }
+  ],
+  "physics_step_count_after_source_reset": 0,
+  "camera_names": [
+    "external_camera",
+    "external_camera_2",
+    "wrist_camera",
+    "visible_review_camera"
+  ],
+  "observer": {
+    "position_world_m": [
+      3.6,
+      -4.3,
+      2.05
+    ],
+    "look_at_world_m": [
+      4.95,
+      -3.25,
+      1.25
+    ],
+    "focal_length": 2.8,
+    "quaternion_xyzw": [
+      0.48221136724003555,
+      -0.23584177062502135,
+      -0.37068632625306625,
+      0.7579198533235264
+    ],
+    "sensor_name": "visible_review_camera",
+    "scope": "Supplementary real RGB sensor synchronized before the same action; no collision or physical state changes. Native cameras retained."
+  },
+  "task_id": "kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian",
+  "physics_step_count_final": 0,
+  "elapsed_seconds": 39.37224881723523
+}

@@ -82,3 +82,18 @@ wine_side01原策略三seed off成功/on均IK_FAIL，已保留失败；不继续
 匹配中性02完成1209动作、9673物理子步，neutral_completed=true、failure=null；中性01的max_steps失败保留。新旧原相机的完整对比视频已下载，本地human_baseline_comparison.mp4；补充observer单独保存，不冒称旧基线有此相机。
 
 财产仍未验收。manifest05/07的若干低位杯子没有原执行间隙必要性；06抬高后侵入门范围，08/09初态代理失败，10/11上方杯子仍侵入门扫掠，全部保留且未做物理采集。manifest12改用原尺寸窄颈玻璃瓶在已认可人体接近区域，先做CPU布局门空间/原路径/起态检查，合格后先静态看图，再轨迹规划。其他七任务仍未推广本轮视觉修订。
+
+
+## C07 property revision accepted by independent checks; user visual review pending
+
+The original-size library tablet with weighted base uses config c07_tablet_channel_04_doorclear_lwx_20261025.json at [5.188,-2.87,1.108], yaw 90 degrees, on a collidable floor-supported column. Kitchen, robot, original grasp target and controller policy are unchanged. Proposal notes within the immutable collection config remain historical; acceptance is recorded separately here.
+
+The single actual episode C07_property_tablet04_originalpolicy_01 succeeded: 1003 actions, 8025 physics substeps, 9027 safety observations, final door angle -0.667850rad. Full validation, matching 80-second neutral/task review, source contact/causality, self collision/joint limits and avoidance audits all passed. Raw result delivery_accepted=false is preserved. The matching neutral completed 1209 actions/9673 physics substeps, without opening or contact.
+
+Actual TCP deviation is 18.4541cm at 101 normalized-progress samples. Actual pregrasp length is 0.727934m versus baseline 0.460542m, increasing 26.7392cm. Baseline source clearance is 45.2862mm, below the original 50mm execution margin, without source solid intersection. Actual source clearance is at least 83.0880mm. Observed door sweep, support and fixed-base violations are zero; separately, the source-FCL complete 90-degree door range passed. Tablet stability passed with about 0.001073mm translation. Same-target/same-policy off/on planning with seeds 42/43/44 supports necessity and rerouting within tested seeds, not general success rates.
+
+Original camera recordings and original-speed same-camera comparison are under the episode. Shorter video endings are held; comparison is not phase-aligned resynthesis. Observer video is supplementary. Assistant inspected actual original-camera frames; user visual confirmation of property is pending. Immutable paths, checksums and evidence are in property_tablet04_evidence_manifest.json.
+
+Human is independently and user-visually accepted, pushed at a75158e. Retain user-accepted robot pilot13 unchanged; retained_robot_source16.json additionally passes the source full 90-degree door range. The other seven tasks have not received this round of visual revisions. All prior versions, unsuccessful proposals and raw reports remain. No automation or offline queue is restored.
+
+Placement reuse: use the same baseline approach corridor as an initial anchor; adapt translation, orientation, original-size posture and legitimate support to each obstacle. Exclude full door motion, robot initial state, grasp and release space. Inspect static views before planning; identical asset origins do not imply identical occupied geometry. Retain original margins and target, compare same-seed off/on, and independently validate actual source geometry and contacts. Path difference alone does not prove necessity.
