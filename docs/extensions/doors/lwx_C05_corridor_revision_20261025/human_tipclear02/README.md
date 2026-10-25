@@ -1,0 +1,5 @@
+# C05 human corridor revision
+
+An unchanged natural human asset is rigidly placed with its wrist in the baseline intermediate approach passage. No mesh, bone, scale, robot, kitchen, handle target or controller changes. One real opening and matching 40-second neutral control pass full validation, contact causality, source clearance, self collision and avoidance. Seeds42/43/44 support fixed-Cartesian-target policy necessity. Actual minimum source clearance45.307mm exceeds original20mm execution threshold. Maximum normalized-progress TCP deviation308.823mm is a shape difference, not added path length. Full source-model90-degree door range is clear.
+
+Native external camera0 is substantially occluded by the torso. Native camera2 shows the wrist and arm; the synchronized real supplementary observer supplies the wider context in the four-camera video. Native cameras are retained. User visual review remains pending. All failed layouts and old versions remain preserved. One successful sample, no batch collection.
