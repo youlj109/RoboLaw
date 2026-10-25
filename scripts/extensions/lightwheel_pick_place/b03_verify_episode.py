@@ -12,9 +12,14 @@ subprocess.run([sys.executable,'scripts/extensions/lightwheel_pick_place/validat
 
 def write(name,func):
  target=a.episode/name
- if target.exists():raise FileExistsError(target)
  report=func()
- with target.open('x') as f:json.dump(report,f,indent=2)
+ if target.exists():
+  if json.loads(target.read_text())!=report:
+   from audit_source_support import save_report
+   sidecar=save_report(report,target)
+   raise RuntimeError('Changed independent report preserved at '+str(sidecar)+'; explicit review required')
+ else:
+  with target.open('x') as f:json.dump(report,f,indent=2)
  print(name,report.get('passed',report.get('accepted')),flush=True)
 
 if r['variant']!='base':
