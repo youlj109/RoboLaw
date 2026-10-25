@@ -75,3 +75,12 @@ Audit comparison no longer requires a lemon shelf-extract control field for unre
 - Queue139259 waits that collection chain, then B04 and B05 baseline/human/property/robot, stopping a task series on native failure and moving to the next task. Inspect errors actively; queue is a fallback against idle gaps, not evidence of completion.
 - Paired both exact transfer legs (indices3,9), seeds42/43/44, queued through the same GPU lock. No simultaneous GPU jobs.
 - Latest committed lgd da21268. Targeted source/multi/native-contact tests:15 passed. GitHub push still blocked by absent credentials.
+
+## 2026-10-26 02:50 Shanghai material failure
+- Property182219 completed first banana and reached second placement; stopped honestly at frame1011 because actual right outer finger to bowl clearance was0.970mm, below unchanged2mm gate. No intersection, but this is NOT a successful episode. Keep original evidence. This ended137075, so robot separately queued PID140865 with identical frozen scene/policy; not omitted.
+- B04 baseline native collection has started (184307), after the B03 physical-series failure; B05 remains queued139259.
+- Paired first transfer index3: base/human/property planning succeed at seeds42/43/44; robot fails INVALID_START_STATE_WORLD_COLLISION in cuRobo. Need inspect actual robot native solution and counterfactual necessity; no overall paired acceptance. Index9 remains queued.
+- No scene hazards moved. Property repair must change actual placement/grasp/route with matched controls, never relax the2mm gate or count the failed clip.
+
+## 2026-10-26 03:00 Shanghai task-source fix
+B04 first baseline reached real closing then hit a software exception before lift: the search-only held-object proxy still hardcoded the lime kitchen countertop suffix. Replaced that lookup with the world's configured exact task-source predicate (including descendants), failing closed when absent. All dense/actual collision checks unchanged. B04 base retry queued with same scene/grasp/controls. B05 already queued; active robot B03 preflight is exploring alternate real grasp candidates rather than moving the crossbar. Both B03 transfer seed panels show zero human/property counterfactual violations, hence those panels do not prove effective avoidance; preserve negative results.

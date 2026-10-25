@@ -140,8 +140,10 @@ class LimePlanner(CuroboPlanner):
         centers,radii=self.lime_proxy
         radii=radii.copy()
         if self.active_phase=='lift':
-            source_plane=max(hi[2] for name,obj,lo,hi in self.world.objects
-                if name.endswith('/counter_main_main_group/top_geometry_right'))
+            source_heights=[hi[2] for name,obj,lo,hi in self.world.objects
+                if self.world._is_source_surface(name)]
+            if not source_heights:raise RuntimeError('Configured exact task source surface has no collision geometry')
+            source_plane=max(source_heights)
             root_world=self.kin.fk(self.query_start_q)@attachment
             centers_world=centers@root_world[:3,:3].T+root_world[:3,3]
             before=float(np.min(centers_world[:,2]-radii))
