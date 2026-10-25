@@ -304,7 +304,7 @@ with SimulationAppContext(args):
             if args.grasp_local_approach and (not use_pregrasp_phase):
                 # TCP Z (col 2) should point into the object; hover back along -TCP_Z.
                 approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
-                pregrasp_offset=np.array([0.0,0.163,-0.076])  # B03: robot-ward approach frame (+Y toward droid, slight -Z)
+                pregrasp_offset=-0.18*approach
             else:
                 pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
             try:
@@ -449,7 +449,7 @@ with SimulationAppContext(args):
                 # Prefer local approach when flag set; else TASK_SPEC offset.
                 if args.grasp_local_approach:
                     approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
-                    pregrasp_offset=np.array([0.0,0.163,-0.076])  # B03: robot-ward approach frame (+Y toward droid, slight -Z)
+                    pregrasp_offset=-0.18*approach
                 else:
                     pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
             phase='pregrasp' if use_pregrasp_phase else 'approach'
