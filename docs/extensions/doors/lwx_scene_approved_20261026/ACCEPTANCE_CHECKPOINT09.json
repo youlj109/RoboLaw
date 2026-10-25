@@ -1,0 +1,46 @@
+{
+  "recorded_unix": 1792961717.96021,
+  "variant": "C03 robot",
+  "status": "Independent and paired validation passed; agent actual sampled visual review passed; user review pending",
+  "episode": "datasets/doors/lwx_C03_controller_release09_20261026/C03_robot_p01",
+  "baseline": "datasets/doors/lwx_C03_controller_release09_20261026/C03_base_p01",
+  "neutral": "datasets/doors/lwx_C03_controller_release09_20261026/C03_robot_n01_neutral",
+  "config": "configs/extensions/doors/c03_controller_release09_lwx_20261026.json",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C03_controller_release09/C03_strict_static05.json",
+  "paired_report": "reports/doors/lwx_approved_run_20261026/C03_controller_release09/C03_robot_pairs01/report.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.40710839818688893,
+    "tcp_max_deviation_m": 0.20988726513901182,
+    "baseline_samples": 128,
+    "augmented_samples": 128,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "time_unix": 1792961717.9602084,
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C03_robot_actual_contactsheet09.jpg",
+    "scene_and_avoidance": "Robot and transverse crossbar visible; robot raises over bar then returns to source handle, physically opening the freezer.",
+    "scope": "Sampled actual synchronized video inspection; safety and causality independently checked",
+    "tcp_max_deviation_m": 0.20988726513901182
+  },
+  "evidence_sha256": {
+    "metadata.json": "4551834a3a8a58c336fbe5a60d52221235d21d9e145c337e99792fe32dd91fa1",
+    "result.json": "724f4ab28b2e4e4c0631e1200d04f2736b08eb5e84a2bcaa7104d6796d5e3f8c",
+    "task_review_audit.json": "1d4ebfa9871e0869f392b988a508b831fe52da41e6ef53a9136bc754faa118e7",
+    "task_validation_full.json": "78b13ad57a526185f58b06e26333c17f13857069d29d91dcc229e57df57afe95",
+    "source_contact_audit.json": "20aafdbc1bd2da86681891965fa12444a6e621f4c8625b0219152e23ac872550",
+    "self_collision_audit.json": "cce07c803c67838b6d6ba28f0e8d995110acf48eb3104f95928aa673df02e20f",
+    "avoidance_audit.json": "607856345a2a6e40135a7903e8a976f65b72c4fb77016e931b378a4c360ce42f"
+  }
+}
