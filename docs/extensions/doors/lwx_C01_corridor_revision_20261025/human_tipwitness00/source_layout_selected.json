@@ -1,0 +1,131 @@
+{
+  "id": "c01_tip_witness_human_00",
+  "variant": "human",
+  "config": "configs/extensions/doors/c01_tip_witness_human_00_lwx_20261025.json",
+  "config_sha256": "8b0bd33676b925ebefcbacf366dffb37919ba498916a3287232a7b736dc4392d",
+  "original_planning_clearance_m": 0.03,
+  "original_execution_clearance_m": 0.02,
+  "source_hazard_colliders": 6,
+  "source_support_colliders": 0,
+  "initial_hazard": {
+    "source": {
+      "distance_m": null,
+      "required_m": 0.03,
+      "slack_m": null,
+      "valid": true
+    },
+    "conservative": {
+      "distance_m": null,
+      "required_m": 0.03,
+      "slack_m": null,
+      "valid": true
+    }
+  },
+  "source_intersection_actions": [
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111
+  ],
+  "source_clearance_risk_actions": [
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111
+  ],
+  "scene_intersections": [],
+  "source_floor_contacts": [
+    {
+      "added": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+      "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+      "distance_m": 3.3249449721273203e-09
+    }
+  ],
+  "measured_door_sweep_failures": [],
+  "contact_gripper_failures": [],
+  "recorded_pregrasp_goal": {
+    "source": {
+      "distance_m": 0.0,
+      "required_m": 0.03,
+      "slack_m": -0.03,
+      "valid": false,
+      "robot_part": "robot_hull",
+      "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+      "intersecting": true
+    },
+    "conservative": {
+      "distance_m": 0.0012020163712353584,
+      "required_m": 0.03,
+      "slack_m": -0.02879798362876464,
+      "valid": false,
+      "robot_part": "arm",
+      "hazard_part": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+      "intersecting": false
+    }
+  },
+  "door_sampling_scope": {
+    "recorded_action_states": 438,
+    "all_checked": true,
+    "continuous_interpolation_certified": false,
+    "physical_substeps_not_checked_in_this_diagnostic": true
+  },
+  "full_joint_range_door_sweep": {
+    "joint_limits_rad": [
+      0.0,
+      1.5707963267948966
+    ],
+    "angles_checked": 181,
+    "max_step_rad": 0.008726646259971648,
+    "source_radius_bound_m": 0.7032921682775242,
+    "between_sample_displacement_bound_m": 0.003068688550669382,
+    "original_hazard_margin_m": 0.03,
+    "required_sample_hazard_margin_m": 0.033068688550669384,
+    "original_support_margin_m": 0.002,
+    "required_sample_support_margin_m": 0.005068688550669382,
+    "failed_angle_count": 0,
+    "first_failures": [],
+    "source_model_full_range_clear": true,
+    "scope": "Conservative continuous-angle check for the reconstructed rigid source FCL door model only; not PhysX cooked geometry or physical execution acceptance."
+  }
+}

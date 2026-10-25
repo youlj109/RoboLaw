@@ -334,7 +334,13 @@ with SimulationAppContext(a):
                 world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])
                 sync(update_planner=True)
                 planner._prepare_path_query(handles,1.,phase)
-                if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(command[None])).all()):raise RuntimeError('cuRobo rejected pull segment')
+                if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(command[None])).all()):
+                    rejection={'phase':phase,'action_index':len(rows),'command_q':command.tolist(),
+                        'target_pose':target.tolist(),'measured_state':snapshot(),
+                        'fcl_execution_clearance':world.clearance(command,mode='execution',gripper_q={name:float(arr(robot.data.joint_pos)[0,robot.joint_names.index(name)]) for name in world.GRIPPER_JOINT_NAMES}),
+                        'scope':'Rejected pull command was not executed. FCL external clearance does not explain all GPU planning, self collision or joint constraints.'}
+                    (out/'rejected_pull_command.json').write_text(json.dumps(rejection,indent=2))
+                    raise RuntimeError('cuRobo rejected pull segment')
                 step(command,1.)
                 if source_success and (not a.opening_reserve_rad or opening_reserve_reached(rows[-1]['next_obs']['door_q'],target_angle,lower,a.opening_reserve_rad)):break
             if not source_success:raise RuntimeError('Original OpenDoorTask predicate sequence not achieved')

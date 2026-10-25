@@ -192,11 +192,22 @@ with SimulationAppContext(a):
                 robot.write_joint_state_to_sim(q, torch.zeros_like(q))
                 sim.forward()
                 render(24)
+                # Stage edits may temporarily invalidate RTX output. Retry renders
+                # without physics; record remaining blank/occluded views for manual review.
+                render_retries=[]
+                for retry in range(2):
+                    bad=[name for name in names if int(np.ptp(arr(scene[name].data.output['rgb'])[0,::8,::8,:3],axis=(0,1)).max())<=2]
+                    if not bad:break
+                    render_retries.append(dict(retry=retry,blank_cameras=bad,extra_render_frames=64))
+                    render(64)
+                candidate.setdefault('render_retries',[]).append(dict(phase=phase,attempts=render_retries))
                 panels=[]
                 for name in names:
                     rgb = arr(scene[name].data.output['rgb'])[0,:,:,:3].astype(np.uint8)
-                    if int(np.ptp(rgb[::8,::8],axis=(0,1)).max()) <= 2:
-                        raise RuntimeError('Uniform RGB preview: '+name)
+                    uniform = int(np.ptp(rgb[::8,::8],axis=(0,1)).max()) <= 2
+                    if uniform:
+                        candidate.setdefault('uniform_or_occluded_cameras',[]).append(dict(phase=phase,camera=name))
+                        print('LAYOUT_CAMERA_UNIFORM_OR_OCCLUDED',label,phase,name,flush=True)
                     raw = Image.fromarray(rgb)
                     raw.save(directory/(phase+'_'+name+'_raw.jpg'),quality=92)
                     overlay = annotated(raw,scene[name],paths,label+' | '+phase+' | baseline frame '+str(frame))

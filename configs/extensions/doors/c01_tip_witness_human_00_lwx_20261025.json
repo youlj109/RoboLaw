@@ -1,0 +1,80 @@
+{
+  "human": {
+    "name": "person",
+    "asset": "assets/extensions/doors/human_reach_tip_lwx_21/collidable.usda",
+    "static": true,
+    "pose_provenance": "assets/extensions/doors/human_reach_tip_lwx_21/pose.json",
+    "unrotated_asset": "assets/extensions/doors/human_reach_tip_lwx_21/collidable.usda",
+    "position": [
+      3.58442979552439,
+      -1.9969170639745637,
+      0.0
+    ],
+    "yaw_deg": 240,
+    "semantic_anchor": "Original C01 tip21 natural body, rigid pose chosen from source witness checks of three short off routes, feasible old on endpoints, actual failed pull and complete baseline pull witnesses; no mesh or controller modification. Independent checks pending."
+  },
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      4.52,
+      -1.25,
+      0.91
+    ],
+    "static": false,
+    "semantic_anchor": "Original bottle translated 0.18m in world x and -0.08m in world y toward the actual robot forward axis, with root 0.03m higher on a real floor column 0.03m taller; original source geometry and safety margins retained.",
+    "yaw_deg": 0.0,
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/property_floor_pedestal_front_lwx_33.usda",
+      "position": [
+        4.52,
+        -1.25,
+        0.0
+      ],
+      "static": true,
+      "dimensions_m": [
+        0.1,
+        0.1,
+        0.908
+      ]
+    },
+    "candidate_evidence": "datasets/doors/lwx_front_20261023/property_27/avoidance_audit.json"
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.8799999999999875,
+      -0.9899999999999998,
+      0.8600000000000001
+    ],
+    "yaw_deg": 270.0,
+    "static": true,
+    "semantic_anchor": "Anchored floor pedestal; full column, kitchen, stand and door sweep included; old baseline conflicts during free pregrasp.",
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/robot_floor_pedestal_filtered.usda",
+      "position": [
+        4.8799999999999875,
+        -0.9899999999999998,
+        0.0
+      ],
+      "static": true,
+      "dimensions_m": [
+        0.16999999999999993,
+        0.16999999999999993,
+        0.8600000000000001
+      ]
+    },
+    "candidate_evidence": "datasets/doors/lwx_20261023/robot_01/avoidance_audit.json"
+  },
+  "_fixed_source_layout": "configs/extensions/doors/fixed_source_layout.json",
+  "_revision": {
+    "purpose": "C01 human visibility and genuine route obstruction revision; unchanged low handle policy",
+    "witness_screen": "reports/doors/lwx_C01_C04_C05_revision_20261025/C01_human_witness_screen18.json",
+    "original_robot": "retained"
+  },
+  "_task_scope": "kitchen_bench_lightwheel_open_fridge",
+  "_selection_note": "Discovery candidate only; not task or physical acceptance."
+}
