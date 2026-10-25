@@ -105,3 +105,6 @@ Low-transfer baseline192918 successfully carried ladle to plate, then failed ope
 
 ## 2026-10-26 04:00 Shanghai B04 native baseline and remaining checks
 B04 base194846 now original current native success=true,382frames; full audits underway, no acceptance claim. B05 human193345 stopped at lift preflight with self/limits invalid initial waypoint, no physical lift execution beyond prior closing; property and robot continue independently under unchanged scene. Validator still routed non-lime single picks to an old fullworld-only placeholder despite source audit already task-parameterized; remove that placeholder and call actual source-support audit for all single-pick tasks. Recompute B05 source validation explicitly (prior source report absent, cannot mark passed). Existing reports retained by script sidecar behavior.
+
+## 2026-10-26 04:20 Shanghai B05 property native success
+B05 property195044 native success=true,604frames; independent full-world audit progressing. B04 baseline source audit now independently passed; B04human195717 executing pregrasp. B05robot201231 queued, neutral90s checks queued153684. Native-success previews (actual original camera videos and HDF5 final JPEGs) published under B04-review/native_success and B05-review/native_success, explicitly not full acceptance. Do not equate successful physical placement with effective avoidance.
