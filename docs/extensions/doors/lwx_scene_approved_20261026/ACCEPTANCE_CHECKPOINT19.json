@@ -1,0 +1,55 @@
+{
+  "recorded_unix": 1792968997.352638,
+  "variant": "C08 human",
+  "status": "Independent and paired validation passed; agent actual sampled visual review passed; user review pending",
+  "episode": "datasets/doors/lwx_scene_approved_20261026/C08_human_natural73",
+  "baseline": "datasets/doors/lwx_C08_property_frozen71_20261026/C08_base_p01",
+  "neutral": "datasets/doors/lwx_scene_approved_20261026/C08_human_natural73_neutral",
+  "config": "configs/extensions/doors/c08_human_natural66_c02_728_lwx_20261026.json",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C08_human_natural73/C08_strict_static05.json",
+  "paired_report": "reports/doors/lwx_approved_run_20261026/C08_human_natural73/C08_human_natural73_pairs/report.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.16331748654737824,
+    "tcp_max_deviation_m": 0.1131501444276432,
+    "baseline_samples": 119,
+    "augmented_samples": 119,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "time_unix": 1792968997.3526368,
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C08_human_multiview19.jpg",
+    "scene_and_avoidance": "Actual sampled frames show continuous natural right elbow/wrist and robot lifting around torso before contacting legal oven handle. Observer shows complete person, robot and oven. Native external1 is substantially occluded by torso, external2 shows robot/leg/oven relation. User visual approval pending.",
+    "scope": "Sampled actual synchronized video inspection; safety and causality independently checked",
+    "tcp_max_deviation_m": 0.1131501444276432
+  },
+  "evidence_sha256": {
+    "metadata.json": "0b43b60d2029fe5ac0d6181228820bf2b5936eb7e46c1d99da4e844e5cad5610",
+    "result.json": "5d91a78c599246c96b3be1f870d5078affbeb981569b2a5d1fcf3a1732ae8d71",
+    "task_review_audit.json": "ea79e5da41b91889f80c871849d7856f27e9b01f22c0cdd7065b2be9cd607a83",
+    "task_validation_full.json": "3a64eb2e50719ff2557f2343d28fa1b69431e3e5911d93e9b5de620032591681",
+    "source_contact_audit.json": "331ebe011cc74eabb231837ccc3083df654e8908c39a3b5389fa7147a8a31236",
+    "self_collision_audit.json": "76660f38127819c6144028a2b79212f7d6b676d9d295c25ad8a578101bef00b0",
+    "avoidance_audit.json": "f191659d0955d9511ed31f94efb66286ee189453079cac44403763a36e575b3c",
+    "paired_report.json": "9d22733634215f62eed3eccdcc09d473549d0d39724a380d04f24abca57a5470",
+    "baseline_metadata.json": "d5576f0745594d31c14dc862e7fb9645d3899b04afe689164f9e7c1b192dd0eb",
+    "baseline_result.json": "6ea4fc7b0e77e7cadc2d60a7b2f80312f774daf160fab8ea7244bb50784d7f8f",
+    "neutral_metadata.json": "c2eec55f600938e01a380f8544b729590b62291ae735779f4d688d385a4035b7",
+    "neutral_result.json": "b9379d9ffa23b9cdaa4a7bda044afa659010008a10a80b7761cad384eb2c694e",
+    "baseline_task_review_audit.json": "55eca9b7af66b5b467bb1d37f2dea0e0ab7a5859619bcc8c772ef096259148c4",
+    "baseline_task_validation_full.json": "30bafb850bced57d9e806b67f3b02555d1cdc46ef89b391f1446a19e8c385ff5",
+    "baseline_source_contact_audit.json": "ad70bbfbce7669ac7ce9494a21fc19247efe1bf75b2ec0b0f581205c936e8959",
+    "baseline_self_collision_audit.json": "4f462ff1691ac698e34388a6b4ff9d9e81508c20c3422afeb15060736a800193"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "scope": "CPU sampled source geometry diagnostic. Not planning/physical acceptance.",
+  "curobo_invoked": false,
+  "ik_invoked": false,
+  "manifest_sha256": "4aed5803c02335a5fc254e1854ed0df7acba6e3fecff499366fd6030c5cfb6e5",
+  "candidates": [
+    {
+      "id": "C08_human_natural73",
+      "variant": "human",
+      "config": "configs/extensions/doors/c08_human_natural66_c02_728_lwx_20261026.json",
+      "config_sha256": "4f9b182389eace326ee048d6e2cd3f7e4d94e866575f5484c545d6fb92adfe96",
+      "source_initial": {
+        "distance_m": null,
+        "required_m": 0.03,
+        "slack_m": null,
+        "valid": true
+      },
+      "support_initial": null,
+      "initial_world_valid": true,
+      "initial_world_collision": null,
+      "initial_joint_limits_valid": true,
+      "scene_intersections": [],
+      "floor_support_contacts": [
+        {
+          "added": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+          "scene": "/World/envs/env_0/kitchen/floor_room/geometry",
+          "distance_m": 3.3249449721273194e-09
+        }
+      ],
+      "door_sweep_failures": [],
+      "door_sweep_sampling_step_deg": 1.9966710408528645,
+      "actual_physics": "not_run",
+      "planning": "not_run",
+      "entity_support": [
+        {
+          "entity": "person",
+          "supported": true,
+          "contacts": [
+            {
+              "entity_collider": "/World/envs/env_0/person/Posed_KitchenAdult_shoes01/shoes01_001",
+              "support_collider": "/World/envs/env_0/kitchen/floor_room/geometry",
+              "distance_m": 3.3249449721273194e-09,
+              "bottom_minus_support_top_m": 3.3249449686578725e-09
+            }
+          ]
+        }
+      ],
+      "door_sweep_direction": 1.0,
+      "door_sweep_joint_limits_rad": [
+        0.0,
+        1.1499999634894549
+      ],
+      "static_rejections_absent": true
+    }
+  ],
+  "complete": true
+}
