@@ -57,3 +57,5 @@ The review bundle contains 24 selected videos, matched baseline videos, separate
 Review folder: reports/doors/lwx_approved_run_20261026/final_review77_20261026
 Branch: lwx
 Data/code source commit: 48675c258a8dd29faa4628907ca482d84473e983
+
+Delivery QA: all 749 copied artifacts passed source/destination SHA256 verification. All 24 main videos decoded first and final frames using the bundled FFmpeg. Every local HTML video/config/evidence link resolves. Full raw datasets remain remote.
