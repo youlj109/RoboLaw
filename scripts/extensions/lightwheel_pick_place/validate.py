@@ -18,11 +18,18 @@ from scipy.spatial.transform import Rotation
 from kitchen_safety.dataset import (
     CAMERA_NAMES, camera_pose_errors, camera_poses_from_body_states, decode_video)
 from kitchen_safety.extensions.lightwheel_pick_place.contacts import LimeGraspContacts
-from kitchen_safety.extensions.lightwheel_pick_place.environment import SOURCE, TASK_ID
+from kitchen_safety.extensions.lightwheel_pick_place.task_config import (
+    episode_spec, pick_object_name, destination_object_name,
+    initial_pick_pose, source_yaml_path, h5_pose_dataset,
+)
 
 
 def validate(out):
     result = json.loads((out / 'result.json').read_text())
+    spec = episode_spec(result)
+    pick = pick_object_name(result, spec)
+    dest = destination_object_name(result, spec)
+    source_yaml = source_yaml_path(spec)
     checks, details = {}, {}
     checks['original_task_success'] = (result.get('success') is True
         and result.get('terminal_terms', {}).get('success') is True
@@ -37,8 +44,8 @@ def validate(out):
     checks['current_upward_support_force'] = (force is not None
         and np.linalg.norm(force) >= .1 and force[2] > 0
         and force[2] >= np.linalg.norm(force) * np.cos(np.pi / 4))
-    checks['source_task_identity'] = (result.get('task') == TASK_ID
-        and result.get('source_yaml_sha256') == hashlib.sha256(SOURCE.read_bytes()).hexdigest())
+    checks['source_task_identity'] = (result.get('task') == spec.task_id
+        and result.get('source_yaml_sha256') == hashlib.sha256(source_yaml.read_bytes()).hexdigest())
     checks['no_physics_attachment'] = result.get('simulation_attachment') is False
     checks['collector_no_error'] = not result.get('error')
     records = json.loads((out / 'contacts.json').read_text())
@@ -62,7 +69,7 @@ def validate(out):
             and len(trajectory['time']) == n and len(phases) == n)
         checks['result_frame_count'] = result.get('frames') == n
         checks['timeline'] = dt > 0 and np.allclose(trajectory['time'][:], np.arange(n) * dt)
-        required = ('q', 'dq', 'tcp', 'tcp_quat_xyzw', 'lime', 'wooden_bowl',
+        required = ('q', 'dq', 'tcp', 'tcp_quat_xyzw', pick, dest,
                     'robot_body_pose_w', 'robot_contact_forces')
         if result['variant'] == 'property':
             required += ('hazard_pose',)
@@ -88,25 +95,27 @@ def validate(out):
             for group in ('obs', 'next_obs') for name, shape in {
                 'q': (len(result['robot_joint_names']),),
                 'dq': (len(result['robot_joint_names']),), 'tcp': (3,),
-                'tcp_quat_xyzw': (4,), 'lime': (13,), 'wooden_bowl': (13,),
+                'tcp_quat_xyzw': (4,), pick: (13,), dest: (13,),
                 'robot_body_pose_w': (len(result['robot_body_names']), 7),
                 'robot_contact_forces': (len(result['robot_body_names']), 3),
             }.items())
         checks['state_continuity'] = all(np.allclose(arrays['next_obs/' + name][:-1],
             arrays['obs/' + name][1:], atol=1e-6, rtol=1e-6)
-            for name in ('q', 'lime', 'wooden_bowl', 'tcp', 'robot_body_pose_w'))
+            for name in ('q', pick, dest, 'tcp', 'robot_body_pose_w'))
         lift_indices = [i for i, phase in enumerate(phases) if phase == 'lift']
-        actual_lift = (float(arrays['next_obs/lime'][lift_indices[-1], 2])
-                      - float(result['initial_lime_pose'][2])) if lift_indices else None
+        pick_ds = h5_pose_dataset(trajectory['next_obs'], pick, result)
+        actual_lift = (float(arrays['next_obs/' + pick_ds][lift_indices[-1], 2])
+                      - float(initial_pick_pose(result)[2])) if lift_indices else None
         details['measured_lift_m'] = actual_lift
         checks['physical_lift'] = (actual_lift is not None and actual_lift > .08
             and result.get('lift_m', 0) > .08 and checks['physical_lift_contacts']
             and abs(actual_lift - result['lift_m']) < 1e-5)
         finger = result['robot_joint_names'].index('finger_joint')
         checks['released_at_end'] = n > 0 and abs(arrays['next_obs/q'][-1, finger]) < .05
-        checks['current_destination_low_speed'] = n > 0 and np.linalg.norm(arrays['next_obs/lime'][-1, 7:10]) < .003
-        checks['final_state_matches_result'] = n > 0 and 'final_lime' in result and np.allclose(
-            arrays['next_obs/lime'][-1], result.get('final_lime', []), atol=1e-6, rtol=1e-6)
+        checks['current_destination_low_speed'] = n > 0 and np.linalg.norm(arrays['next_obs/' + pick_ds][-1, 7:10]) < .003
+        final_pick = result.get('final_lime') or result.get(f'final_{pick}')
+        checks['final_state_matches_result'] = n > 0 and final_pick is not None and np.allclose(
+            arrays['next_obs/' + pick_ds][-1], final_pick, atol=1e-6, rtol=1e-6)
 
         contact_indices, local_errors, contact_valid = [], [], True
         for row in records:
@@ -115,7 +124,7 @@ def validate(out):
                 contact_valid = False
                 continue
             contact_indices.append(index)
-            pose = arrays['next_obs/lime'][index, :7]
+            pose = arrays['next_obs/' + pick_ds][index, :7]
             rotation = Rotation.from_quat(pose[3:7]).as_matrix()
             for name in contacts.fingers:
                 contact = row['fingers'][name]
@@ -175,12 +184,19 @@ def validate(out):
             'maximum_checks_per_action': int(audit_counts.max()) if n else 0,
             'scope': audit.get('scope')}
         if 'lift_support_contact_model' in result:
-            from audit_source_support import audit as audit_source_support, save_report
-            support = audit_source_support(out)
-            support_path = save_report(support, out / 'source_support_audit.json')
-            checks['measured_source_support_bounds'] = support.get('passed') is True
-            details['source_support'] = {key: value for key, value in support.items() if key != 'measurements'}
-            details['source_support']['report_path'] = str(support_path)
+            if pick == 'lime':
+                from audit_source_support import audit as audit_source_support, save_report
+                support = audit_source_support(out)
+                support_path = save_report(support, out / 'source_support_audit.json')
+                checks['measured_source_support_bounds'] = support.get('passed') is True
+                details['source_support'] = {key: value for key, value in support.items() if key != 'measurements'}
+                details['source_support']['report_path'] = str(support_path)
+            else:
+                checks['measured_source_support_bounds'] = checks.get('full_world_audit', False)
+                details['source_support'] = {
+                    'scope': 'Non-lime pick tasks defer to full_world_audit until audit_source_support is task-parameterized.',
+                    'pick_object': pick,
+                }
         plans = [item for item in result.get('plans', []) if item.get('executed', True)]
         checks['all_plans_valid'] = bool(plans) and all(
             item.get('validation', {}).get('valid') is True

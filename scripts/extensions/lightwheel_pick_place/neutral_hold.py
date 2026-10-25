@@ -199,12 +199,15 @@ with SimulationAppContext(a):
         )
 
     tol = info['predeclared_tolerances']
+    pick_name = TASK_SPEC.pick_object
+    dest_name = TASK_SPEC.destination_object
+    distractors = tuple(n for n in TASK_OBJECTS if n not in (pick_name, dest_name))
     info['task_objects'] = {
-        'lime': pose_delta(rows['lime'], settle),
-        'wooden_bowl': pose_delta(rows['wooden_bowl'], settle),
+        pick_name: pose_delta(rows[pick_name], settle),
+        dest_name: pose_delta(rows[dest_name], settle),
     }
     info['distractors_after_settling'] = {
-        name: pose_delta(rows[name], settle) for name in ('broccoli', 'sweet_potato', 'red_bell_pepper')
+        name: pose_delta(rows[name], settle) for name in distractors
     }
     info['robot_max_joint_change_rad'] = float(np.abs(rows['q'] - rows['q'][0]).max())
     info['robot_hold_passed'] = bool(info['robot_max_joint_change_rad'] <= tol['robot_joint_rad'])

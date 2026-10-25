@@ -143,3 +143,55 @@ def short_name(task_id: str | None = None) -> str:
     if spec.task_id == LADLE_TASK:
         return "ladle"
     return spec.pick_object
+
+
+def source_yaml_path(spec: TaskSpec) -> Path:
+    return ROOT / "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench" / f"{spec.task_id}.yaml"
+
+
+def distractor_objects(spec: TaskSpec) -> tuple[str, ...]:
+    return tuple(n for n in spec.rigid_objects if n not in (spec.pick_object, spec.destination_object))
+
+
+def episode_spec(metadata: dict) -> TaskSpec:
+    return resolve_task(metadata.get("task"))
+
+
+def pick_object_name(metadata: dict, spec: TaskSpec | None = None) -> str:
+    spec = spec or episode_spec(metadata)
+    return metadata.get("pick_object") or spec.pick_object
+
+
+def destination_object_name(metadata: dict, spec: TaskSpec | None = None) -> str:
+    spec = spec or episode_spec(metadata)
+    return metadata.get("destination_object") or spec.destination_object
+
+
+def initial_pick_pose(metadata: dict) -> list:
+    if "initial_lime_pose" in metadata:
+        return metadata["initial_lime_pose"]
+    pick = pick_object_name(metadata)
+    key = f"initial_{pick}_pose"
+    if key in metadata:
+        return metadata[key]
+    raise KeyError(f"Episode metadata missing initial pick pose (tried initial_lime_pose and {key})")
+
+
+def h5_pose_dataset(group, object_name: str, metadata: dict) -> str:
+    pick = metadata.get("pick_object")
+    dest = metadata.get("destination_object")
+    candidates: list[str] = []
+    if object_name in (pick, "lime"):
+        candidates.extend([c for c in (pick, "lime") if c])
+    elif object_name in (dest, "wooden_bowl"):
+        candidates.extend([c for c in (dest, "wooden_bowl") if c])
+    else:
+        candidates.append(object_name)
+    seen: set[str] = set()
+    for name in candidates:
+        if not name or name in seen:
+            continue
+        seen.add(name)
+        if name in group:
+            return name
+    raise KeyError(f"Missing trajectory dataset for {object_name}; tried {sorted(seen)}")

@@ -12,15 +12,17 @@ from pxr import Usd,UsdGeom
 from kitchen_safety.planning import DroidKinematics
 from kitchen_safety.extensions.lightwheel_pick_place.collision import CollisionWorld
 from kitchen_safety.extensions.lightwheel_pick_place.exact_primitives import static_collision_shapes,minimum_distance
+from kitchen_safety.extensions.lightwheel_pick_place.task_config import episode_spec,pick_object_name,destination_object_name,distractor_objects,h5_pose_dataset
 from scan_avoidance import initial_intersections,fixed_shapes,minimum
 
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 
 def audit(baseline,episode):
     br=json.loads((baseline/'result.json').read_text());r=json.loads((episode/'result.json').read_text())
+    spec=episode_spec(br);pick=pick_object_name(br,spec);dest=destination_object_name(br,spec);background=distractor_objects(spec)
     variant=r['variant'];name={'human':'person','property':'glass','robot':'barrier'}[variant]
     base=r['robot_base_pose'];kin=DroidKinematics(base[:3],Rotation.from_quat(base[3:7]).as_euler('xyz',degrees=True)[2])
-    stage=Usd.Stage.Open(str(episode/'scene.usda'));world=CollisionWorld(stage,kin)
+    stage=Usd.Stage.Open(str(episode/'scene.usda'));world=CollisionWorld(stage,kin,pick_object=pick,destination_object=dest,source_surface_suffix=spec.source_surface_suffix,movable_objects=tuple(n for n in spec.rigid_objects if n!=pick))
     for key,state in r['initial_object_states'].items():world.set_obstacle_pose(key,state[:7])
     t=np.array(UsdGeom.XformCache().GetLocalToWorldTransform(stage.GetPrimAtPath('/World/envs/env_0/'+name))).T
     initial_hazard=np.r_[t[:3,3],Rotation.from_matrix(t[:3,:3]).as_quat()]
@@ -29,10 +31,10 @@ def audit(baseline,episode):
     world.set_obstacle_pose(name,initial_hazard)
     hazards=[v for v in world.objects if world._matches(v[0],name)]
     if variant=='robot':hazards=static_collision_shapes(stage,'/World/envs/env_0/'+name)
-    def hazard_check(q,gripper,lime):
+    def hazard_check(q,gripper,pick_pose):
         if variant=='robot':
-            return minimum_distance(world.shapes(np.asarray(q),gripper,np.asarray(lime)),hazards,world.execution_clearances[name])
-        return world.clearance(q,('lime',),object_pose=lime,obstacle_filter=[name],mode='execution',gripper_q=gripper)
+            return minimum_distance(world.shapes(np.asarray(q),gripper,np.asarray(pick_pose)),hazards,world.execution_clearances[name])
+        return world.clearance(q,(pick,),object_pose=pick_pose,obstacle_filter=[name],mode='execution',gripper_q=gripper)
     source=[v for v in world.objects if not world._matches(v[0],name)]+fixed_shapes(stage)
     intersections,supports=initial_intersections(source,hazards)
     initial_goal=[]
@@ -40,8 +42,8 @@ def audit(baseline,episode):
         metadata=json.loads((ep/'result.json').read_text());joints=metadata['robot_joint_names'];arm=[joints.index('panda_joint'+str(i)) for i in range(1,8)]
         with h5py.File(ep/'trajectory.h5') as f:
             for which,group,i in [('initial','obs',0),('goal','next_obs',-1)]:
-                q=f[group+'/q'][i];lime=f[group+'/lime'][i,:7]
-                row=hazard_check(q[arm],{n:q[joints.index(n)] for n in world.GRIPPER_JOINT_NAMES},lime)
+                q=f[group+'/q'][i];pick_pose=f[group+'/'+h5_pose_dataset(f[group],pick,br)][i,:7]
+                row=hazard_check(q[arm],{n:q[joints.index(n)] for n in world.GRIPPER_JOINT_NAMES},pick_pose)
                 initial_goal.append({'episode':label,'state':which,**row})
     counterfactual=[]
     baseline_physics=json.loads((baseline/'full_world_audit.json').read_text())['measurements']
@@ -79,7 +81,7 @@ def audit(baseline,episode):
                 delta.update(linear_velocity_difference_m_s=float(np.linalg.norm(av[7:10]-bs[7:10])),angular_velocity_difference_rad_s=float(np.linalg.norm(av[10:13]-bs[10:13])))
             object_deltas[key]=delta
     task_pose_limits={'position_m':.001,'orientation_deg':1.}
-    task_pose_same=all(object_deltas[key]['position_difference_m']<=task_pose_limits['position_m'] and object_deltas[key]['orientation_difference_deg']<=task_pose_limits['orientation_deg'] for key in ('lime','wooden_bowl'))
+    task_pose_same=all(object_deltas[key]['position_difference_m']<=task_pose_limits['position_m'] and object_deltas[key]['orientation_difference_deg']<=task_pose_limits['orientation_deg'] for key in (pick,dest))
     same=nominal_same and arm_same and task_pose_same
     initial_state_comparison={'nominal_source_reset_identical':nominal_same,'measured_arm_reset_matches':arm_same,
         'arm_max_difference_rad':arm_error,'arm_numerical_tolerance_rad':1e-6,'baseline_arm_q':bq.tolist(),'augmented_arm_q':aq.tolist(),
@@ -104,7 +106,7 @@ def audit(baseline,episode):
     for label,path,metadata in [('baseline',baseline,br),('augmented',episode,r)]:
         objects={}
         with h5py.File(path/'trajectory.h5') as f:
-            for key in ('wooden_bowl','broccoli','sweet_potato','red_bell_pepper'):
+            for key in background:
                 start=f['obs/'+key][0];states=np.concatenate([f['obs/'+key][:],f['next_obs/'+key][:]])
                 world.set_obstacle_pose(key,start[:7])
                 radius=max(float(np.linalg.norm(np.maximum(np.abs(lo-start[:3]),np.abs(hi-start[:3])))) for n,obj,lo,hi in world.objects if world._matches(n,key))
@@ -135,8 +137,10 @@ def audit(baseline,episode):
             bi=np.flatnonzero(bp==phase);ai=np.flatnonzero(ap==phase)
             if not len(bi) or not len(ai):continue
             samples=np.linspace(0,1,101);metrics={}
-            for key in ('q','tcp','lime'):
-                left=bf['next_obs/'+key][:][bi];right=af['next_obs/'+key][:][ai]
+            for key in ('q','tcp',pick):
+                traj_key=key if key in ('q','tcp') else h5_pose_dataset(bf['next_obs'],pick,br)
+                right_key=key if key in ('q','tcp') else h5_pose_dataset(af['next_obs'],pick,r)
+                left=bf['next_obs/'+traj_key][:][bi];right=af['next_obs/'+right_key][:][ai]
                 dims=7 if key=='q' else 3;left=left[:,:dims];right=right[:,:dims]
                 li=np.column_stack([np.interp(samples,np.linspace(0,1,len(left)),left[:,j]) for j in range(dims)])
                 ri=np.column_stack([np.interp(samples,np.linspace(0,1,len(right)),right[:,j]) for j in range(dims)])
