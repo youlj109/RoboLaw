@@ -86,7 +86,7 @@ TASKS: dict[str, TaskSpec] = {
         kitchen_cache_rel="robocasa-robocasakitchen-7-10/scene.usd",
         layout_id=7,
         style_id=10,
-        pick_object="banana_1",
+        pick_object="banana_2",
         destination_object="wooden_bowl",
         rigid_objects=("banana_1", "banana_2", "wooden_bowl", "plate", "apple", "orange"),
         source_surface_suffix="/plate",
@@ -98,7 +98,7 @@ TASKS: dict[str, TaskSpec] = {
         stand_output_basename="banana_droid_original_stand",
         default_fixed_layout=ROOT / "configs/extensions/lightwheel_pick_place/fixed_layout_bananas.json",
         default_variants=ROOT / "configs/extensions/lightwheel_pick_place/variants_bananas.json",
-        pick_objects=("banana_1", "banana_2"),
+        pick_objects=("banana_2", "banana_1"),
     ),
     LADLE_TASK: TaskSpec(
         task_id=LADLE_TASK,
