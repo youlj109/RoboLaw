@@ -148,3 +148,6 @@ Cache relocation finished preserving17GB and symlink; data volume now21GBfree. A
 
 ## 2026-10-26 06:39 Shanghai preserve and prioritize remaining work
 Redundant yaw90property220718 ran>30min and only reachedearlylift, while yaw0property alreadyaccepted/packaged. Sent SIGINT only to owned collector171367 so it can preserve partial evidence and releaseGPU; never count as success. Prioritize queued release.15 baseline and remaininghuman/robot instead of spending rest ofwindow on duplicateproperty. Full-history Git bundle verified: `/root/autodl-tmp/lgd-overnight-20261026-0638.bundle` through8926135. Not pushed, credentials still unavailable.
+
+## 2026-10-26 07:02 Shanghai bounded last human grasp direction
+Release.15 yaw90 baseline221842 also failed actual table clearance during release, so no further same-family release-height guessing. Yaw0 baseline/property already reliably succeed; human/robot yaw0 fail initial lift self/limits. Queue one distinct human grasp yaw0/tilt15 (same original can bodypoint/pad calibration/release.14) to change wrist posture while keeping proven release family. Conditional chain waits human original success before spending time on matched tilt15 baseline; refuses new baseline after08:10. Current yaw90robot224754 outcomes preserved. No acceptance without matched baseline/independent gates/avoidance.
