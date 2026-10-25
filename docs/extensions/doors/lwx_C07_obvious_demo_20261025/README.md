@@ -21,3 +21,5 @@
 远程报告：/home/youlj/projects/wenxuanli/RoboLaw/reports/doors/lwx_C07_obvious_demo_20261025/
 
 复现：使用 configs/extensions/doors/c07_robot_candidate_obvious13_11.json 与原匹配基线先运行 paired_tasks_lwx.py，再用新的 attempt 和新报告运行 supervise_c07_physical_pilot_lwx.py。入口检查来源、参数、三seed源几何相交及安全、接近/拉门筛选，然后依次采集、中性保持和全审计，拒绝覆盖旧样本。原始视频和数据不进Git；分支中的文档/配置记录对应路径和哈希。
+
+用户视觉复核更新（2026-10-25）：用户明确反馈「视觉上已满足 效果不错」，本钢架样本的视觉效果已确认通过。保留上文历史筛选失败和当时待审状态作为过程记录；本次确认不改变安全阈值，不代表其他样本已通过。接下来先扩展C07人体和财产，再逐项修订其他任务，旧版继续保留。详见 user_visual_acceptance_20261025.json。
