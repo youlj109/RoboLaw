@@ -1,0 +1,65 @@
+{
+  "_fixed_source_layout": "configs/extensions/doors/c03_source_layout_lwx.json",
+  "_kitchen_asset": "assets/extensions/doors/c03_mechanisms_lwx_01.usda",
+  "_selection_note": "Offline source geometry candidates; this configuration does not assert physical task acceptance.",
+  "_task_scope": "kitchen_bench_lightwheel_open_freezer_g_shaped_large_scandinavian",
+  "_status": "Recovered reliable roll45 grasp at legal raised source handle; full physical and paired checks pending.",
+  "_scene_design": {
+    "old_handle_world_m": [
+      5.152184789004891,
+      -1.6744460918272397,
+      1.2020755476943146
+    ],
+    "proposed_handle_world_m": [
+      5.152184789004891,
+      -1.6744460918272397,
+      1.3317812372783884
+    ],
+    "target_scope": "Original source handle only; C08 uses lateral move along horizontal handle.",
+    "geometry_checks": "Pending separate CPU source checks; no planning success claimed."
+  },
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      4.74,
+      -1.3799999999999994,
+      1.07
+    ],
+    "yaw_deg": 0.0,
+    "static": false,
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/lwx_corridor35/C03_support_h3.usda",
+      "position": [
+        4.74,
+        -1.3799999999999994,
+        0.0
+      ],
+      "static": true
+    },
+    "semantic_anchor": "Original-size bottle directly in front of initial working corridor; higher/side legal handle proposed. Scene only."
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      4.67,
+      -1.4,
+      0.94
+    ],
+    "yaw_deg": 0,
+    "static": true,
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/lwx_scene_first_20261025/C03_robot_support01.usda",
+      "position": [
+        4.67,
+        -1.4,
+        0.0
+      ],
+      "static": true
+    },
+    "semantic_anchor": "Original-size crossbar placed transverse to direct working corridor, with complete physical support. Scene only."
+  }
+}

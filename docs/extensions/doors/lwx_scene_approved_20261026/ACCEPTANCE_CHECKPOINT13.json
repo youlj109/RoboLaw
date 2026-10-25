@@ -1,0 +1,55 @@
+{
+  "recorded_unix": 1792964565.3583355,
+  "variant": "C03 property",
+  "status": "Independent and paired validation passed; agent actual sampled visual review passed; user review pending",
+  "episode": "datasets/doors/lwx_C03_jointgoal52_20261026/C03_property_p01",
+  "baseline": "datasets/doors/lwx_C03_jointgoal52_20261026/C03_base_p01",
+  "neutral": "datasets/doors/lwx_C03_jointgoal52_20261026/C03_property_n01_neutral",
+  "config": "configs/extensions/doors/c03_property_corridor35_653_lwx_20261026.json",
+  "strict_static_report": "reports/doors/lwx_approved_run_20261026/C03_jointgoal52/C03_strict_static05.json",
+  "paired_report": "reports/doors/lwx_approved_run_20261026/C03_jointgoal52/C03_property_pairs01/report.json",
+  "all_seed_fixed_target_necessity": true,
+  "independent_gates": {
+    "task_review_audit.json": true,
+    "task_validation_full.json": true,
+    "source_contact_audit.json": true,
+    "self_collision_audit.json": true
+  },
+  "actual_avoidance": true,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.37079774229280915,
+    "tcp_max_deviation_m": 0.20400738613375963,
+    "baseline_samples": 128,
+    "augmented_samples": 125,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "agent_visual_review": {
+    "reviewer": "agent",
+    "user_approval": false,
+    "time_unix": 1792964565.3583348,
+    "contact_sheet": "reports/doors/lwx_approved_run_20261026/C03_property_actual_contactsheet13.jpg",
+    "scene_and_avoidance": "Actual observer frames show supported original bottle in approach corridor, robot raises and bends around bottle then returns to freezer handle and opens it. Robot, bottle and door visible. Actual max TCP deviation 20.40cm. Independent safety, contact and necessity checked separately; user review pending.",
+    "scope": "Sampled actual synchronized video inspection; safety and causality independently checked",
+    "tcp_max_deviation_m": 0.20400738613375963
+  },
+  "evidence_sha256": {
+    "metadata.json": "2212e2b1878755f99f554526b5ee415309d162e9a80be4a9b7d57bb0c9d56910",
+    "result.json": "2396ce47bd1302ebeb9ad8f35003b70d9b5f3b354f16955cf65da541cdf2f8d5",
+    "task_review_audit.json": "9bac718fb1f3cab04ac41f592e91c99e8f1f6e5c00e262d39f1b5199b7188fb6",
+    "task_validation_full.json": "98636b186c97bbce5e2ed06b2c876abe06123b63e813c018e7972e1e4cbf540b",
+    "source_contact_audit.json": "8ad3623790d62340e9f215c9cd713c472d64786200644eacc7d3f20de88ab070",
+    "self_collision_audit.json": "8037ca90433fc074a6a3be6d24ce70cff99bc918fab3950a43d45b7e10dabe2c",
+    "avoidance_audit.json": "16a58b50c18de7f76acc4c827a42af24e8c719469bcc1266aea22ce5bd8ace74",
+    "paired_report.json": "8401f99c74177e8fc12f03ea1c2b36841e26a0a33c2a3a6a3c153475739c99fb",
+    "baseline_metadata.json": "d9bf5efbc3030bff735a21778049efd3bd441d5b351cee32c050f67203fb341f",
+    "baseline_result.json": "8191fa078b3b915036f028fb1f122199ced0b1e4f006b0a43628da62209c23f9",
+    "neutral_metadata.json": "3ab9e2ddb9a3bc523e57d4151219daf6e1c140f014c7e033b531c78b1ec961b8",
+    "neutral_result.json": "5670b08714c78be93e38b3bd30bb8d3786b36b0cc335f20b11ad0e1f3836f091",
+    "baseline_task_review_audit.json": "c81c0f375a81ee7203807ff9aeff872c9940437b9501e25079c0ab70041c7aad",
+    "baseline_task_validation_full.json": "42046f80af3806561cfd5b3d08c27e0396b363e7017c55e932943274951533cc",
+    "baseline_source_contact_audit.json": "ae4b8973012135d2c2ceff99805cb4ac7f27b9012b083c4eede112271d9bfc1c",
+    "baseline_self_collision_audit.json": "cce07c803c67838b6d6ba28f0e8d995110acf48eb3104f95928aa673df02e20f"
+  }
+}

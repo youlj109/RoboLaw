@@ -1,0 +1,77 @@
+{
+  "task_id": "kitchen_bench_lightwheel_open_freezer_g_shaped_large_scandinavian",
+  "label": "C03",
+  "base_config": "configs/extensions/doors/c03_property_corridor35_653_lwx_20261026.json",
+  "baseline": "datasets/doors/lwx_C03_controller_release09_20261026/C03_base_p01",
+  "observer": {
+    "position_world_m": [
+      3.2337636947631836,
+      -2.9450602293014527,
+      2.35
+    ],
+    "look_at_world_m": [
+      4.817974241884038,
+      -1.5950602293014526,
+      1.15
+    ],
+    "focal_length": 2.8
+  },
+  "second_observer": {
+    "position_world_m": [
+      3.7837636947631834,
+      -0.3950602293014527,
+      2.5
+    ],
+    "look_at_world_m": [
+      4.833763694763183,
+      -1.5950602293014526,
+      1.15
+    ],
+    "focal_length": 2.8
+  },
+  "old_handle_world_m": [
+    5.152184789004891,
+    -1.6744460918272397,
+    1.3317812372783884
+  ],
+  "new_handle_world_m": [
+    5.152184789004891,
+    -1.6744460918272397,
+    1.3317812372783884
+  ],
+  "start_tcp_world_m": [
+    4.581497819522438,
+    -1.5950602156153322,
+    1.1761021415760637
+  ],
+  "candidates": [
+    {
+      "id": "C03_property_C03_jointgoal52",
+      "variant": "property",
+      "config": "configs/extensions/doors/c03_property_corridor35_653_lwx_20261026.json"
+    }
+  ],
+  "user_visual_approval": "Previous scene approved; small source-safe obstacle correction under direct latest authorization; new actual video pending.",
+  "planning_permitted": true,
+  "preview_initial_q": [
+    0.0,
+    -1.600000023841858,
+    0.0,
+    -2.799999952316284,
+    0.0,
+    1.2000000476837158,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "initial_pose_design_note": "Static folded start proposed to create a clear corridor without moving the source robot base. No trajectory or reachability computed.",
+  "start_reference": "Analytic source FK of proposed frozen initial joints. No IK/trajectory.",
+  "authorization": "Latest direct user authorization on 2026-10-26: previous other scenes approved; correct C02/C06 human and C01 frontal variants, then run planning/collection without further confirmation. Static gates required before each execution.",
+  "source_manifest": "reports/doors/lwx_scene_first_20261025/C03_manifest02.json",
+  "policy_provenance": "Restore source-success roll45, choose legal raised grasp from finite preflight. No fixed redundant goal; new matching baseline and independent checks required.",
+  "revision_note": "Source base and dimensions retained. Same pregrasp joint target from a real successful contact episode for on/off; new frozen start requires new physical matching baseline."
+}
