@@ -37,9 +37,12 @@ def plan_transfer(planner,q,target,ignore,grip):
         return direct
     except RuntimeError as exc:failures.append({'route':'direct','error':str(exc)})
     start=planner.kin.fk(q)
-    for rise in (.08,.16,.24):
+    offsets=[(0.,0.,z) for z in (.08,.16,.24)]
+    if planner.world.pick_object=='green_ladle':offsets += [(0.,.12,0.),(.12,0.,0.),(0.,-.12,0.),(-.12,0.,0.)]
+    for delta in offsets:
+        rise=delta[2]
         qstart=np.array(q,copy=True);legs=[]
-        via_start=start.copy();via_start[2,3]+=rise;via_goal=target.copy();via_goal[2,3]+=rise
+        via_start=start.copy();via_start[:3,3]+=np.asarray(delta);via_goal=target.copy();via_goal[:3,3]+=np.asarray(delta)
         try:
             for goal in (via_start,via_goal,target):
                 leg=planner.plan_pose(qstart,goal,ignore,grip,phase='transfer');checked=planner.validate_path(leg['positions'],ignore,grip,phase='transfer')
@@ -49,9 +52,9 @@ def plan_transfer(planner,q,target,ignore,grip):
             checked=planner.validate_path(positions,ignore,grip,phase='transfer')
             if not checked['valid']:raise RuntimeError(str(checked))
             result={'positions':positions,'metadata':dict(legs[-1].get('metadata',{}))}
-            result['metadata']=dict(result.get('metadata',{}),method='motion_gen_upper_route',samples=len(positions),upper_rise_m=rise,route_failures=failures,leg_metadata=[leg.get('metadata',{}) for leg in legs])
+            result['metadata']=dict(result.get('metadata',{}),method='motion_gen_upper_route',samples=len(positions),upper_rise_m=rise,route_offset_world_m=list(delta),route_failures=failures,leg_metadata=[leg.get('metadata',{}) for leg in legs])
             return result
-        except RuntimeError as exc:failures.append({'rise_m':rise,'error':str(exc)})
+        except RuntimeError as exc:failures.append({'route_offset_world_m':list(delta),'error':str(exc)})
     raise RuntimeError('No direct or upper route at fixed scene: '+str(failures))
 
 PAD_CALIBRATION_PATH='configs/extensions/lightwheel_pick_place/b03_pad_contact_calibration.json'
