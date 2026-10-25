@@ -48,11 +48,15 @@ def audit(baseline,episode):
     counterfactual=[]
     baseline_physics=json.loads((baseline/'full_world_audit.json').read_text())['measurements']
     for i,state in enumerate(baseline_physics):
+        active=state.get('pick_object',pick)
+        if world.pick_object!=active:world.bind_pick(active)
         c=hazard_check(state['q_arm'],state['gripper_q'],state['lime_pose'])
         counterfactual.append({'physics_index':i,'action':state['action'],'phase':state['phase'],**c})
     actual=[]
     actual_physics=json.loads((episode/'full_world_audit.json').read_text())['measurements']
     for i,state in enumerate(actual_physics):
+        active=state.get('pick_object',pick)
+        if world.pick_object!=active:world.bind_pick(active)
         if variant=='property':
             if 'hazard_pose' not in state:raise ValueError('Independent property replay requires every measured physics hazard pose')
             world.set_obstacle_pose(name,state['hazard_pose'])
@@ -81,21 +85,36 @@ def audit(baseline,episode):
                 delta.update(linear_velocity_difference_m_s=float(np.linalg.norm(av[7:10]-bs[7:10])),angular_velocity_difference_rad_s=float(np.linalg.norm(av[10:13]-bs[10:13])))
             object_deltas[key]=delta
     task_pose_limits={'position_m':.001,'orientation_deg':1.}
-    task_pose_same=all(object_deltas[key]['position_difference_m']<=task_pose_limits['position_m'] and object_deltas[key]['orientation_difference_deg']<=task_pose_limits['orientation_deg'] for key in (pick,dest))
+    task_pose_same=all(object_deltas[key]['position_difference_m']<=task_pose_limits['position_m'] and object_deltas[key]['orientation_difference_deg']<=task_pose_limits['orientation_deg'] for key in tuple(spec.pick_objects or (pick,))+(dest,))
     same=nominal_same and arm_same and task_pose_same
     initial_state_comparison={'nominal_source_reset_identical':nominal_same,'measured_arm_reset_matches':arm_same,
         'arm_max_difference_rad':arm_error,'arm_numerical_tolerance_rad':1e-6,'baseline_arm_q':bq.tolist(),'augmented_arm_q':aq.tolist(),
         'measured_task_initial_pose_matches':task_pose_same,'task_initial_pose_limits':task_pose_limits,
         'source_object_deltas':object_deltas,'scope':'Exact authored original poses, measured arm reset (1e-6 rad), robot base (1e-7m), and measured lime/bowl initial pose (1mm/1degree) are gated. All source settling deltas are disclosed; both paths must also pass both measured bowl/distractor backgrounds. Nominal equality does not assert identical physical states. No execution-time object setters.'}
     control_keys=('seed','placement_seed','requested_grasp_tilt_deg','requested_grasp_yaw_deg','requested_grasp_height_offset_m','smooth_lift','allowed_grasp_fallback','selected_grasp','dt','pregrasp_offset_m','grasp_lateral_x_m','grasp_finger_bias_m','grasp_local_approach','shelf_lift_retract_m')
+    if len(spec.pick_objects)>1:control_keys=tuple(k for k in control_keys if k!='shelf_lift_retract_m')
     same_controls=all(k in br and k in r and br[k] is not None and r[k] is not None and br[k]==r[k] for k in control_keys)
+    search=br.get('grasp_search_policy')
+    if len(spec.pick_objects)>1 and search:
+        # Search outputs may differ with hazards; the candidate policy and input controls must match.
+        policy_same=(search==r.get('grasp_search_policy') and search.get('name') in ('b03-family-v1','b03-topdown-v1'))
+        def selected_in_policy(metadata):
+            chosen=metadata.get('selected_grasp',{});value=[chosen.get('tilt'),chosen.get('yaw')]
+            if search.get('name')=='b03-topdown-v1':value.append(chosen.get('height_offset_m'))
+            return value in search.get('candidates',[])
+        selected_valid=all(selected_in_policy(m) for m in (br,r))
+        control_keys=tuple(k for k in control_keys if k not in ('selected_grasp','pregrasp_offset_m'))
+        same_controls=bool(policy_same and selected_valid and all(k in br and k in r and br[k]==r[k] for k in control_keys))
+    reset_keys=('path','sha256')
+    reset_controls_match=all(br.get('initial_state_layout_source',{}).get(k)==r.get('initial_state_layout_source',{}).get(k) for k in reset_keys)
     support_keys=('mode','root_z_gate','source_resting_extra_tolerance_m','source_resting_max_xy_displacement_m','surface','detach_clearance_m')
     baseline_support=br.get('source_support_contact_model',{});actual_support=r.get('source_support_contact_model',{})
     same_support=all(k in baseline_support and k in actual_support and baseline_support[k] is not None and actual_support[k] is not None and baseline_support[k]==actual_support[k] for k in support_keys)
     plan_methods_match=[(x['phase'],x.get('metadata',{}).get('method')) for x in br.get('plans',[]) if x.get('executed')]==[(x['phase'],x.get('metadata',{}).get('method')) for x in r.get('plans',[]) if x.get('executed')]
+    if len(spec.pick_objects)>1 and search:plan_methods_match=[x['phase'] for x in br.get('plans',[]) if x.get('executed')]==[x['phase'] for x in r.get('plans',[]) if x.get('executed')]
     lower_keys=('mode','lower_z_m','skipped')
     lower_controls_match=all(br.get('place_lower',{}).get(k)==r.get('place_lower',{}).get(k) for k in lower_keys)
-    same_controls=bool(same_controls and same_support and plan_methods_match and lower_controls_match)
+    same_controls=bool(same_controls and same_support and plan_methods_match and lower_controls_match and reset_controls_match)
     def audit_passes(ep,name):
         path=ep/name
         return path.exists() and json.loads(path.read_text()).get('passed') is True

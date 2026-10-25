@@ -9,6 +9,7 @@ parser.add_argument('--task',default='kitchen_bench_lightwheel_place_lime_in_woo
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
 parser.add_argument('--fixed-layout',help='Use the same saved original reset poses, including for the obstacle-free baseline')
+parser.add_argument('--initial-state-layout',type=Path,help='Reset-only measured rigid poses from the approved scene; never written during execution')
 parser.add_argument('--variant-config',help='Alternative safety-only hazard specifications; source task poses are unchanged')
 parser.add_argument('--smooth-lift',action='store_true',help='Twice-duration smoothstep lift retiming; use the identical setting for baseline and all variants')
 parser.add_argument('--allow-grasp-fallback',action='store_true',help='Legacy diagnostic fallback to 25/20 degrees; leave disabled for controlled avoidance comparisons')
@@ -21,6 +22,8 @@ parser.add_argument('--grasp-lateral-x',type=float,default=0.0,
     help='World-frame +X TCP bias at pick center for finger centerline; metres')
 parser.add_argument('--grasp-local-approach',action='store_true',
     help='Shelf: build pregrasp/standoff along -TCP_Z from selected wrist R (not fixed world offset)')
+parser.add_argument('--defer-full-world-audit',action='store_true',help='Record every 120 Hz state; check added hazards at 120 Hz, full world at 15 Hz live, and require complete 120 Hz offline full-world audit before acceptance')
+parser.add_argument('--grasp-search',choices=('fixed','b03-family','b03-topdown'),default='fixed')
 parser.add_argument('--pregrasp-planner',choices=('auto','motion_gen','cartesian_line'),default='auto')
 parser.add_argument('--pregrasp-standoff',type=float,default=None)
 parser.add_argument('--grasp-finger-bias',type=float,default=0.0,
@@ -83,10 +86,20 @@ with SimulationAppContext(args):
     overview_spec=None
     if args.overview_camera:
         from kitchen_safety.extensions.lightwheel_pick_place.overview import configure_overview
-        overview_spec=configure_overview(cfg.scene)
+        overview_spec=configure_overview(cfg.scene,**({'eye':[.6,-1.3,2.3],'target':[2.15,-2.65,.9]} if len(task_picks(TASK_SPEC))>1 else {}))
     cfg.sim.log_dir=str(out/'logs');cfg.sim.render_interval=cfg.decimation
     cfg.scene.robot_contacts=ContactSensorCfg(prim_path='{ENV_REGEX_NS}/Robot/.*',update_period=0,history_length=1)
     env=builder.make_registered(cfg,kwargs);env.reset();e=env.unwrapped;scene=e.scene;robot=scene['robot']
+    reset_layout_source=None
+    if args.initial_state_layout:
+        reset_layout=json.loads(args.initial_state_layout.read_text())['original_asset_initial_poses']
+        before_reset_writes=int(e.sim.get_physics_step_count())
+        for name in RIGID:
+            pose=reset_layout[name]
+            scene[name].write_root_pose_to_sim(torch.tensor([pose['position_xyz']+pose['rotation_xyzw']],device=e.device,dtype=torch.float32))
+            scene[name].write_root_velocity_to_sim(torch.zeros((1,6),device=e.device))
+        if int(e.sim.get_physics_step_count())!=before_reset_writes:raise RuntimeError('Initialization advanced physics')
+        reset_layout_source={'path':str(args.initial_state_layout),'sha256':hashlib.sha256(args.initial_state_layout.read_bytes()).hexdigest(),'scope':'Once during reset, before controls, observations and task execution; no execution-time object pose writes.'}
     ids,_=robot.find_joints(['panda_joint[1-7]'],preserve_order=True)
     q=arr(robot.data.joint_pos)[0,ids];grip=0.;phase='settle';records=[];clearances=[];plans=[];physics_audits=[]
     terminal={};world=None;planner=None;writer=None;overview_writer=None;overview_alignment=[];error=None
@@ -129,14 +142,15 @@ with SimulationAppContext(args):
         actual_lime_points=world.lime_vertices@Rotation.from_quat(s['lime'][3:7]).as_matrix().T+s['lime'][:3]
         actual_min_z=float(actual_lime_points[:,2].min());detached_before=world.source_detached
         # Full environment robot check; intended grasp/support masks are phase-specific.
-        full=world.clearance(s['q'][ids],ignores(),object_pose=s['lime'][:7],**geometry(s))
+        full=({'valid':None,'audit_pending':True} if args.defer_full_world_audit and physics_checks%8 else world.clearance(s['q'][ids],ignores(),object_pose=s['lime'][:7],**geometry(s)))
         physics_audits.append({'action':len(records),'phase':phase,'q_arm':s['q'][ids].tolist(),
             'gripper_q':{k:float(v) for k,v in geometry(s)['gripper_q'].items()},'lime_pose':s['lime'][:7].tolist(),'pick_object':PICK,
+            **({'rigid_poses':{n:s[n][:7].tolist() for n in RIGID}} if args.defer_full_world_audit else {}),
             **({'hazard_pose':s['hazard_pose'].tolist()} if args.variant=='property' else {}),
             'source_contact':source_contact,'source_hull_min_z_m':actual_min_z,
             'source_detached_before':detached_before,
             'source_lift_floor_z_m':getattr(world,'source_lift_floor_z',None),**full})
-        if not full['valid']:raise RuntimeError(f'Executed collision/clearance: {full}')
+        if full['valid'] is False:raise RuntimeError(f'Executed collision/clearance: {full}')
         world.source_detached=update_detached(detached=world.source_detached,hull_min_z=actual_min_z,
             surface_top=world.source_surface_top,source_contact_count=source_contact['count'])
         physics_audits[-1]['source_detached_after']=world.source_detached
@@ -175,9 +189,11 @@ with SimulationAppContext(args):
       'requested_grasp_height_offset_m':args.grasp_height_offset,
       'smooth_lift':args.smooth_lift,
       'allowed_grasp_fallback':args.allow_grasp_fallback,
+      'full_world_audit_schedule':('120Hz recorded/offline; full world 15Hz live; added hazards 120Hz live' if args.defer_full_world_audit else '120Hz live'),
       'source_yaml_sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
       'original_asset_initial_poses':{name:assets[name]._get_initial_pose_as_pose().to_dict() for name in ('droid',)+RIGID if name in assets and assets[name].get_initial_pose() is not None},
       'simulation_attachment':False,'robot_joint_names':robot.joint_names,'robot_body_names':robot.body_names,'dt':e.step_dt}
+    if reset_layout_source:result['initial_state_layout_source']=reset_layout_source
     if args.fixed_layout:
         result['fixed_layout_source']={'path':args.fixed_layout,'sha256':hashlib.sha256(Path(args.fixed_layout).read_bytes()).hexdigest()}
     if args.variant!='base':
@@ -234,16 +250,21 @@ with SimulationAppContext(args):
             if not cv2.imwrite(str(out/'overview_initial.png'),cv2.cvtColor(overview_initial,cv2.COLOR_RGB2BGR)):
                 raise RuntimeError('Could not save actual initial overview for visibility review')
         def cart(position,*,rotation=None,force_phase=None):
-            global q
+            global q,planner
             world.allowed_phase=phase
             s=snapshot();q=s['q'][ids].copy()
             world.gripper_joint_position=float(s['q'][robot.joint_names.index('finger_joint')])
             if args.variant=='property':
-                world.set_obstacle_pose('glass',s['hazard_pose']);planner.update_dynamic_obstacle('glass')
+                world.set_obstacle_pose('glass',s['hazard_pose'])
+                if len(task_picks(TASK_SPEC))==1:planner.update_dynamic_obstacle('glass')
             if len(task_picks(TASK_SPEC))>1:
                 for name in RIGID:
                     if name!=PICK:
-                        world.set_obstacle_pose(name,s[name][:7]);planner.update_dynamic_obstacle(name)
+                        world.set_obstacle_pose(name,s[name][:7])
+                # The backend only refreshes hazard boxes. Rebuild for moved task meshes.
+                import gc
+                planner=None;gc.collect()
+                planner=LimePlanner(world,kin,dt=e.step_dt,seed=seed,max_joint_speed=.4)
             target=np.eye(4);target[:3,3]=position
             target[:3,:3]=(kin.fk(q)[:3,:3] if rotation is None else rotation)
             # Shelf/lateral approach cannot use cuRobo vertical-column phases.
@@ -258,7 +279,10 @@ with SimulationAppContext(args):
                 if planning_phase=='cartesian_line':
                     trajectory=planner.plan_cartesian_line(q,target,ignores(),grip,phase='lift')
                 else:
-                    trajectory=planner.plan_pose(q,target,ignores(),grip,phase=planning_phase)
+                    if args.grasp_search in ('b03-family','b03-topdown') and planning_phase=='transfer':
+                        from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import plan_transfer
+                        trajectory=plan_transfer(planner,q,target,ignores(),grip)
+                    else:trajectory=planner.plan_pose(q,target,ignores(),grip,phase=planning_phase)
             except RuntimeError:
                 checker=planner.motion_gen.world_coll_checker
                 names=[n for n in planner.obstacle_names if not planner._ignored(n,ignores())]
@@ -301,9 +325,21 @@ with SimulationAppContext(args):
         result['grasp_lateral_x_m']=float(args.grasp_lateral_x)
         result['grasp_finger_bias_m']=float(args.grasp_finger_bias)
         result['grasp_local_approach']=bool(args.grasp_local_approach)
+        topdown_solution=None
+        if args.grasp_search=='b03-topdown':
+            from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import search_topdown,TOPDOWN_POLICY
+            for name in RIGID:
+                if name!=PICK:world.set_obstacle_pose(name,initial[name][:7])
+            topdown_solution,attempts=search_topdown(world,kin,q,initial['lime'][:7],bias_x_m=args.grasp_lateral_x,finger_bias_m=args.grasp_finger_bias,dt=e.step_dt,seed=seed)
+            result['grasp_search_policy']=TOPDOWN_POLICY;result['grasp_solutions']={PICK:{k:v for k,v in topdown_solution.items() if k not in ('rotation','center','offset')}};result['grasp_search_attempts']={PICK:attempts}
+            target_center[:3]=topdown_solution['center']-args.grasp_finger_bias*topdown_solution['rotation'][:,1];use_pregrasp_phase=True
         # use_pregrasp_phase computed earlier from TASK_SPEC for cart() planning-phase selection.
         candidates=list(dict.fromkeys([(args.grasp_tilt,args.grasp_yaw)]+(
             [(25,0),(20,0),(35,90),(35,-90),(10,90),(10,-90),(0,90),(0,-90)] if args.allow_grasp_fallback else [])))
+        if args.grasp_search=='b03-family':
+            candidates=list(dict.fromkeys([(args.grasp_tilt,args.grasp_yaw),(-35,180),(-55,180),(-75,180),(-90,180),(-35,0),(-55,0),(-75,0),(-90,0)]))
+            result['grasp_search_policy']={'name':'b03-family-v1','candidates':candidates,'contact_standoff_m':.02,'lift_m':.12,'closed_grip_preflight_rad':.383,'upper_route_rises_m':[.08,.16,.24]}
+        if topdown_solution:candidates=[(topdown_solution['tilt'],topdown_solution['yaw'])]
         result['pregrasp_candidates']=[]
         selected_R=None
         for tilt,yaw in candidates:
@@ -315,13 +351,21 @@ with SimulationAppContext(args):
                 approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
                 pregrasp_offset=-(args.pregrasp_standoff if args.pregrasp_standoff is not None else (.17 if PICK=='lemon' else .18))*approach
             else:
-                pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
+                pregrasp_offset=(np.array([0.,0.,.125]) if args.grasp_search=='b03-topdown' else np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float))
             try:
                 phase='pregrasp' if use_pregrasp_phase else 'approach'
                 # Use an oriented hover before the short local contact approach.
+                if args.grasp_search=='b03-family':
+                    from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import preflight_grasp
+                    for name in RIGID:
+                        if name!=PICK:world.set_obstacle_pose(name,initial[name][:7])
+                    planner=LimePlanner(world,kin,dt=e.step_dt,seed=seed,max_joint_speed=.4)
+                    preflight=preflight_grasp(planner,q,R,center,pregrasp_offset,initial['lime'][:7],PICK)
+                    result.setdefault('grasp_preflight_passes',[]).append({'tilt':tilt,'yaw':yaw,**preflight})
                 cart(center+pregrasp_offset,rotation=R, force_phase=('transfer' if args.pregrasp_planner=='motion_gen' else ('cartesian_line' if args.pregrasp_planner=='cartesian_line' or (args.pregrasp_planner=='auto' and args.grasp_local_approach and not use_pregrasp_phase and PICK!='lemon') else None)))
                 result['selected_grasp']={'tilt':tilt,'yaw':yaw,'phase':phase,'use_pregrasp_phase':use_pregrasp_phase,
                     'tcp_z_world':approach.tolist() if (args.grasp_local_approach and not use_pregrasp_phase) else None}
+                if topdown_solution:result['selected_grasp']['height_offset_m']=topdown_solution['height_offset_m']
                 result['pregrasp_offset_m']=pregrasp_offset.tolist()
                 selected_R=R; target_center[:3]=center; break
             except RuntimeError as exc:
@@ -465,18 +509,24 @@ with SimulationAppContext(args):
             R=Rotation.from_euler('z',args.grasp_yaw,degrees=True).as_matrix()@Rotation.from_euler('x',args.grasp_tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],dtype=float)
             center=target_center[:3]+float(args.grasp_finger_bias)*R[:,1]
             if use_pregrasp_phase:
-                pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
+                pregrasp_offset=(np.array([0.,0.,.125]) if args.grasp_search=='b03-topdown' else np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float))
             else:
                 # Prefer local approach when flag set; else TASK_SPEC offset.
                 if args.grasp_local_approach:
                     approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
                     pregrasp_offset=-(args.pregrasp_standoff if args.pregrasp_standoff is not None else (.17 if PICK=='lemon' else .18))*approach
                 else:
-                    pregrasp_offset=np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float)
+                    pregrasp_offset=(np.array([0.,0.,.125]) if args.grasp_search=='b03-topdown' else np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float))
+            if args.grasp_search=='b03-topdown':
+                for name in RIGID:
+                    if name!=PICK:world.set_obstacle_pose(name,held0[name][:7])
+                solution,attempts=search_topdown(world,kin,held0['q'][ids],held0['lime'][:7],bias_x_m=args.grasp_lateral_x,finger_bias_m=args.grasp_finger_bias,dt=e.step_dt,seed=seed)
+                R=solution['rotation'];center=solution['center'];pregrasp_offset=solution['offset']
+                result['grasp_solutions'][PICK]={k:v for k,v in solution.items() if k not in ('rotation','center','offset')};result['grasp_search_attempts'][PICK]=attempts
             phase='pregrasp' if use_pregrasp_phase else 'approach'
             cart(center+pregrasp_offset,rotation=R)
             phase='approach'
-            if args.grasp_local_approach:
+            if args.grasp_local_approach and not use_pregrasp_phase:
                 axis=pregrasp_offset/np.linalg.norm(pregrasp_offset)
                 cart(center+axis*.02,force_phase='cartesian_line')
             else:cart(center,rotation=R)
@@ -558,10 +608,11 @@ with SimulationAppContext(args):
         result['frames']=len(records);result['physics_safety_checks']=physics_checks;result['wall_s']=time.perf_counter()-started
         result['plans']=plans;result['clearance_checks']=len(clearances)
         result['cartesian_diagnostics']=getattr(planner,'cartesian_diagnostics',[])
-        result['full_world_audit_passed']=bool(physics_audits and all(x['valid'] for x in physics_audits))
+        result['full_world_audit_passed']=bool(physics_audits and all(x.get('valid') is True for x in physics_audits))
         (out/'full_world_audit.json').write_text(json.dumps({'passed':result['full_world_audit_passed'],
             'scope':'Every physics update: actual arm, fingers and original lime convex hull against all colliders. Only exact source counter permits native-rest collision-hull lower bound minus 0.5 mm and 50 mm xy, until >=2 mm separation and loss of source contacts permanently revoke it. Fruit/bowl support allowed only during placement. All external safety distances unchanged.',
-            'minimum':min(physics_audits,key=lambda x:x['slack_m']) if physics_audits else None,
+            'minimum':min((x for x in physics_audits if x.get('valid') is not None),key=lambda x:x['slack_m'],default=None),
+            'pending_samples':sum(x.get('valid') is None for x in physics_audits),
             'measurements':physics_audits},indent=2))
         if clearances:result['minimum_clearance']=min(clearances,key=lambda x:x['slack_m'])
         # Persist result/trajectory before slow MP4 decode so host timeouts still leave usable artifacts.

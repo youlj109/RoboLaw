@@ -24,7 +24,7 @@ def audit(baseline,episode):
     results={k:json.loads((p/'result.json').read_text()) for k,p in paths.items()}
     traces={k:json.loads((p/'full_world_audit.json').read_text())['measurements'] for k,p in paths.items()}
     b=results['baseline']['robot_base_pose'];kin=DroidKinematics(b[:3],Rotation.from_quat(b[3:7]).as_euler('xyz',degrees=True)[2])
-    spec=episode_spec(results['baseline']);pick=spec.pick_object;BACKGROUND=tuple(n for n in spec.rigid_objects if n!=pick)
+    spec=episode_spec(results['baseline']);pick=spec.pick_object;BACKGROUND=tuple(n for n in spec.rigid_objects if n not in (spec.pick_objects or (pick,)))
     world=CollisionWorld(Usd.Stage.Open(str(paths['baseline']/'scene.usda')),kin,pick_object=pick,destination_object=spec.destination_object,source_surface_suffix=spec.source_surface_suffix,movable_objects=BACKGROUND)
     combinations={}
     for background,metadata in results.items():
@@ -33,7 +33,14 @@ def audit(baseline,episode):
             rows=[]
             for index,state in enumerate(states):
                 world.allowed_phase=state['phase']
-                clearance=world.clearance(state['q_arm'],(pick,),mode='execution',
+                active=state.get('pick_object',pick)
+                if world.pick_object!=active:world.bind_pick(active)
+                if len(spec.pick_objects)>1:
+                    model=results[trajectory]['source_support_contact_model'] if active==pick else results[trajectory]['extra_source_support_models'][active]
+                    world.source_support_mode='native_rest_until_detached';world.source_detached=state['source_detached_before']
+                    world.source_resting_min_z=model['source_resting_min_z_m'];world.source_resting_root=np.asarray(model['source_resting_root_m'])
+
+                clearance=world.clearance(state['q_arm'],(active,),mode='execution',
                     gripper_q=state['gripper_q'],object_pose=state['lime_pose'],obstacle_filter=BACKGROUND)
                 rows.append({'physics_index':index,'action':state['action'],'phase':state['phase'],**clearance})
             combinations[trajectory+'_path_in_'+background+'_background']={'passed':all(x['valid'] for x in rows),
@@ -43,7 +50,7 @@ def audit(baseline,episode):
     return {'passed':all(x['passed'] for x in combinations.values()),'baseline_episode':str(paths['baseline']),
         'episode':str(paths['augmented']),'input_sha256':{k:{n:digest(p/n) for n in ('result.json','full_world_audit.json')} for k,p in paths.items()},
         'background_objects':list(BACKGROUND),'sampling_frequency_hz':120,'combinations':combinations,
-        'scope':'Both actual arm/finger/carried-lime paths must remain safe in both measured initial source backgrounds, including bowl and all drifting distractors. Active lime uses each path actual physics pose; the source task destination support exception remains phase-scoped. No added hazard is used in this nuisance-only test; no physics state setters.'}
+        'scope':'Both actual arm/finger/carried-lime paths must remain safe in both measured initial source backgrounds, including destination, source plate and all non-pick distractors. Multi-pick objects are audited as active carried geometry with their own calibrated source support; original full-world audits retain all other task-object collisions. Active lime uses each path actual physics pose; the source task destination support exception remains phase-scoped. No added hazard is used in this nuisance-only test; no physics state setters.'}
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--baseline',required=True,type=Path);p.add_argument('--episode',required=True,type=Path);p.add_argument('--output',type=Path);a=p.parse_args()

@@ -1,0 +1,16 @@
+#usda 1.0
+(
+    defaultPrim = "Person"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Person"
+{
+    def Xform "RotatedSource" (
+        prepend references = @../../people/mpfb_corridor/collidable.usda@
+    )
+    {
+        float xformOp:rotateZ = 30
+        uniform token[] xformOpOrder = ["xformOp:rotateZ"]
+    }
+}
