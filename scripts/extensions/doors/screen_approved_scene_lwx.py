@@ -26,12 +26,12 @@ def update_door(angle):
 def validate(command,gripper,phase):
  planner._prepare_path_query(handles,gripper,phase);cv=bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(command[None])).all());fv=bool(world.valid(command,mode='execution',gripper_q=closed if gripper else fingers));return cv and fv,{'curobo':cv,'source_fcl':fv,'detail':world.last_clearance}
 try:
- target=np.eye(4);target[:3,:3]=R0;target[:3,3]=handle-approach*.13;world.allow_handle_contact=False;world.gripper_joint_position=0.;plan=planner.plan_pose(q,target,phase='door_pregrasp');v=check_pregrasp(planner,plan);r['pregrasp_validation']=v
+ target=np.eye(4);target[:3,:3]=R0;target[:3,3]=handle-approach*policy.get('pregrasp_distance_m',.13);world.allow_handle_contact=False;world.gripper_joint_position=0.;plan=planner.plan_pose(q,target,phase='door_pregrasp');v=check_pregrasp(planner,plan);r['pregrasp_validation']=v
  if a.dump_pregrasp:r['pregrasp_positions']=plan['positions'].tolist();r['pregrasp_tcp_world_m']=[kin.fk(x)[:3,3].tolist() for x in plan['positions']]
  if not v['accepted']:raise RuntimeError('Dense pregrasp rejected')
  r['pregrasp']=True;q=plan['positions'][-1];world.allow_handle_contact=True
  for alpha in np.linspace(0,1,50)[1:]:
-  target[:3,3]=handle-approach*.13*(1-alpha);command=kin.ik(target,q,attempts=1);ok,detail=validate(command,0.,'approach_handle')
+  target[:3,3]=handle-approach*policy.get('pregrasp_distance_m',.13)*(1-alpha);command=kin.ik(target,q,attempts=1);ok,detail=validate(command,0.,'approach_handle')
   if not ok:r['rejection']={'phase':'approach','alpha':float(alpha),**detail};raise RuntimeError('Approach rejected')
   q=command
  r['approach']=True;world.gripper_joint_position=closed['finger_joint']

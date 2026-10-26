@@ -1,0 +1,96 @@
+{
+  "time": "2026-10-26T05:44:22.108787+00:00",
+  "scope": "C08 robot approved lower bar revision only; fixed layout; single successful physical baseline and variant, plus neutral controls; C04/C06 unfinished.",
+  "status": "independent_pass_and_agent_keyframe_review; user video review pending",
+  "evidence": {
+    "baseline": {
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C08_base_b67",
+      "independent_gates": {
+        "result.json": {
+          "passed": true,
+          "sha256": "a5cf2ccbaa70aea4a9b500bd48fe9e609e54dde5ce1b10d8ce7a6e9cad99c651"
+        },
+        "task_review_audit.json": {
+          "passed": true,
+          "sha256": "7b8d344ad2cdfe9082f67cb4e456799f4306b8424a78eb602aa864938bf210fc"
+        },
+        "task_validation_full.json": {
+          "passed": true,
+          "sha256": "de7b986653e712953123f1d5c5c2dd9b9248d995de774bd98882aeeab0948c12"
+        },
+        "source_contact_audit.json": {
+          "passed": true,
+          "sha256": "ec4fd1cca619982ae3010a378a319fbeaa5f9619587e6d14e4b3d5f0394415b3"
+        },
+        "self_collision_audit.json": {
+          "passed": true,
+          "sha256": "c10c5f5982c8aa955d3237c780b16546bc9faaa142fc2111b67cac6cc61de575"
+        }
+      },
+      "frames": 368
+    },
+    "robot": {
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C08_robot_r67",
+      "independent_gates": {
+        "result.json": {
+          "passed": true,
+          "sha256": "aa8c6f05180d3f814702a9a9e76e79f2908f4b44013e5de34d5b046883ee395c"
+        },
+        "task_review_audit.json": {
+          "passed": true,
+          "sha256": "c619ff84b1b869ad529ca6f3e6172336e01e1c9e3ae250a936224384378c3b97"
+        },
+        "task_validation_full.json": {
+          "passed": true,
+          "sha256": "249b83d6bc4c533c3abeb3ece192c1d493a409e00ed1edafd229887d179f64ad"
+        },
+        "source_contact_audit.json": {
+          "passed": true,
+          "sha256": "5d2fa4395c84d61d1e7307f464fd97a0330936af9c4d3c673da347cf65083eee"
+        },
+        "self_collision_audit.json": {
+          "passed": true,
+          "sha256": "215f58b390e0ada5afcaae500df0d5b23a7fe44e02b65fef78e3d7597d5ddb11"
+        }
+      },
+      "frames": 369
+    }
+  },
+  "all_seed_necessity": true,
+  "seed_scope": [
+    42,
+    43,
+    44
+  ],
+  "same_controller_policy": true,
+  "actual_minimum": {
+    "physics_record": 2395,
+    "action_index": 266,
+    "phase": "pull_door",
+    "distance_m": 0.05193821725325529,
+    "required_m": 0.01,
+    "slack_m": 0.041938217253255285,
+    "valid": true,
+    "robot_part": "robot_hull",
+    "hazard_part": "/World/envs/env_0/barrier/ProjectingTube",
+    "intersecting": false
+  },
+  "baseline_intersection_records": 22,
+  "path_comparison": {
+    "free_phase": "pregrasp",
+    "joint_max_deviation_rad": 0.3590115425502477,
+    "tcp_max_deviation_m": 0.2540575487783658,
+    "baseline_samples": 132,
+    "augmented_samples": 132,
+    "method": "101 normalized-progress samples; necessity determined by geometric counterfactual, never by path difference alone",
+    "figure": "path_comparison.png"
+  },
+  "local_review": "RoboLaw_outputs/lwx_scene_revision_20261026_02/C08_review76/index.html",
+  "limitations": [
+    "Single fixed layout, not randomized or bulk collection.",
+    "Source meshes/hulls are not a claim of PhysX cooked-face identity.",
+    "No user acceptance of new execution video has been inferred from scene approval."
+  ],
+  "reports": "reports/doors/lwx_scene_revision_20261026_02/approved_run67/C08",
+  "config": "configs/extensions/doors/c08_robot_lower_scene02_lwx_20261026.json"
+}

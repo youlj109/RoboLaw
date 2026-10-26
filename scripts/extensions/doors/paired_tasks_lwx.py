@@ -37,7 +37,7 @@ def plan(start, metadata, spec, seed, offsets):
     initial_height = metadata['controller_parameters']['handle_offset_z']
     started = time.perf_counter()
     for offset in offsets:
-        target[:3, 3] = np.asarray(metadata['handle_initial']) - approach*.13 + [0., 0., offset - initial_height]
+        target[:3, 3] = np.asarray(metadata['handle_initial']) - approach*metadata['controller_parameters'].get('pregrasp_distance_m',.13) + [0., 0., offset - initial_height]
         try:
             trajectory = planner.plan_pose(start, target, phase='door_pregrasp')
         except RuntimeError as error:

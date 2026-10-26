@@ -11,6 +11,7 @@ p.add_argument('--planner-hazard-extra-padding-m',type=float,default=0.,help='Ad
 p.add_argument('--task-id',required=True)
 p.add_argument('--grasp-roll-deg',type=float,default=0.)
 p.add_argument('--grasp-pitch-deg',type=float,default=0.)
+p.add_argument('--pregrasp-distance-m',type=float,default=.13,help='Same stand-off in matched baseline and variant; no route waypoints')
 p.add_argument('--handle-normal-offset',type=float,default=0.)
 p.add_argument('--pull-lead-rad',type=float,default=.018)
 p.add_argument('--pull-steps',type=int,default=500)
@@ -30,6 +31,7 @@ p.add_argument('--review-config', default='configs/extensions/doors/review_gates
 p.add_argument('--scene-manifest',type=Path,required=True)
 p.add_argument('--pregrasp-goal-q',type=float,nargs=7)
 a=p.parse_args();a.enable_cameras=True
+if not .03<=a.pregrasp_distance_m<=.20:p.error('--pregrasp-distance-m must be in [.03,.20]')
 scene_manifest=json.loads(a.scene_manifest.read_text())
 if not scene_manifest.get('planning_permitted'):p.error('Scene is not released for planning')
 if a.variant != 'base':
@@ -140,6 +142,7 @@ with SimulationAppContext(a):
     metadata['door_geometry']=geometry
     metadata['door_motion_reference_joint_rad']=reference_joint_position
     metadata['controller_parameters']['grasp_roll_deg']=a.grasp_roll_deg
+    metadata['controller_parameters']['pregrasp_distance_m']=a.pregrasp_distance_m
     if a.pregrasp_goal_q is not None:metadata['controller_parameters']['pregrasp_goal_q']=a.pregrasp_goal_q
     if a.pregrasp_settle_steps:metadata['controller_parameters']['pregrasp_settle_steps']=a.pregrasp_settle_steps
     if a.pregrasp_shortcut_policy!='none':metadata['controller_parameters']['pregrasp_shortcut_policy']=a.pregrasp_shortcut_policy
@@ -328,7 +331,7 @@ with SimulationAppContext(a):
             target=np.eye(4);target[:3,:3]=R0;default_handle=handle0.copy();candidate_failures=[];plan=None;candidate_queries=[]
             phase='pregrasp'
             for offset in ([0.,.06,.10] if a.adaptive_handle_height else [0.]):
-                handle0=default_handle+[0.,0.,offset];target[:3,3]=handle0-approach*.13
+                handle0=default_handle+[0.,0.,offset];target[:3,3]=handle0-approach*a.pregrasp_distance_m
                 candidate_queries.append({'offset_z_m':a.handle_offset_z+offset,'requested_handle_point_world':handle0.tolist(),'requested_pregrasp_pose_world':target.tolist()})
                 print('DOOR_PLAN',phase,target.tolist(),flush=True)
                 try:
@@ -358,7 +361,7 @@ with SimulationAppContext(a):
                 step(settle_command,0.)
             phase='approach_handle';world.allow_handle_contact=True
             for alpha in np.linspace(0,1,50)[1:]:
-                target[:3,3]=handle0-approach*.13*(1-alpha)
+                target[:3,3]=handle0-approach*a.pregrasp_distance_m*(1-alpha)
                 command=kin.ik(target,q,attempts=1)
                 world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])
                 sync(update_planner=True)
