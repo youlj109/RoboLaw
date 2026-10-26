@@ -4,7 +4,7 @@ The approved steel bar remains at its reviewed position. A new matching physical
 
 Both new episodes physically open the oven. Matching neutral controls and the task, full physical validation, source-contact and self-collision gates pass. Seeds 42/43/44 have paired off/on plans: every off path intersects the source bar geometry; every on path passes the independent geometry checks. The measured baseline counterfactual has 22 action-before/after intersection records. The actual obstacle episode has a minimum source clearance of 51.94 mm against the unchanged 10 mm requirement. TCP maximum difference at normalized pregrasp progress is 25.41 cm; this is a path-difference metric, not the necessity criterion.
 
-Complete decode records and an agent review of synchronized keyframes are provided. The arm visibly raises over the bar during approach and then reaches the same handle. User approval of the revised static scene is recorded; user acceptance of this new execution video has not been inferred.
+Complete decode records and an agent review of synchronized keyframes are provided. The arm visibly raises over the bar during approach and then reaches the same handle. The user separately approved the revised static scene and subsequently accepted this execution video with “C08robot没问题”. The exact feedback and its scope are recorded in user_visual_acceptance83.json.
 
 ## Outputs
 
