@@ -34,3 +34,13 @@ B05human/property remain accepted with old baseline/close-once model; robot stil
 
 ## Ownership/authentication
 Branch lgd, old user changes fixed_layout_ladle.json and restore_assets.py plus prior untracked assets/scripts preserved. Do not indiscriminately stage them. GitHub device login was offered while user awake; user chose unable to log in now, continue collection. Local login process canceled; do not repeat authentication question during this work. Push remains blocked, commit and bundle at delivery.
+
+
+## 2026-10-26 05:07 UTC restart (supersedes old process list above)
+- No native jobs remained at status check 05:04 UTC. Acknowledge missed continuation, not continuous progress.
+- B05 robot023744 now native success, validation/full-world/source-support/fixed-hazard/background/self/avoidance all true. Human/property previously accepted; final package remains.
+- B03 base023055 failed: banana_2 true; banana_1 false, final linear speed about0.0312m/s and oscillating bowl contact. Lower TCP compensation was rolled back before this episode; current lower offset uses lift-end measurement, contrary to earlier section.
+- New v6 balanced-first policy prepends first-banana legal pinch candidates yaw180/0, world pinchZ+2.3mm, local waistY+11mm, based on approximate collision-hull volume centroid. Second banana explicitly excludes these new candidates to retain its successful policy. Not a certified cooked COM; physical proof still required. No physics/hazard changes.
+- New native baseline base_lgd_b03_fixedscene_20261026T050735Z, runner208392, actual log lgd-b03-logs/base_fixedscene_20261026T050735Z.log.
+- Continuation208876, /root/autodl-tmp/lgd-day-logs/b03_balanced_continuation.sh/log, waits this baseline. On success collects human/property/robot, verifies matched episodes, derives actual executed transfer indices for paired seeds42/43/44. On base failure stops instead of repeating known bad parameters. Frozen hazard hashes and disk reserve checked before each variant.
+- B04 changed-motion base022533 failed at original wall; no new accepted variants. Do not repeat unchanged.

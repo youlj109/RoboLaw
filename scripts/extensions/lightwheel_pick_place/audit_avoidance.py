@@ -102,11 +102,11 @@ def audit(baseline,episode):
         # Search outputs may differ with hazards; the candidate policy and input controls must match.
         from kitchen_safety.extensions.lightwheel_pick_place.grasp_policy_compatibility import compare as compare_grasp_policy
         grasp_policy_compatibility=compare_grasp_policy(br,r)
-        policy_same=(grasp_policy_compatibility['compatible'] and search.get('name') in ('b03-family-v1','b03-topdown-v1','b03-topdown-v2','b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3','b03-padcenter-v4','b03-padcenter-v5'))
+        policy_same=(grasp_policy_compatibility['compatible'] and search.get('name') in ('b03-family-v1','b03-topdown-v1','b03-topdown-v2','b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3','b03-padcenter-v4','b03-padcenter-v5','b03-padcenter-v6-balanced-first'))
         def selected_in_policy(metadata):
             chosen=metadata.get('selected_grasp',{});value=[chosen.get('tilt'),chosen.get('yaw')]
             if search.get('name') in ('b03-topdown-v1','b03-topdown-v2'):value.append(chosen.get('height_offset_m'))
-            if search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3','b03-padcenter-v4','b03-padcenter-v5'):value.extend([chosen.get('pinch_z_offset_m'),chosen.get('waist_y_shift_m')])
+            if search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3','b03-padcenter-v4','b03-padcenter-v5','b03-padcenter-v6-balanced-first'):value.extend([chosen.get('pinch_z_offset_m'),chosen.get('waist_y_shift_m')])
             return value in search.get('candidates',[])
         selected_valid=all(selected_in_policy(m) for m in (br,r))
         if search.get('name','').startswith('b03-padcenter'):
@@ -124,7 +124,7 @@ def audit(baseline,episode):
     same_support=all(k in baseline_support and k in actual_support and baseline_support[k] is not None and actual_support[k] is not None and baseline_support[k]==actual_support[k] for k in support_keys)
     plan_methods_match=[(x['phase'],x.get('metadata',{}).get('method')) for x in br.get('plans',[]) if x.get('executed')]==[(x['phase'],x.get('metadata',{}).get('method')) for x in r.get('plans',[]) if x.get('executed')]
     if len(spec.pick_objects)>1 and search:plan_methods_match=[x['phase'] for x in br.get('plans',[]) if x.get('executed')]==[x['phase'] for x in r.get('plans',[]) if x.get('executed')]
-    if len(spec.pick_objects)>1 and search and search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3','b03-padcenter-v4','b03-padcenter-v5'):
+    if len(spec.pick_objects)>1 and search and search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3','b03-padcenter-v4','b03-padcenter-v5','b03-padcenter-v6-balanced-first'):
         # Identical feedback policy can produce different recenter counts/routes.
         # Check bounded outputs, while dense actual-path and native gates remain mandatory.
         allowed={'pregrasp':{'motion_gen','motion_gen_upper_route','motion_gen_joint_goal'},'approach':{'cartesian_ik','cartesian_line_ik'},'lift':{'motion_gen','cartesian_line_ik','cartesian_ik'},'transfer':{'motion_gen','motion_gen_upper_route','motion_gen_joint_goal'},'lower':{'cartesian_line_ik','cartesian_ik','motion_gen'},'retreat':{'motion_gen','cartesian_line_ik','cartesian_ik'}}
