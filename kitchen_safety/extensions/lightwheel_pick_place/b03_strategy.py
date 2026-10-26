@@ -59,7 +59,7 @@ def plan_transfer(planner,q,target,ignore,grip):
 
 PAD_CALIBRATION_PATH='configs/extensions/lightwheel_pick_place/b03_pad_contact_calibration.json'
 TOPDOWN_CANDIDATES=[(0,180,.0023,.011),(0,0,.0023,.011),(0,180,.002,0.),(0,0,.002,.03),(0,180,.002,.03),(0,0,.002,0.),(0,0,.003,-.03),(0,180,0.,.03),(0,180,.003,-.03),(15,180,0.,0.),(45,180,-.003,.03),(45,180,-.003,-.03),(45,180,-.003,0.),(60,180,-.003,.03),(75,180,.003,.03)]+[(tilt,yaw,z,y) for y in (.03,-.03,0.) for z in (-.003,0.,.003) for tilt,yaw in ((60,180),(70,180),(75,180),(80,180),(45,180),(-60,0),(-70,0)) if (tilt,yaw,z,y)!=(45,180,0.,0.)]
-TOPDOWN_POLICY={'name':'b03-padcenter-v6-balanced-first','grasp_point':'Actual collision-mesh cross-section centroid aligned to measured bilateral pad center','candidates':[list(x) for x in TOPDOWN_CANDIDATES],'closed_grip_preflight_range_rad':[.30,.383,.46,.55],'pregrasp_world_z_m':.08,'contact_standoff_m':0.,'lift_m':.10,'upper_route_rises_m':[.08,.16,.24]}
+TOPDOWN_POLICY={'name':'b03-padcenter-v7-balanced-both','grasp_point':'Actual collision-mesh cross-section centroid aligned to measured bilateral pad center','candidates':[list(x) for x in TOPDOWN_CANDIDATES],'closed_grip_preflight_range_rad':[.30,.383,.46,.55],'pregrasp_world_z_m':.08,'contact_standoff_m':0.,'lift_m':.10,'upper_route_rises_m':[.08,.16,.24]}
 
 
 def search_topdown(world,kin,q,pick_pose,*,bias_x_m,finger_bias_m,dt,seed):
@@ -135,4 +135,4 @@ def close_recenter_delta(world,kin,state,arm_ids,joint_names,contact_row,solutio
 
 TOPDOWN_POLICY.update(max_recenter_retries=2,recenter_max_step_m=.012,recenter_open_steps=12,recenter_close_steps=30,close_requires_bilateral_load=True)
 
-TOPDOWN_POLICY.update(pose_ik_joint_goal_fallback={'enabled':True,'seed_scales':[0.,.2,.4,.7],'max_position_error_m':.002,'max_orientation_error_deg':1.},physical_exclusions={'banana_1':[[15,180,0.,0.]],'banana_2':[[0,0,.002,.03],[0,180,.0023,.011],[0,0,.0023,.011]]})
+TOPDOWN_POLICY.update(pose_ik_joint_goal_fallback={'enabled':True,'seed_scales':[0.,.2,.4,.7],'max_position_error_m':.002,'max_orientation_error_deg':1.},physical_exclusions={'banana_1':[[15,180,0.,0.]],'banana_2':[[0,0,.002,.03]]})
