@@ -16,6 +16,7 @@ parser.add_argument('--release-retract-z',type=float,default=0.)
 parser.add_argument('--loaded-transfer-time-scale',type=float,default=1.)
 parser.add_argument('--pre-release-hold-steps',type=int,default=0)
 parser.add_argument('--align-second-grasp',action='store_true',help='Align second-banana grasp yaw with its measured object yaw')
+parser.add_argument('--placement-joint-goals',type=Path,help='Passed planning report with native-successful recorded joint endpoints')
 parser.add_argument('--placement-goals',type=Path,help='Passed fixed-scene planning report containing explicit body goals')
 parser.add_argument('--placement-reference',type=Path,help='Successful recorded pre-release object poses for each pick')
 parser.add_argument('--reference-clearance-z',type=float,default=0.)
@@ -129,6 +130,11 @@ with SimulationAppContext(args):
         goal_report=json.loads(args.placement_goals.read_text())
         if not goal_report.get('all_passed'):raise RuntimeError('Placement goal report did not pass')
         placement_refs=goal_report['goals']
+    placement_joint_goals={}
+    if args.placement_joint_goals:
+        joint_report=json.loads(args.placement_joint_goals.read_text())
+        if not joint_report.get('all_passed'):raise RuntimeError('Recorded joint goal planning did not pass')
+        placement_joint_goals=joint_report['joint_goals']
     envdef,assets=build_environment(enable_cameras=True,variant=args.variant,task_id=TASK_ID,
         fixed_layout_path=args.fixed_layout,variant_config_path=args.variant_config)
     builder=ArenaEnvBuilder(envdef,ArenaEnvBuilderCfg(num_envs=1,seed=seed,device='cpu',
@@ -311,7 +317,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'release_retract_z_m':args.release_retract_z,'loaded_transfer_time_scale':args.loaded_transfer_time_scale,'pre_release_hold_steps':args.pre_release_hold_steps,'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'release_retract_z_m':args.release_retract_z,'loaded_transfer_time_scale':args.loaded_transfer_time_scale,'pre_release_hold_steps':args.pre_release_hold_steps,'placement_joint_goals_sha256':hashlib.sha256(args.placement_joint_goals.read_bytes()).hexdigest() if args.placement_joint_goals else None,'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -457,8 +463,13 @@ with SimulationAppContext(args):
                 planning_phase=force_phase
             elif (not use_pregrasp_phase) and phase in ('pregrasp','approach','lift','lower'):
                 planning_phase='transfer'
+            joint_goal=(np.asarray(placement_joint_goals[PICK][phase]) if placement_joint_goals and world.attachment is not None and phase in ('transfer','lower') else None)
+            if joint_goal is not None:target=kin.fk(joint_goal)
             try:
-                if planning_phase=='cartesian_line':
+                if joint_goal is not None:
+                    if not world.valid(joint_goal,ignores()):raise RuntimeError('Recorded placement endpoint collision: '+str(world.last_clearance))
+                    planner.query_start_q=q.copy();trajectory=planner.plan_joint_goal(q,joint_goal,ignores(),grip,phase='transfer')
+                elif planning_phase=='cartesian_line':
                     trajectory=planner.plan_cartesian_line(q,target,ignores(),grip,phase=('transfer' if args.free_release and phase=='lower' else 'lift'))
                 else:
                     if (args.grasp_search in ('b03-family','b03-topdown') or args.transfer_route_search=='upper') and planning_phase=='transfer':
