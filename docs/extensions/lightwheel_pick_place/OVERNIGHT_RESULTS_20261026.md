@@ -1,6 +1,6 @@
 # RoboLaw lgd 夜间结果（2026-10-26）
 
-.git .gitignore .pytest_cache LICENSE README.md THIRD_PARTY_NOTICES.txt assets configs datasets docs exports kitchen_safety reports requirements-collection.txt runtime scenes scripts student_skills tests third_party  B03、B04、B05 全部验收完成。下面区分真实任务成功和安全任务验收。
+未能将 B03、B04、B05 全部验收完成。下面区分真实任务成功和安全任务验收。
 
 | 任务 | 已完成 | 未通过 |
 | --- | --- | --- |
