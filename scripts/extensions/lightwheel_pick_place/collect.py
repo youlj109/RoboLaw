@@ -28,6 +28,7 @@ parser.add_argument('--grasp-local-approach',action='store_true',
     help='Shelf: build pregrasp/standoff along -TCP_Z from selected wrist R (not fixed world offset)')
 parser.add_argument('--defer-added-hazard-audit',action='store_true',help='With deferred full-world audit: retain every120Hz actual state, check added hazards15Hz live, require complete120Hz CPU recheck before validation')
 parser.add_argument('--defer-full-world-audit',action='store_true',help='Record every 120 Hz state; check added hazards at 120 Hz, full world at 15 Hz live, and require complete 120 Hz offline full-world audit before acceptance')
+parser.add_argument('--attachment-feedback',choices=('measured_segment','close_once'),default='measured_segment',help='Collision-model attachment calibration; never a simulation constraint')
 parser.add_argument('--transfer-route-search',choices=('direct','upper'),default='direct',help='Try bounded upper waypoints at fixed hazards if direct transfer fails')
 parser.add_argument('--grasp-body-point',nargs=3,type=float,default=None,help='Measured object-local solid grasp point; recorded as a control')
 parser.add_argument('--grasp-search',choices=('fixed','b03-family','b03-topdown'),default='fixed')
@@ -240,7 +241,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -352,7 +353,7 @@ with SimulationAppContext(args):
             global q,planner
             world.allowed_phase=phase
             s=snapshot();q=s['q'][ids].copy()
-            if world.attachment is not None and phase in ('lift','transfer','lower'):
+            if args.attachment_feedback=='measured_segment' and world.attachment is not None and phase in ('lift','transfer','lower'):
                 # Collision model feedback only; never edits a PhysX body/constraint.
                 measured_attachment=np.linalg.inv(kin.fk(q))@transform(s['lime'][:3],s['lime'][3:7])
                 previous=np.asarray(world.attachment)
@@ -522,7 +523,7 @@ with SimulationAppContext(args):
             phase='lift';cart(held['tcp']+np.array([0.,0.,.10 if args.grasp_search=='b03-topdown' else .12]),force_phase='lift')
         elif use_pregrasp_phase:
             result['commanded_initial_lift_m']=float(TASK_SPEC.lift_height_m)
-            phase='lift';cart(held['tcp']+[0,0,TASK_SPEC.lift_height_m])
+            phase='lift';cart(held['tcp']+np.r_[TASK_SPEC.lift_offset_xy_m,TASK_SPEC.lift_height_m])
         else:
             # Shelf extract: scan template waypoints if provided; else preclear→retract→rise.
             phase='lift'
@@ -564,16 +565,16 @@ with SimulationAppContext(args):
         if result['lift_m']<.08 or not result['lift_contacts']['both_fingers_on_body']:raise RuntimeError('Lime failed physical lift/contact check')
         dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
         # Release above destination then let gravity settle the fruit.
-        desired_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0,TASK_SPEC.transfer_z_m])
+        desired_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
         phase='transfer';cart(desired_root+offset)
         if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
             phase='transfer'
             cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
             result['place_clear_rise_z_m']=float(args.place_clear_rise_z)
         lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
-        lower_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])
+        lower_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
         xfer_tcp=desired_root+offset
-        placement_state=snapshot();lower_tcp=lower_root+(placement_state['tcp']-placement_state['lime'][:3])
+        placement_state=snapshot();lower_tcp=lower_root+((placement_state['tcp']-placement_state['lime'][:3]) if args.attachment_feedback=='measured_segment' else offset)
         result['place_lower']={'mode':args.place_lower_mode,'lower_z_m':lower_z,
             'transfer_tcp_m':xfer_tcp.tolist(),'lower_tcp_m':lower_tcp.tolist(),
             'drop_m':float(xfer_tcp[2]-lower_tcp[2])}
@@ -667,13 +668,13 @@ with SimulationAppContext(args):
             result.setdefault('extra_lift_contacts',[]).append(lift_contact)
             if result['extra_lift_m'][-1]<.08 or not lift_contact['both_fingers_on_body']:raise RuntimeError(f'Physical lift/contact check failed for {PICK}')
             dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
-            desired_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0,TASK_SPEC.transfer_z_m])
+            desired_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
             phase='transfer';cart(desired_root+offset)
             if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
                 phase='transfer';cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
             lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
-            lower_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])
-            xfer_tcp=desired_root+offset;placement_state=snapshot();lower_tcp=lower_root+(placement_state['tcp']-placement_state['lime'][:3])
+            lower_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
+            xfer_tcp=desired_root+offset;placement_state=snapshot();lower_tcp=lower_root+((placement_state['tcp']-placement_state['lime'][:3]) if args.attachment_feedback=='measured_segment' else offset)
             phase='lower'
             if args.place_lower_mode=='skip' or abs(xfer_tcp[2]-lower_tcp[2])<1e-4:
                 pass

@@ -42,6 +42,8 @@ class TaskSpec:
     # Absolute env prim for PhysX source-support when not under kitchen (bananas on plate).
     source_surface_abs: str | None = None
     lift_height_m: float = .16
+    lift_offset_xy_m: tuple[float,float] = (0.,0.)
+    place_offset_xy_m: tuple[float,float] = (0.,0.)
 
 
 TASKS: dict[str, TaskSpec] = {
@@ -106,7 +108,7 @@ TASKS: dict[str, TaskSpec] = {
         task_id=LADLE_TASK,
         kitchen_registry="lightwheel_kitchen_g_shaped_large_scandinavian",
         kitchen_cache_rel="robocasa-robocasakitchen-9-8/scene.usd",
-        layout_id=9, lift_height_m=.10,
+        layout_id=9, lift_height_m=.09, lift_offset_xy_m=(.004,0.), place_offset_xy_m=(-.03,0.),
         style_id=8,
         pick_object="green_ladle",
         destination_object="plate",

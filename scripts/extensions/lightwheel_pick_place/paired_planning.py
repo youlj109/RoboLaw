@@ -290,11 +290,12 @@ def main():
                     grip = st['gripper_joint_position'] if segment in ('transfer', 'lift') else 0.0
                     target = targets[segment]
                     segment_attachment=attachment
-                    if len(TASK_SPEC.pick_objects)>1:
+                    measured_attachment_policy=(result.get('planning_attachment_policy')=='measured_segment' or bool(result.get('planning_attachment_updates')))
+                    if measured_attachment_policy:
                         from kitchen_safety.planning import transform
                         segment_attachment=np.linalg.inv(kin.fk(q0))@transform(st['active_pick_pose'][:3],st['active_pick_pose'][3:7])
                     run['active_pick']=active_pick
-                    run['attachment_source']='measured selected-pick pose at segment start' if len(TASK_SPEC.pick_objects)>1 else 'recorded close attachment'
+                    run['attachment_source']='measured selected-pick pose at segment start' if measured_attachment_policy else 'recorded close attachment'
                     planned = plan_segment(planner, world, segment, q0, target, grip, segment_attachment, recorded['metadata']['method'] if recorded else None)
                     positions = planned.pop('positions')
                     fname = f'{segment}_{variant}_seed{seed}_positions.npy'

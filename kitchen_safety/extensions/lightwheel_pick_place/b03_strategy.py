@@ -69,7 +69,9 @@ def search_topdown(world,kin,q,pick_pose,*,bias_x_m,finger_bias_m,dt,seed):
     from pathlib import Path
     calibration_path=Path(PAD_CALIBRATION_PATH);calibration=json.loads(calibration_path.read_text());pad_offset=np.array(calibration['pad_center_tcp_m']);TOPDOWN_POLICY['pad_calibration_sha256']=hashlib.sha256(calibration_path.read_bytes()).hexdigest();attempts=[]
     for tilt,yaw,pinch_z,y_shift in TOPDOWN_CANDIDATES:
-        if world.pick_object=='banana_1' and (tilt,yaw,pinch_z,y_shift)==(15,180,0.,0.):continue
+        if [tilt,yaw,pinch_z,y_shift] in TOPDOWN_POLICY.get('physical_exclusions',{}).get(world.pick_object,[]):
+            attempts.append({'tilt':tilt,'yaw':yaw,'pinch_z_offset_m':pinch_z,'waist_y_shift_m':y_shift,'passed':False,'reason':'Excluded after a preserved real physical failure; never repeated unchanged'})
+            continue
         local_grasp=collision_mesh_waist(world,y_shift=y_shift);nominal=(transform(pick_pose[:3],pick_pose[3:7])@np.r_[local_grasp,1.])[:3];nominal[0]+=bias_x_m
         rotation=Rotation.from_euler('z',yaw,degrees=True).as_matrix()@Rotation.from_euler('x',tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],float)
         center=nominal+np.array([0,0,pinch_z])-rotation@pad_offset+finger_bias_m*rotation[:,1];height=float(center[2]-nominal[2]);offset=np.array([0.,0.,.08]);row={'tilt':tilt,'yaw':yaw,'height_offset_m':height,'pinch_z_offset_m':pinch_z,'waist_y_shift_m':y_shift,'grasp_point_body_m':local_grasp.tolist()}
@@ -133,4 +135,4 @@ def close_recenter_delta(world,kin,state,arm_ids,joint_names,contact_row,solutio
 
 TOPDOWN_POLICY.update(max_recenter_retries=2,recenter_max_step_m=.012,recenter_open_steps=12,recenter_close_steps=30,close_requires_bilateral_load=True)
 
-TOPDOWN_POLICY.update(pose_ik_joint_goal_fallback={'enabled':True,'seed_scales':[0.,.2,.4,.7],'max_position_error_m':.002,'max_orientation_error_deg':1.},physical_exclusions={'banana_1':[[15,180,0.,0.]]})
+TOPDOWN_POLICY.update(pose_ik_joint_goal_fallback={'enabled':True,'seed_scales':[0.,.2,.4,.7],'max_position_error_m':.002,'max_orientation_error_deg':1.},physical_exclusions={'banana_1':[[15,180,0.,0.]],'banana_2':[[0,0,.002,.03]]})

@@ -95,11 +95,14 @@ def audit(baseline,episode):
     if pick!='lemon':control_keys=tuple(k for k in control_keys if k!='shelf_lift_retract_m')
     if len(spec.pick_objects)>1:control_keys+=('pick_object','pick_objects')
     if pick in ('green_ladle','pepsi_can'):control_keys+=('grasp_point_body_m','transfer_route_policy','commanded_initial_lift_m','pregrasp_planner_mode')
+    if pick=='green_ladle':control_keys+=('task_motion_parameters',)
     same_controls=all(k in br and k in r and br[k] is not None and r[k] is not None and br[k]==r[k] for k in control_keys)
     search=br.get('grasp_search_policy')
     if len(spec.pick_objects)>1 and search:
         # Search outputs may differ with hazards; the candidate policy and input controls must match.
-        policy_same=(search==r.get('grasp_search_policy') and search.get('name') in ('b03-family-v1','b03-topdown-v1','b03-topdown-v2','b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3','b03-padcenter-v4','b03-padcenter-v5'))
+        from kitchen_safety.extensions.lightwheel_pick_place.grasp_policy_compatibility import compare as compare_grasp_policy
+        grasp_policy_compatibility=compare_grasp_policy(br,r)
+        policy_same=(grasp_policy_compatibility['compatible'] and search.get('name') in ('b03-family-v1','b03-topdown-v1','b03-topdown-v2','b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3','b03-padcenter-v4','b03-padcenter-v5'))
         def selected_in_policy(metadata):
             chosen=metadata.get('selected_grasp',{});value=[chosen.get('tilt'),chosen.get('yaw')]
             if search.get('name') in ('b03-topdown-v1','b03-topdown-v2'):value.append(chosen.get('height_offset_m'))
@@ -110,6 +113,10 @@ def audit(baseline,episode):
             selected_valid=bool(selected_valid and all(set(m.get('grasp_solutions',{}))==set(spec.pick_objects) and all(selected_in_policy({'selected_grasp':value}) for value in m['grasp_solutions'].values()) for m in (br,r)))
         control_keys=tuple(k for k in control_keys if k not in ('selected_grasp','pregrasp_offset_m'))
         same_controls=bool(policy_same and selected_valid and all(k in br and k in r and br[k]==r[k] for k in control_keys))
+    def attachment_policy(m):
+        return m.get('planning_attachment_policy') or ('measured_segment' if m.get('planning_attachment_updates') else 'close_once')
+    same_attachment_update_policy=attachment_policy(br)==attachment_policy(r)
+    same_controls=bool(same_controls and same_attachment_update_policy)
     reset_keys=('path','sha256')
     reset_controls_match=all(br.get('initial_state_layout_source',{}).get(k)==r.get('initial_state_layout_source',{}).get(k) for k in reset_keys)
     support_keys=('mode','root_z_gate','source_resting_extra_tolerance_m','source_resting_max_xy_displacement_m','surface','detach_clearance_m')
@@ -211,7 +218,7 @@ def audit(baseline,episode):
         'baseline_audit_gates':baseline_gates,'augmented_audit_gates':actual_gates,
         'source_settling_nuisance_verified':background_verified,
         'source_background_motion_envelopes':{'backgrounds':background_motion,'scope':'Conservative translation + 2*collision-radius*sin(rotation/2) bounds every observed 15Hz source background pose; both 120Hz paths retain original clearance even after subtracting the entire recorded motion envelope. The actual 120Hz full-world audit independently checks live source dynamics.'},
-        'same_control_parameters':same_controls,'control_parameters':{k:r.get(k) for k in control_keys},
+        'same_control_parameters':same_controls,'grasp_policy_compatibility':locals().get('grasp_policy_compatibility'),'same_attachment_update_policy':same_attachment_update_policy,'attachment_update_policies':{'baseline':attachment_policy(br),'augmented':attachment_policy(r)},'control_parameters':{k:r.get(k) for k in control_keys},
         'same_source_support_policy':same_support,'source_support_policy':{k:r.get('source_support_contact_model',{}).get(k) for k in support_keys},
         'avoidance_effective':effective,'property_stability':stability,
         'hazard_geometry_scope':'Exact analytic USD Cylinder/Cube/Sphere/Capsule or triangle mesh; no round-primitive AABB corner is used to establish counterfactual risk. Actual collection retains its stricter conservative execution checks.' if variant=='robot' else 'Actual authored hazard collision triangle meshes, with each measured dynamic vase pose during actual execution.',
