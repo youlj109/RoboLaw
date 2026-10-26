@@ -73,3 +73,9 @@ Branch lgd, old user changes fixed_layout_ladle.json and restore_assets.py plus 
 - New baseline063247 runner214978, b03_collect_floor_center.sh keeps proven firstX-0.03 and secondX+0.075, adds firstY-0.03 to move settled fruit toward bowl floor center. CLI defaultfirstY0 preserves all existing callers; all three offset controls recorded/matched. No hazard/physics/grasp changes.
 - CPU hypothetical spacing report pair_spacing_center_y_hypothesis_20261026.json: same measured failure shapes translated firstY-0.03 and secondX+0.015 retain10.75mm separation (>2mm), not a physical success claim.
 - Current floor_center dispatcher/finalizer supersede exited separated watchers and retain success-only packaging. Native full baseline still pending.
+
+
+## 06:45 UTC higher first release (current)
+- Floor-center063247 failed450frames: first banana shifts while still clamped against bowl, gripper hull intersects bowl. Actual FK TCP at frames399/409/419/429/439: Z1.1294/1.1197/1.1100/1.1003/1.0942m; collision449 atZ1.0975 after contact-driven deflection. Original first lowerTCP1.095m.
+- New first lowerZ0.16 (was0.135m above destination), desired TCP1.12015m, earlier than observed clamped-bowl deflection. FirstXY[-0.03,-0.03], secondX+0.075 unchanged; controlled physical open then gravity release, no object setters, no thresholds changed. Second release remains0.135. CLI defaultNone preserves prior behavior; recorded/matched.
+- New native base064520 runner216367, b03_collect_floor_drop.sh, corresponding floor_drop dispatcher/finalizer in lgd-day-logs. User offered real failure image for manual input asynchronously; do not wait for optional review.
