@@ -50,6 +50,7 @@ parser.add_argument('--shelf-lift-template',type=Path,default=None,
     help='Optional JSON with waypoints_delta_m from scan_shelf_extract; overrides CLI retract grid')
 parser.add_argument('--place-lower-mode',choices=('cartesian_line','transfer','skip','steps'),default='cartesian_line',
     help='Shelf/plate lower: local Z line (default), MotionGen, skip-to-release, or multi-step Z')
+parser.add_argument('--dual-first-place-offset-x',type=float,default=-.06,help='First object root X offset from destination in a dual-pick task; recorded and matched')
 parser.add_argument('--place-lower-z',type=float,default=None,
     help='Override TASK_SPEC.lower_z_m (metres above destination root)')
 parser.add_argument('--place-lower-steps',type=int,default=3,
@@ -241,7 +242,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end'},'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -565,14 +566,14 @@ with SimulationAppContext(args):
         if result['lift_m']<.08 or not result['lift_contacts']['both_fingers_on_body']:raise RuntimeError('Lime failed physical lift/contact check')
         dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
         # Release above destination then let gravity settle the fruit.
-        desired_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
+        desired_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
         phase='transfer';cart(desired_root+offset)
         if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
             phase='transfer'
             cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
             result['place_clear_rise_z_m']=float(args.place_clear_rise_z)
         lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
-        lower_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
+        lower_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
         xfer_tcp=desired_root+offset
         lower_tcp=lower_root+offset
         result['place_lower']={'mode':args.place_lower_mode,'lower_z_m':lower_z,
@@ -668,12 +669,12 @@ with SimulationAppContext(args):
             result.setdefault('extra_lift_contacts',[]).append(lift_contact)
             if result['extra_lift_m'][-1]<.08 or not lift_contact['both_fingers_on_body']:raise RuntimeError(f'Physical lift/contact check failed for {PICK}')
             dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
-            desired_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
+            desired_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
             phase='transfer';cart(desired_root+offset)
             if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
                 phase='transfer';cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
             lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
-            lower_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
+            lower_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
             xfer_tcp=desired_root+offset;lower_tcp=lower_root+offset
             phase='lower'
             if args.place_lower_mode=='skip' or abs(xfer_tcp[2]-lower_tcp[2])<1e-4:

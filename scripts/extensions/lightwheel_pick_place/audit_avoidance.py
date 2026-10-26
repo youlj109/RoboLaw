@@ -95,7 +95,7 @@ def audit(baseline,episode):
     if pick!='lemon':control_keys=tuple(k for k in control_keys if k!='shelf_lift_retract_m')
     if len(spec.pick_objects)>1:control_keys+=('pick_object','pick_objects')
     if pick in ('green_ladle','pepsi_can'):control_keys+=('grasp_point_body_m','transfer_route_policy','commanded_initial_lift_m','pregrasp_planner_mode')
-    if pick=='green_ladle':control_keys+=('task_motion_parameters',)
+    if pick=='green_ladle' or len(spec.pick_objects)>1:control_keys+=('task_motion_parameters',)
     same_controls=all(k in br and k in r and br[k] is not None and r[k] is not None and br[k]==r[k] for k in control_keys)
     search=br.get('grasp_search_policy')
     if len(spec.pick_objects)>1 and search:

@@ -44,3 +44,10 @@ Branch lgd, old user changes fixed_layout_ladle.json and restore_assets.py plus 
 - New native baseline base_lgd_b03_fixedscene_20261026T050735Z, runner208392, actual log lgd-b03-logs/base_fixedscene_20261026T050735Z.log.
 - Continuation208876, /root/autodl-tmp/lgd-day-logs/b03_balanced_continuation.sh/log, waits this baseline. On success collects human/property/robot, verifies matched episodes, derives actual executed transfer indices for paired seeds42/43/44. On base failure stops instead of repeating known bad parameters. Frozen hazard hashes and disk reserve checked before each variant.
 - B04 changed-motion base022533 failed at original wall; no new accepted variants. Do not repeat unchanged.
+
+
+## 05:31 UTC centered placement continuation (current)
+- Completed balanced-first baseline050735 failed only first final native predicate; banana_1 speed0.00097567m/s (<0.003), support angle47.00955deg (>45); banana_2 native true, speed0.00070673m/s. Thus balance grasp removed prior first-banana oscillation, but placement rests against bowl sidewall. Actual image saved in episode settle_final_external_camera_2.jpg.
+- New baseline053117, runner210098, keeps v6 grasp and all physics/thresholds/frozen hazard layouts. First-banana commanded root X offset changes from-0.06 to-0.03m toward bowl center; second remains+0.06m. CLI --dual-first-place-offset-x, default-0.06 preserves existing callers. Dedicated b03_collect_centered.sh passes-0.03 for every baseline/variant.
+- Dual-task avoidance audit now additionally matches full task_motion_parameters, preventing pairing changed placement to old baseline.
+- New dispatcher /root/autodl-tmp/lgd-day-logs/b03_centered_continuation.sh/log waits210098, collects three variants only on native baseline success, records audits and actual-index paired panels. Previous balanced dispatcher exited2 on native failure.
