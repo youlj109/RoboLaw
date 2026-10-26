@@ -11,6 +11,8 @@ parser.add_argument('--task',default='kitchen_bench_lightwheel_place_lime_in_woo
 parser.add_argument('--pick-order',nargs='+',help='Execution order only for original parallel multi-pick task; all original picks remain required')
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
+parser.add_argument('--free-release',action='store_true',help='Keep destination collision enabled while lowering a held object; release above contact')
+parser.add_argument('--first-placement-reference',type=Path,help='Use measured body orientation from a successful first-fruit placement as the robot transport target; no object pose setters')
 parser.add_argument('--single-candidate-round',action='store_true',help='One selected grasp and one direct query per motion segment; stop on failure, no fallback sweep or duplicate grasp preflight')
 parser.add_argument('--fixed-layout',help='Use the same saved original reset poses, including for the obstacle-free baseline')
 parser.add_argument('--initial-state-layout',type=Path,help='Reset-only measured rigid poses from the approved scene; never written during execution')
@@ -164,7 +166,7 @@ with SimulationAppContext(args):
             terminal['terms']={n:bool(arr(e.termination_manager.get_term(n))[0]) for n in e.termination_manager.active_terms}
     e._reset_idx=capture_reset
     def ignores():
-        return (PICK,)+((DEST,) if phase in ('lower','release','retreat','settle_final') else ())
+        return (PICK,)+((DEST,) if phase in ('lower','release','retreat','settle_final') and not (args.free_release and phase=='lower') else ())
     def geometry(state):
         return dict(mode='execution',gripper_q={n:state['q'][robot.joint_names.index(n)] for n in finger_names})
     physics_checks=0
@@ -178,7 +180,7 @@ with SimulationAppContext(args):
             reference=snapshot()
             if any(not np.array_equal(s[k],reference[k]) for k in ('q','lime',*RIGID,*(['hazard_pose'] if args.variant=='property' else []))):raise RuntimeError('Physics snapshot audit-input parity failed')
             result['physics_snapshot_input_parity_verified']=True
-        world.allowed_phase=phase
+        world.allowed_phase=('transfer' if args.free_release and phase=='lower' else phase)
         if args.variant=='property':world.set_obstacle_pose('glass',s['hazard_pose'])
         for name in RIGID:
             if name == PICK: continue
@@ -249,7 +251,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -359,7 +361,7 @@ with SimulationAppContext(args):
 
         def cart(position,*,rotation=None,force_phase=None):
             global q,planner
-            world.allowed_phase=phase
+            world.allowed_phase=('transfer' if args.free_release and phase=='lower' else phase)
             s=snapshot();q=s['q'][ids].copy()
             if args.attachment_feedback=='measured_segment' and world.attachment is not None and phase in ('lift','transfer','lower'):
                 # Collision model feedback only; never edits a PhysX body/constraint.
@@ -397,13 +399,14 @@ with SimulationAppContext(args):
                 planning_phase='transfer'
             try:
                 if planning_phase=='cartesian_line':
-                    trajectory=planner.plan_cartesian_line(q,target,ignores(),grip,phase='lift')
+                    trajectory=planner.plan_cartesian_line(q,target,ignores(),grip,phase=('transfer' if args.free_release and phase=='lower' else 'lift'))
                 else:
                     if (args.grasp_search in ('b03-family','b03-topdown') or args.transfer_route_search=='upper') and planning_phase=='transfer':
                         from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import plan_transfer
                         trajectory=plan_transfer(planner,q,target,ignores(),grip)
                     else:trajectory=planner.plan_pose(q,target,ignores(),grip,phase=planning_phase)
             except RuntimeError:
+                if args.single_candidate_round:raise
                 checker=planner.motion_gen.world_coll_checker
                 names=[n for n in planner.obstacle_names if not planner._ignored(n,ignores())]
                 def valid_subset(subset):
@@ -579,7 +582,19 @@ with SimulationAppContext(args):
         dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
         # Release above destination then let gravity settle the fruit.
         desired_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
-        phase='transfer';cart(desired_root+offset)
+        first_pose_feedback=False
+        if args.first_placement_reference is not None:
+            reference=json.loads(args.first_placement_reference.read_text())
+            checkpoint=reference['placement_checkpoints'][PICK]
+            if not reference.get('success') or not checkpoint.get('passed'):raise RuntimeError('Placement orientation reference has no original success')
+            body_quaternion=checkpoint['object_state'][3:7]
+            actual_attachment=np.linalg.inv(kin.fk(lifted['q'][ids]))@transform(lifted['lime'][:3],lifted['lime'][3:7])
+            target_tcp=transform(desired_root,body_quaternion)@np.linalg.inv(actual_attachment)
+            result['first_placement_orientation_reference']={'path':str(args.first_placement_reference),'sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest(),'body_quaternion':body_quaternion,'scope':'Robot TCP target only; no object pose setters'}
+            phase='transfer';cart(target_tcp[:3,3],rotation=target_tcp[:3,:3])
+            transferred=snapshot();offset=transferred['tcp']-transferred['lime'][:3];first_pose_feedback=True
+        else:
+            phase='transfer';cart(desired_root+offset)
         if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
             phase='transfer'
             cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
@@ -587,7 +602,7 @@ with SimulationAppContext(args):
         lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
         if len(task_picks(TASK_SPEC))==2 and args.dual_first_place_lower_z is not None:lower_z=float(args.dual_first_place_lower_z)
         lower_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
-        xfer_tcp=desired_root+offset
+        xfer_tcp=(transferred['tcp'] if first_pose_feedback else desired_root+offset)
         lower_tcp=lower_root+offset
         result['place_lower']={'mode':args.place_lower_mode,'lower_z_m':lower_z,
             'transfer_tcp_m':xfer_tcp.tolist(),'lower_tcp_m':lower_tcp.tolist(),

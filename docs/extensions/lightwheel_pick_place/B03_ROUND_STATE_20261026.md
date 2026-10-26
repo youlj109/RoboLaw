@@ -1,0 +1,13 @@
+# B03 round-based continuation
+
+The user clarified that one round means one coherent planning recommendation/modification per scene, visit all scenes, retain failures, and revisit only next round. It does not mean one scalar parameter or one solver call for an entire multi-stage task. No environment moves or added physical diagnostic runs.
+
+Planning round 01 completed: `/root/autodl-tmp/B03-review/planning_round_01.json`. Base, robot and property each passed both saved-state transport/lower candidates and their planned gripper-opening sweeps. These are collision planning results, not native successful episodes. One common placement recommendation uses the real successful human first-banana orientation and releases at 0.16m, keeping the destination collision active before release to avoid pressing the bowl while clamped. All original safety margins and native predicates remain unchanged.
+
+A single finite capture round is now active: `/root/autodl-tmp/B03-review/capture_round01.json`, runner `/root/autodl-tmp/lgd-day-logs/b03_capture_round01.py`, log `b03_capture_round01.log`. Baseline first; only on baseline native success, collect robot/property once each. Variant failures are retained and the other variant still runs. No automatic parameter retry, extra physical diagnostics or audit sweep. Normal 1800-second per-episode timeout has a 30-second forced-exit grace period to prevent renderer deadlock holding the GPU forever.
+
+Current new baseline: `base_lgd_b03_free_20261026T130223Z`. Not yet a success claim. Existing human `human_lgd_b03_fixedscene_20261026T092630Z` remains accepted against its historical matched baseline; do not recollect it or promote old reports. Old baseline `base_lgd_b03_fixedscene_20261026T111936Z` succeeded natively but is not automatically a matched baseline for the new release controls.
+
+Pose-only baseline `base_lgd_b03_pose_20261026T123221Z` failed at498 actions during clamped lowering against the bowl. Robot `robot_lgd_b03_fixedscene_20261026T113926Z` failed during second release against the bowl; first placement checkpoint also failed. Property `property_lgd_b03_fixedscene_20261026T114622Z` recorder hung, was stopped, and has runtime_interrupted.json; partial files retained, not success. Height prototypes using first-pick summary for second-pick goal are invalidated in `/root/autodl-tmp/B03-review/height_plan_goal_correction.json`; corrected planning uses actual recorded lower target. No capture was launched from those wrong prototypes.
+
+Night heartbeat remains paused. B04 planning is deferred while the user prioritizes B03. Preserve all preexisting local changes. GitHub credentials remain unavailable; commit and bundle, do not claim pushed.
