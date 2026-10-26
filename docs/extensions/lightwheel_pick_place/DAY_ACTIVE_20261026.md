@@ -51,3 +51,11 @@ Branch lgd, old user changes fixed_layout_ladle.json and restore_assets.py plus 
 - New baseline053117, runner210098, keeps v6 grasp and all physics/thresholds/frozen hazard layouts. First-banana commanded root X offset changes from-0.06 to-0.03m toward bowl center; second remains+0.06m. CLI --dual-first-place-offset-x, default-0.06 preserves existing callers. Dedicated b03_collect_centered.sh passes-0.03 for every baseline/variant.
 - Dual-task avoidance audit now additionally matches full task_motion_parameters, preventing pairing changed placement to old baseline.
 - New dispatcher /root/autodl-tmp/lgd-day-logs/b03_centered_continuation.sh/log waits210098, collects three variants only on native baseline success, records audits and actual-index paired panels. Previous balanced dispatcher exited2 on native failure.
+
+
+## 05:52 UTC spaced placement (current)
+- Centered baseline053117: banana_1 native checkpoint true, speed about0.0026m/s; second lower aborted at frame994 because carried banana vs first-banana clearance1.60806mm<2mm, no intersection. Keep original2mm gate.
+- First centered state [2.11065,-2.56313,.98598], support [1.974,-1.100,3.144]N. First grip/placement improvement proven, whole task not passed.
+- New baseline055157, runner211628. b03_collect_spaced.sh commands first offset-0.04m (2cm toward center from original), midpoint between wall-supported-0.06 and encroaching-0.03. Second offset+0.06 and all grasp/physics/hazards/thresholds unchanged. New matched baseline mandatory.
+- Dispatcher /root/autodl-tmp/lgd-day-logs/b03_spaced_continuation.sh/log and finalizer b03_spaced_finalize.py/log supersede centered watchers (which exited on failure). Only passed manifest yields success package. Baseline native fail stops repeats.
+- Preserved unused5.4GB CUDA installer under /root/lgd-preserved-cache/cuda_12.8.0_570.86.10_linux.run; original path remains symlink. No collection data removed. Data volume had12GB free after move.
