@@ -2,19 +2,20 @@
 import argparse,hashlib,json,subprocess,platform,sys
 from importlib.metadata import version,PackageNotFoundError
 from pathlib import Path
-p=argparse.ArgumentParser();p.add_argument('--task',required=True);p.add_argument('--task-scope',action='store_true',help='Explicit user scope: exclude unrelated global kitchen-joint neutral gate, retain task/object/robot checks and record exclusion');p.add_argument('--baseline',type=Path,required=True);p.add_argument('--human',type=Path,required=True);p.add_argument('--property',type=Path,required=True);p.add_argument('--robot',type=Path,required=True);p.add_argument('--neutral',type=Path,required=True);p.add_argument('--paired',type=Path,nargs='+',required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--task',required=True);p.add_argument('--task-scope',action='store_true',help='Explicit user scope: exclude unrelated global kitchen-joint neutral gate, retain task/object/robot checks and record exclusion');p.add_argument('--baseline',type=Path,required=True);p.add_argument('--robot-baseline',type=Path);p.add_argument('--human',type=Path,required=True);p.add_argument('--property',type=Path,required=True);p.add_argument('--robot',type=Path,required=True);p.add_argument('--neutral',type=Path,required=True);p.add_argument('--paired',type=Path,nargs='+',required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
 def read(path):return json.loads(path.read_text()) if path.exists() else {}
 def digest(path):
  h=hashlib.sha256()
  with path.open('rb') as stream:
   for block in iter(lambda:stream.read(8*1024*1024),b''):h.update(block)
  return h.hexdigest()
-paths={k:getattr(a,k) for k in ('baseline','human','property','robot')};episodes={};hashes={};max_duration=0
+paths={k:getattr(a,k) for k in ('baseline','human','property','robot')};matched_baselines={v:(a.robot_baseline if v=='robot' and a.robot_baseline else a.baseline) for v in ('human','property','robot')};episodes={};hashes={};max_duration=0
+if a.robot_baseline:paths['robot_baseline']=a.robot_baseline
 for name,ep in paths.items():
- r=read(ep/'result.json');max_duration=max(max_duration,float(r.get('frames',0))*float(r.get('dt',0)));gates={'physical_success':r.get('success') is True,'task_and_variant_match':r.get('task')==a.task and r.get('variant')==('base' if name=='baseline' else name)}
+ r=read(ep/'result.json');max_duration=max(max_duration,float(r.get('frames',0))*float(r.get('dt',0)));gates={'physical_success':r.get('success') is True,'task_and_variant_match':r.get('task')==a.task and r.get('variant')==('base' if name.endswith('baseline') else name)}
  for file in ('validation.json','full_world_audit.json','self_collision_audit.json','source_support_audit.json'):
   gates[file]=read(ep/file).get('passed') is True
- if name!='baseline':
+ if not name.endswith('baseline'):
   for file in ('fixed_base_hazard_audit.json','source_background_audit.json'):gates[file]=read(ep/file).get('passed') is True
   gates['effective_avoidance_acceptance']=read(ep/'avoidance_audit.json').get('accepted') is True
  required=['external_camera.mp4','external_camera_2.mp4','wrist_camera.mp4']+(['overview_camera.mp4'] if r.get('overview_camera') else [])
@@ -24,12 +25,13 @@ for name,ep in paths.items():
   if (ep/file).is_file():hashes[str(ep/file)]=digest(ep/file)
  for extra in ep.glob('contacts_*.json'):hashes[str(extra)]=digest(extra)
  for extra in ep.glob('route_extension_equivalence*.json'):hashes[str(extra)]=digest(extra)
+ for extra in ep.glob('source_background_motion_certificate*.json'):hashes[str(extra)]=digest(extra)
 paired_reports=[read(x) for x in a.paired];paired={}
 for v in ('human','property','robot'):
  metadata=read(paths[v]/'result.json')
  rows=[]
  for r in paired_reports:
-  bound=(r.get('seeds')==[42,43,44] and r.get('baseline_result_sha256')==digest(a.baseline/'result.json') and r.get('baseline_trajectory_sha256')==digest(a.baseline/'trajectory.h5') and r.get('variant_config_sha256')==metadata.get('variant_config_source',{}).get('sha256'))
+  bound=(r.get('seeds')==[42,43,44] and r.get('baseline_result_sha256')==digest(matched_baselines[v]/'result.json') and r.get('baseline_trajectory_sha256')==digest(matched_baselines[v]/'trajectory.h5') and r.get('variant_config_sha256')==metadata.get('variant_config_source',{}).get('sha256'))
   if not bound:continue
   summary=r.get('variant_reports',{}).get(v,{})
   segment=summary.get('primary_segment')
