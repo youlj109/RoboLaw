@@ -11,8 +11,10 @@ parser.add_argument('--task',default='kitchen_bench_lightwheel_place_lime_in_woo
 parser.add_argument('--pick-order',nargs='+',help='Execution order only for original parallel multi-pick task; all original picks remain required')
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
+parser.add_argument('--align-second-grasp',action='store_true',help='Align second-banana grasp yaw with its measured object yaw')
 parser.add_argument('--placement-reference',type=Path,help='Successful recorded pre-release object poses for each pick')
 parser.add_argument('--reference-clearance-z',type=float,default=0.)
+parser.add_argument('--round10-second-placement',action='store_true',help='Use planned round10: measured wrist, direct release, Y+30mm and clearance25mm')
 parser.add_argument('--free-release',action='store_true',help='Keep destination collision enabled while lowering a held object; release above contact')
 parser.add_argument('--first-placement-reference',type=Path,help='Use measured body orientation from a successful first-fruit placement as the robot transport target; no object pose setters')
 parser.add_argument('--single-candidate-round',action='store_true',help='One selected grasp and one direct query per motion segment; stop on failure, no fallback sweep or duplicate grasp preflight')
@@ -98,6 +100,8 @@ with SimulationAppContext(args):
     from kitchen_safety.extensions.lightwheel_pick_place.collision import CollisionWorld
     from kitchen_safety.extensions.lightwheel_pick_place.planner import LimePlanner
     LimePlanner.single_candidate_round=bool(args.single_candidate_round)
+    LimePlanner.align_second_grasp=bool(args.align_second_grasp)
+    LimePlanner.joint_second_placement=bool(args.round10_second_placement)
     from kitchen_safety.extensions.lightwheel_pick_place.contacts import LimeGraspContacts,LimeSourceContacts
     from kitchen_safety.extensions.lightwheel_pick_place.source_support import JITTER_M,MAX_XY_M,DETACH_CLEARANCE_M,update_detached,native_contact_is_shallow
     from kitchen_safety.extensions.lightwheel_pick_place.lemon_kinematics import LemonKinematics
@@ -181,7 +185,11 @@ with SimulationAppContext(args):
     e._reset_idx=capture_reset
     def reference_placement_goal(state,destination,above):
         ref=placement_refs[PICK]
-        root=destination[:3]+np.asarray(ref['offset'])+[0.,0.,args.reference_clearance_z+above]
+        second=args.round10_second_placement and PICK=='banana_2'
+        root=destination[:3]+np.asarray(ref['offset'])+[0.,.03 if second else 0.,(.025 if second else args.reference_clearance_z)+above]
+        if second:
+            target=kin.fk(state['q'][ids]).copy();target[:3,3]=root+(state['tcp']-state['lime'][:3])
+            return root,target
         attachment=np.linalg.inv(kin.fk(state['q'][ids]))@transform(state['lime'][:3],state['lime'][3:7])
         return root,transform(root,ref['quaternion'])@np.linalg.inv(attachment)
 
@@ -271,7 +279,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -734,7 +742,7 @@ with SimulationAppContext(args):
             dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
             desired_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
             if placement_refs:
-                desired_root,target_tcp=reference_placement_goal(lifted,dest,.045)
+                desired_root,target_tcp=reference_placement_goal(lifted,dest,0. if args.round10_second_placement else .045)
                 phase='transfer';cart(target_tcp[:3,3],rotation=target_tcp[:3,:3])
                 transferred=snapshot();offset=transferred['tcp']-transferred['lime'][:3]
             else:
@@ -749,7 +757,9 @@ with SimulationAppContext(args):
                 lower_tcp=reference_lower_tcp[:3,3]
                 result.setdefault('placement_body_goals',{})[PICK]={'root':lower_root.tolist(),'quaternion':placement_refs[PICK]['quaternion'],'tcp_target':reference_lower_tcp.tolist()}
             phase='lower'
-            if placement_refs:
+            if placement_refs and args.round10_second_placement:
+                result['placement_body_goals'][PICK]={'root':desired_root.tolist(),'tcp_target':target_tcp.tolist(),'orientation_policy':'keep measured wrist after lift','direct_release':True,'actual_before_open':snapshot()['lime'].tolist()}
+            elif placement_refs:
                 cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
             elif args.place_lower_mode=='skip' or abs(xfer_tcp[2]-lower_tcp[2])<1e-4:
                 pass

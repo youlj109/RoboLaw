@@ -40,6 +40,15 @@ class LimePlanner(CuroboPlanner):
 
     def plan_pose(self,q_arm7,target,ignore_names=(),grip_binary=0,phase=None):
         self.query_start_q=np.asarray(q_arm7).copy()
+        if getattr(self,'joint_second_placement',False) and self.world.pick_object=='banana_2' and self.world.attachment is not None and phase=='transfer':
+            from scipy.spatial.transform import Rotation
+            goal=self.kin.ik(target,np.asarray(q_arm7),attempts=1)
+            fk=self.kin.fk(goal)
+            if np.linalg.norm(fk[:3,3]-target[:3,3])>.002 or np.rad2deg(Rotation.from_matrix(fk[:3,:3]@target[:3,:3].T).magnitude())>1.:
+                raise RuntimeError('Round10 joint goal missed unchanged TCP target')
+            if not self.world.valid(goal,ignore_names):
+                raise RuntimeError('Round10 joint goal fails original FCL: '+str(self.world.last_clearance))
+            return self.plan_joint_goal(q_arm7,goal,ignore_names,grip_binary,phase=phase)
         if self.single_candidate_round:
             return super().plan_pose(q_arm7,target,ignore_names,grip_binary,phase)
         if phase!='pregrasp':

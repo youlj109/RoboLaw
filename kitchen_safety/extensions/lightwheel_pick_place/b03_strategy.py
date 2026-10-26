@@ -23,7 +23,7 @@ def preflight_grasp(planner,q,rotation,center,offset,pick_pose,pick,closed_grip=
             checked3=planner.validate_path(third['positions'],(pick,),1.,phase='lift')
             if not checked3['valid']:raise RuntimeError('Lift path rejected: '+str(checked3))
             lift_checks.append({'gripper_joint_rad':grip,'validation':checked3})
-        return {'passed':True,'scope':'Planned hover/contact/lift only; physical bilateral grasp remains required','checks':[checked,checked2],'lift_checks':lift_checks}
+        return {'passed':True,'scope':'Planned hover/contact/lift only; physical bilateral grasp remains required','checks':[checked,checked2],'lift_checks':lift_checks,'q_lift_end':np.asarray(third['positions'][-1]).tolist(),'attachment_tcp_to_object':np.asarray(world.attachment).tolist()}
     finally:
         world.attachment=old_attachment;world.gripper_joint_position=old_grip;world.allowed_phase=old_phase
 
@@ -84,8 +84,9 @@ def search_topdown(world,kin,q,pick_pose,*,bias_x_m,finger_bias_m,dt,seed):
             attempts.append({'tilt':tilt,'yaw':yaw,'pinch_z_offset_m':pinch_z,'waist_y_shift_m':y_shift,'passed':False,'reason':'Excluded after a preserved real physical failure; never repeated unchanged'})
             continue
         local_grasp=collision_mesh_waist(world,y_shift=y_shift);nominal=(transform(pick_pose[:3],pick_pose[3:7])@np.r_[local_grasp,1.])[:3];nominal[0]+=bias_x_m
-        rotation=Rotation.from_euler('z',yaw,degrees=True).as_matrix()@Rotation.from_euler('x',tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],float)
-        center=nominal+np.array([0,0,pinch_z])-rotation@pad_offset+finger_bias_m*rotation[:,1];height=float(center[2]-nominal[2]);offset=np.array([0.,0.,.08]);row={'tilt':tilt,'yaw':yaw,'height_offset_m':height,'pinch_z_offset_m':pinch_z,'waist_y_shift_m':y_shift,'grasp_point_body_m':local_grasp.tolist()}
+        object_yaw=float(Rotation.from_quat(pick_pose[3:7]).as_euler('xyz',degrees=True)[2]) if getattr(LimePlanner,'align_second_grasp',False) and world.pick_object=='banana_2' else 0.
+        rotation=Rotation.from_euler('z',yaw+object_yaw,degrees=True).as_matrix()@Rotation.from_euler('x',tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],float)
+        center=nominal+np.array([0,0,pinch_z])-rotation@pad_offset+finger_bias_m*rotation[:,1];height=float(center[2]-nominal[2]);offset=np.array([0.,0.,.08]);row={'tilt':tilt,'yaw':yaw,'height_offset_m':height,'pinch_z_offset_m':pinch_z,'waist_y_shift_m':y_shift,'grasp_point_body_m':local_grasp.tolist(),'measured_object_yaw_correction_deg':object_yaw,'world_grasp_yaw_deg':float(yaw+object_yaw)}
         print('TOPDOWN_CANDIDATE',world.pick_object,tilt,yaw,height,flush=True)
         if LimePlanner.single_candidate_round:
             row.update(selected_for_execution=True,preflight={'performed':False,'reason':'User requested one selected candidate, no duplicate hover/contact/lift planning. Actual segment IK, dense path checks and execution collision gates remain mandatory.'})
