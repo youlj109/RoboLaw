@@ -4,6 +4,15 @@ from kitchen_safety.curobo_backend import CuroboPlanner
 class LimePlanner(CuroboPlanner):
     pose_ik_joint_fallback=False
 
+    def __init__(self,world,*args,**kwargs):
+        from .property_proxy import PlanningView
+        view=PlanningView(world) if world.pick_object in ('banana_1','banana_2','green_ladle') else world
+        super().__init__(view,*args,**kwargs)
+        self.world=world
+        if getattr(view,'report',None):
+            self.collision_geometry['property_margin_mesh']=view.report
+
+
     def _pose_goal_via_joint_planner(self,q,target,ignore,grip,phase,pose_error):
         """Same TCP goal, alternate redundant IK; ordinary cuRobo/FCL gates retained."""
         from scipy.spatial.transform import Rotation
@@ -136,12 +145,18 @@ class LimePlanner(CuroboPlanner):
             chosen=np.flatnonzero(depth>.003);chosen=chosen[np.argsort(-depth[chosen])[:100]]
             centers=centers[chosen];radii=np.minimum(.012,depth[chosen])
             gap=(np.linalg.norm(vertices[:,None]-centers[None],axis=2)-radii[None]).min(1)
+            if self.world.pick_object=='green_ladle':
+                from .carried_proxy import distributed_interior_spheres
+                centers,radii,self.distributed_proxy_report=distributed_interior_spheres(vertices)
+                gap=(np.linalg.norm(vertices[:,None]-centers[None],axis=2)-radii[None]).min(1)
             self.lime_proxy=(centers,radii)
             self.collision_geometry['carried_lime_proxy']={
                 'policy':'interior spheres for MotionGen search; full source convex hull checked separately by dense and physics-rate FCL',
                 'sphere_count':len(centers),'full_surface_coverage':False,
                 'maximum_source_vertex_distance_outside_proxy_m':float(gap.max()),
                 'source_support_contact_policy':'Full source hull uses the episode source_support_contact_model (native rest hull bound, exact source surface/XY scope and permanent detach for avoidance trials); this proxy alone is not a surface certificate'}
+        if hasattr(self,'distributed_proxy_report'):
+            self.collision_geometry['carried_lime_proxy'].update(self.distributed_proxy_report)
         centers,radii=self.lime_proxy
         radii=radii.copy()
         if self.active_phase=='lift':

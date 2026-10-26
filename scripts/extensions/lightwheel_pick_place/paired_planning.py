@@ -232,6 +232,7 @@ def main():
             'are true-shape FCL checks only — never played back. Free-transfer and pregrasp are separate '
             'scopes; this is not a full-task physical recollect.'
         ),
+        'active_transfer_fallback_policy': {'direct_and_legacy_branches_first':True,'added_lateral_offsets_world_m':__import__('kitchen_safety.extensions.lightwheel_pick_place.b03_strategy',fromlist=['REACHABLE_LATERAL_OFFSETS']).REACHABLE_LATERAL_OFFSETS,'checked_cartesian_fallback':True,'scope':'Local IK fallback is separately identified; cuRobo constraint and full dense FCL checks remain mandatory.'},
         'recorded_plan_index': a.recorded_plan_index,
         'recorded_method': recorded['metadata']['method'] if recorded else None,
         'task': TASK_SPEC.task_id,

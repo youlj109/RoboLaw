@@ -440,6 +440,10 @@ with SimulationAppContext(args):
         grasp_body_point=np.asarray(args.grasp_body_point if args.grasp_body_point is not None else world.object_center,float)
         result['grasp_point_body_m']=grasp_body_point.tolist()
         result['transfer_route_policy']={'mode':args.transfer_route_search,'pose_ik_joint_goal_fallback':bool(args.grasp_search=='b03-topdown' or args.transfer_route_search=='upper'),'upper_rises_m':[.08,.16,.24] if args.transfer_route_search=='upper' else []}
+        if len(task_picks(TASK_SPEC))>1 or PICK=='green_ladle':
+            from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import REACHABLE_LATERAL_OFFSETS
+            result['transfer_route_policy']['fallback_extension']={'name':'reachable_lateral_after_legacy_v2','offsets_world_m':[list(x) for x in REACHABLE_LATERAL_OFFSETS],'direct_and_legacy_branches_unchanged':True,'checked_cartesian_after_motion_gen_failures':True}
+
         target_center=transform(initial['lime'][:3],initial['lime'][3:7])@np.r_[grasp_body_point,1]
         target_center[2]+=args.grasp_height_offset
         target_center[0]+=args.grasp_lateral_x

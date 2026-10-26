@@ -108,7 +108,7 @@ TASKS: dict[str, TaskSpec] = {
         task_id=LADLE_TASK,
         kitchen_registry="lightwheel_kitchen_g_shaped_large_scandinavian",
         kitchen_cache_rel="robocasa-robocasakitchen-9-8/scene.usd",
-        layout_id=9, lift_height_m=.09, lift_offset_xy_m=(.004,0.), place_offset_xy_m=(-.03,0.),
+        layout_id=9, lift_height_m=.10, lift_offset_xy_m=(.004,0.), place_offset_xy_m=(-.03,0.),
         style_id=8,
         pick_object="green_ladle",
         destination_object="plate",

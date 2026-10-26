@@ -39,6 +39,8 @@ def plan_transfer(planner,q,target,ignore,grip):
     start=planner.kin.fk(q)
     offsets=[(0.,0.,z) for z in (.08,.16,.24)]
     if planner.world.pick_object=='green_ladle':offsets += [(0.,.12,0.),(.12,0.,0.),(0.,-.12,0.),(-.12,0.,0.)]
+    if planner.world.pick_object in ('banana_1','banana_2','green_ladle'):
+        offsets += REACHABLE_LATERAL_OFFSETS
     for delta in offsets:
         rise=delta[2]
         qstart=np.array(q,copy=True);legs=[]
@@ -55,6 +57,8 @@ def plan_transfer(planner,q,target,ignore,grip):
             result['metadata']=dict(result.get('metadata',{}),method='motion_gen_upper_route',samples=len(positions),upper_rise_m=rise,route_offset_world_m=list(delta),route_failures=failures,leg_metadata=[leg.get('metadata',{}) for leg in legs])
             return result
         except RuntimeError as exc:failures.append({'route_offset_world_m':list(delta),'error':str(exc)})
+    if planner.world.pick_object in ('banana_1','banana_2','green_ladle'):
+        return plan_checked_cartesian_bypass(planner,q,target,ignore,grip,failures)
     raise RuntimeError('No direct or upper route at fixed scene: '+str(failures))
 
 PAD_CALIBRATION_PATH='configs/extensions/lightwheel_pick_place/b03_pad_contact_calibration.json'
@@ -136,3 +140,46 @@ def close_recenter_delta(world,kin,state,arm_ids,joint_names,contact_row,solutio
 TOPDOWN_POLICY.update(max_recenter_retries=2,recenter_max_step_m=.012,recenter_open_steps=12,recenter_close_steps=30,close_requires_bilateral_load=True)
 
 TOPDOWN_POLICY.update(pose_ik_joint_goal_fallback={'enabled':True,'seed_scales':[0.,.2,.4,.7],'max_position_error_m':.002,'max_orientation_error_deg':1.},physical_exclusions={'banana_1':[[15,180,0.,0.]],'banana_2':[[0,0,.002,.03]]})
+
+REACHABLE_LATERAL_OFFSETS=[(-.10,.10,0.),(-.15,.15,0.),(-.10,0.,.05),(-.15,.10,.06),(0.,.12,0.),(-.10,-.10,.05)]
+
+def baseline_route_extension_proof(baseline):
+    """Certify that new fallbacks cannot change a recorded direct baseline."""
+    import ast,hashlib,json,subprocess
+    from pathlib import Path
+    baseline=Path(baseline);r=json.loads((baseline/'result.json').read_text())
+    old=subprocess.check_output(['git','show','3997737:kitchen_safety/extensions/lightwheel_pick_place/b03_strategy.py'],text=True)
+    new=Path(__file__).read_text()
+    def function(text):
+        return ast.get_source_segment(text,next(n for n in ast.parse(text).body if isinstance(n,ast.FunctionDef) and n.name=='plan_transfer'))
+    old_function=function(old);new_function=function(new)
+    block="    if planner.world.pick_object in ('banana_1','banana_2','green_ladle'):\n        offsets += REACHABLE_LATERAL_OFFSETS\n"
+    cartesian_block="    if planner.world.pick_object in ('banana_1','banana_2','green_ladle'):\n        return plan_checked_cartesian_bypass(planner,q,target,ignore,grip,failures)\n"
+    unchanged=new_function.replace(block,'').replace(cartesian_block,'')==old_function
+    plans=[p for p in r.get('plans',[]) if p.get('executed')]
+    direct=bool(plans) and all(p.get('metadata',{}).get('method') in ('motion_gen','cartesian_ik','cartesian_line_ik') and 'route_offset_world_m' not in p.get('metadata',{}) for p in plans)
+    return {'passed':bool(unchanged and direct and r.get('success')),'baseline_result_sha256':hashlib.sha256((baseline/'result.json').read_bytes()).hexdigest(),'legacy_commit':'3997737','legacy_function_sha256':hashlib.sha256(old_function.encode()).hexdigest(),'current_function_sha256':hashlib.sha256(new_function.encode()).hexdigest(),'legacy_function_unchanged_except_appended_fallbacks':unchanged,'all_recorded_baseline_plans_direct_or_cartesian':direct,'added_offsets_world_m':[list(x) for x in REACHABLE_LATERAL_OFFSETS],'scope':'Old direct/legacy fallback code is unchanged; new offsets occur only after direct rejection. Every actual baseline plan succeeded without the new branch. Physical success and independent collision gates remain separately mandatory.'}
+
+def plan_checked_cartesian_bypass(planner,q,target,ignore,grip,previous_failures):
+    """Local IK bypass; cuRobo constraints and full dense FCL remain mandatory."""
+    from scipy.spatial.transform import Rotation
+    start=planner.kin.fk(q);failures=list(previous_failures)
+    for delta in [(0.,0.,0.),*REACHABLE_LATERAL_OFFSETS]:
+        a=start.copy();a[:3,3]+=delta;b=np.asarray(target).copy();b[:3,3]+=delta
+        goals=[target] if delta==(0.,0.,0.) else [a,b,target]
+        current=np.array(q,copy=True);legs=[]
+        try:
+            for goal in goals:
+                leg=planner.plan_cartesian_line(current,goal,ignore,grip,phase='transfer')
+                check=planner.validate_path(leg['positions'],ignore,grip,phase='transfer')
+                if not check['valid']:raise RuntimeError(str(check))
+                legs.append(leg);current=leg['positions'][-1]
+            actual=planner.kin.fk(current)
+            pe=float(np.linalg.norm(actual[:3,3]-target[:3,3]));re=float(np.rad2deg(Rotation.from_matrix(actual[:3,:3]@target[:3,:3].T).magnitude()))
+            if pe>.002 or re>1.:raise RuntimeError('Unchanged final TCP goal tolerance failed')
+            positions=np.concatenate([x['positions'] if i==0 else x['positions'][1:] for i,x in enumerate(legs)])
+            checked=planner.validate_path(positions,ignore,grip,phase='transfer')
+            if not checked['valid']:raise RuntimeError(str(checked))
+            return {'positions':positions,'metadata':{'backend':'local_ik_curobo_checked','method':'mixed_cartesian_bypass','samples':len(positions),'route_offset_world_m':list(delta),'goal_position_error_m':pe,'goal_orientation_error_deg':re,'leg_metadata':[x['metadata'] for x in legs],'route_failures':failures,'scope':'No MotionGen success claim; each local line and complete concatenated path pass cuRobo constraints and full FCL, followed by actual physics audits.'}}
+        except RuntimeError as e:failures.append({'cartesian_route_offset_world_m':list(delta),'error':str(e)})
+    raise RuntimeError('All checked Cartesian bypasses failed: '+str(failures))

@@ -103,3 +103,6 @@ Branch lgd, old user changes fixed_layout_ladle.json and restore_assets.py plus 
 - Remove precautionary exclusion of balanced candidates for banana_2: those candidates had never physically failed; exclusion merely retained old second nominal. Keep actual failed second[0,0,.002,.03] excluded. New v7-balanced-both uses same candidate list, first[0,180,pinchZ.0023,waistY.011] eligible for both. Second volume-center estimate waswaistY.0098/pinchZ.00085, so11mm/2.3mm candidate is near/above center and should reduce within-grip roll; still needs real proof.
 - New baseline080313 runner222272, b03_collect_gentle.sh with strategyv7. Current balanced_both dispatcher/finalizer in lgd-day-logs. Same natural offsetsfirstX-0.03,Y0,secondX+0.075; originalreleaseheight0.135; smooth12step opening, seed43, all physics/hazards/thresholds unchanged.
 - Failed-trial images.h5 for020335/023055/050735/053117/070540 are being preserved to/root/lgd-preserved-failed-images with SHA256 checks, original paths retained as symlinks. Native videos/trajectories/other metadata remain. Storage map B03-review/raw_image_storage_20261026.json. No data discarded; reserve space for three captures.
+
+
+Latest post-restart state: POST_RESTART_ACTIVE_20261026.md (supersedes earlier active PID lists).

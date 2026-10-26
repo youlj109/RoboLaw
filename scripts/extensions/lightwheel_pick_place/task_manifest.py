@@ -23,6 +23,7 @@ for name,ep in paths.items():
  for file in ['result.json','trajectory.h5','images.h5','contacts.json','clearances.json','scene.usda','initial_setup.json','collector_source_snapshot.py','validation.json','full_world_audit.json','self_collision_audit.json','source_support_audit.json','avoidance_audit.json','fixed_base_hazard_audit.json','source_background_audit.json']+required:
   if (ep/file).is_file():hashes[str(ep/file)]=digest(ep/file)
  for extra in ep.glob('contacts_*.json'):hashes[str(extra)]=digest(extra)
+ for extra in ep.glob('route_extension_equivalence*.json'):hashes[str(extra)]=digest(extra)
 paired_reports=[read(x) for x in a.paired];paired={}
 for v in ('human','property','robot'):
  metadata=read(paths[v]/'result.json')
@@ -47,7 +48,7 @@ for path in [a.neutral,*a.paired]:
  if path.exists():hashes[str(path)]=digest(path)
 passed=all(x['passed'] for x in episodes.values()) and neutral_gate and all(x['stable_necessity'] and x['all_hazard_on_clear'] for x in paired.values())
 implementation_files=[Path('scripts/extensions/lightwheel_pick_place')/x for x in ('collect.py','validate.py','audit_avoidance.py','audit_source_support.py','audit_source_background.py','audit_fixed_base.py','audit_self_collision.py','paired_planning.py','task_neutral_hold.py','run_host.sh','task_manifest.py','audit_deferred_world.py','audit_multi_source.py')]
-implementation_files += [Path('kitchen_safety/extensions/lightwheel_pick_place')/x for x in ('collision.py','planner.py','lemon_kinematics.py','source_support.py','task_config.py','joint_state.py','b03_strategy.py','contacts.py','multi_evidence.py')]
+implementation_files += [Path('kitchen_safety/extensions/lightwheel_pick_place')/x for x in ('collision.py','planner.py','lemon_kinematics.py','source_support.py','task_config.py','joint_state.py','b03_strategy.py','contacts.py','multi_evidence.py','carried_proxy.py','grasp_policy_compatibility.py')]
 implementation_files += [Path('kitchen_safety/planning.py'),Path('kitchen_safety/curobo_backend.py')]
 runtime={}
 for package in ('numpy','scipy','torch','h5py','python-fcl','usd-core','curobo','isaacsim','isaaclab','isaaclab_arena','imageio-ffmpeg'):

@@ -3,7 +3,7 @@ import json,copy
 from pathlib import Path
 from isaaclab_arena.cli.isaaclab_arena_cli import get_isaaclab_arena_cli_parser
 from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppContext
-p=get_isaaclab_arena_cli_parser();p.add_argument('--episode',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--solver-position',type=int);p.add_argument('--solver-velocity',type=int);p.add_argument('--seconds',type=float,default=20.)
+p=get_isaaclab_arena_cli_parser();p.add_argument('--episode',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--solver-position',type=int);p.add_argument('--solver-velocity',type=int);p.add_argument('--seconds',type=float,default=20.);p.add_argument('--com-only',action='store_true')
 a=p.parse_args();a.enable_cameras=False
 if a.output.exists():raise FileExistsError(a.output)
 with SimulationAppContext(a):
@@ -28,6 +28,12 @@ with SimulationAppContext(a):
    if a.solver_velocity is not None:props.solver_velocity_iteration_count=a.solver_velocity
    actor.spawn.rigid_props=props
  env=builder.make_registered(cfg,kw);env.reset();e=env.unwrapped;e._reset_idx=lambda ids:None;robot=e.scene['robot'];torch.set_num_threads(2)
+ if a.com_only:
+  values={}
+  for n in (*picks(spec),spec.destination_object):
+   view=e.scene[n].root_physx_view
+   values[n]={'com_local_pose':np.asarray(view.get_coms()).tolist(),'mass_kg':np.asarray(view.get_masses()).tolist(),'inertia':np.asarray(view.get_inertias()).tolist()}
+  a.output.write_text(json.dumps({'scope':'Read-only native PhysX mass properties after normal reset; no grasp or task success claim.','task':spec.task_id,'native_mass_properties':values},indent=2));print('NATIVE_MASS_PROPERTIES',json.dumps(values),flush=True);env.close();raise SystemExit(0)
  with h5py.File(a.episode/'trajectory.h5') as h:
   for n in spec.rigid_objects:
    pose=h['next_obs/'+n][-1,:7];e.scene[n].write_root_pose_to_sim(torch.tensor(pose[None],device=e.device));e.scene[n].write_root_velocity_to_sim(torch.zeros((1,6),device=e.device))

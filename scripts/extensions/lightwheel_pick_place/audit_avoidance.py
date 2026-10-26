@@ -117,6 +117,11 @@ def audit(baseline,episode):
         return m.get('planning_attachment_policy') or ('measured_segment' if m.get('planning_attachment_updates') else 'close_once')
     same_attachment_update_policy=attachment_policy(br)==attachment_policy(r)
     same_controls=bool(same_controls and same_attachment_update_policy)
+    route_fallback_equivalence=None
+    if len(spec.pick_objects)>1 and r.get('transfer_route_policy',{}).get('fallback_extension') and not br.get('transfer_route_policy',{}).get('fallback_extension'):
+        from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import baseline_route_extension_proof
+        route_fallback_equivalence=baseline_route_extension_proof(baseline)
+        same_controls=bool(same_controls and route_fallback_equivalence['passed'])
     reset_keys=('path','sha256')
     reset_controls_match=all(br.get('initial_state_layout_source',{}).get(k)==r.get('initial_state_layout_source',{}).get(k) for k in reset_keys)
     support_keys=('mode','root_z_gate','source_resting_extra_tolerance_m','source_resting_max_xy_displacement_m','surface','detach_clearance_m')
@@ -127,7 +132,7 @@ def audit(baseline,episode):
     if len(spec.pick_objects)>1 and search and search.get('name') in ('b03-padcenter-v1','b03-padcenter-v2','b03-padcenter-v3','b03-padcenter-v4','b03-padcenter-v5','b03-padcenter-v6-balanced-first','b03-padcenter-v7-balanced-both'):
         # Identical feedback policy can produce different recenter counts/routes.
         # Check bounded outputs, while dense actual-path and native gates remain mandatory.
-        allowed={'pregrasp':{'motion_gen','motion_gen_upper_route','motion_gen_joint_goal'},'approach':{'cartesian_ik','cartesian_line_ik'},'lift':{'motion_gen','cartesian_line_ik','cartesian_ik'},'transfer':{'motion_gen','motion_gen_upper_route','motion_gen_joint_goal'},'lower':{'cartesian_line_ik','cartesian_ik','motion_gen'},'retreat':{'motion_gen','cartesian_line_ik','cartesian_ik'}}
+        allowed={'pregrasp':{'motion_gen','motion_gen_upper_route','motion_gen_joint_goal','mixed_cartesian_bypass'},'approach':{'cartesian_ik','cartesian_line_ik'},'lift':{'motion_gen','cartesian_line_ik','cartesian_ik'},'transfer':{'motion_gen','motion_gen_upper_route','motion_gen_joint_goal','mixed_cartesian_bypass'},'lower':{'cartesian_line_ik','cartesian_ik','motion_gen'},'retreat':{'motion_gen','cartesian_line_ik','cartesian_ik'}}
         def valid_policy_execution(m):
             plans=[x for x in m.get('plans',[]) if x.get('executed')]
             if not plans or any(x['phase'] not in allowed or x.get('metadata',{}).get('method') not in allowed[x['phase']] for x in plans):return False
@@ -148,7 +153,7 @@ def audit(baseline,episode):
                 phase=x['phase'];method=x.get('metadata',{}).get('method')
                 if phase=='retreat':continue
                 if phase in ('pregrasp','transfer'):
-                    if method not in ('motion_gen','motion_gen_upper_route','motion_gen_joint_goal'):return None
+                    if method not in ('motion_gen','motion_gen_upper_route','motion_gen_joint_goal','mixed_cartesian_bypass'):return None
                     method='same_bounded_transfer_policy'
                 rows.append((phase,method))
             return rows
@@ -183,7 +188,10 @@ def audit(baseline,episode):
         cases={name:float(row['minimum']['slack_m']-bound) for name,row in background_report.get('combinations',{}).items() if name.endswith('_in_'+label+'_background')}
         background_motion[label]={'objects':objects,'maximum_background_surface_displacement_bound_m':bound,
             'cross_replay_slack_after_motion_bound_m':cases,'passed':bool(len(cases)==2 and all(v>=0 for v in cases.values()))}
-    background_verified=bool(background_verified and all(v['passed'] for v in background_motion.values()))
+    exact_motion_path=episode/'source_background_motion_certificate.exact.json'
+    exact_motion=json.loads(exact_motion_path.read_text()) if exact_motion_path.exists() else {}
+    exact_motion_verified=bool(exact_motion.get('passed') and exact_motion.get('input_sha256')==background_inputs)
+    background_verified=bool(background_verified and (all(v['passed'] for v in background_motion.values()) or exact_motion_verified))
     actual_gates['source_background_inputs_match']=background_verified
     baseline_success=bool(br.get('success') and br.get('final_on_destination') and br.get('final_live_success') and all(baseline_gates.values()))
     cfmin=min(counterfactual,key=lambda v:v['slack_m']);actualmin=min(actual,key=lambda v:v['slack_m'])
@@ -216,9 +224,9 @@ def audit(baseline,episode):
         'baseline_episode':str(baseline),'baseline_sha256':{'result.json':digest(baseline/'result.json'),'trajectory.h5':digest(baseline/'trajectory.h5'),'full_world_audit.json':digest(baseline/'full_world_audit.json')},
         'baseline_original_success_verified':baseline_success,'same_source_layout':same,'same_source_layout_scope':initial_state_comparison['scope'],'initial_state_comparison':initial_state_comparison,
         'baseline_audit_gates':baseline_gates,'augmented_audit_gates':actual_gates,
-        'source_settling_nuisance_verified':background_verified,
+        'source_settling_nuisance_verified':background_verified,'exact_observed_background_motion_certificate':{'passed':exact_motion_verified,'path':str(exact_motion_path),'sha256':digest(exact_motion_path) if exact_motion_path.exists() else None},
         'source_background_motion_envelopes':{'backgrounds':background_motion,'scope':'Conservative translation + 2*collision-radius*sin(rotation/2) bounds every observed 15Hz source background pose; both 120Hz paths retain original clearance even after subtracting the entire recorded motion envelope. The actual 120Hz full-world audit independently checks live source dynamics.'},
-        'same_control_parameters':same_controls,'grasp_policy_compatibility':locals().get('grasp_policy_compatibility'),'same_attachment_update_policy':same_attachment_update_policy,'attachment_update_policies':{'baseline':attachment_policy(br),'augmented':attachment_policy(r)},'control_parameters':{k:r.get(k) for k in control_keys},
+        'same_control_parameters':same_controls,'route_fallback_equivalence':route_fallback_equivalence,'grasp_policy_compatibility':locals().get('grasp_policy_compatibility'),'same_attachment_update_policy':same_attachment_update_policy,'attachment_update_policies':{'baseline':attachment_policy(br),'augmented':attachment_policy(r)},'control_parameters':{k:r.get(k) for k in control_keys},
         'same_source_support_policy':same_support,'source_support_policy':{k:r.get('source_support_contact_model',{}).get(k) for k in support_keys},
         'avoidance_effective':effective,'property_stability':stability,
         'hazard_geometry_scope':'Exact analytic USD Cylinder/Cube/Sphere/Capsule or triangle mesh; no round-primitive AABB corner is used to establish counterfactual risk. Actual collection retains its stricter conservative execution checks.' if variant=='robot' else 'Actual authored hazard collision triangle meshes, with each measured dynamic vase pose during actual execution.',
