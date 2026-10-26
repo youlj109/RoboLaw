@@ -51,6 +51,7 @@ parser.add_argument('--shelf-lift-template',type=Path,default=None,
 parser.add_argument('--place-lower-mode',choices=('cartesian_line','transfer','skip','steps'),default='cartesian_line',
     help='Shelf/plate lower: local Z line (default), MotionGen, skip-to-release, or multi-step Z')
 parser.add_argument('--dual-second-place-offset-x',type=float,default=.06,help='Second object root X offset from destination in a dual-pick task; recorded and matched')
+parser.add_argument('--release-ramp-steps',type=int,default=0,help='Control-only linear opening ramp before existing35 fully-open hold steps; recorded and matched')
 parser.add_argument('--dual-first-place-lower-z',type=float,default=None,help='Optional first-object release height above destination root for dual-pick task; recorded and matched')
 parser.add_argument('--dual-first-place-offset-y',type=float,default=0.,help='First object root Y offset from destination; recorded and matched')
 parser.add_argument('--dual-first-place-offset-x',type=float,default=-.06,help='First object root X offset from destination in a dual-pick task; recorded and matched')
@@ -62,6 +63,7 @@ parser.add_argument('--place-clear-rise-z',type=float,default=0.0,
     help='After transfer, pure +Z rise before lower/release (metres); helps clear plate rim')
 args=parser.parse_args();args.enable_cameras=True
 if args.defer_added_hazard_audit and not args.defer_full_world_audit:raise ValueError('Deferred added hazards require complete deferred world audit')
+if not 0<=args.release_ramp_steps<=60:raise ValueError('Release ramp must be0..60 control steps')
 if args.num_envs!=1:raise ValueError('This verified entry runs one environment; parallel collection is not implemented')
 from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task, picks as task_picks
 TASK_SPEC=resolve_task(args.task)
@@ -245,7 +247,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None},'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -596,7 +598,10 @@ with SimulationAppContext(args):
             cart(lower_tcp, force_phase='cartesian_line')
         else:
             cart(lower_tcp, force_phase='transfer')
-        phase='release';grip=0.;world.attachment=None
+        phase='release';world.attachment=None
+        for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
+            grip=float(target_grip);step(q,grip)
+        grip=0.
         for _ in range(35):step(q,grip)
         phase='retreat';before_retreat=len(records)
         try:cart(snapshot()['tcp']+[0,0,.14])
@@ -687,7 +692,10 @@ with SimulationAppContext(args):
                 cart(lower_tcp, force_phase='cartesian_line')
             else:
                 cart(lower_tcp, force_phase='transfer')
-            phase='release';grip=0.;world.attachment=None
+            phase='release';world.attachment=None
+            for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
+                grip=float(target_grip);step(q,grip)
+            grip=0.
             for _ in range(35):step(q,grip)
             phase='retreat';before_retreat=len(records)
             try:cart(snapshot()['tcp']+[0,0,.14])
