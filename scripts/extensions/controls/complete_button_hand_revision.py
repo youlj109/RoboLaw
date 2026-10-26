@@ -16,6 +16,10 @@ def main():
     parser.add_argument('--sides', nargs='+', choices=['left', 'right'], default=['left', 'right'])
     parser.add_argument('--attempt', default='01')
     parser.add_argument('--right-config', type=Path)
+    parser.add_argument('--left-config', type=Path)
+    parser.add_argument('--reports-root', type=Path, default=Path('reports/controls_hand_revision_20261024'))
+    parser.add_argument('--episodes-root', type=Path, default=Path('datasets/controls_hand_revision_20261024'))
+    parser.add_argument('--summary-root', type=Path, default=Path('docs/extensions/controls/hand_revision'))
     args = parser.parse_args()
     args.output_root.mkdir(parents=True, exist_ok=False)
     progress = {'accepted': False, 'status': 'running', 'steps': []}
@@ -52,9 +56,16 @@ def main():
             episodes = {row['variant']: Path(row['path']) for row in old['episodes']}
             baseline = episodes['base']
             config = Path('configs/extensions/controls')/(side+'_button_anatomical_candidate01.json')
+            if side == 'left' and args.left_config:
+                config = args.left_config
             if side == 'right' and args.right_config:
                 config = args.right_config
-            paired = Path('reports/controls_hand_revision_20261024')/(side+'_paired'+args.attempt)
+            screen=args.output_root/(side+'_layout_screen.json')
+            run(side+'_screen','screen_button_layout.py',['--baseline',baseline,'--config',config,
+                '--stage',stage,'--variants','human','--output',screen])
+            if not json.loads(screen.read_text())['candidates']['human']['potential_candidate']:
+                raise ValueError(side+' source manipulation endpoint/layout screen rejected')
+            paired = args.reports_root/(side+'_paired'+args.attempt)
             if not paired.exists():
                 run(side+'_paired', 'paired_planning.py', ['--config', config, '--baseline', baseline,
                     '--stage', stage, '--output', paired], gpu=True)
@@ -67,7 +78,7 @@ def main():
             gates = paired_gates(pairs)
             if not all(gates.values()):
                 raise ValueError(side+' paired gates rejected: '+str(gates))
-            ep = Path('datasets/controls_hand_revision_20261024')/side/('human'+args.attempt)
+            ep = args.episodes_root/side/('human'+args.attempt)
             run(side+'_collect', 'collect_trial.py', ['--controls-task', side, '--config', config,
                 '--variant', 'human', '--output', ep, '--max-steps', '650', '--device', 'cpu'], gpu=True)
             run(side+'_data', 'validate_trial.py', [ep])
@@ -79,7 +90,7 @@ def main():
             run(side+'_avoidance', 'audit_avoidance.py', [ep, '--baseline', baseline, '--stage', stage])
             run(side+'_comparison', 'render_avoidance_comparison.py', [ep, '--camera', 'external_camera'])
             run(side+'_first_violation', 'render_first_violation.py', [ep, '--output-stem', 'first_violation_links'])
-            output = Path('docs/extensions/controls/hand_revision')/(side+'_results.json')
+            output = args.summary_root/(side+'_results.json')
             run(side+'_summary', 'summarize_acceptance.py', ['--baseline', baseline, '--episodes', ep,
                 episodes['property'], episodes['robot'], '--neutral', old['neutral'],
                 '--faucet-mobility', old['faucet_mobility'], '--paired', paired, '--output', output])

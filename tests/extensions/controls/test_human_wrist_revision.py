@@ -11,8 +11,10 @@ ROOT=Path(__file__).resolve().parents[3]
 ASSET=ROOT/'assets/extensions/controls/human_reach_anatomical_down01'
 
 
-def test_wrist_follows_original_forearm_relative_frame():
-    pose=json.loads((ASSET/'pose.json').read_text())
+@pytest.mark.parametrize('asset_name',['human_reach_anatomical_down01','human_hand_between_middle01','human_hand_between_roll30'])
+def test_wrist_follows_original_forearm_relative_frame(asset_name):
+    asset=ROOT/'assets/extensions/controls'/asset_name
+    pose=json.loads((asset/'pose.json').read_text())
     wrist=pose['wrist_structure']
     assert wrist['mode']=='follow-forearm'
     def rotation(name):
@@ -27,14 +29,16 @@ def test_wrist_follows_original_forearm_relative_frame():
     assert abs(bend(pose['before'])-bend(pose['after']))<np.deg2rad(.001)
 
 
-def test_arm_lengths_shoulder_and_feet_preserved():
-    pose=json.loads((ASSET/'pose.json').read_text())
+@pytest.mark.parametrize('asset_name',['human_reach_anatomical_down01','human_hand_between_middle01','human_hand_between_roll30'])
+def test_arm_lengths_shoulder_and_feet_preserved(asset_name):
+    asset=ROOT/'assets/extensions/controls'/asset_name
+    pose=json.loads((asset/'pose.json').read_text())
     assert pose['arm_frame']=='source-bend-plane'
     for name in ('upperarm_r','lowerarm_r'):
         lengths=[np.linalg.norm(np.subtract(pose[key][name][1],pose[key][name][0])) for key in ('before','after')]
         assert abs(lengths[0]-lengths[1])<1e-5
     assert np.max(np.abs(np.subtract(pose['before']['upperarm_r'][0],pose['after']['upperarm_r'][0])))<1e-5
-    audit=json.loads((ASSET/'rebuild_geometry_audit.json').read_text())
+    audit=json.loads((asset/'rebuild_geometry_audit.json').read_text())
     assert audit['passed'] and audit['checks']['feet_unchanged']
     assert audit['checks']['source_wrist_frame_preserved']
     assert audit['checks']['source_wrist_bend_preserved']

@@ -1,5 +1,40 @@
 # zxw D Group Execution
 
+## Latest Hand-In-Gap Delivery
+
+2026-10-26: both new button human episodes completed and passed every independent
+gate, with the hand reaching into the robot/toaster working gap. Current accepted
+index: [ZXW_ALL_BETWEEN_RESULTS.json](ZXW_ALL_BETWEEN_RESULTS.json). Exact layouts,
+reproduction, rejected trials and limitations: [BETWEEN_DELIVERY.md](BETWEEN_DELIVERY.md).
+
+| Revised episode | Button travel | Recorded-state minimum human gap | Required gap |
+| --- | ---: | ---: | ---: |
+| Left human05 | 2.035 mm | 34.228 mm | 20 mm |
+| Right human02 | 2.140 mm | 33.480 mm | 20 mm |
+
+Gap values above are from the action-rate strict audit; separate physics-update
+clearance checks also passed the unchanged 20 mm requirement.
+
+New local videos: `datasets/controls_between_20261026/left/human05/all_cameras.mp4`
+and `datasets/controls_between_20261026/right/human02/all_cameras.mp4`.
+Matching `comparison.mp4` files and first-risk evidence are beside them.
+Source counterfactuals are offline only. Original baselines/control policy,
+property/obstacle recordings and oven data are unchanged. Both tasks passed all
+12 seed42/43/44 paired plans; current regression is 65 tests passed. Full raw
+data and textures/geometry remain local, not Git-uploaded.
+
+### Earlier Placement Review
+
+2026-10-26: user requested hand placement between robot and toaster for both
+button human variants, explicitly without trajectory planning. New static
+drafts are separate from the accepted recordings below and are not accepted
+for collection. See [HAND_BETWEEN_LAYOUT_DRAFT.md](HAND_BETWEEN_LAYOUT_DRAFT.md).
+At the user's subsequent request, actual seed42 cuRobo checks were run for
+both drafts: baseline succeeded, human goal was invalid in both. The full
+manipulation screen and source-hull link diagnostics also reject the layouts.
+No physical collection was launched for those rejected draft03 layouts. See
+[HAND_BETWEEN_PLANNING_CHECK.md](HAND_BETWEEN_PLANNING_CHECK.md).
+
 ## Button Human Pose Revision Complete
 
 The previous button human videos retain valid recorded button/contact evidence,

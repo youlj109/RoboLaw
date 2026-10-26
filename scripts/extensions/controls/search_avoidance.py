@@ -80,6 +80,15 @@ def main():
     parser.add_argument('--y-min', type=float, default=None)
     parser.add_argument('--yaw-step', type=int, default=30)
     parser.add_argument('--stage', default='reports/skill_trials/controls/inspection/stage.usda')
+    parser.add_argument('--local-window', type=float)
+    parser.add_argument('--yaw-window', type=int, default=30)
+    parser.add_argument('--hand-between', action='store_true')
+    parser.add_argument('--hand-height-max', type=float, default=1.25)
+    parser.add_argument('--hand-height-min', type=float, default=1.05)
+    parser.add_argument('--hand-fraction-max', type=float, default=.8)
+    parser.add_argument('--hand-lateral-max', type=float, default=.09)
+    parser.add_argument('--source-risk-only', action='store_true')
+    parser.add_argument('--sample-stride',type=int,default=8)
     args = parser.parse_args()
     out = Path(args.output)
     if out.exists():
@@ -101,7 +110,7 @@ def main():
     fixed = fixed_shapes(pose)
     names = result.get('robot_joint_names') or list(json.loads((ROOT/'reports/skill_trials/controls/inspection/state.json').read_text())['robot_joints'])
     ids = [names.index(f'panda_joint{i}') for i in range(1, 8)]
-    selected = sorted(set([0, len(records) - 1] + list(range(14, len(records), 8))))
+    selected = sorted(set([0, len(records) - 1] + list(range(14, len(records), args.sample_stride))))
     robot_shapes = {}
     for index in selected:
         q = np.array(records[index]['after']['q'])
@@ -112,14 +121,34 @@ def main():
     intermediate = [i for i in selected if records[i]['phase'] == 'prepress']
     margin = world.execution_clearances[name]
     planning_margin = world.clearances[name]
+    hand_filter = None
+    if args.hand_between:
+        if args.variant != 'human':raise ValueError('Hand filter requires human variant')
+        bones=json.loads(((ROOT/spec['asset']).parent/'pose.json').read_text())['after']
+        hand_local=np.asarray(bones['hand_r']).mean(axis=0)
+        button=np.asarray(cfg.get('button_center_world_m',[2.08087763,-.38513822422,1.03313965]))
+        hand_filter={'button_world_m':button.tolist(),'maximum_lateral_offset_m':args.hand_lateral_max,
+            'base_to_button_fraction':[.2,args.hand_fraction_max],'height_range_m':[args.hand_height_min,args.hand_height_max]}
     if args.variant == 'human':
         grid = itertools.product(np.arange(1.1, 3.11, args.step), np.arange(-1.7 if args.y_min is None else args.y_min, -.39, args.step), range(-180, 180, args.yaw_step))
     else:
         grid = itertools.product(np.arange(1.52, 2.51, args.step), np.arange(-.38 if args.y_min is None else args.y_min, .13, args.step), [0] if args.variant == 'property' else [0, 45, 90, 135, 180, 225, 270, 315])
-    candidates = []; counts = {'tested': 0, 'endpoint_rejected': 0, 'no_risk': 0, 'fixed_rejected': 0, 'kitchen_rejected': 0}
+    if args.local_window is not None:
+        if args.variant!='human' or args.local_window<=0:raise ValueError('Positive human local window required')
+        offsets=np.arange(-args.local_window,args.local_window+args.step*.1,args.step)
+        grid=itertools.product(spec['position'][0]+offsets,spec['position'][1]+offsets,
+            range(int(spec['yaw_deg'])-args.yaw_window,int(spec['yaw_deg'])+args.yaw_window+1,args.yaw_step))
+    candidates = []; no_risk_layouts=[];endpoint_rejections=[]
+    counts = {'tested': 0, 'endpoint_rejected': 0, 'no_risk': 0, 'fixed_rejected': 0, 'kitchen_rejected': 0}
     for x, y, yaw in grid:
         counts['tested'] += 1
         xyz = [round(float(x), 6), round(float(y), 6), 0 if args.variant == 'human' else .921]
+        if hand_filter:
+            hand=Rotation.from_euler('z',yaw,degrees=True).apply(hand_local)+xyz
+            fraction=(hand[1]-pose[1])/(button[1]-pose[1])
+            if not (abs(hand[0]-button[0])<=args.hand_lateral_max and .2<=fraction<=args.hand_fraction_max and args.hand_height_min<=hand[2]<=args.hand_height_max):
+                counts['hand_region_rejected']=counts.get('hand_region_rejected',0)+1
+                continue
         world.set_obstacle_pose(name, xyz + Rotation.from_euler('z', yaw, degrees=True).as_quat().tolist())
         # Live controls checks conservatively represent USD primitives by
         # world-aligned bounds. Rebuild that bound after candidate rotation;
@@ -128,12 +157,19 @@ def main():
             fcl.Box(*np.maximum(hi-lo,1e-4)),fcl.Transform((lo+hi)/2)),lo,hi)
             for n,obj,lo,hi in world.objects]
         hazard = world.objects
-        endpoint_min = min(minimum(robot_shapes[i], hazard, planning_margin + .02)['distance_m'] for i in endpoints)
+        endpoint_measures=[(i,minimum(robot_shapes[i],hazard,planning_margin+.02)) for i in endpoints]
+        endpoint_index,endpoint_worst=min(endpoint_measures,key=lambda row:row[1]['distance_m'])
+        endpoint_min=endpoint_worst['distance_m']
         if endpoint_min < planning_margin + .005:
+            if len(endpoint_rejections)<50:
+                endpoint_rejections.append({'position':xyz,'yaw_deg':int(yaw),
+                    'action_index':endpoint_index,**endpoint_worst})
             counts['endpoint_rejected'] += 1; continue
-        measures = [(i, minimum(robot_shapes[i], hazard, margin)) for i in intermediate]
+        measures = [(i, minimum([s for s in robot_shapes[i] if not args.source_risk_only or
+            s[0]=='robot_hull' or s[0].startswith('gripper/')], hazard, margin)) for i in intermediate]
         bad = [(i, m) for i, m in measures if m['intersecting'] or m['distance_m'] < margin]
         if not bad:
+            no_risk_layouts.append({'position':xyz,'yaw_deg':int(yaw),'sampled_endpoint_minimum_m':endpoint_min})
             counts['no_risk'] += 1; continue
         fixed_min = minimum(fixed, hazard, .01)
         if fixed_min['intersecting'] or fixed_min['distance_m'] < .005:
@@ -152,7 +188,9 @@ def main():
     candidates.sort(key=lambda c: (-len(c['baseline_violations']), -c['sampled_endpoint_minimum_m']))
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(dict(baseline=str(episode), baseline_records_sha256=hashlib.sha256((episode/'records.json').read_bytes()).hexdigest(),
-        variant=args.variant, counts=counts, candidates=candidates,
+        variant=args.variant, counts=counts, candidates=candidates,hand_region_constraint=hand_filter,
+        source_robot_hulls_only_for_risk=args.source_risk_only,sample_stride=args.sample_stride,
+        no_risk_layouts=no_risk_layouts,endpoint_rejection_examples=endpoint_rejections,
         scope='Subsampled CPU candidate search only; no physical success or complete counterfactual acceptance claimed.'), indent=2))
     print('SEARCH_DONE', counts, 'candidates', len(candidates), flush=True)
 

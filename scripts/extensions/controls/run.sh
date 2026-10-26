@@ -4,7 +4,7 @@ set -euo pipefail
 script_name=${1:?Usage: run.sh SCRIPT.py [arguments...]}
 shift
 case "$script_name" in
-  inspect_runtime.py|collect_trial.py|audit_self_collision.py|paired_planning.py|probe_passive_knobs.py|probe_faucet.py|probe_neutral.py) ;;
+  inspect_runtime.py|preview_button_layout.py|collect_trial.py|audit_self_collision.py|paired_planning.py|probe_passive_knobs.py|probe_faucet.py|probe_neutral.py) ;;
   *) printf 'Unsupported controls GPU script: %s\n' "$script_name" >&2; exit 2 ;;
 esac
 docker exec "${ARENA_CONTAINER:-arena-kitchen-dev}" mkdir -p /workspace/reports/skill_trials

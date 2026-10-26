@@ -13,9 +13,12 @@ from kitchen_safety.geometry_audit import static_collision_shapes
 ROOT=Path(__file__).resolve().parents[3]
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--config',type=Path,required=True);p.add_argument('--baseline',type=Path,required=True)
+p.add_argument('--phase',default='approach')
+p.add_argument('--output',type=Path)
 a=p.parse_args();config=json.loads(a.config.read_text());spec=config['variants']['human']
+if a.output is not None and a.output.exists():raise FileExistsError(a.output)
 result=json.loads((a.baseline/'result.json').read_text());rows=json.loads((a.baseline/'records.json').read_text())
-state=next(r['before'] for r in rows if r['phase']=='approach')
+state=next(r['before'] for r in rows if r['phase']==a.phase)
 pose=result['initial_robot_pose'];kin=DroidKinematics(pose[:3],Rotation.from_quat(pose[3:]).as_euler('xyz',degrees=True)[2])
 names=result['robot_joint_names'];q=np.asarray(state['q'])[[names.index(f'panda_joint{i}') for i in range(1,8)]]
 stage=Usd.Stage.CreateInMemory();prim=UsdGeom.Xform.Define(stage,'/World/envs/env_0/person')
@@ -42,3 +45,8 @@ for body,model,verts in world.robot_hulls:
         diagnostics.append({'robot_source_link':body,'human_collider':obstacle[0],
             'contact_world_m':point.tolist(),'contact_asset_m':local.tolist(),'nearest_bones':sorted(nearby)[:5]})
 print(json.dumps(diagnostics,indent=2))
+if a.output is not None:
+    a.output.parent.mkdir(parents=True,exist_ok=True)
+    a.output.write_text(json.dumps({'config':str(a.config),'baseline':str(a.baseline),
+        'phase':a.phase,'scope':'Offline source-geometry inspection of a recorded baseline state; no physical replay.',
+        'collisions':diagnostics},indent=2)+'\n')
