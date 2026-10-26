@@ -59,3 +59,9 @@ Branch lgd, old user changes fixed_layout_ladle.json and restore_assets.py plus 
 - New baseline055157, runner211628. b03_collect_spaced.sh commands first offset-0.04m (2cm toward center from original), midpoint between wall-supported-0.06 and encroaching-0.03. Second offset+0.06 and all grasp/physics/hazards/thresholds unchanged. New matched baseline mandatory.
 - Dispatcher /root/autodl-tmp/lgd-day-logs/b03_spaced_continuation.sh/log and finalizer b03_spaced_finalize.py/log supersede centered watchers (which exited on failure). Only passed manifest yields success package. Baseline native fail stops repeats.
 - Preserved unused5.4GB CUDA installer under /root/lgd-preserved-cache/cuda_12.8.0_570.86.10_linux.run; original path remains symlink. No collection data removed. Data volume had12GB free after move.
+
+
+## 06:05 UTC separated second placement (current)
+- Spaced baseline055157: first checkpoint false, stable-looking root [2.0882,-2.568,1.008] but support [0.551,-0.727,0.648]N outside cone. Stopped owned native211635 with SIGINT after first checkpoint; partial674frames and result preserved successfalse. Stopped spaced dispatcher212120/finalizer212123. No need execute known failed first placement through second again.
+- Restore first commanded offset-0.03, already proven native true in053117. Change only second from+0.06 to+0.075m, to avoid prior1.608mm inter-fruit near pass on second lower. Added CLI --dual-second-place-offset-x, default+0.06 preserves old callers; both offsets recorded/matched in task_motion_parameters.
+- New native base060502, runner212908, b03_collect_separated.sh. Current dispatcher/finalizer use separated names in lgd-day-logs and baseline060502. They retain frozen hazard hash checks, one GPU lock, full validation, paired seeds and success-only packaging. No new passed full baseline yet.
