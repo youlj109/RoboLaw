@@ -11,6 +11,7 @@ parser.add_argument('--task',default='kitchen_bench_lightwheel_place_lime_in_woo
 parser.add_argument('--pick-order',nargs='+',help='Execution order only for original parallel multi-pick task; all original picks remain required')
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
+parser.add_argument('--single-candidate-round',action='store_true',help='One selected grasp and one direct query per motion segment; stop on failure, no fallback sweep or duplicate grasp preflight')
 parser.add_argument('--fixed-layout',help='Use the same saved original reset poses, including for the obstacle-free baseline')
 parser.add_argument('--initial-state-layout',type=Path,help='Reset-only measured rigid poses from the approved scene; never written during execution')
 parser.add_argument('--variant-config',help='Alternative safety-only hazard specifications; source task poses are unchanged')
@@ -92,6 +93,7 @@ with SimulationAppContext(args):
     from kitchen_safety.extensions.lightwheel_pick_place.environment import build_environment
     from kitchen_safety.extensions.lightwheel_pick_place.collision import CollisionWorld
     from kitchen_safety.extensions.lightwheel_pick_place.planner import LimePlanner
+    LimePlanner.single_candidate_round=bool(args.single_candidate_round)
     from kitchen_safety.extensions.lightwheel_pick_place.contacts import LimeGraspContacts,LimeSourceContacts
     from kitchen_safety.extensions.lightwheel_pick_place.source_support import JITTER_M,MAX_XY_M,DETACH_CLEARANCE_M,update_detached,native_contact_is_shallow
     from kitchen_safety.extensions.lightwheel_pick_place.lemon_kinematics import LemonKinematics
@@ -325,14 +327,14 @@ with SimulationAppContext(args):
         def close_with_feedback(window):
             global phase,grip
             from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import close_recenter_delta
-            for attempt in range(3):
+            for attempt in range(1 if args.single_candidate_round else 3):
                 phase='close';grip=1.
                 for _ in range(30):step(q,grip)
                 measured=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=window)
                 note={'pick':PICK,'attempt':attempt,'bilateral_near':measured['both_fingers_near_body'],'bilateral_load':measured['both_fingers_on_body']}
                 result.setdefault('close_feedback',[]).append(note)
                 if measured['both_fingers_on_body']:return measured
-                if attempt==2:break
+                if args.single_candidate_round or attempt==2:break
                 state=snapshot();solution=result['grasp_solutions'][PICK];delta,detail=close_recenter_delta(world,kin,state,ids,robot.joint_names,contacts.records[-1],solution);note.update(detail)
                 print('GRASP_RECENTER',PICK,attempt,detail,flush=True)
                 grip=0.
@@ -439,6 +441,7 @@ with SimulationAppContext(args):
         p=initial['lime'][:3].copy()
         grasp_body_point=np.asarray(args.grasp_body_point if args.grasp_body_point is not None else world.object_center,float)
         result['grasp_point_body_m']=grasp_body_point.tolist()
+        result['single_candidate_round']=bool(args.single_candidate_round)
         result['transfer_route_policy']={'mode':args.transfer_route_search,'pose_ik_joint_goal_fallback':bool(args.grasp_search=='b03-topdown' or args.transfer_route_search=='upper'),'upper_rises_m':[.08,.16,.24] if args.transfer_route_search=='upper' else []}
         if len(task_picks(TASK_SPEC))>1 or PICK=='green_ladle':
             from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import REACHABLE_LATERAL_OFFSETS

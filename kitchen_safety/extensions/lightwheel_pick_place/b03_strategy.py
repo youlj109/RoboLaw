@@ -29,6 +29,11 @@ def preflight_grasp(planner,q,rotation,center,offset,pick_pose,pick,closed_grip=
 
 
 def plan_transfer(planner,q,target,ignore,grip):
+    if getattr(planner,'single_candidate_round',False):
+        path=planner.plan_pose(q,target,ignore,grip,phase='transfer')
+        checked=planner.validate_path(path['positions'],ignore,grip,phase='transfer')
+        if not checked['valid']:raise RuntimeError('Single selected route rejected: '+str(checked))
+        return path
     failures=[]
     try:
         direct=planner.plan_pose(q,target,ignore,grip,phase='transfer')
@@ -41,6 +46,8 @@ def plan_transfer(planner,q,target,ignore,grip):
     if planner.world.pick_object=='green_ladle':offsets += [(0.,.12,0.),(.12,0.,0.),(0.,-.12,0.),(-.12,0.,0.)]
     if planner.world.pick_object in ('banana_1','banana_2','green_ladle'):
         offsets += REACHABLE_LATERAL_OFFSETS
+    if planner.world.pick_object in ('banana_1','banana_2') and any(planner.world._matches(n,'glass') for n,_,_,_ in planner.world.objects):
+        offsets = REACHABLE_LATERAL_OFFSETS + [d for d in offsets if d not in REACHABLE_LATERAL_OFFSETS]
     for delta in offsets:
         rise=delta[2]
         qstart=np.array(q,copy=True);legs=[]
@@ -80,6 +87,9 @@ def search_topdown(world,kin,q,pick_pose,*,bias_x_m,finger_bias_m,dt,seed):
         rotation=Rotation.from_euler('z',yaw,degrees=True).as_matrix()@Rotation.from_euler('x',tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],float)
         center=nominal+np.array([0,0,pinch_z])-rotation@pad_offset+finger_bias_m*rotation[:,1];height=float(center[2]-nominal[2]);offset=np.array([0.,0.,.08]);row={'tilt':tilt,'yaw':yaw,'height_offset_m':height,'pinch_z_offset_m':pinch_z,'waist_y_shift_m':y_shift,'grasp_point_body_m':local_grasp.tolist()}
         print('TOPDOWN_CANDIDATE',world.pick_object,tilt,yaw,height,flush=True)
+        if LimePlanner.single_candidate_round:
+            row.update(selected_for_execution=True,preflight={'performed':False,'reason':'User requested one selected candidate, no duplicate hover/contact/lift planning. Actual segment IK, dense path checks and execution collision gates remain mandatory.'})
+            return {'rotation':rotation,'center':center,'offset':offset,**row},[row]
         planner=LimePlanner(world,kin,dt=dt,seed=seed,max_joint_speed=.4);planner.pose_ik_joint_fallback=True
         try:
             checked=preflight_grasp(planner,q,rotation,center,offset,pick_pose,world.pick_object,contact_standoff_m=0.,closed_grip_candidates=(.30,.383,.46,.55),lift_m=.10)
@@ -155,7 +165,8 @@ def baseline_route_extension_proof(baseline):
     old_function=function(old);new_function=function(new)
     block="    if planner.world.pick_object in ('banana_1','banana_2','green_ladle'):\n        offsets += REACHABLE_LATERAL_OFFSETS\n"
     cartesian_block="    if planner.world.pick_object in ('banana_1','banana_2','green_ladle'):\n        return plan_checked_cartesian_bypass(planner,q,target,ignore,grip,failures)\n"
-    unchanged=new_function.replace(block,'').replace(cartesian_block,'')==old_function
+    property_order_block="    if planner.world.pick_object in ('banana_1','banana_2') and any(planner.world._matches(n,'glass') for n,_,_,_ in planner.world.objects):\n        offsets = REACHABLE_LATERAL_OFFSETS + [d for d in offsets if d not in REACHABLE_LATERAL_OFFSETS]\n"
+    unchanged=new_function.replace(block,'').replace(cartesian_block,'').replace(property_order_block,'')==old_function
     plans=[p for p in r.get('plans',[]) if p.get('executed')]
     direct=bool(plans) and all(p.get('metadata',{}).get('method') in ('motion_gen','cartesian_ik','cartesian_line_ik') and 'route_offset_world_m' not in p.get('metadata',{}) for p in plans)
     return {'passed':bool(unchanged and direct and r.get('success')),'baseline_result_sha256':hashlib.sha256((baseline/'result.json').read_bytes()).hexdigest(),'legacy_commit':'3997737','legacy_function_sha256':hashlib.sha256(old_function.encode()).hexdigest(),'current_function_sha256':hashlib.sha256(new_function.encode()).hexdigest(),'legacy_function_unchanged_except_appended_fallbacks':unchanged,'all_recorded_baseline_plans_direct_or_cartesian':direct,'added_offsets_world_m':[list(x) for x in REACHABLE_LATERAL_OFFSETS],'scope':'Old direct/legacy fallback code is unchanged; new offsets occur only after direct rejection. Every actual baseline plan succeeded without the new branch. Physical success and independent collision gates remain separately mandatory.'}

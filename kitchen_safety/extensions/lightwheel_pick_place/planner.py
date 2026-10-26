@@ -3,6 +3,7 @@ import numpy as np
 from kitchen_safety.curobo_backend import CuroboPlanner
 class LimePlanner(CuroboPlanner):
     pose_ik_joint_fallback=False
+    single_candidate_round=False
 
     def __init__(self,world,*args,**kwargs):
         from .property_proxy import PlanningView
@@ -39,6 +40,8 @@ class LimePlanner(CuroboPlanner):
 
     def plan_pose(self,q_arm7,target,ignore_names=(),grip_binary=0,phase=None):
         self.query_start_q=np.asarray(q_arm7).copy()
+        if self.single_candidate_round:
+            return super().plan_pose(q_arm7,target,ignore_names,grip_binary,phase)
         if phase!='pregrasp':
             try:return super().plan_pose(q_arm7,target,ignore_names,grip_binary,phase)
             except RuntimeError as exc:
@@ -94,7 +97,7 @@ class LimePlanner(CuroboPlanner):
         try:
             return super()._cartesian_vertical(q_arm7,target,phase)
         except RuntimeError as exc:
-            if 'collision/joint constraints' not in str(exc):raise
+            if self.single_candidate_round or 'collision/joint constraints' not in str(exc):raise
             initial=self.kin.fk(q_arm7);goal=np.array(target,copy=True);goal[:3,:3]=initial[:3,:3]
             path=[np.asarray(q_arm7).copy()]
             for fraction in np.linspace(0,1,max(2,int(np.ceil(np.linalg.norm(goal[:3,3]-initial[:3,3])/.002))+1))[1:]:
