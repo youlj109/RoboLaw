@@ -352,6 +352,17 @@ with SimulationAppContext(args):
             global q,planner
             world.allowed_phase=phase
             s=snapshot();q=s['q'][ids].copy()
+            if world.attachment is not None and phase in ('lift','transfer','lower'):
+                # Collision model feedback only; never edits a PhysX body/constraint.
+                measured_attachment=np.linalg.inv(kin.fk(q))@transform(s['lime'][:3],s['lime'][3:7])
+                previous=np.asarray(world.attachment)
+                result.setdefault('planning_attachment_updates',[]).append({
+                    'pick_object':PICK,'phase':phase,'action_index':len(records),
+                    'tcp_to_pick':measured_attachment.tolist(),
+                    'translation_correction_m':float(np.linalg.norm(measured_attachment[:3,3]-previous[:3,3])),
+                    'rotation_correction_deg':float(np.rad2deg(Rotation.from_matrix(measured_attachment[:3,:3]@previous[:3,:3].T).magnitude())),
+                    'source':'Measured rigid pose and arm FK at segment start; collision model only.'})
+                world.attachment=measured_attachment
             world.gripper_joint_position=float(s['q'][robot.joint_names.index('finger_joint')])
             if args.variant=='property':
                 world.set_obstacle_pose('glass',s['hazard_pose'])
@@ -562,7 +573,7 @@ with SimulationAppContext(args):
         lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
         lower_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])
         xfer_tcp=desired_root+offset
-        lower_tcp=lower_root+offset
+        placement_state=snapshot();lower_tcp=lower_root+(placement_state['tcp']-placement_state['lime'][:3])
         result['place_lower']={'mode':args.place_lower_mode,'lower_z_m':lower_z,
             'transfer_tcp_m':xfer_tcp.tolist(),'lower_tcp_m':lower_tcp.tolist(),
             'drop_m':float(xfer_tcp[2]-lower_tcp[2])}
@@ -662,7 +673,7 @@ with SimulationAppContext(args):
                 phase='transfer';cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
             lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
             lower_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])
-            xfer_tcp=desired_root+offset; lower_tcp=lower_root+offset
+            xfer_tcp=desired_root+offset;placement_state=snapshot();lower_tcp=lower_root+(placement_state['tcp']-placement_state['lime'][:3])
             phase='lower'
             if args.place_lower_mode=='skip' or abs(xfer_tcp[2]-lower_tcp[2])<1e-4:
                 pass
