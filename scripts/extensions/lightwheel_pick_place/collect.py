@@ -12,6 +12,7 @@ parser.add_argument('--pick-order',nargs='+',help='Execution order only for orig
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
 parser.add_argument('--align-second-grasp',action='store_true',help='Align second-banana grasp yaw with its measured object yaw')
+parser.add_argument('--placement-goals',type=Path,help='Passed fixed-scene planning report containing explicit body goals')
 parser.add_argument('--placement-reference',type=Path,help='Successful recorded pre-release object poses for each pick')
 parser.add_argument('--reference-clearance-z',type=float,default=0.)
 parser.add_argument('--round10-second-placement',action='store_true',help='Use planned round10: measured wrist, direct release, Y+30mm and clearance25mm')
@@ -120,6 +121,10 @@ with SimulationAppContext(args):
                 index=int(np.flatnonzero((reference_phases=='release')&(np.arange(len(reference_phases))>=bounds['start'])&(np.arange(len(reference_phases))<bounds['end']))[0])
                 body=source['obs/'+name][index,:7];bowl=source['obs/wooden_bowl'][index,:7]
                 placement_refs[name]={'offset':(body[:3]-bowl[:3]).tolist(),'quaternion':body[3:7].tolist()}
+    if args.placement_goals:
+        goal_report=json.loads(args.placement_goals.read_text())
+        if not goal_report.get('all_passed'):raise RuntimeError('Placement goal report did not pass')
+        placement_refs=goal_report['goals']
     envdef,assets=build_environment(enable_cameras=True,variant=args.variant,task_id=TASK_ID,
         fixed_layout_path=args.fixed_layout,variant_config_path=args.variant_config)
     builder=ArenaEnvBuilder(envdef,ArenaEnvBuilderCfg(num_envs=1,seed=seed,device='cpu',
@@ -185,6 +190,10 @@ with SimulationAppContext(args):
     e._reset_idx=capture_reset
     def reference_placement_goal(state,destination,above):
         ref=placement_refs[PICK]
+        if args.placement_goals:
+            root=destination[:3]+np.asarray(ref['offset'])
+            attachment=np.linalg.inv(kin.fk(state['q'][ids]))@transform(state['lime'][:3],state['lime'][3:7])
+            return root,transform(root,ref['quaternion'])@np.linalg.inv(attachment)
         second=args.round10_second_placement and PICK=='banana_2'
         root=destination[:3]+np.asarray(ref['offset'])+[0.,.03 if second else 0.,(.025 if second else args.reference_clearance_z)+above]
         if second:
@@ -279,7 +288,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -646,7 +655,10 @@ with SimulationAppContext(args):
             'transfer_tcp_m':xfer_tcp.tolist(),'lower_tcp_m':lower_tcp.tolist(),
             'drop_m':float(xfer_tcp[2]-lower_tcp[2])}
         phase='lower'
-        if placement_refs:
+        if args.placement_goals:
+            result['place_lower']['skipped']=True
+            result['place_lower']['reason']='Direct release at planned body goal'
+        elif placement_refs:
             cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
         elif args.place_lower_mode=='skip' or (args.place_lower_mode=='steps' and abs(xfer_tcp[2]-lower_tcp[2])<1e-4):
             result['place_lower']['skipped']=True
@@ -758,7 +770,7 @@ with SimulationAppContext(args):
                 result.setdefault('placement_body_goals',{})[PICK]={'root':lower_root.tolist(),'quaternion':placement_refs[PICK]['quaternion'],'tcp_target':reference_lower_tcp.tolist()}
             phase='lower'
             if placement_refs and args.round10_second_placement:
-                result['placement_body_goals'][PICK]={'root':desired_root.tolist(),'tcp_target':target_tcp.tolist(),'orientation_policy':'keep measured wrist after lift','direct_release':True,'actual_before_open':snapshot()['lime'].tolist()}
+                result['placement_body_goals'][PICK]={'root':desired_root.tolist(),'tcp_target':target_tcp.tolist(),'orientation_policy':'explicit planned body quaternion' if args.placement_goals else 'keep measured wrist after lift','direct_release':True,'actual_before_open':snapshot()['lime'].tolist()}
             elif placement_refs:
                 cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
             elif args.place_lower_mode=='skip' or abs(xfer_tcp[2]-lower_tcp[2])<1e-4:
