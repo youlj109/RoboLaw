@@ -20,4 +20,6 @@ def reconstruct(metadata,config=None,spec=None):
    p=UsdGeom.Xform.Define(stage,'/World/envs/env_0/'+obj['name']);p.GetPrim().GetReferences().AddReference(str(ROOT/obj['asset']));p.AddTranslateOp().Set(Gf.Vec3d(*obj['position']));p.AddRotateZOp().Set(obj.get('yaw_deg',0.))
  kin=DroidKinematics(metadata['robot_base'],metadata['robot_yaw_deg']);world=TaskCollisionWorld(stage,kin,env_root='/World/envs/env_0');geometry=resolve(stage,metadata['task'],world);world.handle_contact_colliders=set(geometry['handle_colliders'])
  if not any('/stand_instanceable/' in n for n,*_ in world.objects):raise RuntimeError('Source stand missing')
+ world.door_local_glass_proxy_policy=config.get('_planner_glass_proxy_policy','default') if config else 'default'
+ world.door_local_human_proxy_extra_m=config.get('_planner_human_proxy_extra_m',0.) if config else 0.
  return stage,kin,world,geometry

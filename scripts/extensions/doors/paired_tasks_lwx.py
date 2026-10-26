@@ -32,8 +32,8 @@ def plan(start, metadata, spec, seed, offsets):
               'seed': seed, 'initial_q': start.tolist(), 'candidate_offsets_m': offsets}
     from scipy.spatial.transform import Rotation
     approach=Rotation.from_euler('z',metadata['robot_yaw_deg'],degrees=True).apply([1.,0.,0.])
-    from kitchen_safety.extensions.doors.task_model import grasp_rotation
-    target = np.eye(4); target[:3,:3]=grasp_rotation(approach,metadata['controller_parameters']['grasp_roll_deg'],metadata['controller_parameters'].get('grasp_pitch_deg',0.))
+    from kitchen_safety.extensions.doors.approach_orientation_lwx import pregrasp_rotation
+    target = np.eye(4); target[:3,:3]=pregrasp_rotation(approach,metadata['controller_parameters'])
     initial_height = metadata['controller_parameters']['handle_offset_z']
     started = time.perf_counter()
     for offset in offsets:

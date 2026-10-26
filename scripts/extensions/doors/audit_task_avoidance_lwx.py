@@ -52,8 +52,8 @@ goal_row=[r for r in rows if r['phase']=='pregrasp'][-1]
 goal_fk=kin.fk(np.asarray(goal_row['next_obs']['q'][:7]));selected_height=m.get('selected_handle_offset_z_m',m['controller_parameters']['handle_offset_z']);allowed=m['controller_parameters'].get('handle_height_candidates_m',[m['controller_parameters']['handle_offset_z']]);selected_legal=any(abs(selected_height-x)<1e-9 for x in allowed)
 approach=Rotation.from_euler('z',m['robot_yaw_deg'],degrees=True).apply([1.,0.,0.])
 target=np.array(bm['handle_initial'])-approach*bm['controller_parameters'].get('pregrasp_distance_m',.13)+[0.,0.,selected_height-bm['controller_parameters']['handle_offset_z']]
-goal_position_error=float(np.linalg.norm(goal_fk[:3,3]-target));from kitchen_safety.extensions.doors.task_model import grasp_rotation
-target_rotation=grasp_rotation(approach,m['controller_parameters']['grasp_roll_deg'],m['controller_parameters'].get('grasp_pitch_deg',0.))
+goal_position_error=float(np.linalg.norm(goal_fk[:3,3]-target));from kitchen_safety.extensions.doors.approach_orientation_lwx import pregrasp_rotation
+target_rotation=pregrasp_rotation(approach,m['controller_parameters'])
 goal_rotation_error=float(Rotation.from_matrix(goal_fk[:3,:3]@target_rotation.T).magnitude())
 endpoint_legal=bool(selected_legal and counter[0]['valid'] and clearance(shapes(goal_row['next_obs']),hazards,margin)['valid'] and goal_position_error<.004 and goal_rotation_error<.03)
 handle_geometry=[o for o in w.objects if o[0] in geometry['handle_colliders']]

@@ -11,6 +11,9 @@ p.add_argument('--planner-hazard-extra-padding-m',type=float,default=0.,help='Ad
 p.add_argument('--task-id',required=True)
 p.add_argument('--grasp-roll-deg',type=float,default=0.)
 p.add_argument('--grasp-pitch-deg',type=float,default=0.)
+p.add_argument('--pregrasp-roll-deg',type=float,default=None)
+p.add_argument('--pregrasp-pitch-deg',type=float,default=None)
+p.add_argument('--approach-alignment-end-fraction',type=float,default=None)
 p.add_argument('--pregrasp-distance-m',type=float,default=.13,help='Same stand-off in matched baseline and variant; no route waypoints')
 p.add_argument('--handle-normal-offset',type=float,default=0.)
 p.add_argument('--pull-lead-rad',type=float,default=.018)
@@ -18,10 +21,13 @@ p.add_argument('--pull-steps',type=int,default=500)
 p.add_argument('--pull-command-policy',choices=['fixed_lead','lead_backoff_v1'],default='fixed_lead')
 p.add_argument('--ik-limit-margin-rad',type=float,default=0.,help='Contract only local command IK bounds; source robot limits remain unchanged')
 p.add_argument('--release-retreat-m',type=float,default=0.,help='Checked outward TCP retreat during finger release; same policy for baseline and variants')
+p.add_argument('--release-roll-delta-deg',type=float,default=0.,help='After opening fingers at a fixed checked arm target, rotate local wrist roll at fixed TCP before normal withdrawal; matched policy and all original gates required')
+p.add_argument('--release-yaw-deg',type=float,default=0.,help='Rotate outward release about world Z; same bounded control in matched baseline and variant')
 p.add_argument('--release-tilt-deg',type=float,default=0.,help='Tilt outward release direction toward world up; negative moves down, same matched policy')
 p.add_argument('--opening-reserve-rad',type=float,default=0.,help='Additional measured opening before release; native predicate and all collision checks stay active')
+p.add_argument('--release-completion-fraction',type=float,default=1.,help='Finish the same retreat target earlier; measured joint increments and every physics safety gate unchanged')
 p.add_argument('--release-retreat-profile',choices=['linear','ease_out'],default='linear',help='Same bounded retreat endpoint; optional early progress with a slower finish, inherited by matched variants')
-p.add_argument('--release-command-policy',choices=['full_pose','bounded_position_v1','bounded_position_hold_v2'],default='full_pose')
+p.add_argument('--release-command-policy',choices=['full_pose','bounded_position_v1','bounded_position_hold_v2','full_pose_hold_v3','full_pose_track_v4','door_relative_pose_v5'],default='full_pose')
 p.add_argument('--release-settle-steps',type=int,default=0,help='Additional closed-gripper hold at one measured joint target before release; inherited by matched variants')
 p.add_argument('--mode', choices=['collect', 'neutral'], default='collect')
 p.add_argument('--observer-config',required=True)
@@ -31,7 +37,13 @@ p.add_argument('--review-config', default='configs/extensions/doors/review_gates
 p.add_argument('--scene-manifest',type=Path,required=True)
 p.add_argument('--pregrasp-goal-q',type=float,nargs=7)
 a=p.parse_args();a.enable_cameras=True
+import math
+for angle in (a.pregrasp_roll_deg,a.pregrasp_pitch_deg):
+    if angle is not None and (not math.isfinite(angle) or not -180.<=angle<=180.):p.error('Pregrasp angles must be finite and within [-180,180]')
 if not .03<=a.pregrasp_distance_m<=.20:p.error('--pregrasp-distance-m must be in [.03,.20]')
+if a.approach_alignment_end_fraction is not None:
+    if not math.isfinite(a.approach_alignment_end_fraction) or not .05<=a.approach_alignment_end_fraction<=1.:p.error('Alignment end fraction must be finite and within [.05,1]')
+    if a.pregrasp_roll_deg is None and a.pregrasp_pitch_deg is None:p.error('Alignment end fraction needs an explicit pregrasp angle')
 scene_manifest=json.loads(a.scene_manifest.read_text())
 if not scene_manifest.get('planning_permitted'):p.error('Scene is not released for planning')
 if a.variant != 'base':
@@ -48,10 +60,16 @@ if a.release_command_policy!='full_pose' and not a.release_retreat_m:p.error('Bo
 if not 0<=a.pregrasp_settle_steps<=60:p.error('--pregrasp-settle-steps must be in [0,60]')
 if a.neutral_seconds <= 0:p.error('--neutral-seconds must be positive')
 if not 0. <= a.ik_limit_margin_rad <= .1:p.error('--ik-limit-margin-rad must be in [0, .1]')
-if not 0. <= a.release_retreat_m <= .04:p.error('--release-retreat-m must be in [0, .04]')
+# Optional control extent extended after release_dense189 source-geometry checks.
+# This is total TCP travel, not a clearance threshold; all per-step joint,
+# cuRobo, source geometry and 120 Hz physical safety checks remain unchanged.
+if not math.isfinite(a.release_retreat_m) or not 0. <= a.release_retreat_m <= .07:p.error('--release-retreat-m must be finite within [0, .07]')
 if a.release_retreat_profile!='linear' and not a.release_retreat_m:p.error('Release profile needs a retreat')
 if not 0 <= a.release_settle_steps <= 90:p.error('--release-settle-steps must be in [0,90]')
 if not -60. <= a.release_tilt_deg <= 60. or (a.release_tilt_deg and not a.release_retreat_m):p.error('--release-tilt-deg needs a retreat and must be in [-60,60]')
+if not math.isfinite(a.release_yaw_deg) or not -60.<=a.release_yaw_deg<=60. or (a.release_yaw_deg and not a.release_retreat_m):p.error('--release-yaw-deg needs a retreat and must be finite within [-60,60]')
+if not math.isfinite(a.release_completion_fraction) or not .2<=a.release_completion_fraction<=1. or (a.release_completion_fraction!=1. and not a.release_retreat_m):p.error('Release completion fraction requires retreat and must be finite within [.2,1]')
+if not math.isfinite(a.release_roll_delta_deg) or not -60.<=a.release_roll_delta_deg<=60. or (a.release_roll_delta_deg and not a.release_retreat_m):p.error('Release roll delta needs retreat and must be finite in [-60,60]')
 review=json.loads(Path(a.review_config).read_text())
 out=Path(a.output)
 if (out/'result.json').exists() or (out/'images.h5').exists():raise SystemExit('Output already has trial data; use a new attempt directory')
@@ -77,7 +95,7 @@ with SimulationAppContext(a):
     from kitchen_safety.grasp_contacts import _numpy as contact_arr
     from kitchen_safety.extensions.doors.task_planner import TaskPlanner as CuroboPlanner
     from kitchen_safety.extensions.doors.evidence import contact_sample
-    from kitchen_safety.extensions.doors.release_pose_lwx import release_progress
+    from kitchen_safety.extensions.doors.release_timing_lwx import timed_release_progress
     from kitchen_safety.extensions.doors.task_observation import MechanismObserver
     from pxr import UsdGeom,UsdPhysics,Usd
     environment,graph=build(a.task_id,a.variant,True,a.variant_config)
@@ -113,12 +131,20 @@ with SimulationAppContext(a):
     kin.limits[:,0]+=a.ik_limit_margin_rad
     kin.limits[:,1]-=a.ik_limit_margin_rad
     world=DoorCollisionWorld(e.sim.stage,kin,env_root='/World/envs/env_0',default_clearance=.002)
+    world.door_local_glass_proxy_policy=variant_data.get('_planner_glass_proxy_policy','default')
+    world.door_local_human_proxy_extra_m=variant_data.get('_planner_human_proxy_extra_m',0.)
     geometry=resolve(e.sim.stage,a.task_id,world);world.handle_contact_colliders=set(geometry['handle_colliders'])
     handle0=np.asarray(geometry['handle_center']);handle0[2]+=a.handle_offset_z
     hinge=np.asarray(geometry['hinge']);axis=np.asarray(geometry['axis'])
     approach=Rotation.from_euler('z',yaw,degrees=True).apply([1.,0.,0.]);handle0+=np.cross([0.,0.,1.],approach)*a.handle_offset_y
     handle0+=approach*a.handle_normal_offset
     R0=grasp_rotation(approach,a.grasp_roll_deg,a.grasp_pitch_deg)
+    from kitchen_safety.extensions.doors.approach_orientation_lwx import pregrasp_rotation,approach_rotation
+    orientation_policy={'grasp_roll_deg':a.grasp_roll_deg,'grasp_pitch_deg':a.grasp_pitch_deg}
+    if a.pregrasp_roll_deg is not None or a.pregrasp_pitch_deg is not None:
+        orientation_policy.update(pregrasp_roll_deg=a.grasp_roll_deg if a.pregrasp_roll_deg is None else a.pregrasp_roll_deg,pregrasp_pitch_deg=a.grasp_pitch_deg if a.pregrasp_pitch_deg is None else a.pregrasp_pitch_deg)
+    if a.approach_alignment_end_fraction is not None:orientation_policy['approach_alignment_end_fraction']=a.approach_alignment_end_fraction
+    Rpre=pregrasp_rotation(approach,orientation_policy)
     lower,upper=geometry['limits_rad']
     target_angle=joint_position_from_openness(geometry['openness_threshold'],lower,upper)
     pull_limit=max(lower+.01,target_angle-.10) if lower<0. else min(upper-.01,target_angle+.10)
@@ -142,6 +168,10 @@ with SimulationAppContext(a):
     metadata['door_geometry']=geometry
     metadata['door_motion_reference_joint_rad']=reference_joint_position
     metadata['controller_parameters']['grasp_roll_deg']=a.grasp_roll_deg
+    if 'pregrasp_roll_deg' in orientation_policy:
+        metadata['controller_parameters'].update({key:orientation_policy[key] for key in ['pregrasp_roll_deg','pregrasp_pitch_deg']})
+        metadata['controller_parameters']['approach_orientation_policy']='straight_slerp_v1'
+    if a.approach_alignment_end_fraction is not None:metadata['controller_parameters']['approach_alignment_end_fraction']=a.approach_alignment_end_fraction
     metadata['controller_parameters']['pregrasp_distance_m']=a.pregrasp_distance_m
     if a.pregrasp_goal_q is not None:metadata['controller_parameters']['pregrasp_goal_q']=a.pregrasp_goal_q
     if a.pregrasp_settle_steps:metadata['controller_parameters']['pregrasp_settle_steps']=a.pregrasp_settle_steps
@@ -150,9 +180,14 @@ with SimulationAppContext(a):
     if a.grasp_pitch_deg:metadata['controller_parameters']['grasp_pitch_deg']=a.grasp_pitch_deg
     if a.release_retreat_m:metadata['controller_parameters']['release_retreat_m']=a.release_retreat_m
     if a.release_tilt_deg:metadata['controller_parameters']['release_tilt_deg']=a.release_tilt_deg
+    if a.release_yaw_deg:metadata['controller_parameters']['release_yaw_deg']=a.release_yaw_deg
+    if a.release_roll_delta_deg:metadata['controller_parameters']['release_roll_delta_deg']=a.release_roll_delta_deg;metadata['controller_parameters']['release_roll_policy']='synchronous_local_roll_v2'
+    if a.release_completion_fraction!=1.:metadata['controller_parameters']['release_completion_fraction']=a.release_completion_fraction
     if a.opening_reserve_rad:metadata['controller_parameters']['opening_reserve_rad']=a.opening_reserve_rad
     if a.release_settle_steps:metadata['controller_parameters']['release_settle_steps']=a.release_settle_steps
     if a.release_command_policy!='full_pose':metadata['controller_parameters']['release_command_policy']=a.release_command_policy
+    if a.release_command_policy in ('full_pose_track_v4','door_relative_pose_v5'):metadata['controller_parameters']['release_steps']=60;metadata['controller_parameters']['release_hold_target_policy']='unclipped_final_pose_ik_v4'
+    if a.release_command_policy=='door_relative_pose_v5':metadata['controller_parameters']['release_hold_target_policy']='measured_door_relative_pose_v5'
     if a.release_retreat_profile!='linear':metadata['controller_parameters']['release_retreat_profile']=a.release_retreat_profile
     metadata['controller_parameters']['pull_lead_rad']=a.pull_lead_rad
     metadata['controller_parameters']['pull_steps']=a.pull_steps
@@ -194,6 +229,25 @@ with SimulationAppContext(a):
     if a.release_command_policy=='bounded_position_hold_v2':
         hold_source=Path('kitchen_safety/extensions/doors/release_hold_lwx.py')
         metadata['implementation_sha256'][str(hold_source)]=hashlib.sha256(hold_source.read_bytes()).hexdigest()
+    if a.release_command_policy=='door_relative_pose_v5':
+        release_follow_source=Path('kitchen_safety/extensions/doors/release_door_relative_lwx.py')
+        metadata['implementation_sha256'][str(release_follow_source)]=hashlib.sha256(release_follow_source.read_bytes()).hexdigest()
+    if world.door_local_glass_proxy_policy!='default':
+        proxy_source=Path('kitchen_safety/extensions/doors/rounded_hazard_proxy_lwx.py')
+        metadata['implementation_sha256'][str(proxy_source)]=hashlib.sha256(proxy_source.read_bytes()).hexdigest()
+        metadata['controller_parameters']['planner_glass_proxy_policy']=world.door_local_glass_proxy_policy
+    if world.door_local_human_proxy_extra_m:
+        proxy_source=Path('kitchen_safety/extensions/doors/rounded_hazard_proxy_lwx.py')
+        metadata['implementation_sha256'][str(proxy_source)]=hashlib.sha256(proxy_source.read_bytes()).hexdigest()
+        metadata['controller_parameters']['planner_human_proxy_extra_m']=float(world.door_local_human_proxy_extra_m)
+    orientation_source=Path('kitchen_safety/extensions/doors/approach_orientation_lwx.py')
+    metadata['implementation_sha256'][str(orientation_source)]=hashlib.sha256(orientation_source.read_bytes()).hexdigest()
+    direction_source=Path('kitchen_safety/extensions/doors/release_direction_lwx.py')
+    metadata['implementation_sha256'][str(direction_source)]=hashlib.sha256(direction_source.read_bytes()).hexdigest()
+    timing_source=Path('kitchen_safety/extensions/doors/release_timing_lwx.py')
+    metadata['implementation_sha256'][str(timing_source)]=hashlib.sha256(timing_source.read_bytes()).hexdigest()
+    alignment_source=Path('kitchen_safety/extensions/doors/release_alignment_lwx.py')
+    metadata['implementation_sha256'][str(alignment_source)]=hashlib.sha256(alignment_source.read_bytes()).hexdigest()
     release_commands=[]
     pull_commands=[]
     if a.pull_command_policy!='fixed_lead':
@@ -328,7 +382,7 @@ with SimulationAppContext(a):
         else:
             planner=CuroboPlanner(world,kin,dt=e.step_dt,seed=a.seed or 42,max_joint_speed=.5,hazard_extra_padding_m=a.planner_hazard_extra_padding_m,pregrasp_shortcut_policy=a.pregrasp_shortcut_policy,pregrasp_goal_q=a.pregrasp_goal_q)
             handles=tuple(world.handle_contact_colliders)
-            target=np.eye(4);target[:3,:3]=R0;default_handle=handle0.copy();candidate_failures=[];plan=None;candidate_queries=[]
+            target=np.eye(4);target[:3,:3]=Rpre;default_handle=handle0.copy();candidate_failures=[];plan=None;candidate_queries=[]
             phase='pregrasp'
             for offset in ([0.,.06,.10] if a.adaptive_handle_height else [0.]):
                 handle0=default_handle+[0.,0.,offset];target[:3,3]=handle0-approach*a.pregrasp_distance_m
@@ -361,6 +415,7 @@ with SimulationAppContext(a):
                 step(settle_command,0.)
             phase='approach_handle';world.allow_handle_contact=True
             for alpha in np.linspace(0,1,50)[1:]:
+                target[:3,:3]=approach_rotation(approach,orientation_policy,float(alpha))
                 target[:3,3]=handle0-approach*a.pregrasp_distance_m*(1-alpha)
                 command=kin.ik(target,q,attempts=1)
                 world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])
@@ -428,21 +483,32 @@ with SimulationAppContext(a):
                 if stable<5:raise RuntimeError('Final original door-open predicate did not stabilize')
             phase='release_handle'
             release_start=kin.fk(q) if a.release_retreat_m else None
-            release_angle=rows[-1]['next_obs']['door_q']-reference_joint_position
+            release_reference_angle=rows[-1]['next_obs']['door_q']
+            release_angle=release_reference_angle-reference_joint_position
             release_normal=Rotation.from_rotvec(axis*release_angle).apply(approach)
             # Tilt the outward direction, preserving its total length and tool rotation.
             # All command checks, joint increments and every physics-step audit stay active.
-            release_direction=-release_normal*np.cos(np.deg2rad(a.release_tilt_deg))+np.array([0.,0.,np.sin(np.deg2rad(a.release_tilt_deg))])
-            release_direction/=np.linalg.norm(release_direction)
-            for fraction in np.linspace(.05,1.,20):
+            from kitchen_safety.extensions.doors.release_direction_lwx import release_direction as choose_release_direction
+            release_direction=choose_release_direction(release_normal,a.release_tilt_deg,a.release_yaw_deg)
+            release_steps=60 if a.release_command_policy in ('full_pose_track_v4','door_relative_pose_v5') else 20
+            for fraction in np.linspace(1./release_steps,1.,release_steps):
                 if a.release_retreat_m:
                     target=release_start.copy()
-                    target[:3,3]+=release_direction*a.release_retreat_m*release_progress(float(fraction),a.release_retreat_profile)
+                    if a.release_roll_delta_deg:
+                        from kitchen_safety.extensions.doors.release_alignment_lwx import release_roll_pose
+                        target=release_roll_pose(release_start,a.release_roll_delta_deg,min(1.,float(fraction)/.5))
+                    target[:3,3]+=release_direction*a.release_retreat_m*timed_release_progress(float(fraction),a.release_retreat_profile,a.release_completion_fraction)
+                    if a.release_command_policy=='door_relative_pose_v5':
+                        from kitchen_safety.extensions.doors.release_door_relative_lwx import follow_measured_door_pose
+                        release_base_goal=target.copy()
+                        target=follow_measured_door_pose(release_base_goal,hinge,axis,rows[-1]['next_obs']['door_q']-release_reference_angle)
                     if a.release_command_policy in ('bounded_position_v1','bounded_position_hold_v2'):
                         from kitchen_safety.extensions.doors.release_position_lwx import bounded_position_command
                         command=bounded_position_command(kin,q,target[:3,3],release_start[:3,:3])
                         release_commands.append({'action_index':len(rows),'target_pose':target.tolist(),'command':command.tolist(),'command_pose':kin.fk(command).tolist()})
                     else:command=kin.ik(target,q,attempts=1)
+                    if a.release_command_policy in ('full_pose_hold_v3','full_pose_track_v4','door_relative_pose_v5'):release_commands.append({'action_index':len(rows),'target_pose':target.tolist(),'command':command.tolist(),'command_pose':kin.fk(command).tolist()})
+                    release_pose_goal=command.copy()
                     delta_q=command-q;command=q+delta_q/max(1.,float(np.max(np.abs(delta_q)))/.025)
                     world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])
                     sync(update_planner=True);planner._prepare_path_query(handles,0.,phase)
@@ -450,16 +516,21 @@ with SimulationAppContext(a):
                     step(command,0.)
                 else:step(q,0.)
             phase='released_hold'
-            released_hold_target=command.copy() if a.release_command_policy=='bounded_position_hold_v2' else None
-            for _ in range(5):
+            released_hold_target=release_pose_goal.copy() if a.release_command_policy in ('full_pose_track_v4','door_relative_pose_v5') else (command.copy() if a.release_command_policy in ('bounded_position_hold_v2','full_pose_hold_v3') else None)
+            # v3 retains full-pose withdrawal, then holds its checked fixed actuator
+            # endpoint for 30 actions; measured-state chasing is never used.
+            for _ in range(30 if a.release_command_policy in ('full_pose_hold_v3','full_pose_track_v4','door_relative_pose_v5') else 5):
                 if released_hold_target is None:step(q,0.)
                 else:
                     from kitchen_safety.extensions.doors.release_hold_lwx import bounded_hold_command
+                    if a.release_command_policy=='door_relative_pose_v5':
+                        target=follow_measured_door_pose(release_base_goal,hinge,axis,rows[-1]['next_obs']['door_q']-release_reference_angle)
+                        released_hold_target=kin.ik(target,q,attempts=1)
                     hold_command=bounded_hold_command(q,released_hold_target)
                     world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])
                     sync(update_planner=True);planner._prepare_path_query(handles,0.,phase)
                     if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(hold_command[None])).all()):raise RuntimeError('cuRobo rejected final release-target hold')
-                    release_commands.append({'action_index':len(rows),'phase':phase,'fixed_target':released_hold_target.tolist(),'command':hold_command.tolist()})
+                    release_commands.append({'action_index':len(rows),'phase':phase,'target_kind':'measured_door_relative' if a.release_command_policy=='door_relative_pose_v5' else 'fixed_joint','desired_joint_target':released_hold_target.tolist(),'command':hold_command.tolist()})
                     step(hold_command,0.)
             if not bool(predicate[1](e)[0]):raise RuntimeError('Original door-open predicate is false after release')
     except Exception as exc:
@@ -492,7 +563,7 @@ with SimulationAppContext(a):
             if rows:
                 try:videos[name]=decode_video(out/(name+'.mp4'),len(rows),expected_dt=e.step_dt)
                 except Exception as video_error:
-                    videos[name]={'error':str(video_error),'captured_frames':cam.frames,'completed_actions':len(rows)}
+                    videos[name]={'error':str(video_error),'captured_frames':getattr(cam,'frames',None),'completed_actions':len(rows)}
                     result['accepted']=False;result['neutral_completed']=False
                     result['video_validation_failed']=True
                     if result['failure'] is None:result['failure']='Video validation: '+str(video_error)

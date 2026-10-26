@@ -11,9 +11,38 @@ class TaskPlanner(CuroboPlanner):
   if pregrasp_shortcut_policy not in ("none","bounded_chords_v1"):raise ValueError("Unknown pregrasp shortcut policy")
   self.pregrasp_shortcut_policy=pregrasp_shortcut_policy
   super().__init__(*args,**kwargs)
+  self._glass_mesh_records={}
+  policy=getattr(self.world,"door_local_glass_proxy_policy","default")
+  if policy!="default":
+   from kitchen_safety.extensions.doors.rounded_hazard_proxy_lwx import POLICY,replace_glass_boxes
+   if policy!=POLICY:raise ValueError("Unknown task-local glass proxy policy: "+policy)
+   self._glass_mesh_records=replace_glass_boxes(self)
+  self._person_mesh_records={}
+  person_extra=float(getattr(self.world,'door_local_human_proxy_extra_m',0.))
+  if person_extra:
+   from kitchen_safety.extensions.doors.rounded_hazard_proxy_lwx import replace_person_meshes
+   self._person_mesh_records=replace_person_meshes(self,person_extra)
   if self.hazard_extra_padding_m:
    self.collision_geometry['door_local_hazard_extra_padding_m']=self.hazard_extra_padding_m
    self.collision_geometry['door_local_padding_scope']='Additional conservative cuRobo glass/barrier boxes only; source FCL and execution thresholds unchanged.'
+ def update_dynamic_obstacle(self,key,*,reset=True):
+  records=(getattr(self,'_person_mesh_records',{}) if key=='person' else getattr(self,'_glass_mesh_records',{}))
+  if not records or key not in ('glass','person'):return super().update_dynamic_obstacle(key,reset=reset)
+  import numpy as np
+  from curobo.types.math import Pose
+  selected={name:ob for name,ob,*_ in self.world.objects if self.world._matches(name,key)}
+  if set(selected)!=set(records):return False
+  checker=self.motion_gen.world_coll_checker
+  for name,ob in selected.items():
+   ref=records[name];R=np.array(ob.getRotation());p=np.array(ob.getTranslation())
+   D=np.eye(4);D[:3,:3]=R@ref['reference_rotation'].T;D[:3,3]=p-D[:3,:3]@ref['reference_translation']
+   T=self.T_B_W@D@self.kin.base
+   checker.update_obstacle_pose(ref.get('gpu_name',name),Pose.from_list(self._pose_list(T),self.args),update_cpu_reference=True)
+  if reset:
+   if getattr(self,'_context_reused',False) or self.use_cuda_graph:self._reset_all_seeds()
+   else:self.motion_gen.reset(reset_seed=True)
+  return True
+
  def _planning_box(self,lo,hi,padding):
   # The shared adapter passes nonzero padding only for glass/barrier boxes.
   # This also runs during dynamic-box updates, preserving the same policy.
