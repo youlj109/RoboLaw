@@ -214,8 +214,10 @@ with SimulationAppContext(args):
     pick_action_ranges={PICK:{'start':0}}
     source_contact_trackers={name:LimeSourceContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=name,source_surface=SOURCE_SURFACE_PATH,rigid_body_path=pick_rigid_paths[name]) for name in task_picks(TASK_SPEC)}
     source_contacts=source_contact_trackers[PICK]
+    step_wall_profile={'before_snapshot_s':0.,'camera_s':0.,'env_step_s':0.,'after_snapshot_s':0.,'contact_s':0.,'steps':0}
     def step(command,gripper):
-        before=snapshot()
+        tick=time.perf_counter();before=snapshot();step_wall_profile['before_snapshot_s']+=time.perf_counter()-tick
+        tick=time.perf_counter()
         if writer:
             before_capture=int(e.sim.get_physics_step_count())
             writer.write(phase)
@@ -225,13 +227,20 @@ with SimulationAppContext(args):
                     'primary_frame_index':writer.frames-1,'overview_frame_index':overview_writer.frames-1,
                     'physics_step_before':before_capture,'physics_step_after':int(e.sim.get_physics_step_count()),
                     'simulation_time_s':before_capture*cfg.sim.dt})
+        step_wall_profile['camera_s']+=time.perf_counter()-tick
         action=np.r_[command,gripper].astype(np.float32)
+        tick=time.perf_counter()
         try:env.step(torch.tensor(action[None],device=e.device))
-        finally:records.append((phase,action,before,snapshot()))
+        finally:
+            step_wall_profile['env_step_s']+=time.perf_counter()-tick;tick=time.perf_counter()
+            records.append((phase,action,before,snapshot()))
+            step_wall_profile['after_snapshot_s']+=time.perf_counter()-tick;step_wall_profile['steps']+=1
         if terminal and not terminal.get('terms',{}).get('success',False):raise RuntimeError(f'Arena termination: {terminal["terms"]}')
+        tick=time.perf_counter()
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
-        if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True)
-    result={'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'success':False,'planner':'curobo','physical_grasp':True,
+        step_wall_profile['contact_s']+=time.perf_counter()-tick
+        if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
