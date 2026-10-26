@@ -11,6 +11,8 @@ parser.add_argument('--task',default='kitchen_bench_lightwheel_place_lime_in_woo
 parser.add_argument('--pick-order',nargs='+',help='Execution order only for original parallel multi-pick task; all original picks remain required')
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
+parser.add_argument('--placement-reference',type=Path,help='Successful recorded pre-release object poses for each pick')
+parser.add_argument('--reference-clearance-z',type=float,default=0.)
 parser.add_argument('--free-release',action='store_true',help='Keep destination collision enabled while lowering a held object; release above contact')
 parser.add_argument('--first-placement-reference',type=Path,help='Use measured body orientation from a successful first-fruit placement as the robot transport target; no object pose setters')
 parser.add_argument('--single-candidate-round',action='store_true',help='One selected grasp and one direct query per motion segment; stop on failure, no fallback sweep or duplicate grasp preflight')
@@ -102,6 +104,18 @@ with SimulationAppContext(args):
     from kitchen_safety.planning import DroidKinematics,transform
     from kitchen_safety.dataset import CameraWriter,numpy as arr,decode_video
     torch.set_num_threads(2)
+    placement_refs={}
+    if args.placement_reference is not None:
+        import h5py
+        reference_result=json.loads(args.placement_reference.read_text())
+        if not reference_result.get('success') or reference_result['task']!=TASK_ID:raise RuntimeError('Invalid native placement reference')
+        reference_trajectory=args.placement_reference.parent/'trajectory.h5'
+        with h5py.File(reference_trajectory) as source:
+            reference_phases=source['phase'].asstr()[:]
+            for name,bounds in reference_result['pick_action_ranges'].items():
+                index=int(np.flatnonzero((reference_phases=='release')&(np.arange(len(reference_phases))>=bounds['start'])&(np.arange(len(reference_phases))<bounds['end']))[0])
+                body=source['obs/'+name][index,:7];bowl=source['obs/wooden_bowl'][index,:7]
+                placement_refs[name]={'offset':(body[:3]-bowl[:3]).tolist(),'quaternion':body[3:7].tolist()}
     envdef,assets=build_environment(enable_cameras=True,variant=args.variant,task_id=TASK_ID,
         fixed_layout_path=args.fixed_layout,variant_config_path=args.variant_config)
     builder=ArenaEnvBuilder(envdef,ArenaEnvBuilderCfg(num_envs=1,seed=seed,device='cpu',
@@ -165,6 +179,12 @@ with SimulationAppContext(args):
             terminal['state']=snapshot()
             terminal['terms']={n:bool(arr(e.termination_manager.get_term(n))[0]) for n in e.termination_manager.active_terms}
     e._reset_idx=capture_reset
+    def reference_placement_goal(state,destination,above):
+        ref=placement_refs[PICK]
+        root=destination[:3]+np.asarray(ref['offset'])+[0.,0.,args.reference_clearance_z+above]
+        attachment=np.linalg.inv(kin.fk(state['q'][ids]))@transform(state['lime'][:3],state['lime'][3:7])
+        return root,transform(root,ref['quaternion'])@np.linalg.inv(attachment)
+
     def ignores():
         return (PICK,)+((DEST,) if phase in ('lower','release','retreat','settle_final') and not (args.free_release and phase=='lower') else ())
     def geometry(state):
@@ -444,6 +464,8 @@ with SimulationAppContext(args):
         p=initial['lime'][:3].copy()
         grasp_body_point=np.asarray(args.grasp_body_point if args.grasp_body_point is not None else world.object_center,float)
         result['grasp_point_body_m']=grasp_body_point.tolist()
+        if placement_refs:
+            result['task_motion_parameters']['placement_reference']={'result_sha256':hashlib.sha256(args.placement_reference.read_bytes()).hexdigest(),'trajectory_sha256':hashlib.sha256(reference_trajectory.read_bytes()).hexdigest(),'pre_release_goals':placement_refs,'clearance_z_m':args.reference_clearance_z}
         result['single_candidate_round']=bool(args.single_candidate_round)
         result['transfer_route_policy']={'mode':args.transfer_route_search,'pose_ik_joint_goal_fallback':bool(args.grasp_search=='b03-topdown' or args.transfer_route_search=='upper'),'upper_rises_m':[.08,.16,.24] if args.transfer_route_search=='upper' else []}
         if len(task_picks(TASK_SPEC))>1 or PICK=='green_ladle':
@@ -583,7 +605,11 @@ with SimulationAppContext(args):
         # Release above destination then let gravity settle the fruit.
         desired_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
         first_pose_feedback=False
-        if args.first_placement_reference is not None:
+        if placement_refs:
+            desired_root,target_tcp=reference_placement_goal(lifted,dest,.045)
+            phase='transfer';cart(target_tcp[:3,3],rotation=target_tcp[:3,:3])
+            transferred=snapshot();offset=transferred['tcp']-transferred['lime'][:3];first_pose_feedback=True
+        elif args.first_placement_reference is not None:
             reference=json.loads(args.first_placement_reference.read_text())
             checkpoint=reference['placement_checkpoints'][PICK]
             if not reference.get('success') or not checkpoint.get('passed'):raise RuntimeError('Placement orientation reference has no original success')
@@ -604,11 +630,17 @@ with SimulationAppContext(args):
         lower_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
         xfer_tcp=(transferred['tcp'] if first_pose_feedback else desired_root+offset)
         lower_tcp=lower_root+offset
+        if placement_refs:
+            current=snapshot();lower_root,reference_lower_tcp=reference_placement_goal(current,current['wooden_bowl'],0.)
+            lower_tcp=reference_lower_tcp[:3,3]
+            result.setdefault('placement_body_goals',{})[PICK]={'root':lower_root.tolist(),'quaternion':placement_refs[PICK]['quaternion'],'tcp_target':reference_lower_tcp.tolist()}
         result['place_lower']={'mode':args.place_lower_mode,'lower_z_m':lower_z,
             'transfer_tcp_m':xfer_tcp.tolist(),'lower_tcp_m':lower_tcp.tolist(),
             'drop_m':float(xfer_tcp[2]-lower_tcp[2])}
         phase='lower'
-        if args.place_lower_mode=='skip' or (args.place_lower_mode=='steps' and abs(xfer_tcp[2]-lower_tcp[2])<1e-4):
+        if placement_refs:
+            cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
+        elif args.place_lower_mode=='skip' or (args.place_lower_mode=='steps' and abs(xfer_tcp[2]-lower_tcp[2])<1e-4):
             result['place_lower']['skipped']=True
         elif args.place_lower_mode=='steps':
             n=max(1,int(args.place_lower_steps))
@@ -701,14 +733,25 @@ with SimulationAppContext(args):
             if result['extra_lift_m'][-1]<.08 or not lift_contact['both_fingers_on_body']:raise RuntimeError(f'Physical lift/contact check failed for {PICK}')
             dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
             desired_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
-            phase='transfer';cart(desired_root+offset)
+            if placement_refs:
+                desired_root,target_tcp=reference_placement_goal(lifted,dest,.045)
+                phase='transfer';cart(target_tcp[:3,3],rotation=target_tcp[:3,:3])
+                transferred=snapshot();offset=transferred['tcp']-transferred['lime'][:3]
+            else:
+                phase='transfer';cart(desired_root+offset)
             if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
                 phase='transfer';cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
             lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
             lower_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
             xfer_tcp=desired_root+offset;lower_tcp=lower_root+offset
+            if placement_refs:
+                current=snapshot();lower_root,reference_lower_tcp=reference_placement_goal(current,current['wooden_bowl'],0.)
+                lower_tcp=reference_lower_tcp[:3,3]
+                result.setdefault('placement_body_goals',{})[PICK]={'root':lower_root.tolist(),'quaternion':placement_refs[PICK]['quaternion'],'tcp_target':reference_lower_tcp.tolist()}
             phase='lower'
-            if args.place_lower_mode=='skip' or abs(xfer_tcp[2]-lower_tcp[2])<1e-4:
+            if placement_refs:
+                cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
+            elif args.place_lower_mode=='skip' or abs(xfer_tcp[2]-lower_tcp[2])<1e-4:
                 pass
             elif args.place_lower_mode=='cartesian_line':
                 cart(lower_tcp, force_phase='cartesian_line')

@@ -1,3 +1,5 @@
+CURRENT: planning_round_03 passed base/robot/property with both pre-release pose references plus 5mm vertical clearance. One native round is running; see /root/autodl-tmp/B03-review/capture_round03.json. No extra physical diagnostics or immediate retries.
+
 # B03 round-based continuation
 
 The user clarified that one round means one coherent planning recommendation/modification per scene, visit all scenes, retain failures, and revisit only next round. It does not mean one scalar parameter or one solver call for an entire multi-stage task. No environment moves or added physical diagnostic runs.
@@ -11,3 +13,8 @@ Current new baseline: `base_lgd_b03_free_20261026T130223Z`. Not yet a success cl
 Pose-only baseline `base_lgd_b03_pose_20261026T123221Z` failed at498 actions during clamped lowering against the bowl. Robot `robot_lgd_b03_fixedscene_20261026T113926Z` failed during second release against the bowl; first placement checkpoint also failed. Property `property_lgd_b03_fixedscene_20261026T114622Z` recorder hung, was stopped, and has runtime_interrupted.json; partial files retained, not success. Height prototypes using first-pick summary for second-pick goal are invalidated in `/root/autodl-tmp/B03-review/height_plan_goal_correction.json`; corrected planning uses actual recorded lower target. No capture was launched from those wrong prototypes.
 
 Night heartbeat remains paused. B04 planning is deferred while the user prioritizes B03. Preserve all preexisting local changes. GitHub credentials remain unavailable; commit and bundle, do not claim pushed.
+
+## Pre-release reference correction and current round
+The earlier resting-checkpoint orientation was the wrong in-hand goal. Round02 instead loaded the real obs states at each first release action of successful human092630. All scenes passed first-fruit planning; second-fruit lower had only about0.45mm bowl clearance. Round03 applied one5mm upward correction to all scenes; all six saved-state transport/lower/opening candidates passed. The native controller now targets both fruits actual pre-release object poses, with measured attachment refreshed at each placement segment. No environment/body pose setter is used. Source task native predicates and all margins remain unchanged.
+
+Native baseline: base_lgd_b03_reference_20261026T134019Z. Runner /root/autodl-tmp/lgd-day-logs/b03_capture_round03.py and corresponding log execute baseline first, then robot/property once each only if baseline succeeds. Variant failures are retained and the other scene continues. Current reference-based collection is pending, not accepted. Round01 native basefree130223 failed inter-fruit collision before second release; first checkpoint also false. No repetition of that same candidate.
