@@ -73,10 +73,16 @@ def main():
     fixed=fixed_shapes(stage);source=[v for v in world.objects if not world._matches(v[0],spec['name'])]+fixed
     with h5py.File(ep/'trajectory.h5') as f:
         q=f['next_obs/q'][:];lime=f['next_obs/'+pick][:,:7];phases=f['phase'].asstr()[:]
+        pick_poses={name:f['next_obs/'+name][:,:7] for name in (task.pick_objects or (pick,))}
         initial_q=f['obs/q'][0];initial_lime=f['obs/'+pick][0,:7]
     joints=r['robot_joint_names'];arm=[joints.index('panda_joint'+str(i)) for i in range(1,8)];fingers=[joints.index(n) for n in world.GRIPPER_JOINT_NAMES]
     selected=sorted(set([0,len(q)-1,*range(0,len(q),a.stride),*[i for i in range(1,len(q)) if phases[i]!=phases[i-1]],*[i-1 for i in range(1,len(q)) if phases[i]!=phases[i-1]]]))
-    shapes={i:world.shapes(q[i,arm],dict(zip(world.GRIPPER_JOINT_NAMES,q[i,fingers])),lime[i]) for i in selected}
+    shapes={}
+    for i in selected:
+        active=next((name for name,bounds in r.get('pick_action_ranges',{}).items() if bounds['start']<=i<bounds['end']),pick)
+        if world.pick_object!=active:world.bind_pick(active)
+        shapes[i]=world.shapes(q[i,arm],dict(zip(world.GRIPPER_JOINT_NAMES,q[i,fingers])),pick_poses[active][i])
+    if world.pick_object!=pick:world.bind_pick(pick)
     shapes[-1]=world.shapes(initial_q[arm],dict(zip(world.GRIPPER_JOINT_NAMES,initial_q[fingers])),initial_lime)
     movable=('pregrasp','transfer')
     endpoint={-1,*[i for i in selected if phases[i] not in movable],*[i for i in selected if i==len(q)-1 or (i>0 and phases[i]!=phases[i-1]) or (i+1<len(q) and phases[i]!=phases[i+1])]}

@@ -251,6 +251,11 @@ with SimulationAppContext(args):
         config_path=Path(args.variant_config or TASK_SPEC.default_variants)
         result['variant_spec']=json.loads(config_path.read_text())[args.variant]
         result['variant_config_source']={'path':str(config_path),'sha256':hashlib.sha256(config_path.read_bytes()).hexdigest()}
+    import signal
+    def preserve_on_external_stop(signum,frame):
+        result['success']=False;result['interruption_signal']=int(signum)
+        raise TimeoutError('External stop requested; preserve partial observations, never claim native success')
+    previous_signal_handlers={sig:signal.signal(sig,preserve_on_external_stop) for sig in (signal.SIGTERM,signal.SIGINT)}
     try:
         for _ in range(20):step(q,0.)
         initial=snapshot();result['initial_object_states']={name:arr(scene[name].data.root_state_w)[0].tolist() for name in RIGID};result['initial_lime_pose']=initial['lime'].tolist();result['initial_bowl_pose']=initial['wooden_bowl'].tolist();result['pick_object']=PICK;result['destination_object']=DEST;result['pick_objects']=list(task_picks(TASK_SPEC))
@@ -695,6 +700,7 @@ with SimulationAppContext(args):
     except Exception as exc:
         result['error']=repr(exc);result['traceback']=traceback.format_exc();print(result['traceback'],flush=True)
     finally:
+        for sig,handler in previous_signal_handlers.items():signal.signal(sig,handler)
         scene.update=original_update
         if writer:writer.close()
         if overview_writer:
