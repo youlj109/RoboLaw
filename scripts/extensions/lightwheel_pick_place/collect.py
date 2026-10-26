@@ -287,7 +287,10 @@ with SimulationAppContext(args):
         tick=time.perf_counter()
         if writer:
             before_capture=int(e.sim.get_physics_step_count())
+            capture_timing_before=dict(writer.timings)
             writer.write(phase)
+            if time.perf_counter()-tick>2. and writer.frames%30==0:
+                print('SLOW_CAPTURE',phase,writer.frames,{k:round(v-capture_timing_before.get(k,0),3) for k,v in writer.timings.items() if k.endswith('_s')},flush=True)
             if overview_writer:
                 overview_writer.write(phase)
                 overview_alignment.append({'action_index':len(records),'phase':phase,
