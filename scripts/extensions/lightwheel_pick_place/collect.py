@@ -11,6 +11,8 @@ parser.add_argument('--task',default='kitchen_bench_lightwheel_place_lime_in_woo
 parser.add_argument('--pick-order',nargs='+',help='Execution order only for original parallel multi-pick task; all original picks remain required')
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
+parser.add_argument('--loaded-transfer-time-scale',type=float,default=1.)
+parser.add_argument('--pre-release-hold-steps',type=int,default=0)
 parser.add_argument('--align-second-grasp',action='store_true',help='Align second-banana grasp yaw with its measured object yaw')
 parser.add_argument('--placement-goals',type=Path,help='Passed fixed-scene planning report containing explicit body goals')
 parser.add_argument('--placement-reference',type=Path,help='Successful recorded pre-release object poses for each pick')
@@ -288,7 +290,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'loaded_transfer_time_scale':args.loaded_transfer_time_scale,'pre_release_hold_steps':args.pre_release_hold_steps,'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -465,6 +467,10 @@ with SimulationAppContext(args):
                 progress=np.linspace(0.,1.,count);progress=3*progress**2-2*progress**3
                 trajectory['positions']=np.column_stack([np.interp(progress,np.linspace(0.,1.,len(raw)),raw[:,j]) for j in range(7)])
                 trajectory['metadata']={**trajectory['metadata'],'execution_retiming':{'method':'twice-duration smoothstep','original_samples':len(raw),'samples':count,'same_geometric_joint_path':True}}
+            if world.attachment is not None and phase in ('transfer','lower') and args.loaded_transfer_time_scale>1:
+                raw=np.asarray(trajectory['positions']);count=int(np.ceil((len(raw)-1)*args.loaded_transfer_time_scale))+1
+                trajectory['positions']=np.column_stack([np.interp(np.linspace(0,1,count),np.linspace(0,1,len(raw)),raw[:,j]) for j in range(7)])
+                trajectory['metadata']={**trajectory['metadata'],'loaded_transfer_time_scale':args.loaded_transfer_time_scale,'same_geometric_joint_path':True}
             validation=planner.validate_path(trajectory['positions'],ignores(),grip,phase=phase)
             plans.append({'phase':phase,'target':target.tolist(),'metadata':trajectory['metadata'],'validation':validation,'executed':False})
             if not validation['valid']:raise RuntimeError(f'Path validation failed in {phase}: {validation}')
@@ -672,6 +678,7 @@ with SimulationAppContext(args):
             cart(lower_tcp, force_phase='cartesian_line')
         else:
             cart(lower_tcp, force_phase='transfer')
+        for _ in range(args.pre_release_hold_steps):step(q,grip)
         phase='release';world.attachment=None
         for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
             grip=float(target_grip);step(q,grip)
@@ -779,6 +786,7 @@ with SimulationAppContext(args):
                 cart(lower_tcp, force_phase='cartesian_line')
             else:
                 cart(lower_tcp, force_phase='transfer')
+            for _ in range(args.pre_release_hold_steps):step(q,grip)
             phase='release';world.attachment=None
             for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
                 grip=float(target_grip);step(q,grip)
