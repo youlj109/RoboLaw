@@ -11,6 +11,7 @@ parser.add_argument('--task',default='kitchen_bench_lightwheel_place_lime_in_woo
 parser.add_argument('--pick-order',nargs='+',help='Execution order only for original parallel multi-pick task; all original picks remain required')
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
+parser.add_argument('--post-lift-rise',type=float,default=0.)
 parser.add_argument('--release-retract-z',type=float,default=0.)
 parser.add_argument('--loaded-transfer-time-scale',type=float,default=1.)
 parser.add_argument('--pre-release-hold-steps',type=int,default=0)
@@ -217,7 +218,7 @@ with SimulationAppContext(args):
         from paired_planning import grip_joints
         sweep=[world.clearance(qq,(PICK,),mode='execution',gripper_q=grip_joints(g),object_pose=state['lime'][:7]) for qq,g in zip(positions,opening)]
         if not all(c['valid'] for c in sweep):raise RuntimeError('Release/retract sweep rejected: '+str(min(sweep,key=lambda c:c['slack_m'])))
-        plans.append({'phase':'release','target':target.tolist(),'metadata':path.get('metadata',{}),'release_retract_z_m':args.release_retract_z,'opening_sweep_minimum':min(sweep,key=lambda c:c['slack_m']),'executed':True})
+        plans.append({'phase':'release','target':target.tolist(),'metadata':path.get('metadata',{}),'post_lift_rise_m':args.post_lift_rise,'release_retract_z_m':args.release_retract_z,'opening_sweep_minimum':min(sweep,key=lambda c:c['slack_m']),'executed':True})
         for qq,g in zip(positions,opening):step(qq,float(g))
         q=positions[-1].copy();grip=0.
 
@@ -644,6 +645,8 @@ with SimulationAppContext(args):
                     raise
         lifted=snapshot();result['lift_m']=float(lifted['lime'][2]-p[2]);result['lift_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'lift',last_actions=5)
         if result['lift_m']<.08 or not result['lift_contacts']['both_fingers_on_body']:raise RuntimeError('Lime failed physical lift/contact check')
+        if args.post_lift_rise>0:
+            phase='lift';cart(lifted['tcp']+np.array([0.,0.,args.post_lift_rise]),force_phase='lift');lifted=snapshot()
         dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
         # Release above destination then let gravity settle the fruit.
         desired_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
