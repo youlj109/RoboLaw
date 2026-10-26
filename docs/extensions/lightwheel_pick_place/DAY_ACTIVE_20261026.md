@@ -1,0 +1,36 @@
+# Active daytime continuation, 2026-10-26
+
+User is awake and explicitly asked to complete all remaining B03/B04/B05. No new deadline. Keep working; do not reactivate expired overnight automation. User can review JupyterLab images. No subagents requested.
+
+## Approved frozen layouts
+- Latest B03: configs/extensions/lightwheel_pick_place/variants_bananas_transportreview_20261026.json. Human [1.72,-3.28,0], rootyaw0, original human wrapped at childyaw255; property [2.3,-2.75,.922]; robot [2.3,-2.9,.922],yaw180. User approved revised human/property after images and kept approved robot unchanged.
+- Approval/hashes: /root/autodl-tmp/B03-review/transport_review_20261026/scene_approval.json, committed B03_TRANSPORT_SCENE_APPROVAL_20261026.json.
+- Previous daytime human [1.5,-3.3,0],yaw270 blocked bowl placement; property [2.3,-2.4,.922] blocked grasp endpoints. Failed trial data and old approvals remain. Latest replacements are true mid-transport blockers with baseline grasp/placement endpoints checked, not obstacles moved aside after an accepted collection.
+- B04 user approved all three existing images B04-review/review_now/{human,property,robot}.jpg. Hashes /root/autodl-tmp/B04-review/user_scene_approval_20261026.json. Do not move these hazards.
+
+## Critical actual-data fixes
+- Failed robot B03 episode robot_lgd_b03_fixedscene_20261026T012516Z: close-derived carried model differed from actual at transfer start by11.58mm and91.88degrees. Actual TCP rotated only0.104degrees duringlift; object truly rotated within grasp. Preserve drift evidence /root/autodl-tmp/B03-review/day_review_20261026/robot_attachment_drift.json.
+- Collector now updates planning attachment from measured root/arm FK at every carried segment, and computes lower TCP goal using actual current root/TCP offset. Collision model only, no PhysX weld or body setters.
+- Explicit --attachment-feedback measured_segment (default for B03/B04) versus close_once. Auditor compares modes, inferred from recorded update history for already running episodes. Thus recapture a B03 matched baseline; do not pair measured-mode variants to old close-only baseline.
+- B05 runner explicitly close_once to retain already verified B05 baseline/human/property policy; only timeout increases to7200seconds. Actual120Hz physics/collision evidence still required.
+- SIGTERM/SIGINT now preserves partial data through collector finally and forces successfalse. Demonstrated on early B05 robot010442:73frames, signal15, trajectory/result saved. Never count interrupted data.
+- Coarse STEP_WALL_PROFILE records camera,envstep,snapshot/contact costs without changing controls.
+- Exact known failed B03 banana_2 candidate [tilt0,yaw0,pinch.002,waistY.03] is excluded after robot014542 physically failed secondlift. Other candidates/order unchanged. Source proof B03_SECOND_GRASP_FAILURE_20261026.json.
+- Policy compatibility helper permits ONLY stronger physical exclusions if all other search inputs identical and every actual baseline/augmented selected grasp still eligible. Seven focused tests plus existing15 pass (22total). No changed candidates, removed exclusions or newly excluded baseline grasps can pass.
+
+## Active pipeline IDs and logs
+- Current native B03 fresh measured baseline: base_lgd_b03_fixedscene_20261026T020335Z; log /root/autodl-tmp/lgd-b03-logs/base_fixedscene_20261026T020335Z.log.
+- Fresh series parent196642: /root/autodl-tmp/lgd-day-logs/b03_fresh_model_series.sh/log. Waited robot194977 (nowfailed), collects freshbase, then human/property in latest frozen config, CPU verifies and queues two paired panels. Its robot entry references old failed014542; do NOT use that as final robot result.
+- Corrected robot retry198277: /root/autodl-tmp/lgd-day-logs/b03_robot_safe_grasp_retry_runner.log. Queued behind currentbase with same approved robot pose and excludes demonstrated bad secondgrasp. Must independently verify this newest result against successful freshbaseline.
+- Saved B04 revised cuRobo probe queue198425: /root/autodl-tmp/lgd-day-logs/probe_b04_revised_curobo.sh/log, one GPU lock. Hypothetical endpoints only, no native success claim.
+- B04/B05 parent196672: /root/autodl-tmp/lgd-day-logs/b04_revised_then_b05_series.sh/log, waits196642 then B04 base/human/property/robot, verifies all, then B05robot with old verified close-once policy.
+- All GPU jobs share reports/skill_trials/gpu.lock. No simultaneous GPU jobs. Parent waiting is not proof of progress/success; inspect native result files.
+- Fresh-series paired plan indices3/9 are provisional: inspect actual fresh baseline plans and recenter counts before final acceptance; rerun correct transfer legs if indices changed.
+
+## B04 motion, pending actual validation
+Same approved hazards, source/destination and original predicates. TaskSpec now commands90mm lift with4mm +X (within original5mm column gate), then same plate root offset-30mm X, release+85mm Z. CPU full-geometry endpoints found a common safe goal neighborhood for all3 variants; initial planning clearances human34.52mm vs30mm,property62.64mm vs60mm. Native baseline/variants not yet collected under these changed controls. No friction,mass,asset or safety-threshold changes.
+Probe source: scripts/extensions/lightwheel_pick_place/probe_ladle_saved_motion.py. It derives hypothetical revised start from preserved actual data, checks cuRobo/self/full dense paths and explicitly does not claim a PhysX run.
+B05human/property remain accepted with old baseline/close-once model; robot still pending successful complete capture.
+
+## Ownership/authentication
+Branch lgd, old user changes fixed_layout_ladle.json and restore_assets.py plus prior untracked assets/scripts preserved. Do not indiscriminately stage them. GitHub device login was offered while user awake; user chose unable to log in now, continue collection. Local login process canceled; do not repeat authentication question during this work. Push remains blocked, commit and bundle at delivery.
