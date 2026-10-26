@@ -11,6 +11,7 @@ parser.add_argument('--task',default='kitchen_bench_lightwheel_place_lime_in_woo
 parser.add_argument('--pick-order',nargs='+',help='Execution order only for original parallel multi-pick task; all original picks remain required')
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
+parser.add_argument('--release-retract-z',type=float,default=0.)
 parser.add_argument('--loaded-transfer-time-scale',type=float,default=1.)
 parser.add_argument('--pre-release-hold-steps',type=int,default=0)
 parser.add_argument('--align-second-grasp',action='store_true',help='Align second-banana grasp yaw with its measured object yaw')
@@ -204,6 +205,22 @@ with SimulationAppContext(args):
         attachment=np.linalg.inv(kin.fk(state['q'][ids]))@transform(state['lime'][:3],state['lime'][3:7])
         return root,transform(root,ref['quaternion'])@np.linalg.inv(attachment)
 
+    def release_with_retract():
+        global phase,q,grip
+        phase='release';world.attachment=None
+        state=snapshot();start=state['q'][ids].copy();target=kin.fk(start).copy();target[2,3]+=args.release_retract_z
+        for name in RIGID:
+            if name!=PICK:world.set_obstacle_pose(name,state[name][:7])
+        world.allowed_phase='release';planner.query_start_q=start.copy()
+        path=planner.plan_cartesian_line(start,target,(PICK,),0.,phase='lift')
+        positions=np.asarray(path['positions']);opening=np.linspace(grip,0.,len(positions))
+        from paired_planning import grip_joints
+        sweep=[world.clearance(qq,(PICK,),mode='execution',gripper_q=grip_joints(g),object_pose=state['lime'][:7]) for qq,g in zip(positions,opening)]
+        if not all(c['valid'] for c in sweep):raise RuntimeError('Release/retract sweep rejected: '+str(min(sweep,key=lambda c:c['slack_m'])))
+        plans.append({'phase':'release','target':target.tolist(),'metadata':path.get('metadata',{}),'release_retract_z_m':args.release_retract_z,'opening_sweep_minimum':min(sweep,key=lambda c:c['slack_m']),'executed':True})
+        for qq,g in zip(positions,opening):step(qq,float(g))
+        q=positions[-1].copy();grip=0.
+
     def ignores():
         return (PICK,)+((DEST,) if phase in ('lower','release','retreat','settle_final') and not (args.free_release and phase=='lower') else ())
     def geometry(state):
@@ -290,7 +307,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'loaded_transfer_time_scale':args.loaded_transfer_time_scale,'pre_release_hold_steps':args.pre_release_hold_steps,'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'release_retract_z_m':args.release_retract_z,'loaded_transfer_time_scale':args.loaded_transfer_time_scale,'pre_release_hold_steps':args.pre_release_hold_steps,'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -679,10 +696,14 @@ with SimulationAppContext(args):
         else:
             cart(lower_tcp, force_phase='transfer')
         for _ in range(args.pre_release_hold_steps):step(q,grip)
-        phase='release';world.attachment=None
-        for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
-            grip=float(target_grip);step(q,grip)
-        grip=0.
+        if args.release_retract_z>0:release_with_retract()
+        else:
+            if args.release_retract_z>0:release_with_retract()
+            else:
+                phase='release';world.attachment=None
+                for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
+                    grip=float(target_grip);step(q,grip)
+                grip=0.
         for _ in range(35):step(q,grip)
         phase='retreat';before_retreat=len(records)
         try:cart(snapshot()['tcp']+[0,0,.14])
