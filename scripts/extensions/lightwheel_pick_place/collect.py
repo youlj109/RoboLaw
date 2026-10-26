@@ -241,7 +241,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m},'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end'},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -574,7 +574,7 @@ with SimulationAppContext(args):
         lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
         lower_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
         xfer_tcp=desired_root+offset
-        placement_state=snapshot();lower_tcp=lower_root+((placement_state['tcp']-placement_state['lime'][:3]) if args.attachment_feedback=='measured_segment' else offset)
+        lower_tcp=lower_root+offset
         result['place_lower']={'mode':args.place_lower_mode,'lower_z_m':lower_z,
             'transfer_tcp_m':xfer_tcp.tolist(),'lower_tcp_m':lower_tcp.tolist(),
             'drop_m':float(xfer_tcp[2]-lower_tcp[2])}
@@ -674,7 +674,7 @@ with SimulationAppContext(args):
                 phase='transfer';cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
             lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
             lower_root=dest[:3]+np.array([(-.06 if PICK==TASK_SPEC.pick_object else .06) if len(task_picks(TASK_SPEC))==2 else 0,0.0,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
-            xfer_tcp=desired_root+offset;placement_state=snapshot();lower_tcp=lower_root+((placement_state['tcp']-placement_state['lime'][:3]) if args.attachment_feedback=='measured_segment' else offset)
+            xfer_tcp=desired_root+offset;lower_tcp=lower_root+offset
             phase='lower'
             if args.place_lower_mode=='skip' or abs(xfer_tcp[2]-lower_tcp[2])<1e-4:
                 pass
