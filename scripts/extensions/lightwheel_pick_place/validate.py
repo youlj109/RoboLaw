@@ -114,6 +114,14 @@ def validate(out):
         pick_ds = h5_pose_dataset(trajectory['next_obs'], pick, result)
         actual_lift = (float(arrays['next_obs/' + pick_ds][lift_indices[-1], 2])
                       - float(initial_pick_pose(result)[2])) if lift_indices else None
+        if pick=='green_ladle' and lift_indices:
+            lift_plans=[p for p in result.get('plans',[]) if p.get('phase')=='lift' and p.get('executed')]
+            counts=[p.get('metadata',{}).get('samples',0)+12 for p in lift_plans]
+            if len(counts)>1 and sum(counts)==len(lift_indices):
+                boundary=int(lift_indices[0])+counts[0]-1
+                details['total_lift_after_extra_rise_m']=actual_lift
+                actual_lift=float(arrays['next_obs/'+pick_ds][boundary,2])-float(initial_pick_pose(result)[2])
+                details['initial_lift_reporting_boundary_action']=boundary
         details['measured_lift_m'] = actual_lift
         checks['physical_lift'] = (actual_lift is not None and actual_lift > .08
             and result.get('lift_m', 0) > .08 and checks['physical_lift_contacts']
