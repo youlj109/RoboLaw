@@ -85,7 +85,7 @@ parser.add_argument('--place-lower-steps',type=int,default=3,
     help='When place-lower-mode=steps: equal Z drops from transfer height to lower height')
 parser.add_argument('--place-clear-rise-z',type=float,default=0.0,
     help='After transfer, pure +Z rise before lower/release (metres); helps clear plate rim')
-parser.add_argument('--development-release-checkpoint',type=Path);parser.add_argument('--replay-release-prefix-checkpoint',type=Path);parser.add_argument('--staged-release',action='store_true');parser.add_argument('--release-landing-plan',type=Path);parser.add_argument('--release-prefix-transfer-stride',type=int,default=1);parser.add_argument('--landing-correction-time-scale',type=int,default=3)
+parser.add_argument('--development-release-checkpoint',type=Path);parser.add_argument('--replay-release-prefix-checkpoint',type=Path);parser.add_argument('--staged-release',action='store_true');parser.add_argument('--release-landing-plan',type=Path);parser.add_argument('--release-prefix-transfer-stride',type=int,default=1);parser.add_argument('--landing-correction-time-scale',type=int,default=3);parser.add_argument('--release-escape-plan',type=Path)
 args=parser.parse_args();args.enable_cameras=True
 if args.defer_added_hazard_audit and not args.defer_full_world_audit:raise ValueError('Deferred added hazards require complete deferred world audit')
 if not 0<=args.release_ramp_steps<=60:raise ValueError('Release ramp must be0..60 control steps')
@@ -624,7 +624,7 @@ with SimulationAppContext(args):
             result['restored_first_native_passed']=result['placement_checkpoints']['banana_1']['passed']
             if not result['restored_first_native_passed']:raise RuntimeError('Restored first banana no longer passes native destination predicate; checkpoint invalid for this run')
         def staged_release():
-            global phase,q,grip
+            global phase,q,grip,planner
             phase='release';world.attachment=None;world.source_detached=True
             from kitchen_safety.extensions.lightwheel_pick_place.controlled_release import enable_continuous_release
             result['release_action_control']=enable_continuous_release(e.action_manager.get_term('gripper_action'))
@@ -639,17 +639,31 @@ with SimulationAppContext(args):
             # Fixed low-wrist opening displaced the plate in real replay. Withdraw
             # slowly while opening so outer links clear the plate before they spread.
             start=q.copy();tcp=kin.fk(start);previous=start.copy();path=[]
-            for index in range(1,21):
-                target=tcp.copy();target[2,3]+=.002*index
-                candidate=kin.ik(target,previous,attempts=1)
-                if np.linalg.norm(kin.fk(candidate)[:3,3]-target[:3,3])>.001:raise RuntimeError('Coordinated release IK residual')
-                for fraction in np.linspace(0,1,7)[1:]:path.append(previous+(candidate-previous)*fraction)
-                previous=candidate
+            if args.release_escape_plan:
+                proposal=json.loads(args.release_escape_plan.read_text())
+                if not proposal['all_passed']:raise RuntimeError('Saved release escape proposal failed')
+                target=tcp.copy();target[:3,3]+=np.asarray(proposal['selected']['delta'])
+                goal=kin.ik(target,np.asarray(proposal['positions'][-1]),attempts=1)
+                if np.linalg.norm(kin.fk(goal)[:3,3]-target[:3,3])>.001:raise RuntimeError('Release escape IK residual')
+                planner=LimePlanner(world,kin,dt=e.step_dt,seed=seed,max_joint_speed=.4);planner.single_candidate_round=True;planner.certify_execution_margin=True;planner.query_start_q=start.copy()
+                trajectory=planner.plan_joint_goal(start,goal,(PICK,DEST),grip,phase='transfer');raw=np.asarray(trajectory['positions']);previous=start.copy()
+                for command in raw:
+                    count=max(1,int(np.ceil(np.linalg.norm(kin.fk(command)[:3,3]-kin.fk(previous)[:3,3])/.0005)),int(np.ceil(np.max(np.abs(command-previous))/(.4*e.step_dt))))
+                    for fraction in np.linspace(0,1,count+1)[1:]:path.append(previous+(command-previous)*fraction)
+                    previous=command
+                result['release_escape_proposal']={'path':str(args.release_escape_plan),'delta_world_m':proposal['selected']['delta'],'control':'Measured current state, fresh same-target IK and whole-path checks, maximum0.5mm TCP increment per action'}
+            else:
+                for index in range(1,21):
+                    target=tcp.copy();target[2,3]+=.002*index
+                    candidate=kin.ik(target,previous,attempts=1)
+                    if np.linalg.norm(kin.fk(candidate)[:3,3]-target[:3,3])>.001:raise RuntimeError('Coordinated release IK residual')
+                    for fraction in np.linspace(0,1,7)[1:]:path.append(previous+(candidate-previous)*fraction)
+                    previous=candidate
             checked=planner.validate_path(path,(PICK,DEST),grip,phase='lift')
             if not checked['valid']:raise RuntimeError('Closed-finger withdrawal path rejected: '+str(checked))
             from paired_planning import grip_joints
             opening=np.linspace(grip,.45,len(path))
-            st=snapshot();sweep=[world.clearance(qq,(PICK,DEST),mode='execution',gripper_q=grip_joints(g),object_pose=st['lime'][:7]) for qq,g in zip(path,opening)]
+            st=snapshot();sweep=[world.clearance(qq,(PICK,DEST),mode='execution',gripper_q={n:float(release_state['q'][robot.joint_names.index(n)])*float(g)/max(float(opening[0]),1e-6) for n in finger_names},object_pose=st['lime'][:7]) for qq,g in zip(path,opening)]
             if not all(c['valid'] for c in sweep):raise RuntimeError('Coordinated opening sweep rejected: '+str(min(sweep,key=lambda c:c['slack_m'])))
             trace=[];released=False
             for qq,g in zip(path,opening):
@@ -657,7 +671,7 @@ with SimulationAppContext(args):
                 contact=contacts.sample(phase,len(records)-1,snapshot()['lime'][:7]);loads=np.asarray([sum(v['normal_forces_n']) for v in contact['fingers'].values()])
                 trace.append({'grip':grip,'loads_n':loads.tolist(),'wrist_rise_m':float(kin.fk(q)[2,3]-tcp[2,3])})
                 if np.all(loads<=.01):released=True
-            result['staged_release']={'mode':'coordinated40mm_withdrawal_at5mm_per_s_and_gradual_opening','finger_load_trace':trace,'unloaded':released,'support_before_open_n':f.tolist(),'geometry_sweep_passed':True}
+            result['staged_release']={'mode':('plate_plane_escape_and_gradual_opening' if args.release_escape_plan else 'coordinated40mm_withdrawal_at5mm_per_s_and_gradual_opening'),'finger_load_trace':trace,'unloaded':released,'support_before_open_n':f.tolist(),'geometry_sweep_passed':True}
             if not released:raise RuntimeError('Coordinated opening did not unload both fingers')
             for g in np.linspace(grip,0.,31)[1:]:grip=float(g);step(q,grip)
             phase='settle_final'
