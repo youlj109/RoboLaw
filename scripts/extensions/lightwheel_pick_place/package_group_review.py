@@ -4,12 +4,18 @@ from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('--output',required=True,type=Path);a=p.parse_args()
 if a.output.exists():raise FileExistsError(a.output)
 subprocess.run(['/root/autodl-tmp/conda_envs/robolaw_data/bin/python','scripts/extensions/lightwheel_pick_place/build_delivery_inventory.py'],check=True)
-inventory=Path('/root/autodl-tmp/B-group-review/current_delivery_inventory.json');data=json.loads(inventory.read_text());sources={};missing=[]
-def add(path,name):
+inventory=Path('/root/autodl-tmp/B-group-review/current_delivery_inventory.json');data=json.loads(inventory.read_text());sources={};missing=[];optional_missing=[]
+def add(path,name,required=True):
  path=Path(path)
  if path.is_file():sources[name]=path
- else:missing.append(str(path))
+ else:(missing if required else optional_missing).append(str(path))
 add(inventory,'current_delivery_inventory.json')
+summary=Path('docs/extensions/lightwheel_pick_place/B01_B05_DELIVERY_REVIEW_20261028.md')
+if summary.exists():add(summary,'DELIVERY_REVIEW.md')
+for failed in ('base_lgd_b04_matched_human_20261027T162825Z','base_lgd_b04_matched_historical_20261027T165151Z'):
+ ep=Path('datasets/skill_trials/lightwheel_pick_place')/failed
+ for fn in ('result.json','trajectory.h5','external_camera_2.mp4'):
+  if (ep/fn).exists():add(ep/fn,'B04/unpassed_baseline_attempts/'+failed+'/'+fn)
 for task,meta in data['tasks'].items():
  episodes=dict(meta.get('episodes',{}))
  if task=='B03':episodes['baseline']={'episode':'datasets/skill_trials/lightwheel_pick_place/base_lgd_b03_fixedscene_20261026T080313Z'}
@@ -18,7 +24,7 @@ for task,meta in data['tasks'].items():
   episode=Path(row['episode']);prefix=f'{task}/{variant}/{episode.name}'
   for camera in ('external_camera','external_camera_2','wrist_camera'):add(episode/(camera+'.mp4'),prefix+'/'+camera+'.mp4')
   for fn in ('result.json','validation.json','full_world_audit.json','self_collision_audit.json','source_support_audit.json','fixed_base_hazard_audit.json','contacts.json','trajectory.h5','initial_setup.json','cameras.json','collector_source_snapshot.py'):
-   add(episode/fn,prefix+'/'+fn)
+   add(episode/fn,prefix+'/'+fn,required=(fn!='collector_source_snapshot.py' and not (fn=='fixed_base_hazard_audit.json' and variant in ('base','baseline','historical_baseline'))))
   for pattern in ('avoidance*json','source_background*json'):
    for file in episode.glob(pattern):add(file,prefix+'/'+file.name)
  if 'manifest' in meta:add(meta['manifest'],task+'/existing_acceptance_manifest.json')
@@ -34,7 +40,7 @@ for name,path in list(sources.items()):
    if file.exists() and hashlib.sha256(file.read_bytes()).hexdigest()==cfg['sha256']:add(file,'configs/'+file.name)
 size=sum(f.stat().st_size for f in sources.values())
 if size>6*1024**3:raise RuntimeError('Review package exceeds6GiB budget; inspect selected inputs')
-manifest={'generated_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope':'Evidence package, not automatic acceptance. Native execution, collision safety, single-baseline necessity, matched paired planning and strict cross-episode comparisons remain separate. Unpassed/absent checks retained. Images HDF5 and scene assets remain on server; original state/action HDF5 and three original camera videos are included.','delivery_complete':data['delivery_complete'],'input_bytes':size,'missing_inputs':missing,'files':{name:{'server_path':str(file.resolve()),'bytes':file.stat().st_size} for name,file in sources.items()}}
+manifest={'generated_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope':'Evidence package, not automatic acceptance. Native execution, collision safety, single-baseline necessity, matched paired planning and strict cross-episode comparisons remain separate. Unpassed/absent checks retained. Images HDF5 and scene assets remain on server; original state/action HDF5 and three original camera videos are included.','delivery_complete':data['delivery_complete'],'input_bytes':size,'missing_inputs':missing,'optional_or_not_applicable_missing_inputs':optional_missing,'files':{name:{'server_path':str(file.resolve()),'bytes':file.stat().st_size} for name,file in sources.items()}}
 a.output.parent.mkdir(parents=True,exist_ok=True)
 with zipfile.ZipFile(a.output,'x',compression=zipfile.ZIP_DEFLATED,compresslevel=1) as z:
  for name,file in sorted(sources.items()):
