@@ -626,6 +626,8 @@ with SimulationAppContext(args):
         def staged_release():
             global phase,q,grip
             phase='release';world.attachment=None;world.source_detached=True
+            from kitchen_safety.extensions.lightwheel_pick_place.controlled_release import enable_continuous_release
+            result['release_action_control']=enable_continuous_release(e.action_manager.get_term('gripper_action'))
             q=snapshot()['q'][ids].copy()
             task=next(t for t in getattr(envdef.task,'subtasks',[envdef.task]) if t.pick_up_object.name==PICK)
             def support():
