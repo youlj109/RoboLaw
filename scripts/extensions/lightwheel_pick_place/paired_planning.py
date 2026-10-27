@@ -64,7 +64,7 @@ def grip_joints(finger: float) -> dict:
 def true_shape_path(world: CollisionWorld, hazard_name: str, positions, grip: float, required_m: float):
     """Dense FCL execution-margin check of a planned path against one named hazard."""
     rows = []
-    gq = grip_joints(grip)
+    gq = getattr(world,'planning_gripper_q',None) or grip_joints(grip)
     pick = getattr(world, 'pick_object', 'lime')
     ignore = (pick,) if world.attachment is not None else ()
     for i, q in enumerate(np.asarray(positions)):
@@ -87,8 +87,21 @@ def true_shape_path(world: CollisionWorld, hazard_name: str, positions, grip: fl
 
 
 def build_world(baseline: Path, kin: DroidKinematics, variant: str | None, variants: dict, *, task_spec):
+    variant=variant or 'base'
     stage = Usd.Stage.Open(str(baseline / 'scene.usda'))
-    if variant and variant != 'base':
+    reference_result=json.loads((baseline/'result.json').read_text())
+    source_variant=reference_result.get('variant','base')
+    if source_variant!='base':
+        if variant not in ('base',source_variant):raise ValueError('Augmented reference may only toggle its own hazard')
+        stage.SetEditTarget(stage.GetSessionLayer())
+        for hazard in HAZARD_KEY.values():
+            prim=stage.GetPrimAtPath('/World/envs/env_0/'+hazard)
+            if prim:prim.SetActive(variant==source_variant and hazard==HAZARD_KEY[source_variant])
+        # Keep exact captured hazard geometry/transform when on; only active state toggles.
+        if variant==source_variant:
+            expected=reference_result.get('variant_config_source',{}).get('sha256')
+            if expected and digest(ACTIVE_VARIANT_CONFIG)!=expected:raise ValueError('Augmented reference requires exact captured scene config')
+    if source_variant=='base' and variant and variant != 'base':
         spec = variants[variant]
         inject_hazard(
             stage,
@@ -171,6 +184,7 @@ def main():
     p.add_argument('--max-joint-speed', type=float, default=0.4)
     a = p.parse_args()
     from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
+    global ACTIVE_VARIANT_CONFIG
     result_probe = json.loads((a.baseline / 'result.json').read_text())
     task_id = a.task or result_probe.get('task')
     from kitchen_safety.extensions.lightwheel_pick_place.task_config import episode_spec
@@ -181,6 +195,7 @@ def main():
     if a.variant_config is None:
         a.variant_config = TASK_SPEC.default_variants
 
+    ACTIVE_VARIANT_CONFIG=a.variant_config
     out = Path(a.output)
     out.mkdir(parents=True, exist_ok=False)
     baseline = Path(a.baseline)
@@ -219,6 +234,7 @@ def main():
                 'source_detached': (json.loads((baseline / 'full_world_audit.json').read_text())['measurements'][i * 8].get('source_detached_before', False)),
                 'q': f['obs/q'][i, :7].copy(),
                 'gripper_joint_position': float(f['obs/q'][i, finger]),
+                'measured_gripper_q':{n:float(f['obs/q'][i,result['robot_joint_names'].index(n)]) for n in CollisionWorld.GRIPPER_JOINT_NAMES},
                 'background': {n: f['obs/' + n][i, :7].copy() for n in BACKGROUND},
                 PICK: f[f'obs/{PICK}'][i, :7].copy() if f'obs/{PICK}' in f else f['obs/lime'][i, :7].copy(),
             }
@@ -237,6 +253,7 @@ def main():
         'recorded_method': recorded['metadata']['method'] if recorded else None,
         'task': TASK_SPEC.task_id,
         'baseline_episode': str(baseline),
+        'reference_role':('Native-success augmented episode supplies measured start/goal/controller; hazard-off baseline is planned only, not a new physical baseline' if result.get('variant','base')!='base' else 'Native-success physically collected baseline'),
         'baseline_result_sha256': digest(baseline / 'result.json'),
         'baseline_trajectory_sha256': digest(baseline / 'trajectory.h5'),
         'variant_config': str(a.variant_config),
@@ -289,6 +306,7 @@ def main():
                     planner.allow_upper_route_policy=bool(search_policy or result.get('transfer_route_policy',{}).get('mode')=='upper')
                     q0 = st['q']
                     grip = st['gripper_joint_position'] if segment in ('transfer', 'lift') else 0.0
+                    if result.get('variant','base')!='base':world.planning_gripper_q=st['measured_gripper_q'];world.gripper_joint_position=grip
                     target = targets[segment]
                     segment_attachment=attachment
                     measured_attachment_policy=(result.get('planning_attachment_policy')=='measured_segment' or bool(result.get('planning_attachment_updates')))
