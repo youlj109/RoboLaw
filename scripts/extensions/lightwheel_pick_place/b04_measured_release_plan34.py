@@ -19,4 +19,19 @@ for i in range(1,21):
  for f in np.linspace(0,1,7)[1:]:path.append(previous+(candidate-previous)*f)
  previous=candidate
 planner=LimePlanner(w,kin,dt=r['dt'],seed=43,max_joint_speed=.4);planner.certify_execution_margin=True;planner.query_start_q=start.copy();check=planner.validate_path(path,('green_ladle','plate'),1.,phase='lift')
-report={'all_passed':bool(check['valid']),'scope':'Actual post-landing six independent/passive joint positions, no ideal mimic assumption; no PhysX','source_episode':str(p),'measured_gripper_q':w.planning_gripper_q,'validation':check,'positions':np.asarray(path).tolist()};Path('/root/autodl-tmp/B04-review/measured_release_plan34.json').write_text(json.dumps(report,indent=2));print('MEASURED_SIX_JOINT_RELEASE_PATH',report['all_passed'],flush=True)
+diagnostic={}
+if not check['valid']:
+ bad_index=check.get('curobo_failures',[{'sample':0}])[0]['sample'];bad_q=np.asarray(path[bad_index]);checker=planner.motion_gen.world_coll_checker;names=list(planner.obstacle_names)
+ def valid(group):
+  selected=set(group)
+  for n in names:checker.enable_obstacle(n,enable=n in selected)
+  return bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(bad_q[None])).all())
+ diagnostic={'sample':bad_index,'empty_world_valid':valid([]),'blockers':[]}
+ def isolate(group):
+  if not group or valid(group):return
+  if len(group)==1:diagnostic['blockers'].extend(group);return
+  m=len(group)//2;isolate(group[:m]);isolate(group[m:])
+ if diagnostic['empty_world_valid']:isolate(names)
+ diagnostic['actual_fcl']=w.clearance(bad_q,('green_ladle','plate'),mode='execution',gripper_q=w.planning_gripper_q)
+ print('WITHDRAWAL_REJECTION',diagnostic,flush=True)
+report={'all_passed':bool(check['valid']),'scope':'Actual post-landing six independent/passive joint positions, no ideal mimic assumption; no PhysX','source_episode':str(p),'measured_gripper_q':w.planning_gripper_q,'validation':check,'rejection_diagnostic':diagnostic,'positions':np.asarray(path).tolist()};Path('/root/autodl-tmp/B04-review/measured_release_plan34.json').write_text(json.dumps(report,indent=2));print('MEASURED_SIX_JOINT_RELEASE_PATH',report['all_passed'],flush=True)
