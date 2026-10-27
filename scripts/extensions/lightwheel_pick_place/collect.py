@@ -85,7 +85,7 @@ parser.add_argument('--place-lower-steps',type=int,default=3,
     help='When place-lower-mode=steps: equal Z drops from transfer height to lower height')
 parser.add_argument('--place-clear-rise-z',type=float,default=0.0,
     help='After transfer, pure +Z rise before lower/release (metres); helps clear plate rim')
-parser.add_argument('--development-release-checkpoint',type=Path);parser.add_argument('--replay-release-prefix-checkpoint',type=Path);parser.add_argument('--staged-release',action='store_true');parser.add_argument('--release-landing-plan',type=Path)
+parser.add_argument('--development-release-checkpoint',type=Path);parser.add_argument('--replay-release-prefix-checkpoint',type=Path);parser.add_argument('--staged-release',action='store_true');parser.add_argument('--release-landing-plan',type=Path);parser.add_argument('--release-prefix-transfer-stride',type=int,default=1);parser.add_argument('--landing-correction-time-scale',type=int,default=3)
 args=parser.parse_args();args.enable_cameras=True
 if args.defer_added_hazard_audit and not args.defer_full_world_audit:raise ValueError('Deferred added hazards require complete deferred world audit')
 if not 0<=args.release_ramp_steps<=60:raise ValueError('Release ramp must be0..60 control steps')
@@ -670,7 +670,15 @@ with SimulationAppContext(args):
                 if reference['variant']!=args.variant or reference['robot_joint_names']!=list(robot.joint_names) or abs(reference['dt']-e.step_dt)>1e-12:raise RuntimeError('Release prefix schema mismatch')
                 if hashlib.sha256(Path(args.variant_config).read_bytes()).hexdigest()!=reference['variant_config_source']['sha256']:raise RuntimeError('Release prefix scene mismatch')
                 data=np.load(prefix_path,allow_pickle=False)
-                for saved_phase,action in zip(data['phases'],data['actions']):
+                stride=args.release_prefix_transfer_stride
+                if stride not in (1,2):raise RuntimeError('Only verified bounded prefix retiming is supported')
+                keep=[i for i,p in enumerate(data['phases']) if stride==1 or p not in ('transfer','lower') or i%stride==0 or i==len(data['phases'])-1 or (i+1<len(data['phases']) and data['phases'][i+1]!=p) or (i and data['phases'][i-1]!=p)]
+                commands=np.asarray(data['actions'])[keep]
+                max_speed=float(np.max(np.abs(np.diff(commands[:,:7],axis=0)))/e.step_dt)
+                if stride>1 and max_speed>.4+1e-5:raise RuntimeError('Retimed prefix exceeds original joint-speed bound')
+                result['prefix_retiming']={'stride':stride,'original_actions':len(data['actions']),'executed_actions':len(keep),'max_command_joint_speed_rad_s':max_speed,'policy':'Remove alternate redundant slow transfer samples only; grasp/lift controls and path ordering retained; fresh real execution checks required'}
+                for saved_index in keep:
+                    saved_phase=data['phases'][saved_index];action=data['actions'][saved_index]
                     phase=str(saved_phase);q=np.asarray(action[:7]);grip=float(action[7])
                     if phase in ('lift','transfer','lower') and world.attachment is None:
                         st=snapshot();world.attachment=np.linalg.inv(kin.fk(st['q'][ids]))@transform(st['lime'][:3],st['lime'][3:7])
@@ -695,7 +703,7 @@ with SimulationAppContext(args):
                 planner=LimePlanner(world,kin,dt=e.step_dt,seed=seed,max_joint_speed=.4);planner.single_candidate_round=True;planner.certify_execution_margin=True;planner.query_start_q=q.copy()
                 path=planner.plan_joint_goal(q,goal,(PICK,DEST),grip,phase='lower');checked=planner.validate_path(path['positions'],(PICK,DEST),grip,phase='lower')
                 if not checked['valid']:raise RuntimeError('Measured landing path invalid: '+str(checked))
-                raw=np.asarray(path['positions']);slow=np.column_stack([np.interp(np.linspace(0,1,3*(len(raw)-1)+1),np.linspace(0,1,len(raw)),raw[:,j]) for j in range(7)])
+                raw=np.asarray(path['positions']);slow=np.column_stack([np.interp(np.linspace(0,1,args.landing_correction_time_scale*(len(raw)-1)+1),np.linspace(0,1,len(raw)),raw[:,j]) for j in range(7)])
                 plans.append({'phase':'lower','metadata':path.get('metadata',{}),'validation':checked,'executed':True,'measured_landing_correction':True})
                 for command in slow:q=command.copy();step(q,grip)
                 measured=snapshot();orientation_error=Rotation.from_matrix(transform(measured['lime'][:3],measured['lime'][3:7])[:3,:3].T@body_goal[:3,:3]).magnitude()
