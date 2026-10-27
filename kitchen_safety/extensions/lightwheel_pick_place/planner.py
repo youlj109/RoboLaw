@@ -14,18 +14,6 @@ class LimePlanner(CuroboPlanner):
             self.collision_geometry['property_margin_mesh']=view.report
 
 
-    def _prepare_path_query(self,ignore_names,grip_binary,phase):
-        padding=super()._prepare_path_query(ignore_names,grip_binary,phase)
-        if phase in ('lower','release','retreat','settle_final'):
-            contents=getattr(self.world,'placed_task_contents',())
-            for name in self.obstacle_names:
-                if any(self.world._matches(name,content) for content in contents):
-                    # cuRobo cannot distinguish carried-target/target contact here.
-                    # Independent FCL still checks every robot part against contents;
-                    # only the carried target's intended placement contact is exempt.
-                    self.motion_gen.world_coll_checker.enable_obstacle(name,enable=False)
-        return padding
-
     def _pose_goal_via_joint_planner(self,q,target,ignore,grip,phase,pose_error):
         """Same TCP goal, alternate redundant IK; ordinary cuRobo/FCL gates retained."""
         from scipy.spatial.transform import Rotation
@@ -48,7 +36,14 @@ class LimePlanner(CuroboPlanner):
     def _prepare_path_query(self, ignore_names, grip_binary, phase):
         self.active_ignore_names=tuple(ignore_names)
         self.active_phase=phase
-        return super()._prepare_path_query(ignore_names,grip_binary,phase)
+        padding=super()._prepare_path_query(ignore_names,grip_binary,phase)
+        contents=getattr(self.world,'placed_task_contents',()) if phase in ('lower','release','retreat','settle_final') else ()
+        self.last_prepared_contact_mask=[]
+        for name in self.obstacle_names:
+            disabled=self._ignored(name,ignore_names) or any(self.world._matches(name,n) for n in contents)
+            self.motion_gen.world_coll_checker.enable_obstacle(name,enable=not disabled)
+            if disabled:self.last_prepared_contact_mask.append(name)
+        return padding
 
     def plan_pose(self,q_arm7,target,ignore_names=(),grip_binary=0,phase=None):
         self.query_start_q=np.asarray(q_arm7).copy()
