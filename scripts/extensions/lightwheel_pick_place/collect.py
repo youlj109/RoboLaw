@@ -16,6 +16,7 @@ parser.add_argument('--release-retract-z',type=float,default=0.)
 parser.add_argument('--loaded-transfer-time-scale',type=float,default=1.)
 parser.add_argument('--pre-release-hold-steps',type=int,default=0)
 parser.add_argument('--align-second-grasp',action='store_true',help='Align second-banana grasp yaw with its measured object yaw')
+parser.add_argument('--placement-feedback-lower',action='store_true',help='Hover45mm above release, refresh measured attachment, then lower to same goal')
 parser.add_argument('--placement-joint-goals',type=Path,help='Passed planning report with native-successful recorded joint endpoints')
 parser.add_argument('--placement-goals',type=Path,help='Passed fixed-scene planning report containing explicit body goals')
 parser.add_argument('--placement-reference',type=Path,help='Successful recorded pre-release object poses for each pick')
@@ -201,7 +202,7 @@ with SimulationAppContext(args):
     def reference_placement_goal(state,destination,above):
         ref=placement_refs[PICK]
         if args.placement_goals:
-            root=destination[:3]+np.asarray(ref['offset'])
+            root=destination[:3]+np.asarray(ref['offset'])+np.array([0.,0.,above if args.placement_feedback_lower else 0.])
             attachment=np.linalg.inv(kin.fk(state['q'][ids]))@transform(state['lime'][:3],state['lime'][3:7])
             return root,transform(root,ref['quaternion'])@np.linalg.inv(attachment)
         second=args.round10_second_placement and PICK=='banana_2'
@@ -317,7 +318,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'release_retract_z_m':args.release_retract_z,'loaded_transfer_time_scale':args.loaded_transfer_time_scale,'pre_release_hold_steps':args.pre_release_hold_steps,'placement_joint_goals_sha256':hashlib.sha256(args.placement_joint_goals.read_bytes()).hexdigest() if args.placement_joint_goals else None,'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'release_retract_z_m':args.release_retract_z,'loaded_transfer_time_scale':args.loaded_transfer_time_scale,'pre_release_hold_steps':args.pre_release_hold_steps,'placement_feedback_lower':bool(args.placement_feedback_lower),'placement_joint_goals_sha256':hashlib.sha256(args.placement_joint_goals.read_bytes()).hexdigest() if args.placement_joint_goals else None,'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -695,7 +696,9 @@ with SimulationAppContext(args):
             'transfer_tcp_m':xfer_tcp.tolist(),'lower_tcp_m':lower_tcp.tolist(),
             'drop_m':float(xfer_tcp[2]-lower_tcp[2])}
         phase='lower'
-        if args.placement_goals:
+        if args.placement_goals and args.placement_feedback_lower:
+            cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
+        elif args.placement_goals:
             result['place_lower']['skipped']=True
             result['place_lower']['reason']='Direct release at planned body goal'
         elif placement_refs:
@@ -715,12 +718,10 @@ with SimulationAppContext(args):
         for _ in range(args.pre_release_hold_steps):step(q,grip)
         if args.release_retract_z>0:release_with_retract()
         else:
-            if args.release_retract_z>0:release_with_retract()
-            else:
-                phase='release';world.attachment=None
-                for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
-                    grip=float(target_grip);step(q,grip)
-                grip=0.
+            phase='release';world.attachment=None
+            for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
+                grip=float(target_grip);step(q,grip)
+            grip=0.
         for _ in range(35):step(q,grip)
         phase='retreat';before_retreat=len(records)
         try:cart(snapshot()['tcp']+[0,0,.14])
@@ -799,7 +800,7 @@ with SimulationAppContext(args):
             dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
             desired_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
             if placement_refs:
-                desired_root,target_tcp=reference_placement_goal(lifted,dest,0. if args.round10_second_placement else .045)
+                desired_root,target_tcp=reference_placement_goal(lifted,dest,.045 if args.placement_feedback_lower else (0. if args.round10_second_placement else .045))
                 phase='transfer';cart(target_tcp[:3,3],rotation=target_tcp[:3,:3])
                 transferred=snapshot();offset=transferred['tcp']-transferred['lime'][:3]
             else:
@@ -814,7 +815,9 @@ with SimulationAppContext(args):
                 lower_tcp=reference_lower_tcp[:3,3]
                 result.setdefault('placement_body_goals',{})[PICK]={'root':lower_root.tolist(),'quaternion':placement_refs[PICK]['quaternion'],'tcp_target':reference_lower_tcp.tolist()}
             phase='lower'
-            if placement_refs and args.round10_second_placement:
+            if placement_refs and args.placement_feedback_lower:
+                cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
+            elif placement_refs and args.round10_second_placement:
                 result['placement_body_goals'][PICK]={'root':desired_root.tolist(),'tcp_target':target_tcp.tolist(),'orientation_policy':'explicit planned body quaternion' if args.placement_goals else 'keep measured wrist after lift','direct_release':True,'actual_before_open':snapshot()['lime'].tolist()}
             elif placement_refs:
                 cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
@@ -825,10 +828,12 @@ with SimulationAppContext(args):
             else:
                 cart(lower_tcp, force_phase='transfer')
             for _ in range(args.pre_release_hold_steps):step(q,grip)
-            phase='release';world.attachment=None
-            for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
-                grip=float(target_grip);step(q,grip)
-            grip=0.
+            if args.release_retract_z>0:release_with_retract()
+            else:
+                phase='release';world.attachment=None
+                for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
+                    grip=float(target_grip);step(q,grip)
+                grip=0.
             for _ in range(35):step(q,grip)
             phase='retreat';before_retreat=len(records)
             try:cart(snapshot()['tcp']+[0,0,.14])
