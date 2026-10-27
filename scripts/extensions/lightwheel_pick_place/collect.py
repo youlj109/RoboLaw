@@ -229,7 +229,7 @@ with SimulationAppContext(args):
         ref=placement_refs[PICK]
         if args.placement_goals:
             root=destination[:3]+np.asarray(ref['offset'])+np.array([0.,0.,above if args.placement_feedback_lower else 0.])
-            if args.gentle_supported_placement:
+            if args.gentle_supported_placement and PICK in ('banana_1','banana_2'):
                 center_offset=Rotation.from_quat(ref['quaternion']).apply(world.object_center)
                 offset_xy=([.045,-.035] if args.variant=='property' and PICK=='banana_2' else [-.035 if PICK=='banana_1' else .035,0.])
                 root[:2]=destination[:2]+np.array(offset_xy)-center_offset[:2]

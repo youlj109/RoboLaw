@@ -220,7 +220,7 @@ class LimePlanner(CuroboPlanner):
         for fraction in np.linspace(0.,1.,count)[1:]:
             tcp=initial.copy()
             tcp[:3,3]=initial[:3,3]+fraction*delta
-            q=self.kin.ik(tcp,path[-1],attempts=12)
+            q=self.kin.ik(tcp,path[-1],attempts=1)
             if np.max(np.abs(q-path[-1]))>.15:
                 raise RuntimeError(f'Local Cartesian IK switched joint branches during {phase} line')
             path.append(q)
