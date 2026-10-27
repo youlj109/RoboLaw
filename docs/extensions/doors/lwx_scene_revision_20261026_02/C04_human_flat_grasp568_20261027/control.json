@@ -1,0 +1,82 @@
+{
+  "task": "kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian",
+  "variant": "human",
+  "variant_config": "configs/extensions/doors/c04_human_lower_proxy347_lwx_20261026.json",
+  "robot_base": [
+    4.48304557800293,
+    -1.5948182344436646,
+    0.809999942779541
+  ],
+  "robot_yaw_deg": 0.0,
+  "initial_q": [
+    0.0,
+    -1.600000023841858,
+    0.0,
+    -2.799999952316284,
+    0.0,
+    1.2000000476837158,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "handle_initial": [
+    5.143185041897289,
+    -1.6055982080022282,
+    1.4317813398627037
+  ],
+  "selected_handle_initial": [
+    5.143185041897289,
+    -1.6055982080022282,
+    1.4317813398627037
+  ],
+  "selected_handle_offset_z_m": 0.34970579216838926,
+  "controller_parameters": {
+    "seed": 42,
+    "handle_offset_y": 0.0,
+    "handle_offset_z": 0.34970579216838926,
+    "max_joint_speed": 0.5,
+    "grasp_roll_deg": 25.0,
+    "pregrasp_roll_deg": 90.0,
+    "pregrasp_pitch_deg": 0.0,
+    "approach_orientation_policy": "straight_slerp_v1",
+    "approach_alignment_end_fraction": 0.5,
+    "pregrasp_distance_m": 0.05,
+    "pregrasp_goal_q": [
+      0.654223080384439,
+      -0.36736661333469545,
+      -0.49658313605894466,
+      -2.3981268470861523,
+      0.34959982031320797,
+      3.7024986433594322,
+      -2.0451322663287694
+    ],
+    "pregrasp_settle_steps": 30,
+    "pregrasp_shortcut_policy": "bounded_chords_v1",
+    "approach_gripper_position": 0.2801126998417358,
+    "approach_preshape_steps": 24,
+    "approach_preshape_hold_steps": 20,
+    "approach_gripper_policy": "fixed_pregrasp_normalized_ramp_v1",
+    "gripper_command_policy": "continuous_position_v1",
+    "pull_lead_rad": 0.03,
+    "pull_steps": 600,
+    "ik_limit_margin_rad": 0.05,
+    "handle_normal_offset_m": -0.014,
+    "pregrasp_validation": {
+      "version": "dense_pregrasp_v4",
+      "resolution_rad": 0.005,
+      "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+    },
+    "planner_human_proxy_extra_m": 0.01
+  },
+  "action_semantics": {
+    "version": "arm_rad_gripper_normalized_position_v1",
+    "arm": "First7 absolute arm joint target angles in rad, unchanged",
+    "gripper": "Last scalar g in[0,1] commands finger_joint g*pi/4 rad through original position drive; mimic and geometry unchanged. Source binary0/1 endpoints identical.",
+    "source_binary_actions_before_release": false
+  },
+  "source_yaml_sha256": "f9b1d691f9976b45ef8b67b1f338788c8c1bc6a71b5cb9e54b322f4b6cdb7f8c"
+}

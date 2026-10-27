@@ -25,16 +25,25 @@ def update_door(angle):
   if not any(n.startswith(b+'/') for b in g['moving_bodies']):continue
   _,_,rlo,rhi,mesh=world._object_reference[i];T=planner.T_B_W@delta@kin.base if mesh is not None else planner.T_B_W@delta@np.vstack([np.c_[np.eye(3),(rlo+rhi)/2],[0,0,0,1]])
   planner.motion_gen.world_coll_checker.update_obstacle_pose(n,Pose.from_list(planner._pose_list(T),planner.args))
-def validate(command,gripper,phase):
- planner._prepare_path_query(handles,gripper,phase);cv=bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(command[None])).all());fv=bool(world.valid(command,mode='execution',gripper_q=closed if gripper else fingers));return cv and fv,{'curobo':cv,'source_fcl':fv,'detail':world.last_clearance}
+def validate(command,gripper,phase,actual_fingers=None):
+ if actual_fingers is not None:world.gripper_joint_position=float(actual_fingers['finger_joint'])
+ planner._prepare_path_query(handles,gripper,phase);cv=bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(command[None])).all());fv=bool(world.valid(command,mode='execution',gripper_q=actual_fingers if actual_fingers is not None else (closed if gripper else fingers)));return cv and fv,{'curobo':cv,'source_fcl':fv,'detail':world.last_clearance}
 try:
  target=np.eye(4);target[:3,:3]=pregrasp_rotation(approach,policy);target[:3,3]=handle-approach*policy.get('pregrasp_distance_m',.13);world.allow_handle_contact=False;world.gripper_joint_position=0.;plan=planner.plan_pose(q,target,phase='door_pregrasp');v=check_pregrasp(planner,plan);r['pregrasp_validation']=v
  if a.dump_pregrasp:r['pregrasp_positions']=plan['positions'].tolist();r['pregrasp_tcp_world_m']=[kin.fk(x)[:3,3].tolist() for x in plan['positions']]
  if not v['accepted']:raise RuntimeError('Dense pregrasp rejected')
  r['pregrasp']=True;q=plan['positions'][-1];world.allow_handle_contact=True
+ approach_gripper=policy.get('approach_gripper_position',0.);approach_fingers=None
+ if approach_gripper:
+  assert policy.get('gripper_command_policy')=='continuous_position_v1'
+  signs=np.array([1,1,-1,1,-1,-1]);world.allow_handle_contact=False
+  for fraction in np.linspace(0.,1.,policy.get('approach_preshape_steps',24)+1):
+   current=dict(zip(world.GRIPPER_JOINT_NAMES,signs*approach_gripper*(math.pi/4)*fraction));ok,detail=validate(q,approach_gripper*fraction,'preshape_gripper',current)
+   if not ok:r['rejection']={'phase':'preshape_gripper','fraction':float(fraction),**detail};raise RuntimeError('Preshape rejected')
+  approach_fingers=dict(zip(world.GRIPPER_JOINT_NAMES,signs*approach_gripper*(math.pi/4)));world.allow_handle_contact=True;r['preshape']=True
  contact_policy=dict(policy,grasp_roll_deg=policy['grasp_alignment_start_roll_deg']) if policy.get('grasp_alignment_start_roll_deg') is not None else policy
  for alpha in np.linspace(0,1,50)[1:]:
-  target[:3,:3]=approach_rotation(approach,contact_policy,float(alpha));target[:3,3]=handle-approach*policy.get('pregrasp_distance_m',.13)*(1-alpha);command=kin.ik(target,q,attempts=1);ok,detail=validate(command,0.,'approach_handle')
+  target[:3,:3]=approach_rotation(approach,contact_policy,float(alpha));target[:3,3]=handle-approach*policy.get('pregrasp_distance_m',.13)*(1-alpha);command=kin.ik(target,q,attempts=1);ok,detail=validate(command,approach_gripper,'approach_handle',approach_fingers)
   if not ok:r['rejection']={'phase':'approach','alpha':float(alpha),**detail};raise RuntimeError('Approach rejected')
   q=command
  r['approach']=True;world.gripper_joint_position=closed['finger_joint']

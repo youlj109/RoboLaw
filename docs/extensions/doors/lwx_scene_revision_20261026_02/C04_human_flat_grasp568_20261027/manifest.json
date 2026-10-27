@@ -1,0 +1,125 @@
+{
+  "task_id": "kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian",
+  "label": "C04",
+  "base_config": "configs/extensions/doors/c04_human_lower_proxy347_lwx_20261026.json",
+  "baseline": "datasets/doors/lwx_scene_approved_20261026/C04_base_b563",
+  "observer": {
+    "position_world_m": [
+      3.2330455780029297,
+      -2.9448182344436646,
+      2.35
+    ],
+    "look_at_world_m": [
+      4.81511530995011,
+      -1.5948182344436646,
+      1.15
+    ],
+    "focal_length": 2.8
+  },
+  "second_observer": {
+    "position_world_m": [
+      3.7830455780029295,
+      -0.3948182344436646,
+      2.5
+    ],
+    "look_at_world_m": [
+      4.833045578002929,
+      -1.5948182344436646,
+      1.15
+    ],
+    "focal_length": 2.8
+  },
+  "old_handle_world_m": [
+    5.1471850418972895,
+    -1.6055982080022282,
+    1.4117813398627037
+  ],
+  "new_handle_world_m": [
+    5.14318504189729,
+    -1.6055982080022282,
+    1.4317813398627037
+  ],
+  "start_tcp_world_m": [
+    4.580779702762184,
+    -1.594818220757544,
+    1.1761021415760637
+  ],
+  "candidates": [
+    {
+      "id": "C04H_user_revision568",
+      "variant": "human",
+      "config": "configs/extensions/doors/c04_human_lower_proxy347_lwx_20261026.json"
+    }
+  ],
+  "user_visual_approval": "\u4f4d\u7f6e\u548c\u59ff\u6001\u53ef\u4ee5\uff0c\u5f00\u59cb\u89c4\u5212",
+  "planning_permitted": true,
+  "preview_initial_q": [
+    0.0,
+    -1.600000023841858,
+    0.0,
+    -2.799999952316284,
+    0.0,
+    1.2000000476837158,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "initial_pose_design_note": "Static folded start proposed to create a clear corridor without moving the source robot base. No trajectory or reachability computed.",
+  "start_reference": "Analytic source FK of proposed frozen initial joints. No IK/trajectory.",
+  "source_manifest": "reports/doors/lwx_scene_first_20261025/C04_manifest04.json",
+  "authorization": "User explicitly approved natural low-pose and root translation of proposal276 in current chat",
+  "planner_model_adaptation": "Extra10mm outer convex source person proxy for planner only; approved source geometry unchanged; full independent original source gates remain mandatory",
+  "controller_adaptation": {
+    "seed": 42,
+    "handle_offset_y": 0.0,
+    "handle_offset_z": 0.34970579216838926,
+    "max_joint_speed": 0.5,
+    "grasp_roll_deg": 25.0,
+    "pregrasp_roll_deg": 90.0,
+    "pregrasp_pitch_deg": 0.0,
+    "approach_orientation_policy": "straight_slerp_v1",
+    "approach_alignment_end_fraction": 0.5,
+    "pregrasp_distance_m": 0.05,
+    "pregrasp_goal_q": [
+      0.654223080384439,
+      -0.36736661333469545,
+      -0.49658313605894466,
+      -2.3981268470861523,
+      0.34959982031320797,
+      3.7024986433594322,
+      -2.0451322663287694
+    ],
+    "pregrasp_settle_steps": 30,
+    "pregrasp_shortcut_policy": "bounded_chords_v1",
+    "pull_lead_rad": 0.03,
+    "pull_steps": 600,
+    "ik_limit_margin_rad": 0.05,
+    "handle_normal_offset_m": -0.014,
+    "pregrasp_validation": {
+      "version": "dense_pregrasp_v4",
+      "resolution_rad": 0.005,
+      "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+    },
+    "planner_human_proxy_extra_m": 0.01,
+    "grasp_pitch_deg": 0.0,
+    "gripper_command_policy": "continuous_position_v1",
+    "approach_gripper_position": 0.2801126998417358,
+    "approach_preshape_steps": 24,
+    "approach_preshape_hold_steps": 20,
+    "approach_gripper_policy": "fixed_pregrasp_normalized_ramp_v1"
+  },
+  "grasp_adaptation": {
+    "scope": "User requested legal handle point / jaw orientation adaptation, requires newly matched baseline",
+    "proposal": {
+      "scope": "Same approved human and legal handle height. Counterclockwise20deg before contact,4mm shallower depth, pre-shape finger.22rad at pregrasp, source0/1 targets/drives unchanged.",
+      "approval": "2026-10-27 user authorizes whole-arm coordination and pre-rotation before approach. No obstacle changes.",
+      "release": "Retain original C04 binary-endpoint open and hold sequence; continuous mapping has identical0/1 targets. No added retreat.",
+      "new_control": "IK reserve.005->.05rad for coordinated upstream joints; actual552wrist reached hard lower bound under load. Independent original limits unchanged."
+    }
+  },
+  "revision_note": "2026-10-27 user requests C0420deg more horizontal jaw with whole-arm coordination/pre-rotation permitted; approved human and handle height unchanged. Small4mm contact-depth adaptation and pregrasp finger preshape explicit; control IK margin.05rad coordinates joints to avoid the measured552wrist hard stop."
+}
