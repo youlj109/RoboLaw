@@ -21,6 +21,7 @@ parser.add_argument('--replay-second-grasp-prefix',action='store_true',help='Reu
 parser.add_argument('--development-checkpoint',type=Path,help='Reset-only measured first-pick state; second-pick development, never acceptance')
 parser.add_argument('--replay-prefix-checkpoint',type=Path,help='Replay verified real first-pick actions from original reset, then recheck native checkpoint')
 parser.add_argument('--cross-variant-prefix',action='store_true',help='Replay recorded commands under the current hazard variant; retain actual safety and native checks, never restore state')
+parser.add_argument('--keep-transport-wrist',action='store_true',help='Translate held ladle with measured wrist orientation instead of rotating it during transport')
 parser.add_argument('--certify-execution-margin',action='store_true',help='Report unmet optional planning reserve separately; require original dense execution margins and cuRobo constraints')
 parser.add_argument('--supported-landing-transfer',action='store_true',help='Treat destination approach as intentional supported landing,10mm/s near goal, stop on original support force')
 parser.add_argument('--gentle-supported-placement',action='store_true',help='Center object geometry, descend10mm/s until measured bowl support, then open')
@@ -238,6 +239,9 @@ with SimulationAppContext(args):
                 center_offset=Rotation.from_quat(ref['quaternion']).apply(world.object_center)
                 offset_xy=([.045,-.035] if args.variant=='property' and PICK=='banana_2' else [-.035 if PICK=='banana_1' else .035,0.])
                 root[:2]=destination[:2]+np.array(offset_xy)-center_offset[:2]
+            if args.keep_transport_wrist and PICK=='green_ladle':
+                target=kin.fk(state['q'][ids]).copy();target[:3,3]=root+(state['tcp']-state['lime'][:3])
+                return root,target
             attachment=np.linalg.inv(kin.fk(state['q'][ids]))@transform(state['lime'][:3],state['lime'][3:7])
             return root,transform(root,ref['quaternion'])@np.linalg.inv(attachment)
         second=args.round10_second_placement and PICK=='banana_2'
