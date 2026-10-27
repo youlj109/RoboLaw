@@ -499,6 +499,9 @@ class CollisionWorld:
             label,shape,lo,hi=shapes[shape_index]
             name,obj,ob_lo,ob_hi=self.objects[indices[k]]
             if label=='carried_lime':
+                # Target fruits may touch already placed target contents during controlled placement.
+                # This does not exempt any robot/human/property/background pair.
+                if self.allowed_phase in ('lower','release','retreat','settle_final') and any(self._matches(name,n) for n in getattr(self,'placed_task_contents',())):continue
                 if self._matches(name,self.destination_object) and self.allowed_phase in ('lower','release','retreat','settle_final'):continue
                 source_surface=self._is_source_surface(name)
                 if source_surface and getattr(self,'source_support_mode',None) in ('native_rest_until_detached','native_contact_calibrated_until_detached'):

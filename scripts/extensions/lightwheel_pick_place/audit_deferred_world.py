@@ -26,6 +26,12 @@ def check_batch(rows):
   if 'hazard_pose' in row:world.set_obstacle_pose('glass',row['hazard_pose'])
   model=result['source_support_contact_model'] if pick==spec.pick_object else result['extra_source_support_models'][pick]
   world.source_support_mode=result['source_support_contact_model']['mode'];world.source_resting_min_z=row.get('source_support_calibrated_min_z_m',model['source_resting_min_z_m']);world.source_resting_root=np.asarray(model['source_resting_root_m']);world.source_resting_xy=world.source_resting_root[:2];world.source_detached=row['source_detached_before'];world.allowed_phase=row['phase']
+  contents=set(row.get('placed_task_contents',()))
+  if contents and not result.get('placement_contact_policy'):raise ValueError('Unreported target contact policy')
+  for content in contents:
+   checkpoint=result.get('placement_checkpoints',{}).get(content,{})
+   if content not in ('banana_1','banana_2') or not checkpoint.get('passed') or checkpoint['action_index']>=row['action']:raise ValueError('Unverified/early placement contact exemption')
+  world.placed_task_contents=contents
   ignore=(pick,)+((spec.destination_object,) if row['phase'] in ('lower','release','retreat','settle_final') else ())
   measured=world.clearance(row['q_arm'],ignore,mode='execution',gripper_q=row['gripper_q'],object_pose=row['lime_pose'])
   if row.get('valid') is not None and (row['valid']!=measured['valid'] or abs(row['slack_m']-measured['slack_m'])>1e-7):raise ValueError('Offline/live full-world checks disagree')

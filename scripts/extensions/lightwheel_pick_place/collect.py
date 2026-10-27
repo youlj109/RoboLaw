@@ -316,7 +316,7 @@ with SimulationAppContext(args):
         # Full environment robot check; intended grasp/support masks are phase-specific.
         full=({'valid':None,'audit_pending':True} if args.defer_full_world_audit and physics_checks%8 else world.clearance(s['q'][ids],ignores(),object_pose=s['lime'][:7],**geometry(s)))
         physics_audits.append({'action':len(records),'phase':phase,'q_arm':s['q'][ids].tolist(),
-            'gripper_q':{k:float(v) for k,v in geometry(s)['gripper_q'].items()},'lime_pose':s['lime'][:7].tolist(),'pick_object':PICK,
+            'gripper_q':{k:float(v) for k,v in geometry(s)['gripper_q'].items()},'lime_pose':s['lime'][:7].tolist(),'pick_object':PICK,'placed_task_contents':sorted(getattr(world,'placed_task_contents',())),
             **({'rigid_poses':{n:s[n][:7].tolist() for n in RIGID}} if args.defer_full_world_audit else {}),
             **({'hazard_pose':s['hazard_pose'].tolist()} if args.variant=='property' else {}),
             'source_contact':source_contact,'source_hull_min_z_m':actual_min_z,
@@ -483,6 +483,9 @@ with SimulationAppContext(args):
             passed=bool(arr(object_on_destination(e,object_cfg=SceneEntityCfg(name),destination_cfg=SceneEntityCfg(task.destination_location.name),contact_sensor_cfg=task.contact_sensor_cfg,force_threshold=task.force_threshold,velocity_threshold=task.velocity_threshold,support_cone_half_angle_rad=task.support_cone_half_angle_rad))[0])
             row={'action_index':len(records)-1,'passed':passed,'force_matrix_w_n':arr(scene[task.contact_sensor_cfg.name].data.force_matrix_w).tolist(),'object_state':snapshot()[name].tolist()}
             result.setdefault('placement_checkpoints',{})[name]=row;print('PLACEMENT_CHECKPOINT',name,passed,row['force_matrix_w_n'],flush=True)
+            if args.gentle_supported_placement and passed and name in ('banana_1','banana_2'):
+                world.placed_task_contents=set(getattr(world,'placed_task_contents',()))|{name}
+                result['placement_contact_policy']={'scope':'Carried target fruit may contact a native-verified already placed target fruit only during lower/release/retreat/settle_final. All robot/hazard/background checks remain active; both original final predicates required.','target_objects':['banana_1','banana_2']}
 
         def cart(position,*,rotation=None,force_phase=None):
             global q,planner
@@ -855,43 +858,60 @@ with SimulationAppContext(args):
             world.source_lift_floor_z=world.source_resting_min_z-JITTER_M
             result.setdefault('extra_source_support_models',{})[PICK]={'source_resting_min_z_m':world.source_resting_min_z,'source_resting_root_m':p.tolist(),'source_surface_top_m':float(world.source_surface_top),'jitter_tolerance_m':JITTER_M}
             if not source_contacts.sample()['count']:raise RuntimeError(f'No measured original source support for {PICK}')
-            target_center=transform(held0['lime'][:3],held0['lime'][3:7])@np.r_[world.object_center,1]
-            target_center[2]+=args.grasp_height_offset
-            target_center[0]+=args.grasp_lateral_x
-            R=Rotation.from_euler('z',args.grasp_yaw,degrees=True).as_matrix()@Rotation.from_euler('x',args.grasp_tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],dtype=float)
-            center=target_center[:3]+float(args.grasp_finger_bias)*R[:,1]
-            if use_pregrasp_phase:
-                pregrasp_offset=(np.array([0.,0.,.08]) if args.grasp_search=='b03-topdown' else np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float))
-            else:
-                # Prefer local approach when flag set; else TASK_SPEC offset.
-                if args.grasp_local_approach:
-                    approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
-                    pregrasp_offset=-(args.pregrasp_standoff if args.pregrasp_standoff is not None else (.17 if PICK=='lemon' else .18))*approach
-                else:
-                    pregrasp_offset=(np.array([0.,0.,.08]) if args.grasp_search=='b03-topdown' else np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float))
-            if args.grasp_search=='b03-topdown':
-                for name in RIGID:
-                    if name!=PICK:world.set_obstacle_pose(name,held0[name][:7])
-                solution,attempts=search_topdown(world,kin,held0['q'][ids],held0['lime'][:7],bias_x_m=args.grasp_lateral_x,finger_bias_m=args.grasp_finger_bias,dt=e.step_dt,seed=seed)
-                R=solution['rotation'];center=solution['center'];pregrasp_offset=solution['offset']
-                result['grasp_solutions'][PICK]={k:v for k,v in solution.items() if k not in ('rotation','center','offset')};result['grasp_search_attempts'][PICK]=attempts
-            phase='pregrasp' if use_pregrasp_phase else 'approach'
-            cart(center+pregrasp_offset,rotation=R,force_phase=('transfer' if args.pregrasp_planner=='motion_gen' else 'cartesian_line' if args.pregrasp_planner=='cartesian_line' else None))
-            phase='approach'
-            if args.grasp_local_approach and not use_pregrasp_phase:
-                axis=pregrasp_offset/np.linalg.norm(pregrasp_offset)
-                cart(center+axis*.02,force_phase='cartesian_line')
-            else:cart(center,rotation=R)
-            if args.grasp_search=='b03-topdown':extra_close=close_with_feedback(8)
-            else:
-                phase='close';grip=1.
-                for _ in range(40):step(q,grip)
+            if args.replay_second_grasp_prefix:
+                reference=(resume_manifest if resume_manifest else json.loads(args.replay_prefix_checkpoint.read_text()))
+                checkpoint_file=(args.development_checkpoint or args.replay_prefix_checkpoint);prefix_path=checkpoint_file.parent/reference['second_grasp_prefix']['file']
+                if hashlib.sha256(prefix_path.read_bytes()).hexdigest()!=reference['second_grasp_prefix']['sha256']:raise RuntimeError('Second grasp prefix hash mismatch')
+                prefix=np.load(prefix_path,allow_pickle=False);result['second_grasp_replay']=dict(reference['second_grasp_prefix']);use_pregrasp_phase=True
+                source_result=json.loads((Path(reference['source_episode'])/'result.json').read_text())
+                result.setdefault('extra_grasp_replay',{})[PICK]=source_result.get('grasp_solutions',{}).get('banana_2',source_result.get('grasp_candidate'))
+                for saved_phase,command in zip(prefix['phases'],prefix['actions']):
+                    phase=str(saved_phase);q=np.asarray(command[:7]).copy();grip=float(command[7])
+                    if phase=='lift' and world.attachment is None:
+                        measured=snapshot();world.attachment=np.linalg.inv(kin.fk(measured['q'][ids]))@transform(measured['lime'][:3],measured['lime'][3:7])
+                    step(q,grip)
+                held=snapshot();world.attachment=np.linalg.inv(kin.fk(held['q'][ids]))@transform(held['lime'][:3],held['lime'][3:7])
                 extra_close=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=8)
-            held=snapshot();result.setdefault('extra_close_contacts',[]).append(extra_close)
-            if not result['extra_close_contacts'][-1]['both_fingers_near_body']:
-                raise RuntimeError(f'No bilateral physical grasp for {PICK}')
-            world.attachment=np.linalg.inv(kin.fk(held['q'][ids]))@transform(held['lime'][:3],held['lime'][3:7])
-            phase='lift';cart(held['tcp']+np.array([0.,0.,.10 if args.grasp_search=='b03-topdown' else .12]), force_phase='lift')
+                result.setdefault('extra_close_contacts',[]).append(extra_close)
+                if not extra_close['both_fingers_near_body']:raise RuntimeError('Replayed second grasp has no bilateral contact')
+            else:
+                target_center=transform(held0['lime'][:3],held0['lime'][3:7])@np.r_[world.object_center,1]
+                target_center[2]+=args.grasp_height_offset
+                target_center[0]+=args.grasp_lateral_x
+                R=Rotation.from_euler('z',args.grasp_yaw,degrees=True).as_matrix()@Rotation.from_euler('x',args.grasp_tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],dtype=float)
+                center=target_center[:3]+float(args.grasp_finger_bias)*R[:,1]
+                if use_pregrasp_phase:
+                    pregrasp_offset=(np.array([0.,0.,.08]) if args.grasp_search=='b03-topdown' else np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float))
+                else:
+                    # Prefer local approach when flag set; else TASK_SPEC offset.
+                    if args.grasp_local_approach:
+                        approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
+                        pregrasp_offset=-(args.pregrasp_standoff if args.pregrasp_standoff is not None else (.17 if PICK=='lemon' else .18))*approach
+                    else:
+                        pregrasp_offset=(np.array([0.,0.,.08]) if args.grasp_search=='b03-topdown' else np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float))
+                if args.grasp_search=='b03-topdown':
+                    for name in RIGID:
+                        if name!=PICK:world.set_obstacle_pose(name,held0[name][:7])
+                    solution,attempts=search_topdown(world,kin,held0['q'][ids],held0['lime'][:7],bias_x_m=args.grasp_lateral_x,finger_bias_m=args.grasp_finger_bias,dt=e.step_dt,seed=seed)
+                    R=solution['rotation'];center=solution['center'];pregrasp_offset=solution['offset']
+                    result['grasp_solutions'][PICK]={k:v for k,v in solution.items() if k not in ('rotation','center','offset')};result['grasp_search_attempts'][PICK]=attempts
+                phase='pregrasp' if use_pregrasp_phase else 'approach'
+                cart(center+pregrasp_offset,rotation=R,force_phase=('transfer' if args.pregrasp_planner=='motion_gen' else 'cartesian_line' if args.pregrasp_planner=='cartesian_line' else None))
+                phase='approach'
+                if args.grasp_local_approach and not use_pregrasp_phase:
+                    axis=pregrasp_offset/np.linalg.norm(pregrasp_offset)
+                    cart(center+axis*.02,force_phase='cartesian_line')
+                else:cart(center,rotation=R)
+                if args.grasp_search=='b03-topdown':extra_close=close_with_feedback(8)
+                else:
+                    phase='close';grip=1.
+                    for _ in range(40):step(q,grip)
+                    extra_close=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=8)
+                held=snapshot();result.setdefault('extra_close_contacts',[]).append(extra_close)
+                if not result['extra_close_contacts'][-1]['both_fingers_near_body']:
+                    raise RuntimeError(f'No bilateral physical grasp for {PICK}')
+                world.attachment=np.linalg.inv(kin.fk(held['q'][ids]))@transform(held['lime'][:3],held['lime'][3:7])
+                phase='lift';cart(held['tcp']+np.array([0.,0.,.10 if args.grasp_search=='b03-topdown' else .12]), force_phase='lift')
             lifted=snapshot();result.setdefault('extra_lift_m',[]).append(float(lifted['lime'][2]-p[2]))
             lift_contact=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'lift',last_actions=5)
             result.setdefault('extra_lift_contacts',[]).append(lift_contact)
