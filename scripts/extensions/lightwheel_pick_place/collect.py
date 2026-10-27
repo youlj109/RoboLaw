@@ -837,7 +837,7 @@ with SimulationAppContext(args):
                 result['optional_retreat_skipped']={'reason':str(exc),
                     'executed_actions':0,'policy':'Hold the already safe open-gripper pose; original final support/speed predicate remains mandatory.'}
             phase='settle_final'
-            for _ in range(120):
+            for _ in range(300 if args.gentle_supported_placement else 120):
                 step(q,grip)
                 if terminal.get('terms',{}).get('success',False) and all_current_native_predicates():break
             capture_placement_checkpoint(PICK)
@@ -963,7 +963,7 @@ with SimulationAppContext(args):
                 if len(records)!=before_retreat:raise
                 result.setdefault('extra_optional_retreat_skipped',{})[PICK]={'reason':str(exc),'executed_actions':0}
             phase='settle_final'
-            for _ in range(120):
+            for _ in range(300 if args.gentle_supported_placement else 120):
                 step(q,grip)
                 if terminal.get('terms',{}).get('success',False) and all_current_native_predicates():break
             capture_placement_checkpoint(PICK)
