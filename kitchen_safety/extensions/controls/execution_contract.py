@@ -17,7 +17,8 @@ def controller_signature(config):
             'target_angle_interior_deg', 'repair_oven_racks', 'balance_temperature_knob',
             'planning_gripper_geometry', 'retreat_offset_world_m')
     keys+=('pregrasp_rotation_world','knob_contact_mode','friction_radius_m','friction_preload_n',
-           'friction_start_x_offset_m','friction_max_axial_advance_m','friction_lead_deg')
+           'friction_start_x_offset_m','friction_max_axial_advance_m','friction_min_axial_advance_m',
+           'friction_lead_deg','friction_terminal_policy')
     signature = {key: config[key] for key in keys if key in config}
     if 'prepress_planning' in signature:
         policy = signature['prepress_planning']

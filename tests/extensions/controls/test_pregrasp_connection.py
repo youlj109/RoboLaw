@@ -83,3 +83,12 @@ def test_face_reference_rejects_nonfinite_or_excessive_preload_travel():
     config={'initial_roll_deg':-90,'grasp_tcp_world_m':[0,0,0]}
     for angle,advance in ((np.nan,0),(0,np.nan),(0,.026),(0,-.001)):
         with pytest.raises(ValueError):face_friction_pose(config,angle,advance)
+
+
+def test_declared_axial_backoff_only_withdraws_without_changing_circle():
+    config={'initial_roll_deg':-90,'grasp_tcp_world_m':[0,0,0],
+            'friction_min_axial_advance_m':-.01}
+    a=face_friction_pose(config,30.,0.)
+    b=face_friction_pose(config,30.,-.01)
+    assert np.allclose(b[:3,3]-a[:3,3],[-.01,0.,0.])
+    assert np.array_equal(a[:3,:3],b[:3,:3])

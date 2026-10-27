@@ -57,6 +57,10 @@ socket.on("open", async () => {
     assert(await evaluate(production, 'return document.querySelector("#execution-progress").textContent.includes("/ 9") && !!document.querySelector("#execution_notes");'));
     await waitFor(production, '!document.querySelector("#execution-video").hidden && document.querySelector("#execution-video").readyState>=1');
     assert(await evaluate(production, 'const v=document.querySelector("#execution-video");return v.duration>0 && v.videoWidth>0 && v.getAttribute("src").includes("/01_left_cancel_human/");'));
+    if (process.env.SCENE_REVIEW_COMPARISONS === "1") {
+      await waitFor(production, '!document.querySelector("#comparison-video").hidden && document.querySelector("#comparison-video").readyState>=1');
+      assert(await evaluate(production, 'const v=document.querySelector("#comparison-video");return v.duration>0 && v.videoWidth===1280 && document.querySelector("#comparison-video-label").textContent.includes("并非额外实采");'));
+    }
     if (process.env.SCENE_REVIEW_PLANNING === "1") {
       assert.equal(await evaluate(production, 'return document.querySelector("#planning-progress").textContent;'), "轨迹生成 9 / 9");
       await waitFor(production, '!document.querySelector("#trajectory-wrap").hidden');

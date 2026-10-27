@@ -57,10 +57,20 @@ function visualReview(s, force=false) {
   const video=$("execution-video"), videoLabel=$("execution-video-label");
   video.hidden=videoLabel.hidden=!videoFile;
   if (videoFile) {
-    videoLabel.textContent='本轮原始三路相机视频；请结合任务谓词与接触记录查看，不代表有效避障验收。';
+    videoLabel.textContent=(s.execution_status==='passed' ? '已通过的实采视频：' : '最近实采视频，当前场景尚未验收通过：')+
+      videoFile.url+'。请结合任务谓词与接触记录查看，不代表有效避障验收。';
     if (video.getAttribute('src')!==videoFile.url) video.src=videoFile.url;
   } else if (video.hasAttribute('src')) {
     video.removeAttribute('src');video.load();
+  }
+  const comparisonFile=(s.execution_artifacts || []).find(a=>a.label.startsWith('同视角对照') && a.url.endsWith('.mp4'));
+  const comparison=$("comparison-video"), comparisonLabel=$("comparison-video-label");
+  comparison.hidden=comparisonLabel.hidden=!comparisonFile;
+  if (comparisonFile) {
+    comparisonLabel.textContent='原速同视角对照：左为匹配基线，右为本场景实采，均保持15帧/秒。较短片段结束后停留末帧，并非额外实采；不是避障必要性证明。';
+    if (comparison.getAttribute('src')!==comparisonFile.url) comparison.src=comparisonFile.url;
+  } else if (comparison.hasAttribute('src')) {
+    comparison.removeAttribute('src');comparison.load();
   }
   $("visual-status").textContent = visualLabels[s.visual_status] || "待视觉复审";
   $("visual-status").className = s.visual_status === "passed" ? "good" : "change";

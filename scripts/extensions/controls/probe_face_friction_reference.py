@@ -14,6 +14,8 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--tilt-deg',type=float,default=45.)
     p.add_argument('--lead-deg',type=float,default=2.)
+    p.add_argument('--immediate-unload',action='store_true')
+    p.add_argument('--axial-backoff-m',type=float,default=0.)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--config-output',type=Path,required=True)
     args=p.parse_args()
@@ -28,6 +30,10 @@ def main():
         friction_radius_m=.02,friction_preload_n=1.5,friction_start_x_offset_m=-.02,
         friction_max_axial_advance_m=.025,friction_lead_deg=args.lead_deg,
         property_physics_recipe='weighted_reading_lamp_v1')
+    if args.immediate_unload:
+        config.update(friction_terminal_policy='immediate_unload',target_angle_interior_deg=125.)
+    if args.axial_backoff_m:
+        config['friction_min_axial_advance_m']=-args.axial_backoff_m
     base=config['robot_pose_xyzw']
     kin=DroidKinematics(base[:3],Rotation.from_quat(base[3:]).as_euler('xyz',degrees=True)[2])
     q=np.array([-1.1143192649,1.0469874423,1.7097610837,-.9823019496,

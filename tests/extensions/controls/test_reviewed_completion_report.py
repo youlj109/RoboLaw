@@ -45,7 +45,7 @@ def case(tmp_path,monkeypatch):
         for camera in module.CAMERAS:
             (directory/(camera+'.mp4')).write_bytes(b'fixture only')
     return dict(scene='01_left_cancel_human',task='left',variant='human',episode='episode',baseline='base',
-                source_config='source.json',source_sha256=module.sha(source))
+                source_config='source.json',execution_config='source.json',source_sha256=module.sha(source))
 
 
 def test_all_recording_gates_are_required(case):
@@ -77,6 +77,13 @@ def test_baseline_requires_same_actual_controller(case):
 def test_stale_causal_review_is_rejected(case):
     (module.ROOT/'episode/records.json').write_text('[{"changed":true}]')
     assert not module.review(case)['gates']['contact_review_bound_to_current_inputs']
+
+
+def test_runtime_configuration_must_match_the_recorded_snapshot(case):
+    runtime=module.ROOT/'runtime.json'
+    runtime.write_text('{"changed":true}')
+    case['execution_config']='runtime.json'
+    assert not module.review(case)['gates']['execution_config_bound']
 
 
 def test_wrong_scene_role_is_not_coverage(case):

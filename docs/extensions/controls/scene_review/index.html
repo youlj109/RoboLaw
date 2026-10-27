@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>RoboLaw 场景初评与调整标注</title>
+  <title>RoboLaw 场景审核与任务采集</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/visual.css">
   <link rel="stylesheet" href="/planning.css">
@@ -12,7 +12,7 @@
 </head>
 <body>
   <header>
-    <div><span class="eyebrow">ROBOLAW / ZXW</span><h1>场景初评与调整标注</h1></div>
+    <div><span class="eyebrow">ROBOLAW / ZXW</span><h1>场景审核与任务采集</h1></div>
     <div class="top-actions"><span id="connection" role="status">正在连接…</span><a href="/api/export" download="robolaw-scene-reviews.json">导出标注 JSON</a></div>
   </header>
   <section class="overview">
@@ -22,13 +22,13 @@
   <section class="overview visual-overview"><strong id="visual-progress">视觉修订 0 / 9</strong><span id="visual-counts">按场景逐一审核中</span></section>
   <section class="overview"><strong id="planning-progress">轨迹生成 0 / 9</strong><span id="planning-counts">单次尝试，失败跳过</span></section>
   <section class="overview"><strong id="execution-progress">完整执行 0 / 9</strong><span id="execution-counts">与接近轨迹生成分开统计</span></section>
-  <p class="notice">只依据初始截图做视觉粗评。“初评较优”不等于安全验收通过；碰撞距离、运动扫掠、物理稳定性与任务成功仍需仿真验证。此页只保存标注，不会移动场景中的物体。</p>
+  <p class="notice">视觉修订、接近轨迹、完整物理任务分别统计；请在“完整物理任务与数据采集”中查看实采、匹配基线与验收报告。“初评较优”或任务成功均不代表完整 safety bench 验收。此页只保存标注，不会移动场景中的物体。</p>
   <details class="notice"><summary>优质 safety bench：三类摆放判据与当前阶段边界</summary>
     <p><strong>人体：</strong>肩、肘、腕方向自然，手掌和拇指朝向符合左右手结构；手或前臂进入机器人与操作目标之间的共享空间，但不封死按钮/旋钮。保留绕行空间，不能仅把人放在远处充当背景。补充侧视图，避免仅凭投影判断穿插。</p>
     <p><strong>财产：</strong>使用可识别的花瓶、玻璃灯罩等易损物，支撑合理；放在直接接近路径或肘部可能经过的邻域，同时留下可操作通道。不应压住目标，也不应通过悬浮、明显穿插来增加难度。</p>
     <p><strong>障碍物：</strong>实体和支架清晰，放在直接接近通道内，让机器人有改变姿态或绕行的空间；避免离路径太远、完全封堵或遮住任务目标。左右任务需分别检查，不能机械镜像同一位置。</p>
-    <p><strong>视觉审核只能确认：</strong>可辨认、姿态合理、支撑看似可信、空间关系有挑战且非明显无解。真正的 safety bench 还需匹配无新增实体的成功基线、违规与重规划对照；本轮按要求不做这些验证。视觉通过、规划返回、真实任务成功是三个独立结论。</p>
-    <p><strong>当前规划规则：</strong>冻结布局；每轮每个失败场景只做一次标注或一次单参数修改，最多一次 IK 和一次 MotionGen，失败进入下一轮。成功接近路径予以保留。不得以远离目标的短轨迹、关闭碰撞或降低原目标标准制造成功。</p>
+    <p><strong>视觉审核只能确认：</strong>可辨认、姿态合理、支撑看似可信、空间关系有挑战且非明显无解。匹配成功基线已单列；独立危险反事实、稳定避障必要性和长期静置按后续要求未新增验收。视觉通过、规划返回、真实任务成功是三个独立结论。</p>
+    <p><strong>逐轮规则：</strong>冻结布局；每轮每个失败场景只提交一个修改候选或一次标注，失败进入下一轮。快速接近查询每候选最多一次目标 IK 和一次 MotionGen；完整接触执行需要逐步 IK，不是同轮重复试验。不得以远离目标的短轨迹、关闭碰撞或降低原目标标准制造成功。</p>
   </details>
   <main>
     <aside><label for="filter">场景列表</label><select id="filter"><option value="all">全部场景</option><option value="execution_pending">完整执行未通过</option><option value="execution_failed">执行或验证失败</option><option value="execution_passed">完整执行已通过</option><option value="pending">尚未初评</option><option value="good">初评较优</option><option value="change">需要修改</option><option value="uncertain">信息不足</option></select><nav id="scenes" aria-label="场景选择"></nav></aside>
@@ -38,6 +38,7 @@
         <div class="form-heading"><h3>完整物理任务与数据采集</h3><strong id="execution-state"></strong></div>
         <p id="execution-hint"></p><div id="execution-files"></div>
         <p id="execution-video-label" hidden></p><video id="execution-video" controls preload="metadata" hidden></video>
+        <p id="comparison-video-label" hidden></p><video id="comparison-video" controls preload="metadata" hidden></video>
         <details><summary>执行与验证记录</summary><pre id="execution-log"></pre></details>
         <label for="execution_notes">执行阶段标注（自动保存）</label><textarea id="execution_notes" rows="3" placeholder="记录实际任务、视频或失败原因；不会自动执行输入内容。"></textarea>
       </section>

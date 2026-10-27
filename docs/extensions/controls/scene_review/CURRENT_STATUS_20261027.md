@@ -1,8 +1,8 @@
 # Current Review And Planning Status
 
 **The table below is the historical approach-only checkpoint.** Fresh full
-physical recordings now pass 8/9 variants; oven/property remains under a new
-contact-controller experiment. See [physical completion](PHYSICAL_COMPLETION_20261027.md)
+physical recordings now pass all 9/9 variants, including oven/property's real
+contact controller and released original level-three end state. See [physical completion](PHYSICAL_COMPLETION_20261027.md)
 and the webpage's separate full-execution panel for current task acceptance.
 
 Local review: <http://127.0.0.1:8765>. Scene images, observations, editable notes,

@@ -18,8 +18,10 @@ def temperature_grasp_rotation(config):
 def face_friction_pose(config,angle_deg,advance_m):
     radius=float(config.get('friction_radius_m',.02))
     maximum=float(config.get('friction_max_axial_advance_m',.025))
-    if (not np.isfinite([radius,maximum,angle_deg,advance_m]).all() or
-            not 0<radius<=.025 or not 0<maximum<=.025 or not 0<=advance_m<=maximum):
+    minimum=float(config.get('friction_min_axial_advance_m',0.))
+    if (not np.isfinite([radius,minimum,maximum,angle_deg,advance_m]).all() or
+            not 0<radius<=.025 or not -.02<=minimum<=0 or
+            not 0<maximum<=.025 or not minimum<=advance_m<=maximum):
         raise ValueError('Face contact outside declared reference bounds')
     pose=np.eye(4)
     pose[:3,:3]=temperature_grasp_rotation(config)
@@ -44,6 +46,7 @@ def execute_face_friction(config,state,step,set_phase,command_pose,q,contact_loa
     set_phase('grasp')
     advance=0.
     maximum=float(config.get('friction_max_axial_advance_m',.025))
+    minimum=float(config.get('friction_min_axial_advance_m',0.))
     preload=float(config.get('friction_preload_n',1.5))
     for _ in range(int(np.ceil(maximum/.00025))+1):
         command=command_pose(face_friction_pose(config,0.,advance),1,repeats=2)
@@ -79,10 +82,13 @@ def execute_face_friction(config,state,step,set_phase,command_pose,q,contact_loa
         lost=lost+1 if load<.01 else 0
         if lost>=10:raise RuntimeError('Lost target face contact during friction turn')
         if load<preload*.5:advance=min(maximum,advance+.0001)
-        elif load>preload*2:advance=max(0.,advance-.0001)
+        elif load>preload*2:advance=max(minimum,advance-.0001)
     if not reached:raise RuntimeError('Face contact did not reach the original level-three predicate')
     set_phase('hold')
-    for _ in range(8):step(command,grip=1)
+    if config.get('friction_terminal_policy','hold_then_unload')=='hold_then_unload':
+        for _ in range(8):step(command,grip=1)
+    elif config['friction_terminal_policy']!='immediate_unload':
+        raise ValueError('Unsupported face-contact terminal policy')
     # Remove normal pressure before opening: this is not a pinched grasp.
     set_phase('disengage')
     terminal=np.asarray(state()['tcp'])

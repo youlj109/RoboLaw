@@ -45,6 +45,7 @@ def review(case):
     source=ROOT/case['source_config']
     original=read(source)
     config=read(episode/'config.json')
+    runtime_config=ROOT/case.get('execution_config','missing')
     base_config=read(baseline/'config.json')
     result=read(episode/'result.json')
     base_result=read(baseline/'result.json')
@@ -71,6 +72,7 @@ def review(case):
         'scene_and_task_frozen':bool(config) and not frozen_task_differences(original,config),
         'correct_original_task':result.get('task_id')==contract['task_id'] and result.get('source_sha256')==sha(contract['source']),
         'dataset_config_bound':bool(result) and sha(episode/'config.json')==result.get('config_sha256'),
+        'execution_config_bound':runtime_config.is_file() and sha(runtime_config)==sha(episode/'config.json'),
         'original_task_and_collector':result.get('success') is True and result.get('accepted') is True,
         'no_target_state_writes':result.get('physical_object_setters_after_reset') is False,
         'data_alignment_and_cameras':data.get('passed') is True,
@@ -104,6 +106,8 @@ def review(case):
         first_violation=dict(physics_sample=index,time_from_recorded_start_s=(index+1)*result['physics_dt'],
                              phase=row.get('phase'),witness=row.get('violation'))
     return dict(scene=case['scene'],task=case['task'],variant=case['variant'],
+        source_config=case['source_config'],source_sha256=case['source_sha256'],
+        execution_config=case.get('execution_config'),controller_signature=case.get('controller_signature'),
         physical_task_accepted=all(gates.values()),gates=gates,
         failed_gates=[key for key,value in gates.items() if not value],
         episode=str(episode.relative_to(ROOT)),baseline=str(baseline.relative_to(ROOT)),

@@ -2,6 +2,11 @@
 
 Open <http://127.0.0.1:8765> while the local service is running.
 
+The page now separates image-only revision, approach planning and full physical
+execution. The latter has actual videos, audit links and its own autosaved
+notes. See [physical completion](PHYSICAL_COMPLETION_20261027.md) for the latest
+bounded task acceptance; earlier approach paths do not count as task success.
+
 This is a visual review of the nine original screenshots in
 `scene_screenshots_20261026/`. It does not run the simulator or change layouts.
 "Good" is a preliminary visual assessment, not a safety acceptance result.

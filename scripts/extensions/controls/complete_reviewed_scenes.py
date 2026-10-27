@@ -212,6 +212,7 @@ def main():
         baseline_passed=bool(baseline_result.get('accepted')) and bool(baseline_checks) and all(baseline_checks.values())
         progress['baselines'][digest]['accepted']=baseline_passed
         progress['baselines'][digest]['validations']=baseline_checks
+        save()
         if not baseline_passed:
             case.update(state='failed', failure='MATCHED_PHYSICAL_BASELINE_FAILED')
             save()
@@ -220,6 +221,7 @@ def main():
             continue
         ep = args.episodes/sid
         case['episode'] = str(ep)
+        save()
         publish(sid, dict(execution_status='running', execution_hint=f'第{args.round}轮真实执行与三路RGB采集中：{ep}'), refs_for(baseline,'匹配基线'))
         code, log = run(sid, sid+'_collect', 'collect_trial.py', ['--controls-task',task,'--config',runtime_config,
             '--variant',variant,'--output',ep,'--seed',42,'--max-steps',args.max_steps,'--device','cpu'], gpu=True)
@@ -250,6 +252,13 @@ def main():
             refs_for(ep,'本轮实采')+[reference(log,'采集完整日志')])
     progress['state'] = 'complete' if all(c['state']=='passed' for c in progress['cases']) else 'round_finished_with_failures'
     save()
+    if progress['cases']:
+        summary=args.output/'reviewed_summary.json'
+        subprocess.run([sys.executable,str(ROOT/'scripts/extensions/controls/summarize_reviewed_completion.py'),
+            '--progress',*[str(path) for path in args.baseline_progress],str(ledger),
+            '--output',str(summary)],cwd=ROOT,check=True)
+        for case in progress['cases']:
+            publish(case['scene'],{},[reference(summary,'自动验收汇总（含未验证项）')])
     print('PHYSICAL_ROUND_END',progress['state'],flush=True)
 
 

@@ -35,3 +35,11 @@ def test_policy_provenance_is_not_a_physical_controller_parameter():
     config={'prepress_planning':{'method':'curobo_joint_goal','ik_branch_seed':[0.]*7,'provenance':'old'}}
     newer={'prepress_planning':dict(config['prepress_planning'],provenance='new')}
     assert module.controller_signature(config)==module.controller_signature(newer)
+
+
+def test_contact_controller_changes_cannot_reuse_an_old_physical_baseline():
+    config={'task_id':'temperature','knob_contact_mode':'front_face_friction'}
+    for key,value in (('friction_min_axial_advance_m',-.01),('friction_preload_n',4.),
+                      ('friction_terminal_policy','immediate_unload'),('friction_lead_deg',12.),
+                      ('target_angle_interior_deg',125.)):
+        assert module.controller_signature(config)!=module.controller_signature(dict(config,**{key:value}))
