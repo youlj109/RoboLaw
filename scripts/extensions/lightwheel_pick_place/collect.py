@@ -16,6 +16,7 @@ parser.add_argument('--release-retract-z',type=float,default=0.)
 parser.add_argument('--loaded-transfer-time-scale',type=float,default=1.)
 parser.add_argument('--pre-release-hold-steps',type=int,default=0)
 parser.add_argument('--align-second-grasp',action='store_true',help='Align second-banana grasp yaw with its measured object yaw')
+parser.add_argument('--gentle-supported-placement',action='store_true',help='Center object geometry, descend10mm/s until measured bowl support, then open')
 parser.add_argument('--placement-feedback-lower',action='store_true',help='Hover45mm above release, refresh measured attachment, then lower to same goal')
 parser.add_argument('--placement-joint-goals',type=Path,help='Passed planning report with native-successful recorded joint endpoints')
 parser.add_argument('--placement-goals',type=Path,help='Passed fixed-scene planning report containing explicit body goals')
@@ -203,6 +204,9 @@ with SimulationAppContext(args):
         ref=placement_refs[PICK]
         if args.placement_goals:
             root=destination[:3]+np.asarray(ref['offset'])+np.array([0.,0.,above if args.placement_feedback_lower else 0.])
+            if args.gentle_supported_placement:
+                center_offset=Rotation.from_quat(ref['quaternion']).apply(world.object_center)
+                root[:2]=destination[:2]+np.array([-.035 if PICK=='banana_1' else .035,0.])-center_offset[:2]
             attachment=np.linalg.inv(kin.fk(state['q'][ids]))@transform(state['lime'][:3],state['lime'][3:7])
             return root,transform(root,ref['quaternion'])@np.linalg.inv(attachment)
         second=args.round10_second_placement and PICK=='banana_2'
@@ -212,6 +216,34 @@ with SimulationAppContext(args):
             return root,target
         attachment=np.linalg.inv(kin.fk(state['q'][ids]))@transform(state['lime'][:3],state['lime'][3:7])
         return root,transform(root,ref['quaternion'])@np.linalg.inv(attachment)
+
+    def lower_until_supported():
+        global phase,q
+        phase='lower';world.allowed_phase='lower'
+        state=snapshot();start=state['q'][ids].copy();tcp=kin.fk(start);previous=start.copy();path=[start]
+        world.attachment=np.linalg.inv(tcp)@transform(state['lime'][:3],state['lime'][3:7]);world.planning_gripper_q=geometry(state)['gripper_q']
+        stop_reason='maximum140mm descent'
+        for index in range(1,71):
+            target=tcp.copy();target[2,3]-=.002*index
+            candidate=kin.ik(target,previous,attempts=1);actual=kin.fk(candidate)
+            if np.linalg.norm(actual[:3,3]-target[:3,3])>.001:stop_reason='IK residual';break
+            if not world.valid(candidate,(PICK,DEST)):stop_reason=str(world.last_clearance);break
+            for fraction in (1/3,2/3,1.):path.append(previous+(candidate-previous)*fraction)
+            previous=candidate
+        checked=planner.validate_path(path,(PICK,DEST),grip,phase='lower')
+        if not checked['valid']:raise RuntimeError('Supported descent path rejected: '+str(checked))
+        task=next(t for t in getattr(envdef.task,'subtasks',[envdef.task]) if t.pick_up_object.name==PICK)
+        supported=False;executed=0
+        for command in path[1:]:
+            step(command,grip);q=np.asarray(command).copy();executed+=1
+            force=arr(scene[task.contact_sensor_cfg.name].data.force_matrix_w).reshape(-1,3)[0];magnitude=float(np.linalg.norm(force))
+            if magnitude>=task.force_threshold and force[2]>0 and force[2]/magnitude>=np.cos(task.support_cone_half_angle_rad):supported=True;break
+        detail={'supported':supported,'executed_actions':executed,'force_n':force.tolist() if executed else None,'speed_m_s':.01,'planned_descent_limit_m':.14,'planning_stop':stop_reason,'actual_body_before_open':snapshot()['lime'].tolist()}
+        result.setdefault('supported_placements',{})[PICK]=detail;print('SUPPORTED_PLACEMENT',PICK,detail,flush=True)
+        if not supported:raise RuntimeError('No measured bowl support before safe descent limit; do not drop fruit')
+        from paired_planning import grip_joints
+        current=snapshot();opening=[world.clearance(q,(PICK,DEST),mode='execution',gripper_q=grip_joints(g),object_pose=current['lime'][:7]) for g in np.linspace(grip,0.,31)]
+        if not all(c['valid'] for c in opening):raise RuntimeError('Actual opening geometry rejected: '+str(min(opening,key=lambda c:c['slack_m'])))
 
     def release_with_retract():
         global phase,q,grip
@@ -318,7 +350,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'release_retract_z_m':args.release_retract_z,'loaded_transfer_time_scale':args.loaded_transfer_time_scale,'pre_release_hold_steps':args.pre_release_hold_steps,'placement_feedback_lower':bool(args.placement_feedback_lower),'placement_joint_goals_sha256':hashlib.sha256(args.placement_joint_goals.read_bytes()).hexdigest() if args.placement_joint_goals else None,'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'release_retract_z_m':args.release_retract_z,'loaded_transfer_time_scale':args.loaded_transfer_time_scale,'pre_release_hold_steps':args.pre_release_hold_steps,'gentle_supported_placement':bool(args.gentle_supported_placement),'placement_feedback_lower':bool(args.placement_feedback_lower),'placement_joint_goals_sha256':hashlib.sha256(args.placement_joint_goals.read_bytes()).hexdigest() if args.placement_joint_goals else None,'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -442,6 +474,7 @@ with SimulationAppContext(args):
                     'source':'Measured rigid pose and arm FK at segment start; collision model only.'})
                 world.attachment=measured_attachment
             world.gripper_joint_position=float(s['q'][robot.joint_names.index('finger_joint')])
+            world.planning_gripper_q=geometry(s)['gripper_q']
             if args.variant=='property':
                 world.set_obstacle_pose('glass',s['hazard_pose'])
                 if len(task_picks(TASK_SPEC))==1:planner.update_dynamic_obstacle('glass')
@@ -696,7 +729,9 @@ with SimulationAppContext(args):
             'transfer_tcp_m':xfer_tcp.tolist(),'lower_tcp_m':lower_tcp.tolist(),
             'drop_m':float(xfer_tcp[2]-lower_tcp[2])}
         phase='lower'
-        if args.placement_goals and args.placement_feedback_lower:
+        if args.gentle_supported_placement:
+            lower_until_supported()
+        elif args.placement_goals and args.placement_feedback_lower:
             cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
         elif args.placement_goals:
             result['place_lower']['skipped']=True
@@ -815,7 +850,9 @@ with SimulationAppContext(args):
                 lower_tcp=reference_lower_tcp[:3,3]
                 result.setdefault('placement_body_goals',{})[PICK]={'root':lower_root.tolist(),'quaternion':placement_refs[PICK]['quaternion'],'tcp_target':reference_lower_tcp.tolist()}
             phase='lower'
-            if placement_refs and args.placement_feedback_lower:
+            if args.gentle_supported_placement:
+                lower_until_supported()
+            elif placement_refs and args.placement_feedback_lower:
                 cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
             elif placement_refs and args.round10_second_placement:
                 result['placement_body_goals'][PICK]={'root':desired_root.tolist(),'tcp_target':target_tcp.tolist(),'orientation_policy':'explicit planned body quaternion' if args.placement_goals else 'keep measured wrist after lift','direct_release':True,'actual_before_open':snapshot()['lime'].tolist()}

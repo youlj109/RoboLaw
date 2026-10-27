@@ -392,9 +392,11 @@ class CollisionWorld:
             capsule(pos[a],pos[b],r,'arm')
         base=ts[-1]
         def local(x,y=0):return base[:3,3]+base[:3,:3]@np.array([x,y,0])
-        capsule(local(0),local(.065),.043,'gripper')
-        for y in [-.039,.039]:capsule(local(.085,y),local(.145,y),.012,'finger')
+        if gripper_q is None:
+            capsule(local(0),local(.065),.043,'gripper')
+            for y in [-.039,.039]:capsule(local(.085,y),local(.145,y),.012,'finger')
         for body,model,verts in self.robot_hulls:
+            if gripper_q is not None and body==self.gripper_root:continue
             t=links[body];world_verts=verts@t[:3,:3].T+t[:3,3]
             shapes.append(('robot_hull',fcl.CollisionObject(model,fcl.Transform(t[:3,:3],t[:3,3])),world_verts.min(axis=0),world_verts.max(axis=0)))
         base=links[self.gripper_root]
@@ -445,6 +447,7 @@ class CollisionWorld:
 
     def _pairs(self,q,ignore,mode,gripper_q,object_pose,obstacle_filter,max_slack=float('inf')):
         """Candidates with a conservative AABB lower bound on required clearance."""
+        if gripper_q is None and mode=='planning':gripper_q=getattr(self,'planning_gripper_q',None)
         # The target container remains an obstacle for every robot link.
         # Only the fruit/container support pair is intended during placement.
         ignore=tuple(x for x in ignore if x!=self.destination_object)
