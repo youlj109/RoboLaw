@@ -16,6 +16,8 @@ parser.add_argument('--release-retract-z',type=float,default=0.)
 parser.add_argument('--loaded-transfer-time-scale',type=float,default=1.)
 parser.add_argument('--pre-release-hold-steps',type=int,default=0)
 parser.add_argument('--align-second-grasp',action='store_true',help='Align second-banana grasp yaw with its measured object yaw')
+parser.add_argument('--development-checkpoint',type=Path,help='Reset-only measured first-pick state; second-pick development, never acceptance')
+parser.add_argument('--replay-prefix-checkpoint',type=Path,help='Replay verified real first-pick actions from original reset, then recheck native checkpoint')
 parser.add_argument('--gentle-supported-placement',action='store_true',help='Center object geometry, descend10mm/s until measured bowl support, then open')
 parser.add_argument('--placement-feedback-lower',action='store_true',help='Hover45mm above release, refresh measured attachment, then lower to same goal')
 parser.add_argument('--placement-joint-goals',type=Path,help='Passed planning report with native-successful recorded joint endpoints')
@@ -86,6 +88,12 @@ if args.pick_order:
     from dataclasses import replace
     if not TASK_SPEC.pick_objects or len(args.pick_order)!=len(TASK_SPEC.pick_objects) or set(args.pick_order)!=set(TASK_SPEC.pick_objects):raise ValueError('Pick order must contain every original parallel pick exactly once')
     TASK_SPEC=replace(TASK_SPEC,pick_object=args.pick_order[0],pick_objects=tuple(args.pick_order))
+if args.development_checkpoint and args.replay_prefix_checkpoint:raise ValueError('Development restore and final prefix replay are mutually exclusive')
+original_pick_objects=tuple(TASK_SPEC.pick_objects)
+if args.development_checkpoint:
+    from dataclasses import replace
+    if set(original_pick_objects)!={'banana_1','banana_2'}:raise ValueError('Checkpoint development is B03 only')
+    TASK_SPEC=replace(TASK_SPEC,pick_object='banana_2',pick_objects=('banana_2',))
 TASK_ID=TASK_SPEC.task_id
 ROOT=Path(__file__).resolve().parents[3]
 SOURCE=ROOT/'third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench'/(TASK_ID+'.yaml')
@@ -169,6 +177,21 @@ with SimulationAppContext(args):
             scene[name].write_root_velocity_to_sim(torch.zeros((1,6),device=e.device))
         if int(e.sim.get_physics_step_count())!=before_reset_writes:raise RuntimeError('Initialization advanced physics')
         reset_layout_source={'path':str(args.initial_state_layout),'sha256':hashlib.sha256(args.initial_state_layout.read_bytes()).hexdigest(),'scope':'Once during reset, before controls, observations and task execution; no execution-time object pose writes.'}
+    resume_manifest=None
+    if args.development_checkpoint:
+        resume_manifest=json.loads(args.development_checkpoint.read_text())
+        if resume_manifest['variant']!=args.variant or not resume_manifest['native_first_checkpoint']['passed']:raise RuntimeError('Checkpoint scene/native verification mismatch')
+        if list(robot.joint_names)!=resume_manifest['robot_joint_names']:raise RuntimeError('Checkpoint robot joint schema mismatch')
+        reference_config=resume_manifest.get('variant_config_source')
+        if reference_config and hashlib.sha256(Path(args.variant_config).read_bytes()).hexdigest()!=reference_config['sha256']:raise RuntimeError('Checkpoint frozen variant config changed')
+        saved=resume_manifest['state'];ticks_before=int(e.sim.get_physics_step_count())
+        for name,value in saved['rigid'].items():
+            scene[name].write_root_pose_to_sim(torch.tensor([value[:7]],device=e.device,dtype=torch.float32))
+            scene[name].write_root_velocity_to_sim(torch.tensor([value[7:13]],device=e.device,dtype=torch.float32))
+        saved_q=torch.tensor([saved['q']],device=e.device,dtype=torch.float32);saved_dq=torch.tensor([saved['dq']],device=e.device,dtype=torch.float32)
+        robot.write_joint_state_to_sim(saved_q,saved_dq);robot.set_joint_position_target(saved_q)
+        e.sim.physics_manager.forward();scene.update(0.)
+        if int(e.sim.get_physics_step_count())!=ticks_before:raise RuntimeError('Checkpoint restoration advanced physics')
     ids,_=robot.find_joints(['panda_joint[1-7]'],preserve_order=True)
     q=arr(robot.data.joint_pos)[0,ids];grip=0.;phase='settle';records=[];clearances=[];plans=[];physics_audits=[]
     terminal={};world=None;planner=None;writer=None;overview_writer=None;overview_alignment=[];error=None
@@ -363,6 +386,8 @@ with SimulationAppContext(args):
       'source_yaml_sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
       'original_asset_initial_poses':{name:assets[name]._get_initial_pose_as_pose().to_dict() for name in ('droid',)+RIGID if name in assets and assets[name].get_initial_pose() is not None},
       'simulation_attachment':False,'robot_joint_names':robot.joint_names,'robot_body_names':robot.body_names,'dt':e.step_dt}
+    if resume_manifest:result['development_only']=True
+    if resume_manifest:result['development_checkpoint']={'path':str(args.development_checkpoint),'sha256':hashlib.sha256(args.development_checkpoint.read_bytes()).hexdigest(),'scope':'Reset-only measured state restoration; not full original-task acceptance','source_episode':resume_manifest['source_episode']}
     if reset_layout_source:result['initial_state_layout_source']=reset_layout_source
     if args.fixed_layout:
         result['fixed_layout_source']={'path':args.fixed_layout,'sha256':hashlib.sha256(Path(args.fixed_layout).read_bytes()).hexdigest()}
@@ -388,7 +413,7 @@ with SimulationAppContext(args):
         initial_lime_points=world.lime_vertices@Rotation.from_quat(initial['lime'][3:7]).as_matrix().T+initial['lime'][:3]
         world.source_resting_min_z=float(initial_lime_points[:,2].min())
         world.source_resting_xy=initial['lime'][:2].copy()
-        world.source_support_mode=('native_contact_calibrated_until_detached' if len(task_picks(TASK_SPEC))>1 else 'native_rest_until_detached');world.source_detached=False
+        world.source_support_mode=('native_contact_calibrated_until_detached' if len(task_picks(TASK_SPEC))>1 or args.development_checkpoint else 'native_rest_until_detached');world.source_detached=False
         world.source_resting_root=initial['lime'][:3].copy()
         world.source_surface_top=max((v[3][2] for v in world.objects if v[0]==SOURCE_SURFACE_PATH or v[0].startswith(SOURCE_SURFACE_PATH.rstrip('/')+'/') or v[0].endswith(TASK_SPEC.source_surface_suffix)), default=float(initial['lime'][2]))
         result['per_pick_initial_source_contacts']={name:view.sample() for name,view in source_contact_trackers.items()}
@@ -550,229 +575,252 @@ with SimulationAppContext(args):
             for command in trajectory['positions']:step(command,grip)
             q=trajectory['positions'][-1].copy()
             for _ in range(12):step(q,grip)
-        p=initial['lime'][:3].copy()
-        grasp_body_point=np.asarray(args.grasp_body_point if args.grasp_body_point is not None else world.object_center,float)
-        result['grasp_point_body_m']=grasp_body_point.tolist()
-        if placement_refs:
-            result['task_motion_parameters']['placement_reference']={'result_sha256':hashlib.sha256(args.placement_reference.read_bytes()).hexdigest(),'trajectory_sha256':hashlib.sha256(reference_trajectory.read_bytes()).hexdigest(),'pre_release_goals':placement_refs,'clearance_z_m':args.reference_clearance_z}
-        result['single_candidate_round']=bool(args.single_candidate_round)
-        result['transfer_route_policy']={'mode':args.transfer_route_search,'pose_ik_joint_goal_fallback':bool(args.grasp_search=='b03-topdown' or args.transfer_route_search=='upper'),'upper_rises_m':[.08,.16,.24] if args.transfer_route_search=='upper' else []}
-        if len(task_picks(TASK_SPEC))>1 or PICK=='green_ladle':
-            from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import REACHABLE_LATERAL_OFFSETS
-            result['transfer_route_policy']['fallback_extension']={'name':'reachable_lateral_after_legacy_v2','offsets_world_m':[list(x) for x in REACHABLE_LATERAL_OFFSETS],'direct_and_legacy_branches_unchanged':True,'checked_cartesian_after_motion_gen_failures':True}
-
-        target_center=transform(initial['lime'][:3],initial['lime'][3:7])@np.r_[grasp_body_point,1]
-        target_center[2]+=args.grasp_height_offset
-        target_center[0]+=args.grasp_lateral_x
-        result['grasp_lateral_x_m']=float(args.grasp_lateral_x)
-        result['grasp_finger_bias_m']=float(args.grasp_finger_bias)
-        result['grasp_local_approach']=bool(args.grasp_local_approach)
-        topdown_solution=None
-        if args.grasp_search=='b03-topdown':
-            from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import search_topdown,TOPDOWN_POLICY
-            for name in RIGID:
-                if name!=PICK:world.set_obstacle_pose(name,initial[name][:7])
-            topdown_solution,attempts=search_topdown(world,kin,q,initial['lime'][:7],bias_x_m=args.grasp_lateral_x,finger_bias_m=args.grasp_finger_bias,dt=e.step_dt,seed=seed)
-            result['grasp_search_policy']=TOPDOWN_POLICY;result['grasp_solutions']={PICK:{k:v for k,v in topdown_solution.items() if k not in ('rotation','center','offset')}};result['grasp_search_attempts']={PICK:attempts}
-            target_center[:3]=topdown_solution['center']-args.grasp_finger_bias*topdown_solution['rotation'][:,1];use_pregrasp_phase=True
-        # use_pregrasp_phase computed earlier from TASK_SPEC for cart() planning-phase selection.
-        candidates=list(dict.fromkeys([(args.grasp_tilt,args.grasp_yaw)]+(
-            [(25,0),(20,0),(35,90),(35,-90),(10,90),(10,-90),(0,90),(0,-90)] if args.allow_grasp_fallback else [])))
-        if args.grasp_search=='b03-family':
-            candidates=list(dict.fromkeys([(args.grasp_tilt,args.grasp_yaw),(-35,180),(-55,180),(-75,180),(-90,180),(-35,0),(-55,0),(-75,0),(-90,0)]))
-            result['grasp_search_policy']={'name':'b03-family-v1','candidates':candidates,'contact_standoff_m':.02,'lift_m':.12,'closed_grip_preflight_rad':.383,'upper_route_rises_m':[.08,.16,.24]}
-        if topdown_solution:candidates=[(topdown_solution['tilt'],topdown_solution['yaw'])]
-        result['pregrasp_candidates']=[]
-        selected_R=None
-        for tilt,yaw in candidates:
-            R=Rotation.from_euler('z',yaw,degrees=True).as_matrix()@Rotation.from_euler('x',tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],dtype=float)
-            # Optional finger-open bias in grasp frame (TCP Y = column 1).
-            center=target_center[:3]+float(args.grasp_finger_bias)*R[:,1]
-            if args.grasp_local_approach and (not use_pregrasp_phase):
-                # TCP Z (col 2) should point into the object; hover back along -TCP_Z.
-                approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
-                pregrasp_offset=-(args.pregrasp_standoff if args.pregrasp_standoff is not None else (.17 if PICK=='lemon' else .18))*approach
+        if args.development_checkpoint:
+            capture_placement_checkpoint('banana_1')
+            result['restored_first_native_passed']=result['placement_checkpoints']['banana_1']['passed']
+            if not result['restored_first_native_passed']:raise RuntimeError('Restored first banana no longer passes native destination predicate; checkpoint invalid for this run')
+        if args.replay_prefix_checkpoint:
+            reference=json.loads(args.replay_prefix_checkpoint.read_text());prefix_path=args.replay_prefix_checkpoint.parent/'prefix.npz'
+            if list(robot.joint_names)!=reference['robot_joint_names'] or abs(e.step_dt-reference['dt'])>1e-12:raise RuntimeError('Prefix joint/time schema mismatch')
+            if reference.get('variant_config_source') and hashlib.sha256(Path(args.variant_config).read_bytes()).hexdigest()!=reference['variant_config_source']['sha256']:raise RuntimeError('Prefix scene config changed')
+            if reference['variant']!=args.variant or hashlib.sha256(prefix_path.read_bytes()).hexdigest()!=reference['prefix_sha256']:raise RuntimeError('Prefix provenance mismatch')
+            data=np.load(prefix_path,allow_pickle=False);source_result=json.loads((Path(reference['source_episode'])/'result.json').read_text())
+            result['prefix_replay']={'checkpoint':str(args.replay_prefix_checkpoint),'source_episode':reference['source_episode'],'actions':len(data['actions']),'policy':'Real recorded commands replayed from original reset; actual contact/safety and native checkpoint re-evaluated'}
+            for saved_phase,action in zip(data['phases'],data['actions']):
+                phase=str(saved_phase);q=np.asarray(action[:7]);grip=float(action[7]);step(q,grip)
+            world.attachment=None;world.source_detached=True
+            result['close_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=8)
+            result['lift_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'lift',last_actions=5)
+            lifted_states=[row[3]['lime'][2] for row in records if row[0]=='lift'];result['lift_m']=float(max(lifted_states)-initial['lime'][2]) if lifted_states else 0.
+            for key in ('grasp_candidate','grasp_point_body_m','grasp_solutions'):
+                if key in source_result:result[key]=source_result[key]
+            capture_placement_checkpoint('banana_1');result['prefix_replay']['checkpoint_native_passed']=result['placement_checkpoints']['banana_1']['passed']
+            actual=snapshot();expected=reference['state'];result['prefix_replay']['state_difference']={'joint_max_abs_rad':float(np.max(np.abs(actual['q']-expected['q']))),'rigid_position_m':{name:float(np.linalg.norm(actual[name][:3]-np.asarray(value[:3]))) for name,value in expected['rigid'].items()}}
+            if not result['prefix_replay']['checkpoint_native_passed']:raise RuntimeError('Replayed prefix did not reproduce native first placement; stop before second')
+        else:
+            p=initial['lime'][:3].copy()
+            grasp_body_point=np.asarray(args.grasp_body_point if args.grasp_body_point is not None else world.object_center,float)
+            result['grasp_point_body_m']=grasp_body_point.tolist()
+            if placement_refs:
+                result['task_motion_parameters']['placement_reference']={'result_sha256':hashlib.sha256(args.placement_reference.read_bytes()).hexdigest(),'trajectory_sha256':hashlib.sha256(reference_trajectory.read_bytes()).hexdigest(),'pre_release_goals':placement_refs,'clearance_z_m':args.reference_clearance_z}
+            result['single_candidate_round']=bool(args.single_candidate_round)
+            result['transfer_route_policy']={'mode':args.transfer_route_search,'pose_ik_joint_goal_fallback':bool(args.grasp_search=='b03-topdown' or args.transfer_route_search=='upper'),'upper_rises_m':[.08,.16,.24] if args.transfer_route_search=='upper' else []}
+            if len(task_picks(TASK_SPEC))>1 or PICK=='green_ladle':
+                from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import REACHABLE_LATERAL_OFFSETS
+                result['transfer_route_policy']['fallback_extension']={'name':'reachable_lateral_after_legacy_v2','offsets_world_m':[list(x) for x in REACHABLE_LATERAL_OFFSETS],'direct_and_legacy_branches_unchanged':True,'checked_cartesian_after_motion_gen_failures':True}
+    
+            target_center=transform(initial['lime'][:3],initial['lime'][3:7])@np.r_[grasp_body_point,1]
+            target_center[2]+=args.grasp_height_offset
+            target_center[0]+=args.grasp_lateral_x
+            result['grasp_lateral_x_m']=float(args.grasp_lateral_x)
+            result['grasp_finger_bias_m']=float(args.grasp_finger_bias)
+            result['grasp_local_approach']=bool(args.grasp_local_approach)
+            topdown_solution=None
+            if args.grasp_search=='b03-topdown':
+                from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import search_topdown,TOPDOWN_POLICY
+                for name in RIGID:
+                    if name!=PICK:world.set_obstacle_pose(name,initial[name][:7])
+                topdown_solution,attempts=search_topdown(world,kin,q,initial['lime'][:7],bias_x_m=args.grasp_lateral_x,finger_bias_m=args.grasp_finger_bias,dt=e.step_dt,seed=seed)
+                result['grasp_search_policy']=TOPDOWN_POLICY;result['grasp_solutions']={PICK:{k:v for k,v in topdown_solution.items() if k not in ('rotation','center','offset')}};result['grasp_search_attempts']={PICK:attempts}
+                target_center[:3]=topdown_solution['center']-args.grasp_finger_bias*topdown_solution['rotation'][:,1];use_pregrasp_phase=True
+            # use_pregrasp_phase computed earlier from TASK_SPEC for cart() planning-phase selection.
+            candidates=list(dict.fromkeys([(args.grasp_tilt,args.grasp_yaw)]+(
+                [(25,0),(20,0),(35,90),(35,-90),(10,90),(10,-90),(0,90),(0,-90)] if args.allow_grasp_fallback else [])))
+            if args.grasp_search=='b03-family':
+                candidates=list(dict.fromkeys([(args.grasp_tilt,args.grasp_yaw),(-35,180),(-55,180),(-75,180),(-90,180),(-35,0),(-55,0),(-75,0),(-90,0)]))
+                result['grasp_search_policy']={'name':'b03-family-v1','candidates':candidates,'contact_standoff_m':.02,'lift_m':.12,'closed_grip_preflight_rad':.383,'upper_route_rises_m':[.08,.16,.24]}
+            if topdown_solution:candidates=[(topdown_solution['tilt'],topdown_solution['yaw'])]
+            result['pregrasp_candidates']=[]
+            selected_R=None
+            for tilt,yaw in candidates:
+                R=Rotation.from_euler('z',yaw,degrees=True).as_matrix()@Rotation.from_euler('x',tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],dtype=float)
+                # Optional finger-open bias in grasp frame (TCP Y = column 1).
+                center=target_center[:3]+float(args.grasp_finger_bias)*R[:,1]
+                if args.grasp_local_approach and (not use_pregrasp_phase):
+                    # TCP Z (col 2) should point into the object; hover back along -TCP_Z.
+                    approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
+                    pregrasp_offset=-(args.pregrasp_standoff if args.pregrasp_standoff is not None else (.17 if PICK=='lemon' else .18))*approach
+                else:
+                    pregrasp_offset=(np.array([0.,0.,.08]) if args.grasp_search=='b03-topdown' else np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float))
+                try:
+                    phase='pregrasp' if use_pregrasp_phase else 'approach'
+                    # Use an oriented hover before the short local contact approach.
+                    if args.grasp_search=='b03-family':
+                        from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import preflight_grasp
+                        for name in RIGID:
+                            if name!=PICK:world.set_obstacle_pose(name,initial[name][:7])
+                        planner=LimePlanner(world,kin,dt=e.step_dt,seed=seed,max_joint_speed=.4);planner.pose_ik_joint_fallback=bool(args.grasp_search=='b03-topdown' or args.transfer_route_search=='upper')
+                        preflight=preflight_grasp(planner,q,R,center,pregrasp_offset,initial['lime'][:7],PICK)
+                        result.setdefault('grasp_preflight_passes',[]).append({'tilt':tilt,'yaw':yaw,**preflight})
+                    cart(center+pregrasp_offset,rotation=R, force_phase=('transfer' if args.pregrasp_planner=='motion_gen' else ('cartesian_line' if args.pregrasp_planner=='cartesian_line' or (args.pregrasp_planner=='auto' and args.grasp_local_approach and not use_pregrasp_phase and PICK!='lemon') else None)))
+                    result['selected_grasp']={'tilt':tilt,'yaw':yaw,'phase':phase,'use_pregrasp_phase':use_pregrasp_phase,
+                        'tcp_z_world':approach.tolist() if (args.grasp_local_approach and not use_pregrasp_phase) else None}
+                    if topdown_solution:result['selected_grasp']['height_offset_m']=topdown_solution['height_offset_m']
+                    if topdown_solution:
+                        for key in ('pinch_z_offset_m','waist_y_shift_m'):
+                            if key in topdown_solution:result['selected_grasp'][key]=topdown_solution[key]
+                    result['pregrasp_offset_m']=pregrasp_offset.tolist()
+                    selected_R=R; target_center[:3]=center; break
+                except RuntimeError as exc:
+                    result['pregrasp_candidates'].append({'tilt':tilt,'yaw':yaw,'error':str(exc)})
+                    if records:raise
+            else:raise RuntimeError('All pregrasp pose candidates failed')
+            phase='approach'
+            if use_pregrasp_phase:
+                cart(target_center[:3])
             else:
-                pregrasp_offset=(np.array([0.,0.,.08]) if args.grasp_search=='b03-topdown' else np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float))
-            try:
-                phase='pregrasp' if use_pregrasp_phase else 'approach'
-                # Use an oriented hover before the short local contact approach.
-                if args.grasp_search=='b03-family':
-                    from kitchen_safety.extensions.lightwheel_pick_place.b03_strategy import preflight_grasp
-                    for name in RIGID:
-                        if name!=PICK:world.set_obstacle_pose(name,initial[name][:7])
-                    planner=LimePlanner(world,kin,dt=e.step_dt,seed=seed,max_joint_speed=.4);planner.pose_ik_joint_fallback=bool(args.grasp_search=='b03-topdown' or args.transfer_route_search=='upper')
-                    preflight=preflight_grasp(planner,q,R,center,pregrasp_offset,initial['lime'][:7],PICK)
-                    result.setdefault('grasp_preflight_passes',[]).append({'tilt':tilt,'yaw':yaw,**preflight})
-                cart(center+pregrasp_offset,rotation=R, force_phase=('transfer' if args.pregrasp_planner=='motion_gen' else ('cartesian_line' if args.pregrasp_planner=='cartesian_line' or (args.pregrasp_planner=='auto' and args.grasp_local_approach and not use_pregrasp_phase and PICK!='lemon') else None)))
-                result['selected_grasp']={'tilt':tilt,'yaw':yaw,'phase':phase,'use_pregrasp_phase':use_pregrasp_phase,
-                    'tcp_z_world':approach.tolist() if (args.grasp_local_approach and not use_pregrasp_phase) else None}
-                if topdown_solution:result['selected_grasp']['height_offset_m']=topdown_solution['height_offset_m']
-                if topdown_solution:
-                    for key in ('pinch_z_offset_m','waist_y_shift_m'):
-                        if key in topdown_solution:result['selected_grasp'][key]=topdown_solution[key]
-                result['pregrasp_offset_m']=pregrasp_offset.tolist()
-                selected_R=R; target_center[:3]=center; break
-            except RuntimeError as exc:
-                result['pregrasp_candidates'].append({'tilt':tilt,'yaw':yaw,'error':str(exc)})
-                if records:raise
-        else:raise RuntimeError('All pregrasp pose candidates failed')
-        phase='approach'
-        if use_pregrasp_phase:
-            cart(target_center[:3])
-        else:
-            # Shelf: stop short along the same approach axis used for hover.
-            axis=np.asarray(result['pregrasp_offset_m'],dtype=float)
-            axis=axis/max(float(np.linalg.norm(axis)),1e-6)
-            contact_standoff=target_center[:3]+axis*0.02
-            result['approach_contact_standoff_m']=contact_standoff.tolist()
-            # Banana feasibility: MotionGen transfer IK_FAIL on hover->contact; cartesian_line succeeds near tol.
-            cart(contact_standoff, force_phase=('transfer' if PICK=='lemon' else 'cartesian_line'))
-        if args.grasp_search=='b03-topdown':result['close_contacts']=close_with_feedback(5)
-        else:
-            phase='close';grip=1.
-            for _ in range(30):step(q,grip)
-            result['close_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=5)
-        held=snapshot()
-        if not result['close_contacts']['both_fingers_near_body']:raise RuntimeError('No bilateral physical lime grasp')
-        world.attachment=np.linalg.inv(kin.fk(held['q'][ids]))@transform(held['lime'][:3],held['lime'][3:7])
-        result['planning_attachment_tcp_to_lime']=world.attachment.tolist()
-        held_points=world.lime_vertices@Rotation.from_quat(held['lime'][3:7]).as_matrix().T+held['lime'][:3]
-        held_min_z=float(held_points[:,2].min())
-        if held_min_z<world.source_resting_min_z-.0005:raise RuntimeError('Closed grasp went below the original calibrated source support')
-        world.source_lift_floor_z=world.source_resting_min_z-JITTER_M
-        result['lift_support_contact_model']={'measured_closed_grasp_min_z_m':held_min_z,
-            'mode':world.source_support_mode,
-            'initial_lower_bound_m':world.source_lift_floor_z,'jitter_tolerance_m':.0005,
-            'xy_anchor_m':world.source_resting_xy.tolist(),'max_xy_displacement_m':.05,
-            'policy':'Only exact original source surface and 50 mm xy region, collision hull bottom at least initial native rest minus 0.5 mm (asset origin is not a penetration measure); geometric separation plus zero contacts permanently revokes exception.'}
-        if len(task_picks(TASK_SPEC))>1:
-            phase='lift';cart(held['tcp']+np.array([0.,0.,.10 if args.grasp_search=='b03-topdown' else .12]),force_phase='lift')
-        elif use_pregrasp_phase:
-            result['commanded_initial_lift_m']=float(TASK_SPEC.lift_height_m)
-            phase='lift';cart(held['tcp']+np.r_[TASK_SPEC.lift_offset_xy_m,TASK_SPEC.lift_height_m])
-        else:
-            # Shelf extract: scan template waypoints if provided; else preclear→retract→rise.
-            phase='lift'
-            if args.shelf_lift_template is not None:
-                tmpl=json.loads(Path(args.shelf_lift_template).read_text())
-                waypoints=[np.asarray(w,dtype=float) for w in tmpl['waypoints_delta_m']]
-                result['shelf_lift_retract_m']={'template':str(args.shelf_lift_template),
-                    'waypoints':[w.tolist() for w in waypoints], **{k:tmpl[k] for k in tmpl if k!='waypoints_delta_m'}}
+                # Shelf: stop short along the same approach axis used for hover.
+                axis=np.asarray(result['pregrasp_offset_m'],dtype=float)
+                axis=axis/max(float(np.linalg.norm(axis)),1e-6)
+                contact_standoff=target_center[:3]+axis*0.02
+                result['approach_contact_standoff_m']=contact_standoff.tolist()
+                # Banana feasibility: MotionGen transfer IK_FAIL on hover->contact; cartesian_line succeeds near tol.
+                cart(contact_standoff, force_phase=('transfer' if PICK=='lemon' else 'cartesian_line'))
+            if args.grasp_search=='b03-topdown':result['close_contacts']=close_with_feedback(5)
             else:
-                n=max(1,int(args.shelf_retract_steps))
-                y_final=float(args.shelf_retract_y); z_rise=float(args.shelf_rise_z)
-                z_clear=float(args.shelf_retract_clear_z); z_pre=float(args.shelf_preclear_z)
-                waypoints=[]
-                if z_pre>0:
-                    waypoints.append(np.array([0.0, 0.0, z_pre]))
-                hold_z=max(z_pre, z_clear)
+                phase='close';grip=1.
+                for _ in range(30):step(q,grip)
+                result['close_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=5)
+            held=snapshot()
+            if not result['close_contacts']['both_fingers_near_body']:raise RuntimeError('No bilateral physical lime grasp')
+            world.attachment=np.linalg.inv(kin.fk(held['q'][ids]))@transform(held['lime'][:3],held['lime'][3:7])
+            result['planning_attachment_tcp_to_lime']=world.attachment.tolist()
+            held_points=world.lime_vertices@Rotation.from_quat(held['lime'][3:7]).as_matrix().T+held['lime'][:3]
+            held_min_z=float(held_points[:,2].min())
+            if held_min_z<world.source_resting_min_z-.0005:raise RuntimeError('Closed grasp went below the original calibrated source support')
+            world.source_lift_floor_z=world.source_resting_min_z-JITTER_M
+            result['lift_support_contact_model']={'measured_closed_grasp_min_z_m':held_min_z,
+                'mode':world.source_support_mode,
+                'initial_lower_bound_m':world.source_lift_floor_z,'jitter_tolerance_m':.0005,
+                'xy_anchor_m':world.source_resting_xy.tolist(),'max_xy_displacement_m':.05,
+                'policy':'Only exact original source surface and 50 mm xy region, collision hull bottom at least initial native rest minus 0.5 mm (asset origin is not a penetration measure); geometric separation plus zero contacts permanently revokes exception.'}
+            if len(task_picks(TASK_SPEC))>1:
+                phase='lift';cart(held['tcp']+np.array([0.,0.,.10 if args.grasp_search=='b03-topdown' else .12]),force_phase='lift')
+            elif use_pregrasp_phase:
+                result['commanded_initial_lift_m']=float(TASK_SPEC.lift_height_m)
+                phase='lift';cart(held['tcp']+np.r_[TASK_SPEC.lift_offset_xy_m,TASK_SPEC.lift_height_m])
+            else:
+                # Shelf extract: scan template waypoints if provided; else preclear→retract→rise.
+                phase='lift'
+                if args.shelf_lift_template is not None:
+                    tmpl=json.loads(Path(args.shelf_lift_template).read_text())
+                    waypoints=[np.asarray(w,dtype=float) for w in tmpl['waypoints_delta_m']]
+                    result['shelf_lift_retract_m']={'template':str(args.shelf_lift_template),
+                        'waypoints':[w.tolist() for w in waypoints], **{k:tmpl[k] for k in tmpl if k!='waypoints_delta_m'}}
+                else:
+                    n=max(1,int(args.shelf_retract_steps))
+                    y_final=float(args.shelf_retract_y); z_rise=float(args.shelf_rise_z)
+                    z_clear=float(args.shelf_retract_clear_z); z_pre=float(args.shelf_preclear_z)
+                    waypoints=[]
+                    if z_pre>0:
+                        waypoints.append(np.array([0.0, 0.0, z_pre]))
+                    hold_z=max(z_pre, z_clear)
+                    for i in range(1,n+1):
+                        frac=i/n
+                        t=0.5*frac+0.5*(frac*frac)
+                        waypoints.append(np.array([0.0, y_final*t, hold_z]))
+                    waypoints.append(np.array([0.0, y_final, z_rise]))
+                    result['shelf_lift_retract_m']={'y_final':y_final,'z_rise':z_rise,'z_clear':z_clear,
+                        'z_preclear':z_pre,'steps':n,'waypoints':[w.tolist() for w in waypoints]}
+                for wi,w in enumerate(waypoints):
+                    try:
+                        # Phase from consecutive step, not absolute offset (rise keeps prior Y).
+                        prev=np.zeros(3) if wi==0 else np.asarray(waypoints[wi-1],dtype=float)
+                        step_delta=np.asarray(w,dtype=float)-prev
+                        if abs(float(step_delta[0]))<1e-9 and abs(float(step_delta[1]))<1e-9:
+                            force='lift'
+                        else:
+                            force='cartesian_line'
+                        cart(held['tcp']+w, force_phase=force)
+                    except RuntimeError as exc:
+                        result['shelf_lift_failed_waypoint']= {'index':wi,'delta_m':w.tolist(),
+                            'step_m':step_delta.tolist(),'error':str(exc),'plan_phase':force}
+                        raise
+            lifted=snapshot();result['lift_m']=float(lifted['lime'][2]-p[2]);result['lift_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'lift',last_actions=5)
+            if result['lift_m']<.08 or not result['lift_contacts']['both_fingers_on_body']:raise RuntimeError('Lime failed physical lift/contact check')
+            if args.post_lift_rise>0:
+                phase='lift';cart(lifted['tcp']+np.array([0.,0.,args.post_lift_rise]),force_phase='lift');lifted=snapshot()
+            dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
+            # Release above destination then let gravity settle the fruit.
+            desired_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
+            first_pose_feedback=False
+            if placement_refs:
+                desired_root,target_tcp=reference_placement_goal(lifted,dest,.045)
+                phase='transfer';cart(target_tcp[:3,3],rotation=target_tcp[:3,:3])
+                transferred=snapshot();offset=transferred['tcp']-transferred['lime'][:3];first_pose_feedback=True
+            elif args.first_placement_reference is not None:
+                reference=json.loads(args.first_placement_reference.read_text())
+                checkpoint=reference['placement_checkpoints'][PICK]
+                if not reference.get('success') or not checkpoint.get('passed'):raise RuntimeError('Placement orientation reference has no original success')
+                body_quaternion=checkpoint['object_state'][3:7]
+                actual_attachment=np.linalg.inv(kin.fk(lifted['q'][ids]))@transform(lifted['lime'][:3],lifted['lime'][3:7])
+                target_tcp=transform(desired_root,body_quaternion)@np.linalg.inv(actual_attachment)
+                result['first_placement_orientation_reference']={'path':str(args.first_placement_reference),'sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest(),'body_quaternion':body_quaternion,'scope':'Robot TCP target only; no object pose setters'}
+                phase='transfer';cart(target_tcp[:3,3],rotation=target_tcp[:3,:3])
+                transferred=snapshot();offset=transferred['tcp']-transferred['lime'][:3];first_pose_feedback=True
+            else:
+                phase='transfer';cart(desired_root+offset)
+            if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
+                phase='transfer'
+                cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
+                result['place_clear_rise_z_m']=float(args.place_clear_rise_z)
+            lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
+            if len(task_picks(TASK_SPEC))==2 and args.dual_first_place_lower_z is not None:lower_z=float(args.dual_first_place_lower_z)
+            lower_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
+            xfer_tcp=(transferred['tcp'] if first_pose_feedback else desired_root+offset)
+            lower_tcp=lower_root+offset
+            if placement_refs:
+                current=snapshot();lower_root,reference_lower_tcp=reference_placement_goal(current,current['wooden_bowl'],0.)
+                lower_tcp=reference_lower_tcp[:3,3]
+                result.setdefault('placement_body_goals',{})[PICK]={'root':lower_root.tolist(),'quaternion':placement_refs[PICK]['quaternion'],'tcp_target':reference_lower_tcp.tolist()}
+            result['place_lower']={'mode':args.place_lower_mode,'lower_z_m':lower_z,
+                'transfer_tcp_m':xfer_tcp.tolist(),'lower_tcp_m':lower_tcp.tolist(),
+                'drop_m':float(xfer_tcp[2]-lower_tcp[2])}
+            phase='lower'
+            if args.gentle_supported_placement:
+                lower_until_supported()
+            elif args.placement_goals and args.placement_feedback_lower:
+                cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
+            elif args.placement_goals:
+                result['place_lower']['skipped']=True
+                result['place_lower']['reason']='Direct release at planned body goal'
+            elif placement_refs:
+                cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
+            elif args.place_lower_mode=='skip' or (args.place_lower_mode=='steps' and abs(xfer_tcp[2]-lower_tcp[2])<1e-4):
+                result['place_lower']['skipped']=True
+            elif args.place_lower_mode=='steps':
+                n=max(1,int(args.place_lower_steps))
                 for i in range(1,n+1):
                     frac=i/n
-                    t=0.5*frac+0.5*(frac*frac)
-                    waypoints.append(np.array([0.0, y_final*t, hold_z]))
-                waypoints.append(np.array([0.0, y_final, z_rise]))
-                result['shelf_lift_retract_m']={'y_final':y_final,'z_rise':z_rise,'z_clear':z_clear,
-                    'z_preclear':z_pre,'steps':n,'waypoints':[w.tolist() for w in waypoints]}
-            for wi,w in enumerate(waypoints):
-                try:
-                    # Phase from consecutive step, not absolute offset (rise keeps prior Y).
-                    prev=np.zeros(3) if wi==0 else np.asarray(waypoints[wi-1],dtype=float)
-                    step_delta=np.asarray(w,dtype=float)-prev
-                    if abs(float(step_delta[0]))<1e-9 and abs(float(step_delta[1]))<1e-9:
-                        force='lift'
-                    else:
-                        force='cartesian_line'
-                    cart(held['tcp']+w, force_phase=force)
-                except RuntimeError as exc:
-                    result['shelf_lift_failed_waypoint']= {'index':wi,'delta_m':w.tolist(),
-                        'step_m':step_delta.tolist(),'error':str(exc),'plan_phase':force}
-                    raise
-        lifted=snapshot();result['lift_m']=float(lifted['lime'][2]-p[2]);result['lift_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'lift',last_actions=5)
-        if result['lift_m']<.08 or not result['lift_contacts']['both_fingers_on_body']:raise RuntimeError('Lime failed physical lift/contact check')
-        if args.post_lift_rise>0:
-            phase='lift';cart(lifted['tcp']+np.array([0.,0.,args.post_lift_rise]),force_phase='lift');lifted=snapshot()
-        dest=snapshot()['wooden_bowl'];offset=lifted['tcp']-lifted['lime'][:3]
-        # Release above destination then let gravity settle the fruit.
-        desired_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,TASK_SPEC.transfer_z_m])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
-        first_pose_feedback=False
-        if placement_refs:
-            desired_root,target_tcp=reference_placement_goal(lifted,dest,.045)
-            phase='transfer';cart(target_tcp[:3,3],rotation=target_tcp[:3,:3])
-            transferred=snapshot();offset=transferred['tcp']-transferred['lime'][:3];first_pose_feedback=True
-        elif args.first_placement_reference is not None:
-            reference=json.loads(args.first_placement_reference.read_text())
-            checkpoint=reference['placement_checkpoints'][PICK]
-            if not reference.get('success') or not checkpoint.get('passed'):raise RuntimeError('Placement orientation reference has no original success')
-            body_quaternion=checkpoint['object_state'][3:7]
-            actual_attachment=np.linalg.inv(kin.fk(lifted['q'][ids]))@transform(lifted['lime'][:3],lifted['lime'][3:7])
-            target_tcp=transform(desired_root,body_quaternion)@np.linalg.inv(actual_attachment)
-            result['first_placement_orientation_reference']={'path':str(args.first_placement_reference),'sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest(),'body_quaternion':body_quaternion,'scope':'Robot TCP target only; no object pose setters'}
-            phase='transfer';cart(target_tcp[:3,3],rotation=target_tcp[:3,:3])
-            transferred=snapshot();offset=transferred['tcp']-transferred['lime'][:3];first_pose_feedback=True
-        else:
-            phase='transfer';cart(desired_root+offset)
-        if float(args.place_clear_rise_z)>0 and (not use_pregrasp_phase):
-            phase='transfer'
-            cart(snapshot()['tcp']+np.array([0.0,0.0,float(args.place_clear_rise_z)]), force_phase='transfer')
-            result['place_clear_rise_z_m']=float(args.place_clear_rise_z)
-        lower_z=float(TASK_SPEC.lower_z_m if args.place_lower_z is None else args.place_lower_z)
-        if len(task_picks(TASK_SPEC))==2 and args.dual_first_place_lower_z is not None:lower_z=float(args.dual_first_place_lower_z)
-        lower_root=dest[:3]+np.array([(args.dual_first_place_offset_x if PICK==TASK_SPEC.pick_object else args.dual_second_place_offset_x) if len(task_picks(TASK_SPEC))==2 else 0,args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 and PICK==TASK_SPEC.pick_object else 0.,lower_z])+np.r_[TASK_SPEC.place_offset_xy_m,0.]
-        xfer_tcp=(transferred['tcp'] if first_pose_feedback else desired_root+offset)
-        lower_tcp=lower_root+offset
-        if placement_refs:
-            current=snapshot();lower_root,reference_lower_tcp=reference_placement_goal(current,current['wooden_bowl'],0.)
-            lower_tcp=reference_lower_tcp[:3,3]
-            result.setdefault('placement_body_goals',{})[PICK]={'root':lower_root.tolist(),'quaternion':placement_refs[PICK]['quaternion'],'tcp_target':reference_lower_tcp.tolist()}
-        result['place_lower']={'mode':args.place_lower_mode,'lower_z_m':lower_z,
-            'transfer_tcp_m':xfer_tcp.tolist(),'lower_tcp_m':lower_tcp.tolist(),
-            'drop_m':float(xfer_tcp[2]-lower_tcp[2])}
-        phase='lower'
-        if args.gentle_supported_placement:
-            lower_until_supported()
-        elif args.placement_goals and args.placement_feedback_lower:
-            cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
-        elif args.placement_goals:
-            result['place_lower']['skipped']=True
-            result['place_lower']['reason']='Direct release at planned body goal'
-        elif placement_refs:
-            cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
-        elif args.place_lower_mode=='skip' or (args.place_lower_mode=='steps' and abs(xfer_tcp[2]-lower_tcp[2])<1e-4):
-            result['place_lower']['skipped']=True
-        elif args.place_lower_mode=='steps':
-            n=max(1,int(args.place_lower_steps))
-            for i in range(1,n+1):
-                frac=i/n
-                mid=xfer_tcp*(1.0-frac)+lower_tcp*frac
-                cart(mid, force_phase='cartesian_line')
-        elif args.place_lower_mode=='cartesian_line':
-            cart(lower_tcp, force_phase='cartesian_line')
-        else:
-            cart(lower_tcp, force_phase='transfer')
-        for _ in range(args.pre_release_hold_steps):step(q,grip)
-        if args.release_retract_z>0:release_with_retract()
-        else:
-            phase='release';world.attachment=None
-            for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
-                grip=float(target_grip);step(q,grip)
-            grip=0.
-        for _ in range(35):step(q,grip)
-        phase='retreat';before_retreat=len(records)
-        try:cart(snapshot()['tcp']+[0,0,.14])
-        except RuntimeError as exc:
-            # Withdrawal is not part of the source pick-and-place predicate.
-            # If the optional path is rejected before any motion, keep the
-            # already checked open-gripper pose and let the fruit settle.
-            # Never swallow any failure after a retreat action was executed.
-            if len(records)!=before_retreat:raise
-            result['optional_retreat_skipped']={'reason':str(exc),
-                'executed_actions':0,'policy':'Hold the already safe open-gripper pose; original final support/speed predicate remains mandatory.'}
-        phase='settle_final'
-        for _ in range(120):
-            step(q,grip)
-            if terminal.get('terms',{}).get('success',False) and all_current_native_predicates():break
-        capture_placement_checkpoint(PICK)
+                    mid=xfer_tcp*(1.0-frac)+lower_tcp*frac
+                    cart(mid, force_phase='cartesian_line')
+            elif args.place_lower_mode=='cartesian_line':
+                cart(lower_tcp, force_phase='cartesian_line')
+            else:
+                cart(lower_tcp, force_phase='transfer')
+            for _ in range(args.pre_release_hold_steps):step(q,grip)
+            if args.release_retract_z>0:release_with_retract()
+            else:
+                phase='release';world.attachment=None
+                for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
+                    grip=float(target_grip);step(q,grip)
+                grip=0.
+            for _ in range(35):step(q,grip)
+            phase='retreat';before_retreat=len(records)
+            try:cart(snapshot()['tcp']+[0,0,.14])
+            except RuntimeError as exc:
+                # Withdrawal is not part of the source pick-and-place predicate.
+                # If the optional path is rejected before any motion, keep the
+                # already checked open-gripper pose and let the fruit settle.
+                # Never swallow any failure after a retreat action was executed.
+                if len(records)!=before_retreat:raise
+                result['optional_retreat_skipped']={'reason':str(exc),
+                    'executed_actions':0,'policy':'Hold the already safe open-gripper pose; original final support/speed predicate remains mandatory.'}
+            phase='settle_final'
+            for _ in range(120):
+                step(q,grip)
+                if terminal.get('terms',{}).get('success',False) and all_current_native_predicates():break
+            capture_placement_checkpoint(PICK)
         # DUAL_PICK_LOOP: place remaining picks (B03 banana_2) with same skill template.
         remaining=list(task_picks(TASK_SPEC))[1:]
         result['pick_objects']=list(task_picks(TASK_SPEC))
@@ -906,6 +954,9 @@ with SimulationAppContext(args):
         if args.variant=='property':
             result['property_displacement_m']=float(np.linalg.norm(final['hazard_pose'][:3]-initial['hazard_pose'][:3]))
             result['success'] &= result['property_displacement_m']<.01
+        if args.development_checkpoint:
+            result['development_second_success']=bool(native.get('banana_2',{}).get('passed') and abs(final['q'][robot.joint_names.index('finger_joint')])<.05)
+            result['development_only']=True;result['success']=False
     except Exception as exc:
         result['error']=repr(exc);result['traceback']=traceback.format_exc();print(result['traceback'],flush=True)
     finally:
