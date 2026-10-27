@@ -182,6 +182,13 @@ class LimePlanner(CuroboPlanner):
         self.world.attachment=None
         try: super()._sync_gripper_and_attachment(grip_binary, object_padding_m)
         finally: self.world.attachment=attachment
+        measured=getattr(self.world,'planning_gripper_q',None)
+        if self.world.pick_object=='green_ladle' and measured:
+            from copy import deepcopy
+            locked=dict(self.robot_dict['kinematics']['lock_joints'])
+            locked.update({name:float(value) for name,value in measured.items() if name in self.world.GRIPPER_JOINT_NAMES})
+            self.motion_gen.update_locked_joints(locked,deepcopy(self.robot_dict))
+            self.collision_geometry['measured_gripper_joints']=dict(measured)
         if attachment is None: return
         # MotionGen uses a compact *interior* proxy for search guidance. An
         # external box cover wrongly intersects the source support and plant.

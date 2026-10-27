@@ -628,7 +628,8 @@ with SimulationAppContext(args):
             phase='release';world.attachment=None;world.source_detached=True
             from kitchen_safety.extensions.lightwheel_pick_place.controlled_release import enable_continuous_release
             result['release_action_control']=enable_continuous_release(e.action_manager.get_term('gripper_action'))
-            q=snapshot()['q'][ids].copy()
+            release_state=snapshot();q=release_state['q'][ids].copy()
+            world.gripper_joint_position=float(release_state['q'][robot.joint_names.index('finger_joint')]);world.planning_gripper_q=geometry(release_state)['gripper_q']
             task=next(t for t in getattr(envdef.task,'subtasks',[envdef.task]) if t.pick_up_object.name==PICK)
             def support():
                 f=arr(scene[task.contact_sensor_cfg.name].data.force_matrix_w).reshape(-1,3)[0];mag=float(np.linalg.norm(f))
@@ -694,7 +695,7 @@ with SimulationAppContext(args):
                 proposal=json.loads(args.release_landing_plan.read_text())
                 if not proposal['all_passed']:raise RuntimeError('Unverified measured landing proposal')
                 state=snapshot();q=state['q'][ids].copy();world.source_detached=True;phase='lower';world.allowed_phase='lower'
-                world.attachment=np.linalg.inv(kin.fk(q))@transform(state['lime'][:3],state['lime'][3:7]);world.planning_gripper_q=geometry(state)['gripper_q']
+                world.attachment=np.linalg.inv(kin.fk(q))@transform(state['lime'][:3],state['lime'][3:7]);world.planning_gripper_q=geometry(state)['gripper_q'];world.gripper_joint_position=float(state['q'][robot.joint_names.index('finger_joint')])
                 for name in RIGID:
                     if name!=PICK:world.set_obstacle_pose(name,state[name][:7])
                 body_goal=np.asarray(proposal['body_goal']);target=body_goal@np.linalg.inv(world.attachment)
