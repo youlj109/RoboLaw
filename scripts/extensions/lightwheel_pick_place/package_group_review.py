@@ -23,7 +23,7 @@ for task,meta in data['tasks'].items():
    for file in episode.glob(pattern):add(file,prefix+'/'+file.name)
  if 'manifest' in meta:add(meta['manifest'],task+'/existing_acceptance_manifest.json')
  review=Path('/root/autodl-tmp')/(task+'-review')
- for pattern in ('*existing_baseline_comparison.json','*final_existing_baseline_comparison.json','paired_*/paired_planning.json','acceptance_manifest.json'):
+ for pattern in ('*existing_baseline_comparison.json','*final_existing_baseline_comparison.json','paired_*/paired_planning.json','acceptance_manifest.json','scope_review_manifest.json'):
   for file in review.glob(pattern):add(file,task+'/review/'+str(file.relative_to(review)))
 # Include exact collected scene configs as provenance, never private handoffs or SSH logs.
 for name,path in list(sources.items()):
