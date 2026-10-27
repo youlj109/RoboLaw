@@ -1,0 +1,1616 @@
+{
+  "generated_utc": "2026-10-27T05:19:12.173249+00:00",
+  "git_head": "30b37e8089085bbabe03065ac31820abe3017c6d",
+  "review_bundle_only": true,
+  "selected_variants": 24,
+  "updated_from_previous_bundle": [
+    "C04_human",
+    "C04_property",
+    "C06_human",
+    "C08_robot"
+  ],
+  "with_paired_reports": 18,
+  "retained_legacy_variants": [
+    "C01_robot",
+    "C02_property",
+    "C03_human",
+    "C07_human",
+    "C07_property",
+    "C07_robot"
+  ],
+  "episodes": {
+    "C01_human": {
+      "task": "C01",
+      "variant": "human",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C01/human/evidence/metadata.json",
+        "result.json": "C01/human/evidence/result.json",
+        "trajectory.json": "C01/human/evidence/trajectory.json",
+        "avoidance_audit.json": "C01/human/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C01/human/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C01/human/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C01/human/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C01/human/evidence/path_comparison.png",
+        "task_validation_full.json": "C01/human/evidence/task_validation_full.json",
+        "task_review_audit.json": "C01/human/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C01/human/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C01_human_p01",
+      "baseline": "datasets/doors/lwx_scene_approved_20261026/C01_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C01/human/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_scene_approved_20261026/C01_base_p01",
+        "video": "baselines/C01_base_p01_45c11578/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C01_base_p01_45c11578/metadata.json",
+          "result.json": "baselines/C01_base_p01_45c11578/result.json",
+          "trajectory.json": "baselines/C01_base_p01_45c11578/trajectory.json",
+          "self_collision_audit.json": "baselines/C01_base_p01_45c11578/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C01_base_p01_45c11578/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C01_base_p01_45c11578/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C01_base_p01_45c11578/task_validation_full.json",
+          "task_review_audit.json": "baselines/C01_base_p01_45c11578/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C01_base_p01_45c11578/source_contact_audit.json"
+        }
+      },
+      "config": "C01/human/config.json",
+      "paired_report": "C01/human/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C01/human/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "avoidance_report": "C01/human/evidence/avoidance_audit.json",
+      "review_page": "C01/human/index.html"
+    },
+    "C01_property": {
+      "task": "C01",
+      "variant": "property",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C01/property/evidence/metadata.json",
+        "result.json": "C01/property/evidence/result.json",
+        "trajectory.json": "C01/property/evidence/trajectory.json",
+        "avoidance_audit.json": "C01/property/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C01/property/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C01/property/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C01/property/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C01/property/evidence/path_comparison.png",
+        "task_validation_full.json": "C01/property/evidence/task_validation_full.json",
+        "task_review_audit.json": "C01/property/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C01/property/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C01_property_clear05_00",
+      "baseline": "datasets/doors/lwx_scene_approved_20261026/C01_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C01/property/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_scene_approved_20261026/C01_base_p01",
+        "video": "baselines/C01_base_p01_45c11578/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C01_base_p01_45c11578/metadata.json",
+          "result.json": "baselines/C01_base_p01_45c11578/result.json",
+          "trajectory.json": "baselines/C01_base_p01_45c11578/trajectory.json",
+          "self_collision_audit.json": "baselines/C01_base_p01_45c11578/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C01_base_p01_45c11578/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C01_base_p01_45c11578/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C01_base_p01_45c11578/task_validation_full.json",
+          "task_review_audit.json": "baselines/C01_base_p01_45c11578/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C01_base_p01_45c11578/source_contact_audit.json"
+        }
+      },
+      "config": "C01/property/config.json",
+      "paired_report": "C01/property/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C01/property/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "avoidance_report": "C01/property/evidence/avoidance_audit.json",
+      "review_page": "C01/property/index.html"
+    },
+    "C01_robot": {
+      "task": "C01",
+      "variant": "robot",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": null,
+        "task_review_audit.json": null,
+        "source_contact_audit.json": null,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C01/robot/evidence/metadata.json",
+        "result.json": "C01/robot/evidence/result.json",
+        "trajectory.json": "C01/robot/evidence/trajectory.json",
+        "avoidance_audit.json": "C01/robot/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C01/robot/evidence/self_collision_audit.json",
+        "path_comparison.png": "C01/robot/evidence/path_comparison.png",
+        "validation_full.json": "C01/robot/evidence/validation_full.json",
+        "review_audit.json": "C01/robot/evidence/review_audit.json",
+        "contact_geometry_audit.json": "C01/robot/evidence/contact_geometry_audit.json",
+        "comparison_audit.json": "C01/robot/evidence/comparison_audit.json"
+      },
+      "episode": "datasets/doors/lwx_20261023/robot_01",
+      "baseline": "datasets/doors/lwx_20261023/base_03",
+      "video_layout": "原三路同步合成",
+      "video": "C01/robot/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_20261023/base_03",
+        "video": "baselines/base_03_de809d55/video.mp4",
+        "video_layout": "原三路同步合成",
+        "files": {
+          "metadata.json": "baselines/base_03_de809d55/metadata.json",
+          "result.json": "baselines/base_03_de809d55/result.json",
+          "trajectory.json": "baselines/base_03_de809d55/trajectory.json",
+          "self_collision_audit.json": "baselines/base_03_de809d55/self_collision_audit.json",
+          "validation_full.json": "baselines/base_03_de809d55/validation_full.json",
+          "review_audit.json": "baselines/base_03_de809d55/review_audit.json",
+          "contact_geometry_audit.json": "baselines/base_03_de809d55/contact_geometry_audit.json"
+        }
+      },
+      "config": "C01/robot/config.json",
+      "status": "沿用旧版：成功执行和历史审计保留",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "limitations": "按用户要求保留原钢架版。缺部分新版独立审计及本轮多seed报告；旧无障碍路线的保护间距不足，不能等同源几何实际相交。",
+      "avoidance_report": "C01/robot/evidence/avoidance_audit.json",
+      "review_page": "C01/robot/index.html"
+    },
+    "C02_human": {
+      "task": "C02",
+      "variant": "human",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C02/human/evidence/metadata.json",
+        "result.json": "C02/human/evidence/result.json",
+        "trajectory.json": "C02/human/evidence/trajectory.json",
+        "avoidance_audit.json": "C02/human/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C02/human/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C02/human/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C02/human/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C02/human/evidence/path_comparison.png",
+        "task_validation_full.json": "C02/human/evidence/task_validation_full.json",
+        "task_review_audit.json": "C02/human/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C02/human/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_C02_lowstart46_20261026/C02_human_p01",
+      "baseline": "datasets/doors/lwx_C02_lowstart46_20261026/C02_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C02/human/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_C02_lowstart46_20261026/C02_base_p01",
+        "video": "baselines/C02_base_p01_882d34e9/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C02_base_p01_882d34e9/metadata.json",
+          "result.json": "baselines/C02_base_p01_882d34e9/result.json",
+          "trajectory.json": "baselines/C02_base_p01_882d34e9/trajectory.json",
+          "self_collision_audit.json": "baselines/C02_base_p01_882d34e9/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C02_base_p01_882d34e9/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C02_base_p01_882d34e9/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C02_base_p01_882d34e9/task_validation_full.json",
+          "task_review_audit.json": "baselines/C02_base_p01_882d34e9/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C02_base_p01_882d34e9/source_contact_audit.json"
+        }
+      },
+      "config": "C02/human/config.json",
+      "paired_report": "C02/human/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C02/human/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "avoidance_report": "C02/human/evidence/avoidance_audit.json",
+      "review_page": "C02/human/index.html"
+    },
+    "C02_property": {
+      "task": "C02",
+      "variant": "property",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C02/property/evidence/metadata.json",
+        "result.json": "C02/property/evidence/result.json",
+        "trajectory.json": "C02/property/evidence/trajectory.json",
+        "avoidance_audit.json": "C02/property/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C02/property/evidence/self_collision_audit.json",
+        "path_comparison.png": "C02/property/evidence/path_comparison.png",
+        "task_validation_full.json": "C02/property/evidence/task_validation_full.json",
+        "task_review_audit.json": "C02/property/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C02/property/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_property_27",
+      "baseline": "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_base_01",
+      "video_layout": "原三路同步合成",
+      "video": "C02/property/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_base_01",
+        "video": "baselines/C02_base_01_4c78d766/video.mp4",
+        "video_layout": "原三路同步合成",
+        "files": {
+          "metadata.json": "baselines/C02_base_01_4c78d766/metadata.json",
+          "result.json": "baselines/C02_base_01_4c78d766/result.json",
+          "trajectory.json": "baselines/C02_base_01_4c78d766/trajectory.json",
+          "self_collision_audit.json": "baselines/C02_base_01_4c78d766/self_collision_audit.json",
+          "task_validation_full.json": "baselines/C02_base_01_4c78d766/task_validation_full.json",
+          "task_review_audit.json": "baselines/C02_base_01_4c78d766/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C02_base_01_4c78d766/source_contact_audit.json"
+        }
+      },
+      "config": "C02/property/config.json",
+      "status": "沿用旧版：成功执行和历史审计保留",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "limitations": "本包沿用旧版成功和历史审计，未附本轮统一的多seed成对规划报告。",
+      "avoidance_report": "C02/property/evidence/avoidance_audit.json",
+      "review_page": "C02/property/index.html"
+    },
+    "C02_robot": {
+      "task": "C02",
+      "variant": "robot",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C02/robot/evidence/metadata.json",
+        "result.json": "C02/robot/evidence/result.json",
+        "trajectory.json": "C02/robot/evidence/trajectory.json",
+        "avoidance_audit.json": "C02/robot/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C02/robot/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C02/robot/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C02/robot/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C02/robot/evidence/path_comparison.png",
+        "task_validation_full.json": "C02/robot/evidence/task_validation_full.json",
+        "task_review_audit.json": "C02/robot/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C02/robot/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C02_robot_supported02",
+      "baseline": "datasets/doors/lwx_scene_approved_20261026/C02_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C02/robot/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_scene_approved_20261026/C02_base_p01",
+        "video": "baselines/C02_base_p01_42321680/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C02_base_p01_42321680/metadata.json",
+          "result.json": "baselines/C02_base_p01_42321680/result.json",
+          "trajectory.json": "baselines/C02_base_p01_42321680/trajectory.json",
+          "self_collision_audit.json": "baselines/C02_base_p01_42321680/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C02_base_p01_42321680/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C02_base_p01_42321680/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C02_base_p01_42321680/task_validation_full.json",
+          "task_review_audit.json": "baselines/C02_base_p01_42321680/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C02_base_p01_42321680/source_contact_audit.json"
+        }
+      },
+      "config": "C02/robot/config.json",
+      "paired_report": "C02/robot/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C02/robot/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "avoidance_report": "C02/robot/evidence/avoidance_audit.json",
+      "review_page": "C02/robot/index.html"
+    },
+    "C03_human": {
+      "task": "C03",
+      "variant": "human",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C03/human/evidence/metadata.json",
+        "result.json": "C03/human/evidence/result.json",
+        "trajectory.json": "C03/human/evidence/trajectory.json",
+        "avoidance_audit.json": "C03/human/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C03/human/evidence/self_collision_audit.json",
+        "path_comparison.png": "C03/human/evidence/path_comparison.png",
+        "task_validation_full.json": "C03/human/evidence/task_validation_full.json",
+        "task_review_audit.json": "C03/human/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C03/human/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_C02_C03_20261023/C03_human_05",
+      "baseline": "datasets/doors/lwx_C02_C03_20261023/C03_base_05",
+      "video_layout": "原三路同步合成",
+      "video": "C03/human/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_C02_C03_20261023/C03_base_05",
+        "video": "baselines/C03_base_05_0585acbd/video.mp4",
+        "video_layout": "原三路同步合成",
+        "files": {
+          "metadata.json": "baselines/C03_base_05_0585acbd/metadata.json",
+          "result.json": "baselines/C03_base_05_0585acbd/result.json",
+          "trajectory.json": "baselines/C03_base_05_0585acbd/trajectory.json",
+          "self_collision_audit.json": "baselines/C03_base_05_0585acbd/self_collision_audit.json",
+          "task_validation_full.json": "baselines/C03_base_05_0585acbd/task_validation_full.json",
+          "task_review_audit.json": "baselines/C03_base_05_0585acbd/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C03_base_05_0585acbd/source_contact_audit.json"
+        }
+      },
+      "config": "C03/human/config.json",
+      "status": "沿用旧版：成功执行和历史审计保留",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "limitations": "本包沿用旧版成功和历史审计，未附本轮统一的多seed成对规划报告。",
+      "avoidance_report": "C03/human/evidence/avoidance_audit.json",
+      "review_page": "C03/human/index.html"
+    },
+    "C03_property": {
+      "task": "C03",
+      "variant": "property",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C03/property/evidence/metadata.json",
+        "result.json": "C03/property/evidence/result.json",
+        "trajectory.json": "C03/property/evidence/trajectory.json",
+        "avoidance_audit.json": "C03/property/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C03/property/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C03/property/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C03/property/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C03/property/evidence/path_comparison.png",
+        "task_validation_full.json": "C03/property/evidence/task_validation_full.json",
+        "task_review_audit.json": "C03/property/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C03/property/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_C03_jointgoal52_20261026/C03_property_p01",
+      "baseline": "datasets/doors/lwx_C03_jointgoal52_20261026/C03_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C03/property/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_C03_jointgoal52_20261026/C03_base_p01",
+        "video": "baselines/C03_base_p01_0fd0af71/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C03_base_p01_0fd0af71/metadata.json",
+          "result.json": "baselines/C03_base_p01_0fd0af71/result.json",
+          "trajectory.json": "baselines/C03_base_p01_0fd0af71/trajectory.json",
+          "self_collision_audit.json": "baselines/C03_base_p01_0fd0af71/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C03_base_p01_0fd0af71/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C03_base_p01_0fd0af71/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C03_base_p01_0fd0af71/task_validation_full.json",
+          "task_review_audit.json": "baselines/C03_base_p01_0fd0af71/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C03_base_p01_0fd0af71/source_contact_audit.json"
+        }
+      },
+      "config": "C03/property/config.json",
+      "paired_report": "C03/property/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C03/property/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "avoidance_report": "C03/property/evidence/avoidance_audit.json",
+      "review_page": "C03/property/index.html"
+    },
+    "C03_robot": {
+      "task": "C03",
+      "variant": "robot",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C03/robot/evidence/metadata.json",
+        "result.json": "C03/robot/evidence/result.json",
+        "trajectory.json": "C03/robot/evidence/trajectory.json",
+        "avoidance_audit.json": "C03/robot/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C03/robot/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C03/robot/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C03/robot/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C03/robot/evidence/path_comparison.png",
+        "task_validation_full.json": "C03/robot/evidence/task_validation_full.json",
+        "task_review_audit.json": "C03/robot/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C03/robot/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_C03_controller_release09_20261026/C03_robot_p01",
+      "baseline": "datasets/doors/lwx_C03_controller_release09_20261026/C03_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C03/robot/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_C03_controller_release09_20261026/C03_base_p01",
+        "video": "baselines/C03_base_p01_6a80057a/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C03_base_p01_6a80057a/metadata.json",
+          "result.json": "baselines/C03_base_p01_6a80057a/result.json",
+          "trajectory.json": "baselines/C03_base_p01_6a80057a/trajectory.json",
+          "self_collision_audit.json": "baselines/C03_base_p01_6a80057a/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C03_base_p01_6a80057a/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C03_base_p01_6a80057a/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C03_base_p01_6a80057a/task_validation_full.json",
+          "task_review_audit.json": "baselines/C03_base_p01_6a80057a/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C03_base_p01_6a80057a/source_contact_audit.json"
+        }
+      },
+      "config": "C03/robot/config.json",
+      "paired_report": "C03/robot/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C03/robot/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "avoidance_report": "C03/robot/evidence/avoidance_audit.json",
+      "review_page": "C03/robot/index.html"
+    },
+    "C04_human": {
+      "task": "C04",
+      "variant": "human",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": true,
+      "visual_user_confirmed": true,
+      "files": {
+        "metadata.json": "C04/human/evidence/metadata.json",
+        "result.json": "C04/human/evidence/result.json",
+        "trajectory.json": "C04/human/evidence/trajectory.json",
+        "avoidance_audit.json": "C04/human/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C04/human/evidence/self_collision_audit.json",
+        "task_review_audit.json": "C04/human/evidence/task_review_audit.json",
+        "task_validation_full.json": "C04/human/evidence/task_validation_full.json",
+        "source_contact_audit.json": "C04/human/evidence/source_contact_audit.json",
+        "supplementary_observer_alignment.json": "C04/human/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C04/human/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C04/human/evidence/path_comparison.png"
+      },
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C04_human_h568",
+      "baseline": "datasets/doors/lwx_scene_approved_20261026/C04_base_b563",
+      "video_layout": "原三路＋同步总览",
+      "status": "当前修订：完整独立验收和所测seed对照通过",
+      "detail": "夹爪接触前转平约20°；整臂协调，原人体布局和抓点高度不变。",
+      "video": "C04/human/video.mp4",
+      "comparison_video": "C04/human/baseline_comparison.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_scene_approved_20261026/C04_base_b563",
+        "video": "baselines/C04_base_b563_1af73484/video.mp4",
+        "video_layout": "原相机2",
+        "files": {
+          "metadata.json": "baselines/C04_base_b563_1af73484/metadata.json",
+          "result.json": "baselines/C04_base_b563_1af73484/result.json",
+          "trajectory.json": "baselines/C04_base_b563_1af73484/trajectory.json",
+          "self_collision_audit.json": "baselines/C04_base_b563_1af73484/self_collision_audit.json",
+          "task_review_audit.json": "baselines/C04_base_b563_1af73484/task_review_audit.json",
+          "task_validation_full.json": "baselines/C04_base_b563_1af73484/task_validation_full.json",
+          "source_contact_audit.json": "baselines/C04_base_b563_1af73484/source_contact_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C04_base_b563_1af73484/supplementary_observer_alignment.json"
+        }
+      },
+      "config": "C04/human/config.json",
+      "paired_report": "C04/human/paired_report.json",
+      "user_confirmation": "C04/human/user_visual_acceptance.json",
+      "additional_videos": {
+        "external_camera_2.mp4": "C04/human/external_camera_2.mp4",
+        "wrist_camera.mp4": "C04/human/wrist_camera.mp4"
+      },
+      "avoidance_report": "C04/human/evidence/avoidance_audit.json",
+      "review_page": "C04/human/index.html"
+    },
+    "C04_property": {
+      "task": "C04",
+      "variant": "property",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": true,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C04/property/evidence/metadata.json",
+        "result.json": "C04/property/evidence/result.json",
+        "trajectory.json": "C04/property/evidence/trajectory.json",
+        "avoidance_audit.json": "C04/property/evidence/avoidance_audit.json",
+        "avoidance_matched318.json": "C04/property/evidence/avoidance_matched318.json",
+        "self_collision_audit.json": "C04/property/evidence/self_collision_audit.json",
+        "task_review_audit.json": "C04/property/evidence/task_review_audit.json",
+        "task_validation_full.json": "C04/property/evidence/task_validation_full.json",
+        "source_contact_audit.json": "C04/property/evidence/source_contact_audit.json",
+        "supplementary_observer_alignment.json": "C04/property/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C04/property/evidence/review_all_four_cameras.json"
+      },
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C04_property_p291",
+      "baseline": "datasets/doors/lwx_scene_approved_20261026/C04_base_b318",
+      "video_layout": "原三路＋同步总览",
+      "status": "当前修订：完整独立验收和所测seed对照通过",
+      "detail": "降低后的财产场景。成功样本编号p291，配新匹配基线b318；318是匹配验证编号，不是第二条财产实采。",
+      "video": "C04/property/video.mp4",
+      "comparison_video": "C04/property/baseline_comparison.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_scene_approved_20261026/C04_base_b318",
+        "video": "baselines/C04_base_b318_36cedef0/video.mp4",
+        "video_layout": "原三路同步合成",
+        "files": {
+          "metadata.json": "baselines/C04_base_b318_36cedef0/metadata.json",
+          "result.json": "baselines/C04_base_b318_36cedef0/result.json",
+          "trajectory.json": "baselines/C04_base_b318_36cedef0/trajectory.json",
+          "self_collision_audit.json": "baselines/C04_base_b318_36cedef0/self_collision_audit.json",
+          "task_review_audit.json": "baselines/C04_base_b318_36cedef0/task_review_audit.json",
+          "task_validation_full.json": "baselines/C04_base_b318_36cedef0/task_validation_full.json",
+          "source_contact_audit.json": "baselines/C04_base_b318_36cedef0/source_contact_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C04_base_b318_36cedef0/supplementary_observer_alignment.json"
+        }
+      },
+      "config": "C04/property/config.json",
+      "paired_report": "C04/property/paired_report.json",
+      "additional_videos": {
+        "external_camera_2.mp4": "C04/property/external_camera_2.mp4",
+        "wrist_camera.mp4": "C04/property/wrist_camera.mp4"
+      },
+      "avoidance_report": "C04/property/evidence/avoidance_matched318.json",
+      "review_page": "C04/property/index.html"
+    },
+    "C04_robot": {
+      "task": "C04",
+      "variant": "robot",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C04/robot/evidence/metadata.json",
+        "result.json": "C04/robot/evidence/result.json",
+        "trajectory.json": "C04/robot/evidence/trajectory.json",
+        "avoidance_audit.json": "C04/robot/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C04/robot/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C04/robot/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C04/robot/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C04/robot/evidence/path_comparison.png",
+        "task_validation_full.json": "C04/robot/evidence/task_validation_full.json",
+        "task_review_audit.json": "C04/robot/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C04/robot/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_controller_release03_20261026/C04_robot_p01",
+      "baseline": "datasets/doors/lwx_controller_release03_20261026/C04_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C04/robot/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_controller_release03_20261026/C04_base_p01",
+        "video": "baselines/C04_base_p01_f9bedaf7/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C04_base_p01_f9bedaf7/metadata.json",
+          "result.json": "baselines/C04_base_p01_f9bedaf7/result.json",
+          "trajectory.json": "baselines/C04_base_p01_f9bedaf7/trajectory.json",
+          "self_collision_audit.json": "baselines/C04_base_p01_f9bedaf7/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C04_base_p01_f9bedaf7/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C04_base_p01_f9bedaf7/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C04_base_p01_f9bedaf7/task_validation_full.json",
+          "task_review_audit.json": "baselines/C04_base_p01_f9bedaf7/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C04_base_p01_f9bedaf7/source_contact_audit.json"
+        }
+      },
+      "config": "C04/robot/config.json",
+      "paired_report": "C04/robot/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C04/robot/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "avoidance_report": "C04/robot/evidence/avoidance_audit.json",
+      "review_page": "C04/robot/index.html"
+    },
+    "C05_human": {
+      "task": "C05",
+      "variant": "human",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C05/human/evidence/metadata.json",
+        "result.json": "C05/human/evidence/result.json",
+        "trajectory.json": "C05/human/evidence/trajectory.json",
+        "avoidance_audit.json": "C05/human/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C05/human/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C05/human/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C05/human/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C05/human/evidence/path_comparison.png",
+        "task_validation_full.json": "C05/human/evidence/task_validation_full.json",
+        "task_review_audit.json": "C05/human/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C05/human/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C05_human_natural10",
+      "baseline": "datasets/doors/lwx_scene_approved_20261026/C05_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C05/human/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_scene_approved_20261026/C05_base_p01",
+        "video": "baselines/C05_base_p01_0646be1f/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C05_base_p01_0646be1f/metadata.json",
+          "result.json": "baselines/C05_base_p01_0646be1f/result.json",
+          "trajectory.json": "baselines/C05_base_p01_0646be1f/trajectory.json",
+          "self_collision_audit.json": "baselines/C05_base_p01_0646be1f/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C05_base_p01_0646be1f/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C05_base_p01_0646be1f/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C05_base_p01_0646be1f/task_validation_full.json",
+          "task_review_audit.json": "baselines/C05_base_p01_0646be1f/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C05_base_p01_0646be1f/source_contact_audit.json"
+        }
+      },
+      "config": "C05/human/config.json",
+      "paired_report": "C05/human/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C05/human/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "avoidance_report": "C05/human/evidence/avoidance_audit.json",
+      "review_page": "C05/human/index.html"
+    },
+    "C05_property": {
+      "task": "C05",
+      "variant": "property",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C05/property/evidence/metadata.json",
+        "result.json": "C05/property/evidence/result.json",
+        "trajectory.json": "C05/property/evidence/trajectory.json",
+        "avoidance_audit.json": "C05/property/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C05/property/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C05/property/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C05/property/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C05/property/evidence/path_comparison.png",
+        "task_validation_full.json": "C05/property/evidence/task_validation_full.json",
+        "task_review_audit.json": "C05/property/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C05/property/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C05_property_campaign37_00",
+      "baseline": "datasets/doors/lwx_scene_approved_20261026/C05_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C05/property/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_scene_approved_20261026/C05_base_p01",
+        "video": "baselines/C05_base_p01_0646be1f/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C05_base_p01_0646be1f/metadata.json",
+          "result.json": "baselines/C05_base_p01_0646be1f/result.json",
+          "trajectory.json": "baselines/C05_base_p01_0646be1f/trajectory.json",
+          "self_collision_audit.json": "baselines/C05_base_p01_0646be1f/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C05_base_p01_0646be1f/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C05_base_p01_0646be1f/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C05_base_p01_0646be1f/task_validation_full.json",
+          "task_review_audit.json": "baselines/C05_base_p01_0646be1f/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C05_base_p01_0646be1f/source_contact_audit.json"
+        }
+      },
+      "config": "C05/property/config.json",
+      "paired_report": "C05/property/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C05/property/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "avoidance_report": "C05/property/evidence/avoidance_audit.json",
+      "review_page": "C05/property/index.html"
+    },
+    "C05_robot": {
+      "task": "C05",
+      "variant": "robot",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C05/robot/evidence/metadata.json",
+        "result.json": "C05/robot/evidence/result.json",
+        "trajectory.json": "C05/robot/evidence/trajectory.json",
+        "avoidance_audit.json": "C05/robot/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C05/robot/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C05/robot/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C05/robot/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C05/robot/evidence/path_comparison.png",
+        "task_validation_full.json": "C05/robot/evidence/task_validation_full.json",
+        "task_review_audit.json": "C05/robot/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C05/robot/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C05_robot_corridor06",
+      "baseline": "datasets/doors/lwx_scene_approved_20261026/C05_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C05/robot/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_scene_approved_20261026/C05_base_p01",
+        "video": "baselines/C05_base_p01_0646be1f/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C05_base_p01_0646be1f/metadata.json",
+          "result.json": "baselines/C05_base_p01_0646be1f/result.json",
+          "trajectory.json": "baselines/C05_base_p01_0646be1f/trajectory.json",
+          "self_collision_audit.json": "baselines/C05_base_p01_0646be1f/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C05_base_p01_0646be1f/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C05_base_p01_0646be1f/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C05_base_p01_0646be1f/task_validation_full.json",
+          "task_review_audit.json": "baselines/C05_base_p01_0646be1f/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C05_base_p01_0646be1f/source_contact_audit.json"
+        }
+      },
+      "config": "C05/robot/config.json",
+      "paired_report": "C05/robot/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C05/robot/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "avoidance_report": "C05/robot/evidence/avoidance_audit.json",
+      "review_page": "C05/robot/index.html"
+    },
+    "C06_human": {
+      "task": "C06",
+      "variant": "human",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": true,
+      "visual_user_confirmed": true,
+      "files": {
+        "metadata.json": "C06/human/evidence/metadata.json",
+        "result.json": "C06/human/evidence/result.json",
+        "trajectory.json": "C06/human/evidence/trajectory.json",
+        "avoidance_audit.json": "C06/human/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C06/human/evidence/self_collision_audit.json",
+        "task_review_audit.json": "C06/human/evidence/task_review_audit.json",
+        "task_validation_full.json": "C06/human/evidence/task_validation_full.json",
+        "source_contact_audit.json": "C06/human/evidence/source_contact_audit.json",
+        "supplementary_observer_alignment.json": "C06/human/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C06/human/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C06/human/evidence/path_comparison.png"
+      },
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C06_human_h524",
+      "baseline": "datasets/doors/lwx_scene_approved_20261026/C06_base_b515",
+      "video_layout": "原三路＋同步总览",
+      "status": "当前修订：完整独立验收和所测seed对照通过",
+      "detail": "已认可的人体与夹爪调平、逐步张开和退让完成版h524，释放终态无残留接触。",
+      "video": "C06/human/video.mp4",
+      "comparison_video": "C06/human/baseline_comparison.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_scene_approved_20261026/C06_base_b515",
+        "video": "baselines/C06_base_b515_e8cb5c0d/video.mp4",
+        "video_layout": "原相机2",
+        "files": {
+          "metadata.json": "baselines/C06_base_b515_e8cb5c0d/metadata.json",
+          "result.json": "baselines/C06_base_b515_e8cb5c0d/result.json",
+          "trajectory.json": "baselines/C06_base_b515_e8cb5c0d/trajectory.json",
+          "self_collision_audit.json": "baselines/C06_base_b515_e8cb5c0d/self_collision_audit.json",
+          "task_review_audit.json": "baselines/C06_base_b515_e8cb5c0d/task_review_audit.json",
+          "task_validation_full.json": "baselines/C06_base_b515_e8cb5c0d/task_validation_full.json",
+          "source_contact_audit.json": "baselines/C06_base_b515_e8cb5c0d/source_contact_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C06_base_b515_e8cb5c0d/supplementary_observer_alignment.json"
+        }
+      },
+      "config": "C06/human/config.json",
+      "paired_report": "C06/human/paired_report.json",
+      "paired_scope": "使用h515的42/43/44接近段配对；h524的前段等价性见delivery/prefix_equivalence.json。释放改进另有真实执行和独立审计。",
+      "additional_videos": {
+        "external_camera_2.mp4": "C06/human/external_camera_2.mp4",
+        "wrist_camera.mp4": "C06/human/wrist_camera.mp4"
+      },
+      "avoidance_report": "C06/human/evidence/avoidance_audit.json",
+      "review_page": "C06/human/index.html"
+    },
+    "C06_property": {
+      "task": "C06",
+      "variant": "property",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C06/property/evidence/metadata.json",
+        "result.json": "C06/property/evidence/result.json",
+        "trajectory.json": "C06/property/evidence/trajectory.json",
+        "avoidance_audit.json": "C06/property/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C06/property/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C06/property/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C06/property/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C06/property/evidence/path_comparison.png",
+        "task_validation_full.json": "C06/property/evidence/task_validation_full.json",
+        "task_review_audit.json": "C06/property/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C06/property/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_C06_property_lower53_20261026/C06_property_p01",
+      "baseline": "datasets/doors/lwx_C06_property_lower53_20261026/C06_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C06/property/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_C06_property_lower53_20261026/C06_base_p01",
+        "video": "baselines/C06_base_p01_fe29bbf9/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C06_base_p01_fe29bbf9/metadata.json",
+          "result.json": "baselines/C06_base_p01_fe29bbf9/result.json",
+          "trajectory.json": "baselines/C06_base_p01_fe29bbf9/trajectory.json",
+          "self_collision_audit.json": "baselines/C06_base_p01_fe29bbf9/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C06_base_p01_fe29bbf9/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C06_base_p01_fe29bbf9/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C06_base_p01_fe29bbf9/task_validation_full.json",
+          "task_review_audit.json": "baselines/C06_base_p01_fe29bbf9/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C06_base_p01_fe29bbf9/source_contact_audit.json"
+        }
+      },
+      "config": "C06/property/config.json",
+      "paired_report": "C06/property/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C06/property/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "avoidance_report": "C06/property/evidence/avoidance_audit.json",
+      "review_page": "C06/property/index.html"
+    },
+    "C06_robot": {
+      "task": "C06",
+      "variant": "robot",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C06/robot/evidence/metadata.json",
+        "result.json": "C06/robot/evidence/result.json",
+        "trajectory.json": "C06/robot/evidence/trajectory.json",
+        "avoidance_audit.json": "C06/robot/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C06/robot/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C06/robot/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C06/robot/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C06/robot/evidence/path_comparison.png",
+        "task_validation_full.json": "C06/robot/evidence/task_validation_full.json",
+        "task_review_audit.json": "C06/robot/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C06/robot/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C06_robot_campaign37_00",
+      "baseline": "datasets/doors/lwx_C06_corridor09_20261026/C06_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C06/robot/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_C06_corridor09_20261026/C06_base_p01",
+        "video": "baselines/C06_base_p01_c2d50300/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C06_base_p01_c2d50300/metadata.json",
+          "result.json": "baselines/C06_base_p01_c2d50300/result.json",
+          "trajectory.json": "baselines/C06_base_p01_c2d50300/trajectory.json",
+          "self_collision_audit.json": "baselines/C06_base_p01_c2d50300/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C06_base_p01_c2d50300/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C06_base_p01_c2d50300/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C06_base_p01_c2d50300/task_validation_full.json",
+          "task_review_audit.json": "baselines/C06_base_p01_c2d50300/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C06_base_p01_c2d50300/source_contact_audit.json"
+        }
+      },
+      "config": "C06/robot/config.json",
+      "paired_report": "C06/robot/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C06/robot/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "avoidance_report": "C06/robot/evidence/avoidance_audit.json",
+      "review_page": "C06/robot/index.html"
+    },
+    "C07_human": {
+      "task": "C07",
+      "variant": "human",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C07/human/evidence/metadata.json",
+        "result.json": "C07/human/evidence/result.json",
+        "trajectory.json": "C07/human/evidence/trajectory.json",
+        "avoidance_audit.json": "C07/human/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C07/human/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C07/human/evidence/supplementary_observer_alignment.json",
+        "path_comparison.png": "C07/human/evidence/path_comparison.png",
+        "task_validation_full.json": "C07/human/evidence/task_validation_full.json",
+        "task_review_audit.json": "C07/human/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C07/human/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_C07_door_space_first_20261025/C07_human_midlow_originalpolicy_01",
+      "baseline": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+      "video_layout": "原三路同步合成",
+      "video": "C07/human/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+        "video": "baselines/C07_base_01_e4889110/video.mp4",
+        "video_layout": "原三路同步合成",
+        "files": {
+          "metadata.json": "baselines/C07_base_01_e4889110/metadata.json",
+          "result.json": "baselines/C07_base_01_e4889110/result.json",
+          "trajectory.json": "baselines/C07_base_01_e4889110/trajectory.json",
+          "self_collision_audit.json": "baselines/C07_base_01_e4889110/self_collision_audit.json",
+          "task_validation_full.json": "baselines/C07_base_01_e4889110/task_validation_full.json",
+          "task_review_audit.json": "baselines/C07_base_01_e4889110/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C07_base_01_e4889110/source_contact_audit.json"
+        }
+      },
+      "config": "C07/human/config.json",
+      "additional_videos": {
+        "同步总览": "C07/human/observer.mp4"
+      },
+      "status": "沿用旧版：成功执行和历史审计保留",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "limitations": "本包沿用旧版成功和历史审计，未附本轮统一的多seed成对规划报告。",
+      "avoidance_report": "C07/human/evidence/avoidance_audit.json",
+      "review_page": "C07/human/index.html"
+    },
+    "C07_property": {
+      "task": "C07",
+      "variant": "property",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C07/property/evidence/metadata.json",
+        "result.json": "C07/property/evidence/result.json",
+        "trajectory.json": "C07/property/evidence/trajectory.json",
+        "avoidance_audit.json": "C07/property/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C07/property/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C07/property/evidence/supplementary_observer_alignment.json",
+        "path_comparison.png": "C07/property/evidence/path_comparison.png",
+        "task_validation_full.json": "C07/property/evidence/task_validation_full.json",
+        "task_review_audit.json": "C07/property/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C07/property/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_C07_door_space_first_20261025/C07_property_tablet04_originalpolicy_01",
+      "baseline": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+      "video_layout": "原三路同步合成",
+      "video": "C07/property/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+        "video": "baselines/C07_base_01_e4889110/video.mp4",
+        "video_layout": "原三路同步合成",
+        "files": {
+          "metadata.json": "baselines/C07_base_01_e4889110/metadata.json",
+          "result.json": "baselines/C07_base_01_e4889110/result.json",
+          "trajectory.json": "baselines/C07_base_01_e4889110/trajectory.json",
+          "self_collision_audit.json": "baselines/C07_base_01_e4889110/self_collision_audit.json",
+          "task_validation_full.json": "baselines/C07_base_01_e4889110/task_validation_full.json",
+          "task_review_audit.json": "baselines/C07_base_01_e4889110/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C07_base_01_e4889110/source_contact_audit.json"
+        }
+      },
+      "config": "C07/property/config.json",
+      "additional_videos": {
+        "同步总览": "C07/property/observer.mp4"
+      },
+      "status": "沿用旧版：成功执行和历史审计保留",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "limitations": "本包沿用旧版成功和历史审计，未附本轮统一的多seed成对规划报告。",
+      "avoidance_report": "C07/property/evidence/avoidance_audit.json",
+      "review_page": "C07/property/index.html"
+    },
+    "C07_robot": {
+      "task": "C07",
+      "variant": "robot",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": true,
+      "files": {
+        "metadata.json": "C07/robot/evidence/metadata.json",
+        "result.json": "C07/robot/evidence/result.json",
+        "trajectory.json": "C07/robot/evidence/trajectory.json",
+        "avoidance_audit.json": "C07/robot/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C07/robot/evidence/self_collision_audit.json",
+        "path_comparison.png": "C07/robot/evidence/path_comparison.png",
+        "task_validation_full.json": "C07/robot/evidence/task_validation_full.json",
+        "task_review_audit.json": "C07/robot/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C07/robot/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_C07_obvious_demo_20261025/C07_robot_pilot13",
+      "baseline": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+      "video_layout": "原三路同步合成",
+      "video": "C07/robot/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+        "video": "baselines/C07_base_01_e4889110/video.mp4",
+        "video_layout": "原三路同步合成",
+        "files": {
+          "metadata.json": "baselines/C07_base_01_e4889110/metadata.json",
+          "result.json": "baselines/C07_base_01_e4889110/result.json",
+          "trajectory.json": "baselines/C07_base_01_e4889110/trajectory.json",
+          "self_collision_audit.json": "baselines/C07_base_01_e4889110/self_collision_audit.json",
+          "task_validation_full.json": "baselines/C07_base_01_e4889110/task_validation_full.json",
+          "task_review_audit.json": "baselines/C07_base_01_e4889110/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C07_base_01_e4889110/source_contact_audit.json"
+        }
+      },
+      "config": "C07/robot/config.json",
+      "status": "沿用旧版：成功执行和历史审计保留",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "limitations": "本包沿用旧版成功和历史审计，未附本轮统一的多seed成对规划报告。",
+      "avoidance_report": "C07/robot/evidence/avoidance_audit.json",
+      "review_page": "C07/robot/index.html"
+    },
+    "C08_human": {
+      "task": "C08",
+      "variant": "human",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C08/human/evidence/metadata.json",
+        "result.json": "C08/human/evidence/result.json",
+        "trajectory.json": "C08/human/evidence/trajectory.json",
+        "avoidance_audit.json": "C08/human/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C08/human/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C08/human/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C08/human/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C08/human/evidence/path_comparison.png",
+        "task_validation_full.json": "C08/human/evidence/task_validation_full.json",
+        "task_review_audit.json": "C08/human/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C08/human/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C08_human_natural73",
+      "baseline": "datasets/doors/lwx_C08_property_frozen71_20261026/C08_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C08/human/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_C08_property_frozen71_20261026/C08_base_p01",
+        "video": "baselines/C08_base_p01_4ba4f265/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C08_base_p01_4ba4f265/metadata.json",
+          "result.json": "baselines/C08_base_p01_4ba4f265/result.json",
+          "trajectory.json": "baselines/C08_base_p01_4ba4f265/trajectory.json",
+          "self_collision_audit.json": "baselines/C08_base_p01_4ba4f265/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C08_base_p01_4ba4f265/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C08_base_p01_4ba4f265/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C08_base_p01_4ba4f265/task_validation_full.json",
+          "task_review_audit.json": "baselines/C08_base_p01_4ba4f265/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C08_base_p01_4ba4f265/source_contact_audit.json"
+        }
+      },
+      "config": "C08/human/config.json",
+      "paired_report": "C08/human/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C08/human/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "camera_limitation": "Native external1 is substantially occluded by torso; use synchronized observer for full person/robot/oven view.",
+      "avoidance_report": "C08/human/evidence/avoidance_audit.json",
+      "review_page": "C08/human/index.html"
+    },
+    "C08_property": {
+      "task": "C08",
+      "variant": "property",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": false,
+      "visual_user_confirmed": false,
+      "files": {
+        "metadata.json": "C08/property/evidence/metadata.json",
+        "result.json": "C08/property/evidence/result.json",
+        "trajectory.json": "C08/property/evidence/trajectory.json",
+        "avoidance_audit.json": "C08/property/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C08/property/evidence/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "C08/property/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C08/property/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C08/property/evidence/path_comparison.png",
+        "task_validation_full.json": "C08/property/evidence/task_validation_full.json",
+        "task_review_audit.json": "C08/property/evidence/task_review_audit.json",
+        "source_contact_audit.json": "C08/property/evidence/source_contact_audit.json"
+      },
+      "episode": "datasets/doors/lwx_C08_property_frozen71_20261026/C08_property_p01",
+      "baseline": "datasets/doors/lwx_C08_property_frozen71_20261026/C08_base_p01",
+      "video_layout": "原三路＋同步总览",
+      "video": "C08/property/video.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_C08_property_frozen71_20261026/C08_base_p01",
+        "video": "baselines/C08_base_p01_4ba4f265/video.mp4",
+        "video_layout": "原三路＋同步总览",
+        "files": {
+          "metadata.json": "baselines/C08_base_p01_4ba4f265/metadata.json",
+          "result.json": "baselines/C08_base_p01_4ba4f265/result.json",
+          "trajectory.json": "baselines/C08_base_p01_4ba4f265/trajectory.json",
+          "self_collision_audit.json": "baselines/C08_base_p01_4ba4f265/self_collision_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C08_base_p01_4ba4f265/supplementary_observer_alignment.json",
+          "review_all_four_cameras.json": "baselines/C08_base_p01_4ba4f265/review_all_four_cameras.json",
+          "task_validation_full.json": "baselines/C08_base_p01_4ba4f265/task_validation_full.json",
+          "task_review_audit.json": "baselines/C08_base_p01_4ba4f265/task_review_audit.json",
+          "source_contact_audit.json": "baselines/C08_base_p01_4ba4f265/source_contact_audit.json"
+        }
+      },
+      "config": "C08/property/config.json",
+      "paired_report": "C08/property/paired_report.json",
+      "additional_videos": {
+        "同步总览": "C08/property/observer.mp4"
+      },
+      "status": "所选修订：独立验收和所测seed对照通过",
+      "detail": "按已有总包保留该成功版本，本次未重新采集。",
+      "camera_limitation": "Native close views crop upper bottle; observer provides complete obstacle view.",
+      "avoidance_report": "C08/property/evidence/avoidance_audit.json",
+      "review_page": "C08/property/index.html"
+    },
+    "C08_robot": {
+      "task": "C08",
+      "variant": "robot",
+      "fixed_only": true,
+      "modern_gates": {
+        "result.json": true,
+        "task_validation_full.json": true,
+        "task_review_audit.json": true,
+        "source_contact_audit.json": true,
+        "self_collision_audit.json": true
+      },
+      "current_update": true,
+      "visual_user_confirmed": true,
+      "files": {
+        "metadata.json": "C08/robot/evidence/metadata.json",
+        "result.json": "C08/robot/evidence/result.json",
+        "trajectory.json": "C08/robot/evidence/trajectory.json",
+        "avoidance_audit.json": "C08/robot/evidence/avoidance_audit.json",
+        "self_collision_audit.json": "C08/robot/evidence/self_collision_audit.json",
+        "task_review_audit.json": "C08/robot/evidence/task_review_audit.json",
+        "task_validation_full.json": "C08/robot/evidence/task_validation_full.json",
+        "source_contact_audit.json": "C08/robot/evidence/source_contact_audit.json",
+        "supplementary_observer_alignment.json": "C08/robot/evidence/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "C08/robot/evidence/review_all_four_cameras.json",
+        "path_comparison.png": "C08/robot/evidence/path_comparison.png"
+      },
+      "episode": "datasets/doors/lwx_scene_approved_20261026/C08_robot_r67",
+      "baseline": "datasets/doors/lwx_scene_approved_20261026/C08_base_b67",
+      "video_layout": "原三路＋同步总览",
+      "status": "当前修订：完整独立验收和所测seed对照通过",
+      "detail": "已认可的低位钢架r67；接近时抬高绕过横杆后到相同抓点开门。",
+      "video": "C08/robot/video.mp4",
+      "comparison_video": "C08/robot/baseline_comparison.mp4",
+      "baseline_evidence": {
+        "source": "datasets/doors/lwx_scene_approved_20261026/C08_base_b67",
+        "video": "baselines/C08_base_b67_3897f635/video.mp4",
+        "video_layout": "原三路同步合成",
+        "files": {
+          "metadata.json": "baselines/C08_base_b67_3897f635/metadata.json",
+          "result.json": "baselines/C08_base_b67_3897f635/result.json",
+          "trajectory.json": "baselines/C08_base_b67_3897f635/trajectory.json",
+          "self_collision_audit.json": "baselines/C08_base_b67_3897f635/self_collision_audit.json",
+          "task_review_audit.json": "baselines/C08_base_b67_3897f635/task_review_audit.json",
+          "task_validation_full.json": "baselines/C08_base_b67_3897f635/task_validation_full.json",
+          "source_contact_audit.json": "baselines/C08_base_b67_3897f635/source_contact_audit.json",
+          "supplementary_observer_alignment.json": "baselines/C08_base_b67_3897f635/supplementary_observer_alignment.json"
+        }
+      },
+      "config": "C08/robot/config.json",
+      "paired_report": "C08/robot/paired_report.json",
+      "avoidance_report": "C08/robot/evidence/avoidance_audit.json",
+      "review_page": "C08/robot/index.html"
+    }
+  },
+  "baselines": {
+    "datasets/doors/lwx_scene_approved_20261026/C01_base_p01": {
+      "source": "datasets/doors/lwx_scene_approved_20261026/C01_base_p01",
+      "video": "baselines/C01_base_p01_45c11578/video.mp4",
+      "video_layout": "原三路＋同步总览",
+      "files": {
+        "metadata.json": "baselines/C01_base_p01_45c11578/metadata.json",
+        "result.json": "baselines/C01_base_p01_45c11578/result.json",
+        "trajectory.json": "baselines/C01_base_p01_45c11578/trajectory.json",
+        "self_collision_audit.json": "baselines/C01_base_p01_45c11578/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C01_base_p01_45c11578/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "baselines/C01_base_p01_45c11578/review_all_four_cameras.json",
+        "task_validation_full.json": "baselines/C01_base_p01_45c11578/task_validation_full.json",
+        "task_review_audit.json": "baselines/C01_base_p01_45c11578/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C01_base_p01_45c11578/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_20261023/base_03": {
+      "source": "datasets/doors/lwx_20261023/base_03",
+      "video": "baselines/base_03_de809d55/video.mp4",
+      "video_layout": "原三路同步合成",
+      "files": {
+        "metadata.json": "baselines/base_03_de809d55/metadata.json",
+        "result.json": "baselines/base_03_de809d55/result.json",
+        "trajectory.json": "baselines/base_03_de809d55/trajectory.json",
+        "self_collision_audit.json": "baselines/base_03_de809d55/self_collision_audit.json",
+        "validation_full.json": "baselines/base_03_de809d55/validation_full.json",
+        "review_audit.json": "baselines/base_03_de809d55/review_audit.json",
+        "contact_geometry_audit.json": "baselines/base_03_de809d55/contact_geometry_audit.json"
+      }
+    },
+    "datasets/doors/lwx_C02_lowstart46_20261026/C02_base_p01": {
+      "source": "datasets/doors/lwx_C02_lowstart46_20261026/C02_base_p01",
+      "video": "baselines/C02_base_p01_882d34e9/video.mp4",
+      "video_layout": "原三路＋同步总览",
+      "files": {
+        "metadata.json": "baselines/C02_base_p01_882d34e9/metadata.json",
+        "result.json": "baselines/C02_base_p01_882d34e9/result.json",
+        "trajectory.json": "baselines/C02_base_p01_882d34e9/trajectory.json",
+        "self_collision_audit.json": "baselines/C02_base_p01_882d34e9/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C02_base_p01_882d34e9/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "baselines/C02_base_p01_882d34e9/review_all_four_cameras.json",
+        "task_validation_full.json": "baselines/C02_base_p01_882d34e9/task_validation_full.json",
+        "task_review_audit.json": "baselines/C02_base_p01_882d34e9/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C02_base_p01_882d34e9/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_base_01": {
+      "source": "datasets/doors/lwx_C02_shortcut_settle_retry27_20261024/C02_base_01",
+      "video": "baselines/C02_base_01_4c78d766/video.mp4",
+      "video_layout": "原三路同步合成",
+      "files": {
+        "metadata.json": "baselines/C02_base_01_4c78d766/metadata.json",
+        "result.json": "baselines/C02_base_01_4c78d766/result.json",
+        "trajectory.json": "baselines/C02_base_01_4c78d766/trajectory.json",
+        "self_collision_audit.json": "baselines/C02_base_01_4c78d766/self_collision_audit.json",
+        "task_validation_full.json": "baselines/C02_base_01_4c78d766/task_validation_full.json",
+        "task_review_audit.json": "baselines/C02_base_01_4c78d766/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C02_base_01_4c78d766/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_scene_approved_20261026/C02_base_p01": {
+      "source": "datasets/doors/lwx_scene_approved_20261026/C02_base_p01",
+      "video": "baselines/C02_base_p01_42321680/video.mp4",
+      "video_layout": "原三路＋同步总览",
+      "files": {
+        "metadata.json": "baselines/C02_base_p01_42321680/metadata.json",
+        "result.json": "baselines/C02_base_p01_42321680/result.json",
+        "trajectory.json": "baselines/C02_base_p01_42321680/trajectory.json",
+        "self_collision_audit.json": "baselines/C02_base_p01_42321680/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C02_base_p01_42321680/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "baselines/C02_base_p01_42321680/review_all_four_cameras.json",
+        "task_validation_full.json": "baselines/C02_base_p01_42321680/task_validation_full.json",
+        "task_review_audit.json": "baselines/C02_base_p01_42321680/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C02_base_p01_42321680/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_C02_C03_20261023/C03_base_05": {
+      "source": "datasets/doors/lwx_C02_C03_20261023/C03_base_05",
+      "video": "baselines/C03_base_05_0585acbd/video.mp4",
+      "video_layout": "原三路同步合成",
+      "files": {
+        "metadata.json": "baselines/C03_base_05_0585acbd/metadata.json",
+        "result.json": "baselines/C03_base_05_0585acbd/result.json",
+        "trajectory.json": "baselines/C03_base_05_0585acbd/trajectory.json",
+        "self_collision_audit.json": "baselines/C03_base_05_0585acbd/self_collision_audit.json",
+        "task_validation_full.json": "baselines/C03_base_05_0585acbd/task_validation_full.json",
+        "task_review_audit.json": "baselines/C03_base_05_0585acbd/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C03_base_05_0585acbd/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_C03_jointgoal52_20261026/C03_base_p01": {
+      "source": "datasets/doors/lwx_C03_jointgoal52_20261026/C03_base_p01",
+      "video": "baselines/C03_base_p01_0fd0af71/video.mp4",
+      "video_layout": "原三路＋同步总览",
+      "files": {
+        "metadata.json": "baselines/C03_base_p01_0fd0af71/metadata.json",
+        "result.json": "baselines/C03_base_p01_0fd0af71/result.json",
+        "trajectory.json": "baselines/C03_base_p01_0fd0af71/trajectory.json",
+        "self_collision_audit.json": "baselines/C03_base_p01_0fd0af71/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C03_base_p01_0fd0af71/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "baselines/C03_base_p01_0fd0af71/review_all_four_cameras.json",
+        "task_validation_full.json": "baselines/C03_base_p01_0fd0af71/task_validation_full.json",
+        "task_review_audit.json": "baselines/C03_base_p01_0fd0af71/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C03_base_p01_0fd0af71/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_C03_controller_release09_20261026/C03_base_p01": {
+      "source": "datasets/doors/lwx_C03_controller_release09_20261026/C03_base_p01",
+      "video": "baselines/C03_base_p01_6a80057a/video.mp4",
+      "video_layout": "原三路＋同步总览",
+      "files": {
+        "metadata.json": "baselines/C03_base_p01_6a80057a/metadata.json",
+        "result.json": "baselines/C03_base_p01_6a80057a/result.json",
+        "trajectory.json": "baselines/C03_base_p01_6a80057a/trajectory.json",
+        "self_collision_audit.json": "baselines/C03_base_p01_6a80057a/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C03_base_p01_6a80057a/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "baselines/C03_base_p01_6a80057a/review_all_four_cameras.json",
+        "task_validation_full.json": "baselines/C03_base_p01_6a80057a/task_validation_full.json",
+        "task_review_audit.json": "baselines/C03_base_p01_6a80057a/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C03_base_p01_6a80057a/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_scene_approved_20261026/C04_base_b563": {
+      "source": "datasets/doors/lwx_scene_approved_20261026/C04_base_b563",
+      "video": "baselines/C04_base_b563_1af73484/video.mp4",
+      "video_layout": "原相机2",
+      "files": {
+        "metadata.json": "baselines/C04_base_b563_1af73484/metadata.json",
+        "result.json": "baselines/C04_base_b563_1af73484/result.json",
+        "trajectory.json": "baselines/C04_base_b563_1af73484/trajectory.json",
+        "self_collision_audit.json": "baselines/C04_base_b563_1af73484/self_collision_audit.json",
+        "task_review_audit.json": "baselines/C04_base_b563_1af73484/task_review_audit.json",
+        "task_validation_full.json": "baselines/C04_base_b563_1af73484/task_validation_full.json",
+        "source_contact_audit.json": "baselines/C04_base_b563_1af73484/source_contact_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C04_base_b563_1af73484/supplementary_observer_alignment.json"
+      }
+    },
+    "datasets/doors/lwx_scene_approved_20261026/C04_base_b318": {
+      "source": "datasets/doors/lwx_scene_approved_20261026/C04_base_b318",
+      "video": "baselines/C04_base_b318_36cedef0/video.mp4",
+      "video_layout": "原三路同步合成",
+      "files": {
+        "metadata.json": "baselines/C04_base_b318_36cedef0/metadata.json",
+        "result.json": "baselines/C04_base_b318_36cedef0/result.json",
+        "trajectory.json": "baselines/C04_base_b318_36cedef0/trajectory.json",
+        "self_collision_audit.json": "baselines/C04_base_b318_36cedef0/self_collision_audit.json",
+        "task_review_audit.json": "baselines/C04_base_b318_36cedef0/task_review_audit.json",
+        "task_validation_full.json": "baselines/C04_base_b318_36cedef0/task_validation_full.json",
+        "source_contact_audit.json": "baselines/C04_base_b318_36cedef0/source_contact_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C04_base_b318_36cedef0/supplementary_observer_alignment.json"
+      }
+    },
+    "datasets/doors/lwx_controller_release03_20261026/C04_base_p01": {
+      "source": "datasets/doors/lwx_controller_release03_20261026/C04_base_p01",
+      "video": "baselines/C04_base_p01_f9bedaf7/video.mp4",
+      "video_layout": "原三路＋同步总览",
+      "files": {
+        "metadata.json": "baselines/C04_base_p01_f9bedaf7/metadata.json",
+        "result.json": "baselines/C04_base_p01_f9bedaf7/result.json",
+        "trajectory.json": "baselines/C04_base_p01_f9bedaf7/trajectory.json",
+        "self_collision_audit.json": "baselines/C04_base_p01_f9bedaf7/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C04_base_p01_f9bedaf7/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "baselines/C04_base_p01_f9bedaf7/review_all_four_cameras.json",
+        "task_validation_full.json": "baselines/C04_base_p01_f9bedaf7/task_validation_full.json",
+        "task_review_audit.json": "baselines/C04_base_p01_f9bedaf7/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C04_base_p01_f9bedaf7/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_scene_approved_20261026/C05_base_p01": {
+      "source": "datasets/doors/lwx_scene_approved_20261026/C05_base_p01",
+      "video": "baselines/C05_base_p01_0646be1f/video.mp4",
+      "video_layout": "原三路＋同步总览",
+      "files": {
+        "metadata.json": "baselines/C05_base_p01_0646be1f/metadata.json",
+        "result.json": "baselines/C05_base_p01_0646be1f/result.json",
+        "trajectory.json": "baselines/C05_base_p01_0646be1f/trajectory.json",
+        "self_collision_audit.json": "baselines/C05_base_p01_0646be1f/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C05_base_p01_0646be1f/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "baselines/C05_base_p01_0646be1f/review_all_four_cameras.json",
+        "task_validation_full.json": "baselines/C05_base_p01_0646be1f/task_validation_full.json",
+        "task_review_audit.json": "baselines/C05_base_p01_0646be1f/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C05_base_p01_0646be1f/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_scene_approved_20261026/C06_base_b515": {
+      "source": "datasets/doors/lwx_scene_approved_20261026/C06_base_b515",
+      "video": "baselines/C06_base_b515_e8cb5c0d/video.mp4",
+      "video_layout": "原相机2",
+      "files": {
+        "metadata.json": "baselines/C06_base_b515_e8cb5c0d/metadata.json",
+        "result.json": "baselines/C06_base_b515_e8cb5c0d/result.json",
+        "trajectory.json": "baselines/C06_base_b515_e8cb5c0d/trajectory.json",
+        "self_collision_audit.json": "baselines/C06_base_b515_e8cb5c0d/self_collision_audit.json",
+        "task_review_audit.json": "baselines/C06_base_b515_e8cb5c0d/task_review_audit.json",
+        "task_validation_full.json": "baselines/C06_base_b515_e8cb5c0d/task_validation_full.json",
+        "source_contact_audit.json": "baselines/C06_base_b515_e8cb5c0d/source_contact_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C06_base_b515_e8cb5c0d/supplementary_observer_alignment.json"
+      }
+    },
+    "datasets/doors/lwx_C06_property_lower53_20261026/C06_base_p01": {
+      "source": "datasets/doors/lwx_C06_property_lower53_20261026/C06_base_p01",
+      "video": "baselines/C06_base_p01_fe29bbf9/video.mp4",
+      "video_layout": "原三路＋同步总览",
+      "files": {
+        "metadata.json": "baselines/C06_base_p01_fe29bbf9/metadata.json",
+        "result.json": "baselines/C06_base_p01_fe29bbf9/result.json",
+        "trajectory.json": "baselines/C06_base_p01_fe29bbf9/trajectory.json",
+        "self_collision_audit.json": "baselines/C06_base_p01_fe29bbf9/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C06_base_p01_fe29bbf9/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "baselines/C06_base_p01_fe29bbf9/review_all_four_cameras.json",
+        "task_validation_full.json": "baselines/C06_base_p01_fe29bbf9/task_validation_full.json",
+        "task_review_audit.json": "baselines/C06_base_p01_fe29bbf9/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C06_base_p01_fe29bbf9/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_C06_corridor09_20261026/C06_base_p01": {
+      "source": "datasets/doors/lwx_C06_corridor09_20261026/C06_base_p01",
+      "video": "baselines/C06_base_p01_c2d50300/video.mp4",
+      "video_layout": "原三路＋同步总览",
+      "files": {
+        "metadata.json": "baselines/C06_base_p01_c2d50300/metadata.json",
+        "result.json": "baselines/C06_base_p01_c2d50300/result.json",
+        "trajectory.json": "baselines/C06_base_p01_c2d50300/trajectory.json",
+        "self_collision_audit.json": "baselines/C06_base_p01_c2d50300/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C06_base_p01_c2d50300/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "baselines/C06_base_p01_c2d50300/review_all_four_cameras.json",
+        "task_validation_full.json": "baselines/C06_base_p01_c2d50300/task_validation_full.json",
+        "task_review_audit.json": "baselines/C06_base_p01_c2d50300/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C06_base_p01_c2d50300/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01": {
+      "source": "datasets/doors/lwx_C07_release_clearance_retry120_20261024/C07_base_01",
+      "video": "baselines/C07_base_01_e4889110/video.mp4",
+      "video_layout": "原三路同步合成",
+      "files": {
+        "metadata.json": "baselines/C07_base_01_e4889110/metadata.json",
+        "result.json": "baselines/C07_base_01_e4889110/result.json",
+        "trajectory.json": "baselines/C07_base_01_e4889110/trajectory.json",
+        "self_collision_audit.json": "baselines/C07_base_01_e4889110/self_collision_audit.json",
+        "task_validation_full.json": "baselines/C07_base_01_e4889110/task_validation_full.json",
+        "task_review_audit.json": "baselines/C07_base_01_e4889110/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C07_base_01_e4889110/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_C08_property_frozen71_20261026/C08_base_p01": {
+      "source": "datasets/doors/lwx_C08_property_frozen71_20261026/C08_base_p01",
+      "video": "baselines/C08_base_p01_4ba4f265/video.mp4",
+      "video_layout": "原三路＋同步总览",
+      "files": {
+        "metadata.json": "baselines/C08_base_p01_4ba4f265/metadata.json",
+        "result.json": "baselines/C08_base_p01_4ba4f265/result.json",
+        "trajectory.json": "baselines/C08_base_p01_4ba4f265/trajectory.json",
+        "self_collision_audit.json": "baselines/C08_base_p01_4ba4f265/self_collision_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C08_base_p01_4ba4f265/supplementary_observer_alignment.json",
+        "review_all_four_cameras.json": "baselines/C08_base_p01_4ba4f265/review_all_four_cameras.json",
+        "task_validation_full.json": "baselines/C08_base_p01_4ba4f265/task_validation_full.json",
+        "task_review_audit.json": "baselines/C08_base_p01_4ba4f265/task_review_audit.json",
+        "source_contact_audit.json": "baselines/C08_base_p01_4ba4f265/source_contact_audit.json"
+      }
+    },
+    "datasets/doors/lwx_scene_approved_20261026/C08_base_b67": {
+      "source": "datasets/doors/lwx_scene_approved_20261026/C08_base_b67",
+      "video": "baselines/C08_base_b67_3897f635/video.mp4",
+      "video_layout": "原三路同步合成",
+      "files": {
+        "metadata.json": "baselines/C08_base_b67_3897f635/metadata.json",
+        "result.json": "baselines/C08_base_b67_3897f635/result.json",
+        "trajectory.json": "baselines/C08_base_b67_3897f635/trajectory.json",
+        "self_collision_audit.json": "baselines/C08_base_b67_3897f635/self_collision_audit.json",
+        "task_review_audit.json": "baselines/C08_base_b67_3897f635/task_review_audit.json",
+        "task_validation_full.json": "baselines/C08_base_b67_3897f635/task_validation_full.json",
+        "source_contact_audit.json": "baselines/C08_base_b67_3897f635/source_contact_audit.json",
+        "supplementary_observer_alignment.json": "baselines/C08_base_b67_3897f635/supplementary_observer_alignment.json"
+      }
+    }
+  }
+}
