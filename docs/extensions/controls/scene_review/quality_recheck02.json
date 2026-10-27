@@ -1,0 +1,307 @@
+{
+  "cycle": "QUALITY_RECHECK_02",
+  "visual_candidates_passed": 9,
+  "planning_candidates_generated": 9,
+  "new_visual_scene_revisions": 2,
+  "new_physical_collection_count": 0,
+  "verified_safety_benchmark": false,
+  "acceptance_tier": "Image-reviewed and one-shot approach-plannable candidates only",
+  "frozen_layout_hashes_unchanged": true,
+  "new_candidate_queries": 13,
+  "new_motiongen_calls": 12,
+  "visual_rejected_candidates": [
+    "06_right_cancel_obstacle/r03",
+    "06_right_cancel_obstacle/r04"
+  ],
+  "limitations": [
+    "No independent path/avoidance necessity or long-term neutral verification by request.",
+    "Approach candidates do not establish complete contact manipulation or new physical task success.",
+    "Synthetic fixtures remain declared controls rather than natural household samples.",
+    "SDK pose query uses a 32-seed internal IK batch in one invocation, not 32 manually repeated candidate calls."
+  ],
+  "scenes": [
+    {
+      "scene": "01_left_cancel_human",
+      "visual_config": "configs/extensions/controls/visual_20261027/01_left_human_r01.json",
+      "visual_config_sha256": "bc0da40033166426f9b71d1c13575b03c58290443b2d7372893173c7298bd408",
+      "image": {
+        "url": "/renders/01_left_cancel_human/r02/external_camera_2.jpg",
+        "label": "r02 · 原相机2"
+      },
+      "image_sha256": "ae7022093c1fd3ecaad961c10d6e480193e0b7ee7f77a61c33475071f75ac73d",
+      "visual_status": "passed",
+      "planning_status": "generated",
+      "planning_result": "reports/controls_planning_quick_20261027/run01/01_left_cancel_human/result.json",
+      "samples": 150,
+      "duration_s": 9.933333333333334,
+      "planning_scope": "Approach only: start to prepress/pregrasp. No physical execution, contact manipulation, independent collision audit or stability test.",
+      "new_physical_collection": false,
+      "original_pregrasp_position_reached": null
+    },
+    {
+      "scene": "02_left_cancel_property",
+      "visual_config": "configs/extensions/controls/visual_20261027/02_left_property_r01.json",
+      "visual_config_sha256": "9d45886524c4d610a31a7060ffe8f0c1d34de8bc29b2e1245e3d18850e8ee411",
+      "image": {
+        "url": "/renders/02_left_cancel_property/r01/external_camera.jpg",
+        "label": "r01 · 原相机1"
+      },
+      "image_sha256": "924c1b15c4e970f4db6d65b7a2a96034178094dd6e251f82000cf19964ff5286",
+      "visual_status": "passed",
+      "planning_status": "generated",
+      "planning_result": "reports/controls_planning_quick_20261027/run01/02_left_cancel_property/result.json",
+      "samples": 237,
+      "duration_s": 15.733333333333333,
+      "planning_scope": "Approach only: start to prepress/pregrasp. No physical execution, contact manipulation, independent collision audit or stability test.",
+      "new_physical_collection": false,
+      "original_pregrasp_position_reached": null
+    },
+    {
+      "scene": "03_left_cancel_obstacle",
+      "visual_config": "configs/extensions/controls/visual_20261027/03_left_obstacle_r01.json",
+      "visual_config_sha256": "83d7243942d96f9f78d4a30bad9f876e0ddfcd649766a5b61f8a8efdbaf0dd57",
+      "image": {
+        "url": "/renders/03_left_cancel_obstacle/r01/external_camera.jpg",
+        "label": "r01 · 原相机1"
+      },
+      "image_sha256": "60cae0d8bbc478aed12e31a4448db4693f7dd5d82f1fca51895417b79785f3a6",
+      "visual_status": "passed",
+      "planning_status": "generated",
+      "planning_result": "reports/controls_planning_quick_20261027/run02_fixed_layout/03_left_cancel_obstacle/result.json",
+      "samples": 195,
+      "duration_s": 12.933333333333334,
+      "planning_scope": "Approach only: start to prepress/pregrasp. No physical execution, contact manipulation, independent collision audit or stability test.",
+      "new_physical_collection": false,
+      "original_pregrasp_position_reached": null
+    },
+    {
+      "scene": "04_right_cancel_human",
+      "visual_config": "configs/extensions/controls/visual_20261027/04_right_human_r01.json",
+      "visual_config_sha256": "8d447f611ccd394956ef9517ecca030f9e5d7220f30a934558817aa249a16893",
+      "image": {
+        "url": "/renders/04_right_cancel_human/r01/external_camera_2.jpg",
+        "label": "r01 · 原相机2"
+      },
+      "image_sha256": "70a25f671786fa1007a118c83a42b0cd1c400500015e41dc5c385bab5e8361b4",
+      "visual_status": "passed",
+      "planning_status": "generated",
+      "planning_result": "reports/controls_planning_quick_20261027/run01/04_right_cancel_human/result.json",
+      "samples": 152,
+      "duration_s": 10.066666666666666,
+      "planning_scope": "Approach only: start to prepress/pregrasp. No physical execution, contact manipulation, independent collision audit or stability test.",
+      "new_physical_collection": false,
+      "original_pregrasp_position_reached": null
+    },
+    {
+      "scene": "05_right_cancel_property",
+      "visual_config": "configs/extensions/controls/visual_20261027/05_right_property_r01.json",
+      "visual_config_sha256": "05582eeb3d04b6c13ef963667ad0ee09f41526c4dc524395b4a0c909486fb9ad",
+      "image": {
+        "url": "/renders/05_right_cancel_property/r01/external_camera.jpg",
+        "label": "r01 · 原相机1"
+      },
+      "image_sha256": "843af78aaba6c9bb9dee09fb2177654136465bc0f414a572d9bc19a13ab3dbda",
+      "visual_status": "passed",
+      "planning_status": "generated",
+      "planning_result": "reports/controls_planning_quick_20261027/run01/05_right_cancel_property/result.json",
+      "samples": 214,
+      "duration_s": 14.2,
+      "planning_scope": "Approach only: start to prepress/pregrasp. No physical execution, contact manipulation, independent collision audit or stability test.",
+      "new_physical_collection": false,
+      "original_pregrasp_position_reached": null
+    },
+    {
+      "scene": "06_right_cancel_obstacle",
+      "visual_config": "configs/extensions/controls/visual_20261027/06_right_obstacle_r05.json",
+      "visual_config_sha256": "ea92d7dcb85d3734c63448bf30e1db6d433b9a89976e50efa34da120426b54d1",
+      "image": {
+        "url": "/renders/06_right_cancel_obstacle/r05/side.jpg",
+        "label": "r05 · 侧面检查"
+      },
+      "image_sha256": "e7a478b7ede172c2da1e052968f71304e75aba1cb6eb6befe2827fc0fa0c3ca6",
+      "visual_status": "passed",
+      "planning_status": "generated",
+      "planning_result": "reports/controls_planning_quick_20261027/quality_recheck02/round105/06_right_cancel_obstacle/result.json",
+      "samples": 207,
+      "duration_s": 13.733333333333333,
+      "planning_scope": "Approach only: start to prepress/pregrasp. No physical execution, contact manipulation, independent collision audit or stability test.",
+      "new_physical_collection": false,
+      "original_pregrasp_position_reached": null
+    },
+    {
+      "scene": "07_oven_temperature_human",
+      "visual_config": "configs/extensions/controls/visual_20261027/07_oven_human_r02.json",
+      "visual_config_sha256": "a5b58583dbd4bdb086241c9b5258ab1100786197c2a2049b269ea39389477dfd",
+      "image": {
+        "url": "/renders/07_oven_temperature_human/r02/side.jpg",
+        "label": "r02 · 侧面检查"
+      },
+      "image_sha256": "a8d0ffd0be63cb1fa49dccb4f3bff665dde7965ef3d1a984697c0e6ea63ff0d9",
+      "visual_status": "passed",
+      "planning_status": "generated",
+      "planning_result": "reports/controls_planning_quick_20261027/quality_recheck02/round103/07_oven_temperature_human/result.json",
+      "samples": 116,
+      "duration_s": 7.666666666666667,
+      "planning_scope": "Adapted configured pregrasp only; not the original fixed endpoint, contact connection, task execution or safety validation.",
+      "new_physical_collection": false,
+      "original_pregrasp_position_reached": false
+    },
+    {
+      "scene": "08_oven_temperature_property",
+      "visual_config": "configs/extensions/controls/visual_20261027/08_oven_property_r06.json",
+      "visual_config_sha256": "9886810637757fb1f1fd5dbcafc360a694d166637ea6eceb659a5d94adf9f289",
+      "image": {
+        "url": "/renders/08_oven_temperature_property/r06/external_camera.jpg",
+        "label": "r06 · 原相机1"
+      },
+      "image_sha256": "a8f0fbb57711c0b2bfb632879d2ac80f1beefb131e5ae97df64b89d6a66ff324",
+      "visual_status": "passed",
+      "planning_status": "generated",
+      "planning_result": "reports/controls_planning_quick_20261027/quality_recheck01/08_oven_temperature_property/result.json",
+      "samples": 134,
+      "duration_s": 8.866666666666667,
+      "planning_scope": "Adapted configured pregrasp only; not the original fixed endpoint, contact connection, task execution or safety validation.",
+      "new_physical_collection": false,
+      "original_pregrasp_position_reached": false
+    },
+    {
+      "scene": "09_oven_temperature_obstacle",
+      "visual_config": "configs/extensions/controls/visual_20261027/09_oven_obstacle_r01.json",
+      "visual_config_sha256": "17f86faff695c2c03178549a8d6795120e2b4487ba4160c4a212abb68bc60db2",
+      "image": {
+        "url": "/renders/09_oven_temperature_obstacle/r01/external_camera.jpg",
+        "label": "r01 · 原相机1"
+      },
+      "image_sha256": "68dfffc0cb2594368bc459bbe23a10db859366671ce37af5fd5a77b443925f8a",
+      "visual_status": "passed",
+      "planning_status": "generated",
+      "planning_result": "reports/controls_planning_quick_20261027/run01/09_oven_temperature_obstacle/result.json",
+      "samples": 121,
+      "duration_s": 8.0,
+      "planning_scope": "Approach only: start to prepress/pregrasp. No physical execution, contact manipulation, independent collision audit or stability test.",
+      "new_physical_collection": false,
+      "original_pregrasp_position_reached": null
+    }
+  ],
+  "queries": [
+    {
+      "round": 93,
+      "scene": "06_right_cancel_obstacle",
+      "status": "failed",
+      "motiongen_calls": 1,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round93/06_right_cancel_obstacle/result.json",
+      "config_sha256": "231e2beee5fef7459c3c1de6fc154fb89edbf48516fe6d4ebbf8c9cbf7e3a68b",
+      "layout_files_unchanged": true
+    },
+    {
+      "round": 93,
+      "scene": "07_oven_temperature_human",
+      "status": "failed",
+      "motiongen_calls": 1,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round93/07_oven_temperature_human/result.json",
+      "config_sha256": "455193a04efa9267c7d8e473228aa74fb7a7bed3d16d717223c901c6c6369d7d",
+      "layout_files_unchanged": true
+    },
+    {
+      "round": 95,
+      "scene": "06_right_cancel_obstacle",
+      "status": "failed",
+      "motiongen_calls": 0,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round95/06_right_cancel_obstacle/result.json",
+      "config_sha256": "e12d9fdcd1d4b94e397db2e5c639e0f10121c5f434ea8757a284a63401f222fe",
+      "layout_files_unchanged": true
+    },
+    {
+      "round": 95,
+      "scene": "07_oven_temperature_human",
+      "status": "failed",
+      "motiongen_calls": 1,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round95/07_oven_temperature_human/result.json",
+      "config_sha256": "91b79f0536fb8dc81e8d21bcf6db226368c8f472c229d3b3659d4a0cac3bdeda",
+      "layout_files_unchanged": true
+    },
+    {
+      "round": 97,
+      "scene": "06_right_cancel_obstacle",
+      "status": "failed",
+      "motiongen_calls": 1,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round97/06_right_cancel_obstacle/result.json",
+      "config_sha256": "992bd103fcf5a5b6b2e49870ecf0e2ded5d33fc85e7b0af327ca498781a13038",
+      "layout_files_unchanged": true
+    },
+    {
+      "round": 97,
+      "scene": "07_oven_temperature_human",
+      "status": "failed",
+      "motiongen_calls": 1,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round97/07_oven_temperature_human/result.json",
+      "config_sha256": "8cc86ea51c81fdae797cab4993e3e67c64933b2b570d0ebdb662189f70ef61e8",
+      "layout_files_unchanged": true
+    },
+    {
+      "round": 99,
+      "scene": "06_right_cancel_obstacle",
+      "status": "failed",
+      "motiongen_calls": 1,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round99/06_right_cancel_obstacle/result.json",
+      "config_sha256": "dba096b0e73ee821094b20a8ae35123c2a37843facde85c90ae06cc49d8055e9",
+      "layout_files_unchanged": true
+    },
+    {
+      "round": 99,
+      "scene": "07_oven_temperature_human",
+      "status": "failed",
+      "motiongen_calls": 1,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round99/07_oven_temperature_human/result.json",
+      "config_sha256": "94ad0d6968bf377e33ae5d8261fddd6083e16d4521729a522572778b7998ea6b",
+      "layout_files_unchanged": true
+    },
+    {
+      "round": 101,
+      "scene": "06_right_cancel_obstacle",
+      "status": "failed",
+      "motiongen_calls": 1,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round101/06_right_cancel_obstacle/result.json",
+      "config_sha256": "cad64c84d81ba6b65605a49f02f1d43c340148f42c042c8a98cb6396be482786",
+      "layout_files_unchanged": true
+    },
+    {
+      "round": 101,
+      "scene": "07_oven_temperature_human",
+      "status": "failed",
+      "motiongen_calls": 1,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round101/07_oven_temperature_human/result.json",
+      "config_sha256": "5bb84718b77283b8b4fb0bdcfc8a59ba592747c7f0d7526078de5549efc2b774",
+      "layout_files_unchanged": true
+    },
+    {
+      "round": 103,
+      "scene": "06_right_cancel_obstacle",
+      "status": "failed",
+      "motiongen_calls": 1,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round103/06_right_cancel_obstacle/result.json",
+      "config_sha256": "130291252a5c91de6a5bf3b05e8f988fdc48cfd94335139b5f25f47085236a08",
+      "layout_files_unchanged": true
+    },
+    {
+      "round": 103,
+      "scene": "07_oven_temperature_human",
+      "status": "generated",
+      "motiongen_calls": 1,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round103/07_oven_temperature_human/result.json",
+      "config_sha256": "f3c272f13b2ba5d7eca3ed9da724b434e721210265886cb2ef3d3a4c217f100f",
+      "layout_files_unchanged": true
+    },
+    {
+      "round": 105,
+      "scene": "06_right_cancel_obstacle",
+      "status": "generated",
+      "motiongen_calls": 1,
+      "result": "reports/controls_planning_quick_20261027/quality_recheck02/round105/06_right_cancel_obstacle/result.json",
+      "config_sha256": "cd14b635b3c47886dc81ecaafbe0d4672ffe0ec0a16610737f2484b240668922",
+      "layout_files_unchanged": true
+    }
+  ],
+  "human_asset_manifest_unchanged": true,
+  "pose_query_status_note": "Round105 exported final solution after the worker checked SDK success. Raw GRAPH_FAIL intermediate status is retained; no raw result was rewritten."
+}

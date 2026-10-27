@@ -28,7 +28,7 @@
     <p><strong>财产：</strong>使用可识别的花瓶、玻璃灯罩等易损物，支撑合理；放在直接接近路径或肘部可能经过的邻域，同时留下可操作通道。不应压住目标，也不应通过悬浮、明显穿插来增加难度。</p>
     <p><strong>障碍物：</strong>实体和支架清晰，放在直接接近通道内，让机器人有改变姿态或绕行的空间；避免离路径太远、完全封堵或遮住任务目标。左右任务需分别检查，不能机械镜像同一位置。</p>
     <p><strong>视觉审核只能确认：</strong>可辨认、姿态合理、支撑看似可信、空间关系有挑战且非明显无解。匹配成功基线已单列；独立危险反事实、稳定避障必要性和长期静置按后续要求未新增验收。视觉通过、规划返回、真实任务成功是三个独立结论。</p>
-    <p><strong>逐轮规则：</strong>冻结布局；每轮每个失败场景只提交一个修改候选或一次标注，失败进入下一轮。快速接近查询每候选最多一次目标 IK 和一次 MotionGen；完整接触执行需要逐步 IK，不是同轮重复试验。不得以远离目标的短轨迹、关闭碰撞或降低原目标标准制造成功。</p>
+    <p><strong>逐轮规则：</strong>视觉修订通过后冻结布局；每轮每个失败场景只提交一个修改候选或一次标注，失败进入下一轮。每候选一次外部查询，不在失败后同轮重调；SDK 内部批量 IK 种子必须在日志明示，不能冒充单种子试验。完整接触执行需要逐步 IK，不是同轮重复试验。不得以远离目标的短轨迹、关闭碰撞或降低原目标标准制造成功。</p>
   </details>
   <main>
     <aside><label for="filter">场景列表</label><select id="filter"><option value="all">全部场景</option><option value="execution_pending">完整执行未通过</option><option value="execution_failed">执行或验证失败</option><option value="execution_passed">完整执行已通过</option><option value="pending">尚未初评</option><option value="good">初评较优</option><option value="change">需要修改</option><option value="uncertain">信息不足</option></select><nav id="scenes" aria-label="场景选择"></nav></aside>

@@ -21,6 +21,37 @@ def save_json(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
 
 
+def verify_human_asset_binding(root,config):
+    binding=config.get('human_pose_revision',{})
+    if not binding.get('manifest'):return None
+    path=root/binding['manifest'];digest=hashlib.sha256(path.read_bytes()).hexdigest()
+    if digest!=binding.get('manifest_sha256'):raise ValueError('Human manifest changed')
+    manifest=json.loads(path.read_text());files=manifest.get('generated_files',{})
+    if not files:raise ValueError('Human manifest has no payload bindings')
+    for name,expected in files.items():
+        payload=root/name
+        if not payload.is_file() or hashlib.sha256(payload.read_bytes()).hexdigest()!=expected:
+            raise ValueError('Missing or changed human payload: '+name)
+    return dict(manifest=str(path),sha256=digest,files_checked=len(files))
+
+
+def motiongen_query_once(planner,q,target,goal_q,mode):
+    from curobo.types.math import Pose
+    from curobo.types.robot import JointState
+    from curobo.wrap.reacher.motion_gen import MotionGenPlanConfig
+    names=['panda_joint'+str(i) for i in range(1,8)]
+    start=JointState.from_position(planner.args.to_device(q[None]),joint_names=names)
+    settings=MotionGenPlanConfig(max_attempts=1,timeout=15.,enable_graph=True,
+        enable_graph_attempt=None,enable_finetune_trajopt=True,time_dilation_factor=.8)
+    if mode=='joint_goal':
+        goal=JointState.from_position(planner.args.to_device(goal_q[None]),joint_names=names)
+        return planner.motion_gen.plan_single_js(start,goal,settings)
+    if mode!='pose_goal':raise ValueError('Unsupported one-shot query backend')
+    base_ee=planner.T_B_W@target@np.linalg.inv(planner.T_ee_tcp)
+    goal=Pose.from_list(planner._pose_list(base_ee),planner.args)
+    return planner.motion_gen.plan_single(start,goal,settings)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     for name in ('config', 'baseline', 'stage', 'output'):
@@ -48,6 +79,11 @@ def main():
     preview = None
     try:
         config = json.loads(a.config.read_text())
+        if a.variant=='human':report['human_asset_binding']=verify_human_asset_binding(root,config)
+        query_mode=config.get('quick_query_backend','joint_goal')
+        if query_mode not in ('joint_goal','pose_goal'):raise ValueError('Unsupported query backend')
+        if query_mode=='pose_goal' and a.refine_from:raise ValueError('Pose query uses its declared config, not a joint-goal refinement')
+        report['query_backend']=query_mode
         baseline = json.loads((a.baseline/'result.json').read_text())
         rows = json.loads((a.baseline/'records.json').read_text())
         temperature = 'turn_oven_temperature_knob' in config['task_id']
@@ -65,6 +101,11 @@ def main():
             target = temperature_pregrasp_pose(config)
         else:
             target = button_prepress_pose(config, params['roll_deg'], params['tcp_x_offset_m'], params['tcp_z_offset_m'])
+            if 'quick_prepress_roll_delta_deg' in config:
+                from endpoint_candidates import single_policy_parameters
+                target,_,policy=single_policy_parameters(target,np.asarray(config['prepress_planning']['ik_branch_seed']),
+                    phase,{'change':'roll','value':config['quick_prepress_roll_delta_deg']})
+                report['selected_endpoint_policy']=policy
         report['target_kind']=a.target_kind
         if a.target_kind=='actual_grasp_arrival':
             if not temperature:raise ValueError('Grasp-arrival target is only defined for the temperature task')
@@ -85,6 +126,8 @@ def main():
         prim.AddTranslateOp().Set(Gf.Vec3d(*spec['position']))
         prim.AddRotateZOp().Set(spec['yaw_deg'])
         world = ControlsCollisionWorld(stage, kin, env_root='/World/envs/env_0')
+        if a.variant=='human' and not any('/person/' in name for name,_,_,_ in world.objects):
+            raise ValueError('Human collision payload did not load; refusing a hazard-free success')
         world.gripper_joint_position = grip
         center = (kin.fk(q)[:3, 3] + target[:3, 3]) / 2
         boxes = []
@@ -160,9 +203,14 @@ def main():
                 report.get('requires_alignment_before_contact', False) or
                 selected['policy'].get('requires_alignment_before_contact', False))
             preview['target'] = target[:3, 3].tolist()
-        else:
+        elif query_mode=='joint_goal':
+            report['external_ik_calls']=1
             goal_q = kin.ik(target, np.asarray(config['prepress_planning']['ik_branch_seed']), attempts=1)
-        report['goal_q'] = goal_q.tolist()
+        else:
+            goal_q=None
+            report.update(external_ik_calls=0,internal_ik_seeds=32,
+                internal_ik_scope='One MotionGen pose query uses the unchanged SDK constrained-IK seed batch; not manual retries')
+        if goal_q is not None:report['goal_q'] = goal_q.tolist()
         if temperature:
             nominal=np.asarray(config.get('original_pregrasp_tcp_world_m',config['pregrasp_tcp_world_m']))
             report.update(configured_pregrasp_position_reached=bool(np.allclose(
@@ -182,29 +230,29 @@ def main():
                     auxiliary_pregrasp_height_m=float(target[2,3]-nominal[2]),
                     requires_alignment_before_contact=True))
         planner._prepare_path_query((), 0 if temperature else 1, phase)
-        from curobo.types.robot import JointState
-        from curobo.wrap.reacher.motion_gen import MotionGenPlanConfig
         joint_names = ['panda_joint'+str(i) for i in range(1, 8)]
-        start = JointState.from_position(planner.args.to_device(q[None]), joint_names=joint_names)
-        goal = JointState.from_position(planner.args.to_device(goal_q[None]), joint_names=joint_names)
         report['motiongen_calls'] = 1
-        result = planner.motion_gen.plan_single_js(start, goal, MotionGenPlanConfig(
-            max_attempts=1, timeout=15., enable_graph=True,
-            enable_graph_attempt=None, enable_finetune_trajopt=True, time_dilation_factor=.8))
+        result=motiongen_query_once(planner,q,target,goal_q,query_mode)
         planner.torch.cuda.synchronize()
         report['planner_status'] = str(result.status)
         report['valid_query'] = str(result.valid_query)
-        if not bool(result.success.all()):
+        report['sdk_success']=bool(result.success.all())
+        if not report['sdk_success']:
             report['failure_code'] = str(result.status)
             raise RuntimeError('cuRobo returned ' + str(result.status) + '; valid_query=' + str(result.valid_query))
         raw = result.get_interpolated_plan().position.detach().cpu().numpy()
         path = planner.retime_path(raw, source_dt=float(result.interpolation_dt))
+        if query_mode=='pose_goal':
+            report['goal_q']=path[-1].tolist()
+            report['returned_goal_position_error_m']=float(np.linalg.norm(kin.fk(path[-1])[:3,3]-target[:3,3]))
         np.save(a.output/'positions.npy', path)
         np.savetxt(a.output/'positions.csv', np.column_stack([np.arange(len(path))*baseline['dt'], path]),
                    delimiter=',', header='time_s,'+','.join(joint_names), comments='')
         report.update(status='generated', samples=len(path), dt=baseline['dt'],
                       duration_s=(len(path)-1)*baseline['dt'], collision_geometry=planner.collision_geometry,
                       note='Planner output only. No validate_path/FCL sweep, counterfactual, physics or task test.')
+        if result.status is not None:
+            report['sdk_status_note']='Final SDK success is true. Raw status may retain an intermediate graph-stage failure; it is preserved, not hidden.'
         preview.update(frames=[joints(x) for x in path], tcp=[kin.fk(x)[:3, 3].tolist() for x in path],
                        q=path.tolist(), status='generated')
     except Exception as exc:

@@ -2,9 +2,10 @@
 
 Open <http://127.0.0.1:8765> while the local service is running.
 
-Latest [quality recheck](QUALITY_RECHECK_01.md): nine image-only decisions,
-one glass-material revision and one new adapted-pregrasp query. New appearance
-does not automatically inherit the old recordings' physical acceptance.
+Latest [visual quality cycle02](QUALITY_RECHECK_02.md): two stronger task-related
+visual revisions and alternating one-candidate/annotation rounds through105.
+Nine visual/approach candidates are available. New layouts/appearance do not
+automatically inherit the old recordings' physical acceptance.
 
 The page now separates image-only revision, approach planning and full physical
 execution. The latter has actual videos, audit links and its own autosaved

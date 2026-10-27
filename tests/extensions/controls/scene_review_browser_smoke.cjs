@@ -93,10 +93,22 @@ socket.on("open", async () => {
       await waitFor(production, `document.querySelector("#planning-state").textContent.includes(${JSON.stringify(expectedState)})`);
       const roundResult = JSON.parse(roundScene.planning_log);
       if (roundScene.planning_status === "generated" && roundResult.selected_endpoint_policy?.auxiliary_pregrasp_height_m > 0) {
-        assert(await evaluate(production, 'return document.querySelector("#planning-state").textContent.includes("原终点未达") && document.querySelector("#planning-counts").textContent.includes("辅助预抓取候选 1");'));
+        assert(await evaluate(production, 'const r=await (await fetch("/api/scenes")).json();const n=r.scenes.filter(s=>{try{return s.planning_status==="generated" && JSON.parse(s.planning_log).selected_endpoint_policy?.auxiliary_pregrasp_height_m>0;}catch(_){return false;}}).length;return document.querySelector("#planning-state").textContent.includes("原终点未达") && document.querySelector("#planning-counts").textContent.includes("辅助预抓取候选 "+n);'));
       }
       assert.equal(await evaluate(production, 'return document.querySelector("#trajectory-play").disabled;'), roundScene.planning_status === "failed");
       assert(await evaluate(production, 'return document.querySelector("#planning-round-history").textContent.includes("失败") && document.querySelector("#planning-round-history").textContent.includes("15厘米");'));
+    }
+    if (process.env.SCENE_REVIEW_QUALITY_02 === "1") {
+      for (const [id,config,image] of [["06_right_cancel_obstacle","06_right_obstacle_r05.json","/r05/side.jpg"],["07_oven_temperature_human","07_oven_human_r02.json","/r02/side.jpg"]]) {
+        await evaluate(production, `location.hash=${JSON.stringify(id)};return true;`);
+        await waitFor(production, 'document.querySelector("#planning-state").textContent.includes("已返回") && !document.querySelector("#trajectory-wrap").hidden');
+        const row=await evaluate(production, `return (await (await fetch("/api/scenes")).json()).scenes.find(s=>s.id===${JSON.stringify(id)});`);
+        assert(row.visual_config.endsWith(config) && row.execution_status==="recorded");
+        await waitFor(production, `document.querySelector("#hero").getAttribute("src").endsWith(${JSON.stringify(image)}) && Number(document.querySelector("#trajectory-frame").max)===${JSON.parse(row.planning_log).samples-1}`);
+        assert(await evaluate(production, 'return document.querySelector("#execution-video-label").textContent.includes("当前修订版尚未验收");'));
+      }
+      await evaluate(production, 'location.hash="08_oven_temperature_property";return true;');
+      await waitFor(production, 'document.querySelector("#hero").getAttribute("src").includes("/r06/")');
     }
     if (process.env.SCENE_REVIEW_VISUAL === "1") {
       assert.equal(await evaluate(production, 'return document.querySelector("#visual-progress").textContent;'), "视觉修订 9 / 9");

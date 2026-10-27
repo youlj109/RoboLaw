@@ -1,9 +1,10 @@
 # Full Physical Completion
 
-Version boundary: the nine-of-nine result below belongs to the recorded r05
-lamp appearance. A later image-only [quality recheck](QUALITY_RECHECK_01.md)
-created r06 glass material and one new approach query, without re-collecting it.
-Do not inherit the old physical acceptance for this newer appearance version.
+Version boundary: the nine-of-nine result below belongs to its recorded layouts
+and r05 lamp appearance. Later [cycle01](QUALITY_RECHECK_01.md) changed lamp
+material; [cycle02](QUALITY_RECHECK_02.md) changed the right fixture orientation
+and oven human arm pose. These new versions have visual/approach results, not
+new physical collection. Do not inherit the old physical acceptance for them.
 
 ## Reviewed Final Result
 
