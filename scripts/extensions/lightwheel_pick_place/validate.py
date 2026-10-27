@@ -63,8 +63,9 @@ def validate(out):
         # Actual measured handle is the thin stem, ending before the spoon bowl at X>.07m.
         handle_points=[np.asarray(f['points_lime_local_m'],float).reshape(-1,3)[np.abs(np.asarray(f['normal_forces_n']))>.01] for row in records if row['phase'] in ('close','lift','transfer','lower') for f in row['fingers'].values()]
         handle_points=np.concatenate(handle_points) if handle_points else np.empty((0,3))
-        checks['ladle_handle_contact_region']=bool(len(handle_points) and (handle_points[:,0]>=-.15).all() and (handle_points[:,0]<=.05).all())
-        details['ladle_handle_contact_bounds_x_m']=[-.15,.05]
+        checks['ladle_handle_contact_region']=bool(len(handle_points) and (handle_points[:,0]>=-.15).all() and (handle_points[:,0]<=.06).all())
+        details['ladle_handle_contact_bounds_x_m']=[-.15,.06]
+        details['ladle_handle_bounds_geometry_evidence']='docs/extensions/lightwheel_pick_place/B04_HANDLE_CONTACT_GEOMETRY_20261027.json'
 
 
     with h5py.File(out / 'trajectory.h5') as trajectory, h5py.File(out / 'images.h5') as images:
