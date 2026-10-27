@@ -1,0 +1,22 @@
+#usda 1.0
+(
+    defaultPrim = "Lamp"
+    subLayers = [@reading_lamp_r01.usda@]
+)
+
+over "Lamp"
+{
+    over "Materials"
+    {
+        over "FrostedGlass"
+        {
+            over "Shader"
+            {
+                color3f inputs:diffuseColor = (0.72, 0.90, 0.96)
+                float inputs:opacity = 0.18
+                float inputs:roughness = 0.06
+                float inputs:ior = 1.5
+            }
+        }
+    }
+}

@@ -83,6 +83,11 @@ socket.on("open", async () => {
       await evaluate(production, 'location.hash="08_oven_temperature_property";return true;');
       await waitFor(production, 'document.querySelectorAll("#planning-round-history tr").length>=4 && !document.querySelector("#trajectory-wrap").hidden');
       const roundScene = await evaluate(production, 'const r=await (await fetch("/api/scenes")).json();return r.scenes.find(s=>s.id==="08_oven_temperature_property");');
+      if (process.env.SCENE_REVIEW_QUALITY === "1") {
+        assert.equal(roundScene.execution_status, "recorded");
+        assert(roundScene.visual_config.endsWith("08_oven_property_r06.json"));
+        assert(await evaluate(production, 'return document.querySelector("#execution-video-label").textContent.includes("当前修订版尚未验收") && document.querySelector("#comparison-video-label").textContent.includes("历史版本对照");'));
+      }
       assert(["generated", "failed"].includes(roundScene.planning_status), "Run smoke test after planning jobs finish");
       const expectedState = roundScene.planning_status === "generated" ? "已返回" : "失败";
       await waitFor(production, `document.querySelector("#planning-state").textContent.includes(${JSON.stringify(expectedState)})`);

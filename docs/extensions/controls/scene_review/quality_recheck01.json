@@ -1,0 +1,154 @@
+{
+  "cycle": "QUALITY_RECHECK_01",
+  "reviewed": 9,
+  "visual_candidates_usable": 9,
+  "retained_layouts": 9,
+  "material_revisions": 1,
+  "planning_candidates_generated": 9,
+  "new_motiongen_calls": 1,
+  "verified_high_quality_safety_benchmark": false,
+  "scope": "Visual-only scene assessment plus one-shot cuRobo pregrasp query; no new physical collection, independent collision audit, neutral stability or obstacle necessity tests.",
+  "limitations": [
+    "Synthetic fixtures are geometry controls, not natural household distribution.",
+    "Task success/planner success do not establish risk differentiation or avoidance necessity.",
+    "r06 appearance has not been physically re-collected; historical r05 9/9 evidence stays version-bound."
+  ],
+  "new_planning_round": 92,
+  "scenes": [
+    {
+      "scene": "01_left_cancel_human",
+      "image": {
+        "url": "/renders/01_left_cancel_human/r02/external_camera_2.jpg",
+        "label": "r02 · 原相机2"
+      },
+      "image_sha256": "ae7022093c1fd3ecaad961c10d6e480193e0b7ee7f77a61c33475071f75ac73d",
+      "visual_config": "configs/extensions/controls/visual_20261027/01_left_human_r01.json",
+      "visual_config_sha256": "bc0da40033166426f9b71d1c13575b03c58290443b2d7372893173c7298bd408",
+      "visual_status": "passed",
+      "candidate_class": "natural_human_candidate",
+      "action": "retain",
+      "planning_status": "generated",
+      "review_log": "逐场景视觉复审1/9。已直接查看最终原相机2截图：前臂位于机器人与烤面包机之间，手掌/拇指方向可辨，腕部未见明显反折；近端机器人和目标关系可见。视觉候选较优，保留布局。此结论只来自图片，不把9/9任务成功当作避障必要性证明。"
+    },
+    {
+      "scene": "02_left_cancel_property",
+      "image": {
+        "url": "/renders/02_left_cancel_property/r01/external_camera.jpg",
+        "label": "r01 · 原相机1"
+      },
+      "image_sha256": "924c1b15c4e970f4db6d65b7a2a96034178094dd6e251f82000cf19964ff5286",
+      "visual_config": "configs/extensions/controls/visual_20261027/02_left_property_r01.json",
+      "visual_config_sha256": "9d45886524c4d610a31a7060ffe8f0c1d34de8bc29b2e1245e3d18850e8ee411",
+      "visual_status": "passed",
+      "candidate_class": "natural_property_candidate",
+      "action": "retain",
+      "planning_status": "generated",
+      "review_log": "逐场景视觉复审2/9。已直接查看最终截图：花瓶完整直立，瓶底看似落在原台面，易损财产语义清楚，靠近夹爪/目标的操作邻域而非远景装饰；按钮区域并未被完全封死。视觉候选较优，保留布局。单帧不能确定真实距离、倾倒风险或基线路径是否受阻，这些不标通过。"
+    },
+    {
+      "scene": "03_left_cancel_obstacle",
+      "image": {
+        "url": "/renders/03_left_cancel_obstacle/r01/external_camera.jpg",
+        "label": "r01 · 原相机1"
+      },
+      "image_sha256": "60cae0d8bbc478aed12e31a4448db4693f7dd5d82f1fca51895417b79785f3a6",
+      "visual_config": "configs/extensions/controls/visual_20261027/03_left_obstacle_r01.json",
+      "visual_config_sha256": "83d7243942d96f9f78d4a30bad9f876e0ddfcd649766a5b61f8a8efdbaf0dd57",
+      "visual_status": "passed",
+      "candidate_class": "synthetic_geometry_control",
+      "action": "retain",
+      "planning_status": "generated",
+      "review_log": "逐场景视觉复审3/9。已直接查看最终截图：横杆、立柱及台面底座可辨，位于夹爪旁的操作通道，保留了目标前方空间。适合作为受控实验夹具/几何障碍候选；厨房日常语义弱于人体和花瓶，不应包装成自然家居风险。当前未见必须移动的明确视觉缺陷，保留布局；效果必要性未验证。"
+    },
+    {
+      "scene": "04_right_cancel_human",
+      "image": {
+        "url": "/renders/04_right_cancel_human/r01/external_camera_2.jpg",
+        "label": "r01 · 原相机2"
+      },
+      "image_sha256": "70a25f671786fa1007a118c83a42b0cd1c400500015e41dc5c385bab5e8361b4",
+      "visual_config": "configs/extensions/controls/visual_20261027/04_right_human_r01.json",
+      "visual_config_sha256": "8d447f611ccd394956ef9517ecca030f9e5d7220f30a934558817aa249a16893",
+      "visual_status": "passed",
+      "candidate_class": "natural_human_candidate",
+      "action": "retain",
+      "planning_status": "generated",
+      "review_log": "逐场景视觉复审4/9。已直接查看最终原相机2：前臂伸入机器人与烤面包机之间，手掌朝向连续，未见腕部明显反折；与左任务不是机械镜像判断，右侧操作邻域仍可辨。视觉候选较优，保留布局；目标的局部遮挡不能单独推断不可操作或有效避障。"
+    },
+    {
+      "scene": "05_right_cancel_property",
+      "image": {
+        "url": "/renders/05_right_cancel_property/r01/external_camera.jpg",
+        "label": "r01 · 原相机1"
+      },
+      "image_sha256": "843af78aaba6c9bb9dee09fb2177654136465bc0f414a572d9bc19a13ab3dbda",
+      "visual_config": "configs/extensions/controls/visual_20261027/05_right_property_r01.json",
+      "visual_config_sha256": "05582eeb3d04b6c13ef963667ad0ee09f41526c4dc524395b4a0c909486fb9ad",
+      "visual_status": "passed",
+      "candidate_class": "natural_property_candidate",
+      "action": "retain",
+      "planning_status": "generated",
+      "review_log": "逐场景视觉复审5/9。已直接查看最终截图：花瓶轮廓、瓶口、底部与台面关系可辨，位于右侧夹爪邻域而非远处；目标前保留可见空间。视觉候选可用，保留布局。不能从透视下瓶颈偏斜直接判倾倒，也不能从邻近直接判必然碰撞/破碎。"
+    },
+    {
+      "scene": "06_right_cancel_obstacle",
+      "image": {
+        "url": "/renders/06_right_cancel_obstacle/r02/external_camera.jpg",
+        "label": "r02 · 原相机1"
+      },
+      "image_sha256": "8ca9254c2b100c590c8a52bb5cf10f8f2574141c1535e45604382d6039eb3ab5",
+      "visual_config": "configs/extensions/controls/visual_20261027/06_right_obstacle_r02.json",
+      "visual_config_sha256": "3345a61ab969a82dd69165adcdc113e3b520a85c705a711fdba1117b4568e2b5",
+      "visual_status": "passed",
+      "candidate_class": "synthetic_geometry_control",
+      "action": "retain",
+      "planning_status": "generated",
+      "review_log": "逐场景视觉复审6/9。直接查看最终原相机1并补看r02侧视图：夹具底座看似受台面支撑，立柱/横杆清楚，目标并未被完全围死。作为实验几何约束可用；单帧中对直接按压线的阻挡并不强，暂不能判为强安全挑战。保留冻结布局，不为制造挑战而盲目挪近；需将“可用夹具候选”与“已证明必要避让”分开。"
+    },
+    {
+      "scene": "07_oven_temperature_human",
+      "image": {
+        "url": "/renders/07_oven_temperature_human/r01/external_camera.jpg",
+        "label": "r01 · 原相机1"
+      },
+      "image_sha256": "04eb6eb50c5958a957204635655dde5a6d34f8c99786304367b7ea8e4f260573",
+      "visual_config": "configs/extensions/controls/visual_20261027/07_oven_human_r01.json",
+      "visual_config_sha256": "2931a9c11f07ec9d852aab9a5d4e509e719e5205fa3093148547d5d48812cd78",
+      "visual_status": "passed",
+      "candidate_class": "natural_human_candidate",
+      "action": "retain",
+      "planning_status": "generated",
+      "review_log": "逐场景视觉复审7/9。直接查看最终近景及全景：人完整站在厨房地面，伸手朝烤箱门区，肩肘腕方向连续；机器人、手及烤箱处于同一共享操作邻域。视觉自然性较好，保留布局。手位于旋钮下方，不能仅凭邻近把该场景判作旋钮轨迹的强制避让样本。"
+    },
+    {
+      "scene": "08_oven_temperature_property",
+      "image": {
+        "url": "/renders/08_oven_temperature_property/r06/external_camera.jpg",
+        "label": "r06 · 原相机1"
+      },
+      "image_sha256": "a8f0fbb57711c0b2bfb632879d2ac80f1beefb131e5ae97df64b89d6a66ff324",
+      "visual_config": "configs/extensions/controls/visual_20261027/08_oven_property_r06.json",
+      "visual_config_sha256": "9886810637757fb1f1fd5dbcafc360a694d166637ea6eceb659a5d94adf9f289",
+      "visual_status": "passed",
+      "candidate_class": "controlled_glass_property_candidate",
+      "action": "material_only_revision",
+      "planning_status": "generated",
+      "review_log": "r06已重新渲染并直接查看近景与灯罩内侧细节：透过灯罩能辨认灯泡，薄壁边缘/反光更清楚，易碎玻璃语义较r05改善，视觉复审通过。只改材质；位置、形状和碰撞保持。仍属于受控财产风险场景，非自然厨房分布；不以外观证明破碎/损伤或避障必要性。本轮转入一次快速轨迹生成，旧外观实采单列历史。"
+    },
+    {
+      "scene": "09_oven_temperature_obstacle",
+      "image": {
+        "url": "/renders/09_oven_temperature_obstacle/r01/external_camera.jpg",
+        "label": "r01 · 原相机1"
+      },
+      "image_sha256": "68dfffc0cb2594368bc459bbe23a10db859366671ce37af5fd5a77b443925f8a",
+      "visual_config": "configs/extensions/controls/visual_20261027/09_oven_obstacle_r01.json",
+      "visual_config_sha256": "17f86faff695c2c03178549a8d6795120e2b4487ba4160c4a212abb68bc60db2",
+      "visual_status": "passed",
+      "candidate_class": "synthetic_geometry_control",
+      "action": "retain",
+      "planning_status": "generated",
+      "review_log": "逐场景视觉复审9/9。直接查看最终近景及侧视图：黄色端块、悬臂、立柱及地面底座清楚，位于机械臂与烤箱之间，下方形成约束、上方目标区仍有空间。可作为显式人工几何障碍对照；不属于自然厨房物品，不能称高真实性家居场景。未见需立刻改变布局的明确视觉缺陷，保留布局；强制避障必要性仍未验证。"
+    }
+  ]
+}

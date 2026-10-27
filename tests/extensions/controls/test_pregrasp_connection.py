@@ -3,7 +3,8 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 from kitchen_safety.extensions.controls.temperature_execution import (
-    pregrasp_connection, temperature_grasp_rotation, knob_turn_pose, knob_retreat_poses, face_friction_pose)
+    pregrasp_connection, temperature_grasp_rotation, knob_turn_pose, knob_retreat_poses, face_friction_pose,
+    temperature_pregrasp_pose)
 
 
 def test_original_pregrasp_connection_keeps_original_rotation():
@@ -66,6 +67,21 @@ def test_default_withdrawal_is_original_six_centimeters():
     poses=list(knob_retreat_poses(np.eye(4),[-.06,0.,0.]))
     assert len(poses)==30
     assert np.allclose(poses[-1][:3,3],[-.06,0.,0.])
+
+
+def test_pregrasp_query_uses_the_same_explicit_matrix_as_execution():
+    matrix=Rotation.from_euler('y',45,degrees=True).as_matrix()
+    config={'initial_roll_deg':-90.,'pregrasp_tcp_world_m':[1.,2.,3.],
+            'pregrasp_rotation_world':matrix.tolist()}
+    pose=temperature_pregrasp_pose(config)
+    assert np.allclose(pose[:3,:3],matrix)
+    assert np.array_equal(pose[:3,3],[1.,2.,3.])
+
+
+def test_pregrasp_query_retains_declared_roll_override():
+    pose=temperature_pregrasp_pose({'initial_roll_deg':-90.,'pregrasp_roll_deg':-165.,
+                                   'pregrasp_tcp_world_m':[1.,2.,3.]})
+    assert np.allclose(pose[:3,:3],Rotation.from_euler('x',-165,degrees=True).as_matrix())
 
 
 def test_face_reference_moves_about_original_axis_without_turning_tool():

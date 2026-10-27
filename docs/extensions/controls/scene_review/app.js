@@ -57,7 +57,7 @@ function visualReview(s, force=false) {
   const video=$("execution-video"), videoLabel=$("execution-video-label");
   video.hidden=videoLabel.hidden=!videoFile;
   if (videoFile) {
-    videoLabel.textContent=(s.execution_status==='passed' ? '已通过的实采视频：' : '最近实采视频，当前场景尚未验收通过：')+
+    videoLabel.textContent=(s.execution_status==='passed' ? '已通过的实采视频：' : '历史/最近实采视频，当前修订版尚未验收：')+
       videoFile.url+'。请结合任务谓词与接触记录查看，不代表有效避障验收。';
     if (video.getAttribute('src')!==videoFile.url) video.src=videoFile.url;
   } else if (video.hasAttribute('src')) {
@@ -67,7 +67,8 @@ function visualReview(s, force=false) {
   const comparison=$("comparison-video"), comparisonLabel=$("comparison-video-label");
   comparison.hidden=comparisonLabel.hidden=!comparisonFile;
   if (comparisonFile) {
-    comparisonLabel.textContent='原速同视角对照：左为匹配基线，右为本场景实采，均保持15帧/秒。较短片段结束后停留末帧，并非额外实采；不是避障必要性证明。';
+    comparisonLabel.textContent=(s.execution_status==='passed' ? '原速同视角对照：' : '历史版本对照，不代表当前修订版验收：')+
+      '左为匹配基线，右为所记录版本实采，均保持15帧/秒。较短片段结束后停留末帧，并非额外实采；不是避障必要性证明。';
     if (comparison.getAttribute('src')!==comparisonFile.url) comparison.src=comparisonFile.url;
   } else if (comparison.hasAttribute('src')) {
     comparison.removeAttribute('src');comparison.load();

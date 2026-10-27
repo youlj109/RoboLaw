@@ -14,6 +14,7 @@ from kitchen_safety.planning import DroidKinematics
 from kitchen_safety.curobo_backend import CuroboPlanner
 from kitchen_safety.extensions.controls.collision import ControlsCollisionWorld
 from kitchen_safety.extensions.controls.planning import button_prepress_pose
+from kitchen_safety.extensions.controls.temperature_execution import temperature_pregrasp_pose
 
 
 def save_json(path, value):
@@ -61,9 +62,7 @@ def main():
             raise ValueError('Baseline/config task mismatch')
         params = baseline['control_parameters']
         if temperature:
-            target = np.eye(4)
-            target[:3, :3] = Rotation.from_euler('x', config['initial_roll_deg'], degrees=True).as_matrix()
-            target[:3, 3] = config['pregrasp_tcp_world_m']
+            target = temperature_pregrasp_pose(config)
         else:
             target = button_prepress_pose(config, params['roll_deg'], params['tcp_x_offset_m'], params['tcp_z_offset_m'])
         report['target_kind']=a.target_kind
@@ -165,14 +164,23 @@ def main():
             goal_q = kin.ik(target, np.asarray(config['prepress_planning']['ik_branch_seed']), attempts=1)
         report['goal_q'] = goal_q.tolist()
         if temperature:
-            report.update(original_pregrasp_position_reached=bool(np.allclose(
+            nominal=np.asarray(config.get('original_pregrasp_tcp_world_m',config['pregrasp_tcp_world_m']))
+            report.update(configured_pregrasp_position_reached=bool(np.allclose(
                 target[:3,3], config['pregrasp_tcp_world_m'], atol=1e-9, rtol=0)),
+                original_pregrasp_position_reached=bool(np.allclose(target[:3,3],nominal,atol=1e-9,rtol=0)),
                 nominal_grasp_position_reached=bool(np.allclose(
                 target[:3,3], config['grasp_tcp_world_m'], atol=1e-9, rtol=0)),
                 remaining_nominal_grasp_distance_m=float(np.linalg.norm(
                 target[:3,3]-np.asarray(config['grasp_tcp_world_m']))))
             if report.get('selected_endpoint_policy', {}).get('auxiliary_pregrasp_height_m'):
                 report['scope']='Adapted auxiliary pregrasp endpoint only. Original grasp point unchanged; no connection, physical grasp, turn or safety validation.'
+            if not report['original_pregrasp_position_reached']:
+                report['scope']='Adapted configured pregrasp only; not the original fixed endpoint, contact connection, task execution or safety validation.'
+                report['requires_alignment_before_contact']=True
+                report.setdefault('selected_endpoint_policy',dict(
+                    name='retained_recorded_controller_reference',
+                    auxiliary_pregrasp_height_m=float(target[2,3]-nominal[2]),
+                    requires_alignment_before_contact=True))
         planner._prepare_path_query((), 0 if temperature else 1, phase)
         from curobo.types.robot import JointState
         from curobo.wrap.reacher.motion_gen import MotionGenPlanConfig
@@ -205,7 +213,7 @@ def main():
         report.setdefault('failure_code', type(exc).__name__)
         traceback.print_exc()
     finally:
-        if a.refine_from and 'protected_hashes' in locals():
+        if 'protected_hashes' in locals():
             report['layout_files_unchanged'] = all(
                 hashlib.sha256(Path(name).read_bytes()).hexdigest() == value
                 for name, value in protected_hashes.items())

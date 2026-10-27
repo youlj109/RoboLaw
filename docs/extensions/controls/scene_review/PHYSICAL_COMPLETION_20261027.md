@@ -1,5 +1,10 @@
 # Full Physical Completion
 
+Version boundary: the nine-of-nine result below belongs to the recorded r05
+lamp appearance. A later image-only [quality recheck](QUALITY_RECHECK_01.md)
+created r06 glass material and one new approach query, without re-collecting it.
+Do not inherit the old physical acceptance for this newer appearance version.
+
 ## Reviewed Final Result
 
 All nine fresh variants pass the bounded physical-task gates, with matched

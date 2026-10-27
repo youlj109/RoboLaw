@@ -1,7 +1,13 @@
 # Current Review And Planning Status
 
+Latest: [quality recheck 01](QUALITY_RECHECK_01.md) individually reviewed nine
+scenes, retained eight and improved only the oven/property glass material. The
+new r06 appearance has one generated adapted-pregrasp query, not new physical
+collection or full safety-benchmark acceptance. Historical r05 9/9 data remains
+version-bound and available; the webpage separates these states.
+
 **The table below is the historical approach-only checkpoint.** Fresh full
-physical recordings now pass all 9/9 variants, including oven/property's real
+historical r05 physical recordings pass all 9/9 variants, including oven/property's real
 contact controller and released original level-three end state. See [physical completion](PHYSICAL_COMPLETION_20261027.md)
 and the webpage's separate full-execution panel for current task acceptance.
 

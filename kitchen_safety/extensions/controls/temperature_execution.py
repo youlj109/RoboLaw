@@ -15,6 +15,16 @@ def temperature_grasp_rotation(config):
     return matrix
 
 
+def temperature_pregrasp_pose(config):
+    """Share the actual configured reference between quick queries and execution."""
+    pose=np.eye(4)
+    pose[:3,:3]=(temperature_grasp_rotation({'grasp_rotation_world':config['pregrasp_rotation_world']})
+        if 'pregrasp_rotation_world' in config else
+        Rotation.from_euler('x',config.get('pregrasp_roll_deg',config['initial_roll_deg']),degrees=True).as_matrix())
+    pose[:3,3]=config['pregrasp_tcp_world_m']
+    return pose
+
+
 def face_friction_pose(config,angle_deg,advance_m):
     radius=float(config.get('friction_radius_m',.02))
     maximum=float(config.get('friction_max_axial_advance_m',.025))
@@ -152,10 +162,7 @@ def execute_temperature(config, planner, kin, state, step, set_phase, arm_ids, o
         command=kin.ik(pose,q(),attempts=4)
         for _ in range(repeats):step(command,grip=grip)
         return command
-    target=np.eye(4)
-    target[:3,:3]=(temperature_grasp_rotation({'grasp_rotation_world':config['pregrasp_rotation_world']}) if 'pregrasp_rotation_world' in config else
-        Rotation.from_euler('x',config.get('pregrasp_roll_deg',config['initial_roll_deg']),degrees=True).as_matrix())
-    target[:3,3]=config['pregrasp_tcp_world_m']
+    target=temperature_pregrasp_pose(config)
     set_phase('pregrasp')
     plan=plan_control_pose(planner,q(),target,config.get('prepress_planning'),grip_binary=0,phase='pregrasp')
     if on_positions is not None:
