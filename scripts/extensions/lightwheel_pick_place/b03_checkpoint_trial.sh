@@ -7,6 +7,7 @@ case "$variant" in robot) checkpoint=/root/autodl-tmp/B03-review/checkpoints/rob
 case "$mode" in development) flag=--development-checkpoint ;; replay) flag=--replay-prefix-checkpoint ;; *) exit 2 ;; esac
 extra=()
 if [[ ${3:-} == robot-prefix ]]; then checkpoint=/root/autodl-tmp/B03-review/checkpoints/robot_first17/checkpoint.json; extra=(--cross-variant-prefix); fi
+if [[ ${3:-} == property-verified ]]; then checkpoint=/root/autodl-tmp/B03-review/checkpoints/property_verified042412/checkpoint.json; fi
 stamp=$(date -u +%Y%m%dT%H%M%SZ)
 out=datasets/skill_trials/lightwheel_pick_place/${variant}_lgd_b03_checkpoint_${mode}_${stamp}
 printf 'output=%s\n' "$out"

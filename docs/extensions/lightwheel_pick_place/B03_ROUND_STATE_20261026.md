@@ -87,3 +87,7 @@ Robot original-reset checkpoint replay 033440Z has native success, validation, c
 
 ## Property replay 042412Z result
 Second native passed; first failed simultaneous final check on speed (~0.00426 m/s vs original 0.003). Both checkpoints individually passed. Single change: final gentle settle 120 to 300 actions; original simultaneous predicates and early exit unchanged. Frozen scene/motions unchanged. Robot counterfactual:184 unsafe baseline samples, actual safe/effective true; strict matching controls/nuisance still false.
+
+06:21 UTC property055657Z reached final settling with measured support release; still running. Finite timeout supervisor paused at24m21s to allow newly authorized extra180 settling actions and export to finish, with independent10min hard watchdog. No collector safety changes, new trial or GPU overlap. Successful capture triggers final audit watcher055657.
+
+06:31 UTC property055657 ended native false: extending settling did not change banana1 residual velocity (~4.24mm/s), root position stable, banana2 native true. Do not repeat waiting. Actual centers banana1 (2.11752,-2.56260), banana2 (2.16166,-2.56492) nearly same Y, only44mm X separation; first support load ~6N suggests compression between contents. One next coherent placement change: second target bowl offset (+45,-35)mm instead of(+35,0), away from first at(-30,+20)mm. Environment frozen, no threshold change. Exported verified first native checkpoint from property042412, develop second only before final original-reset replay. Preserve failure and videos.
