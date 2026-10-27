@@ -56,6 +56,16 @@ class LimePlanner(CuroboPlanner):
             if not self.world.valid(goal,ignore_names):
                 raise RuntimeError('Round10 joint goal fails original FCL: '+str(self.world.last_clearance))
             return self.plan_joint_goal(q_arm7,goal,ignore_names,grip_binary,phase=phase)
+        recorded_seed=getattr(self,'phase_joint_seeds',{}).get(phase)
+        if self.single_candidate_round and self.world.pick_object=='green_ladle' and recorded_seed is not None:
+            from scipy.spatial.transform import Rotation
+            goal=self.kin.ik(target,np.asarray(recorded_seed),attempts=1)
+            actual=self.kin.fk(goal)
+            if np.linalg.norm(actual[:3,3]-target[:3,3])>.002 or np.rad2deg(Rotation.from_matrix(actual[:3,:3]@target[:3,:3].T).magnitude())>1.:raise RuntimeError('Recorded-seed IK misses unchanged TCP target')
+            if not self.world.valid(goal,ignore_names):raise RuntimeError('Recorded-seed endpoint fails full FCL: '+str(self.world.last_clearance))
+            path=self.plan_joint_goal(q_arm7,goal,ignore_names,grip_binary,phase=phase)
+            path['metadata']['recorded_ik_seed']=list(recorded_seed)
+            return path
         if self.single_candidate_round and self.world.pick_object=='green_ladle' and self.world.attachment is not None and phase=='transfer':
             from scipy.spatial.transform import Rotation
             goal=self.kin.ik(target,np.asarray(q_arm7),attempts=1)

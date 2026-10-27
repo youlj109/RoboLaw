@@ -12,6 +12,7 @@ parser.add_argument('--pick-order',nargs='+',help='Execution order only for orig
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
 parser.add_argument('--post-lift-rise',type=float,default=0.)
+parser.add_argument('--phase-joint-seeds',type=Path,help='Recorded successful posture seeds; unchanged current TCP goals and all collision checks')
 parser.add_argument('--release-retract-z',type=float,default=0.)
 parser.add_argument('--loaded-transfer-time-scale',type=float,default=1.)
 parser.add_argument('--pre-release-hold-steps',type=int,default=0)
@@ -117,6 +118,7 @@ with SimulationAppContext(args):
     from kitchen_safety.extensions.lightwheel_pick_place.environment import build_environment
     from kitchen_safety.extensions.lightwheel_pick_place.collision import CollisionWorld
     from kitchen_safety.extensions.lightwheel_pick_place.planner import LimePlanner
+    LimePlanner.phase_joint_seeds=(json.loads(args.phase_joint_seeds.read_text())['seeds'] if args.phase_joint_seeds else {})
     LimePlanner.single_candidate_round=bool(args.single_candidate_round)
     LimePlanner.align_second_grasp=bool(args.align_second_grasp)
     LimePlanner.joint_second_placement=bool(args.round10_second_placement)
@@ -402,6 +404,7 @@ with SimulationAppContext(args):
     def preserve_on_external_stop(signum,frame):
         result['success']=False;result['interruption_signal']=int(signum)
         raise TimeoutError('External stop requested; preserve partial observations, never claim native success')
+    if args.phase_joint_seeds:result['phase_joint_seed_reference']={'path':str(args.phase_joint_seeds),'sha256':hashlib.sha256(args.phase_joint_seeds.read_bytes()).hexdigest(),'policy':'IK initialization only; original current TCP goals and safety checks retained'}
     previous_signal_handlers={sig:signal.signal(sig,preserve_on_external_stop) for sig in (signal.SIGTERM,signal.SIGINT)}
     try:
         for _ in range(20):step(q,0.)
