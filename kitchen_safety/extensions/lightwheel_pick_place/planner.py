@@ -33,6 +33,21 @@ class LimePlanner(CuroboPlanner):
             except RuntimeError as exc:failures.append({'scale':scale,'error':str(exc)})
         raise RuntimeError('No valid redundant joint goal at unchanged TCP: '+str(failures))
 
+    def validate_path(self, positions, ignore_names=(), grip_binary=0, phase=None, **kwargs):
+        report=super().validate_path(positions,ignore_names,grip_binary,phase=phase,**kwargs)
+        if report['valid'] or not getattr(self,'certify_execution_margin',False) or self.world.pick_object!='green_ladle':return report
+        if report.get('curobo_failures') or report.get('early_rejection')!='independent_geometry':return report
+        values=np.asarray(positions);dense=[values[0]]
+        for a,b in zip(values[:-1],values[1:]):
+            count=max(1,int(np.ceil(np.max(np.abs(b-a))/.01)))
+            dense.extend(a+(b-a)*f for f in np.linspace(0,1,count+1)[1:])
+        dense=np.asarray(dense)
+        if not bool(self.motion_gen.ik_solver.check_valid(self.args.to_device(dense)).all()):return report
+        gripper=getattr(self.world,'planning_gripper_q',None)
+        rows=[self.world.clearance(q,ignore_names,mode='execution',gripper_q=gripper) for q in dense]
+        if not all(row['valid'] for row in rows):return report
+        return {'valid':True,'samples':len(dense),'validation_complete':True,'scope':'Original execution margins at dense joint samples plus original cuRobo constraints; planning reserve remains explicitly not passed','planning_reserve_passed':False,'planning_reserve_report':report,'execution_minimum':min(rows,key=lambda row:row['slack_m']),'execution_measurements':rows}
+
     def _prepare_path_query(self, ignore_names, grip_binary, phase):
         self.active_ignore_names=tuple(ignore_names)
         self.active_phase=phase

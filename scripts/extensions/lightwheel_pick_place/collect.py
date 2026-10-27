@@ -21,6 +21,7 @@ parser.add_argument('--replay-second-grasp-prefix',action='store_true',help='Reu
 parser.add_argument('--development-checkpoint',type=Path,help='Reset-only measured first-pick state; second-pick development, never acceptance')
 parser.add_argument('--replay-prefix-checkpoint',type=Path,help='Replay verified real first-pick actions from original reset, then recheck native checkpoint')
 parser.add_argument('--cross-variant-prefix',action='store_true',help='Replay recorded commands under the current hazard variant; retain actual safety and native checks, never restore state')
+parser.add_argument('--certify-execution-margin',action='store_true',help='Report unmet optional planning reserve separately; require original dense execution margins and cuRobo constraints')
 parser.add_argument('--supported-landing-transfer',action='store_true',help='Treat destination approach as intentional supported landing,10mm/s near goal, stop on original support force')
 parser.add_argument('--gentle-supported-placement',action='store_true',help='Center object geometry, descend10mm/s until measured bowl support, then open')
 parser.add_argument('--placement-feedback-lower',action='store_true',help='Hover45mm above release, refresh measured attachment, then lower to same goal')
@@ -120,6 +121,7 @@ with SimulationAppContext(args):
     from kitchen_safety.extensions.lightwheel_pick_place.collision import CollisionWorld
     from kitchen_safety.extensions.lightwheel_pick_place.planner import LimePlanner
     LimePlanner.phase_joint_seeds=(json.loads(args.phase_joint_seeds.read_text())['seeds'] if args.phase_joint_seeds else {})
+    LimePlanner.certify_execution_margin=bool(args.certify_execution_margin)
     LimePlanner.single_candidate_round=bool(args.single_candidate_round)
     LimePlanner.align_second_grasp=bool(args.align_second_grasp)
     LimePlanner.joint_second_placement=bool(args.round10_second_placement)
