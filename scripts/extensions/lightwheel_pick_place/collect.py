@@ -85,6 +85,7 @@ parser.add_argument('--place-lower-steps',type=int,default=3,
     help='When place-lower-mode=steps: equal Z drops from transfer height to lower height')
 parser.add_argument('--place-clear-rise-z',type=float,default=0.0,
     help='After transfer, pure +Z rise before lower/release (metres); helps clear plate rim')
+parser.add_argument('--development-release-checkpoint',type=Path);parser.add_argument('--replay-release-prefix-checkpoint',type=Path);parser.add_argument('--staged-release',action='store_true')
 args=parser.parse_args();args.enable_cameras=True
 if args.defer_added_hazard_audit and not args.defer_full_world_audit:raise ValueError('Deferred added hazards require complete deferred world audit')
 if not 0<=args.release_ramp_steps<=60:raise ValueError('Release ramp must be0..60 control steps')
@@ -187,9 +188,9 @@ with SimulationAppContext(args):
         if int(e.sim.get_physics_step_count())!=before_reset_writes:raise RuntimeError('Initialization advanced physics')
         reset_layout_source={'path':str(args.initial_state_layout),'sha256':hashlib.sha256(args.initial_state_layout.read_bytes()).hexdigest(),'scope':'Once during reset, before controls, observations and task execution; no execution-time object pose writes.'}
     resume_manifest=None
-    if args.development_checkpoint:
-        resume_manifest=json.loads(args.development_checkpoint.read_text())
-        if resume_manifest['variant']!=args.variant or not resume_manifest['native_first_checkpoint']['passed']:raise RuntimeError('Checkpoint scene/native verification mismatch')
+    if args.development_checkpoint or args.development_release_checkpoint:
+        resume_manifest=json.loads((args.development_release_checkpoint or args.development_checkpoint).read_text())
+        if resume_manifest['variant']!=args.variant or (not args.development_release_checkpoint and not resume_manifest['native_first_checkpoint']['passed']):raise RuntimeError('Checkpoint scene/native verification mismatch')
         if list(robot.joint_names)!=resume_manifest['robot_joint_names']:raise RuntimeError('Checkpoint robot joint schema mismatch')
         reference_config=resume_manifest.get('variant_config_source')
         if reference_config and hashlib.sha256(Path(args.variant_config).read_bytes()).hexdigest()!=reference_config['sha256']:raise RuntimeError('Checkpoint frozen variant config changed')
@@ -202,7 +203,7 @@ with SimulationAppContext(args):
         e.sim.physics_manager.forward();scene.update(0.)
         if int(e.sim.get_physics_step_count())!=ticks_before:raise RuntimeError('Checkpoint restoration advanced physics')
     ids,_=robot.find_joints(['panda_joint[1-7]'],preserve_order=True)
-    q=arr(robot.data.joint_pos)[0,ids];grip=0.;phase='settle';records=[];clearances=[];plans=[];physics_audits=[]
+    q=arr(robot.data.joint_pos)[0,ids];grip=(float(resume_manifest['grip']) if args.development_release_checkpoint else 0.);phase='settle';records=[];clearances=[];plans=[];physics_audits=[]
     terminal={};world=None;planner=None;writer=None;overview_writer=None;overview_alignment=[];error=None
     finger_names=[n for i,n in enumerate(robot.joint_names) if i not in ids]
     bi=robot.body_names.index('base_link')
@@ -409,7 +410,7 @@ with SimulationAppContext(args):
       'original_asset_initial_poses':{name:assets[name]._get_initial_pose_as_pose().to_dict() for name in ('droid',)+RIGID if name in assets and assets[name].get_initial_pose() is not None},
       'simulation_attachment':False,'robot_joint_names':robot.joint_names,'robot_body_names':robot.body_names,'dt':e.step_dt}
     if resume_manifest:result['development_only']=True
-    if resume_manifest:result['development_checkpoint']={'path':str(args.development_checkpoint),'sha256':hashlib.sha256(args.development_checkpoint.read_bytes()).hexdigest(),'scope':'Reset-only measured state restoration; not full original-task acceptance','source_episode':resume_manifest['source_episode']}
+    if resume_manifest and not args.development_release_checkpoint:result['development_checkpoint']={'path':str(args.development_checkpoint),'sha256':hashlib.sha256(args.development_checkpoint.read_bytes()).hexdigest(),'scope':'Reset-only measured state restoration; not full original-task acceptance','source_episode':resume_manifest['source_episode']}
     if reset_layout_source:result['initial_state_layout_source']=reset_layout_source
     if args.fixed_layout:
         result['fixed_layout_source']={'path':args.fixed_layout,'sha256':hashlib.sha256(Path(args.fixed_layout).read_bytes()).hexdigest()}
@@ -424,7 +425,7 @@ with SimulationAppContext(args):
     if args.phase_joint_seeds:result['phase_joint_seed_reference']={'path':str(args.phase_joint_seeds),'sha256':hashlib.sha256(args.phase_joint_seeds.read_bytes()).hexdigest(),'policy':'IK initialization only; original current TCP goals and safety checks retained'}
     previous_signal_handlers={sig:signal.signal(sig,preserve_on_external_stop) for sig in (signal.SIGTERM,signal.SIGINT)}
     try:
-        for _ in range(20):step(q,0.)
+        for _ in range(20):step(q,grip)
         initial=snapshot();result['initial_object_states']={name:arr(scene[name].data.root_state_w)[0].tolist() for name in RIGID};result['initial_lime_pose']=initial['lime'].tolist();result['initial_bowl_pose']=initial['wooden_bowl'].tolist();result['pick_object']=PICK;result['destination_object']=DEST;result['pick_objects']=list(task_picks(TASK_SPEC))
         base=arr(robot.data.root_state_w)[0,:7];kin=(LemonKinematics if PICK=='lemon' else DroidKinematics)(base[:3],Rotation.from_quat(base[3:7]).as_euler('xyz',degrees=True)[2])
         result['fk_error_m']=float(np.linalg.norm(kin.fk(initial['q'][ids])[:3,3]-initial['tcp']))
@@ -441,7 +442,7 @@ with SimulationAppContext(args):
         world.source_surface_top=max((v[3][2] for v in world.objects if v[0]==SOURCE_SURFACE_PATH or v[0].startswith(SOURCE_SURFACE_PATH.rstrip('/')+'/') or v[0].endswith(TASK_SPEC.source_surface_suffix)), default=float(initial['lime'][2]))
         result['per_pick_initial_source_contacts']={name:view.sample() for name,view in source_contact_trackers.items()}
         initial_source_contacts=source_contacts.sample()
-        if not initial_source_contacts['count']:raise RuntimeError('No measured original pick-object/source-surface support contacts')
+        if not initial_source_contacts['count'] and not args.development_release_checkpoint:raise RuntimeError('No measured original pick-object/source-surface support contacts')
         result['source_support_contact_model']={'source_resting_min_z_m':world.source_resting_min_z,
             'source_resting_xy_m':world.source_resting_xy.tolist(),'source_resting_extra_tolerance_m':.0005,'source_resting_max_xy_displacement_m':.05,
             'mode':world.source_support_mode,'native_contact_max_penetration_m':JITTER_M,'root_z_gate':False,'source_resting_root_m':world.source_resting_root.tolist(),
@@ -456,6 +457,7 @@ with SimulationAppContext(args):
             'robot_base_pose':result['robot_base_pose'],
             'robot_joint_names':robot.joint_names,'robot_joint_positions':initial['q'].tolist(),
             'source_yaml_sha256':result['source_yaml_sha256']},indent=2))
+        if args.development_release_checkpoint:world.source_detached=True;world.allowed_phase='release';phase='release'
         result['start_fcl']=world.clearance(initial['q'][ids],(PICK,),**geometry(initial))
         planner=LimePlanner(world,kin,dt=e.step_dt,seed=seed,max_joint_speed=.4);planner.pose_ik_joint_fallback=bool(args.grasp_search=='b03-topdown' or args.transfer_route_search=='upper')
         use_pregrasp_phase=bool(abs(TASK_SPEC.pregrasp_offset_m[2])>=max(abs(TASK_SPEC.pregrasp_offset_m[0]),abs(TASK_SPEC.pregrasp_offset_m[1])))
@@ -621,7 +623,57 @@ with SimulationAppContext(args):
             capture_placement_checkpoint('banana_1')
             result['restored_first_native_passed']=result['placement_checkpoints']['banana_1']['passed']
             if not result['restored_first_native_passed']:raise RuntimeError('Restored first banana no longer passes native destination predicate; checkpoint invalid for this run')
-        if args.replay_prefix_checkpoint:
+        def staged_release():
+            global phase,q,grip
+            phase='release';world.attachment=None;world.source_detached=True
+            q=snapshot()['q'][ids].copy()
+            task=next(t for t in getattr(envdef.task,'subtasks',[envdef.task]) if t.pick_up_object.name==PICK)
+            def support():
+                f=arr(scene[task.contact_sensor_cfg.name].data.force_matrix_w).reshape(-1,3)[0];mag=float(np.linalg.norm(f))
+                return bool(mag>=task.force_threshold and f[2]>0 and f[2]/mag>=np.cos(task.support_cone_half_angle_rad)),f
+            ok,f=support()
+            if not ok:raise RuntimeError('Staged release requires measured native plate support')
+            released=False;trace=[]
+            for g in np.linspace(grip,.45,34)[1:]:
+                grip=float(g);step(q,grip)
+                contact=contacts.sample(phase,len(records)-1,snapshot()['lime'][:7]);loads=np.asarray([sum(v['normal_forces_n']) for v in contact['fingers'].values()])
+                trace.append({'grip':grip,'loads_n':loads.tolist()})
+                if np.all(loads<=.01):released=True;break
+            result['staged_release']={'finger_load_trace':trace,'unloaded':released,'support_before_open_n':f.tolist()}
+            if not released:raise RuntimeError('Partial opening did not unload both fingers')
+            for _ in range(8):step(q,grip)
+            ok,f=support()
+            if not ok:raise RuntimeError('Plate support lost before wrist withdrawal')
+            result['staged_release']['support_before_withdraw_n']=f.tolist()
+            phase='retreat';st=snapshot();cart(st['tcp']+np.array([0.,0.,.04]),rotation=Rotation.from_quat(st['tcp_quat_xyzw']).as_matrix(),force_phase='lift')
+            phase='release'
+            for g in np.linspace(grip,0.,31)[1:]:grip=float(g);step(q,grip)
+            phase='settle_final'
+            for _ in range(90):step(q,grip)
+        if args.development_release_checkpoint or args.replay_release_prefix_checkpoint:
+            cp=args.development_release_checkpoint or args.replay_release_prefix_checkpoint
+            reference=json.loads(cp.read_text());source_result=json.loads((Path(reference['source_episode'])/'result.json').read_text())
+            if args.replay_release_prefix_checkpoint:
+                prefix_path=cp.parent/'prefix.npz'
+                if hashlib.sha256(prefix_path.read_bytes()).hexdigest()!=reference['prefix_sha256']:raise RuntimeError('Release prefix hash mismatch')
+                if reference['variant']!=args.variant or reference['robot_joint_names']!=list(robot.joint_names) or abs(reference['dt']-e.step_dt)>1e-12:raise RuntimeError('Release prefix schema mismatch')
+                if hashlib.sha256(Path(args.variant_config).read_bytes()).hexdigest()!=reference['variant_config_source']['sha256']:raise RuntimeError('Release prefix scene mismatch')
+                data=np.load(prefix_path,allow_pickle=False)
+                for saved_phase,action in zip(data['phases'],data['actions']):
+                    phase=str(saved_phase);q=np.asarray(action[:7]);grip=float(action[7])
+                    if phase in ('lift','transfer','lower') and world.attachment is None:
+                        st=snapshot();world.attachment=np.linalg.inv(kin.fk(st['q'][ids]))@transform(st['lime'][:3],st['lime'][3:7])
+                        world.source_lift_floor_z=world.source_resting_min_z-.0005
+                    step(q,grip)
+                result['prefix_replay']={'source_episode':reference['source_episode'],'actions':len(data['actions']),'original_reset':True,'checkpoint':str(cp)}
+                result['close_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'close',last_actions=8)
+                result['lift_contacts']=contacts.summarize(list(TASK_SPEC.grasp_body_z_range),'lift',last_actions=5)
+                lifted_states=[row[3]['lime'][2] for row in records if row[0]=='lift'];result['lift_m']=float(lifted_states[-1]-initial['lime'][2]) if lifted_states else 0.
+                for key in ('grasp_candidate','grasp_point_body_m','grasp_solutions','grasp_pose_calibration','lift_support_contact_model'):
+                    if key in source_result:result[key]=source_result[key]
+            staged_release()
+            capture_placement_checkpoint(PICK)
+        elif args.replay_prefix_checkpoint:
             reference=json.loads(args.replay_prefix_checkpoint.read_text());prefix_path=args.replay_prefix_checkpoint.parent/'prefix.npz'
             if list(robot.joint_names)!=reference['robot_joint_names'] or abs(e.step_dt-reference['dt'])>1e-12:raise RuntimeError('Prefix joint/time schema mismatch')
             if reference.get('variant_config_source') and hashlib.sha256(Path(args.variant_config).read_bytes()).hexdigest()!=reference['variant_config_source']['sha256']:raise RuntimeError('Prefix scene config changed')
@@ -861,7 +913,8 @@ with SimulationAppContext(args):
             else:
                 cart(lower_tcp, force_phase='transfer')
             for _ in range(args.pre_release_hold_steps):step(q,grip)
-            if args.release_retract_z>0:release_with_retract()
+            if args.staged_release:staged_release()
+            elif args.release_retract_z>0:release_with_retract()
             else:
                 phase='release';world.attachment=None
                 for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
@@ -992,7 +1045,8 @@ with SimulationAppContext(args):
             else:
                 cart(lower_tcp, force_phase='transfer')
             for _ in range(args.pre_release_hold_steps):step(q,grip)
-            if args.release_retract_z>0:release_with_retract()
+            if args.staged_release:staged_release()
+            elif args.release_retract_z>0:release_with_retract()
             else:
                 phase='release';world.attachment=None
                 for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
@@ -1033,6 +1087,10 @@ with SimulationAppContext(args):
         if args.variant=='property':
             result['property_displacement_m']=float(np.linalg.norm(final['hazard_pose'][:3]-initial['hazard_pose'][:3]))
             result['success'] &= result['property_displacement_m']<.01
+        if args.development_release_checkpoint:
+            result['development_release_native_destination_passed']=bool(native.get(PICK,{}).get('passed') and abs(final['q'][robot.joint_names.index('finger_joint')])<.05)
+            result['development_only']=True;result['success']=False
+            result['development_release_checkpoint']=str(args.development_release_checkpoint)
         if args.development_checkpoint:
             result['development_second_success']=bool(native.get('banana_2',{}).get('passed') and abs(final['q'][robot.joint_names.index('finger_joint')])<.05)
             result['development_only']=True;result['success']=False
