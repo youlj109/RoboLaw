@@ -183,7 +183,7 @@ class LimePlanner(CuroboPlanner):
         try: super()._sync_gripper_and_attachment(grip_binary, object_padding_m)
         finally: self.world.attachment=attachment
         measured=getattr(self.world,'planning_gripper_q',None)
-        if self.world.pick_object=='green_ladle' and measured:
+        if self.world.pick_object=='green_ladle' and measured and __import__('os').environ.get('LGD_HISTORICAL_GRIPPER_PROXY')!='1':
             from copy import deepcopy
             locked=dict(self.robot_dict['kinematics']['lock_joints'])
             locked.update({name:float(value) for name,value in measured.items() if name in self.world.GRIPPER_JOINT_NAMES})
