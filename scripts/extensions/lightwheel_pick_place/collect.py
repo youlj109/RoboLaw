@@ -85,7 +85,7 @@ parser.add_argument('--place-lower-steps',type=int,default=3,
     help='When place-lower-mode=steps: equal Z drops from transfer height to lower height')
 parser.add_argument('--place-clear-rise-z',type=float,default=0.0,
     help='After transfer, pure +Z rise before lower/release (metres); helps clear plate rim')
-parser.add_argument('--development-release-checkpoint',type=Path);parser.add_argument('--replay-release-prefix-checkpoint',type=Path);parser.add_argument('--staged-release',action='store_true')
+parser.add_argument('--development-release-checkpoint',type=Path);parser.add_argument('--replay-release-prefix-checkpoint',type=Path);parser.add_argument('--staged-release',action='store_true');parser.add_argument('--release-landing-plan',type=Path)
 args=parser.parse_args();args.enable_cameras=True
 if args.defer_added_hazard_audit and not args.defer_full_world_audit:raise ValueError('Deferred added hazards require complete deferred world audit')
 if not 0<=args.release_ramp_steps<=60:raise ValueError('Release ramp must be0..60 control steps')
@@ -682,6 +682,26 @@ with SimulationAppContext(args):
                 lifted_states=[row[3]['lime'][2] for row in records if row[0]=='lift'];result['lift_m']=float(lifted_states[-1]-initial['lime'][2]) if lifted_states else 0.
                 for key in ('grasp_candidate','grasp_point_body_m','grasp_solutions','grasp_pose_calibration','lift_support_contact_model'):
                     if key in source_result:result[key]=source_result[key]
+            if args.release_landing_plan:
+                proposal=json.loads(args.release_landing_plan.read_text())
+                if not proposal['all_passed']:raise RuntimeError('Unverified measured landing proposal')
+                state=snapshot();q=state['q'][ids].copy();world.source_detached=True;phase='lower';world.allowed_phase='lower'
+                world.attachment=np.linalg.inv(kin.fk(q))@transform(state['lime'][:3],state['lime'][3:7]);world.planning_gripper_q=geometry(state)['gripper_q']
+                for name in RIGID:
+                    if name!=PICK:world.set_obstacle_pose(name,state[name][:7])
+                body_goal=np.asarray(proposal['body_goal']);target=body_goal@np.linalg.inv(world.attachment)
+                goal=kin.ik(target,np.asarray(proposal['joint_goal']),attempts=1)
+                if np.linalg.norm(kin.fk(goal)[:3,3]-target[:3,3])>.001 or Rotation.from_matrix(kin.fk(goal)[:3,:3].T@target[:3,:3]).magnitude()>.02:raise RuntimeError('Measured landing feedback IK residual')
+                planner=LimePlanner(world,kin,dt=e.step_dt,seed=seed,max_joint_speed=.4);planner.single_candidate_round=True;planner.certify_execution_margin=True;planner.query_start_q=q.copy()
+                path=planner.plan_joint_goal(q,goal,(PICK,DEST),grip,phase='lower');checked=planner.validate_path(path['positions'],(PICK,DEST),grip,phase='lower')
+                if not checked['valid']:raise RuntimeError('Measured landing path invalid: '+str(checked))
+                raw=np.asarray(path['positions']);slow=np.column_stack([np.interp(np.linspace(0,1,3*(len(raw)-1)+1),np.linspace(0,1,len(raw)),raw[:,j]) for j in range(7)])
+                plans.append({'phase':'lower','metadata':path.get('metadata',{}),'validation':checked,'executed':True,'measured_landing_correction':True})
+                for command in slow:q=command.copy();step(q,grip)
+                measured=snapshot();orientation_error=Rotation.from_matrix(transform(measured['lime'][:3],measured['lime'][3:7])[:3,:3].T@body_goal[:3,:3]).magnitude()
+                result['measured_landing_correction']={'plan':str(args.release_landing_plan),'body_goal':body_goal.tolist(),'orientation_error_deg':float(np.rad2deg(orientation_error)),'actual_body':measured['lime'].tolist()}
+                if orientation_error>np.deg2rad(10):raise RuntimeError('Actual ladle did not retain near-flat landing orientation')
+                lower_until_supported()
             staged_release()
             capture_placement_checkpoint(PICK)
         elif args.replay_prefix_checkpoint:
