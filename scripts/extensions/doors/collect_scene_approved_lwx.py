@@ -11,6 +11,7 @@ p.add_argument('--planner-hazard-extra-padding-m',type=float,default=0.,help='Ad
 p.add_argument('--task-id',required=True)
 p.add_argument('--grasp-roll-deg',type=float,default=0.)
 p.add_argument('--grasp-pitch-deg',type=float,default=0.)
+p.add_argument('--grasp-alignment-start-roll-deg',type=float,default=None,help='Optional initial contact roll; after original closure, rotate at the same handle point toward grasp-roll-deg with all checks retained')
 p.add_argument('--pregrasp-roll-deg',type=float,default=None)
 p.add_argument('--pregrasp-pitch-deg',type=float,default=None)
 p.add_argument('--approach-alignment-end-fraction',type=float,default=None)
@@ -28,6 +29,8 @@ p.add_argument('--opening-reserve-rad',type=float,default=0.,help='Additional me
 p.add_argument('--release-completion-fraction',type=float,default=1.,help='Finish the same retreat target earlier; measured joint increments and every physics safety gate unchanged')
 p.add_argument('--release-retreat-profile',choices=['linear','ease_out'],default='linear',help='Same bounded retreat endpoint; optional early progress with a slower finish, inherited by matched variants')
 p.add_argument('--release-command-policy',choices=['full_pose','bounded_position_v1','bounded_position_hold_v2','full_pose_hold_v3','full_pose_track_v4','door_relative_pose_v5'],default='full_pose')
+p.add_argument('--gripper-command-policy',choices=['binary_default','continuous_position_v1'],default='binary_default',help='Local normalized finger-position adapter; endpoints0/1 reproduce original open/close targets; original robot drives and geometry unchanged')
+p.add_argument('--release-open-steps',type=int,default=0,help='Open original binary gripper at one fixed checked arm target before retreat; no joint-state writes or force/clearance changes')
 p.add_argument('--release-settle-steps',type=int,default=0,help='Additional closed-gripper hold at one measured joint target before release; inherited by matched variants')
 p.add_argument('--mode', choices=['collect', 'neutral'], default='collect')
 p.add_argument('--observer-config',required=True)
@@ -63,13 +66,18 @@ if not 0. <= a.ik_limit_margin_rad <= .1:p.error('--ik-limit-margin-rad must be 
 # Optional control extent extended after release_dense189 source-geometry checks.
 # This is total TCP travel, not a clearance threshold; all per-step joint,
 # cuRobo, source geometry and 120 Hz physical safety checks remain unchanged.
-if not math.isfinite(a.release_retreat_m) or not 0. <= a.release_retreat_m <= .07:p.error('--release-retreat-m must be finite within [0, .07]')
+if not math.isfinite(a.release_retreat_m) or not 0. <= a.release_retreat_m <= .10:p.error('--release-retreat-m must be finite within [0, .10]')
 if a.release_retreat_profile!='linear' and not a.release_retreat_m:p.error('Release profile needs a retreat')
+if a.gripper_command_policy!='binary_default' and not a.release_open_steps:p.error('Continuous position adapter requires explicit release opening stage')
+if not 0 <= a.release_open_steps <= 30:p.error('--release-open-steps must be in [0,30]')
+if a.release_open_steps and not a.release_retreat_m:p.error('In-place opening requires a checked retreat')
 if not 0 <= a.release_settle_steps <= 90:p.error('--release-settle-steps must be in [0,90]')
 if not -60. <= a.release_tilt_deg <= 60. or (a.release_tilt_deg and not a.release_retreat_m):p.error('--release-tilt-deg needs a retreat and must be in [-60,60]')
 if not math.isfinite(a.release_yaw_deg) or not -60.<=a.release_yaw_deg<=60. or (a.release_yaw_deg and not a.release_retreat_m):p.error('--release-yaw-deg needs a retreat and must be finite within [-60,60]')
 if not math.isfinite(a.release_completion_fraction) or not .2<=a.release_completion_fraction<=1. or (a.release_completion_fraction!=1. and not a.release_retreat_m):p.error('Release completion fraction requires retreat and must be finite within [.2,1]')
 if not math.isfinite(a.release_roll_delta_deg) or not -60.<=a.release_roll_delta_deg<=60. or (a.release_roll_delta_deg and not a.release_retreat_m):p.error('Release roll delta needs retreat and must be finite in [-60,60]')
+if a.grasp_alignment_start_roll_deg is not None:
+    if not math.isfinite(a.grasp_alignment_start_roll_deg) or not -180.<=a.grasp_alignment_start_roll_deg<=180. or abs(a.grasp_alignment_start_roll_deg-a.grasp_roll_deg)>30.:p.error('Closed-grip roll alignment must be finite, within [-180,180], and at most30deg')
 review=json.loads(Path(a.review_config).read_text())
 out=Path(a.output)
 if (out/'result.json').exists() or (out/'images.h5').exists():raise SystemExit('Output already has trial data; use a new attempt directory')
@@ -101,6 +109,13 @@ with SimulationAppContext(a):
     environment,graph=build(a.task_id,a.variant,True,a.variant_config)
     builder=ArenaEnvBuilder(environment,ArenaEnvBuilderCfg(device='cpu',seed=a.seed or 42,presets='physx',num_envs=1,solve_relations=False,resolve_on_reset=False,recorder_dataset_export_dir_path=str(out/'arena')))
     cfg,kw=builder.compose_manager_cfg();cfg.observations.camera_obs=None;cfg.sim.render_interval=cfg.decimation
+    if a.gripper_command_policy=='continuous_position_v1':
+        # Local action mapping only. Preserve source0/1 position targets, one
+        # action dimension, mimic constraints and original actuator properties.
+        from isaaclab.envs.mdp.actions.actions_cfg import JointPositionActionCfg
+        original_gripper=cfg.actions.gripper_action
+        if original_gripper.joint_names!=['finger_joint'] or original_gripper.open_command_expr!={'finger_joint':0.} or abs(original_gripper.close_command_expr['finger_joint']-math.pi/4)>1e-7:raise RuntimeError('Unexpected source binary gripper mapping')
+        cfg.actions.gripper_action=JointPositionActionCfg(asset_name='robot',joint_names=['finger_joint'],preserve_order=True,scale=math.pi/4,use_default_offset=False,clip={'finger_joint':(0.,math.pi/4)})
     scene_source_metadata=json.loads((Path(scene_manifest['baseline'])/'metadata.json').read_text())
     scene_initial_q=scene_manifest.get('preview_initial_q',scene_source_metadata['initial_q'])
     cfg.scene.robot.init_state.joint_pos={n:float(v) for n,v in zip(scene_source_metadata['robot_joint_names'],scene_initial_q)}
@@ -168,6 +183,7 @@ with SimulationAppContext(a):
     metadata['door_geometry']=geometry
     metadata['door_motion_reference_joint_rad']=reference_joint_position
     metadata['controller_parameters']['grasp_roll_deg']=a.grasp_roll_deg
+    if a.grasp_alignment_start_roll_deg is not None:metadata['controller_parameters'].update(grasp_alignment_start_roll_deg=a.grasp_alignment_start_roll_deg,grasp_alignment_policy='closed_grip_roll_v1',grasp_alignment_steps=40,grasp_alignment_hold_steps=20)
     if 'pregrasp_roll_deg' in orientation_policy:
         metadata['controller_parameters'].update({key:orientation_policy[key] for key in ['pregrasp_roll_deg','pregrasp_pitch_deg']})
         metadata['controller_parameters']['approach_orientation_policy']='straight_slerp_v1'
@@ -184,6 +200,10 @@ with SimulationAppContext(a):
     if a.release_roll_delta_deg:metadata['controller_parameters']['release_roll_delta_deg']=a.release_roll_delta_deg;metadata['controller_parameters']['release_roll_policy']='synchronous_local_roll_v2'
     if a.release_completion_fraction!=1.:metadata['controller_parameters']['release_completion_fraction']=a.release_completion_fraction
     if a.opening_reserve_rad:metadata['controller_parameters']['opening_reserve_rad']=a.opening_reserve_rad
+    if a.release_open_steps:metadata['controller_parameters'].update(release_open_steps=a.release_open_steps,release_open_policy='fixed_arm_original_binary_open_v1' if a.gripper_command_policy=='binary_default' else 'fixed_arm_normalized_position_ramp_v1')
+    if a.gripper_command_policy!='binary_default':
+        metadata['controller_parameters']['gripper_command_policy']=a.gripper_command_policy
+        metadata['action_semantics']={'version':'arm_rad_gripper_normalized_position_v1','arm':'First7 absolute arm joint target angles in rad, unchanged','gripper':'Last scalar g in[0,1] commands finger_joint g*pi/4 rad through original position drive; mimic and geometry unchanged. Source binary0/1 endpoints identical.','source_binary_actions_before_release':True}
     if a.release_settle_steps:metadata['controller_parameters']['release_settle_steps']=a.release_settle_steps
     if a.release_command_policy!='full_pose':metadata['controller_parameters']['release_command_policy']=a.release_command_policy
     if a.release_command_policy in ('full_pose_track_v4','door_relative_pose_v5'):metadata['controller_parameters']['release_steps']=60;metadata['controller_parameters']['release_hold_target_policy']='unclipped_final_pose_ik_v4'
@@ -414,8 +434,9 @@ with SimulationAppContext(a):
                 if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(settle_command[None])).all()):raise RuntimeError('cuRobo rejected pregrasp endpoint settling')
                 step(settle_command,0.)
             phase='approach_handle';world.allow_handle_contact=True
+            contact_orientation_policy=dict(orientation_policy,grasp_roll_deg=a.grasp_alignment_start_roll_deg) if a.grasp_alignment_start_roll_deg is not None else orientation_policy
             for alpha in np.linspace(0,1,50)[1:]:
-                target[:3,:3]=approach_rotation(approach,orientation_policy,float(alpha))
+                target[:3,:3]=approach_rotation(approach,contact_orientation_policy,float(alpha))
                 target[:3,3]=handle0-approach*a.pregrasp_distance_m*(1-alpha)
                 command=kin.ik(target,q,attempts=1)
                 world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])
@@ -429,6 +450,18 @@ with SimulationAppContext(a):
             phase='grasp_handle'
             for _ in range(20):step(q,1.)
             if max(r['contacts']['count'] for r in rows[-10:])==0:raise RuntimeError('No physical finger-door contact after closure')
+            if a.grasp_alignment_start_roll_deg is not None:
+                # Actual motor commands only: same source-handle TCP, measured door
+                # feedback and original25mrad increment/collision/contact gates.
+                for alignment_step in range(60):
+                    fraction=min(1.,(alignment_step+1)/40.)
+                    roll=a.grasp_alignment_start_roll_deg+(a.grasp_roll_deg-a.grasp_alignment_start_roll_deg)*fraction
+                    target=door_target_pose(hinge,axis,handle0,grasp_rotation(approach,roll,a.grasp_pitch_deg),rows[-1]['next_obs']['door_q'],reference_joint_position)
+                    command=kin.ik(target,q,attempts=1);delta_q=command-q;command=q+delta_q/max(1.,float(np.max(np.abs(delta_q)))/.025)
+                    world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')]);sync(update_planner=True);planner._prepare_path_query(handles,1.,phase)
+                    if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(command[None])).all()):raise RuntimeError('cuRobo rejected closed-grip roll alignment')
+                    step(command,1.)
+                if max(r['contacts']['count'] for r in rows[-10:])==0:raise RuntimeError('Finger-handle contact lost during closed-grip roll alignment')
             phase='pull_door'
             for _ in range(a.pull_steps):
                 measured=rows[-1]['next_obs']['door_q']
@@ -482,6 +515,17 @@ with SimulationAppContext(a):
                     if stable>=5:break
                 if stable<5:raise RuntimeError('Final original door-open predicate did not stabilize')
             phase='release_handle'
+            if a.release_open_steps:
+                # Original binary opening command. Separate opening from arm motion;
+                # measured mimic joints and all original physics-step checks remain.
+                fixed_open_arm_target=q.copy()
+                for open_step in range(a.release_open_steps):
+                    world.gripper_joint_position=float(arr(robot.data.joint_pos)[0,robot.joint_names.index('finger_joint')])
+                    sync(update_planner=True);planner._prepare_path_query(handles,0.,phase)
+                    if not bool(planner.motion_gen.ik_solver.check_valid(planner.args.to_device(fixed_open_arm_target[None])).all()):raise RuntimeError('cuRobo rejected fixed-arm gripper opening')
+                    open_grip=1.-float(open_step+1)/a.release_open_steps if a.gripper_command_policy=='continuous_position_v1' else 0.
+                    release_commands.append({'action_index':len(rows),'phase':phase,'stage':'open_in_place','command':fixed_open_arm_target.tolist(),'gripper_command':open_grip})
+                    step(fixed_open_arm_target,open_grip)
             release_start=kin.fk(q) if a.release_retreat_m else None
             release_reference_angle=rows[-1]['next_obs']['door_q']
             release_angle=release_reference_angle-reference_joint_position

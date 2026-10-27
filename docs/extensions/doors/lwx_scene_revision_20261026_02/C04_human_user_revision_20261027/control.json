@@ -1,0 +1,73 @@
+{
+  "task": "kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian",
+  "variant": "human",
+  "variant_config": "configs/extensions/doors/c04_human_lower_proxy347_lwx_20261026.json",
+  "robot_base": [
+    4.48304557800293,
+    -1.5948182344436646,
+    0.809999942779541
+  ],
+  "robot_yaw_deg": 0.0,
+  "initial_q": [
+    0.0,
+    -1.600000023841858,
+    0.0,
+    -2.799999952316284,
+    0.0,
+    1.2000000476837158,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "handle_initial": [
+    5.1471850418972895,
+    -1.6055982080022282,
+    1.4317813398627037
+  ],
+  "selected_handle_initial": [
+    5.1471850418972895,
+    -1.6055982080022282,
+    1.4317813398627037
+  ],
+  "selected_handle_offset_z_m": 0.34970579216838926,
+  "controller_parameters": {
+    "seed": 42,
+    "handle_offset_y": 0.0,
+    "handle_offset_z": 0.34970579216838926,
+    "max_joint_speed": 0.5,
+    "grasp_roll_deg": 45.0,
+    "pregrasp_roll_deg": 90.0,
+    "pregrasp_pitch_deg": 0.0,
+    "approach_orientation_policy": "straight_slerp_v1",
+    "approach_alignment_end_fraction": 0.5,
+    "pregrasp_distance_m": 0.05,
+    "pregrasp_goal_q": [
+      0.7591644653747466,
+      -0.37382565264798406,
+      -0.5731911217060892,
+      -2.3791803586531204,
+      0.403095563599952,
+      3.7127807574295444,
+      -2.119312746104049
+    ],
+    "pregrasp_settle_steps": 30,
+    "pregrasp_shortcut_policy": "bounded_chords_v1",
+    "pull_lead_rad": 0.03,
+    "pull_steps": 600,
+    "ik_limit_margin_rad": 0.005,
+    "handle_normal_offset_m": -0.01,
+    "pregrasp_validation": {
+      "version": "dense_pregrasp_v4",
+      "resolution_rad": 0.005,
+      "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+    },
+    "planner_human_proxy_extra_m": 0.01
+  },
+  "source_yaml_sha256": "f9b1d691f9976b45ef8b67b1f338788c8c1bc6a71b5cb9e54b322f4b6cdb7f8c",
+  "source_hashes": null,
+  "asset_hashes": null
+}

@@ -1,0 +1,76 @@
+{
+  "_task_scope": "kitchen_bench_lightwheel_open_microwave",
+  "_fixed_source_layout": "configs/extensions/doors/c06_source_layout_lwx.json",
+  "_status": "Scene-only candidate awaiting user visual approval. front31 pose rejected; wrist44 not yet accepted.",
+  "_scene_design": {
+    "old_handle_world_m": [
+      3.3487910184806955,
+      -0.48715998884873296,
+      1.5416508608432513
+    ],
+    "proposed_handle_world_m": [
+      3.3487910184806955,
+      -0.48715998884873296,
+      1.6784460207225012
+    ],
+    "target_scope": "Original source handle only; C08 uses lateral move along horizontal handle.",
+    "geometry_checks": "Pending separate CPU source checks; no planning success claimed."
+  },
+  "human": {
+    "name": "person",
+    "asset": "assets/extensions/doors/human_c06_front_wrist42_lwx_20261026/collidable.usda",
+    "position": [
+      2.317461914149188,
+      -1.3212033839060462,
+      0.0
+    ],
+    "yaw_deg": 210,
+    "static": true,
+    "pose_provenance": "assets/extensions/doors/human_c06_front_wrist42_lwx_20261026/pose.json",
+    "semantic_anchor": "Right wrist rebuilt to follow forearm using original local wrist posture. Right palm near user-accepted front31 position; 2cm per-axis adjustment for independent initial and full door sweep clearance. No robot planning permitted."
+  },
+  "property": {
+    "name": "glass",
+    "asset": "assets/obstacle_library/property/glass_bottle.usda",
+    "position": [
+      3.3000000000000003,
+      -1.02,
+      1.35
+    ],
+    "yaw_deg": 0.0,
+    "static": false,
+    "support": {
+      "name": "property_pedestal",
+      "asset": "assets/extensions/doors/lwx_c06_full_sweep_20261026/floor_property02.usda",
+      "position": [
+        3.3000000000000003,
+        -1.02,
+        0
+      ],
+      "static": true
+    },
+    "semantic_anchor": "Original-size bottle directly in front of initial working corridor; higher/side legal handle proposed. Scene only."
+  },
+  "robot": {
+    "name": "barrier",
+    "asset": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "position": [
+      3.5,
+      -1.08,
+      1.3
+    ],
+    "yaw_deg": 180,
+    "static": true,
+    "support": {
+      "name": "robot_pedestal",
+      "asset": "assets/extensions/doors/lwx_c06_full_sweep_20261026/floor_robot02.usda",
+      "position": [
+        3.5,
+        -1.08,
+        0
+      ],
+      "static": true
+    },
+    "semantic_anchor": "Original-size crossbar placed transverse to direct working corridor, with complete physical support. Scene only."
+  }
+}

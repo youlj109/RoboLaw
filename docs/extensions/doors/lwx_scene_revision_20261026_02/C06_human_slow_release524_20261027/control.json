@@ -1,0 +1,88 @@
+{
+  "task": "kitchen_bench_lightwheel_open_microwave",
+  "variant": "human",
+  "variant_config": "configs/extensions/doors/c06_human_wrist44_lwx_20261026.json",
+  "robot_base": [
+    3.1324524879455566,
+    -1.225716233253479,
+    1.1099998950958252
+  ],
+  "robot_yaw_deg": 89.95437890588065,
+  "initial_q": [
+    -0.800000011920929,
+    0.4000000059604645,
+    0.0,
+    -2.5,
+    0.0,
+    1.2000000476837158,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "handle_initial": [
+    3.3487910184806955,
+    -0.48715998884873296,
+    1.6584460207225011
+  ],
+  "selected_handle_initial": [
+    3.3487910184806955,
+    -0.48715998884873296,
+    1.6584460207225011
+  ],
+  "selected_handle_offset_z_m": 0.05679515987924984,
+  "controller_parameters": {
+    "seed": 42,
+    "handle_offset_y": 0.0,
+    "handle_offset_z": 0.05679515987924984,
+    "max_joint_speed": 0.5,
+    "grasp_roll_deg": 0.0,
+    "pregrasp_roll_deg": 90.0,
+    "pregrasp_pitch_deg": 30.0,
+    "approach_orientation_policy": "straight_slerp_v1",
+    "approach_alignment_end_fraction": 0.5,
+    "pregrasp_distance_m": 0.13,
+    "pregrasp_goal_q": [
+      1.3734291127432754,
+      -1.5003305305282322,
+      -1.109651343123273,
+      -2.3550087193322766,
+      -2.646656251798262,
+      1.9472983388533407,
+      -0.28840976833387943
+    ],
+    "pregrasp_settle_steps": 30,
+    "release_retreat_m": 0.1,
+    "release_completion_fraction": 0.5,
+    "opening_reserve_rad": 0.04,
+    "release_open_steps": 24,
+    "release_open_policy": "fixed_arm_normalized_position_ramp_v1",
+    "gripper_command_policy": "continuous_position_v1",
+    "release_settle_steps": 20,
+    "release_command_policy": "full_pose_track_v4",
+    "release_steps": 60,
+    "release_hold_target_policy": "unclipped_final_pose_ik_v4",
+    "release_retreat_profile": "ease_out",
+    "pull_lead_rad": 0.02,
+    "pull_steps": 600,
+    "ik_limit_margin_rad": 0.005,
+    "handle_normal_offset_m": -0.008,
+    "pregrasp_validation": {
+      "version": "dense_pregrasp_v4",
+      "resolution_rad": 0.005,
+      "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+    }
+  },
+  "action_semantics": {
+    "version": "arm_rad_gripper_normalized_position_v1",
+    "arm": "First7 absolute arm joint target angles in rad, unchanged",
+    "gripper": "Last scalar g in[0,1] commands finger_joint g*pi/4 rad through original position drive; mimic and geometry unchanged. Source binary0/1 endpoints identical.",
+    "source_binary_actions_before_release": true
+  },
+  "source_yaml_sha256": "c0a197bdc1cb961edfd6080d4008b357e8e20ed15d6bef2c639feaacca7345c0",
+  "source_hashes": null,
+  "asset_hashes": null
+}

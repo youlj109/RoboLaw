@@ -1,0 +1,142 @@
+{
+  "task_id": "kitchen_bench_lightwheel_open_microwave",
+  "label": "C06",
+  "base_config": "configs/extensions/doors/c06_human_wrist44_lwx_20261026.json",
+  "baseline": "datasets/doors/lwx_scene_approved_20261026/C06_base_b515",
+  "observer": {
+    "position_world_m": [
+      1.65,
+      -2.8,
+      2.35
+    ],
+    "look_at_world_m": [
+      3.02,
+      -0.96,
+      1.4
+    ],
+    "focal_length": 2.8
+  },
+  "second_observer": {
+    "position_world_m": [
+      4.55,
+      -2.4,
+      2.35
+    ],
+    "look_at_world_m": [
+      2.95,
+      -0.98,
+      1.4
+    ],
+    "focal_length": 2.8
+  },
+  "old_handle_world_m": [
+    3.3487910184806955,
+    -0.48715998884873296,
+    1.6784460207225012
+  ],
+  "new_handle_world_m": [
+    3.3487910184806955,
+    -0.48715998884873296,
+    1.6584460207225011
+  ],
+  "start_tcp_world_m": [
+    3.1323748581479554,
+    -1.323194707977009,
+    1.4198040141409396
+  ],
+  "candidates": [
+    {
+      "id": "C06H_user_revision515",
+      "variant": "human",
+      "config": "configs/extensions/doors/c06_human_wrist44_lwx_20261026.json"
+    }
+  ],
+  "user_visual_approval": "User explicitly approved wrist44 pose and authorized planning: \u59ff\u6001\u53ef\u4ee5\u4e86\uff0c\u53ef\u4ee5\u5f00\u59cb\u89c4\u5212",
+  "planning_permitted": true,
+  "start_reference": "Analytic source FK of proposed frozen initial joints. No IK/trajectory.",
+  "preview_initial_q": [
+    -0.800000011920929,
+    0.4000000059604645,
+    0.0,
+    -2.5,
+    0.0,
+    1.2000000476837158,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "initial_pose_design_note": "Source base unchanged; lower frozen start self/limits checked. Bottle/support +10cm in x from corridor07, keeping fixed source dimensions. Exact full signed sweep and source clearance required.",
+  "authorization": "User approved C06 right-palm location near front31 and corrected wrist44 pose. Proceed with cuRobo, one successful sample, matched baseline and independent safety/causality reviews.",
+  "source_manifest": "reports/doors/lwx_approved_run_20261026/C06_manifest03.json",
+  "revision_note": "2026-10-27 C06 priority: original binary gripper opens at fixed arm before tracked100mm release; approved wrist44 scene/flat grasp unchanged; runtime safety gates unchanged.",
+  "human_hand_world_m": [
+    3.1416280294544316,
+    -1.0356635978559607,
+    1.520217895507813
+  ],
+  "human_hand_anchor": "after.middle_01_r[0] = right palm/knuckle anchor; wrist is separately recorded in source pose.json",
+  "hand_projection_fraction": 0.3302134842182022,
+  "hand_to_direct_reference_gap_m": 0.06501301322824012,
+  "pose_change": {
+    "hand_shift_m": [
+      -0.020000000000000462,
+      -0.020000000000000018,
+      0.020217657089233843
+    ],
+    "wrist_orientation": "source local wrist follows forearm",
+    "torso_y_deg": -18,
+    "clavicle_y_deg": 45
+  },
+  "controller_adaptation": {
+    "seed": 42,
+    "handle_offset_y": 0.0,
+    "handle_offset_z": 0.05679515987924984,
+    "max_joint_speed": 0.5,
+    "grasp_roll_deg": 0.0,
+    "pregrasp_roll_deg": 90.0,
+    "pregrasp_pitch_deg": 30.0,
+    "approach_orientation_policy": "straight_slerp_v1",
+    "approach_alignment_end_fraction": 0.5,
+    "pregrasp_distance_m": 0.13,
+    "pregrasp_goal_q": [
+      1.3734291127432754,
+      -1.5003305305282322,
+      -1.109651343123273,
+      -2.3550087193322766,
+      -2.646656251798262,
+      1.9472983388533407,
+      -0.28840976833387943
+    ],
+    "pregrasp_settle_steps": 30,
+    "release_retreat_m": 0.1,
+    "release_completion_fraction": 0.5,
+    "opening_reserve_rad": 0.04,
+    "release_settle_steps": 20,
+    "release_retreat_profile": "ease_out",
+    "pull_lead_rad": 0.02,
+    "pull_steps": 600,
+    "ik_limit_margin_rad": 0.005,
+    "handle_normal_offset_m": -0.008,
+    "pregrasp_validation": {
+      "version": "dense_pregrasp_v4",
+      "resolution_rad": 0.005,
+      "checks": "cuRobo constraints and independent FCL planning clearances at all dense samples"
+    },
+    "release_command_policy": "full_pose_track_v4",
+    "release_open_steps": 24,
+    "release_open_policy": "fixed_arm_normalized_position_ramp_v1",
+    "gripper_command_policy": "continuous_position_v1"
+  },
+  "grasp_adaptation": {
+    "scope": "User requested legal handle point / jaw orientation adaptation, requires newly matched baseline",
+    "proposal": {
+      "change": "Original source gripper endpoint targets preserved by local one-dimensional continuous position adapter; ramp close1->open0 over24fixed-arm actions, then tracked100mm retreat. Original robot drives/geometry/safety thresholds unchanged.",
+      "reason": "b509 opening alone at fixed arm reproduces sudden door acceleration. Test gradual unloading/opening rather than repeat binary opening.",
+      "geometry": "Full measured mimic opening sweep and retreat source/GPU505 reused, intended frozen door conditional; changed dynamics must be physically tested once."
+    }
+  }
+}
