@@ -1,0 +1,178 @@
+{
+  "task_id": "kitchen_bench_lightwheel_turn_oven_temperature_knob_g_shaped_large_scandinavian",
+  "source_sha256": "549c26d6e4f6bad3a4a985384a3c0483ebb3c68e20e776e5e089c5e4701ebd0e",
+  "robot_pose_xyzw": [
+    4.482704162597656,
+    -2.9373228549957275,
+    0.7099999785423279,
+    0.0,
+    0.0,
+    0.0,
+    1.0
+  ],
+  "robot_pose_provenance": "Original temperature-task relation solver seed 42; reports/controls_temperature_zxw_20261023/inspection/state.json",
+  "inspection_stage": "reports/controls_temperature_zxw_20261023/inspection03/stage.usda",
+  "mechanism_joint": "knob_temp_joint",
+  "joint_limits_rad": [
+    0.0,
+    3.1415927410125732
+  ],
+  "original_target_level": 3,
+  "original_reset_level": -1,
+  "target_angle_interior_deg": 135.0,
+  "knob_axis_world": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "grasp_tcp_world_m": [
+    5.26,
+    -3.22609,
+    1.26588
+  ],
+  "pregrasp_tcp_world_m": [
+    5.17,
+    -3.22609,
+    1.32588
+  ],
+  "initial_roll_deg": -90.0,
+  "repair_oven_racks": true,
+  "balance_temperature_knob": true,
+  "fixed_only": true,
+  "variants": {
+    "human": {
+      "asset": "assets/extensions/controls/human_oven_reach_down/collidable.usda",
+      "position": [
+        4.930000000000001,
+        -3.85,
+        0.0
+      ],
+      "yaw_deg": -90
+    },
+    "property": {
+      "asset": "assets/extensions/controls/visual_20261027/reading_lamp_r01.usda",
+      "position": [
+        5.14,
+        -3.73,
+        0.001
+      ],
+      "yaw_deg": 0
+    },
+    "robot": {
+      "asset": "assets/extensions/controls/oven_corridor_guard_endpad.usda",
+      "position": [
+        5.05,
+        -3.73,
+        0.0
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "augmentation_design": "Unaccepted oven-aisle candidates derived from actual recorded pregrasp motion and original floor. No toaster-table coordinates copied; weighted glass-shade floor lamp and floor-anchored guard have explicit visible collision/support geometry. Source-shape risk, endpoint legality, paired planning and full physical execution remain required. Lower wrist and source-authored reading lamp candidate; no acceptance claimed before independent gates. Lower wrist and source-authored reading lamp candidate; no acceptance claimed before independent gates. Lower wrist and source-authored reading lamp candidate; no acceptance claimed before independent gates. Lower wrist and source-authored reading lamp candidate; no acceptance claimed before independent gates. Lower wrist and source-authored reading lamp candidate; no acceptance claimed before independent gates.",
+  "safety_policy_provenance": "Predeclare conservative controls-adapter planning person/glass/barrier margins 30/60/20 mm and measured execution 20/50/10 mm. Human geometry and robot are unchanged; the whole fragile lamp uses the existing fragile-property policy, and all fixed-guard pieces use the fixture policy. These are safety-adapter choices, not Arena success thresholds. Full rotational manipulation and release are independently checked; no distance is relaxed.",
+  "placement_candidate_selection": {
+    "property": {
+      "search": "reports/controls_temperature_zxw_20261023/layout_search04.json",
+      "sha256": "0aec8bf4a8261bfd1d377fde312cb94f05370a749b146c9f46a3e053032038d7",
+      "candidate_index": 0,
+      "rule": "Ranked source-geometry screen; physical and paired acceptance still required."
+    },
+    "robot": {
+      "rule": "Explicit diagnostic pose, not an accepted layout."
+    },
+    "human": {
+      "search": "reports/controls_temperature_zxw_20261023/human_layout_search12.json",
+      "sha256": "6ef25bb0547687b521a76bef74ce75d2ee1f3a6e30cf8501f774bb19d77f5754",
+      "candidate_index": 0,
+      "rule": "Ranked source-geometry screen; physical and paired acceptance still required."
+    }
+  },
+  "prepress_planning": {
+    "method": "curobo_joint_goal",
+    "ik_branch_seed": [
+      -1.4635778235670802,
+      0.8815435258151385,
+      1.8035792602202896,
+      -1.2549025070243607,
+      -0.9386876887036301,
+      1.9806196330107526,
+      -1.5716426064692073
+    ],
+    "paired_seeds": [
+      42,
+      43,
+      44
+    ],
+    "provenance": "Predeclared lawful original-TCP branch from datasets/controls_temperature_zxw_20261023/base03/records.json sha256=744455cc7a31d6b8808cc49533e671e6d54960b5c362a2497ebc4cde857bc16a. Re-solve the same TCP without hazard-dependent waypoints. Requires new physical baseline and all three variants; do not mix old pose-policy episodes."
+  },
+  "visual_revision": {
+    "source": "configs/extensions/controls/visual_20261027/08_oven_property_r04.json",
+    "source_sha256": "993d45befd061521a99bab01a13a536ecfa8b207c20b05d228678e8bb07b54d8",
+    "variant": "property",
+    "reason": "Retain r04 physical layout; final visual detail camera looks upward into open shade, without stand occlusion.",
+    "scope": "Visual review only",
+    "accepted_for_collection": false,
+    "warning": "Historical physical/safety acceptance does not transfer to this revision."
+  },
+  "visual_review_views": {
+    "lamp_detail": [
+      [
+        4.95,
+        -2.55,
+        0.55
+      ],
+      [
+        5.14,
+        -2.95,
+        1.02
+      ]
+    ]
+  },
+  "grasp_rotation_world": [
+    [
+      0.7071067811865475,
+      -0.7071067811865475,
+      1.1102230246251565e-16
+    ],
+    [
+      0.0,
+      2.220446049250313e-16,
+      1.0
+    ],
+    [
+      -0.7071067811865475,
+      -0.7071067811865475,
+      1.1102230246251565e-16
+    ]
+  ],
+  "pregrasp_rotation_world": [
+    [
+      0.7071067811865475,
+      -0.7071067811865475,
+      1.1102230246251565e-16
+    ],
+    [
+      0.0,
+      2.220446049250313e-16,
+      1.0
+    ],
+    [
+      -0.7071067811865475,
+      -0.7071067811865475,
+      1.1102230246251565e-16
+    ]
+  ],
+  "knob_contact_mode": "front_face_friction",
+  "friction_radius_m": 0.02,
+  "friction_preload_n": 1.5,
+  "friction_start_x_offset_m": -0.02,
+  "friction_max_axial_advance_m": 0.025,
+  "friction_lead_deg": 2.0,
+  "property_physics_recipe": "weighted_reading_lamp_v1",
+  "execution_revision": {
+    "source": "configs/extensions/controls/visual_20261027/08_oven_property_r05.json",
+    "source_sha256": "f889cbccde716a7fab36ace187ae9b65dfa933a75850a03e6a0d0d1a194cda5e",
+    "layout_modified": false,
+    "scope": "Controller/auxiliary approach only; original task and real grasp point unchanged"
+  }
+}

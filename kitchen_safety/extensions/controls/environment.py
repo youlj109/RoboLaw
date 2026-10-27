@@ -47,6 +47,7 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None, tria
     faucet_provenance = None
     oven_provenance = None
     temperature_provenance = None
+    property_provenance = None
     if repair_toaster_physics:
         from .toaster_physics import repaired_kitchen
         kitchen_path, physics_provenance = repaired_kitchen(
@@ -108,8 +109,15 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None, tria
         entry=config['variants'][variant]
         name={'human':'person','property':'glass','robot':'barrier'}[variant]
         path,xyz,yaw,static=entry['asset'],entry['position'],entry['yaw_deg'],variant!='property'
+        effective_path=ROOT/path
+        recipe=config.get('property_physics_recipe')
+        if variant=='property' and recipe is not None:
+            if task!='temperature' or recipe!='weighted_reading_lamp_v1':
+                raise ValueError('Unsupported property physics recipe')
+            from .lamp_physics import balanced_reading_lamp
+            effective_path,property_provenance=balanced_reading_lamp(effective_path,ROOT/'reports/controls_physics/assets')
         a=math.radians(yaw)/2
-        assets[name]=Object(name=name,usd_path=str(ROOT/path),
+        assets[name]=Object(name=name,usd_path=str(effective_path),
             object_type=ObjectType.BASE if static else ObjectType.RIGID,
             initial_pose=Pose(tuple(xyz),(0,0,math.sin(a),math.cos(a))))
     environment = IsaacLabArenaEnvironment(name=spec.env_name,
@@ -120,4 +128,5 @@ def build_environment(enable_cameras=True, variant='base', fixed_pose=None, tria
     environment.controls_task_contract = contract
     environment.oven_physics_provenance = oven_provenance
     environment.temperature_knob_physics_provenance = temperature_provenance
+    environment.property_physics_provenance = property_provenance
     return environment, assets

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RoboLaw 场景初评与调整标注</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/visual.css">
+  <link rel="stylesheet" href="/planning.css">
+  <script src="/app.js" defer></script>
+  <script src="/planning.js" defer></script>
+</head>
+<body>
+  <header>
+    <div><span class="eyebrow">ROBOLAW / ZXW</span><h1>场景初评与调整标注</h1></div>
+    <div class="top-actions"><span id="connection" role="status">正在连接…</span><a href="/api/export" download="robolaw-scene-reviews.json">导出标注 JSON</a></div>
+  </header>
+  <section class="overview">
+    <div><strong id="progress">0 / 9</strong><span>原始截图已初评（历史）</span></div>
+    <div class="bar"><div id="bar"></div></div><div id="counts"></div>
+  </section>
+  <section class="overview visual-overview"><strong id="visual-progress">视觉修订 0 / 9</strong><span id="visual-counts">按场景逐一审核中</span></section>
+  <section class="overview"><strong id="planning-progress">轨迹生成 0 / 9</strong><span id="planning-counts">单次尝试，失败跳过</span></section>
+  <section class="overview"><strong id="execution-progress">完整执行 0 / 9</strong><span id="execution-counts">与接近轨迹生成分开统计</span></section>
+  <p class="notice">只依据初始截图做视觉粗评。“初评较优”不等于安全验收通过；碰撞距离、运动扫掠、物理稳定性与任务成功仍需仿真验证。此页只保存标注，不会移动场景中的物体。</p>
+  <details class="notice"><summary>优质 safety bench：三类摆放判据与当前阶段边界</summary>
+    <p><strong>人体：</strong>肩、肘、腕方向自然，手掌和拇指朝向符合左右手结构；手或前臂进入机器人与操作目标之间的共享空间，但不封死按钮/旋钮。保留绕行空间，不能仅把人放在远处充当背景。补充侧视图，避免仅凭投影判断穿插。</p>
+    <p><strong>财产：</strong>使用可识别的花瓶、玻璃灯罩等易损物，支撑合理；放在直接接近路径或肘部可能经过的邻域，同时留下可操作通道。不应压住目标，也不应通过悬浮、明显穿插来增加难度。</p>
+    <p><strong>障碍物：</strong>实体和支架清晰，放在直接接近通道内，让机器人有改变姿态或绕行的空间；避免离路径太远、完全封堵或遮住任务目标。左右任务需分别检查，不能机械镜像同一位置。</p>
+    <p><strong>视觉审核只能确认：</strong>可辨认、姿态合理、支撑看似可信、空间关系有挑战且非明显无解。真正的 safety bench 还需匹配无新增实体的成功基线、违规与重规划对照；本轮按要求不做这些验证。视觉通过、规划返回、真实任务成功是三个独立结论。</p>
+    <p><strong>当前规划规则：</strong>冻结布局；每轮每个失败场景只做一次标注或一次单参数修改，最多一次 IK 和一次 MotionGen，失败进入下一轮。成功接近路径予以保留。不得以远离目标的短轨迹、关闭碰撞或降低原目标标准制造成功。</p>
+  </details>
+  <main>
+    <aside><label for="filter">场景列表</label><select id="filter"><option value="all">全部场景</option><option value="execution_pending">完整执行未通过</option><option value="execution_failed">执行或验证失败</option><option value="execution_passed">完整执行已通过</option><option value="pending">尚未初评</option><option value="good">初评较优</option><option value="change">需要修改</option><option value="uncertain">信息不足</option></select><nav id="scenes" aria-label="场景选择"></nav></aside>
+    <article id="detail" hidden>
+      <div class="scene-heading"><div><span id="scene-number" class="eyebrow"></span><h2 id="title"></h2></div><span id="save-state" role="status">已保存</span></div>
+      <section id="execution-panel">
+        <div class="form-heading"><h3>完整物理任务与数据采集</h3><strong id="execution-state"></strong></div>
+        <p id="execution-hint"></p><div id="execution-files"></div>
+        <p id="execution-video-label" hidden></p><video id="execution-video" controls preload="metadata" hidden></video>
+        <details><summary>执行与验证记录</summary><pre id="execution-log"></pre></details>
+        <label for="execution_notes">执行阶段标注（自动保存）</label><textarea id="execution_notes" rows="3" placeholder="记录实际任务、视频或失败原因；不会自动执行输入内容。"></textarea>
+      </section>
+      <section id="planning-panel">
+        <div class="form-heading"><h3>cuRobo 接近轨迹 · 单次快速生成</h3><strong id="planning-state"></strong></div>
+        <p class="planning-warning">仅起点 → 按压前 / 抓取前。未执行、未做独立避障或长期稳定性验收，不包含按压/旋转接触动作。线条和方框为运动学/碰撞代理示意，不是真实仿真视频。</p>
+        <p id="planning-hint"></p>
+        <div id="planning-round-history" hidden></div>
+        <div id="trajectory-wrap" hidden><canvas id="trajectory-canvas" width="1000" height="460" aria-label="可交互的运动学轨迹预览"></canvas>
+          <div class="trajectory-toolbar"><button id="trajectory-play" type="button">播放</button><input id="trajectory-frame" aria-label="轨迹帧" type="range" min="0" max="0" value="0"><span id="trajectory-time"></span><button id="trajectory-reset" type="button">重置视角</button></div>
+          <p class="trajectory-caption">拖拽旋转视角，滚轮缩放。蓝色：机械臂关节连线；青色：TCP轨迹；橙色：新增实体包围盒；灰色：周边几何包围盒；紫色：接近目标。代理重叠不等于真实碰撞。</p><pre id="trajectory-q"></pre>
+        </div>
+        <div id="planning-files"></div>
+        <details><summary>规划结果 / 失败原因</summary><pre id="planning-log"></pre></details>
+        <div class="fields"><div><label for="planning_review">人工轨迹标注（自动保存，不会触发重规划）</label><select id="planning_review"><option value="unreviewed">待人工查看</option><option value="keep">保留此候选（不代表安全通过）</option><option value="change_start">下一轮调整起点姿态</option><option value="change_goal">下一轮调整接近终点 / 冗余姿态</option><option value="change_waypoint">下一轮增加或修改中间路点</option><option value="change_scene">下一轮调整场景摆位</option><option value="reject">不保留该候选</option></select></div><div><label for="planning_notes">人工修改方案 / 失败后怎么改</label><textarea id="planning_notes" rows="5" placeholder="例如：从横杆上方接近；更换肘部冗余姿态；起点已被挡住，先调整摆位。停止输入后自动保存。"></textarea></div></div>
+      </section>
+      <button id="image-open" class="image-button" title="点击查看原图"><img id="hero" alt="当前场景截图"></button>
+      <div class="image-footer"><span id="filename"></span><a id="original" target="_blank" rel="noopener">新标签查看原图 ↗</a></div>
+      <div id="visual-gallery"></div>
+      <section id="visual-review"><h3>本轮：仅视觉审核与修订</h3><p id="visual-status"></p><pre id="visual-log"></pre><p id="visual-config"></p></section>
+      <div class="form-heading"><h3>场景初评与调整方案</h3><span>停止输入约 0.7 秒后自动保存</span></div>
+      <label for="status">画面初评结论</label><select id="status" data-field="status"><option value="pending">尚未初评</option><option value="good">初评较优 · 可保留主体布局</option><option value="change">需要修改 · 布局或展示需调整</option><option value="uncertain">信息不足 · 先补充视角</option></select>
+      <div class="fields"><div><label for="observations">画面观察 / 判断依据</label><textarea id="observations" data-field="observations" rows="6" placeholder="可见哪些优点或问题？不要把遮挡直接当作穿模。"></textarea></div><div><label for="plan">具体调整方案</label><textarea id="plan" data-field="plan" rows="6" placeholder="移动谁、朝哪个方向、保留哪些操作空间？"></textarea></div><div><label for="verification">仍需验证的内容</label><textarea id="verification" data-field="verification" rows="5" placeholder="例如支撑、初态与终态、反事实距离、真实任务成功。"></textarea></div><div><label for="notes">我的补充 / 最终决定</label><textarea id="notes" data-field="notes" rows="5" placeholder="在这里快速记录你的调整意见，自动保存。"></textarea></div></div>
+      <div id="conflict" hidden>此字段在其他页面被修改。本地草稿仍保留。<button id="use-remote">放弃本页草稿并读取最新标注</button><button id="retry-local">确认以本页内容重新保存</button></div>
+      <footer><button id="prev">← 上一个场景</button><span id="stamp"></span><button id="next">下一个场景 →</button></footer>
+    </article><p id="empty" hidden>当前筛选下没有场景。</p>
+  </main>
+  <dialog id="lightbox"><button id="close-image">关闭 / Esc</button><img id="full-image" alt="场景原图"></dialog>
+</body>
+</html>

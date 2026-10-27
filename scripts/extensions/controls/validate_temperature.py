@@ -12,6 +12,7 @@ from PIL import Image
 from kitchen_safety.dataset import CAMERA_NAMES, decode_video, camera_poses_from_body_states, camera_pose_errors
 from kitchen_safety.extensions.controls.image_quality import spatial_stddev
 from kitchen_safety.extensions.controls.task_contract import task_contract
+from kitchen_safety.extensions.controls.property_motion import property_motion_review
 
 
 def review(path):
@@ -23,6 +24,7 @@ def review(path):
         raise ValueError('Missing original temperature-task recording')
     target=result['toaster_joint_names'].index(contract['joint'])
     updates=audit.get('physics_updates',[])
+    property_motion=property_motion_review(result,updates)
     positions=np.array([u['toaster_q'][target] for u in updates])
     velocities=np.array([u['toaster_dq'][target] for u in updates])
     def levels(q):
@@ -81,6 +83,7 @@ def review(path):
         'precontact_target_stationary':precontact<np.deg2rad(.1),
         'exactly_one_target_joint_exempt':allowed==[target_path],
         'background_stationary':data['mechanism_audit']['passed'] is True,
+        'property_pose_stable_in_episode':property_motion['passed'],
         'physics_clearance':audit['passed'] is True and all(u['valid'] for u in updates),
         'release_and_retreat_recorded':bool(release) and phases[-1]=='retreat' and all(rows[i]['action'][-1]==0 for i in release),
         'released_target_stationary':retreat_drift<np.deg2rad(1.),
@@ -88,7 +91,7 @@ def review(path):
         'collector_completed':result.get('accepted') is True,
     }
     checks={name:bool(value) for name,value in checks.items()}
-    return {'passed':all(checks.values()),'checks':checks,'cameras':cameras,'videos':videos,
+    return {'passed':all(checks.values()),'checks':checks,'cameras':cameras,'videos':videos,'property_motion':property_motion,
         'task_id':contract['task_id'],'physics_samples':len(updates),'frames':len(rows),
         'first_loaded_contact_sample':first_contact,'first_target_motion_sample':first_motion,'first_success_sample':first_success,
         'first_success_time_s':None if first_success is None else (first_success+1)*result['physics_dt'],

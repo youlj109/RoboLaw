@@ -6,16 +6,35 @@ shared benchmark remains unchanged. Robot geometry/math remain inherited.
 import numpy as np
 from kitchen_safety.collision_planner import CollisionWorld, _primitive_world_bounds
 
+
+def held_gripper_pose(joint_names, positions, velocities, expected_opening):
+    """Capture a settled commanded opening; never changes physical joint states."""
+    if not np.isfinite(expected_opening) or not 0<=expected_opening<=np.pi/4:
+        raise ValueError('Declared opening must be within the source gripper stroke')
+    names=CollisionWorld.GRIPPER_JOINT_NAMES
+    indices=[joint_names.index(name) for name in names]
+    measured=np.asarray(positions,dtype=float)[indices]
+    speeds=np.asarray(velocities,dtype=float)[indices]
+    expected=expected_opening*np.array([1,1,-1,1,-1,-1])
+    if (not np.isfinite(measured).all() or not np.isfinite(speeds).all() or
+            np.max(abs(speeds))>.01 or np.max(abs(measured-expected))>.001):
+        raise ValueError('Gripper is not settled at its declared held opening')
+    return dict(zip(names,measured.tolist()))
+
+
 class ControlsCollisionWorld(CollisionWorld):
     allow_button_contact = False
+    planning_gripper_joint_positions = None
 
     def _robot_hulls(self):
         # The baseline includes an open-gripper static hull. Fine button contact
         # uses the measured articulated finger hulls already supplied by shapes.
         return [x for x in super()._robot_hulls() if '/Gripper/' not in x[0]]
 
-    def shapes(self, *args, **kwargs):
-        shapes = super().shapes(*args, **kwargs)
+    def shapes(self, q, gripper_q=None, object_pose=None, *, _cache_robot=False):
+        if gripper_q is None and np.asarray(q).size == 7 and self.planning_gripper_joint_positions is not None:
+            gripper_q = self.planning_gripper_joint_positions
+        shapes = super().shapes(q, gripper_q=gripper_q, object_pose=object_pose, _cache_robot=_cache_robot)
         # Fixed open-finger capsules are redundant with measured finger hulls.
         return [x for x in shapes if x[0] != 'finger']
 

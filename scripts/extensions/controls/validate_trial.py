@@ -8,12 +8,15 @@ import numpy as np
 from PIL import Image
 from kitchen_safety.dataset import CAMERA_NAMES, decode_video, camera_poses_from_body_states, camera_pose_errors
 from kitchen_safety.extensions.controls.image_quality import spatial_stddev
+from kitchen_safety.extensions.controls.property_motion import property_motion_review
 
 parser=argparse.ArgumentParser();parser.add_argument('episode');args=parser.parse_args()
 out=Path(args.episode)
 records=json.loads((out/'records.json').read_text());result=json.loads((out/'result.json').read_text())
 contacts=json.loads((out/'contacts.json').read_text());audit=json.loads((out/'audit.json').read_text())
 count=len(records);details={};errors=[]
+details['property_motion']=property_motion_review(result,audit.get('physics_updates',[]))
+if not details['property_motion']['passed']:errors.append('Property moved or toppled during the recorded episode')
 mechanism_path=out/'mechanism_audit.json'
 details['all_kitchen_mechanisms_passed']=bool(mechanism_path.exists() and json.loads(mechanism_path.read_text()).get('passed'))
 if not details['all_kitchen_mechanisms_passed']:errors.append('Missing or failed all-kitchen mechanism audit')
