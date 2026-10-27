@@ -21,6 +21,7 @@ parser.add_argument('--replay-second-grasp-prefix',action='store_true',help='Reu
 parser.add_argument('--development-checkpoint',type=Path,help='Reset-only measured first-pick state; second-pick development, never acceptance')
 parser.add_argument('--replay-prefix-checkpoint',type=Path,help='Replay verified real first-pick actions from original reset, then recheck native checkpoint')
 parser.add_argument('--cross-variant-prefix',action='store_true',help='Replay recorded commands under the current hazard variant; retain actual safety and native checks, never restore state')
+parser.add_argument('--grasp-pose-calibration',type=Path,help='Measured pad center and native COM grasp calibration; source rigid geometry/physics unchanged')
 parser.add_argument('--keep-transport-wrist',action='store_true',help='Translate held ladle with measured wrist orientation instead of rotating it during transport')
 parser.add_argument('--certify-execution-margin',action='store_true',help='Report unmet optional planning reserve separately; require original dense execution margins and cuRobo constraints')
 parser.add_argument('--supported-landing-transfer',action='store_true',help='Treat destination approach as intentional supported landing,10mm/s near goal, stop on original support force')
@@ -510,6 +511,7 @@ with SimulationAppContext(args):
 
         def cart(position,*,rotation=None,force_phase=None):
             global q,planner,phase
+            if args.grasp_pose_calibration and PICK=='green_ladle' and phase in ('approach','lift'):force_phase='cartesian_line'
             landing=bool(args.supported_landing_transfer and PICK=='green_ladle' and phase=='transfer')
             if landing:phase='lower';force_phase='transfer'
             world.allowed_phase=('transfer' if args.free_release and phase=='lower' else phase)
@@ -691,12 +693,17 @@ with SimulationAppContext(args):
                     R=Rotation.from_euler('z',yaw,degrees=True).as_matrix()@Rotation.from_euler('x',tilt,degrees=True).as_matrix()@np.array([[0,-1,0],[0,0,1],[-1,0,0]],dtype=float)
                     # Optional finger-open bias in grasp frame (TCP Y = column 1).
                     center=target_center[:3]+float(args.grasp_finger_bias)*R[:,1]
+                    if args.grasp_pose_calibration:
+                        calibrated=json.loads(args.grasp_pose_calibration.read_text());R=np.asarray(calibrated['rotation_world']);grasp_body_point=np.asarray(calibrated['body_point_m'])
+                        pinch=transform(initial['lime'][:3],initial['lime'][3:7])@np.r_[grasp_body_point,1.]
+                        center=pinch[:3]-R@np.asarray(calibrated['pad_center_tcp_m']);result['grasp_point_body_m']=grasp_body_point.tolist();result['grasp_pose_calibration']=calibrated
                     if args.grasp_local_approach and (not use_pregrasp_phase):
                         # TCP Z (col 2) should point into the object; hover back along -TCP_Z.
                         approach=R[:,2]; approach=approach/max(float(np.linalg.norm(approach)),1e-6)
                         pregrasp_offset=-(args.pregrasp_standoff if args.pregrasp_standoff is not None else (.17 if PICK=='lemon' else .18))*approach
                     else:
                         pregrasp_offset=(np.array([0.,0.,.08]) if args.grasp_search=='b03-topdown' else np.asarray(TASK_SPEC.pregrasp_offset_m,dtype=float))
+                    if args.grasp_pose_calibration:pregrasp_offset=np.asarray(calibrated['pregrasp_offset_world_m'])
                     try:
                         phase='pregrasp' if use_pregrasp_phase else 'approach'
                         # Use an oriented hover before the short local contact approach.
