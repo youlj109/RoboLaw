@@ -19,6 +19,7 @@ parser.add_argument('--align-second-grasp',action='store_true',help='Align secon
 parser.add_argument('--replay-second-grasp-prefix',action='store_true',help='Reuse physically verified second grasp/lift commands after checkpoint; actual safety/contact checks remain')
 parser.add_argument('--development-checkpoint',type=Path,help='Reset-only measured first-pick state; second-pick development, never acceptance')
 parser.add_argument('--replay-prefix-checkpoint',type=Path,help='Replay verified real first-pick actions from original reset, then recheck native checkpoint')
+parser.add_argument('--cross-variant-prefix',action='store_true',help='Replay recorded commands under the current hazard variant; retain actual safety and native checks, never restore state')
 parser.add_argument('--gentle-supported-placement',action='store_true',help='Center object geometry, descend10mm/s until measured bowl support, then open')
 parser.add_argument('--placement-feedback-lower',action='store_true',help='Hover45mm above release, refresh measured attachment, then lower to same goal')
 parser.add_argument('--placement-joint-goals',type=Path,help='Passed planning report with native-successful recorded joint endpoints')
@@ -587,9 +588,9 @@ with SimulationAppContext(args):
             reference=json.loads(args.replay_prefix_checkpoint.read_text());prefix_path=args.replay_prefix_checkpoint.parent/'prefix.npz'
             if list(robot.joint_names)!=reference['robot_joint_names'] or abs(e.step_dt-reference['dt'])>1e-12:raise RuntimeError('Prefix joint/time schema mismatch')
             if reference.get('variant_config_source') and hashlib.sha256(Path(args.variant_config).read_bytes()).hexdigest()!=reference['variant_config_source']['sha256']:raise RuntimeError('Prefix scene config changed')
-            if reference['variant']!=args.variant or hashlib.sha256(prefix_path.read_bytes()).hexdigest()!=reference['prefix_sha256']:raise RuntimeError('Prefix provenance mismatch')
+            if (reference['variant']!=args.variant and not args.cross_variant_prefix) or hashlib.sha256(prefix_path.read_bytes()).hexdigest()!=reference['prefix_sha256']:raise RuntimeError('Prefix provenance mismatch')
             data=np.load(prefix_path,allow_pickle=False);source_result=json.loads((Path(reference['source_episode'])/'result.json').read_text())
-            result['prefix_replay']={'checkpoint':str(args.replay_prefix_checkpoint),'source_episode':reference['source_episode'],'actions':len(data['actions']),'policy':'Real recorded commands replayed from original reset; actual contact/safety and native checkpoint re-evaluated'}
+            result['prefix_replay']={'checkpoint':str(args.replay_prefix_checkpoint),'source_variant':reference['variant'],'execution_variant':args.variant,'cross_variant':reference['variant']!=args.variant,'source_episode':reference['source_episode'],'actions':len(data['actions']),'policy':'Real recorded commands replayed from original reset; actual contact/safety and native checkpoint re-evaluated'}
             for saved_phase,action in zip(data['phases'],data['actions']):
                 phase=str(saved_phase);q=np.asarray(action[:7]);grip=float(action[7]);step(q,grip)
             world.attachment=None;world.source_detached=True
