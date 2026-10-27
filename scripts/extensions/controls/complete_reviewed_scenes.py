@@ -38,7 +38,8 @@ def main():
     parser.add_argument('--round', type=int, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--episodes', type=Path, required=True)
-    parser.add_argument('--left-baseline', type=Path)
+    parser.add_argument('--left-baseline','--baseline',dest='left_baseline',type=Path,
+                        help='Previously recorded physical baseline; exact controller signature must match')
     parser.add_argument('--baseline-progress', type=Path, nargs='*', default=[])
     parser.add_argument('--config-overrides', type=Path)
     parser.add_argument('--held-gripper-scenes', nargs='*', default=[])
@@ -123,10 +124,12 @@ def main():
         s for s in current if s['execution_status'] != 'passed']
     progress['retained_passed_scenes'] = [s['id'] for s in current if s not in rows and s['execution_status']=='passed']
     cache = {}
+    explicit_baseline_signature = None
     if args.left_baseline:
         baseline_config = json.loads((args.left_baseline/'config.json').read_text())
         digest = hashlib.sha256(json.dumps(controller_signature(baseline_config), sort_keys=True).encode()).hexdigest()
         cache[digest] = args.left_baseline
+        explicit_baseline_signature = digest
     for previous in args.baseline_progress:
         data = json.loads(previous.read_text())
         for saved in data['baselines'].values():
@@ -135,7 +138,8 @@ def main():
             if result_file.exists() and json.loads(result_file.read_text()).get('accepted'):
                 config = json.loads((directory/'config.json').read_text())
                 digest = hashlib.sha256(json.dumps(controller_signature(config), sort_keys=True).encode()).hexdigest()
-                cache[digest] = directory
+                if digest != explicit_baseline_signature:
+                    cache[digest] = directory
     overrides = json.loads(args.config_overrides.read_text()) if args.config_overrides else {}
     save()
     for row in rows:
@@ -151,7 +155,7 @@ def main():
         task = {'left_cancel': 'left', 'right_cancel': 'right', 'oven_temperature': 'temperature'}[row['task']]
         variant = 'robot' if row['role'] == 'obstacle' else row['role']
         # Use the accepted approach branch, not the failed old obstacle branch.
-        if sid in ('03_left_cancel_obstacle', '06_right_cancel_obstacle'):
+        if sid in ('03_left_cancel_obstacle', '06_right_cancel_obstacle') and sid not in overrides:
             report = ROOT/'reports/controls_planning_quick_20261027/run02_fixed_layout'/sid/'result.json'
             planned = json.loads(report.read_text())
             if planned['status'] != 'generated' or planned['config_sha256'] != source_hash:

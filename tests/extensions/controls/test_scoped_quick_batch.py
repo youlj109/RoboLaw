@@ -24,6 +24,12 @@ def test_failed_planning_hints_do_not_suggest_moving_frozen_hazards():
     assert '不移动灯' in module.scene_hint('08_oven_temperature_property')
 
 
+def test_resource_queue_failure_is_not_geometric_infeasibility():
+    hint=module.failure_hint('GPU_LOCK_TIMEOUT')
+    assert '尚未调用规划器' in hint
+    assert '不是场景' in hint
+
+
 @pytest.mark.parametrize('move_layout',[False,True])
 def test_controller_reference_cannot_move_frozen_entities(tmp_path,monkeypatch,move_layout):
     monkeypatch.setattr(module,'ROOT',tmp_path)

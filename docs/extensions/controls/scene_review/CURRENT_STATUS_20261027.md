@@ -1,5 +1,34 @@
 # Current Review And Planning Status
 
+Active strict acceptance work: [fixed-scene benchmark contract](BENCHMARK_ACCEPTANCE_V1.md).
+The user requested continuing beyond approach-only quality. Current scene versions
+are being checked through real contact execution, neutral holds, independent
+source-shape counterfactuals and matched-policy seed pairs. Deferred checks below
+describe historical scopes, not current permission to omit them.
+
+- Matched collector-policy pairs: left human/property, right human/property and
+  oven obstacle pass seeds 42/43/44, dense planning checks, robust source-shape
+  counterfactual risk, source-safe hazard-on paths and feasible endpoints.
+- Current right obstacle: fresh matched baseline plus 330-frame real success;
+  independent task/contact/base/self and single-baseline avoidance gates pass.
+  Its 50-second augmented neutral hold passes. Three-seed validation is pending.
+- Left obstacle r01: reject physical scene legality and stable necessity; source
+  base/toaster intersection was independently confirmed. R02 improves visible
+  support but fails the original initial planning margin (17.396 mm versus 20 mm).
+  R03 was rejected from images for ambiguous free-end/robot silhouettes. R04 is
+  an unreviewed render candidate, not an accepted layout or trajectory.
+- Oven obstacle: a fresh 586-frame baseline reaches original level three with
+  contact-before-motion, release and zero measured retreat drift. A new variant
+  recording is running to bind the full current metadata format; old records
+  missing control fields are not silently patched.
+- Neutral setup failures are retained. The old left inspection lacks task ID and
+  differs from the frozen robot pose; explicit config-pose authority avoids it.
+  A newly introduced quaternion-order assumption was corrected against the local
+  IsaacLab xyz/xyzw API, with root-pose regression tests. Failed setup runs contain
+  no neutral observations and cannot establish scene instability or acceptance.
+- Web source diagnostics, raw reports and a bound first-violation keyframe are
+  linked without changing manual annotation fields. CPU suite: 179 passed.
+
 Latest: [visual quality cycle02](QUALITY_RECHECK_02.md) strengthened the right
 fixture orientation and oven human arm pose, froze both before planning, and
 completed alternating annotation/single-candidate rounds93-105. Nine current

@@ -25,3 +25,17 @@ def controller_signature(config):
         signature['prepress_planning'] = {
             key: policy[key] for key in ('method', 'ik_branch_seed') if key in policy}
     return signature
+
+
+def root_pose_match(measured_xyzw,expected_xyzw):
+    """Bind the pinned Arena/IsaacLab xyz/xyzw root-pose contract in physical units."""
+    import numpy as np
+    from scipy.spatial.transform import Rotation
+    measured=np.asarray(measured_xyzw,dtype=float);expected=np.asarray(expected_xyzw,dtype=float)
+    if measured.shape!=(7,) or expected.shape!=(7,) or not np.isfinite([measured,expected]).all():
+        raise ValueError('Root poses must be finite xyz/xyzw seven-vectors')
+    position=float(np.linalg.norm(measured[:3]-expected[:3]))
+    angle=float((Rotation.from_quat(measured[3:]).inv()*Rotation.from_quat(expected[3:])).magnitude())
+    return dict(passed=position<=1e-6 and angle<=1e-6,position_error_m=position,
+        rotation_error_rad=angle,position_tolerance_m=1e-6,rotation_tolerance_rad=1e-6,
+        quaternion_order='xyzw')

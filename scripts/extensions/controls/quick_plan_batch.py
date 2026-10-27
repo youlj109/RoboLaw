@@ -39,6 +39,8 @@ def planning_inputs(scene,references):
 
 def failure_hint(code, error=''):
     value = (code + ' ' + error).upper()
+    if 'GPU_LOCK_TIMEOUT' in value:
+        return 'GPU排队等待超时，尚未调用规划器；这是资源状态，不是场景或轨迹不可行。保持布局，等待资源后另开一轮。'
     if 'START' in value and ('COLLISION' in value or 'INVALID' in value):
         return '布局已冻结：优先核对初始关节读取与模型。无效起点不能靠抓点或中间路点补救；不移动实体、不降低间隙。若真实初态非法，明确标为受阻，不能伪造新的起点冒充原任务。'
     if 'GOAL' in value and ('COLLISION' in value or 'INVALID' in value):
@@ -67,7 +69,9 @@ def main():
     p.add_argument('--refine-failed-from', type=Path, help='Only refine failed cases in this saved run; fixed layouts')
     p.add_argument('--scenes',nargs='+',help='Retain all other scenes without re-planning')
     p.add_argument('--references',type=Path,help='Per-scene config/baseline/stage references; layouts must match visual configs')
+    p.add_argument('--lock-wait-seconds',type=int,default=10,help='Resource queue budget, separate from the unchanged 100 s worker budget')
     a = p.parse_args()
+    if a.lock_wait_seconds<1:p.error('Lock wait must be positive')
     a.output.mkdir(parents=True, exist_ok=a.resume)
     client = build_opener(ProxyHandler({}))
     api = 'http://127.0.0.1:8765'
@@ -107,7 +111,7 @@ def main():
             variant = 'robot' if scene['role'] == 'obstacle' else scene['role']
             cmd = ['docker', 'exec', '-i', '-w', '/workspace', '-e', 'PYTHONPATH=/workspace',
                    os.environ.get('ARENA_CONTAINER', 'robolaw-arena'),
-                   'flock', '-w', '10', '/workspace/reports/skill_trials/gpu.lock',
+                   'flock', '-E', '75', '-w', str(a.lock_wait_seconds), '/workspace/reports/skill_trials/gpu.lock',
                    'timeout', '--signal=TERM', '--kill-after=5s', '100s',
                    '/workspace/.venv-arena/bin/python', 'scripts/extensions/controls/quick_plan_scene.py',
                    '--config', config, '--baseline', baseline, '--stage', stage,
@@ -116,12 +120,12 @@ def main():
                 cmd += ['--refine-from', str(a.refine_failed_from/sid/'result.json')]
             if not (a.resume and (directory/'result.json').exists()):
                 with (directory/'worker.log').open('w') as stream:
-                    result = subprocess.run(cmd, cwd=ROOT, stdout=stream, stderr=subprocess.STDOUT, timeout=120)
+                    result = subprocess.run(cmd, cwd=ROOT, stdout=stream, stderr=subprocess.STDOUT, timeout=120+a.lock_wait_seconds)
             file = directory/'result.json'
             if file.is_file():
                 report = json.loads(file.read_text())
             else:
-                report = dict(status='failed', failure_code='TIMEOUT' if result.returncode == 124 else 'WORKER_ERROR',
+                report = dict(status='failed', failure_code=('GPU_LOCK_TIMEOUT' if result.returncode==75 else 'TIMEOUT' if result.returncode == 124 else 'WORKER_ERROR'),
                               error='Worker exit '+str(result.returncode), safety_validated=False)
         except Exception as exc:
             report = dict(status='failed', failure_code=type(exc).__name__, error=str(exc), safety_validated=False)

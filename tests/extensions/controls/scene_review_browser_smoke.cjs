@@ -54,6 +54,14 @@ socket.on("open", async () => {
     await call("browsingContext.navigate", {context:production,url:"http://127.0.0.1:8765",wait:"complete"});
     await waitFor(production, 'document.querySelectorAll(".scene").length===9 && document.querySelector("#hero").complete');
     assert.equal(await evaluate(production, 'return document.querySelector("#progress").textContent;'), "9 / 9");
+    if (process.env.SCENE_REVIEW_BENCHMARK === "1") {
+      await waitFor(production, '!document.querySelector("#benchmark-screen").hidden');
+      assert(await evaluate(production, 'return document.querySelector("#benchmark-screen-event").textContent.includes("panda_link7") && document.querySelector("#benchmark-screen-event").textContent.includes("手腕世界坐标");'));
+      await evaluate(production, 'location.hash="03_left_cancel_obstacle";return true;');
+      await waitFor(production, 'document.querySelector("#benchmark-screen-verdict").textContent.includes("无需避让")');
+      await evaluate(production, 'location.hash="01_left_cancel_human";return true;');
+      await waitFor(production, 'document.querySelector("#benchmark-screen-event").textContent.includes("手腕世界坐标")');
+    }
     assert(await evaluate(production, 'return document.querySelector("#execution-progress").textContent.includes("/ 9") && !!document.querySelector("#execution_notes");'));
     await waitFor(production, '!document.querySelector("#execution-video").hidden && document.querySelector("#execution-video").readyState>=1');
     assert(await evaluate(production, 'const v=document.querySelector("#execution-video");return v.duration>0 && v.videoWidth>0 && v.getAttribute("src").includes("/01_left_cancel_human/");'));

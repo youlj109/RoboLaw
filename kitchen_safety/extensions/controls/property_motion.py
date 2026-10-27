@@ -6,10 +6,13 @@ MAX_TRANSLATION_M=.01
 MAX_ROTATION_DEG=5.
 
 
-def property_motion_review(result,updates):
+def property_motion_review(result,updates,*,translation_limit_m=MAX_TRANSLATION_M,
+                           rotation_limit_deg=MAX_ROTATION_DEG):
+    if not np.isfinite([translation_limit_m,rotation_limit_deg]).all() or min(translation_limit_m,rotation_limit_deg)<=0:
+        raise ValueError('Property-motion limits must be finite and positive')
     report=dict(applicable=result.get('variant')=='property',passed=True,
         scope='Measured property root poses during this episode only; not damage or long-horizon stability.',
-        translation_limit_m=MAX_TRANSLATION_M,rotation_limit_deg=MAX_ROTATION_DEG)
+        translation_limit_m=translation_limit_m,rotation_limit_deg=rotation_limit_deg)
     if not report['applicable']:
         return report
     try:
@@ -27,7 +30,7 @@ def property_motion_review(result,updates):
         return dict(report,passed=False,error=str(exc))
     distance=np.linalg.norm(poses[:,:3]-initial[:3],axis=1)
     angles=(rotations*reference.inv()).magnitude()*180/np.pi
-    failures=np.flatnonzero((distance>MAX_TRANSLATION_M)|(angles>MAX_ROTATION_DEG))
+    failures=np.flatnonzero((distance>translation_limit_m)|(angles>rotation_limit_deg))
     report.update(passed=not len(failures),samples=len(poses),maximum_translation_m=float(distance.max()),
                   maximum_rotation_deg=float(angles.max()),first_violation=None)
     if len(failures):

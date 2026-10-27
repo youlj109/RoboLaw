@@ -27,15 +27,29 @@ def label_robot_hulls(shapes,bodies):
     return output
 
 
+def source_surface_witness(left,right,expected_gap):
+    if expected_gap<=1e-8:return None
+    import fcl
+    result=fcl.DistanceResult()
+    gap=float(fcl.distance(left[1],right[1],fcl.DistanceRequest(enable_nearest_points=True),result))
+    points=np.asarray(result.nearest_points,dtype=float)
+    if (points.shape!=(2,3) or not np.isfinite(points).all() or
+            abs(gap-expected_gap)>1e-6 or abs(np.linalg.norm(points[1]-points[0])-gap)>1e-6):
+        raise ValueError('Nearest surface points disagree with source distance witness')
+    return dict(points_world_m=points.tolist(),distance_m=gap)
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('episode',type=Path)
     p.add_argument('--camera',default='external_camera')
     p.add_argument('--output-stem',default='first_violation')
+    p.add_argument('--audit-name',default='avoidance_audit.json')
     a=p.parse_args();ep=a.episode
     output=ep/(a.output_stem+'_evidence.json');picture=ep/(a.output_stem+'.png')
     if output.exists() or picture.exists():raise FileExistsError(output)
-    audit=json.loads((ep/'avoidance_audit.json').read_text())
+    audit_path=ep/a.audit_name
+    audit=json.loads(audit_path.read_text())
     if not audit['accepted']:raise ValueError('Only accepted independent evidence may be illustrated')
     baseline=Path(audit['baseline_episode'])
     first=audit['exact_primitive_counterfactual']['violations'][0]
@@ -63,6 +77,8 @@ def main():
     witness=minimum_distance([s for s in labeled(event) if s[0] not in ('arm','gripper')],exact,first['required_m'])
     if witness['valid'] or abs(witness['distance_m']-first['distance_m'])>1e-6:
         raise ValueError('Resolved source-link witness disagrees with original audit')
+    surface=source_surface_witness(next(s for s in labeled(event) if s[0]==witness['robot_part']),
+        next(s for s in exact if s[0]==witness['obstacle']),witness['distance_m'])
     font=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',17)
     small=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',14)
     canvas=Image.new('RGB',(1280,520),'#152133');draw=ImageDraw.Draw(canvas)
@@ -101,6 +117,11 @@ def main():
         meta=json.loads((path/'result.json').read_text())
         for part,_,lo,hi in labeled(state):
             if part==witness['robot_part']:box(lo,hi,'#5ccfff',2)
+        if side==0 and surface is not None:
+            points=project(surface['points_world_m'])
+            if points is not None:
+                fd.line([tuple(p) for p in points],fill='#ff5050',width=3)
+                for x,y in points:fd.ellipse((x-3,y-3,x+3,y+3),outline='#ff5050',width=2)
         if wrist_local is not None:
             wrist=Rotation.from_quat(hazard_pose[3:]).apply(wrist_local)+hazard_pose[:3]
             pixel=project([wrist])
@@ -111,14 +132,15 @@ def main():
         draw.text((side*640+10,10),('BASELINE: added hazard is GEOMETRY ONLY' if side==0 else 'ACTUAL: hazard present, safe real execution'),font=font,fill='white')
         draw.text((side*640+10,408),f't={i*meta["dt"]:.3f}s | frame {i} | phase {rows[i]["phase"]}',font=small,fill='white')
     draw.text((10,435),f'First source violation: t={(first["action_index"]+(first["state"]=="after"))*result["dt"]:.3f}s | {witness["robot_part"]} | gap {first["distance_m"]*1000:.2f} / {first["required_m"]*1000:.0f} mm',font=small,fill='white')
-    draw.text((10,458),'Red/green: collider AABBs. Yellow: conservative whole-asset AABB + safety margin. Blue: resolved risk link.',font=small,fill='white')
+    draw.text((10,458),'Bounds outside the camera are omitted. Blue: risk link. Red segment: source nearest-surface distance witness.',font=small,fill='white')
     draw.text((10,481),'Overlays are explanatory bounds, NOT exact contact surfaces or a simulated baseline collision. Source FCL audit is authoritative.',font=small,fill='white')
     canvas.save(picture)
     evidence={'first_source_violation':first,'time_from_recorded_start_s':(first['action_index']+(first['state']=='after'))*result['dt'],
         'robot_part':witness['robot_part'],'resolved_source_witness':witness,
+        'nearest_surface_witness':surface,
         'human_wrist_world_m':None if wrist is None else wrist.tolist(),
         'picture':str(picture),'picture_sha256':hashlib.sha256(picture.read_bytes()).hexdigest(),
-        'audit_sha256':hashlib.sha256((ep/'avoidance_audit.json').read_bytes()).hexdigest(),
+        'audit_sha256':hashlib.sha256(audit_path.read_bytes()).hexdigest(),
         'source_asset_sha256':hashlib.sha256((ROOT/spec['asset']).read_bytes()).hexdigest(),
         'scope':'Synchronized original pre-action RGB; after-action violation shown in next pre-action frame. Static human wrist from audited original skeleton pose, not a tracked injury. AABB drawings are conservative illustrations; exact source-shape necessity remains in the separate audit. No unsafe physical baseline replay.'}
     output.write_text(json.dumps(evidence,indent=2)+'\n')

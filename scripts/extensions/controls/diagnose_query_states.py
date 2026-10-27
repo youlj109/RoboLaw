@@ -11,11 +11,18 @@ from kitchen_safety.extensions.controls.collision import ControlsCollisionWorld
 from kitchen_safety.curobo_backend import CuroboPlanner
 
 
+def write_report(path,report):
+    path.parent.mkdir(parents=True,exist_ok=True)
+    with path.open('x') as stream:json.dump(report,stream,indent=2);stream.write('\n')
+    print(json.dumps(report,indent=2))
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--result',type=Path,required=True)
     p.add_argument('--variant',choices=['human','property','robot'],required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--cpu-source',action='store_true',help='Diagnose source shapes and the existing FCL model, with no CUDA/IK/path query')
     args=p.parse_args()
     if args.output.exists():raise FileExistsError(args.output)
     source=json.loads(args.result.read_text());config_path=Path(source['config'])
@@ -32,6 +39,27 @@ def main():
     prim.AddTranslateOp().Set(Gf.Vec3d(*spec['position']));prim.AddRotateZOp().Set(spec['yaw_deg'])
     world=ControlsCollisionWorld(stage,kin,env_root='/World/envs/env_0')
     world.gripper_joint_position=source['gripper_joint_position']
+    if args.cpu_source:
+        from kitchen_safety.geometry_audit import static_collision_shapes,minimum_distance
+        from scripts.extensions.controls.render_first_violation import label_robot_hulls
+        baseline=Path(source['baseline'])
+        names=json.loads((baseline/'result.json').read_text())['robot_joint_names']
+        records=json.loads((baseline/'records.json').read_text())
+        state=next(row['before'] for row in records if row['phase']==source['phase'])
+        gripper=dict(zip(names,state['q']))
+        exact=static_collision_shapes(stage,str(prim.GetPath()))
+        report=dict(scope='CPU source-shape and conservative FCL endpoint diagnosis only; not a path or task acceptance.',
+            result=str(args.result),result_sha256=hashlib.sha256(args.result.read_bytes()).hexdigest(),
+            config_sha256=source['config_sha256'],ik_calls=0,motiongen_calls=0,layout_modified=False,states={})
+        for name,field in (('start','start_q'),('goal','goal_q')):
+            if field not in source:continue
+            q=np.asarray(source[field])
+            shapes=[s for s in world.shapes(q,gripper) if s[0]=='robot_hull' or s[0].startswith('gripper/')]
+            labeled=label_robot_hulls(shapes,[body for body,_,_ in world.robot_hulls])
+            report['states'][name]=dict(source_hazard=minimum_distance(labeled,exact,world.clearances[key]),
+                conservative_hazard=world.clearance(q,mode='planning',gripper_q=gripper,obstacle_filter=(key,)))
+        write_report(args.output,report)
+        return
     planner=CuroboPlanner(world,kin,seed=42)
     planner._prepare_path_query((),0 if source['phase']=='pregrasp' else 1,source['phase'])
     rollout=planner.motion_gen.graph_planner.safety_rollout_fn
@@ -68,9 +96,7 @@ def main():
                     obstacle=obstacle,proxy_signed_gap_m=gap,
                     only_aabb_hint_not_source_mesh_collision=obstacle in world.meshes))
         report['states'][name]['proxy_overlap_hints']=sorted(hints,key=lambda r:r['proxy_signed_gap_m'])[:12]
-    args.output.parent.mkdir(parents=True,exist_ok=True)
-    with args.output.open('x') as f:json.dump(report,f,indent=2);f.write('\n')
-    print(json.dumps(report,indent=2))
+    write_report(args.output,report)
 
 
 if __name__=='__main__':main()

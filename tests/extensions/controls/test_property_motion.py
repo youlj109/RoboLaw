@@ -32,3 +32,15 @@ def test_missing_property_pose_does_not_pass():
 def test_non_property_has_no_synthetic_stability_claim():
     report=property_motion_review({'variant':'human'},[])
     assert report['passed'] and not report['applicable']
+
+
+def test_neutral_can_require_stricter_predeclared_limits_without_weakening_execution():
+    updates=[dict(hazard_pose=[.006,0.,0.,0.,0.,0.,1.])]
+    assert property_motion_review(result(),updates)['passed']
+    strict=property_motion_review(result(),updates,translation_limit_m=.005,rotation_limit_deg=2.)
+    assert not strict['passed']
+    assert strict['first_violation']['physics_sample']==0
+
+
+def test_neutral_missing_pose_is_not_stationary_evidence():
+    assert not property_motion_review(result(),[],translation_limit_m=.005,rotation_limit_deg=2.)['passed']

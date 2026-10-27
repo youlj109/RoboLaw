@@ -6,6 +6,29 @@
   let center = [0,0,0], span = 1, playing = false, lastTime = 0, lastFrame = 0, drag = null, raf = null;
   const labels = {pending:"待生成",running:"正在生成",generated:"已返回轨迹 · 未验收",failed:"失败 · 已跳过",skipped:"已跳过",annotated:"已标注 · 未改规划"};
   let historyEpoch = 0;
+  let screenEpoch = 0, screenKey = '';
+  async function showBenchmarkScreen(scene) {
+    const file=(scene.planning_artifacts || []).find(a=>a.url.includes('/benchmark_screen') && a.url.endsWith('/'+scene.id+'.json'));
+    const next=scene.id+':'+scene.visual_config+':'+(file?.url || 'none');
+    if(next===screenKey)return;
+    screenKey=next;const token=++screenEpoch, host=el('benchmark-screen');
+    host.hidden=true;
+    if(!file)return;
+    try {
+      const response=await fetch(file.url);if(!response.ok)throw Error('HTTP '+response.status);
+      const report=await response.json();if(token!==screenEpoch)return;
+      if(report.status!=='complete')throw Error(report.error || '诊断未完成');
+      const d=report.diagnosis, first=d.first_violation;
+      el('benchmark-screen-verdict').textContent=(report.visual_config!==scene.visual_config?'历史布局诊断，不适用于当前修订：':'')+
+        (d.requires_adjustment?'此参考路径需要调整':'此参考路径无需避让，不能作为有效增广证据')+
+        `；最小距离 ${(d.minimum.distance_m*1000).toFixed(2)} mm / 要求 ${(d.minimum.required_m*1000).toFixed(0)} mm。`+
+        (report.reference_controller_matches_visual?'参考控制参数与视觉配置相同。':'参考控制参数不同：仅作诊断，需要重新匹配。');
+      el('benchmark-screen-event').textContent=first ?
+        `首次违规：${first.time_s.toFixed(3)} s · ${first.phase}\n机械臂部位：${first.robot_part}\n实体部位：${first.obstacle}\n`+
+        (first.human_wrist_world_m?'人体手腕世界坐标 [m]：'+first.human_wrist_world_m.map(x=>x.toFixed(4)).join(', '):'') : '本参考轨迹未发现源形状安全距离违规。';
+      host.hidden=false;
+    }catch(e){if(token===screenEpoch){el('benchmark-screen-verdict').textContent='诊断加载失败：'+e.message;el('benchmark-screen-event').textContent='';host.hidden=false;}}
+  }
   async function showRoundHistory(scene) {
     const token=++historyEpoch, host=el('planning-round-history');
     const file=(scene.planning_artifacts || []).find(a=>a.url.endsWith('/round_history.json'));
@@ -76,6 +99,7 @@
     if (frame===data.frames.length-1) stop(); else raf=requestAnimationFrame(tick);
   }
   window.renderPlanning = async (scene, force=false) => {
+    showBenchmarkScreen(scene);
     showRoundHistory(scene);
     let auxiliary = false;
     try { auxiliary = JSON.parse(scene.planning_log).selected_endpoint_policy?.auxiliary_pregrasp_height_m > 0; }
@@ -101,7 +125,7 @@
     const nextKey=scene.id+":"+(preview?.url || "none")+":"+scene.planning_status;
     if (!force && key===nextKey) return;
     key=nextKey;const token=++epoch;stop();data=null;el("trajectory-wrap").hidden=true;
-    if (!preview) return;
+    if (!preview || !['generated','failed'].includes(scene.planning_status)) return;
     try {
       const response=await fetch(preview.url);if(!response.ok)throw Error("HTTP "+response.status);
       const result=await response.json();if(token!==epoch)return;
