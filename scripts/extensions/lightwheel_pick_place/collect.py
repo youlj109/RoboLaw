@@ -21,6 +21,7 @@ parser.add_argument('--replay-second-grasp-prefix',action='store_true',help='Reu
 parser.add_argument('--development-checkpoint',type=Path,help='Reset-only measured first-pick state; second-pick development, never acceptance')
 parser.add_argument('--replay-prefix-checkpoint',type=Path,help='Replay verified real first-pick actions from original reset, then recheck native checkpoint')
 parser.add_argument('--cross-variant-prefix',action='store_true',help='Replay recorded commands under the current hazard variant; retain actual safety and native checks, never restore state')
+parser.add_argument('--supported-landing-transfer',action='store_true',help='Treat destination approach as intentional supported landing,10mm/s near goal, stop on original support force')
 parser.add_argument('--gentle-supported-placement',action='store_true',help='Center object geometry, descend10mm/s until measured bowl support, then open')
 parser.add_argument('--placement-feedback-lower',action='store_true',help='Hover45mm above release, refresh measured attachment, then lower to same goal')
 parser.add_argument('--placement-joint-goals',type=Path,help='Passed planning report with native-successful recorded joint endpoints')
@@ -248,6 +249,15 @@ with SimulationAppContext(args):
     def lower_until_supported():
         global phase,q
         phase='lower';world.allowed_phase='lower'
+        task=next(t for t in getattr(envdef.task,'subtasks',[envdef.task]) if t.pick_up_object.name==PICK)
+        force=arr(scene[task.contact_sensor_cfg.name].data.force_matrix_w).reshape(-1,3)[0];magnitude=float(np.linalg.norm(force))
+        if magnitude>=task.force_threshold and force[2]>0 and force[2]/magnitude>=np.cos(task.support_cone_half_angle_rad):
+            current=snapshot()
+            from paired_planning import grip_joints
+            opening=[world.clearance(q,(PICK,DEST),mode='execution',gripper_q=grip_joints(g),object_pose=current['lime'][:7]) for g in np.linspace(grip,0.,31)]
+            if not all(c['valid'] for c in opening):raise RuntimeError('Supported landing opening geometry rejected')
+            result.setdefault('supported_placements',{})[PICK]={'supported':True,'executed_actions':0,'force_n':force.tolist(),'source':'Measured support during slowed landing approach; no extra downward press'}
+            return
         state=snapshot();start=state['q'][ids].copy();tcp=kin.fk(start);previous=start.copy();path=[start]
         world.attachment=np.linalg.inv(tcp)@transform(state['lime'][:3],state['lime'][3:7]);world.planning_gripper_q=geometry(state)['gripper_q']
         stop_reason='maximum140mm descent'
@@ -493,7 +503,9 @@ with SimulationAppContext(args):
                 result['placement_contact_policy']={'scope':'Carried target fruit may contact a native-verified already placed target fruit only during lower/release/retreat/settle_final. All robot/hazard/background checks remain active; both original final predicates required.','target_objects':['banana_1','banana_2']}
 
         def cart(position,*,rotation=None,force_phase=None):
-            global q,planner
+            global q,planner,phase
+            landing=bool(args.supported_landing_transfer and PICK=='green_ladle' and phase=='transfer')
+            if landing:phase='lower';force_phase='transfer'
             world.allowed_phase=('transfer' if args.free_release and phase=='lower' else phase)
             s=snapshot();q=s['q'][ids].copy()
             if args.attachment_feedback=='measured_segment' and world.attachment is not None and phase in ('lift','transfer','lower'):
@@ -581,8 +593,21 @@ with SimulationAppContext(args):
                 plans[-1]['approach_lookahead']=checked
                 if not checked['valid']:raise RuntimeError('Approach lookahead is not collision-free')
             plans[-1]['executed']=True
-            for command in trajectory['positions']:step(command,grip)
-            q=trajectory['positions'][-1].copy()
+            if landing:
+                raw=np.asarray(trajectory['positions']);slow=[q.copy()];previous=q.copy()
+                for command in raw:
+                    a=kin.fk(previous);b=kin.fk(command);near=np.linalg.norm(b[:3,3]-target[:3,3])<.20
+                    travel=max(float(np.linalg.norm(b[:3,3]-a[:3,3])),.17*float(Rotation.from_matrix(b[:3,:3]@a[:3,:3].T).magnitude()))
+                    count=max(1,int(np.ceil(travel/(.01*e.step_dt)))) if near else 1
+                    slow.extend(previous+(command-previous)*f for f in np.linspace(0,1,count+1)[1:]);previous=command
+                trajectory['positions']=slow;plans[-1]['metadata']['supported_landing_speed_m_s']=.01;plans[-1]['metadata']['samples']=len(slow)
+            for command in trajectory['positions']:
+                step(command,grip);q=np.asarray(command).copy()
+                if landing:
+                    task=next(t for t in getattr(envdef.task,'subtasks',[envdef.task]) if t.pick_up_object.name==PICK)
+                    force=arr(scene[task.contact_sensor_cfg.name].data.force_matrix_w).reshape(-1,3)[0];magnitude=float(np.linalg.norm(force))
+                    if magnitude>=task.force_threshold and force[2]>0 and force[2]/magnitude>=np.cos(task.support_cone_half_angle_rad):
+                        result['supported_landing_transfer']={'force_n':force.tolist(),'action_index':len(records)-1};break
             for _ in range(12):step(q,grip)
         if args.development_checkpoint:
             capture_placement_checkpoint('banana_1')
