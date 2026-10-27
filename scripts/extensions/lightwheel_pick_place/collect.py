@@ -603,7 +603,7 @@ with SimulationAppContext(args):
             lifted_states=[row[3]['lime'][2] for row in records if row[0]=='lift'];result['lift_m']=float(max(lifted_states)-initial['lime'][2]) if lifted_states else 0.
             for key in ('grasp_candidate','grasp_point_body_m','grasp_solutions'):
                 if key in source_result:result[key]=source_result[key]
-            capture_placement_checkpoint('banana_1');result['prefix_replay']['checkpoint_native_passed']=result['placement_checkpoints']['banana_1']['passed']
+            capture_placement_checkpoint(PICK);result['prefix_replay']['checkpoint_native_passed']=result['placement_checkpoints'][PICK]['passed']
             actual=snapshot();expected=reference['state'];result['prefix_replay']['state_difference']={'joint_max_abs_rad':float(np.max(np.abs(actual['q']-expected['q']))),'rigid_position_m':{name:float(np.linalg.norm(actual[name][:3]-np.asarray(value[:3]))) for name,value in expected['rigid'].items()}}
             if not result['prefix_replay']['checkpoint_native_passed']:raise RuntimeError('Replayed prefix did not reproduce native first placement; stop before second')
         else:
