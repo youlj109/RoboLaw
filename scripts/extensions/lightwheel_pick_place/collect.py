@@ -635,20 +635,29 @@ with SimulationAppContext(args):
                 return bool(mag>=task.force_threshold and f[2]>0 and f[2]/mag>=np.cos(task.support_cone_half_angle_rad)),f
             ok,f=support()
             if not ok:raise RuntimeError('Staged release requires measured native plate support')
-            released=False;trace=[]
-            for g in np.linspace(grip,.45,34)[1:]:
-                grip=float(g);step(q,grip)
+            # Fixed low-wrist opening displaced the plate in real replay. Withdraw
+            # slowly while opening so outer links clear the plate before they spread.
+            start=q.copy();tcp=kin.fk(start);previous=start.copy();path=[]
+            for index in range(1,21):
+                target=tcp.copy();target[2,3]+=.002*index
+                candidate=kin.ik(target,previous,attempts=1)
+                if np.linalg.norm(kin.fk(candidate)[:3,3]-target[:3,3])>.001:raise RuntimeError('Coordinated release IK residual')
+                for fraction in np.linspace(0,1,7)[1:]:path.append(previous+(candidate-previous)*fraction)
+                previous=candidate
+            checked=planner.validate_path(path,(PICK,DEST),grip,phase='lift')
+            if not checked['valid']:raise RuntimeError('Closed-finger withdrawal path rejected: '+str(checked))
+            from paired_planning import grip_joints
+            opening=np.linspace(grip,.45,len(path))
+            st=snapshot();sweep=[world.clearance(qq,(PICK,DEST),mode='execution',gripper_q=grip_joints(g),object_pose=st['lime'][:7]) for qq,g in zip(path,opening)]
+            if not all(c['valid'] for c in sweep):raise RuntimeError('Coordinated opening sweep rejected: '+str(min(sweep,key=lambda c:c['slack_m'])))
+            trace=[];released=False
+            for qq,g in zip(path,opening):
+                q=np.asarray(qq).copy();grip=float(g);step(q,grip)
                 contact=contacts.sample(phase,len(records)-1,snapshot()['lime'][:7]);loads=np.asarray([sum(v['normal_forces_n']) for v in contact['fingers'].values()])
-                trace.append({'grip':grip,'loads_n':loads.tolist()})
-                if np.all(loads<=.01):released=True;break
-            result['staged_release']={'finger_load_trace':trace,'unloaded':released,'support_before_open_n':f.tolist()}
-            if not released:raise RuntimeError('Partial opening did not unload both fingers')
-            for _ in range(8):step(q,grip)
-            ok,f=support()
-            if not ok:raise RuntimeError('Plate support lost before wrist withdrawal')
-            result['staged_release']['support_before_withdraw_n']=f.tolist()
-            phase='retreat';st=snapshot();cart(st['tcp']+np.array([0.,0.,.04]),rotation=Rotation.from_quat(st['tcp_quat_xyzw']).as_matrix(),force_phase='lift')
-            phase='release'
+                trace.append({'grip':grip,'loads_n':loads.tolist(),'wrist_rise_m':float(kin.fk(q)[2,3]-tcp[2,3])})
+                if np.all(loads<=.01):released=True
+            result['staged_release']={'mode':'coordinated40mm_withdrawal_at5mm_per_s_and_gradual_opening','finger_load_trace':trace,'unloaded':released,'support_before_open_n':f.tolist(),'geometry_sweep_passed':True}
+            if not released:raise RuntimeError('Coordinated opening did not unload both fingers')
             for g in np.linspace(grip,0.,31)[1:]:grip=float(g);step(q,grip)
             phase='settle_final'
             for _ in range(90):step(q,grip)
