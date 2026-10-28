@@ -185,6 +185,7 @@ def main():
                    choices=['transfer', 'pregrasp', 'approach', 'lift'])
     p.add_argument('--max-joint-speed', type=float, default=0.4)
     p.add_argument('--match-recorded-execution-certification',action='store_true',help='Match an explicitly recorded ladle execution-margin certification; preserve failed planning-reserve diagnostics')
+    p.add_argument('--execution-certification-reference',type=Path,help='Explicit strictly matched native variant proving the common controller certification when the baseline needed no reserve fallback')
     a = p.parse_args()
     from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
     global ACTIVE_VARIANT_CONFIG
@@ -219,6 +220,13 @@ def main():
 
     if a.match_recorded_execution_certification:
         evidence=(recorded or {}).get('validation',{})
+        if a.execution_certification_reference:
+            reference_result=json.loads((a.execution_certification_reference/'result.json').read_text())
+            reference_audit=json.loads((a.execution_certification_reference/'avoidance_audit.fresh_matched.policy_review.json').read_text())
+            reference_leg=reference_result['plans'][a.recorded_plan_index]
+            if not (reference_result.get('success') and reference_result.get('collector_source_sha256')==result.get('collector_source_sha256') and reference_result.get('task_motion_parameters')==result.get('task_motion_parameters') and reference_leg.get('metadata',{}).get('goal_q_arm')==recorded.get('metadata',{}).get('goal_q_arm') and reference_audit.get('accepted') is True and Path(reference_audit['baseline_episode']).resolve()==baseline.resolve() and reference_audit['baseline_sha256']['result.json']==digest(baseline/'result.json')):
+                raise ValueError('Certification reference is not the strictly matched common native controller')
+            evidence=reference_leg.get('validation',{})
         if PICK!='green_ladle' or not (evidence.get('valid') is True and evidence.get('planning_reserve_passed') is False and evidence.get('scope')=='Original execution margins at dense joint samples plus original cuRobo constraints; planning reserve remains explicitly not passed'):
             raise ValueError('Execution certification requires exact recorded original-policy evidence')
 
@@ -272,7 +280,8 @@ def main():
         'variants': list(a.variants),
         'segments': list(a.segments),
         'match_recorded_execution_certification':bool(a.match_recorded_execution_certification),
-        'execution_certification_source_validation':recorded.get('validation',{}) if a.match_recorded_execution_certification else None,
+        'execution_certification_reference':str(a.execution_certification_reference) if a.execution_certification_reference else None,
+        'execution_certification_source_validation':evidence if a.match_recorded_execution_certification else None,
         'max_joint_speed': a.max_joint_speed,
         'dt': result['dt'],
         'control_parameters': {

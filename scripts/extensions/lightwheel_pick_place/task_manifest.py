@@ -2,7 +2,7 @@
 import argparse,hashlib,json,subprocess,platform,sys
 from importlib.metadata import version,PackageNotFoundError
 from pathlib import Path
-p=argparse.ArgumentParser();p.add_argument('--task',required=True);p.add_argument('--task-scope',action='store_true',help='Explicit user scope: exclude unrelated global kitchen-joint neutral gate, retain task/object/robot checks and record exclusion');p.add_argument('--baseline',type=Path,required=True);p.add_argument('--robot-baseline',type=Path);p.add_argument('--human',type=Path,required=True);p.add_argument('--property',type=Path,required=True);p.add_argument('--robot',type=Path,required=True);p.add_argument('--neutral',type=Path,required=True);p.add_argument('--paired',type=Path,nargs='+',required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--task',required=True);p.add_argument('--task-scope',action='store_true',help='Explicit user scope: exclude unrelated global kitchen-joint neutral gate, retain task/object/robot checks and record exclusion');p.add_argument('--baseline',type=Path,required=True);p.add_argument('--robot-baseline',type=Path);p.add_argument('--human',type=Path,required=True);p.add_argument('--property',type=Path,required=True);p.add_argument('--robot',type=Path,required=True);p.add_argument('--neutral',type=Path,required=True);p.add_argument('--paired',type=Path,nargs='+',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--human-avoidance-review',type=Path);p.add_argument('--property-avoidance-review',type=Path);p.add_argument('--robot-avoidance-review',type=Path);a=p.parse_args()
 def read(path):return json.loads(path.read_text()) if path.exists() else {}
 def digest(path):
  h=hashlib.sha256()
@@ -17,7 +17,12 @@ for name,ep in paths.items():
   gates[file]=read(ep/file).get('passed') is True
  if not name.endswith('baseline'):
   for file in ('fixed_base_hazard_audit.json','source_background_audit.json'):gates[file]=read(ep/file).get('passed') is True
-  gates['effective_avoidance_acceptance']=read(ep/'avoidance_audit.json').get('accepted') is True
+  evidence_path=getattr(a,name+'_avoidance_review') or ep/'avoidance_audit.json'
+  evidence=read(evidence_path)
+  if evidence_path.exists():hashes[str(evidence_path)]=digest(evidence_path)
+  gates['effective_avoidance_acceptance']=evidence.get('accepted') is True
+  expected=matched_baselines[name]
+  gates['matching_baseline_evidence']=bool(Path(evidence.get('baseline_episode','')).resolve()==expected.resolve() and all(evidence.get('baseline_sha256',{}).get(f)==digest(expected/f) for f in ('result.json','trajectory.h5','full_world_audit.json')))
  required=['external_camera.mp4','external_camera_2.mp4','wrist_camera.mp4']+(['overview_camera.mp4'] if r.get('overview_camera') else [])
  gates['required_videos_exist']=all((ep/x).is_file() and (ep/x).stat().st_size>0 for x in required)
  episodes[name]={'collector_source_sha256':r.get('collector_source_sha256'),'episode':str(ep),'gates':gates,'passed':all(gates.values()),'duration_seconds':float(r.get('frames',0))*float(r.get('dt',0))}
@@ -49,8 +54,8 @@ neutral_gate=neutral_task_gate if a.task_scope else neutral_full_gate
 for path in [a.neutral,*a.paired]:
  if path.exists():hashes[str(path)]=digest(path)
 passed=all(x['passed'] for x in episodes.values()) and neutral_gate and all(x['stable_necessity'] and x['all_hazard_on_clear'] for x in paired.values())
-implementation_files=[Path('scripts/extensions/lightwheel_pick_place')/x for x in ('collect.py','validate.py','audit_avoidance.py','audit_source_support.py','audit_source_background.py','audit_fixed_base.py','audit_self_collision.py','paired_planning.py','task_neutral_hold.py','run_host.sh','task_manifest.py','audit_deferred_world.py','audit_multi_source.py')]
-implementation_files += [Path('kitchen_safety/extensions/lightwheel_pick_place')/x for x in ('collision.py','planner.py','lemon_kinematics.py','source_support.py','task_config.py','joint_state.py','b03_strategy.py','contacts.py','multi_evidence.py','carried_proxy.py','grasp_policy_compatibility.py')]
+implementation_files=[Path('scripts/extensions/lightwheel_pick_place')/x for x in ('collect.py','validate.py','audit_avoidance.py','audit_source_support.py','audit_source_background.py','audit_fixed_base.py','audit_self_collision.py','paired_planning.py','task_neutral_hold.py','run_host.sh','task_manifest.py','audit_deferred_world.py','audit_multi_source.py','audit_background_motion.py')]
+implementation_files += [Path('kitchen_safety/extensions/lightwheel_pick_place')/x for x in ('collision.py','planner.py','lemon_kinematics.py','source_support.py','task_config.py','joint_state.py','b03_strategy.py','contacts.py','multi_evidence.py','carried_proxy.py','property_proxy.py','grasp_policy_compatibility.py')]
 implementation_files += [Path('kitchen_safety/planning.py'),Path('kitchen_safety/curobo_backend.py')]
 runtime={}
 for package in ('numpy','scipy','torch','h5py','python-fcl','usd-core','curobo','isaacsim','isaaclab','isaaclab_arena','imageio-ffmpeg'):

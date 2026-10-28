@@ -11,6 +11,11 @@ p=argparse.ArgumentParser();p.add_argument('--episode',type=Path,required=True);
 if a.output.exists():raise FileExistsError(a.output)
 paths={'baseline':a.baseline,'augmented':a.episode};r={k:json.load(open(v/'result.json')) for k,v in paths.items()};old=json.load(open(a.episode/'source_background_audit.json'));bounds=json.load(open(a.episode/'avoidance_audit.json'))['source_background_motion_envelopes']['backgrounds'];spec=episode_spec(r['baseline']);b=r['baseline']['robot_base_pose'];kin=DroidKinematics(b[:3],Rotation.from_quat(b[3:7]).as_euler('xyz',degrees=True)[2]);objects=tuple(bounds['baseline']['objects']);world=CollisionWorld(Usd.Stage.Open(str(a.baseline/'scene.usda')),kin,pick_object=spec.pick_object,destination_object=spec.destination_object,source_surface_suffix=spec.source_surface_suffix,movable_objects=objects)
 traces={k:json.load(open(v/'full_world_audit.json'))['measurements'] for k,v in paths.items()};cases={}
+for label,states in traces.items():
+ for n in objects:
+  poses=np.asarray([t['rigid_poses'][n][:7] for t in states]);start=np.asarray(r[label]['initial_object_states'][n][:7]);radius=bounds[label]['objects'][n]['conservative_collision_radius_m'];angles=(Rotation.from_quat(poses[:,3:7])*Rotation.from_quat(start[3:7]).inv()).magnitude();motion=np.linalg.norm(poses[:,:3]-start[:3],axis=1)+2*radius*np.sin(angles/2)
+  bounds[label]['objects'][n]['max_surface_displacement_bound_m']=float(motion.max())
+
 for label,meta in r.items():
  for n in objects:world.set_obstacle_pose(n,meta['initial_object_states'][n][:7])
  for trajectory,states in traces.items():
@@ -36,4 +41,4 @@ for label,meta in r.items():
      else:print('EXACT_ENVELOPE',key,n,state['action'],len(poses),exact,flush=True)
 
   cases[key]={'passed':not failures,'minimum_bound_slack_m':minimum,'refined_checks':checked,'exact_observed_envelope_checks':refinements,'failures':failures[:20]};print(key,cases[key],flush=True)
-out={'passed':all(x['passed'] for x in cases.values()),'input_sha256':old['input_sha256'],'cases':cases,'scope':'Every non-destination source object gets its own full observed rigid-motion envelope; original per-pair margin retained. Rows certified by global bound are reused; all other rows get individual exact FCL distances. Where an isotropic bound fails, every unique measured 120Hz object pose is cross-checked against that measured robot/payload state. No continuous-time interpolation claim. Destination cross-replay remains independently required.'};a.output.write_text(json.dumps(out,indent=2))
+out={'passed':all(x['passed'] for x in cases.values()),'input_sha256':old['input_sha256'],'cases':cases,'motion_bounds_120hz':bounds,'scope':'Every non-destination source object gets its own full observed rigid-motion envelope; original per-pair margin retained. Rows certified by global bound are reused; all other rows get individual exact FCL distances. Where an isotropic bound fails, every unique measured 120Hz object pose is cross-checked against that measured robot/payload state. No continuous-time interpolation claim. Destination cross-replay remains independently required.'};a.output.write_text(json.dumps(out,indent=2))

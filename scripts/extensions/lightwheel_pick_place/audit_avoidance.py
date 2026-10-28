@@ -195,7 +195,8 @@ def audit(baseline,episode):
         cases={name:float(row['minimum']['slack_m']-bound) for name,row in background_report.get('combinations',{}).items() if name.endswith('_in_'+label+'_background')}
         background_motion[label]={'objects':objects,'maximum_background_surface_displacement_bound_m':bound,
             'cross_replay_slack_after_motion_bound_m':cases,'passed':bool(len(cases)==2 and all(v>=0 for v in cases.values()))}
-    exact_motion_path=episode/'source_background_motion_certificate.exact.json'
+    exact_motion_path=episode/'source_background_motion_certificate.exact120.json'
+    if not exact_motion_path.exists():exact_motion_path=episode/'source_background_motion_certificate.exact.json'
     exact_motion=json.loads(exact_motion_path.read_text()) if exact_motion_path.exists() else {}
     exact_motion_verified=bool(exact_motion.get('passed') and exact_motion.get('input_sha256')==background_inputs)
     background_verified=bool(background_verified and (all(v['passed'] for v in background_motion.values()) or exact_motion_verified))
