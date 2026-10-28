@@ -9,9 +9,10 @@ import matplotlib.pyplot as plt
 from pxr import Usd
 from kitchen_safety.planning import DroidKinematics
 from kitchen_safety.extensions.lightwheel_pick_place.collision import CollisionWorld
+from kitchen_safety.extensions.lightwheel_pick_place.task_config import episode_spec,pick_object_name,destination_object_name
 
-p=argparse.ArgumentParser();p.add_argument('--baseline',type=Path,required=True);p.add_argument('--episode',type=Path,required=True);a=p.parse_args()
-r=json.loads((a.episode/'result.json').read_text());audit=json.loads((a.episode/'avoidance_audit.json').read_text());b=r['robot_base_pose'];kin=DroidKinematics(b[:3],Rotation.from_quat(b[3:]).as_euler('xyz',degrees=True)[2]);w=CollisionWorld(Usd.Stage.Open(str(a.episode/'scene.usda')),kin);name={'human':'person','property':'glass','robot':'barrier'}[r['variant']];w.set_obstacle_pose(name,audit['hazard_initial_pose'])
+p=argparse.ArgumentParser();p.add_argument('--baseline',type=Path,required=True);p.add_argument('--episode',type=Path,required=True);p.add_argument('--audit',type=Path);p.add_argument('--output-dir',type=Path);a=p.parse_args();output=a.output_dir or a.episode;output.mkdir(parents=True,exist_ok=True)
+r=json.loads((a.episode/'result.json').read_text());audit=json.loads((a.audit or a.episode/'avoidance_audit.json').read_text());b=r['robot_base_pose'];kin=DroidKinematics(b[:3],Rotation.from_quat(b[3:]).as_euler('xyz',degrees=True)[2]);spec=episode_spec(r);pick=pick_object_name(r,spec);dest=destination_object_name(r,spec);w=CollisionWorld(Usd.Stage.Open(str(a.episode/'scene.usda')),kin,pick_object=pick,destination_object=dest,source_surface_suffix=spec.source_surface_suffix,movable_objects=tuple(n for n in spec.rigid_objects if n!=pick));name={'human':'person','property':'glass','robot':'barrier'}[r['variant']];w.set_obstacle_pose(name,audit['hazard_initial_pose'])
 parts=[v[::max(1,len(v)//1200)] for n,(v,faces) in w.meshes.items() if w._matches(n,name)]
 for n,obj,lo,hi in w.objects:
     if w._matches(n,name) and n not in w.meshes:
@@ -46,5 +47,5 @@ for phase,row in audit['path_comparison']['phases'].items():
     names.append(phase);differences.append(row['metrics']['q']['max_normalized_phase_difference'])
 ax.bar(names,differences,color='#007ea8');ax.set(ylabel='Max joint-vector difference (rad)',title='Actual joint paths, normalized per free-motion phase');ax.grid(axis='y',alpha=.2)
 fig.suptitle(r['variant']+' avoidance: same reset layout, seed and grasp; original task success',fontsize=13)
-for suffix in ('png','pdf'):fig.savefig(a.episode/('path_comparison.'+suffix),dpi=160)
-print(a.episode/'path_comparison.png')
+for suffix in ('png','pdf'):fig.savefig(output/('path_comparison.'+suffix),dpi=160)
+print(output/'path_comparison.png')
