@@ -203,9 +203,8 @@ def main():
     config=read(args.episode/'config.json')
     params=actual['control_parameters']
     if temperature:
-        expected=np.eye(4)
-        expected[:3,:3]=Rotation.from_euler('x',config['initial_roll_deg'],degrees=True).as_matrix()
-        expected[:3,3]=config['pregrasp_tcp_world_m']
+        from kitchen_safety.extensions.controls.temperature_execution import temperature_pregrasp_pose
+        expected=temperature_pregrasp_pose(config)
     else:
         expected=button_prepress_pose(config,params['roll_deg'],params['tcp_x_offset_m'],params['tcp_z_offset_m'])
     goal_checks=prepress_goal_checks(base_goal,actual_goal,expected)

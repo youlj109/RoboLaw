@@ -63,6 +63,7 @@ def main():
     p.add_argument('--round-number', type=int, default=2)
     p.add_argument('--pose-reference', type=Path, help='Saved candidate pose retained while changing one parameter')
     p.add_argument('--target-kind', choices=['original_precontact','actual_grasp_arrival'], default='original_precontact')
+    p.add_argument('--validate-path',action='store_true',help='Also run existing dense model gates; never execute or certify a physical task')
     a = p.parse_args()
     if a.single_policy and not a.refine_from:
         p.error('--single-policy requires --refine-from')
@@ -129,6 +130,9 @@ def main():
         if a.variant=='human' and not any('/person/' in name for name,_,_,_ in world.objects):
             raise ValueError('Human collision payload did not load; refusing a hazard-free success')
         world.gripper_joint_position = grip
+        if config.get('planning_gripper_geometry')=='held_articulated':
+            from kitchen_safety.extensions.controls.collision import held_gripper_pose
+            world.planning_gripper_joint_positions=held_gripper_pose(names,state['q'],state['dq'],0. if temperature else np.pi/4)
         center = (kin.fk(q)[:3, 3] + target[:3, 3]) / 2
         boxes = []
         for name, _, lo, hi in world.objects:
@@ -255,6 +259,12 @@ def main():
             report['sdk_status_note']='Final SDK success is true. Raw status may retain an intermediate graph-stage failure; it is preserved, not hidden.'
         preview.update(frames=[joints(x) for x in path], tcp=[kin.fk(x)[:3, 3].tolist() for x in path],
                        q=path.tolist(), status='generated')
+        if a.validate_path:
+            validation=planner.validate_path(path,grip_binary=0 if temperature else 1,phase=phase)
+            report['independent_dense_validation']=validation
+            report['approach_model_validated']=bool(validation['valid'])
+            report['note']='Returned candidate with dense model checks. Physical manipulation, stability and benchmark acceptance remain separate.'
+            preview['validation_rejected']=not validation['valid']
     except Exception as exc:
         report['status'] = 'failed'
         report['error'] = str(exc)

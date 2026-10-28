@@ -39,3 +39,21 @@ def root_pose_match(measured_xyzw,expected_xyzw):
     return dict(passed=position<=1e-6 and angle<=1e-6,position_error_m=position,
         rotation_error_rad=angle,position_tolerance_m=1e-6,rotation_tolerance_rad=1e-6,
         quaternion_order='xyzw')
+
+
+def paired_coverage_gates(runs,seeds,variants):
+    expected={(seed,variant) for seed in seeds for variant in variants}
+    observed=[(row['seed'],row['variant']) for row in runs]
+    complete=bool(expected) and len(observed)==len(expected) and set(observed)==expected
+    hazards=[row for row in runs if row['variant']!='base']
+    return dict(complete_pairs=complete,
+        all_plans_valid=complete and all(row.get('success') is True for row in runs),
+        all_hazard_off_paths_require_adjustment=complete and bool(hazards) and all(
+            row.get('true_shape_counterfactual',{}).get('violations') for row in hazards),
+        all_counterfactual_risks_robust=complete and bool(hazards) and all(
+            row.get('true_shape_counterfactual',{}).get('robust_violation') is True for row in hazards),
+        all_counterfactual_endpoints_safe=complete and bool(hazards) and all(
+            row.get('true_shape_counterfactual',{}).get('initial_and_goal_safe') is True for row in hazards),
+        all_hazard_on_source_shapes_safe=complete and bool(hazards) and all(
+            row.get('true_shape_actual',{}).get('samples',0)>0 and
+            not row['true_shape_actual']['violations'] for row in hazards))

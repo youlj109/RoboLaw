@@ -1,0 +1,420 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset" (
+    doc = "Controlled static low protective fixture. Height-adjusted source geometry; native circular cylinders keep their radius. Not a manufacturer model or accepted scene."
+)
+{
+    def "Materials"
+    {
+        def Material "CoatedSteel"
+        {
+            token outputs:surface.connect = </Asset/Materials/CoatedSteel/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.1, 0.16, 0.2)
+                float inputs:metallic = 0.72
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "MachinedSteel"
+        {
+            token outputs:surface.connect = </Asset/Materials/MachinedSteel/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.55, 0.6, 0.64)
+                float inputs:metallic = 0.95
+                float inputs:roughness = 0.22
+                token outputs:surface
+            }
+        }
+
+        def Material "WarningYellow"
+        {
+            token outputs:surface.connect = </Asset/Materials/WarningYellow/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.97, 0.68, 0.025)
+                float inputs:metallic = 0.1
+                float inputs:roughness = 0.42
+                token outputs:surface
+            }
+        }
+
+        def Material "WarningBlack"
+        {
+            token outputs:surface.connect = </Asset/Materials/WarningBlack/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.012, 0.015, 0.018)
+                float inputs:metallic = 0.1
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "ControlPanel"
+        {
+            token outputs:surface.connect = </Asset/Materials/ControlPanel/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.045, 0.055, 0.06)
+                float inputs:metallic = 0.3
+                float inputs:roughness = 0.38
+                token outputs:surface
+            }
+        }
+
+        def Material "StopButton"
+        {
+            token outputs:surface.connect = </Asset/Materials/StopButton/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.55, 0.025, 0.015)
+                float inputs:metallic = 0.1
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "BoltedBase" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/CoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.16, 0.16, 0.014057143)
+        double3 xformOp:translate = (0, 0, 0.007028571428571429)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "BoltedBaseBolt00Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0008785714285714286
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (-0.062, -0.062, 0.01522857142857143)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "BoltedBaseBolt00Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.002928571428571429
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (-0.062, -0.062, 0.01522857142857143)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "BoltedBaseBolt01Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0008785714285714286
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (-0.062, 0.062, 0.01522857142857143)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "BoltedBaseBolt01Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.002928571428571429
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (-0.062, 0.062, 0.01522857142857143)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "BoltedBaseBolt10Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0008785714285714286
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (0.062, -0.062, 0.01522857142857143)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "BoltedBaseBolt10Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.002928571428571429
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (0.062, -0.062, 0.01522857142857143)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "BoltedBaseBolt11Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0008785714285714286
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (0.062, 0.062, 0.01522857142857143)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "BoltedBaseBolt11Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.002928571428571429
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (0.062, 0.062, 0.01522857142857143)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "SquarePedestal" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/CoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.052, 0.052, 0.15228571)
+        double3 xformOp:translate = (0, 0, 0.0902)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "TubeMount" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/CoatedSteel>
+        double size = 1
+        float3 xformOp:scale = (0.065, 0.07, 0.038071427)
+        double3 xformOp:translate = (0, -0.015, 0.16400000000000003)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "ProjectingTube" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.4
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.018
+        double3 xformOp:translate = (0, -0.185, 0.16400000000000003)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "TubeEnd" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.019
+        double3 xformOp:translate = (0, -0.386, 0.16400000000000003)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "WarningCollar0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.018
+        rel material:binding = </Asset/Materials/WarningYellow>
+        double radius = 0.0185
+        double3 xformOp:translate = (0, -0.34, 0.16400000000000003)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "WarningCollar1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.018
+        rel material:binding = </Asset/Materials/WarningYellow>
+        double radius = 0.0185
+        double3 xformOp:translate = (0, -0.3, 0.16400000000000003)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "WarningCollar2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.018
+        rel material:binding = </Asset/Materials/WarningYellow>
+        double radius = 0.0185
+        double3 xformOp:translate = (0, -0.26, 0.16400000000000003)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Mesh "WeldedGusset" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3, 3, 4, 4, 4]
+        int[] faceVertexIndices = [2, 1, 0, 3, 4, 5, 0, 1, 4, 3, 1, 2, 5, 4, 2, 0, 3, 5]
+        rel material:binding = </Asset/Materials/CoatedSteel>
+        uniform token physics:approximation = "convexHull"
+        point3f[] points = [(-0.012, -0.025, 0.08785715), (-0.012, -0.025, 0.15228571), (-0.012, -0.11, 0.15228571), (0.012, -0.025, 0.08785715), (0.012, -0.025, 0.15228571), (0.012, -0.11, 0.15228571)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cylinder "TubeMountBolt0Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (-0.025, -0.051, 0.16400000000000003)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "TubeMountBolt0Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (-0.025, -0.051, 0.16400000000000003)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "TubeMountBolt1Washer" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.0015
+        rel material:binding = </Asset/Materials/WarningBlack>
+        double radius = 0.009
+        double3 xformOp:translate = (0.025, -0.051, 0.16400000000000003)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "TubeMountBolt1Head" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.005
+        rel material:binding = </Asset/Materials/MachinedSteel>
+        double radius = 0.0065
+        double3 xformOp:translate = (0.025, -0.051, 0.16400000000000003)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "FootWarningYellow" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/WarningYellow>
+        double size = 1
+        float3 xformOp:scale = (0.144, 0.021, 0.00029285715)
+        double3 xformOp:translate = (0, -0.0655, 0.014350000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "FootWarningBlack1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3]
+        int[] faceVertexIndices = [0, 1, 2]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(-0.0545, -0.055, 0.014584286), (-0.072, -0.055, 0.014584286), (-0.072, -0.0725, 0.014584286)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FootWarningBlack2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(-0.058, -0.076, 0.014584286), (-0.0405, -0.076, 0.014584286), (-0.0195, -0.055, 0.014584286), (-0.037, -0.055, 0.014584286)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FootWarningBlack3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(-0.023, -0.076, 0.014584286), (-0.0055, -0.076, 0.014584286), (0.0155, -0.055, 0.014584286), (-0.002, -0.055, 0.014584286)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FootWarningBlack4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.012, -0.076, 0.014584286), (0.0295, -0.076, 0.014584286), (0.0505, -0.055, 0.014584286), (0.033, -0.055, 0.014584286)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "FootWarningBlack5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [5]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4]
+        rel material:binding = </Asset/Materials/WarningBlack>
+        point3f[] points = [(0.047, -0.076, 0.014584286), (0.0645, -0.076, 0.014584286), (0.072, -0.0685, 0.014584286), (0.072, -0.055, 0.014584286), (0.068, -0.055, 0.014584286)]
+        uniform token subdivisionScheme = "none"
+    }
+}
+

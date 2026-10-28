@@ -182,6 +182,7 @@ with SimulationAppContext(args):
             'faucet_physics_provenance':definition.faucet_physics_provenance,
             'oven_physics_provenance':definition.oven_physics_provenance,
             'temperature_knob_physics_provenance':definition.temperature_knob_physics_provenance,
+            'property_physics_provenance':definition.property_physics_provenance,
             'object_state_setters_after_reset':False,
             'scope':'All kitchen q/dq at every neutral physics update; three original cameras at action rate. No torque or robot task execution; does not establish avoidance or mechanism mobility.'}
         (out/'validation.json').write_text(json.dumps(report,indent=2))

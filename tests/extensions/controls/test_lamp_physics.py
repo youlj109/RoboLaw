@@ -7,6 +7,7 @@ from pxr import Usd,UsdGeom,UsdPhysics
 from scipy.spatial.transform import Rotation
 
 from kitchen_safety.extensions.controls.lamp_physics import balanced_reading_lamp,weighted_lamp_mass_properties
+from kitchen_safety.extensions.controls import lamp_physics
 
 SOURCE=Path(__file__).resolve().parents[3]/'assets/extensions/controls/visual_20261027/reading_lamp_r01.usda'
 
@@ -51,3 +52,26 @@ def test_changed_cached_overlay_is_rejected(tmp_path):
     output.write_text(output.read_text()+'\n')
     with pytest.raises(ValueError,match='Changed cached'):
         balanced_reading_lamp(SOURCE,tmp_path)
+
+
+def test_reviewed_glass_only_derivative_keeps_dynamic_mass_recipe(tmp_path):
+    source=SOURCE.with_name('reading_lamp_glass_r02.usda')
+    output,info=balanced_reading_lamp(source,tmp_path)
+    assert info['source_verification']['nonmaterial_properties_identical']
+    stage=Usd.Stage.Open(str(output))
+    assert not UsdPhysics.RigidBodyAPI(stage.GetDefaultPrim()).GetKinematicEnabledAttr().Get()
+    assert np.isclose(UsdPhysics.MassAPI(stage.GetDefaultPrim()).GetMassAttr().Get(),6.)
+    assert UsdGeom.GetStageMetersPerUnit(stage)==1.
+    assert UsdGeom.GetStageUpAxis(stage)=='Z'
+    assert stage.GetPrimAtPath('/Lamp/Materials/FrostedGlass/Shader').GetAttribute('inputs:opacity').Get()<.2
+
+
+def test_derivative_allowlist_does_not_allow_changed_collision_geometry(tmp_path,monkeypatch):
+    source=SOURCE.with_name('reading_lamp_glass_r02.usda')
+    changed=tmp_path/'changed.usda';Usd.Stage.Open(str(source)).Flatten().Export(str(changed))
+    stage=Usd.Stage.Open(str(changed))
+    UsdGeom.Cylinder(stage.GetPrimAtPath('/Lamp/WeightedBase')).GetRadiusAttr().Set(.17)
+    stage.GetRootLayer().Save()
+    monkeypatch.setattr(lamp_physics,'VISUAL_DERIVATIVE_SHA256',hashlib.sha256(changed.read_bytes()).hexdigest())
+    with pytest.raises(ValueError,match='attribute changed'):
+        lamp_physics.verify_lamp_source(changed)

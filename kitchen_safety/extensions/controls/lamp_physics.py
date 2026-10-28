@@ -6,6 +6,47 @@ from pathlib import Path
 import numpy as np
 
 SOURCE_SHA256='54cd9df85575001be0591bc6d1f6350bd7119f450a050c3f84be03f25b31c045'
+VISUAL_DERIVATIVE_SHA256='92f167f8ffcd2b72e83ab21c1d0b0a8f8346cfd3ff1ae36a82cb42ed129fff41'
+
+
+def verify_lamp_source(source):
+    from pxr import Usd
+    source=Path(source)
+    digest=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+    source_hash=digest(source)
+    if source_hash==SOURCE_SHA256:
+        return dict(source_sha256=source_hash,material_only_derivative=False)
+    if source_hash!=VISUAL_DERIVATIVE_SHA256:
+        raise ValueError('Weighted-base recipe is bound to the reviewed lamp asset')
+    canonical=Path(__file__).resolve().parents[3]/'assets/extensions/controls/visual_20261027/reading_lamp_r01.usda'
+    if digest(canonical)!=SOURCE_SHA256:raise ValueError('Canonical lamp source changed')
+    original=Usd.Stage.Open(str(canonical));revised=Usd.Stage.Open(str(source))
+    def prims(stage):return {str(p.GetPath()):p for p in stage.Traverse() if '/Materials' not in str(p.GetPath())}
+    before,after=prims(original),prims(revised)
+    if set(before)!=set(after):raise ValueError('Nonmaterial lamp hierarchy changed')
+    for path,left in before.items():
+        right=after[path]
+        if left.GetAllMetadata()!=right.GetAllMetadata():raise ValueError('Nonmaterial lamp metadata changed: '+path)
+        if {p.GetName() for p in left.GetProperties()}!={p.GetName() for p in right.GetProperties()}:
+            raise ValueError('Nonmaterial lamp properties changed: '+path)
+        for attr in left.GetAttributes():
+            counterpart=right.GetAttribute(attr.GetName())
+            times=attr.GetTimeSamples()
+            if (attr.GetAllMetadata()!=counterpart.GetAllMetadata() or attr.Get()!=counterpart.Get() or
+                    attr.GetConnections()!=counterpart.GetConnections() or times!=counterpart.GetTimeSamples() or
+                    any(attr.Get(t)!=counterpart.Get(t) for t in times)):
+                raise ValueError('Nonmaterial lamp attribute changed: '+str(attr.GetPath()))
+        for relation in left.GetRelationships():
+            counterpart=right.GetRelationship(relation.GetName())
+            if relation.GetTargets()!=counterpart.GetTargets() or relation.GetAllMetadata()!=counterpart.GetAllMetadata():
+                raise ValueError('Nonmaterial lamp relationship changed: '+str(relation.GetPath()))
+    for key in ('metersPerUnit','upAxis','defaultPrim'):
+        if revised.HasAuthoredMetadata(key) and original.GetMetadata(key)!=revised.GetMetadata(key):
+            raise ValueError('Lamp stage units/root changed')
+    return dict(source_sha256=source_hash,material_only_derivative=True,
+                canonical_source_sha256=SOURCE_SHA256,nonmaterial_properties_identical=True,
+                normalized_stage_metadata=dict(metersPerUnit=1.,upAxis='Z'),
+                metadata_note='Reviewed shader-only sublayer omits units/upAxis; the mass overlay authors canonical metre/Z metadata explicitly.')
 
 
 def weighted_lamp_mass_properties():
@@ -33,13 +74,12 @@ def weighted_lamp_mass_properties():
 
 
 def balanced_reading_lamp(source,output_dir):
-    from pxr import Gf,Usd,UsdPhysics
+    from pxr import Gf,Usd,UsdGeom,UsdPhysics
     from scipy.spatial.transform import Rotation
     source=Path(source).resolve()
     digest=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
     source_hash=digest(source)
-    if source_hash!=SOURCE_SHA256:
-        raise ValueError('Weighted-base recipe is bound to the reviewed lamp asset')
+    source_verification=verify_lamp_source(source)
     recipe_hash=digest(__file__)
     directory=Path(output_dir)
     directory.mkdir(parents=True,exist_ok=True)
@@ -56,6 +96,8 @@ def balanced_reading_lamp(source,output_dir):
         raise ValueError('Original lamp total mass must be retained')
     stage=Usd.Stage.CreateNew(str(output))
     stage.GetRootLayer().subLayerPaths=[str(source)]
+    UsdGeom.SetStageMetersPerUnit(stage,1.)
+    UsdGeom.SetStageUpAxis(stage,UsdGeom.Tokens.z)
     body=stage.GetPrimAtPath(root_path)
     stage.SetDefaultPrim(body)
     mass=UsdPhysics.MassAPI.Apply(body)
@@ -67,6 +109,7 @@ def balanced_reading_lamp(source,output_dir):
     stage.GetRootLayer().Save()
     info=dict(recipe='weighted-reading-lamp-v1',recipe_sha256=recipe_hash,source=str(source),
         source_sha256=source_hash,overlay_sha256=digest(output),**properties,
+        source_verification=source_verification,
         geometry_and_collision_unchanged=True,pose_unchanged=True,kinematic_lock_added=False,
         runtime_state_setters=False)
     manifest.write_text(json.dumps(info,indent=2)+'\n')

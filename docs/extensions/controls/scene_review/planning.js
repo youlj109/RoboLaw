@@ -101,13 +101,15 @@
   window.renderPlanning = async (scene, force=false) => {
     showBenchmarkScreen(scene);
     showRoundHistory(scene);
-    let auxiliary = false;
-    try { auxiliary = JSON.parse(scene.planning_log).selected_endpoint_policy?.auxiliary_pregrasp_height_m > 0; }
+    let auxiliary = false, rejected = false;
+    try { const report=JSON.parse(scene.planning_log);auxiliary=report.selected_endpoint_policy?.auxiliary_pregrasp_height_m > 0;
+      rejected=report.independent_dense_validation?.valid===false; }
     catch (_) { /* Old logs may be plain text. */ }
     el("planning-state").textContent=labels[scene.planning_status] || labels.pending;
     if (scene.planning_status === "generated" && auxiliary)
       el("planning-state").textContent="已返回辅助预抓取轨迹 · 原终点未达";
-    el("planning-state").className=scene.planning_status==="generated" && !auxiliary?"good":"change";
+    if(rejected)el('planning-state').textContent='已返回候选 · 独立密集检查拒绝';
+    el("planning-state").className=scene.planning_status==="generated" && !auxiliary && !rejected?"good":"change";
     el("planning-hint").textContent=scene.planning_hint || "本轮每场景只尝试一次；失败自动跳过，等待人工标注，不自动修改场景。";
     el("planning-log").textContent=scene.planning_log || "暂无规划结果";
     const artifacts=scene.planning_artifacts || [];

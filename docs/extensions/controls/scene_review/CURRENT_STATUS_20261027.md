@@ -6,6 +6,33 @@ are being checked through real contact execution, neutral holds, independent
 source-shape counterfactuals and matched-policy seed pairs. Deferred checks below
 describe historical scopes, not current permission to omit them.
 
+## Live Checkpoint: 2026-10-28
+
+Bound report `reports/controls_completion_20261027/benchmark_summary140/report.json`
+passes **6/9** current scenes: left human/property, all three right variants,
+and oven obstacle. The benchmark as a whole is **not accepted**.
+
+- Left obstacle r04 is visually acceptable but does not invalidate its measured
+  reference path. R05 is visually rejected: the base and front bolts overhang
+  the countertop in `r05/external_camera_2.jpg`. R06 passed image-only review,
+  then its source screen rejected endpoint safety; the one queued planning query
+  is retained separately. Visual acceptance does not override this rejection.
+- Oven human: the +1 cm auxiliary pregrasp passes dense planning validation.
+  Its fresh matched baseline completed successfully in round137. Following the
+  daemon interruption, round141 reuses that recording for independent checks
+  and one variant attempt, without repeating the baseline collection.
+- Oven property: an exact-hash approved shader-only lamp derivative previously
+  failed the weighted-mass recipe's source guard before planning. The guard now
+  verifies all non-material USD content against the original lamp, records
+  canonical metres/Z-up, and preserves the same dynamic 6 kg mass recipe.
+  Neutral round139 passed 50 seconds (1 mm maximum property translation).
+  Physical round141 is pending; old setup
+  failures do not prove physical instability or GPU memory exhaustion.
+- CPU regression suite: 186 passed, including both fixture candidates.
+  The local review page and all manual annotation fields are retained.
+
+## Earlier Checkpoint (Superseded)
+
 - Matched collector-policy pairs: left human/property, right human/property and
   oven obstacle pass seeds 42/43/44, dense planning checks, robust source-shape
   counterfactual risk, source-safe hazard-on paths and feasible endpoints.

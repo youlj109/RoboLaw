@@ -118,6 +118,8 @@ def main():
                    '--variant', variant, '--output', str(directory), '--seed', '42']
             if a.refine_failed_from:
                 cmd += ['--refine-from', str(a.refine_failed_from/sid/'result.json')]
+            if references.get(sid,{}).get('validate_path') is True:
+                cmd += ['--validate-path']
             if not (a.resume and (directory/'result.json').exists()):
                 with (directory/'worker.log').open('w') as stream:
                     result = subprocess.run(cmd, cwd=ROOT, stdout=stream, stderr=subprocess.STDOUT, timeout=120+a.lock_wait_seconds)

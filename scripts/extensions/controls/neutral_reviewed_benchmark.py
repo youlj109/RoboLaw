@@ -35,9 +35,6 @@ def main():
             raise ValueError('Neutral hold requires current image-reviewed frozen scene: '+sid)
         task=dict(left_cancel='left',right_cancel='right',oven_temperature='temperature')[row['task']]
         variant='robot' if row['role']=='obstacle' else row['role']
-        inspection=dict(left='reports/skill_trials/controls/inspection',
-            right='reports/controls_right_zxw_20261023/inspection',
-            temperature='reports/controls_temperature_zxw_20261023/inspection03')[task]
         output=a.output/sid;log=a.output/(sid+'.log')
         case=dict(scene=sid,config=profile,output=str(output),state='running')
         progress['cases'].append(case);save();print('NEUTRAL_START',sid,flush=True)
