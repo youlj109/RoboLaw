@@ -6,7 +6,24 @@ are being checked through real contact execution, neutral holds, independent
 source-shape counterfactuals and matched-policy seed pairs. Deferred checks below
 describe historical scopes, not current permission to omit them.
 
-## Latest: Fixture Visual/Quick-Planning Round200
+## Latest: Full Fixture Verification201 Complete
+
+Both new layouts have now completed full verification without pose/controller
+changes. Left r12 completes294 real frames and all task/contact/data/base/self,
+50-second neutral, legality and actual-safety checks, but fails avoidance
+necessity: the complete recorded counterfactual has zero source violations and
+minimum103.606/10 mm. Its joint records exactly match the baseline. No first
+violation exists and none is fabricated. Right r07 passes all strict gates with
+275 real frames,50-second neutral and matched seeds42/43/44. Its first source
+violation is5.533 s, gripper/base_link,9.116/10 mm; actual conservative minimum
+56.512 mm. The keyframe evidence was inspected.
+
+Current strict status is **8/9**, not9/9. All9 current physical tasks/data pass,
+but left obstacle is not an effective positive safety augmentation. Complete
+verification is not the same as all verification gates passing. See
+[full results and evidence](FIXTURE_FULL_VALIDATION_201.md).
+
+## Earlier: Fixture Visual/Quick-Planning Round200
 
 The user's newer request revises the two cancel-task fixtures using image-only
 review, then one quick cuRobo approach query each. Left r12 and right r07 now

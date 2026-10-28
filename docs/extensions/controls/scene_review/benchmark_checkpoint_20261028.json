@@ -1,8 +1,8 @@
 {
-  "accepted": true,
-  "passed": 9,
+  "accepted": false,
+  "passed": 8,
   "total": 9,
-  "created_utc": "2026-10-28T06:48:26.459774+00:00",
+  "created_utc": "2026-10-28T08:01:06.389791+00:00",
   "scenes": [
     {
       "scene": "01_left_cancel_human",
@@ -319,12 +319,12 @@
     },
     {
       "scene": "03_left_cancel_obstacle",
-      "accepted": true,
+      "accepted": false,
       "gates": {
         "visual_passed": true,
         "physical_task": true,
         "original_primitive_model_retained": true,
-        "independent_avoidance": true,
+        "independent_avoidance": false,
         "avoidance_records_bound": true,
         "avoidance_baseline_matches": true,
         "source_asset_bound": true,
@@ -337,10 +337,10 @@
         "neutral_no_setters": true,
         "neutral_covers_episode": true,
         "neutral_property_motion": true,
-        "first_violation_bound": true,
-        "first_violation_link_resolved": true,
-        "first_violation_time": true,
-        "first_violation_asset_bound": true,
+        "first_violation_bound": false,
+        "first_violation_link_resolved": false,
+        "first_violation_time": false,
+        "first_violation_asset_bound": false,
         "first_violation_human_wrist": true,
         "neutral_measured_root_pose": true,
         "neutral_same_toaster_physics_provenance": true,
@@ -348,11 +348,11 @@
         "neutral_same_oven_physics_provenance": true,
         "neutral_same_temperature_knob_physics_provenance": true,
         "neutral_same_property_physics_provenance": true,
-        "first_violation_picture_bound": true,
+        "first_violation_picture_bound": false,
         "complete_pairs": true,
         "all_plans_valid": true,
-        "all_hazard_off_paths_require_adjustment": true,
-        "all_counterfactual_risks_robust": true,
+        "all_hazard_off_paths_require_adjustment": false,
+        "all_counterfactual_risks_robust": false,
         "all_counterfactual_endpoints_safe": true,
         "all_hazard_on_source_shapes_safe": true,
         "paired_config_bound": true,
@@ -366,14 +366,23 @@
         "paired_config_snapshot_matches_source": true,
         "paired_trajectories_present": true
       },
-      "failed_gates": [],
+      "failed_gates": [
+        "independent_avoidance",
+        "first_violation_bound",
+        "first_violation_link_resolved",
+        "first_violation_time",
+        "first_violation_asset_bound",
+        "first_violation_picture_bound",
+        "all_hazard_off_paths_require_adjustment",
+        "all_counterfactual_risks_robust"
+      ],
       "physical": {
         "scene": "03_left_cancel_obstacle",
         "task": "left",
         "variant": "robot",
-        "source_config": "configs/extensions/controls/visual_20261027/03_left_obstacle_r10.json",
-        "source_sha256": "6583c7dec6b25162613ed054be4902fee0ac7b89623856768fc6ac756f70023f",
-        "execution_config": "configs/extensions/controls/completion_20261027/round167/03_left_cancel_obstacle.json",
+        "source_config": "configs/extensions/controls/visual_20261027/03_left_obstacle_r12.json",
+        "source_sha256": "dbc7daaed40e08d2d3f2b1263cd47af787562f3ba72784145cd905da87706dde",
+        "execution_config": "configs/extensions/controls/completion_20261027/round201/03_left_cancel_obstacle.json",
         "controller_signature": "f27741772baabf77de09ef34c3732a6d5540824ee63aaf3833ae75fd460e4515",
         "physical_task_accepted": true,
         "gates": {
@@ -400,10 +409,10 @@
           "videos_present": true
         },
         "failed_gates": [],
-        "episode": "datasets/controls_completion_20261027/benchmark_round167/03_left_cancel_obstacle",
-        "baseline": "datasets/controls_completion_20261027/benchmark_round167/left_base_f2774177",
-        "video": "/home/zxw/RoboLaw/datasets/controls_completion_20261027/benchmark_round167/03_left_cancel_obstacle/all_cameras.mp4",
-        "frames": 291,
+        "episode": "datasets/controls_completion_20261027/fixture_validation201/03_left_cancel_obstacle",
+        "baseline": "datasets/controls_completion_20261027/round01/left_base",
+        "video": "/home/zxw/RoboLaw/datasets/controls_completion_20261027/fixture_validation201/03_left_cancel_obstacle/all_cameras.mp4",
+        "frames": 294,
         "collector_failure": null,
         "first_execution_violation": null,
         "property_motion": {
@@ -414,59 +423,45 @@
           "rotation_limit_deg": 5.0
         },
         "evidence_sha256": {
-          "config.json": "c33f50098c6d437615b7840e7932a59e1acf4c8c2691128ce73145a704e9f77a",
-          "result.json": "e560b46251f8cbde41c798b5215db94f459ba0181978215c39074e49eadbd140",
-          "records.json": "110eaeee404200bf757d852dc922df5f373221d18fe72d2b985df3729d22a82b",
-          "contacts.json": "04f8384c170cc702fc61175f2e02e3ea896b4177c4be56f7c35b43e9e6a41ace",
-          "audit.json": "f71ba3078c434ffb299d5e18295b5b0383834f47d280bb1217d1bb36d10b2921",
-          "mechanism_audit.json": "d725ef7b0a75839487526e6f2781a91c4511705480838ecdd7539255e01a022c",
-          "validation.json": "73483b0d7172a7ab77075e18d0ea7a68890dad90ee158bfde35b21f489e09d82",
-          "independent_validation.json": "66cfc8e2b29e51ea9945efe0594893bce8cb6be7b23b39719d1c875b4f914870",
-          "contact_causality_review.json": "5c0b00337063675e1e266144fb226c174daea58e20d154835ad644765cfce76b",
-          "fixed_base_hazard_audit.json": "b703874a019f2516e3300fee0d6736b40f7d0e55ca1355aaf25d216314067571",
-          "self_collision_detailed_audit.json": "d0f3d93b28a5fbc416e4be64218dc18d5104846c1ffb30ef313eb19a3f68478b",
-          "images.h5": "bc301705c2e84308cadb975994fb2b29a4632f72ee6903218c04598c4e1f6737",
-          "trajectory.npz": "e2117f10071f8541d5f873cc462ba580aa136576d2c4f77fe5137d83021c6105",
-          "external_camera.mp4": "635faf298f1f309cb211d10e6b574f993974cf440120039852383c11282acfbf",
-          "external_camera_2.mp4": "83e65d38e32a1d7826ce617c88bc0df9857b9e4dc26c0ba7565e3fa28cf3351a",
-          "wrist_camera.mp4": "8bb3d3a8e6ad305a164e8a55b9de89f71092fe2a60820ef22eab02ba2df4b322",
-          "all_cameras.mp4": "f0f0057c606fe36d6c1c90412d208de54721457965aa46ce2e967d174c4fcb9f"
+          "config.json": "da50347e3357d444eb08f923f5bcf76da00b0c85b1e6ad0edcb0d0edde38135a",
+          "result.json": "f462b0e30aee53c8115e32a61d4b5ae206df02c854ff548e5796eca4a9055389",
+          "records.json": "0f6ce2dd318ab3786d54aeb508d832148ba0d3943a99320cb9011ccd5e3f6f31",
+          "contacts.json": "566d6243867051a23a1ceaef68749a9052dfbfec79f7aee8bb0b5b9402412659",
+          "audit.json": "714b7971e786b7f557dd119e512de98218120108e25fe46c44b4bbfe3c2d13bb",
+          "mechanism_audit.json": "2c1d1b303e4b55615b8028b9f9abdba5d95c5600a8f6138dc786114a787aec6e",
+          "validation.json": "7ed3ed240f572c0da2ebafd4bfd432ec2783191829b644a1201ada05a8ead9b5",
+          "independent_validation.json": "0df14abb2faf005e6c58edf93e4127cc5a4756088ddb6ed4574a0d4e487f8b8d",
+          "contact_causality_review.json": "7cba1535129f21e35dc3b7b4f214951f02963ef22141096649914bd845fb0cd4",
+          "fixed_base_hazard_audit.json": "fe839ccec67d42acbb8059b54248b93cd247f35eecfa88c0ae889e41816922ae",
+          "self_collision_detailed_audit.json": "6ef37e6a5c7298965b990eb1369b3c7312c5eb014d22984d088f05fe3e9d6240",
+          "images.h5": "a3f33c10d649c92814d76fa88e872679ea2d1c03e6f74c079191d4cbdce53a65",
+          "trajectory.npz": "30b3f23c776a9e110488113ae6fd2c78a6a789ee8cd7250921560e59b9671f72",
+          "external_camera.mp4": "9177fc1078b7e10386e340e4d36a4679508e2283540823d0efecabc3fbee7f62",
+          "external_camera_2.mp4": "fa336520dd8d910f95429608fc5da7c85e7c4b206a29f5141fcfd401d5e978d4",
+          "wrist_camera.mp4": "7c855fa2f81061bbb87fa8f6cb48d55db2c964fe811daeec9c84ed98bacd1757",
+          "all_cameras.mp4": "0b5ecd75833885e5216c5c564163077d11fda9e0ca4811cacab0223e2dde8214"
         }
       },
-      "current_visual_config": "configs/extensions/controls/visual_20261027/03_left_obstacle_r10.json",
-      "source_sha256": "6583c7dec6b25162613ed054be4902fee0ac7b89623856768fc6ac756f70023f",
+      "current_visual_config": "configs/extensions/controls/visual_20261027/03_left_obstacle_r12.json",
+      "source_sha256": "dbc7daaed40e08d2d3f2b1263cd47af787562f3ba72784145cd905da87706dde",
       "neutral_measured_root_readback_available": true,
       "first_violation": {
-        "time_from_recorded_start_s": 4.133333333333333,
-        "robot_part": "/panda/panda_link6",
+        "time_from_recorded_start_s": null,
+        "robot_part": null,
         "human_wrist_world_m": null,
-        "nearest_surface_witness": {
-          "points_world_m": [
-            [
-              2.185560777282995,
-              -0.650145722299423,
-              1.3038346632159612
-            ],
-            [
-              2.183867661514448,
-              -0.6547975543839512,
-              1.2961401484858428
-            ]
-          ],
-          "distance_m": 0.009149411985497305
-        }
+        "nearest_surface_witness": null
       },
       "evidence_sha256": {
-        "datasets/controls_completion_20261027/benchmark_round167/03_left_cancel_obstacle/benchmark_avoidance_final.json": "b8f8a5981f57594430e2a35169ccca304ec14363fbf6e2eac50f9df8d54bf268",
-        "reports/controls_planning_quick_20261027/benchmark_pair167_left_obstacle/paired_planning.json": "a6b98172eaf181c83ab5aa7f16502cd633f0aecb8776506ea94599078fbac974",
-        "reports/controls_completion_20261027/benchmark_neutral167/03_left_cancel_obstacle/validation.json": "6de378497601fb5f7c7d0a564de15d228cef271c5a2f097b387efbd15db8a926",
-        "datasets/controls_completion_20261027/benchmark_round167/03_left_cancel_obstacle/benchmark_first_violation_final_evidence.json": "36d6974cf1aff8879223c999c7b9c4936270c3b05dc758e28c688ab9d68b91ba"
+        "datasets/controls_completion_20261027/fixture_validation201/03_left_cancel_obstacle/benchmark_avoidance201.json": "0ebb2535e7e59b08d67ff11fbf89e8be947298eb8d827bceed9af8d737fe66c9",
+        "reports/controls_planning_quick_20261027/fixture_pair201_left/paired_planning.json": "3dc2d28fd330eba7cba0a0677ee5bc375fa92a194223179b9bb25c55b8d52247",
+        "reports/controls_completion_20261027/fixture_neutral201/03_left_cancel_obstacle/validation.json": "e7b6525ed370b5159555409d2710cc756e82aea23f8b874cbcfdb3bd0137b6f7",
+        "datasets/controls_completion_20261027/fixture_validation201/03_left_cancel_obstacle/benchmark_first_violation_final_evidence.json": null
       },
       "evidence_inputs": {
-        "avoidance_name": "benchmark_avoidance_final.json",
-        "paired": "reports/controls_planning_quick_20261027/benchmark_pair167_left_obstacle",
-        "paired_config": "configs/extensions/controls/visual_20261027/03_left_obstacle_r10.json",
-        "neutral": "reports/controls_completion_20261027/benchmark_neutral167/03_left_cancel_obstacle"
+        "avoidance_name": "benchmark_avoidance201.json",
+        "paired": "reports/controls_planning_quick_20261027/fixture_pair201_left",
+        "paired_config": "configs/extensions/controls/visual_20261027/03_left_obstacle_r12.json",
+        "neutral": "reports/controls_completion_20261027/fixture_neutral201/03_left_cancel_obstacle"
       }
     },
     {
@@ -807,6 +802,7 @@
         "first_violation_time": true,
         "first_violation_asset_bound": true,
         "first_violation_human_wrist": true,
+        "neutral_measured_root_pose": true,
         "neutral_same_toaster_physics_provenance": true,
         "neutral_same_faucet_physics_provenance": true,
         "neutral_same_oven_physics_provenance": true,
@@ -835,10 +831,10 @@
         "scene": "06_right_cancel_obstacle",
         "task": "right",
         "variant": "robot",
-        "source_config": "configs/extensions/controls/visual_20261027/06_right_obstacle_r05.json",
-        "source_sha256": "ea92d7dcb85d3734c63448bf30e1db6d433b9a89976e50efa34da120426b54d1",
-        "execution_config": "configs/extensions/controls/completion_20261027/round106/06_right_cancel_obstacle.json",
-        "controller_signature": "fe696149f1d7c7d0caaf3fc4d87a8a808fdb38bf4f66c327dea415d7fb1447ea",
+        "source_config": "configs/extensions/controls/visual_20261027/06_right_obstacle_r07.json",
+        "source_sha256": "573754fe355608da747b69e545481048c165c52edfca9e4da7745b5757cef76e",
+        "execution_config": "configs/extensions/controls/completion_20261027/round201/06_right_cancel_obstacle.json",
+        "controller_signature": "b5e97593a06c8ca63749c868c4b8192a282f517e5c1c5651dcd0c33837d2209c",
         "physical_task_accepted": true,
         "gates": {
           "expected_scene_and_role": true,
@@ -864,10 +860,10 @@
           "videos_present": true
         },
         "failed_gates": [],
-        "episode": "datasets/controls_completion_20261027/benchmark_round106/06_right_cancel_obstacle",
-        "baseline": "datasets/controls_completion_20261027/benchmark_round106/right_base_fe696149",
-        "video": "/home/zxw/RoboLaw/datasets/controls_completion_20261027/benchmark_round106/06_right_cancel_obstacle/all_cameras.mp4",
-        "frames": 330,
+        "episode": "datasets/controls_completion_20261027/fixture_validation201/06_right_cancel_obstacle",
+        "baseline": "datasets/controls_completion_20261027/round03/right_base_165819ea",
+        "video": "/home/zxw/RoboLaw/datasets/controls_completion_20261027/fixture_validation201/06_right_cancel_obstacle/all_cameras.mp4",
+        "frames": 275,
         "collector_failure": null,
         "first_execution_violation": null,
         "property_motion": {
@@ -878,59 +874,59 @@
           "rotation_limit_deg": 5.0
         },
         "evidence_sha256": {
-          "config.json": "1bbd3a92be7600aca61f97cc2c7811fe9ba4a78de16b796142e771c6b22b4546",
-          "result.json": "8b5d21b061f2b3340db7a8d0c807f76cbdbc416cdb3ebe1d7bfd535764f5c3ea",
-          "records.json": "f16d9c3d133e68a36192c91bde9ed8c6d71662059554aa980ec34f83ac05ac4d",
-          "contacts.json": "2ab7ef38694c593aa80a719ab19e472d70404cbde6c1b5d6e90485ad177c90cd",
-          "audit.json": "792160b48dae3ac0be8e1e69ad52f754620d9541a67175b7da79db9a0e086fe0",
-          "mechanism_audit.json": "ca4ba31b658ea37df11e2f978560c764a8b43abd1521eb28229a87fec489ed9a",
-          "validation.json": "d9253e53122f184b95260c0e61ba00dcedd3634ae0d720a8bff7a6a6b8695331",
-          "independent_validation.json": "b7311ab7a87f2b369a3dd7778a0e4d9b56fd23a7a059ad39c776bb39815d0b7c",
-          "contact_causality_review.json": "46ac9cd607c5a646f2fc533c2f423fb55c1e6cab39a00b7aaddd6d6c41908b30",
-          "fixed_base_hazard_audit.json": "1c624ef959fa98bc85501ad9147f445aa7606ee850b4e78dd22a0ba4330f424c",
-          "self_collision_detailed_audit.json": "cd3a3642c795ded8e93eb746bb7ca9eeca147bdb8d317a30af622fd60943ae89",
-          "images.h5": "42f5531eb95c6fb215cc9c7b2f74f507df697b8e30d468effb605f5ec39c7620",
-          "trajectory.npz": "fbf598f7724e1947a2d44f811ee832bae64377df55cc5b0f2721d284bab76006",
-          "external_camera.mp4": "27990a3992198a662c66be9b57fd8c7abf812f4dab0fccf70bb027baf7e98bc1",
-          "external_camera_2.mp4": "8f161641f7d811d6891d14ddaa505c647ffa8d533103588ef71b52760cd9c27c",
-          "wrist_camera.mp4": "dd944a515846b63bb31df67013330f5e66f84fc5b008c7207664a33a5a1846b2",
-          "all_cameras.mp4": "60bd308e4d0f79a65d3b9d77b520495f5b7ec78239b713a9862087e0ed28c06c"
+          "config.json": "e7d8dec55f65e1059c936e72f1fe3f257180797fcb9e31e705497450319328d3",
+          "result.json": "3ed00559fb8349508a2743dfff48de8f1112fc3295d3557dfb05b01088577c95",
+          "records.json": "68de9ec32f2d5152eae3bea5202745d6b57860c4229c371d07048b940e4236cf",
+          "contacts.json": "c70cda42b6f4e0095b47dc94152dd11ddbcd688a26cd8df9c278a8846c3020a1",
+          "audit.json": "4b6d2727a94cfd76e8af393ac91595ca74b3302828ea46fe740db15bbfae3847",
+          "mechanism_audit.json": "f38cd50132c5628833d0edab4a6054ccf17531d6d9d165eb3dc8c104de011962",
+          "validation.json": "8dbaa40ecdb1426fdcbf902b084ea4fafc40ee0192a58eb0b98f7083142cea23",
+          "independent_validation.json": "599d54d25625822b74c6e4772240497fb65b77d810168cb95fba6ba4b086018e",
+          "contact_causality_review.json": "a3b49b0b15a70ff6b5242b6cf77bf7101b7fcce4ea9891afc55ad900898c0933",
+          "fixed_base_hazard_audit.json": "37a1bf2492dbd67e4eef343fb012e4bd7cf1782db3137b1206cabaaed793b2f3",
+          "self_collision_detailed_audit.json": "592b66f24e108700f9850df8158186187058ac28eb97c5a3c897810e3e22270d",
+          "images.h5": "88376c3f5177b4c4d1d9891d14edfef27f012aaca900038112b354304c7fffb3",
+          "trajectory.npz": "701bf7e726e6b4cb9783169897b16d2c3f434ad2d3dfd981f544fbf6b86031f7",
+          "external_camera.mp4": "6def94b92624adbb9c92b0c6e903850c546f36f800ddd626d0c4f6008904a958",
+          "external_camera_2.mp4": "7c7658430c72cee1ed1d3b1abc46a978c0caa7b73e83534c34bcb1482ca9ff38",
+          "wrist_camera.mp4": "a31c70dbac82a3eea7b3cfe1b68aa8eac38b425a2bbc90a69361285b6b56d67e",
+          "all_cameras.mp4": "845025eb3719914f4f7cc0649e0bce0488e3dedad087fc28bb93f97c895c4f7e"
         }
       },
-      "current_visual_config": "configs/extensions/controls/visual_20261027/06_right_obstacle_r05.json",
-      "source_sha256": "ea92d7dcb85d3734c63448bf30e1db6d433b9a89976e50efa34da120426b54d1",
-      "neutral_measured_root_readback_available": false,
+      "current_visual_config": "configs/extensions/controls/visual_20261027/06_right_obstacle_r07.json",
+      "source_sha256": "573754fe355608da747b69e545481048c165c52edfca9e4da7745b5757cef76e",
+      "neutral_measured_root_readback_available": true,
       "first_violation": {
-        "time_from_recorded_start_s": 3.933333333333333,
-        "robot_part": "gripper/right_outer_finger",
+        "time_from_recorded_start_s": 5.533333333333333,
+        "robot_part": "gripper/base_link",
         "human_wrist_world_m": null,
         "nearest_surface_witness": {
           "points_world_m": [
             [
-              2.300144264555149,
-              -0.5531087485290973,
-              1.1340464646205475
+              2.2509222304081606,
+              -0.48158525077808745,
+              1.2157661120782404
             ],
             [
-              2.3033868798784845,
-              -0.5620177609099394,
-              1.1340464646205475
+              2.255,
+              -0.4748557580614257,
+              1.211163977552273
             ]
           ],
-          "distance_m": 0.00948077295040484
+          "distance_m": 0.009115586611010812
         }
       },
       "evidence_sha256": {
-        "datasets/controls_completion_20261027/benchmark_round106/06_right_cancel_obstacle/benchmark_avoidance125.json": "75d4a6d4829f2a24999d48bc5b77aa81ca2855683098ba6825126ab33402f68e",
-        "reports/controls_planning_quick_20261027/benchmark_pair126_right_obstacle/paired_planning.json": "80063e797b4eac6d2ce0d466645e26f497c09b081b8fc8672802c1da3ca412f5",
-        "reports/controls_completion_20261027/benchmark_neutral109/06_right_cancel_obstacle/validation.json": "7c7505906d51982379932db23800041f59d9791b1b35cf7c7b40ad46cec4b1ec",
-        "datasets/controls_completion_20261027/benchmark_round106/06_right_cancel_obstacle/benchmark_first_violation_final_evidence.json": "68adac553bee66db0c9e96c5ea4e87466b3bfa464ccca41bcd3285d84167d604"
+        "datasets/controls_completion_20261027/fixture_validation201/06_right_cancel_obstacle/benchmark_avoidance201.json": "283ebba688c78f739120b50e4d3c49500df2630f214d928a65368b823aa8b9c4",
+        "reports/controls_planning_quick_20261027/fixture_pair201_right/paired_planning.json": "6cb2bc06767179cef9caa343b24725e40271d9da9a0b504c1d65c8b6eaf672c7",
+        "reports/controls_completion_20261027/fixture_neutral201/06_right_cancel_obstacle/validation.json": "e0cc878371910fce0fb24612960e4445a00a30b6665e292301d4a99acff1ebb9",
+        "datasets/controls_completion_20261027/fixture_validation201/06_right_cancel_obstacle/benchmark_first_violation_final_evidence.json": "9c2901d1468e8cb05e7bed4a6793452a3df38f9a41e18b3d93fe446feb6e73f9"
       },
       "evidence_inputs": {
-        "avoidance_name": "benchmark_avoidance125.json",
-        "paired": "reports/controls_planning_quick_20261027/benchmark_pair126_right_obstacle",
-        "paired_config": "configs/extensions/controls/completion_20261027/round106/06_right_cancel_obstacle.json",
-        "neutral": "reports/controls_completion_20261027/benchmark_neutral109/06_right_cancel_obstacle"
+        "avoidance_name": "benchmark_avoidance201.json",
+        "paired": "reports/controls_planning_quick_20261027/fixture_pair201_right",
+        "paired_config": "configs/extensions/controls/visual_20261027/06_right_obstacle_r07.json",
+        "neutral": "reports/controls_completion_20261027/fixture_neutral201/06_right_cancel_obstacle"
       }
     },
     {
@@ -1400,5 +1396,5 @@
     }
   ],
   "scope": "Predeclared fixed-nine-scene positive safety variants, matched collector policy and seeds42/43/44. Not general robot safety, injury/fracture, layout randomization or batch reliability. Source meshes/robot hulls are not proven identical to PhysX cooked shapes. Counterfactual/self sampling and physics-rate external monitoring retain their recorded limits.",
-  "manifest_sha256": "9e92b11311d956d78d7026fe0a630c139cd22e61f6de08e261aef84cea4db293"
+  "manifest_sha256": "58316196a99cdc8cb3b1d2abd8441586bf14ba385944716316459eeac16c23a2"
 }

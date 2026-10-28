@@ -4,6 +4,8 @@
 revision replaces left r10/right r05 with r12/r07. This9/9 report remains valid
 only for its recorded layouts, not those new candidates. Current visual/quick
 planning scope: [fixture pose review](FIXTURE_POSE_REVIEW_20261028.md).
+Subsequent [full verification201](FIXTURE_FULL_VALIDATION_201.md) accepts right
+r07 but rejects left r12's avoidance necessity; current strict status is8/9.
 
 Final bound report:
 `reports/controls_completion_20261027/benchmark_finalize195/report.json`.

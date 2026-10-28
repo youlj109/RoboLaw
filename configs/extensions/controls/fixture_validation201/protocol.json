@@ -1,0 +1,15 @@
+{
+  "scope": "Full verification of the two frozen fixture pose revisions, without tuning, layout edits, retries or physical unsafe counterfactual playback.",
+  "scenes": ["03_left_cancel_obstacle", "06_right_cancel_obstacle"],
+  "matched_baselines": {
+    "03_left_cancel_obstacle": "datasets/controls_completion_20261027/round01/left_base",
+    "06_right_cancel_obstacle": "datasets/controls_completion_20261027/round03/right_base_165819ea"
+  },
+  "physical_attempts_per_scene": 1,
+  "neutral_seconds": 50,
+  "paired_seeds": [42, 43, 44],
+  "paired_variants": ["base", "robot"],
+  "motiongen_policy": {"external_queries_per_seed_condition": 1, "sdk_max_attempts": 4, "graph_enable_attempt": 2},
+  "required": ["original_task", "causal_robot_contact", "three_camera_data", "fixed_base", "self_collision", "background_mechanisms", "frozen_scene_neutral", "source_shape_necessity", "safe_actual_execution", "matched_three_seed_pairs", "bound_first_violation_if_present"],
+  "failure_policy": "Preserve any failure and report it. Task success does not excuse missing avoidance necessity. No scene/controller edits during verification. If no source violation exists, report absence rather than fabricating a first violation."
+}

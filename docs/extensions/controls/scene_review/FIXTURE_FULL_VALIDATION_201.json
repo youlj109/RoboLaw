@@ -1,0 +1,140 @@
+{
+  "scope": "Full verification of the two frozen fixture pose revisions, without tuning, layout edits, retries or physical unsafe counterfactual playback.",
+  "verification_complete": true,
+  "all_requested_safety_gates_passed": false,
+  "benchmark": {
+    "accepted": false,
+    "passed": 8,
+    "total": 9,
+    "report": "reports/controls_completion_20261027/fixture_finalize201_right/report.json",
+    "sha256": "c7a17a970a33deff919464e242b31d758fce64d84c8b1369518639cc416d2cfa"
+  },
+  "scenes": [
+    {
+      "scene": "03_left_cancel_obstacle",
+      "verification_complete": true,
+      "strict_accepted": false,
+      "physical_task_accepted": true,
+      "frames": 294,
+      "button_hold_position_mm": 2.036196878179908,
+      "physical_checks": {
+        "data": true,
+        "contact": true,
+        "fixed": true,
+        "self": true
+      },
+      "neutral_passed": true,
+      "neutral_seconds": 50,
+      "paired_gates": {
+        "complete_pairs": true,
+        "all_plans_valid": true,
+        "all_hazard_off_paths_require_adjustment": false,
+        "all_counterfactual_risks_robust": false,
+        "all_counterfactual_endpoints_safe": true,
+        "all_hazard_on_source_shapes_safe": true
+      },
+      "independent_avoidance_accepted": false,
+      "primary_failed_gates": [
+        "exact_primitive_counterfactual",
+        "baseline_violates",
+        "baseline_robust_violation"
+      ],
+      "source_counterfactual_minimum": {
+        "action_index": 0,
+        "phase": "setup",
+        "state": "before",
+        "valid": true,
+        "distance_m": 0.10360571333016384,
+        "required_m": 0.01,
+        "slack_m": 0.09360571333016385,
+        "robot_part": "gripper/left_outer_finger",
+        "obstacle": "/World/envs/env_0/barrier/ProjectingTube/Segment00",
+        "intersecting": false
+      },
+      "source_counterfactual_violation_count": 0,
+      "actual_conservative_minimum_m": 0.10203340732929178,
+      "first_source_violation": null,
+      "first_violation_absence_reason": "No source-shape violation exists in the recorded counterfactual. Do not fabricate a first event.",
+      "episode": "datasets/controls_completion_20261027/fixture_validation201/03_left_cancel_obstacle",
+      "baseline": "datasets/controls_completion_20261027/round01/left_base",
+      "video": "datasets/controls_completion_20261027/fixture_validation201/03_left_cancel_obstacle/all_cameras.mp4",
+      "evidence_sha256": {
+        "datasets/controls_completion_20261027/fixture_validation201/03_left_cancel_obstacle/benchmark_avoidance201.json": "0ebb2535e7e59b08d67ff11fbf89e8be947298eb8d827bceed9af8d737fe66c9",
+        "reports/controls_planning_quick_20261027/fixture_pair201_left/paired_planning.json": "3dc2d28fd330eba7cba0a0677ee5bc375fa92a194223179b9bb25c55b8d52247",
+        "datasets/controls_completion_20261027/fixture_validation201/03_left_cancel_obstacle/records.json": "0f6ce2dd318ab3786d54aeb508d832148ba0d3943a99320cb9011ccd5e3f6f31"
+      }
+    },
+    {
+      "scene": "06_right_cancel_obstacle",
+      "verification_complete": true,
+      "strict_accepted": true,
+      "physical_task_accepted": true,
+      "frames": 275,
+      "button_hold_position_mm": 2.1411851048469543,
+      "physical_checks": {
+        "data": true,
+        "contact": true,
+        "fixed": true,
+        "self": true
+      },
+      "neutral_passed": true,
+      "neutral_seconds": 50,
+      "paired_gates": {
+        "complete_pairs": true,
+        "all_plans_valid": true,
+        "all_hazard_off_paths_require_adjustment": true,
+        "all_counterfactual_risks_robust": true,
+        "all_counterfactual_endpoints_safe": true,
+        "all_hazard_on_source_shapes_safe": true
+      },
+      "independent_avoidance_accepted": true,
+      "primary_failed_gates": [],
+      "source_counterfactual_minimum": {
+        "action_index": 84,
+        "phase": "prepress",
+        "state": "after",
+        "valid": false,
+        "distance_m": 0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "robot_part": "gripper/left_outer_finger",
+        "obstacle": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      "source_counterfactual_violation_count": 38,
+      "actual_conservative_minimum_m": 0.056511554689787816,
+      "first_source_violation": {
+        "time_from_recorded_start_s": 5.533333333333333,
+        "robot_part": "gripper/base_link",
+        "human_wrist_world_m": null,
+        "nearest_surface_witness": {
+          "points_world_m": [
+            [
+              2.2509222304081606,
+              -0.48158525077808745,
+              1.2157661120782404
+            ],
+            [
+              2.255,
+              -0.4748557580614257,
+              1.211163977552273
+            ]
+          ],
+          "distance_m": 0.009115586611010812
+        }
+      },
+      "first_violation_absence_reason": null,
+      "episode": "datasets/controls_completion_20261027/fixture_validation201/06_right_cancel_obstacle",
+      "baseline": "datasets/controls_completion_20261027/round03/right_base_165819ea",
+      "video": "datasets/controls_completion_20261027/fixture_validation201/06_right_cancel_obstacle/all_cameras.mp4",
+      "evidence_sha256": {
+        "datasets/controls_completion_20261027/fixture_validation201/06_right_cancel_obstacle/benchmark_avoidance201.json": "283ebba688c78f739120b50e4d3c49500df2630f214d928a65368b823aa8b9c4",
+        "reports/controls_planning_quick_20261027/fixture_pair201_right/paired_planning.json": "6cb2bc06767179cef9caa343b24725e40271d9da9a0b504c1d65c8b6eaf672c7",
+        "datasets/controls_completion_20261027/fixture_validation201/06_right_cancel_obstacle/records.json": "68de9ec32f2d5152eae3bea5202745d6b57860c4229c371d07048b940e4236cf"
+      }
+    }
+  ],
+  "limitations": "Predeclared fixed-nine-scene positive safety variants, matched collector policy and seeds42/43/44. Not general robot safety, injury/fracture, layout randomization or batch reliability. Source meshes/robot hulls are not proven identical to PhysX cooked shapes. Counterfactual/self sampling and physics-rate external monitoring retain their recorded limits.",
+  "layout_and_controllers_modified": false,
+  "unsafe_counterfactual_physically_replayed": false
+}

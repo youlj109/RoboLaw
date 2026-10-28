@@ -1,5 +1,11 @@
 # Fixture Pose Visual Review
 
+This is the historical visual/quick-planning round200 scope. The user's later
+full verification201 is complete: right r07 passes, left r12 fails avoidance
+necessity despite successful physical execution. Current strict status is8/9.
+See [full verification](FIXTURE_FULL_VALIDATION_201.md); the round200 results
+below are retained rather than rewritten as full acceptance.
+
 Newest requested scope: improve the two cancel-task obstacle placements using
 **real-image-only review**, freeze each accepted layout, then generate one quick
 cuRobo approach each. No execution, long-term stability, counterfactual necessity
