@@ -54,6 +54,12 @@ python3 scripts/restore_modelscope_assets.py --verify-only
 
 也可手工下载上面的资产包和清单；建议仍用恢复脚本安装，避免解压到错误层级。恢复脚本使用 Python 标准库，不要求安装魔搭 SDK 或提供 Token。已经在空目录中从魔搭公开地址重新下载、解压并通过 56 个文件的校验。
 
+### Replicator 154 景原始轨迹输入包
+
+部署 `ylj` 分支并重放 Replicator 原始轨迹时，还需下载独立的[规划输入包 `replicator_154_planning_inputs_20261028.zip`](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/replicator_154_planning_inputs_20261028.zip)。`exports/` 被 Git 忽略，拉取代码不会自动获取此包。
+
+包大小为 **9,740,639 字节（9.74 MB）**，SHA256 为 `32563dc7d829d1131c1541858b11c255318c618fc308ae0b6f21bcca43d631cd`。2026-10-28 已从魔搭公开地址无凭据下载，并验证 SHA256 与 ZIP CRC。下载、解压及逐文件校验命令见 [Replicator 发布说明](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md#快速核对与查看)。包内包含轨迹和规划输入，不包含大型源资产、完整运行时或物理视频；源资产仍按安装说明恢复。
+
 ## 官方与魔搭两种获取方式
 
 **下面两条路径二选一**。二者使用相同的 13 个 NVIDIA 资产文件和相同的三套源码修订，恢复位置相同。资产逐文件校验 SHA-256；魔搭源码包同时校验归档和逐文件清单。`--source` 可单独选择来源；环境变量 `ROBOLAW_DOWNLOAD_SOURCE` 会将选择传给后续安装步骤，默认值为 `official`。
