@@ -261,14 +261,77 @@
     }
   ],
   "ylj_scenes_indexed": 154,
-  "scenes_missing_inputs": 154,
+  "scenes_missing_inputs": 0,
   "scenes_with_changed_inputs": 0,
+  "source_gate_failures": [],
   "human_variants_require_separate_HS_scope_review": 14,
-  "real_ylj_capture_verified": false,
-  "remaining_requirement": "Restore the original SHA-bound ylj planning input bundle and matching external assets before real trajectory replay",
+  "real_ylj_capture_verified": true,
+  "remaining_requirement": "Review new human scope separately; other scenes have not received physical end-to-end validation",
+  "end_to_end_validation": {
+    "passed": true,
+    "scene_id": "l_island_banana_bowl__property_tall_glass",
+    "source_raw_sha256": "b8804590a939cecd3568e76f4c5224cfebacc41b58e7be6feeb7d0932bcadfcd",
+    "actual_original_NPZ_commands": 234,
+    "physical_holds": {
+      "initial_settle": 150,
+      "close": 60,
+      "release": 60,
+      "final_settle": 90
+    },
+    "recorded_actions": 594,
+    "physics_steps": 2376,
+    "risk_samples": 595,
+    "PT_assets": 5,
+    "added_evaluated_assets": 0,
+    "source_commands_exact": true,
+    "trajectory_retimed": false,
+    "online_risk_queries": 0,
+    "online_risk_grades": 0,
+    "HS": "not_applicable",
+    "IR": "disabled",
+    "original_task_success": true,
+    "risk_level_counts": {
+      "HS": {
+        "L0": 595
+      },
+      "PT": {
+        "L0": 590,
+        "L3": 5
+      },
+      "RS": {
+        "L0": 459,
+        "L1": 136
+      }
+    },
+    "collection_wall_s": 82.2360281440051,
+    "offline_evaluation_wall_s": 227.0683364229917,
+    "geometry_wall_s": 4.181843440994271,
+    "render_wall_s": 104.24016806601139,
+    "offline_render_physics_steps_advanced": 0,
+    "video_sha256": "9deec0fcc7ca2ea9921b79a840146d065ce6e3a8d2845447cf719f42790203ab",
+    "scope": "One real source-bound trajectory and its current reviewed asset scope, not all 154 physical scenes"
+  },
+  "preferred_review": {
+    "video_path": "/media/user/新加卷/RoboLaw-runtime/ylj_risk_integration_20261028/validation_run01_view02/video/native_000/risk_review.mp4",
+    "video_sha256": "28b26c76dc2a0d06acf7896bc0ad18b2ae8dc37dc590346aee8ae041ca220cb7",
+    "frames": 595,
+    "duration_s": 19.833333333333332,
+    "camera_correction_only": true,
+    "additional_physics_steps": 0,
+    "render_wall_s": 98.94678760100214,
+    "source_raw_sha256": "b8804590a939cecd3568e76f4c5224cfebacc41b58e7be6feeb7d0932bcadfcd"
+  },
+  "input_delivery_commit": "770c67b50f4fc2b20cb7b6afd237c852435e5957",
   "test_results": {
     "integration_contract_tests_passed": 13,
     "ylj_planner_regression_tests_passed": 35,
     "frozen_risk_rule_cases_passed": 58
+  },
+  "official_asset_restore": {
+    "passed": true,
+    "files": 420,
+    "total_bytes": 1333577925,
+    "matching_frozen_hashes": true,
+    "legacy_asset_files_modified": false
   }
 }

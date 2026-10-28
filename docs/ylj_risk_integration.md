@@ -12,7 +12,17 @@ ylj 的 154 个场景包含新加障碍。导入场景配置不等于授权把�
 
 ## 使用统一流水线
 
-先按 ylj 发布说明恢复 `replicator_154_planning_inputs_20261028.zip`（SHA256 `32563dc7d829d1131c1541858b11c255318c618fc308ae0b6f21bcca43d631cd`）及外部源资产。保留索引中的相对路径与原始字节。Git 本身不包含实际轨迹 NPZ、规划结果和 source_scene 证据，缺失时严格报错；不生成伪轨迹，不跳过 SHA，不重新规划冒充原版本。
+先按 ylj 发布说明恢复 [原始输入包](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/replicator_154_planning_inputs_20261028.zip)（SHA256 `32563dc7d829d1131c1541858b11c255318c618fc308ae0b6f21bcca43d631cd`）及外部源资产。下载说明来自 `ylj@770c67b`。保留索引中的相对路径与原始字节。Git 本身不包含实际轨迹 NPZ、规划结果和 source_scene 证据，缺失时严格报错；不生成伪轨迹，不跳过 SHA，不重新规划冒充原版本。
+
+5090 上本次验证的融合工作区是 `/media/user/新加卷/RoboLaw-huirongzeng`。它保留 ylj 的原始障碍物文件；旧运行目录中部分同名文件哈希不同，不能混用。机器人、依赖与官方资产可复用已校验的本机缓存，ylj 直接来源文件需在融合工作区内按原 SHA 恢复。原运行目录的旧资产保留，供历史数据使用。运行前进入融合工作区并指定它在容器内的路径：
+
+```bash
+cd /media/user/新加卷/RoboLaw-huirongzeng
+export ARENA_CONTAINER=arena-kitchen-collect
+export ROBOLAW_WORKSPACE=/media/user/新加卷/RoboLaw-huirongzeng
+```
+
+`ROBOLAW_WORKSPACE` 只选择此次进程的代码/资产工作区，路径必须已经挂载到现有容器；不设置时原入口仍使用 `/workspace`。
 
 ```bash
 scripts/arena_python.sh scripts/collect_ylj_risk_task.py \
@@ -44,3 +54,5 @@ ylj 快速轨迹未执行 0.4 rad/s 减速处理的已知问题仍以源版本�
 ## 验证
 
 `python -m unittest discover -s tests -p test_ylj_risk_integration.py` 检查精确资产/表面交集、同数量换入资产拦截、新人体拒绝、任务身份、完整 NPZ 通道与时间轴、ylj 插入等待和 154 景输入预检。真实运行还需要输入包及匹配的外部 USD；CPU 测试通过不能代替全部 154 景端到端验收。
+
+本机已下载并核对输入包全部 794 个来源文件，154 景直接来源校验通过。按“不增加风险计算资产”要求，140 个非人体变体可以进入当前融合采集，14 个新增人体变体仍需独立 HS 范围授权。已对 `l_island_banana_bowl__property_tall_glass` 执行完整原轨迹，得到 2,376 个物理步、594 个动作及 595 个离线风险样本；PT 保留原 5 个资产，原任务成功。在线记录 82.24 秒，离线评价 227.07 秒，其中 gDist 完整网格测距 4.18 秒。未知与审计项仍保留，本条验证不替代其余场景的实际运行验收。

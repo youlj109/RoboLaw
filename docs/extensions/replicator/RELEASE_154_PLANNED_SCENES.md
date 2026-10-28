@@ -81,9 +81,13 @@ Git 保存代码、技能包、配置、索引和说明。`reports/`、大部分
 ## 快速核对与查看
 
 1. 获取 `ylj` 中本次代码、配置与完整索引，按原安装流程准备运行环境和源资产。
-2. 将单独提供的输入包放到 `exports/`，在仓库根目录解压并核对 SHA：
+2. 从[魔搭下载原始轨迹输入包](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/replicator_154_planning_inputs_20261028.zip)，在仓库根目录下载、校验并解压：
 
    ```bash
+   mkdir -p exports
+   curl -fL --retry 3 "https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/replicator_154_planning_inputs_20261028.zip" \
+     -o exports/replicator_154_planning_inputs_20261028.zip
+   echo "32563dc7d829d1131c1541858b11c255318c618fc308ae0b6f21bcca43d631cd  exports/replicator_154_planning_inputs_20261028.zip" | sha256sum -c -
    unzip -t exports/replicator_154_planning_inputs_20261028.zip
    unzip -n exports/replicator_154_planning_inputs_20261028.zip
    sha256sum -c PLANNING_INPUTS_SHA256SUMS
