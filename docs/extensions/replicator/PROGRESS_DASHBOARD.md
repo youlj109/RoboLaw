@@ -4,13 +4,13 @@
 
 ## 物理执行与实际视频
 
-截至 2026-10-28，154 景规划已完整生成，真实物理执行批次已启动但尚未全部完成。顶部面板读取 `exports/replicator_154_physical_demos_20261028/manifest.json`，独立显示 planned、physical pending/running/success/failed/error 和有效视频数量。每景只执行一次；实际抓放失败保留原结果和视频，不计作规划失败，也不自动重跑。
+截至 2026-10-28，154 景规划已完整生成，**首轮真实物理执行已全部完成：70 成功、84 任务失败、0 执行错误，154 个真实视频**。顶部面板读取 `exports/replicator_154_physical_demos_20261028/manifest.json`，独立显示 planned、physical pending/running/success/failed/error 和有效视频数量。首轮每景执行一次；实际抓放失败保留原结果和视频，不计作规划失败，也不自动重跑。逐任务数据见 [14 个任务的首轮统计](RELEASE_154_PLANNED_SCENES.md#首轮物理执行统计)。U 型香蕉的 11 景相机补录也已完成（7 成功、4 失败），最终演示包已生成。
 
 按场景选择可查看真实执行结果、失败原因和 overview 视频。初始化或录制错误单独显示，`executed=false` 表示没有开始执行，不标成抓放失败或成功。结果必须与 R10 的场景、配置、轨迹及 SHA 绑定；视频链接还需实际执行结果 SHA 和视频 SHA 验证通过。缺失或不一致显示待核，不用旧规划动画替代。
 
 G 型香蕉人体的源网格相交、U 型碗窄口的底座支撑边界两项历史质量提示继续保留。实际任务成功也不自动解除这些提示或代表安全避障验收。人工标注和原轨迹界面保持独立。
 
-首次执行、恢复和 `--dry-run` 的完整命令见 [154 景发布与输入恢复说明](RELEASE_154_PLANNED_SCENES.md)。最小输入包包含执行所需的 R10 progress、154 份 result/source_scene 和各实际轨迹路径；大型源资产仍须另行恢复。网页历史图片与标注不在最小输入包内。只有 154 个真实视频齐全且通过校验后才能生成完整物理 demo 包，当前进度以面板和 manifest 为准。
+首次执行、恢复和 `--dry-run` 的完整命令见 [154 景发布与输入恢复说明](RELEASE_154_PLANNED_SCENES.md)。最小输入包包含执行所需的 R10 progress、154 份 result/source_scene、各实际轨迹路径及六份相机来源证据；大型源资产仍须另行恢复，全部网页历史图片与人工标注不在包内。首轮及补录的原生执行审计已通过，最终演示包中的 165 个视频也已完整解码并通过文件校验。视频包为 `exports/replicator_154_physical_video_bundle_20261028.zip`，解压后打开 `index.html`；含 154 景主视频及 11 个原遮挡视频，详细大小和 SHA 见发布说明。
 
 初始化启动次数与物理 episode 分开记录。L-island 香蕉人体景曾在首次 `env.step` 前停滞；旧 `initializing`、`executed=false` 记录保留，新初始化通过 `initialization_history` 绑定旧记录，实际结果写入独立子目录。这只恢复尚未开始的唯一 episode，不重跑已经执行的任务；额外初始化记录随视频包保留，不能替代该景的正式结果或真实视频。
 

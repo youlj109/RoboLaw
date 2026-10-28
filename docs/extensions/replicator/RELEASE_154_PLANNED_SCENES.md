@@ -2,7 +2,31 @@
 
 截至 2026-10-28，14 个 Replicator 原始任务 × 11 种安全增广变体，共 **154 景已生成完整 cuRobo 轨迹，0 景规划失败**。每条完整轨迹包含预抓取、接近、抬升、转运、下放和撤离六阶段。
 
-这份发布记录的是**规划结果**。真实 PhysX 执行与视频录制已启动，首轮每景一次，失败也保留；U 型香蕉 11 景因首轮相机遮挡，另获授权各真实补录一次，首轮与补录成绩分开记录。实际执行结果及视频独立保存，不用规划轨迹、静态截图或轨迹动画计作物理任务成功。完成情况以本机 [物理执行面板](http://127.0.0.1:8765/#physicalWorkspace) 为准，安全避障和长期稳定性未单独验收。
+首轮真实 PhysX 执行已全部完成：**154 景实际执行、70 成功、84 任务失败、0 执行错误，保存 154 个真实视频**。首轮每景一次，失败也保留；U 型香蕉 11 景因首轮相机遮挡，另各真实补录一次，补录也已完成（7 成功、4 失败）。最终演示包已生成，包含 154 景主视频和 11 个原遮挡视频，全部 165 个视频通过完整解码与来源校验。首轮与补录成绩分开记录，不用规划轨迹、静态截图或轨迹动画计作物理任务成功。逐景结果见本机 [物理执行面板](http://127.0.0.1:8765/#physicalWorkspace)，安全避障和长期稳定性未单独验收。
+
+## 首轮物理执行统计
+
+统计来自 `exports/replicator_154_physical_demos_20261028/manifest.json`，每个原始任务均有 11 个变体、11 次实际执行和 11 个视频。任务标识省略共同前缀 `kitchen_bench_replicator_`；成功依据原始任务判据，补录不改动下表。
+
+| 原始任务 | 成功 | 任务失败 | 执行错误 | 真实视频 |
+| --- | ---: | ---: | ---: | ---: |
+| `g_shape_banana_bowl` | 3 | 8 | 0 | 11 |
+| `g_shape_bowl_sink` | 4 | 7 | 0 | 11 |
+| `g_shape_mustard_bowl` | 1 | 10 | 0 | 11 |
+| `l_island_banana_bowl` | 6 | 5 | 0 | 11 |
+| `l_island_bowl_sink` | 4 | 7 | 0 | 11 |
+| `l_island_mustard_bowl` | 8 | 3 | 0 | 11 |
+| `l_shape_banana_bowl` | 6 | 5 | 0 | 11 |
+| `l_shape_bowl_sink` | 2 | 9 | 0 | 11 |
+| `l_shape_mustard_bowl` | 2 | 9 | 0 | 11 |
+| `peninsula_bowl_sink` | 7 | 4 | 0 | 11 |
+| `peninsula_mustard_bowl` | 5 | 6 | 0 | 11 |
+| `u_shape_banana_bowl` | 7 | 4 | 0 | 11 |
+| `u_shape_bowl_sink` | 7 | 4 | 0 | 11 |
+| `u_shape_mustard_bowl` | 8 | 3 | 0 | 11 |
+| **合计** | **70** | **84** | **0** | **154** |
+
+首轮独立原生执行审计已通过：154 次实际 episode 与视频来源绑定、原规划指令、连续 120 Hz 物理状态和原始任务判据均已核对，70 项成功都有实际判据支持。报告保存在 `reports/replicator_physical_execution_20261028/completed_execution_audit.json`，按仓库规则不随 Git 提交。11 次补录也通过独立审计，首轮清单保持原字节。最终打包器另行完成全部 165 视频解码与 ZIP 成员 SHA 校验；这些检查不等于安全避障认证。
 
 ## 完整索引
 
@@ -29,7 +53,7 @@ NPZ 包含实际规划关节序列 `q`、名义 TCP `tcp_world`、阶段 `phase`
 | `g_shape_banana_bowl__human_default_mpfb` | 一次 CPU 检查仍发现人体衣服与厨房橱柜源网格相交 | 虽已生成轨迹，场景质量不通过 |
 | `u_shape_bowl_sink__robot_narrow_opening` | 障碍底座 AABB 超出台面 AABB 边界 | 支撑质量待复核；AABB 提示不等于已经证实实际悬空 |
 
-这两项不会因轨迹完整或视频录制完成而自动消失。其余 152 景也没有因此获得物理、安全或避障验收结论。
+这两项不会因轨迹完整或视频录制完成而自动消失。其余 152 景也不能仅凭没有这两项提示就判为安全或避障合格；实际任务结果以上面的首轮统计为准。
 
 ## 从 Git 获取什么，从证据包恢复什么
 
@@ -41,7 +65,7 @@ Git 保存代码、技能包、配置、索引和说明。`reports/`、大部分
 
 本包已通过 ZIP CRC、每个成员的 SHA 和原路径字节检查。解压后的 154 景均通过真实执行器 `source_entries/load_inputs` 的 CPU 校验，六份相机证据也由 `load_camera_overrides` 校验；相机配置取当前 Git，21 个未打包直接源资产映射到本机已安装资产，原始 SHA 校验保留。这不表示单独解压本包即可运行，源资产及其网格、纹理依赖仍需恢复。另已执行带新相机参数的真实容器 CLI `--dry-run`，154 景通过，未启动物理或规划。
 
-保留原相对路径及文件字节，按索引 SHA 校验。沿用轨迹的 `artifacts.*.path` 可能指向 R1–R9 的原轮次，因此只复制 R10 的目录不能保证证据自包含。不得为了通过校验改写原始结果或忽略缺失文件。视频包应另附逐景视频与真实执行结果的清单和 SHA；本文件不预先承诺该包已录制完成。
+保留原相对路径及文件字节，按索引 SHA 校验。沿用轨迹的 `artifacts.*.path` 可能指向 R1–R9 的原轮次，因此只复制 R10 的目录不能保证证据自包含。不得为了通过校验改写原始结果或忽略缺失文件。最终视频包独立分发，已附逐景视频与真实执行结果的清单和 SHA，详见下方。
 
 厨房、机器人、任务物体和人体源资产按 [仓库安装与资产恢复说明](../../../README.md) 恢复；Replicator 的额外厨房、香蕉资产入口分别为 `scripts/extensions/replicator/restore_layout_assets.py` 和 `scripts/extensions/replicator/restore_banana.py`。索引顶层 `source_assets` 与 `robot_models` 保存本次实际来源文件 SHA，恢复后以这些记录核对。
 
@@ -87,7 +111,7 @@ Git 保存代码、技能包、配置、索引和说明。`reports/`、大部分
      --output exports/replicator_154_physical_demos_20261028
    ```
 
-   当前本机批次已运行，不要并行重复启动。`--device cpu` 选择 CPU PhysX，实际相机渲染仍需 GPU/RTX。恢复前确认上一进程已经退出且 manifest 没有 running 项。推荐使用主机协调器，每个原始任务启动一个全新 Kit 进程，默认最多 11 景，显式使用 8 个 PhysX 线程：
+   本机首轮已完成，无需重跑；任何批次有运行项时都不要并行重复启动。`--device cpu` 选择 CPU PhysX，实际相机渲染仍需 GPU/RTX。恢复未完成的批次前，确认上一进程已经退出且 manifest 没有 running 项。推荐使用主机协调器，每个原始任务启动一个全新 Kit 进程，默认最多 11 景，显式使用 8 个 PhysX 线程：
 
    ```bash
    python3 scripts/extensions/replicator/run_physical_demo_batches.py \
@@ -100,20 +124,22 @@ Git 保存代码、技能包、配置、索引和说明。`reports/`、大部分
 
 5. 启动网页：`python3 scripts/extensions/replicator/progress_dashboard.py --port 8765`，打开 [物理执行面板](http://127.0.0.1:8765/#physicalWorkspace)。实际输出在 `exports/replicator_154_physical_demos_20261028/manifest.json`、`executions/` 和 `videos/`。初始化错误 `executed=false` 不算抓放失败或成功；只有真实任务判据通过才记执行成功。最小输入包不包含全部截图、网页历史和标注，新克隆时不保证显示本机历史的全部图片与人工记录。
 
-154 份真实视频齐全后，可用 `scripts/extensions/replicator/package_trajectory_demos.py` 校验并打包物理 demo。失败执行的视频也保留；缺视频时拒绝完整打包，不用规划动画补齐。
+首轮 154 份真实视频已齐全，可用 `scripts/extensions/replicator/package_trajectory_demos.py` 校验首轮集合。最终供查看的演示已用下面的独立入口生成；失败执行的视频也保留，缺视频时拒绝完整打包，不用规划动画补齐。
 
 ### 相机补录与最终演示包
 
 U 型香蕉首轮 11 景的相机高度在天花板范围内，视频遮挡，因此这 11 景在独立目录 `exports/replicator_u_banana_camera_retakes_20261028/` 各再真实执行一次。补录仅改相机与曝光，锁定原布局、控制参数和轨迹；原首轮 manifest、结果与视频不改。**无论补录成功还是失败，11 景全部固定选新录，不按成绩择优。** 网页上方仍统计首轮，补录另列已保存数量，视频明确标为第 2 次。
 
-首轮 154 景和补录 11 景全部完成后，运行独立发布入口：
+首轮 154 景和补录 11 景均已完成，独立发布入口如下。当前包已生成，脚本拒绝覆盖已有包；仅重新校验可使用 `--validate-only`。
 
 ```bash
 python3 scripts/extensions/replicator/package_reviewable_physical_demos.py --validate-only
 python3 scripts/extensions/replicator/package_reviewable_physical_demos.py
 ```
 
-输出 `exports/replicator_154_physical_video_bundle_20261028/` 及同名 ZIP：主 `videos/` 154 个（143 首轮 + 11 新录），`first_pass_videos/` 保留 11 个原遮挡视频，共 165 个 MP4；154 份原始结果与 154 份所选结果分目录保存。`demo_selection.json` 逐景给出首轮和所选视频/结果的 SHA、实际状态与尝试编号；README 和网页并列首轮成绩与演示集成绩。原 manifest 作为原字节溯源保存，不将其旧视频路径改指新内容。
+已生成 `exports/replicator_154_physical_video_bundle_20261028/` 及同名 ZIP：主 `videos/` 154 个（143 首轮 + 11 新录），`first_pass_videos/` 保留 11 个原遮挡视频，共 165 个 MP4；154 份原始结果与 154 份所选结果分目录保存。`demo_selection.json` 逐景给出首轮和所选视频/结果的 SHA、实际状态与尝试编号；README 和网页并列首轮成绩与演示集成绩。原 manifest 作为原字节溯源保存，不将其旧视频路径改指新内容。
+
+视频 ZIP 大小 **168,040,081 字节（168.04 MB）**，SHA256 为 `c0745ac0c48c6d0c1832766798f3760ddb70c6230cf5ef85e500a0b8156db51c`。解压后打开 `index.html` 即可浏览。首轮成绩与所选 154 个演示的成绩本次均为 **70 成功、84 失败**；11 个补录为 **7 成功、4 失败**，逐景结果也与原首轮一致，选择规则仍为固定使用全部补录。所有 165 个视频完整解码通过，ZIP CRC 与全部成员 SHA 验证通过。视频包保存在本机，不随 Git 代码上传。
 
 `physical_camera_retake_plan_20261028.json` 绑定本机已有首轮物理结果与视频 SHA，**新克隆不能凭规划输入包直接使用该补录计划**。新首次执行只使用上方 `--camera-overrides`，避免旧默认相机再次遮挡，不传 `--camera-retake-plan`。
 
