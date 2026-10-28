@@ -6,7 +6,7 @@ profile=${1:?robot or property}
 case "$profile" in robot|property) ;; *) exit 2 ;; esac
 py=/root/autodl-tmp/conda_envs/robolaw_data/bin/python
 log=/root/autodl-tmp/lgd-day-logs/b03_standard_matched_${profile}_runner.log
-for ((i=0;i<400;i++)); do
+for ((i=0;i<600;i++)); do
  grep -q '^exit=' "$log" && break
  sleep 10
 done

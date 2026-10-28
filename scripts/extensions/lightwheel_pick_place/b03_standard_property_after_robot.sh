@@ -2,7 +2,7 @@
 set -euo pipefail
 cd /root/autodl-tmp/RoboLaw-lgd
 log=/root/autodl-tmp/lgd-day-logs/b03_standard_matched_robot_runner.log
-for ((i=0;i<400;i++)); do
+for ((i=0;i<600;i++)); do
  grep -q '^exit=' "$log" && break
  sleep 10
 done
