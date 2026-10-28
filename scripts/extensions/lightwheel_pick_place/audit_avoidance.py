@@ -133,6 +133,12 @@ def audit(baseline,episode):
         # Identical feedback policy can produce different recenter counts/routes.
         # Check bounded outputs, while dense actual-path and native gates remain mandatory.
         allowed={'pregrasp':{'motion_gen','motion_gen_upper_route','motion_gen_joint_goal','mixed_cartesian_bypass'},'approach':{'cartesian_ik','cartesian_line_ik'},'lift':{'motion_gen','cartesian_line_ik','cartesian_ik'},'transfer':{'motion_gen','motion_gen_upper_route','motion_gen_joint_goal','mixed_cartesian_bypass'},'lower':{'cartesian_line_ik','cartesian_ik','motion_gen'},'retreat':{'motion_gen','cartesian_line_ik','cartesian_ik'}}
+        # The same explicitly recorded joint-goal file is also used for lower.
+        # Recognize its validated MotionGen method, without accepting an
+        # unconfigured or mismatched lowering controller.
+        shared_lower_goals=br.get('task_motion_parameters',{}).get('placement_joint_goals_sha256')
+        if shared_lower_goals and shared_lower_goals==r.get('task_motion_parameters',{}).get('placement_joint_goals_sha256'):
+            allowed['lower'].add('motion_gen_joint_goal')
         def valid_policy_execution(m):
             plans=[x for x in m.get('plans',[]) if x.get('executed')]
             if not plans or any(x['phase'] not in allowed or x.get('metadata',{}).get('method') not in allowed[x['phase']] for x in plans):return False
