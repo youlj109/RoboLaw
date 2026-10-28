@@ -68,6 +68,14 @@ PHYSICAL_STATUSES = ('pending', 'running', 'success', 'failed', 'error')
 CAMERA_RETAKE_DEMOS = 'exports/replicator_u_banana_camera_retakes_20261028/'
 CAMERA_RETAKE_PLAN = 'configs/extensions/replicator/physical_camera_retake_plan_20261028.json'
 CAMERA_RETAKE_TOTAL = 11
+PHYSICAL_RETRY_DEMOS = 'exports/replicator_physical_retry_round1_20261028/'
+PHYSICAL_RETRY_PLAN = 'configs/extensions/replicator/physical_retry_round1_20261028.json'
+PHYSICAL_RETRY_DIAGNOSTICS = 'reports/replicator_physical_retry_round1_diagnostics_20261028/'
+PHYSICAL_RETRY_DETAIL_DIAGNOSTICS = 'reports/replicator_physical_retry_round1_diagnostics_detail_20261028/'
+PHYSICAL_RETRY_DARK_DIAGNOSTICS = 'reports/replicator_physical_retry_round1_diagnostics_dark_20261028/'
+PHYSICAL_RETRY_TOTAL = 84
+PHYSICAL_RETRY_RESULTS = 'configs/extensions/replicator/physical_retry_results_round1_20261028.json'
+PHYSICAL_RETRY_REPORT = 'docs/extensions/replicator/PHYSICAL_RETRY_ROUND1_20261028.md'
 
 
 def trajectory_report_roots(root):
@@ -153,6 +161,7 @@ class Progress:
         self.report_logs: dict[str, list[Path]] | None = None
         self.annotation_lock = threading.Lock()
         self.trajectory_annotation_lock = threading.Lock()
+        self.physical_retry_annotation_lock = threading.Lock()
 
     @property
     def annotation_path(self) -> Path:
@@ -790,11 +799,251 @@ class Progress:
                       video_count=sum(row['video_available'] for row in entries), stale=sum(row['stale'] for row in entries),
                       initialization_error=sum(row['initialization_error'] for row in entries))
         retakes = self.camera_retakes(entries, indexed, source_path)
+        retry = self.physical_retries(entries, indexed)
+        executed_errors=sum(r.get('result_valid') and r.get('executed') and r.get('execution_status')=='error' for r in retry['entries'])
+        latest=dict(total=counts['total'],success=counts['success']+retry['counts']['success'],
+                    failed=counts['failed']-retry['counts']['success']-executed_errors,error=counts['error']+executed_errors)
         return dict(kind='physical_execution', manifest_present=bool(manifest), manifest_valid=manifest_valid,
                     manifest_path=PHYSICAL_DEMOS + 'manifest.json', counts=counts, entries=entries,
                     updated_at=manifest.get('updated_at'), stage=manifest.get('stage', manifest.get('status', 'waiting')),
-                    camera_retakes=retakes,
+                    camera_retakes=retakes, failure_retry=retry, combined_latest_counts=latest,
                     notice='首轮每景一次物理仿真，成功、失败和错误分别记录；相机补录独立展示，不改变首轮成绩。安全及过程避障未单独验收。')
+
+    def physical_retries(self, first_entries, first_raw):
+        """One explicit failure-retry overlay; first-pass and camera counts stay immutable."""
+        manifest = self.json(self.root / PHYSICAL_RETRY_DEMOS / 'manifest.json')
+        empty = dict(manifest_present=bool(manifest), total=PHYSICAL_RETRY_TOTAL, entries=[],
+                     counts={k:0 for k in (*PHYSICAL_STATUSES,'stale','diagnostics_ready')})
+        if not manifest: return empty
+        first = {r['scene_id']:r for r in first_entries}
+        def require(value, message):
+            if not value: raise ValueError(message)
+        def bound(value, digest):
+            path=self.local(value)
+            require(valid_digest(digest) and path.is_file() and self.file_sha256(path)==digest,'重试来源 SHA 不匹配：'+str(value))
+            return path
+        def prior_path(raw, field='execution_result_path', camera=False):
+            value=raw[field]
+            return self.local((CAMERA_RETAKE_DEMOS if camera else PHYSICAL_DEMOS)+value if value.startswith('executions/') else value)
+        try:
+            plan_path=bound(manifest['retry_plan_path'],manifest['retry_plan_sha256']);plan=self.json(plan_path)
+            require(plan_path==self.root/PHYSICAL_RETRY_PLAN and plan.get('kind')=='physical_failure_retry_plan','重试计划类型或路径错误。')
+            require(manifest.get('kind')=='physical_failure_retry' and manifest.get('rendering_enabled') is False
+                    and manifest.get('video_expected') is False,'本轮必须为无渲染物理测试。')
+            for key,prefix in [('source_first_pass_manifest',PHYSICAL_DEMOS),('source_camera_retake_manifest',CAMERA_RETAKE_DEMOS)]:
+                ref=manifest[key];require(ref==plan[key],'重试清单来源与冻结计划不一致。')
+                require(bound(ref['path'],ref['sha256'])==self.root/prefix/'manifest.json','重试源清单路径错误。')
+            raw_rows=manifest['entries'];plan_rows=plan['entries']
+            if isinstance(plan_rows,dict):plan_rows=list(plan_rows.values())
+            planned={r['scene_id']:r for r in plan_rows};indexed={r['scene_id']:r for r in raw_rows}
+            failures={sid for sid,r in first_raw.items() if r.get('execution_status')=='failed'}
+            require(len(raw_rows)==len(plan_rows)==PHYSICAL_RETRY_TOTAL and len(indexed)==len(planned)==PHYSICAL_RETRY_TOTAL
+                    and set(indexed)==set(planned)==failures,'重试白名单必须恰好覆盖首轮失败项。')
+            cameras={r['scene_id']:r for r in self.json(self.root/CAMERA_RETAKE_DEMOS/'manifest.json').get('entries',[])}
+        except (ValueError,OSError,KeyError,TypeError) as error:
+            return dict(empty,manifest_error=str(error),counts=dict(empty['counts'],stale=PHYSICAL_RETRY_TOTAL))
+        entries=[]
+        for sid,raw in indexed.items():
+            row=dict(scene_id=sid,task_id=raw.get('task_id'),variant_id=raw.get('variant_id'),config_sha256=raw.get('config_sha256'),
+                execution_status='pending',executed=False,task_success=False,attempts=0,result_valid=False,result_url=None,
+                result_sha256=None,stale=False,reason='',physical_attempt_number=raw.get('physical_attempt_number'),
+                diagnostics=[],diagnostic_report_url=None,diagnostic_error='',adjustment_description=raw.get('adjustment',{}).get('description',''))
+            try:
+                require(sid in first and first[sid]['result_valid'] and first[sid]['execution_status']=='failed','首轮真实失败来源待核。')
+                require(all(raw.get(k)==v for k,v in planned[sid].items()),'重试条目与冻结计划不一致。')
+                require(raw.get('retry_plan_sha256')==manifest['retry_plan_sha256'] and self.local(raw['retry_plan_path'])==plan_path,'条目重试计划绑定错误。')
+                for key in ('scene_id','task_id','variant_id','config_sha256'):
+                    require(raw.get(key)==first_raw[sid].get(key),'重试改变原场景身份或配置。')
+                for name in ('config','trajectory','source_trajectory','result','source_scene'):
+                    bound(raw[name+'_path'],raw[name+'_sha256'])
+                require(raw['source_trajectory_sha256']==first_raw[sid]['trajectory_sha256'],'原轨迹 SHA 不一致。')
+                history=raw['prior_physical_attempts'];previous=[first_raw[sid]]+([cameras[sid]] if sid in cameras else [])
+                require(len(history)==len(previous) and raw['physical_attempt_number']==len(history)+1,'物理尝试编号未计入历史补录。')
+                for i,(ref,previous_row) in enumerate(zip(history,previous)):
+                    path=bound(ref['result_path'],ref['result_sha256']);actual=self.json(path)
+                    require(path==prior_path(previous_row,camera=i>0) and ref['result_sha256']==previous_row['execution_result_sha256'],'先前物理结果绑定错误。')
+                    require(actual.get('scene_id')==sid and actual.get('executed') is True and actual.get('execution_status')=='failed'
+                            and actual.get('task_success') is False and actual.get('physical_attempt_number',1)==i+1,'先前物理 episode 不是已确认失败。')
+                    for key in ('execution_status','task_success','executed','video_sha256'):
+                        require(ref.get(key)==actual.get(key),'先前物理状态不一致。')
+                status=raw.get('execution_status');require(status in PHYSICAL_STATUSES,'未知重试状态。')
+                row.update(execution_status=status,attempts=raw.get('attempts',0))
+                if status in ('pending','running'):
+                    entries.append(row);first[sid]['failure_retry']=row;continue
+                path=bound(raw['execution_result_path'],raw['execution_result_sha256'])
+                require(path==self.root/PHYSICAL_RETRY_DEMOS/'executions'/sid/'result.json','重试结果路径错误。')
+                result=self.json(path)
+                require(result.get('kind')=='physical_failure_retry_execution' and result.get('status')=='complete','重试实际结果类型错误。')
+                for key in ('scene_id','task_id','variant_id','config_path','config_sha256','trajectory_path','trajectory_sha256',
+                            'source_trajectory_path','source_trajectory_sha256','physical_attempt_number','prior_physical_attempts',
+                            'retry_plan_path','retry_plan_sha256','adjustment','execution_status','task_success','executed','attempts'):
+                    require(result.get(key)==raw.get(key),'重试实际结果/清单不一致：'+key)
+                require(result.get('planning_result_sha256')==raw['result_sha256'] and self.local(result['planning_result_path'])==self.local(raw['result_path']), '重试规划来源不一致。')
+                require(type(result.get('executed')) is bool and type(result.get('task_success')) is bool
+                        and type(result.get('attempts')) is int and result['attempts']==1
+                        and result['task_success'] is (status=='success') and (result['executed'] or status=='error')
+                        and result.get('rendering_enabled') is False and result.get('video_expected') is False,'重试次数、判据或无渲染标记矛盾。')
+                if status=='success':
+                    require(result.get('original_task_success') is True and result.get('final_original_destination_predicate') is True,'成功缺少原始任务判据。')
+                if result['executed']:
+                    evidence=result['physics_evidence']
+                    for name in ('q','metadata'):bound(evidence[name+'_path'],evidence[name+'_sha256'])
+                    if status=='success':require(evidence.get('complete') is True and evidence.get('continuous') is True,'成功缺少完整物理状态。')
+                row.update(executed=result['executed'],task_success=result['task_success'],result_valid=True,
+                    result_url='/artifact/'+quote(path.relative_to(self.root).as_posix(),safe='/'),result_sha256=raw['execution_result_sha256'],
+                    reason=str(result.get('failure_reason') or ''),initialization_error=status=='error' and not result['executed'])
+                if status in ('failed','error') and result['executed']:
+                    report_path=self.root/PHYSICAL_RETRY_DIAGNOSTICS/'scenes'/sid/'diagnostic.json'
+                    report=self.json(report_path)
+                    diagnostic_progress=self.json(self.root/PHYSICAL_RETRY_DIAGNOSTICS/'progress.json')
+                    diagnostic_entry=next((e for e in diagnostic_progress.get('entries',[]) if e.get('scene_id')==sid),{})
+                    if report:
+                        try:
+                            require(diagnostic_entry.get('status')=='ready' and diagnostic_entry.get('report_path')==report_path.relative_to(self.root).as_posix()
+                                    and bound(diagnostic_entry['report_path'],diagnostic_entry['report_sha256'])==report_path,'诊断报告绑定无效。')
+                            require(report.get('kind')=='physical_failure_diagnostic_state_replay' and report.get('scene_id')==sid
+                                    and report.get('diagnostic_only') is True and report.get('physics_steps_requested')==0
+                                    and report.get('physical_episode_started') is False,'诊断必须是零执行的状态回放。')
+                            binding=report['binding'];evidence=result['physics_evidence']
+                            for name,key in [('execution_result','execution_result'),('config','config')]:
+                                require(binding[name+'_sha256']==raw[key+'_sha256'],'诊断未绑定本轮结果/config。')
+                            for name,key in [('physics_states','q'),('physics_metadata','metadata')]:
+                                require(binding[name+'_sha256']==evidence[key+'_sha256'] and bound(binding[name+'_path'],binding[name+'_sha256'])==self.local(evidence[key+'_path']),'诊断实测状态来源错误。')
+                            require(binding.get('physical_overlay_sha256')==result['physical_overlay_binding']['sha256_start'],'诊断物理背景 overlay 不匹配。')
+                            bound(binding['physical_overlay_path'],binding['physical_overlay_sha256'])
+                            frames=report['frames'];require(1<=len(frames)<=10,'诊断图片数量错误。')
+                            images=[]
+                            for frame in frames:
+                                image=bound(frame['image_path'],frame['image_sha256']);require(image.parent==report_path.parent and re.fullmatch(r'frame_[0-9]{2}\.jpg',image.name),'诊断图片路径错误。')
+                                images.append(dict(frame,url='/artifact/'+quote(image.relative_to(self.root).as_posix(),safe='/')))
+                            row.update(diagnostics=images,diagnostic_report_url='/artifact/'+quote(report_path.relative_to(self.root).as_posix(),safe='/'))
+                        except (ValueError,OSError,KeyError,TypeError) as error:row['diagnostic_error']=str(error)
+            except (ValueError,OSError,KeyError,TypeError) as error:
+                row.update(stale=True,result_valid=False,result_url=None,execution_status='pending',reason=str(error))
+            entries.append(row)
+            if sid in first:first[sid]['failure_retry']=row
+        counts={status:sum(r['execution_status']==status for r in entries) for status in PHYSICAL_STATUSES}
+        counts.update(stale=sum(r['stale'] for r in entries),diagnostics_ready=sum(bool(r['diagnostics']) for r in entries))
+        self.physical_retry_visual_reviews(manifest,entries)
+        try:notes=self.physical_retry_annotations()
+        except AnnotationError as error:notes=dict(entries=[],error=error.message)
+        return dict(empty,entries=entries,counts=counts,updated_at=manifest.get('updated_at'),stage=manifest.get('stage'),annotations=notes)
+
+    def physical_retry_visual_reviews(self, manifest, entries):
+        """Read-only published image findings, separate from user-owned annotations."""
+        if manifest.get('stage') != 'complete': return
+        publication=self.json(self.root/PHYSICAL_RETRY_RESULTS)
+        if not publication:return  # Expected while execution/render/review is pending.
+        def bound(ref):
+            if not isinstance(ref,dict) or not valid_digest(ref.get('sha256')):raise ValueError('Invalid review source')
+            path=self.local(ref['path'])
+            if not path.is_file() or self.file_sha256(path)!=ref['sha256']:raise ValueError('Review source changed')
+            return path
+        try:
+            source=publication['source_retry_manifest']
+            if (publication.get('kind')!='physical_failure_retry_result_snapshot'
+                    or publication.get('partial_preview') is True
+                    or bound(source)!=self.root/PHYSICAL_RETRY_DEMOS/'manifest.json'
+                    or publication.get('diagnostic_visual_review',{}).get('status')!='complete'
+                    or publication['diagnostic_visual_review'].get('conclusions_written') is not True):return
+            published=publication['entries'];indexed={item['scene_id']:item for item in published}
+            if len(indexed)!=len(published):return
+            report_url=None
+            if publication.get('markdown_report_path')==PHYSICAL_RETRY_REPORT and (self.root/PHYSICAL_RETRY_REPORT).is_file():
+                report_url='/artifact/'+quote(PHYSICAL_RETRY_REPORT,safe='/')
+        except (ValueError,OSError,KeyError,TypeError):return
+        for row in entries:
+            if not row.get('result_valid') or row['execution_status'] not in ('failed','error'):continue
+            try:
+                item=indexed[row['scene_id']];retry=item['retry'];review=retry['diagnostic_visual_review']
+                result_path=bound(retry['result'])
+                if (result_path!=self.root/PHYSICAL_RETRY_DEMOS/'executions'/row['scene_id']/'result.json'
+                        or retry['result']['sha256']!=row['result_sha256']
+                        or review.get('scene_id')!=row['scene_id'] or review.get('status')!='complete'
+                        or review.get('execution_result_sha256')!=row['result_sha256']
+                        or not row.get('diagnostic_report_url')):continue
+                diagnostic_path=self.root/PHYSICAL_RETRY_DIAGNOSTICS/'scenes'/row['scene_id']/'diagnostic.json'
+                if not valid_digest(review.get('diagnostic_report_sha256')) or self.file_sha256(diagnostic_path)!=review['diagnostic_report_sha256']:continue
+                facts=review.get('observed_visual_facts_zh');interpretation=review.get('interpretation_zh');next_step=review.get('next_adjustment_zh')
+                confirmed=review.get('root_cause_confirmed');inference=review.get('interpretation_is_inference')
+                if (not isinstance(facts,list) or not facts or any(not isinstance(value,str) or not value.strip() for value in facts)
+                        or not isinstance(interpretation,str) or not interpretation.strip()
+                        or not isinstance(next_step,str) or not next_step.strip()
+                        or type(confirmed) is not bool or type(inference) is not bool or inference is confirmed):continue
+                basis=review.get('confirmation_basis_zh','')
+                if confirmed:
+                    evidence=review.get('confirmation_evidence')
+                    if not isinstance(evidence,list) or not evidence or not isinstance(basis,str) or not basis.strip():continue
+                    for ref in evidence:bound(ref)
+                supplementary=[]
+                primary=self.json(diagnostic_path)
+                for ref in review.get('supplementary_diagnostic_reports',[]):
+                    extra_path=bound(ref);extra=self.json(extra_path)
+                    if (not any(extra_path.is_relative_to(self.root/prefix) for prefix in (PHYSICAL_RETRY_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY_DARK_DIAGNOSTICS))
+                            or extra.get('kind')!='physical_failure_diagnostic_state_replay' or extra.get('scene_id')!=row['scene_id']
+                            or extra.get('status')!='ready' or extra.get('physics_steps_requested')!=0
+                            or extra.get('physical_episode_started') is not False or extra.get('timeline_playing') is not False
+                            or extra.get('binding')!=primary.get('binding') or not 1<=len(extra.get('frames',[]))<=10):
+                        raise ValueError('Supplementary diagnostic is not the same recorded episode')
+                    for frame in extra['frames']:
+                        image=bound(dict(path=frame['image_path'],sha256=frame['image_sha256']))
+                        if (image.parent!=extra_path.parent or not re.fullmatch(r'frame_[0-9]{2}\.jpg',image.name)
+                                or not any(all(frame.get(k)==f.get(k) for k in ('state_index','physics_step','phase','action_index')) for f in primary['frames'])):
+                            raise ValueError('Supplementary frame differs from recorded diagnostic state')
+                        policy=extra.get('observation_policy',{})
+                        supplementary.append(dict(frame,url='/artifact/'+quote(image.relative_to(self.root).as_posix(),safe='/'),supplementary=True,
+                            observation_label=('斜侧近景' if policy.get('detail_view') else '总览补图')+' · 请求曝光 '+str(policy.get('exposure_ev',0))+'EV'))
+                row['diagnostic_visual_review']=dict(status='complete',observed_visual_facts_zh=facts,
+                    interpretation_zh=interpretation,next_adjustment_zh=next_step,root_cause_confirmed=confirmed,
+                    interpretation_is_inference=inference,confirmation_basis_zh=basis if confirmed else '',
+                    markdown_report_url=report_url,source_index_url='/artifact/'+quote(PHYSICAL_RETRY_RESULTS,safe='/'))
+                row['diagnostics'].extend(supplementary)
+            except (ValueError,OSError,KeyError,TypeError):continue
+
+    @property
+    def physical_retry_annotation_path(self):
+        return self.root/'reports/replicator_dashboard/physical_retry_annotations.json'
+
+    def physical_retry_annotations(self):
+        path=self.physical_retry_annotation_path
+        if not path.exists():return dict(schema_version=1,entries=[])
+        try:
+            data=json.loads(path.read_text());seen=set()
+            if data.get('schema_version')!=1 or not isinstance(data.get('entries'),list):raise ValueError()
+            for row in data['entries']:
+                if (not isinstance(row,dict) or not isinstance(row.get('scene_id'),str) or not re.fullmatch(r'[a-z0-9_]{1,160}',row['scene_id'])
+                        or row['scene_id'] in seen or not isinstance(row.get('note'),str) or len(row['note'])>ANNOTATION_MAX_NOTE
+                        or type(row.get('revision')) is not int or row['revision']<1
+                        or not valid_digest(row.get('result_sha256')) or not valid_digest(row.get('config_sha256'))):raise ValueError()
+                seen.add(row['scene_id'])
+            return data
+        except (OSError,ValueError,TypeError) as error:raise AnnotationError(503,'物理重试标注文件异常，保留原文件并停止覆盖。') from error
+
+    def save_physical_retry_annotation(self,payload):
+        fields={'scene_id','note','expected_revision','config_sha256','result_sha256'}
+        if (not isinstance(payload,dict) or set(payload)!=fields or not isinstance(payload.get('scene_id'),str)
+                or not re.fullmatch(r'[a-z0-9_]{1,160}',payload['scene_id']) or not isinstance(payload.get('note'),str)
+                or len(payload['note'])>ANNOTATION_MAX_NOTE or type(payload.get('expected_revision')) is not int or payload['expected_revision']<0
+                or not valid_digest(payload.get('config_sha256')) or not valid_digest(payload.get('result_sha256'))):
+            raise AnnotationError(400,'物理标注字段无效，最多 20000 字。')
+        row=next((r for r in self.physical_execution()['failure_retry']['entries'] if r['scene_id']==payload['scene_id']),None)
+        if not row or not row['result_valid']:raise AnnotationError(409,'物理重试结果尚未保存或来源已变化。')
+        path=self.physical_retry_annotation_path;path.parent.mkdir(parents=True,exist_ok=True)
+        with self.physical_retry_annotation_lock, path.with_suffix('.lock').open('a+b') as lock:
+            fcntl.flock(lock.fileno(),fcntl.LOCK_EX)
+            data=self.physical_retry_annotations();current=next((r for r in data['entries'] if r['scene_id']==payload['scene_id']),None)
+            if payload['expected_revision']!=(current['revision'] if current else 0):raise AnnotationError(409,'物理标注已被其他页面更新，草稿保留。',current)
+            if any(payload[k]!=row[k] for k in ('config_sha256','result_sha256')):raise AnnotationError(409,'实际物理结果已变化，请重新查看后标注。',current)
+            entry={k:payload[k] for k in ('scene_id','note','config_sha256','result_sha256')};entry.update(revision=payload['expected_revision']+1,updated_at=iso())
+            data['entries']=[r for r in data['entries'] if r['scene_id']!=entry['scene_id']]+[entry]
+            temporary=None
+            try:
+                with tempfile.NamedTemporaryFile(mode='w',encoding='utf-8',dir=path.parent,prefix='.physical-retry-',suffix='.tmp',delete=False) as stream:
+                    temporary=Path(stream.name);json.dump(data,stream,ensure_ascii=False,indent=2);stream.write('\n');stream.flush();os.fsync(stream.fileno())
+                os.replace(temporary,path)
+            finally:
+                if temporary:temporary.unlink(missing_ok=True)
+            return entry
 
     def camera_retakes(self, first_entries, first_raw, source_path):
         """Read-only overlay; never promote a retake outcome into first-pass counts."""
@@ -2040,6 +2289,14 @@ class Progress:
 
 
 def allowed_artifact(rel: str) -> bool:
+    if rel.startswith(PHYSICAL_RETRY_DEMOS):
+        return bool(re.fullmatch(r'executions/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY_DEMOS):]))
+    if rel.startswith(PHYSICAL_RETRY_DIAGNOSTICS):
+        return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/(?:diagnostic\.json|frame_[0-9]{2}\.jpg)',rel[len(PHYSICAL_RETRY_DIAGNOSTICS):]))
+    if rel.startswith(PHYSICAL_RETRY_DETAIL_DIAGNOSTICS):
+        return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/frame_[0-9]{2}\.jpg',rel[len(PHYSICAL_RETRY_DETAIL_DIAGNOSTICS):]))
+    if rel.startswith(PHYSICAL_RETRY_DARK_DIAGNOSTICS):
+        return bool(re.fullmatch(r'(?:attempt_[0-9]{2}/)?scenes/[A-Za-z0-9_-]+/frame_[0-9]{2}\.jpg',rel[len(PHYSICAL_RETRY_DARK_DIAGNOSTICS):]))
     if rel.startswith(CAMERA_RETAKE_DEMOS):
         tail = rel[len(CAMERA_RETAKE_DEMOS):]
         return bool(re.fullmatch(r'(?:videos/u_shape_banana_bowl__[A-Za-z0-9_-]+\.mp4|executions/u_shape_banana_bowl__[A-Za-z0-9_-]+/result\.json)', tail))
@@ -2096,7 +2353,7 @@ def handler_for(progress: Progress):
 
         def do_POST(self):
             route = urlsplit(self.path).path
-            if route not in ("/api/annotations", "/api/trajectory-annotations"):
+            if route not in ("/api/annotations", "/api/trajectory-annotations", "/api/physical-retry-annotations"):
                 self.json_response(404, {"error": "Unknown endpoint"})
                 return
             try:
@@ -2120,7 +2377,7 @@ def handler_for(progress: Progress):
                     payload = json.loads(raw.decode("utf-8"))
                 except (UnicodeError, ValueError) as exc:
                     raise AnnotationError(400, "JSON 内容无效。") from exc
-                save = progress.save_trajectory_annotation if route == "/api/trajectory-annotations" else progress.save_annotation
+                save = progress.save_physical_retry_annotation if route == "/api/physical-retry-annotations" else progress.save_trajectory_annotation if route == "/api/trajectory-annotations" else progress.save_annotation
                 self.json_response(200, {"entry": save(payload)})
             except AnnotationError as exc:
                 result = {"error": exc.message}
@@ -2142,9 +2399,9 @@ def handler_for(progress: Progress):
 
         def respond(self, head=False):
             route = unquote(urlsplit(self.path).path)
-            if route in ("/api/annotations", "/api/trajectory-annotations"):
+            if route in ("/api/annotations", "/api/trajectory-annotations", "/api/physical-retry-annotations"):
                 try:
-                    read = progress.trajectory_annotations if route == "/api/trajectory-annotations" else progress.annotations
+                    read = progress.physical_retry_annotations if route == "/api/physical-retry-annotations" else progress.trajectory_annotations if route == "/api/trajectory-annotations" else progress.annotations
                     self.json_response(200, read(), head=head)
                 except AnnotationError as exc:
                     self.json_response(exc.status, {"error": exc.message}, head=head)
@@ -2171,10 +2428,11 @@ def handler_for(progress: Progress):
                     path = progress.local(rel)
                     if not allowed_artifact(path.relative_to(progress.root).as_posix()):
                         raise ValueError("Not a dashboard artifact")
-                    if path.relative_to(progress.root).as_posix().startswith((PHYSICAL_DEMOS, CAMERA_RETAKE_DEMOS)):
+                    if path.relative_to(progress.root).as_posix().startswith((PHYSICAL_DEMOS, CAMERA_RETAKE_DEMOS, PHYSICAL_RETRY_DEMOS, PHYSICAL_RETRY_DIAGNOSTICS, PHYSICAL_RETRY_DETAIL_DIAGNOSTICS, PHYSICAL_RETRY_DARK_DIAGNOSTICS)):
                         physical = progress.physical_execution()
-                        valid_urls = {entry.get(key) for entry in [*physical['entries'], *physical['camera_retakes']['entries']]
-                                      for key in ('video_url', 'result_url')}
+                        valid_urls = {entry.get(key) for entry in [*physical['entries'], *physical['camera_retakes']['entries'], *physical['failure_retry']['entries']]
+                                      for key in ('video_url', 'result_url', 'diagnostic_report_url')}
+                        valid_urls.update(frame['url'] for entry in physical['failure_retry']['entries'] for frame in entry.get('diagnostics',[]))
                         if '/artifact/' + quote(path.relative_to(progress.root).as_posix(), safe='/') not in valid_urls:
                             raise ValueError('Physical artifact is not bound by a valid result')
                 else:

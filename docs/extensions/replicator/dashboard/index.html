@@ -42,11 +42,13 @@
     <div id="errorBanner" class="banner" role="status"></div>
     <section class="panel scene-panel" aria-labelledby="physicalHeading" id="physicalWorkspace">
       <div class="panel-header"><div><h2 id="physicalHeading">物理执行 · 实际结果与视频</h2><small>规划成功单独统计；每景一次实际仿真尝试，失败保留</small></div><small id="physicalUpdated">等待执行清单</small></div>
-      <div class="scene-metrics" id="physicalMetrics" aria-label="物理执行进度"></div>
+      <p><strong>首轮物理执行 · 原始记录保留</strong></p>
+      <div class="scene-metrics" id="physicalMetrics" aria-label="首轮物理执行进度"></div>
       <div class="scene-warnings" id="physicalWarnings" role="status"></div>
       <p id="physicalRetakeStatus" role="status"></p>
-      <div class="physical-controls"><label>查找场景<input id="physicalSearch" type="search" placeholder="任务或变体" autocomplete="off"></label><label>执行结果<select id="physicalFilter"><option value="">全部状态</option><option value="pending">等待执行</option><option value="running">执行中</option><option value="success">物理任务成功</option><option value="failed">物理任务失败</option><option value="error">初始化 / 执行错误</option></select></label><label style="flex:2">选择场景<select id="physicalScene" aria-label="选择物理执行场景"></select></label></div>
+      <div class="physical-controls"><label>查找场景<input id="physicalSearch" type="search" placeholder="任务或变体" autocomplete="off"></label><label>首轮执行结果<select id="physicalFilter"><option value="">全部状态</option><option value="pending">等待执行</option><option value="running">执行中</option><option value="success">物理任务成功</option><option value="failed">物理任务失败</option><option value="error">初始化 / 执行错误</option></select></label><label>本轮重试<select id="physicalRetryFilter"><option value="">全部场景</option><option value="all">本轮 84 景</option><option value="pending">本轮待测</option><option value="running">本轮运行</option><option value="success">本轮成功</option><option value="failed">本轮失败</option><option value="error">本轮错误</option></select></label><label style="flex:2">选择场景<select id="physicalScene" aria-label="选择物理执行场景"></select></label></div>
       <div class="physical-detail"><div><video id="physicalVideo" controls preload="metadata" playsinline hidden></video><div class="physical-empty" id="physicalVideoEmpty">尚无已验证来源的实际执行视频</div></div><div><h3 id="physicalTitle">等待场景记录</h3><p id="physicalOutcome"></p><pre id="physicalReason"></pre><div id="physicalQuality"></div><div class="artifact-list" id="physicalArtifacts"></div></div></div>
+      <div id="physicalRetryWorkspace" hidden><h3>首轮失败项 · 单次调整与无渲染物理测试</h3><p id="physicalRetrySummary" role="status"></p><div id="physicalRetryMetrics" class="scene-metrics"></div><pre id="physicalRetryOutcome"></pre><p>以下图片为实测状态的诊断回放，带有水印；不是本轮执行相机画面，也不增加物理尝试次数。上方视频始终属于首轮或明确标记的相机补录。</p><div id="physicalRetryDiagnostics"></div><div id="physicalRetryVisualReview" hidden></div><div id="physicalRetryNotes" hidden><label for="physicalRetryNote"><strong>实际失败原因 / 后续调整方案</strong></label><textarea id="physicalRetryNote" maxlength="20000" rows="4" style="display:block;width:100%;margin-top:8px" placeholder="结合抓取、抬升、下放和释放状态，记录观察与调整建议；标注不会自动启动下一次尝试。"></textarea><span id="physicalRetryNoteStatus" role="status"></span> <button class="anno-btn" type="button" id="physicalRetryNoteSave">保存 / 重试保存</button></div></div>
       <div class="scene-footer" id="physicalNotice">安全及过程避障未单独验收；初始化错误不计为抓放成功或失败。</div>
     </section>
     <section class="panel annotator" aria-labelledby="trajectoryHeading" id="trajectoryWorkspace">
@@ -721,7 +723,58 @@
       window.addEventListener('online',fetchTrajectories);document.addEventListener('visibilitychange',()=>{if(!document.hidden)fetchTrajectories();});window.addEventListener('storage',event=>{if(event.key?.startsWith(TRAJ_DRAFT_PREFIX))fetchTrajectories();});fetchTrajectories();setInterval(fetchTrajectories,15000);
     }
     const PHYSICAL_LABEL={pending:'等待执行',running:'执行中',success:'物理任务成功',failed:'物理任务失败',error:'执行错误'};
-    const physicalState={selected:null,query:'',filter:'',signature:''};
+    const physicalState={selected:null,query:'',filter:'',retryFilter:'',signature:''};
+    const physicalNotes=new Map();
+    function physicalRetryRow(id){return arr(state.data?.physical_execution?.failure_retry?.entries).find(row=>row.scene_id===id);}
+    function physicalNoteRecord(id){
+      if(!physicalNotes.has(id))physicalNotes.set(id,{note:'',revision:0,result_sha256:null,config_sha256:null,dirty:false,saving:false,error:'',timer:null});
+      const record=physicalNotes.get(id),server=arr(state.data?.physical_execution?.failure_retry?.annotations?.entries).find(row=>row.scene_id===id),row=physicalRetryRow(id);
+      if(!record.dirty&&!record.saving&&row?.result_valid){record.note=server?.note||'';record.revision=server?.revision||0;record.result_sha256=row.result_sha256;record.config_sha256=row.config_sha256;record.historical=!!server&&server.result_sha256!==row.result_sha256;}
+      return record;
+    }
+    function physicalNoteUI(){
+      const row=physicalRetryRow(physicalState.selected),area=byId('physicalRetryNote');byId('physicalRetryNotes').hidden=!row;
+      if(!row)return;const record=physicalNoteRecord(row.scene_id);area.disabled=!row.result_valid;
+      if(area.dataset.scene!==row.scene_id||document.activeElement!==area){area.dataset.scene=row.scene_id;if(area.value!==record.note)area.value=record.note;}
+      byId('physicalRetryNoteStatus').textContent=record.error||(!row.result_valid?'本轮结果保存且来源核对后可标注':record.saving?'正在自动保存…':record.dirty?'有未保存草稿':record.historical?'历史标注：实际结果已变化，修改后重新保存':record.revision?'已自动保存 · 仅供分析，不触发重试':'输入后自动保存；不改变实际成功/失败');
+      byId('physicalRetryNoteSave').disabled=!row.result_valid||record.saving;
+    }
+    async function savePhysicalNote(id){
+      const record=physicalNoteRecord(id);clearTimeout(record.timer);if(!record.dirty||record.saving)return;
+      const note=record.note;record.saving=true;record.error='';physicalNoteUI();
+      try{
+        const response=await fetch('/api/physical-retry-annotations',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scene_id:id,note,expected_revision:record.revision,config_sha256:record.config_sha256,result_sha256:record.result_sha256})});
+        const data=await response.json();if(!response.ok)throw new Error(data.error||'保存失败');
+        record.revision=data.entry.revision;record.historical=false;record.dirty=record.note!==note;
+        const notes=state.data.physical_execution.failure_retry.annotations||(state.data.physical_execution.failure_retry.annotations={entries:[]});notes.entries=arr(notes.entries).filter(row=>row.scene_id!==id).concat(data.entry);
+      }catch(error){record.error=str(error.message)+'；草稿保留，请先复制内容再刷新或比较服务器版本。';}
+      finally{record.saving=false;if(record.dirty&&!record.error)record.timer=setTimeout(()=>savePhysicalNote(id),650);if(physicalState.selected===id)physicalNoteUI();}
+    }
+    function renderPhysicalRetry(){
+      const data=state.data?.physical_execution||{},retry=data.failure_retry||{},counts=retry.counts||{},latest=data.combined_latest_counts||{};
+      byId('physicalRetryWorkspace').hidden=!retry.manifest_present;
+      byId('physicalRetryMetrics').replaceChildren(...[['本轮待测',counts.pending],['本轮运行',counts.running],['本轮成功',counts.success],['本轮失败',counts.failed],['本轮错误',counts.error],['失败诊断图已保存',counts.diagnostics_ready],['最新实际成功',latest.success],['最新实际失败',latest.failed]].map(([label,value])=>{const box=el('div','scene-metric');box.append(el('b','',number(value)),el('span','',label));return box;}));
+      byId('physicalRetrySummary').textContent=retry.manifest_error||('首轮失败 '+number(retry.total)+' 景各调整一次、无渲染物理测试一次；已保存 '+(number(counts.success)+number(counts.failed)+number(counts.error))+' / '+number(retry.total)+'。首轮 70/84 保留，最新成绩只合并有效实际结果。'+(number(counts.stale)?' '+number(counts.stale)+' 景绑定待核。':''));
+      const row=physicalRetryRow(physicalState.selected),gallery=byId('physicalRetryDiagnostics');gallery.replaceChildren();
+      byId('physicalRetryOutcome').textContent=row?'本轮重试：'+(row.stale?'来源待核':physicalLabel(row))+' · 累计第 '+number(row.physical_attempt_number)+' 次物理 episode（本轮只一次）\n'+str(row.adjustment_description)+(row.reason?'\n实际结果：'+row.reason:'')+(row.diagnostic_error?'\n诊断图片：'+row.diagnostic_error:''):'本景首轮已成功，本轮保留。';
+      if(row){
+        const link=artifactLink({url:row.result_url,label:'本轮实际结果（无渲染、无视频）',kind:'report'});if(link)gallery.append(link);
+        const report=artifactLink({url:row.diagnostic_report_url,label:'状态回放诊断报告',kind:'report'});if(report)gallery.append(report);
+        for(const frame of arr(row.diagnostics)){const url=safeURL(frame.url);if(!url)continue;const figure=el('figure');figure.style.cssText='display:inline-block;width:min(100%,300px);margin:8px';const a=el('a');a.href=url;a.target='_blank';a.rel='noopener';const img=el('img');img.src=url;img.alt='诊断状态回放 '+str(frame.phase);img.loading='lazy';img.style.width='100%';a.append(img);figure.append(a,el('figcaption','',(frame.supplementary?str(frame.observation_label)+' · ':'状态回放 · ')+str(frame.phase)+' · 实测步 '+number(frame.physics_step)));gallery.append(figure);}
+        if(!arr(row.diagnostics).length&&['failed','error'].includes(row.execution_status))gallery.append(el('p','','等待失败诊断图；它将回放已保存的实际状态，不再执行抓放。'));
+      }
+      const visual=byId('physicalRetryVisualReview'),review=row?.diagnostic_visual_review;visual.replaceChildren();visual.hidden=!review;
+      if(review){
+        visual.append(el('h4','','自动诊断 · 看图复查已完成'),el('p','','以下内容来自本轮已绑定的视觉复查，与下方手工标注独立。'));
+        visual.append(el('strong','','画面中可见的事实'));const facts=el('ul');arr(review.observed_visual_facts_zh).forEach(text=>facts.append(el('li','',text)));visual.append(facts);
+        visual.append(el('p','',(review.interpretation_is_inference?'推断：':'有补充证据的判断：')+str(review.interpretation_zh)));
+        if(review.confirmation_basis_zh)visual.append(el('p','','判断依据：'+str(review.confirmation_basis_zh)));
+        visual.append(el('p','','下一步建议：'+str(review.next_adjustment_zh)));
+        const link=artifactLink({url:review.markdown_report_url,label:'本轮完整执行与失败诊断报告',kind:'report'});if(link)visual.append(link);
+      }
+      physicalNoteUI();
+    }
+
     function physicalLabel(entry){return entry?.initialization_error?'初始化错误 · 未进入执行':PHYSICAL_LABEL[entry?.execution_status]||'等待执行';}
     function renderPhysicalDetail(){
       const data=state.data?.physical_execution||{},entry=arr(data.entries).find(row=>row.scene_id===physicalState.selected),retake=entry?.camera_retake,video=byId('physicalVideo'),url=safeURL(retake?.video_url||entry?.video_url);
@@ -731,19 +784,22 @@
       if(url){if(video.getAttribute('src')!==url)video.src=url;video.hidden=false;byId('physicalVideoEmpty').hidden=true;}
       else{if(video.hasAttribute('src')){video.pause();video.removeAttribute('src');video.load();}video.hidden=true;byId('physicalVideoEmpty').hidden=false;byId('physicalVideoEmpty').textContent=entry?.initialization_error?'初始化未完成，尚无已绑定的实际现场视频':entry?.execution_status==='running'?'本景执行中，视频将在保存并校验后显示':'尚无已验证来源的实际执行视频';}
       const quality=byId('physicalQuality');quality.replaceChildren();if(arr(entry?.historical_quality_issues).length){const box=el('div','trajectory-quality');box.append(el('b','','沿用场景的历史质量提示'));entry.historical_quality_issues.forEach(value=>box.append(el('p','',value)));quality.append(box);}
-      const links=[];for(const[key,label,kind]of[['result_url','首轮实际执行结果','report'],['video_url','打开首轮现场视频','video']]){const link=artifactLink({url:entry?.[key],label,kind});if(link)links.push(link);}for(const[key,label,kind]of[['result_url','相机补录 · 第2次结果','report'],['video_url','打开相机补录 · 第2次视频','video']]){const link=artifactLink({url:retake?.[key],label,kind});if(link)links.push(link);}byId('physicalArtifacts').replaceChildren(...links);
+      const links=[];for(const[key,label,kind]of[['result_url','首轮实际执行结果','report'],['video_url','打开首轮现场视频','video']]){const link=artifactLink({url:entry?.[key],label,kind});if(link)links.push(link);}for(const[key,label,kind]of[['result_url','相机补录 · 第2次结果','report'],['video_url','打开相机补录 · 第2次视频','video']]){const link=artifactLink({url:retake?.[key],label,kind});if(link)links.push(link);}byId('physicalArtifacts').replaceChildren(...links);renderPhysicalRetry();
     }
     function renderPhysical(){
-      const data=state.data?.physical_execution||{},counts=data.counts||{},rows=arr(data.entries),filtered=rows.filter(row=>(!physicalState.filter||row.execution_status===physicalState.filter)&&(!physicalState.query||(row.scene_id+' '+str(row.variant_name)).toLowerCase().includes(physicalState.query.toLowerCase())));
+      const data=state.data?.physical_execution||{},counts=data.counts||{},rows=arr(data.entries),filtered=rows.filter(row=>(!physicalState.retryFilter||(row.failure_retry&&(physicalState.retryFilter==='all'||row.failure_retry.execution_status===physicalState.retryFilter)))&&(!physicalState.filter||row.execution_status===physicalState.filter)&&(!physicalState.query||(row.scene_id+' '+str(row.variant_name)).toLowerCase().includes(physicalState.query.toLowerCase())));
       byId('physicalMetrics').replaceChildren(...[['规划已生成',counts.planned],['等待执行',counts.pending],['执行中',counts.running],['物理成功',counts.success],['物理失败',counts.failed],['初始化 / 执行错误',counts.error],['实际视频',counts.video_count]].map(([label,value])=>{const box=el('div','scene-metric');box.append(el('b','',number(value)),el('span','',label));return box;}));
       byId('physicalUpdated').textContent=(data.manifest_present?'已完成 '+(number(counts.success)+number(counts.failed)+number(counts.error))+' / '+number(counts.total):'等待实际执行清单')+(data.updated_at?' · '+clock(data.updated_at):'');
       byId('physicalWarnings').textContent=(number(counts.stale)?number(counts.stale)+' 景的来源或结果绑定待核，未计入执行成功/失败。 ':'')+(number(counts.initialization_error)?number(counts.initialization_error)+' 景未进入物理执行，已单列为初始化错误。':'');
       byId('physicalRetakeStatus').textContent=data.camera_retakes?.manifest_present?'相机补录已保存 '+number(data.camera_retakes.saved)+' / '+number(data.camera_retakes.total)+'；本页上方统计仍为首轮成绩，全部11景固定选择新录，不按成败择优。'+(number(data.camera_retakes.stale)?' '+number(data.camera_retakes.stale)+' 景补录来源待核。':''):'';
       byId('physicalNotice').textContent=str(data.notice,'每景一次物理仿真尝试；安全及过程避障未单独验收。');
-      if(!filtered.some(row=>row.scene_id===physicalState.selected))physicalState.selected=(filtered.find(row=>row.execution_status==='running')||filtered[0])?.scene_id||null;
-      const signature=JSON.stringify(filtered.map(row=>[row.scene_id,row.execution_status,row.stale,row.initialization_error]));if(signature!==physicalState.signature){physicalState.signature=signature;byId('physicalScene').replaceChildren(...filtered.map(row=>{const option=el('option','',row.scene_id+' · '+physicalLabel(row)+(row.stale?' · 来源待核':''));option.value=row.scene_id;return option;}));}byId('physicalScene').value=physicalState.selected||'';renderPhysicalDetail();
+      if(!filtered.some(row=>row.scene_id===physicalState.selected))physicalState.selected=(filtered.find(row=>row.failure_retry?.execution_status==='running'||row.execution_status==='running')||filtered[0])?.scene_id||null;
+      const signature=JSON.stringify(filtered.map(row=>[row.scene_id,row.execution_status,row.stale,row.initialization_error,row.failure_retry?.execution_status]));if(signature!==physicalState.signature){physicalState.signature=signature;byId('physicalScene').replaceChildren(...filtered.map(row=>{const option=el('option','',row.scene_id+' · 首轮 '+physicalLabel(row)+(row.failure_retry?' · 本轮 '+physicalLabel(row.failure_retry):'')+(row.stale?' · 来源待核':''));option.value=row.scene_id;return option;}));}byId('physicalScene').value=physicalState.selected||'';renderPhysicalDetail();
     }
     byId('physicalSearch').addEventListener('input',event=>{physicalState.query=event.target.value;renderPhysical();});byId('physicalFilter').addEventListener('change',event=>{physicalState.filter=event.target.value;renderPhysical();});byId('physicalScene').addEventListener('change',event=>{physicalState.selected=event.target.value;renderPhysicalDetail();});
+    byId('physicalRetryFilter').addEventListener('change',event=>{physicalState.retryFilter=event.target.value;renderPhysical();});
+    byId('physicalRetryNote').addEventListener('input',event=>{const id=physicalState.selected,record=physicalNoteRecord(id);record.note=event.target.value;record.dirty=true;record.error='';clearTimeout(record.timer);record.timer=setTimeout(()=>savePhysicalNote(id),650);physicalNoteUI();});
+    byId('physicalRetryNoteSave').addEventListener('click',()=>savePhysicalNote(physicalState.selected));
     function render(){renderPhysical();renderTrajectories();renderAnnotations();renderAdjustments();renderPlacement();renderVisual();renderSafety();renderScenes();renderSummary();renderFilters();renderTasks();renderDetail();renderProcesses();renderEvents();}
     async function refresh(){
       if(state.busy)return;state.busy=true;const button=byId('refresh');button.classList.add('loading');button.disabled=true;

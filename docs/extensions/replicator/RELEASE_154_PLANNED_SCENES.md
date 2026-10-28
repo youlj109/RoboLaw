@@ -2,7 +2,9 @@
 
 截至 2026-10-28，14 个 Replicator 原始任务 × 11 种安全增广变体，共 **154 景已生成完整 cuRobo 轨迹，0 景规划失败**。每条完整轨迹包含预抓取、接近、抬升、转运、下放和撤离六阶段。
 
-**GitHub 逐景结果：[154 景成功／失败表](PHYSICAL_EXECUTION_154_20261028.md) · [机器可读执行结果 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json)**。这两份文件记录实际物理执行，视频在独立 ZIP 中提供，未上传为 GitHub 在线视频。
+**GitHub 最新逐景结果：[154 景结果与失败诊断](PHYSICAL_RETRY_ROUND1_20261028.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round1_20261028.json)**。首轮 [70/84 结果表](PHYSICAL_EXECUTION_154_20261028.md) 与 [首轮 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json) 保留。视频在独立 ZIP 中提供，未上传为 GitHub 在线视频。
+
+第一轮物理重试已完成：84 个首轮失败场景各做一次时序调整、一次无渲染真实 PhysX 测试，**36 景转为成功、48 景仍失败、0 执行错误，最新合计 106/154 景成功**。本轮没有改变布局、抓点或几何路径，没有新增视频；剩余失败的实测状态诊断图与逐景修改建议见新结果及本机网页。下方首轮统计和视频包仍对应历史记录。
 
 首轮真实 PhysX 执行已全部完成：**154 景实际执行、70 成功、84 任务失败、0 执行错误，保存 154 个真实视频**。首轮每景一次，失败也保留；U 型香蕉 11 景因首轮相机遮挡，另各真实补录一次，补录也已完成（7 成功、4 失败）。最终演示包已生成，包含 154 景主视频和 11 个原遮挡视频，全部 165 个视频通过完整解码与来源校验。首轮与补录成绩分开记录，不用规划轨迹、静态截图或轨迹动画计作物理任务成功。逐景结果见本机 [物理执行面板](http://127.0.0.1:8765/#physicalWorkspace)，安全避障和长期稳定性未单独验收。
 
@@ -32,7 +34,7 @@
 
 ## 完整索引
 
-使用 [final_154_scenes_20261028.json](../../../configs/extensions/replicator/final_154_scenes_20261028.json) 获取全部 154 景的冻结规划输入。它保留规划完成时的历史状态，`physical_execution_verified: false` 及“物理执行准备中”不代表当前结果；最新物理状态见独立的 [执行结果索引](../../../configs/extensions/replicator/physical_execution_154_20261028.json)。不要将 `trajectory_retry_v10.json` 当作完整清单：它只包含第十轮最后两景的重试方案。
+使用 [final_154_scenes_20261028.json](../../../configs/extensions/replicator/final_154_scenes_20261028.json) 获取全部 154 景的冻结规划输入。它保留规划完成时的历史状态，`physical_execution_verified: false` 及“物理执行准备中”不代表当前结果；最新物理状态见独立的 [执行结果索引](../../../configs/extensions/replicator/physical_retry_results_round1_20261028.json)。不要将 `trajectory_retry_v10.json` 当作完整清单：它只包含第十轮最后两景的重试方案。
 
 索引逐景保存：
 
