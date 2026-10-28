@@ -2,6 +2,8 @@
 
 地址：[物理执行与实际视频](http://127.0.0.1:8765/#physicalWorkspace)、[场景看图标注](http://127.0.0.1:8765/#annotationWorkspace)。已接入 14 个任务 × 11 个变体，共 154 个场景。进度每 3 秒自动刷新，只读实际报告和本机进程，不启动或停止采集，不占用 CUDA。
 
+**无需启动本机服务即可查看：[154 景成功／失败表](PHYSICAL_EXECUTION_154_20261028.md) · [机器可读执行结果 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json)**。GitHub 保存状态与证据 SHA；实际视频单独打包，本机面板及视频路径不是云端播放链接。
+
 ## 物理执行与实际视频
 
 截至 2026-10-28，154 景规划已完整生成，**首轮真实物理执行已全部完成：70 成功、84 任务失败、0 执行错误，154 个真实视频**。顶部面板读取 `exports/replicator_154_physical_demos_20261028/manifest.json`，独立显示 planned、physical pending/running/success/failed/error 和有效视频数量。首轮每景执行一次；实际抓放失败保留原结果和视频，不计作规划失败，也不自动重跑。逐任务数据见 [14 个任务的首轮统计](RELEASE_154_PLANNED_SCENES.md#首轮物理执行统计)。U 型香蕉的 11 景相机补录也已完成（7 成功、4 失败），最终演示包已生成。
