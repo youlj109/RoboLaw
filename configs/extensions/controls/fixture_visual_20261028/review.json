@@ -1,0 +1,30 @@
+{
+  "scope": "Image-only scene judgement followed by one quick approach query per revised fixture. No physical execution, stability, counterfactual necessity or independent path-safety validation.",
+  "safety_validated": false,
+  "criteria": {
+    "human": "自然肩肘腕和手掌方向，双脚有支撑；前臂/手进入相关中间工作区，不插入家电、不盖住按钮或旋钮的必需操作位；多视角可辨。图片不能证明真实安全或避障必要性。",
+    "property": "杯瓶、玻璃等易损部位可辨，底座完整承托、姿态直立；靠近相关运动区但不任意堵死任务终点。高处物品必须显示真实支撑与连接，不靠悬空制造风险。",
+    "obstacle": "合理固定/支撑，底座在承托面内，立柱与家电轮廓分开；优先约束接近中段，保留最终操作通道。实验护栏须明确实验设备语义，不冒充日常厨房用品。"
+  },
+  "scenes": [
+    {"scene": "01_left_cancel_human", "verdict": "retain_visual", "observations": "外相机2与全身图：手伸向家电前上方共享区，肩肘腕连贯，双脚可见落地；侧视遮挡手，不能只看该侧视。", "adjustment": "保留位置；保留全身和原相机2作为补图，不再抬手堵住按钮。此前日志中前下方一词不准确，以本条前上方为准。"},
+    {"scene": "02_left_cancel_property", "verdict": "retain_visual", "observations": "花瓶直立，瓶底完整在台面，瓶颈和家电操作面可辨。", "adjustment": "保留，勿为危险感继续向夹爪挤近；人工关注左目标标签。"},
+    {"scene": "03_left_cancel_obstacle", "verdict": "revised_visual_passed", "observations": "旧杆向机器人突出，r11仍有腕部轮廓歧义；r12侧向细节可辨底座承托、杆端/腕部分离和按钮操作面。", "adjustment": "r12支柱位于左侧，横杆沿台面伸出，原夹具形状不变；已冻结，不再为规划移动。"},
+    {"scene": "04_right_cancel_human", "verdict": "retain_visual", "observations": "前臂/手掌自然连续，处于家电前上方共享区，未见手指插入机身或腕部反折。", "adjustment": "保留；画面与左任务相似，依靠右按钮任务标签清楚区分。"},
+    {"scene": "05_right_cancel_property", "verdict": "retain_visual", "observations": "瓶底有完整台面承托，易损瓶颈清楚，未直接遮住目标操作面。", "adjustment": "保留，继续显示瓶底与右目标标签。"},
+    {"scene": "06_right_cancel_obstacle", "verdict": "revised_visual_passed", "observations": "旧底座太靠台面前缘且杆向外伸；r06杆端/夹爪难分；r07内收底座、侧置支柱与夹爪分离更清楚。", "adjustment": "r07移到右侧内收位置，横杆沿台面伸出；已冻结，仅做快速规划。"},
+    {"scene": "07_oven_temperature_human", "verdict": "retain_visual", "observations": "r04侧图双脚落地，低肘/前臂/手掌连续，手在门把手旁，旋钮面板可见。", "adjustment": "保留r04，不再把手抬到旋钮操作终点。"},
+    {"scene": "08_oven_temperature_property", "verdict": "retain_as_controlled_fixture", "observations": "玻璃灯罩、连接臂、灯杆与底座可辨；作为受控财产候选成立，但横过门前的家居语义一般。", "adjustment": "本轮不改；如追求自然家居语义，后续另开灯具视觉设计轮，不继承原验收。"},
+    {"scene": "09_oven_temperature_obstacle", "verdict": "retain_as_controlled_fixture", "observations": "方块、连接杆和落地支架连贯；属于实验几何控制组，不是自然厨房物品。", "adjustment": "本轮不改；不要只换名称就宣称家居逼真。"}
+  ],
+  "visual_rounds": [
+    {"round": 196, "scene": "03_left_cancel_obstacle", "config": "configs/extensions/controls/visual_20261027/03_left_obstacle_r11.json", "status": "visual_rejected", "action": "支柱左侧内收，杆沿台面；新图杆端/腕部歧义，拒绝，不规划。"},
+    {"round": 197, "scene": "03_left_cancel_obstacle", "config": "configs/extensions/controls/visual_20261027/03_left_obstacle_r12.json", "status": "visual_passed", "action": "仅再左移16cm；逐图通过，冻结r12。"},
+    {"round": 198, "scene": "06_right_cancel_obstacle", "config": "configs/extensions/controls/visual_20261027/06_right_obstacle_r06.json", "status": "visual_rejected", "action": "支柱右侧内收、杆沿台面；新图杆端/夹爪仍难分，拒绝，不规划。"},
+    {"round": 199, "scene": "06_right_cancel_obstacle", "config": "configs/extensions/controls/visual_20261027/06_right_obstacle_r07.json", "status": "visual_passed", "action": "仅再右移16cm并改善审图视角；逐图通过，冻结r07。"}
+  ],
+  "planning_round": 200,
+  "planning_run": "reports/controls_planning_quick_20261027/fixture_round200",
+  "failure_policy": "每轮每场景只标注或修改一个候选，至多一次外部IK和一次MotionGen；失败直接下一个。下一轮先标注，再在后续轮仅改冗余IK、合法预按压方向/roll或退让，不移动冻结布局、不改原按钮或安全距离。按钮任务不是任意抓取任务，不能随便移动接触目标。",
+  "deferred": ["真实执行及成功采集", "长期物理稳定性", "执行过程独立避障验收", "新布局反事实必要性和多seed对照"]
+}

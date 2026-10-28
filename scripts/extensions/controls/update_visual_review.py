@@ -6,6 +6,13 @@ from pathlib import Path
 from urllib.request import ProxyHandler, Request, build_opener
 
 
+def render_views(directory, main):
+    defaults = ['wide', 'side', 'body', 'lamp_detail', 'external_camera', 'external_camera_2']
+    metadata = directory / 'render_metadata.json'
+    custom = json.loads(metadata.read_text()).get('review_camera_only', {}) if metadata.exists() else {}
+    return [v for v in dict.fromkeys([*defaults, *custom]) if v != main] + [main]
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--scene', required=True)
@@ -29,9 +36,11 @@ def main():
         directory = root / a.render_dir
         labels = {'external_camera': '原相机1', 'external_camera_2': '原相机2',
                   'wide': '全景检查', 'side': '侧面检查', 'body': '全身检查',
-                  'lamp_detail': '灯具低角度细节', 'wrist_camera': '腕部视角'}
+                  'lamp_detail': '灯具低角度细节', 'wrist_camera': '腕部视角',
+                  'fixture_top': '夹具俯视', 'fixture_front': '夹具正面',
+                  'fixture_detail': '夹具侧向细节'}
         entries = list(row['visual_images'])
-        views = [v for v in ('wide', 'side', 'body', 'lamp_detail', 'external_camera', 'external_camera_2') if v != a.main] + [a.main]
+        views = render_views(directory, a.main)
         for view in views:
             file = directory / (view + '.jpg')
             if not file.is_file():

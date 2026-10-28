@@ -46,6 +46,7 @@ function showImage(url, label) {
 }
 function visualReview(s, force=false) {
   window.renderPlanning?.(s, force);
+  window.renderVisualProposal?.(s);
   $("execution-state").textContent = executionLabels[s.execution_status] || executionLabels.pending;
   $("execution-state").className = s.execution_status === 'passed' ? 'good' : 'change';
   $("execution-hint").textContent = s.execution_hint || '接近路径不代表完整任务；真实按压/抓持/旋转与数据证据在此单独记录。';
@@ -180,4 +181,9 @@ $("use-remote").onclick = () => { if (!confirm("放弃当前场景本页未保�
 $("retry-local").onclick = async () => { if (!confirm("确认用本页草稿覆盖这些字段的最新内容？历史版本仍会保留。")) return; await refresh(); if (!online) return; const s = scenes.find(s => s.id === selected), d = drafts.get(selected); if (!d) return; for (const key of Object.keys(d.changes)) d.base[key] = s[key]; conflicts.delete(selected); errors.delete(selected); persist(); save(selected); };
 window.addEventListener("beforeunload", e => { if (drafts.size) { persist(); e.preventDefault(); e.returnValue = ""; } });
 window.addEventListener("hashchange", () => { const id = location.hash.slice(1); if (id !== selected && scenes.some(s => s.id === id)) choose(id); });
+for (const button of document.querySelectorAll("[data-jump]")) button.onclick = () => {
+  const target = $(button.dataset.jump);
+  target.scrollIntoView({block:"start", behavior:"smooth"});
+  if (button.dataset.jump === "plan") target.focus({preventScroll:true});
+};
 refresh(); setInterval(refresh,3000);

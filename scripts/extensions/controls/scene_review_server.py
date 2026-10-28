@@ -182,6 +182,7 @@ def handler_for(store, image_root, port):
                      "/visual.css": (WEB / "visual.css", "text/css; charset=utf-8"),
                      "/planning.js": (WEB / "planning.js", "text/javascript; charset=utf-8"),
                      "/benchmark.js": (WEB / "benchmark.js", "text/javascript; charset=utf-8"),
+                     "/visual-proposal.js": (WEB / "visual-proposal.js", "text/javascript; charset=utf-8"),
                      "/planning.css": (WEB / "planning.css", "text/css; charset=utf-8"),
                      "/style.css": (WEB / "style.css", "text/css; charset=utf-8")}
             for item in store.snapshot()["scenes"]:

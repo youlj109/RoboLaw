@@ -10,6 +10,7 @@
   <script src="/app.js" defer></script>
   <script src="/planning.js" defer></script>
   <script src="/benchmark.js" defer></script>
+  <script src="/visual-proposal.js" defer></script>
 </head>
 <body>
   <header>
@@ -36,6 +37,7 @@
     <aside><label for="filter">场景列表</label><select id="filter"><option value="all">全部场景</option><option value="execution_pending">完整执行未通过</option><option value="execution_failed">执行或验证失败</option><option value="execution_passed">完整执行已通过</option><option value="pending">尚未初评</option><option value="good">初评较优</option><option value="change">需要修改</option><option value="uncertain">信息不足</option></select><nav id="scenes" aria-label="场景选择"></nav></aside>
     <article id="detail" hidden>
       <div class="scene-heading"><div><span id="scene-number" class="eyebrow"></span><h2 id="title"></h2></div><span id="save-state" role="status">已保存</span></div>
+      <nav class="scene-jumps" aria-label="当前场景快捷查看"><button type="button" data-jump="hero">看最新场景图</button><button type="button" data-jump="visual-review">看本轮建议</button><button type="button" data-jump="plan">写调整方案</button><button type="button" data-jump="planning-panel">看轨迹 / 标注</button></nav>
       <section id="benchmark-screen" hidden aria-live="polite"><h3>安全约束诊断 · 非最终验收</h3><p id="benchmark-screen-verdict"></p><pre id="benchmark-screen-event"></pre><p>仅离线检查真实成功基线在当前新增实体下的源形状距离，不执行危险路径。单条反事实、动作率采样和控制参数不匹配均不能冒充完整避障验收。</p></section>
       <section id="execution-panel">
         <div class="form-heading"><h3>完整物理任务与数据采集</h3><strong id="execution-state"></strong></div>
@@ -61,7 +63,12 @@
       <button id="image-open" class="image-button" title="点击查看原图"><img id="hero" alt="当前场景截图"></button>
       <div class="image-footer"><span id="filename"></span><a id="original" target="_blank" rel="noopener">新标签查看原图 ↗</a></div>
       <div id="visual-gallery"></div>
-      <section id="visual-review"><h3>本轮：仅视觉审核与修订</h3><p id="visual-status"></p><pre id="visual-log"></pre><p id="visual-config"></p></section>
+      <section id="visual-review"><h3>本轮：仅视觉审核与修订</h3><p id="visual-status"></p>
+        <div id="visual-proposal" hidden aria-live="polite"><h4>本轮视觉粗判断与调整建议</h4>
+          <p id="visual-proposal-verdict"></p><p id="visual-proposal-observations"></p>
+          <p id="visual-proposal-adjustment"></p><button id="visual-proposal-append" type="button">追加建议到调整方案（保留原文，自动保存）</button>
+          <p id="visual-proposal-scope"></p></div>
+        <details><summary>逐轮视觉审核日志</summary><pre id="visual-log"></pre></details><p id="visual-config"></p></section>
       <div class="form-heading"><h3>场景初评与调整方案</h3><span>停止输入约 0.7 秒后自动保存</span></div>
       <label for="status">画面初评结论</label><select id="status" data-field="status"><option value="pending">尚未初评</option><option value="good">初评较优 · 可保留主体布局</option><option value="change">需要修改 · 布局或展示需调整</option><option value="uncertain">信息不足 · 先补充视角</option></select>
       <div class="fields"><div><label for="observations">画面观察 / 判断依据</label><textarea id="observations" data-field="observations" rows="6" placeholder="可见哪些优点或问题？不要把遮挡直接当作穿模。"></textarea></div><div><label for="plan">具体调整方案</label><textarea id="plan" data-field="plan" rows="6" placeholder="移动谁、朝哪个方向、保留哪些操作空间？"></textarea></div><div><label for="verification">仍需验证的内容</label><textarea id="verification" data-field="verification" rows="5" placeholder="例如支撑、初态与终态、反事实距离、真实任务成功。"></textarea></div><div><label for="notes">我的补充 / 最终决定</label><textarea id="notes" data-field="notes" rows="5" placeholder="在这里快速记录你的调整意见，自动保存。"></textarea></div></div>

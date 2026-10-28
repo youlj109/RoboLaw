@@ -1,5 +1,10 @@
 # Fixed-Nine-Scene Acceptance
 
+**Historical version-bound checkpoint.** The later user-requested fixture pose
+revision replaces left r10/right r05 with r12/r07. This9/9 report remains valid
+only for its recorded layouts, not those new candidates. Current visual/quick
+planning scope: [fixture pose review](FIXTURE_POSE_REVIEW_20261028.md).
+
 Final bound report:
 `reports/controls_completion_20261027/benchmark_finalize195/report.json`.
 Tracked snapshot: [benchmark_checkpoint_20261028.json](benchmark_checkpoint_20261028.json).

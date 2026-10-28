@@ -6,7 +6,22 @@ are being checked through real contact execution, neutral holds, independent
 source-shape counterfactuals and matched-policy seed pairs. Deferred checks below
 describe historical scopes, not current permission to omit them.
 
-## Live Checkpoint: 2026-10-28
+## Latest: Fixture Visual/Quick-Planning Round200
+
+The user's newer request revises the two cancel-task fixtures using image-only
+review, then one quick cuRobo approach query each. Left r12 and right r07 now
+replace r10/r05 for this workflow. Both pass fresh visual review and each returns
+one approach candidate (158/149 points). No physical execution, stability,
+counterfactual necessity or independent path-safety verification is requested
+or performed for these new poses. Layouts stay frozen after visual acceptance.
+
+The previous bound9/9 report is historical for its own scene versions. It does
+not transfer to the two new poses: the live header correctly counts7 matching
+previously accepted scenes and two revised scenes without new strict acceptance.
+All old evidence and user annotations remain. See
+[current review and round record](FIXTURE_POSE_REVIEW_20261028.md).
+
+## Earlier Strict Checkpoint: 2026-10-28
 
 Bound report `reports/controls_completion_20261027/benchmark_finalize195/report.json`
 passes **9/9** current scenes: all three left/right/oven variants. All current

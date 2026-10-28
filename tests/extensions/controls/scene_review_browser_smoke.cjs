@@ -11,6 +11,8 @@ let seq = 0;
 const pending = new Map();
 socket.on("message", data => {
   const m = JSON.parse(data), p = pending.get(m.id);
+  if (m.method === "log.entryAdded" && m.params?.level === "error")
+    console.error("BROWSER_ERROR", JSON.stringify(m.params));
   if (p) {
     pending.delete(m.id);
     m.type === "error" ? p.reject(Error(JSON.stringify(m))) : p.resolve(m.result);
@@ -34,11 +36,12 @@ async function evaluate(context, expression) {
   return r.result.value === undefined ? null : JSON.parse(r.result.value);
 }
 async function waitFor(ctx, expression) {
-  for (let i = 0; i < 45; i++) {
+  for (let i = 0; i < 300; i++) {
     if (await evaluate(ctx, `return ${expression};`)) return;
     await pause(150);
   }
-  throw Error("timeout: " + expression);
+  const debug=await evaluate(ctx, 'return {url:location.href,ready:document.readyState,scenes:document.querySelectorAll(".scene").length,body:document.body.innerText.slice(0,1000)};');
+  throw Error("timeout: " + expression + " " + JSON.stringify(debug));
 }
 async function screenshot(ctx, name) {
   const image = await call("browsingContext.captureScreenshot", {context:ctx, origin:"document"});
@@ -49,6 +52,7 @@ async function screenshot(ctx, name) {
 socket.on("open", async () => {
   try {
     await call("session.new", {capabilities:{}});
+    await call("session.subscribe", {events:["log.entryAdded"]});
     const tree = await call("browsingContext.getTree"), production = tree.contexts[0].context;
     await call("browsingContext.setViewport", {context:production, viewport:{width:1560,height:1100},devicePixelRatio:1});
     await call("browsingContext.navigate", {context:production,url:"http://127.0.0.1:8765",wait:"complete"});
@@ -131,10 +135,37 @@ socket.on("open", async () => {
       await waitFor(production, 'document.querySelector("#hero").complete && document.querySelector("#hero").naturalWidth>0');
       assert(await evaluate(production, 'return document.querySelector("#hero").getAttribute("src").startsWith("/renders/");'));
     }
+    if (process.env.SCENE_REVIEW_VISUAL_PROPOSAL === "1") {
+      for (const [id,version] of [["03_left_cancel_obstacle","r12"],["06_right_cancel_obstacle","r07"]]) {
+        await evaluate(production, `location.hash=${JSON.stringify(id)};return true;`);
+        await waitFor(production, '!document.querySelector("#visual-proposal").hidden && !document.querySelector("#visual-proposal-append").disabled');
+        await waitFor(production, `document.querySelector("#hero").complete && document.querySelector("#hero").currentSrc.includes("/${version}/fixture_detail.jpg") && document.querySelector("#hero").naturalWidth>0`);
+        await waitFor(production, 'document.querySelectorAll("#planning-round-history tr").length>=4');
+        assert(await evaluate(production, 'return document.querySelector("#visual-proposal-verdict").textContent.includes("新摆位视觉通过") && document.querySelector("#visual-proposal-adjustment").textContent.includes("冻结");'));
+        await waitFor(production, 'document.querySelector("#benchmark-progress").textContent==="严格门禁快照 7 / 9"');
+        await screenshot(production, id + "_proposal.png");
+      }
+      await evaluate(production, 'location.hash="01_left_cancel_human";return true;');
+    }
     await screenshot(production, "page_desktop.png");
     const tab = await call("browsingContext.create", {type:"tab"}), ctx = tab.context;
     await call("browsingContext.navigate", {context:ctx,url:"http://127.0.0.1:8766",wait:"complete"});
     await waitFor(ctx, 'document.querySelectorAll(".scene").length===9');
+    if (process.env.SCENE_REVIEW_VISUAL_PROPOSAL === "1") {
+      const source=await evaluate(production, 'return (await (await fetch("/api/scenes")).json()).scenes.find(s=>s.id==="03_left_cancel_obstacle");');
+      const changes={visual_config:source.visual_config,planning_artifacts:source.planning_artifacts,plan:"用户原方案"};
+      await evaluate(ctx, `const changes=${JSON.stringify(changes)};const row=(await(await fetch("/api/scenes")).json()).scenes.find(s=>s.id==="03_left_cancel_obstacle");const r=await fetch("/api/scenes/03_left_cancel_obstacle",{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({changes,base:Object.fromEntries(Object.keys(changes).map(k=>[k,row[k]])),actor:"scratch-proposal-test"})});if(!r.ok)throw Error(await r.text());return true;`);
+      const proposalTab=(await call("browsingContext.create",{type:"tab"})).context;
+      await call("browsingContext.navigate",{context:proposalTab,url:"http://127.0.0.1:8766/#03_left_cancel_obstacle",wait:"complete"});
+      await waitFor(proposalTab, '!document.querySelector("#visual-proposal").hidden && !document.querySelector("#visual-proposal-append").disabled');
+      assert.equal(await evaluate(proposalTab,'return document.querySelector("#plan").value;'),"用户原方案");
+      await evaluate(proposalTab,'document.querySelector("#visual-proposal-append").click();return true;');
+      await waitFor(proposalTab,'document.querySelector("#save-state").textContent==="已保存到本地磁盘"');
+      await call("browsingContext.reload",{context:proposalTab,wait:"complete"});
+      await waitFor(proposalTab,'document.querySelector("#plan").value.startsWith("用户原方案\\n\\n本轮视觉建议：")');
+      assert(await evaluate(proposalTab,'return (document.querySelector("#plan").value.match(/本轮视觉建议：/g)||[]).length===1;'));
+      await call("browsingContext.close",{context:proposalTab});
+    }
     await evaluate(ctx, 'const n=document.querySelector("#notes");n.value="自动保存测试：向台面侧方调整";n.dispatchEvent(new Event("input",{bubbles:true}));return true;');
     await waitFor(ctx, 'document.querySelector("#save-state").textContent==="已保存到本地磁盘"');
     await call("browsingContext.reload", {context:ctx,wait:"complete"});
@@ -174,10 +205,12 @@ socket.on("open", async () => {
     assert(await evaluate(production, 'return document.documentElement.scrollWidth<=window.innerWidth;'));
     await screenshot(production, "page_mobile.png");
     console.log("PASS: desktop/mobile, autosave, reload persistence, navigation, zoom, filter, conflict rejection, draft recovery, explicit resolution. Production data unchanged.");
-    await call("session.end");
   } catch (e) {
     console.error(e);
     process.exitCode = 1;
-  } finally { socket.close(); }
+  } finally {
+    try { await call("session.end"); } catch (_) {}
+    socket.close();
+  }
 });
-setTimeout(() => { console.error("Browser test timed out"); process.exit(2); }, 80000).unref();
+setTimeout(() => { console.error("Browser test timed out"); process.exit(2); }, 180000).unref();

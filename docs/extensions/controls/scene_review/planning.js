@@ -4,7 +4,7 @@
   const canvas = el("trajectory-canvas"), ctx = canvas.getContext("2d");
   let data = null, key = "", epoch = 0, frame = 0, yaw = -.65, pitch = .55, zoom = 1;
   let center = [0,0,0], span = 1, playing = false, lastTime = 0, lastFrame = 0, drag = null, raf = null;
-  const labels = {pending:"待生成",running:"正在生成",generated:"已返回轨迹 · 未验收",failed:"失败 · 已跳过",skipped:"已跳过",annotated:"已标注 · 未改规划"};
+  const labels = {pending:"待生成",running:"正在生成",generated:"已返回轨迹 · 未验收",failed:"失败 · 已跳过",skipped:"已跳过",annotated:"已标注 · 未改规划",visual_rejected:"视觉未通过 · 本轮结束",visual_passed:"视觉通过 · 已冻结"};
   let historyEpoch = 0;
   let screenEpoch = 0, screenKey = '';
   async function showBenchmarkScreen(scene) {
