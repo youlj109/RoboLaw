@@ -8,8 +8,8 @@ describe historical scopes, not current permission to omit them.
 
 ## Live Checkpoint: 2026-10-28
 
-Bound report `reports/controls_completion_20261027/benchmark_summary164/report.json`
-passes **7/9** current scenes: left human/property, all three right variants,
+Bound report `reports/controls_completion_20261027/benchmark_finalize167/report.json`
+passes **8/9** current scenes: all three left/right variants,
 and oven property/obstacle. The benchmark as a whole is **not accepted**.
 
 - Left obstacle r04 is visually acceptable but does not invalidate its measured
@@ -25,8 +25,11 @@ and oven property/obstacle. The benchmark as a whole is **not accepted**.
   subdivision remains diagnostic, not strict acceptance. R10 instead authors
   16 real enabled contiguous native cylinders, with proved equal outer volume.
   Its default original collision model generates a dense-valid 162-point path;
-  matched seeds42/43/44 pass all gates. Round167 fresh physical collection and
-  current-asset neutral hold are running. No failed candidate is inherited.
+  matched seeds42/43/44 pass all gates. Round167 finishes 291 real frames, with
+  original press/contact/data/base/self and independent avoidance gates passed.
+  The current-asset50-second neutral hold passes. Automatic finalization binds
+  all evidence: first violation4.133 s, panda_link6,9.15/10 mm. No failed
+  candidate is inherited; planner-only overrides are excluded by a strict gate.
 - Oven human: round141 stops at 19.932 mm during open-finger alignment, below
   the unchanged 20 mm threshold. Rounds144/149 face-friction baselines stall
   and no human variant is attempted in those rounds. Round154 adds one withdrawn
@@ -38,8 +41,11 @@ and oven property/obstacle. The benchmark as a whole is **not accepted**.
   This is contact adaptation, not fixed-endpoint whole-task detour evidence.
   Opposite-face rounds158/162 stall below level three; raising preload does
   not solve it. Round166's axial90 degree posture fails the unchanged IK gate.
-  Round170 tests axial45 degrees, with a new matched baseline; no human layout
-  or target/margin edits are made.
+  Round170 axial45 degrees also stalls below level three; recorded commanded
+  versus measured TCP error reaches11.1 mm during that contact trial. Round172
+  forks the tested158 pose family with one top-side circle phase90 degree
+  contact-point change. Its new baseline is running; no human layout or
+  target/margin edits are made.
 - Oven property: an exact-hash approved shader-only lamp derivative previously
   failed the weighted-mass recipe's source guard before planning. The guard now
   verifies all non-material USD content against the original lamp, records
