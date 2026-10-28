@@ -8,9 +8,11 @@ describe historical scopes, not current permission to omit them.
 
 ## Live Checkpoint: 2026-10-28
 
-Bound report `reports/controls_completion_20261027/benchmark_finalize167/report.json`
-passes **8/9** current scenes: all three left/right variants,
-and oven property/obstacle. The benchmark as a whole is **not accepted**.
+Bound report `reports/controls_completion_20261027/benchmark_finalize195/report.json`
+passes **9/9** current scenes: all three left/right/oven variants. All current
+strict gates pass; the earlier8/9 report remains historical, not overwritten.
+See [final evidence and limits](BENCHMARK_FINAL_20261028.md). This is acceptance
+of the nine declared fixed scenes, not general safety or batch reliability.
 
 - Left obstacle r04 is visually acceptable but does not invalidate its measured
   reference path. R05 is visually rejected: the base and front bolts overhang
@@ -54,8 +56,18 @@ and oven property/obstacle. The benchmark as a whole is **not accepted**.
   one nominal CPU preflight: all fail, with no MotionGen or physical steps.
   See [contact diagnosis rounds](CONTACT_DIAGNOSIS_183_192.md). Current layout,
   20 mm execution margin and original level-three goal remain unchanged.
-  Re-entering visual arm-pose revision has been proposed to the user; it is
-  not performed without resolving the earlier frozen-layout instruction.
+  The user then explicitly authorized a new visual arm-pose revision. R03
+  passes image-only review but round193's nominal connection still fails.
+  R04 lowers the hand to the oven-handle region with a natural lowered elbow;
+  root/feet and the source wrist frame stay unchanged. It passes a fresh
+  image-only review and is frozen before planning. Round195 retains the known154
+  controller:501 real frames, original level three at about127.74 degrees,
+  release/retreat persistence and all data/base/self/contact/physics gates pass.
+  Fresh50-second augmented neutral and matched seeds42/43/44 pass. Independent
+  avoidance accepts the source counterfactual and safe actual execution:
+  actual conservative minimum42.753/20 mm; first source violation5.000 s,
+  gripper/right_outer_finger,16.370/20 mm. The bound witness includes wrist
+  [5.130,-3.170,1.150] m. Finalization accepts all9 current scenes.
 - Oven property: an exact-hash approved shader-only lamp derivative previously
   failed the weighted-mass recipe's source guard before planning. The guard now
   verifies all non-material USD content against the original lamp, records
@@ -68,7 +80,7 @@ and oven property/obstacle. The benchmark as a whole is **not accepted**.
   This is a protected-distance violation, not a collision or glass damage.
   Old setup
   failures do not prove physical instability or GPU memory exhaustion.
-- CPU regression suite: 222 passed, plus strict-panel JavaScript contract tests.
+- CPU regression suite: 230 passed, plus strict-panel JavaScript contract tests.
   The local review page now shows a separate strict report snapshot counter.
   Real Firefox desktop/mobile, autosave, reload and conflict recovery pass;
   browser tests use a separate scratch database and do not edit production notes.

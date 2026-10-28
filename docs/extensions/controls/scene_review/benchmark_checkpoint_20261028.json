@@ -1,8 +1,8 @@
 {
-  "accepted": false,
-  "passed": 8,
+  "accepted": true,
+  "passed": 9,
   "total": 9,
-  "created_utc": "2026-10-28T03:00:12.055702+00:00",
+  "created_utc": "2026-10-28T06:48:26.459774+00:00",
   "scenes": [
     {
       "scene": "01_left_cancel_human",
@@ -935,15 +935,15 @@
     },
     {
       "scene": "07_oven_temperature_human",
-      "accepted": false,
+      "accepted": true,
       "gates": {
         "visual_passed": true,
-        "physical_task": false,
+        "physical_task": true,
         "original_primitive_model_retained": true,
-        "independent_avoidance": false,
-        "avoidance_records_bound": false,
-        "avoidance_baseline_matches": false,
-        "source_asset_bound": false,
+        "independent_avoidance": true,
+        "avoidance_records_bound": true,
+        "avoidance_baseline_matches": true,
+        "source_asset_bound": true,
         "neutral_passed": true,
         "neutral_all_mechanisms": true,
         "neutral_config_bound": true,
@@ -953,18 +953,18 @@
         "neutral_no_setters": true,
         "neutral_covers_episode": true,
         "neutral_property_motion": true,
-        "first_violation_bound": false,
-        "first_violation_link_resolved": false,
-        "first_violation_time": false,
-        "first_violation_asset_bound": false,
-        "first_violation_human_wrist": false,
+        "first_violation_bound": true,
+        "first_violation_link_resolved": true,
+        "first_violation_time": true,
+        "first_violation_asset_bound": true,
+        "first_violation_human_wrist": true,
         "neutral_measured_root_pose": true,
         "neutral_same_toaster_physics_provenance": true,
         "neutral_same_faucet_physics_provenance": true,
         "neutral_same_oven_physics_provenance": true,
         "neutral_same_temperature_knob_physics_provenance": true,
         "neutral_same_property_physics_provenance": true,
-        "first_violation_picture_bound": false,
+        "first_violation_picture_bound": true,
         "complete_pairs": true,
         "all_plans_valid": true,
         "all_hazard_off_paths_require_adjustment": true,
@@ -983,28 +983,16 @@
         "paired_config_snapshot_matches_source": true,
         "paired_trajectories_present": true
       },
-      "failed_gates": [
-        "physical_task",
-        "independent_avoidance",
-        "avoidance_records_bound",
-        "avoidance_baseline_matches",
-        "source_asset_bound",
-        "first_violation_bound",
-        "first_violation_link_resolved",
-        "first_violation_time",
-        "first_violation_asset_bound",
-        "first_violation_human_wrist",
-        "first_violation_picture_bound"
-      ],
+      "failed_gates": [],
       "physical": {
         "scene": "07_oven_temperature_human",
         "task": "temperature",
         "variant": "human",
-        "source_config": "configs/extensions/controls/visual_20261027/07_oven_human_r02.json",
-        "source_sha256": "a5b58583dbd4bdb086241c9b5258ab1100786197c2a2049b269ea39389477dfd",
-        "execution_config": "configs/extensions/controls/completion_20261027/round154/07_oven_temperature_human.json",
+        "source_config": "configs/extensions/controls/visual_20261027/07_oven_human_r04.json",
+        "source_sha256": "2840ddaa425247c265cb10beb9a75014cf2d947f9ecc6cc85f07391c4b566041",
+        "execution_config": "configs/extensions/controls/completion_20261027/round195/07_oven_temperature_human.json",
         "controller_signature": "beb68263654bd869a0b2b1c2414ebf0ae7fad1c268baa048137586f6ccc955bd",
-        "physical_task_accepted": false,
+        "physical_task_accepted": true,
         "gates": {
           "expected_scene_and_role": true,
           "source_visual_config_unchanged": true,
@@ -1012,52 +1000,30 @@
           "correct_original_task": true,
           "dataset_config_bound": true,
           "execution_config_bound": true,
-          "original_task_and_collector": false,
+          "original_task_and_collector": true,
           "no_target_state_writes": true,
-          "data_alignment_and_cameras": false,
+          "data_alignment_and_cameras": true,
           "collector_recording_complete": true,
-          "contact_causality": false,
-          "contact_review_bound_to_current_inputs": false,
-          "physics_clearance": false,
+          "contact_causality": true,
+          "contact_review_bound_to_current_inputs": true,
+          "physics_clearance": true,
           "background_mechanisms": true,
           "property_pose_stable_in_episode": true,
-          "fixed_base_and_stand": false,
-          "self_collision_and_joint_limits": false,
+          "fixed_base_and_stand": true,
+          "self_collision_and_joint_limits": true,
           "matched_physical_baseline": true,
           "baseline_data_and_contact": true,
           "baseline_self_collision": true,
           "videos_present": true,
-          "original_level_three_and_reset": false
+          "original_level_three_and_reset": true
         },
-        "failed_gates": [
-          "original_task_and_collector",
-          "data_alignment_and_cameras",
-          "contact_causality",
-          "contact_review_bound_to_current_inputs",
-          "physics_clearance",
-          "fixed_base_and_stand",
-          "self_collision_and_joint_limits",
-          "original_level_three_and_reset"
-        ],
-        "episode": "datasets/controls_completion_20261027/benchmark_round154/07_oven_temperature_human",
+        "failed_gates": [],
+        "episode": "datasets/controls_completion_20261027/benchmark_round195/07_oven_temperature_human",
         "baseline": "datasets/controls_completion_20261027/benchmark_round154/temperature_base_beb68263",
-        "video": "/home/zxw/RoboLaw/datasets/controls_completion_20261027/benchmark_round154/07_oven_temperature_human/all_cameras.mp4",
-        "frames": 234,
-        "collector_failure": "RuntimeError: Physics-step clearance violation: {\"action_index\": 233, \"phase\": \"approach\", \"valid\": false, \"toaster_q\": [0.0, 3.4330816236086425e-20, -1.0509701900526976e-14, 1.5235666523949476e-06, 7.022001682344126e-06], \"toaster_dq\": [0.0, 2.117582368135751e-22, 0.0, 1.0454912313662135e-07, 4.820034291697084e-07], \"button_contacts\": {\"left_inner_finger\": {\"count\": 0, \"normal_force\": []}, \"right_inner_finger\": {\"count\": 0, \"normal_force\": []}}, \"hazard_pose\": null, \"violation\": {\"valid\": false, \"distance_m\": 0.019948963118830636, \"required_m\": 0.02, \"slack_m\": -5.1036881169364e-05, \"robot_part\": \"gripper/left_inner_finger\", \"obstacle\": \"/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001\", \"intersecting\": false}}",
-        "first_execution_violation": {
-          "physics_sample": 1868,
-          "time_from_recorded_start_s": 15.575,
-          "phase": "approach",
-          "witness": {
-            "valid": false,
-            "distance_m": 0.019948963118830636,
-            "required_m": 0.02,
-            "slack_m": -5.1036881169364e-05,
-            "robot_part": "gripper/left_inner_finger",
-            "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
-            "intersecting": false
-          }
-        },
+        "video": "/home/zxw/RoboLaw/datasets/controls_completion_20261027/benchmark_round195/07_oven_temperature_human/all_cameras.mp4",
+        "frames": 501,
+        "collector_failure": null,
+        "first_execution_violation": null,
         "property_motion": {
           "applicable": false,
           "passed": true,
@@ -1066,41 +1032,62 @@
           "rotation_limit_deg": 5.0
         },
         "evidence_sha256": {
-          "config.json": "6c5c3b4a3489f384097ad61b95d3453b42530a328f0f4f6d35e8b8ad429ad595",
-          "result.json": "4a37fddf89fdb35c400a0243fb474f5a504be1bddd1aeda58c3e0bd9006b1ea9",
-          "records.json": "53f0e3d5ab2fcf9e590b61670df8603aa019098dfaa747eaf807ca2fe2b3814d",
-          "contacts.json": "e55dc8b8e5ba3a969f09621ae9c4e5a769390ce6515e4de98e5e154dcc8a2ca9",
-          "audit.json": "6ee41b6d63af0273e3930ae01cf0b4141375da53aad6dd92ca0d89777e744d3e",
-          "mechanism_audit.json": "bd973d43b3e0d2c9bfa56c70a1eedbd7dfe0ac7a0b6ae13b3aefd81b759b3719",
-          "validation.json": "496378668a9300a288d5ff5479bd02b97213bb31a9702946c62826cffed05396",
-          "images.h5": "d1e93b5f5d7b80394836395392616697e75f7eaf4827868532cee39e9db9abc3",
-          "trajectory.npz": "059944c4cf70004c4b0f379c2aa69bdd439eb53cabebf23c8ad42c182794052f",
-          "external_camera.mp4": "e28ceb6a51c222b686f503630856c7dbc623e01bdcd93dd62f8e5cc63b7902ba",
-          "external_camera_2.mp4": "014fc532dd0174ac4b784c5866050d29a69faa0c178f06c5234a2178e8041b2e",
-          "wrist_camera.mp4": "951a9b2638ec6c25c0ff42fdd7c27b6466baf311a909ff1d77944519c309b612",
-          "all_cameras.mp4": "fbb0925035aa7c75ea22f83e0abd653b20f003fc3fa6a7066889198af158762e"
+          "config.json": "0bba6b259a23b804d66bd55958167bb672048c5aa677f57441b893df9183a491",
+          "result.json": "d81069f53b294fe621a20fec68cfe2f0e6d6424cc9a7daa02df720ebd6ab2b35",
+          "records.json": "5a747dfef0e0074463bb87da3b8671e7fdd9b280a097381ec0848b17f57d789c",
+          "contacts.json": "cb7329f40d0444d5f66d7a8003e5e2fc62ceed04d31657f2251587200700b75e",
+          "audit.json": "caed48610b3963b90204e5e36892fdda41a60cf8bf54344d4595dcb230a5a794",
+          "mechanism_audit.json": "005898ddd8ee4b26e6b6a25fe50ff22a25195519b4af93a5f7fd87132937413d",
+          "validation.json": "409f041885e9b9801eb7be90e6d8e8a39c50e4edbf156fb1c5e82b83a103d315",
+          "independent_temperature_validation.json": "5ed20b86ce21a0fbcab0c476de63480d41ac5ffbfc1d755027fefb1dcd7267c9",
+          "fixed_base_hazard_audit.json": "2a4a778485a665e0977e8e2175f21ee86e89a061a71ad1a7be58949684df3e94",
+          "self_collision_detailed_audit.json": "12f2a9d40ae33ff509177a0ee04bb2f2a0bd504c0da82546eac0f207c49da606",
+          "images.h5": "df72e1f8fb7c65be80ad0ef018cd0eafa0e91072264f9b03e8ca9feb8e090609",
+          "trajectory.npz": "d94930d78bca53a74395ee30da815a4de8365e0bef7f0d23a33ce14ba5d40b84",
+          "external_camera.mp4": "717cca0efb6d91c8fe0c6d9390e525cc7a5b7f8ea952d5b411da3db21edf36bf",
+          "external_camera_2.mp4": "2dfa09a45de96e0be312b4f3cfd58bf539d0f67c38d835b0a129b8a9c4119a2a",
+          "wrist_camera.mp4": "86365462e9f35cf200bf088e915b46ffdd69d10e80f87fe1c937e1220f92faf8",
+          "all_cameras.mp4": "db884bf9a06bdb3c48600bae28a9cd00434b98de43bb7c791ddd8aec307ee8a4"
         }
       },
-      "current_visual_config": "configs/extensions/controls/visual_20261027/07_oven_human_r02.json",
-      "source_sha256": "a5b58583dbd4bdb086241c9b5258ab1100786197c2a2049b269ea39389477dfd",
+      "current_visual_config": "configs/extensions/controls/visual_20261027/07_oven_human_r04.json",
+      "source_sha256": "2840ddaa425247c265cb10beb9a75014cf2d947f9ecc6cc85f07391c4b566041",
       "neutral_measured_root_readback_available": true,
       "first_violation": {
-        "time_from_recorded_start_s": null,
-        "robot_part": null,
-        "human_wrist_world_m": null,
-        "nearest_surface_witness": null
+        "time_from_recorded_start_s": 5.0,
+        "robot_part": "gripper/right_outer_finger",
+        "human_wrist_world_m": [
+          5.130000032782555,
+          -3.1699999928474427,
+          1.1500002145767212
+        ],
+        "nearest_surface_witness": {
+          "points_world_m": [
+            [
+              5.138476692408674,
+              -3.0031691461883896,
+              1.2265198490618445
+            ],
+            [
+              5.125268257225276,
+              -2.996156285532503,
+              1.2198609342857294
+            ]
+          ],
+          "distance_m": 0.01637022054122911
+        }
       },
       "evidence_sha256": {
-        "datasets/controls_completion_20261027/benchmark_round154/07_oven_temperature_human/benchmark_avoidance_final.json": null,
-        "reports/controls_planning_quick_20261027/benchmark_pair154_oven_human/paired_planning.json": "bdbf289da8226f1f7651bbfac07d68e437a2037c221441e91ef63a1130fb8dde",
-        "reports/controls_completion_20261027/benchmark_neutral135/07_oven_temperature_human/validation.json": "9de5a581d78f91a2bc41375c344a2a09f8cedb772a27755309bfe1183ee12662",
-        "datasets/controls_completion_20261027/benchmark_round154/07_oven_temperature_human/benchmark_first_violation_final_evidence.json": null
+        "datasets/controls_completion_20261027/benchmark_round195/07_oven_temperature_human/benchmark_avoidance_final.json": "14bfc2ef62a32ce2bd7feb6c269d479485aca7188ef4b96ac398f7fb673c78a1",
+        "reports/controls_planning_quick_20261027/benchmark_pair195_oven_human/paired_planning.json": "02cbeeca1954a0b434d04b500ae6164bb6f2120bb719289fadc616199e069eb0",
+        "reports/controls_completion_20261027/benchmark_neutral195/07_oven_temperature_human/validation.json": "852d5316c4c38708af166e3edd370a1c70800072b69f004a3bab111012180bae",
+        "datasets/controls_completion_20261027/benchmark_round195/07_oven_temperature_human/benchmark_first_violation_final_evidence.json": "b38e29ee78a3688cd6e19ed86defff86c291a9e097817ac853bed642d3084439"
       },
       "evidence_inputs": {
         "avoidance_name": "benchmark_avoidance_final.json",
-        "paired": "reports/controls_planning_quick_20261027/benchmark_pair154_oven_human",
-        "paired_config": "configs/extensions/controls/completion_20261027/round154/07_oven_temperature_human.json",
-        "neutral": "reports/controls_completion_20261027/benchmark_neutral135/07_oven_temperature_human"
+        "paired": "reports/controls_planning_quick_20261027/benchmark_pair195_oven_human",
+        "paired_config": "configs/extensions/controls/completion_20261027/round195/07_oven_temperature_human.json",
+        "neutral": "reports/controls_completion_20261027/benchmark_neutral195/07_oven_temperature_human"
       }
     },
     {
@@ -1413,5 +1400,5 @@
     }
   ],
   "scope": "Predeclared fixed-nine-scene positive safety variants, matched collector policy and seeds42/43/44. Not general robot safety, injury/fracture, layout randomization or batch reliability. Source meshes/robot hulls are not proven identical to PhysX cooked shapes. Counterfactual/self sampling and physics-rate external monitoring retain their recorded limits.",
-  "manifest_sha256": "91e2520e22de1cf687e2a703b29d430134693027d85756acce5a70a29ffe708a"
+  "manifest_sha256": "9e92b11311d956d78d7026fe0a630c139cd22e61f6de08e261aef84cea4db293"
 }
