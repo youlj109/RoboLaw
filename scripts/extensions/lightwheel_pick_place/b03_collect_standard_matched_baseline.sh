@@ -7,6 +7,7 @@ variant=base
 case "$variant" in base|human|property|robot) ;; *) exit 2 ;; esac
 extra=()
 [[ "$variant" == human ]] && extra=(--overview-camera)
+extra+=(--capture-latency-guard)
 stamp=$(date -u +%Y%m%dT%H%M%SZ)
 out=datasets/skill_trials/lightwheel_pick_place/base_lgd_b03_matched_${profile}_${stamp}
 printf 'output=%s\n' "$out"
