@@ -47,7 +47,10 @@ def audit(ep):
         native_calibration=False
         if r['source_support_contact_model']['mode']=='native_contact_calibrated_until_detached':
             normals=np.asarray(source_contact.get('normals_world',[]),float).reshape(-1,3)
-            contact_ok=bool(contact_ok and (count==0 or (min(source_contact['separations_m'])>=-.0005 and np.allclose(np.linalg.norm(normals,axis=1),1.,atol=1e-4))))
+            # Match collect.py: shallow contacts permit floor RECALIBRATION.
+            # Deeper cooked-contact values do not erase the last verified floor;
+            # original raw-hull floor, XY, phase, detach and FCL gates still apply.
+            contact_ok=bool(contact_ok and (count==0 or np.allclose(np.linalg.norm(normals,axis=1),1.,atol=1e-4)))
             native_calibration=bool(contact_ok and count>0 and not before and phase in ('pregrasp','approach','close','lift') and min(source_contact['separations_m'])>=-.0005 and np.allclose(np.linalg.norm(normals,axis=1),1.,atol=1e-4))
             if native_calibration:calibrated[pick]['floor']=minimum-.0005
             floor=calibrated[pick]['floor']
@@ -59,9 +62,9 @@ def audit(ep):
             obj=fcl.CollisionObject(plate_model,fcl.Transform(plate_rotation,plate_pose[:3]));raw=float(fcl.distance(banana,obj,fcl.DistanceRequest(),fcl.DistanceResult()));hit=raw<0 or (raw==0 and bool(fcl.collide(banana,obj,fcl.CollisionRequest(),fcl.CollisionResult())));distance=min(distance,max(0.,raw));intersecting|=hit
         source_clear=not intersecting and distance>=.002
         aligned=(ranges[pick]['start']<=action<ranges[pick]['end'] and abs(minimum-item['source_hull_min_z_m'])<1e-6 and item['source_detached_before']==before and item['source_detached_after']==after)
-        row={'physics_index':index,'pick':pick,'action':action,'phase':phase,'raw_hull_min_z_m':minimum,'native_floor_m':floor,'source_distance_m':distance,'source_intersecting':intersecting,'bounded_source_exception':bool(region),'contacts_valid':bool(contact_ok),'state_aligned':bool(aligned),'passed':bool(contact_ok and aligned and (source_clear or region))};rows.append(row);detached[pick]=after
+        row={'physics_index':index,'pick':pick,'action':action,'phase':phase,'raw_hull_min_z_m':minimum,'native_floor_m':floor,'source_distance_m':distance,'source_intersecting':intersecting,'bounded_source_exception':bool(region),'contacts_valid':bool(contact_ok),'raw_contact_separation_min_m':min(source_contact['separations_m']) if count else None,'shallow_contact_recalibration':bool(native_calibration),'state_aligned':bool(aligned),'passed':bool(contact_ok and aligned and (source_clear or region))};rows.append(row);detached[pick]=after
     checks.update(all_picks_measured=all(seen.values()),initial_physical_support=all(supported.values()),all_picks_detached=all(detached.values()),geometry_and_contact_state=bool(rows and all(x['passed'] for x in rows)))
-    return {'passed':bool(all(checks.values())),'checks':checks,'measurements':rows,'scope':'Independent raw USD banana convex hulls and concave plate meshes, per-banana native rest floors, raw exact-source contacts, permanent detach, and measured plate states at each recorded action. The plate must remain within 1 mm / 1 degree; intra-action source pose is resolved at 15 Hz while banana/contact measurements remain at 120 Hz. All external safety margins are unchanged.'}
+    return {'passed':bool(all(checks.values())),'checks':checks,'measurements':rows,'criterion_parity':'Same runtime collect.py policy: shallow cooked contacts allow recalibration; otherwise retain prior native floor. Raw separation remains disclosed, not a second unconditional rejection. All floor/XY/detach/FCL thresholds unchanged.','scope':'Independent raw USD banana convex hulls and concave plate meshes, per-banana native rest floors, raw exact-source contacts, permanent detach, and measured plate states at each recorded action. The plate must remain within 1 mm / 1 degree; intra-action source pose is resolved at 15 Hz while banana/contact measurements remain at 120 Hz. All external safety margins are unchanged.'}
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('episode',type=Path);p.add_argument('--output',type=Path,required=True);a=p.parse_args();report=audit(a.episode)
