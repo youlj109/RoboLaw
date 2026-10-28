@@ -8,6 +8,7 @@ from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppCont
 parser=get_isaaclab_arena_cli_parser()
 parser.add_argument('--task',default='kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian',
     help='Arena env id; default B01 lime. Use lemon shelf→plate id for B02.')
+parser.add_argument('--capture-latency-guard',action='store_true',help='Stop after three >2s live capture frames, preserve partial evidence; no changed physics/video policy')
 parser.add_argument('--b03-stage-profile',type=Path,help='Explicit per-pick control parameters, fresh planning only; no trajectory/state replay')
 parser.add_argument('--pick-order',nargs='+',help='Execution order only for original parallel multi-pick task; all original picks remain required')
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
@@ -386,6 +387,13 @@ with SimulationAppContext(args):
             writer.write(phase)
             if time.perf_counter()-tick>2. and writer.frames%30==0:
                 print('SLOW_CAPTURE',phase,writer.frames,{k:round(v-capture_timing_before.get(k,0),3) for k,v in writer.timings.items() if k.endswith('_s')},flush=True)
+            if args.capture_latency_guard:
+                elapsed_capture=time.perf_counter()-tick
+                result.setdefault('capture_component_timings',[]).append({'frame':writer.frames,'phase':phase,'seconds':elapsed_capture,'components':writer.last_capture_components})
+                if elapsed_capture>2.:
+                    print('CAPTURE_COMPONENT_TIMING',json.dumps(result['capture_component_timings'][-1]),flush=True)
+                if sum(x['seconds']>2. for x in result['capture_component_timings'])>=3:
+                    raise RuntimeError('Capture latency guard: three slow frames; stop before further physics, preserve partial evidence')
             if overview_writer:
                 overview_writer.write(phase)
                 overview_alignment.append({'action_index':len(records),'phase':phase,

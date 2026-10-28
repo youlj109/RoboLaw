@@ -32,11 +32,15 @@ with SimulationAppContext(a):
  names=list(d.embodiment.camera_config.camera_names())+['overview_camera']+(['person_review_camera'] if a.variant=='human' and is_banana else []);w=CameraWriter(a.output,e.scene,names,e.step_dt,previews=True);start=int(e.sim.get_physics_step_count());w.warm_up(e.sim,min_frames=2,max_frames=4,sample_every=1,stable_windows=2)
  import time
  from isaaclab_physx.renderers.isaac_rtx_renderer_utils import ensure_isaac_rtx_render_update
+ import isaaclab_physx.renderers.isaac_rtx_renderer_utils as rtx_utils
  timings=[]
- for refresh in (True,False,True):
+ for refresh in (True,True,True,False,False,False,True,True,True):
   for name in names:e.scene[name].cfg.update_latest_camera_pose=refresh
   row={'update_latest_camera_pose':refresh,'cameras':{}}
   tick=time.perf_counter();e.sim.render();row['sim_render_s']=time.perf_counter()-tick
+  # Invalidate only the render deduplication cache so each sample actually
+  # pumps Kit, as new physics ticks do; real physics counter stays untouched.
+  rtx_utils._last_render_update_key=(-1,-1,-1)
   tick=time.perf_counter();ensure_isaac_rtx_render_update(force=True);row['ensure_render_s']=time.perf_counter()-tick
   for name in names:
    tick=time.perf_counter();e.scene[name].update(0.,force_recompute=True);update_s=time.perf_counter()-tick

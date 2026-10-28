@@ -261,15 +261,20 @@ class CameraWriter:
         from isaaclab_physx.renderers.isaac_rtx_renderer_utils import ensure_isaac_rtx_render_update
         started = time.perf_counter()
         ensure_isaac_rtx_render_update(force=True)
-        self.timings['render_capture_s'] += time.perf_counter() - started
+        ensure_seconds=time.perf_counter()-started
+        self.timings['render_capture_s'] += ensure_seconds
+        capture_components={'ensure_renderer_s':ensure_seconds,'cameras':{}}
         panels = []
         for name in self.names:
             started = time.perf_counter()
             camera = self.scene[name]
             camera.update(0.0, force_recompute=True)
+            update_seconds=time.perf_counter()-started
+            read_started=time.perf_counter()
             rgb = numpy(camera.data.output['rgb'])[0, :, :, :3].astype(np.uint8)
             position = numpy(camera.data.pos_w)[0]
             quaternion = numpy(camera.data.quat_w_ros)[0]
+            capture_components['cameras'][name]={'update_s':update_seconds,'rgb_pose_read_s':time.perf_counter()-read_started}
             self.timings['render_capture_s'] += time.perf_counter() - started
 
             started = time.perf_counter()
@@ -322,6 +327,7 @@ class CameraWriter:
             self.timings['preview_s'] += time.perf_counter() - started
         self.frames += 1
         self.timings['frames'] = self.frames
+        self.last_capture_components=capture_components
         self.last_phase = phase
 
     def close(self):
