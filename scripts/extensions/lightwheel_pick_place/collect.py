@@ -414,7 +414,7 @@ with SimulationAppContext(args):
         if phase in ('close','lift','transfer','lower'):contacts.sample(phase,len(records)-1,snapshot()['lime'][:7])
         step_wall_profile['contact_s']+=time.perf_counter()-tick
         if len(records)%30==0:print('STEP',len(records),phase,snapshot()['lime'][:3].round(4),flush=True);print('STEP_WALL_PROFILE',json.dumps(step_wall_profile),flush=True)
-    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'release_retract_z_m':args.release_retract_z,'loaded_transfer_time_scale':args.loaded_transfer_time_scale,'pre_release_hold_steps':args.pre_release_hold_steps,'gentle_supported_placement':bool(args.gentle_supported_placement),'placement_feedback_lower':bool(args.placement_feedback_lower),'placement_joint_goals_sha256':hashlib.sha256(args.placement_joint_goals.read_bytes()).hexdigest() if args.placement_joint_goals else None,'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps},'success':False,'planner':'curobo','physical_grasp':True,
+    result={'step_wall_profile_seconds':step_wall_profile,'collector_source_sha256':COLLECTOR_SOURCE_SHA256,'task':TASK_ID,'variant':args.variant,'pregrasp_planner_mode':args.pregrasp_planner,'planning_attachment_policy':args.attachment_feedback,'task_motion_parameters':{'release_retract_z_m':args.release_retract_z,'loaded_transfer_time_scale':args.loaded_transfer_time_scale,'pre_release_hold_steps':args.pre_release_hold_steps,'gentle_supported_placement':bool(args.gentle_supported_placement),'placement_feedback_lower':bool(args.placement_feedback_lower),'placement_joint_goals_sha256':hashlib.sha256(args.placement_joint_goals.read_bytes()).hexdigest() if args.placement_joint_goals else None,'placement_goals_sha256':hashlib.sha256(args.placement_goals.read_bytes()).hexdigest() if args.placement_goals else None,'round10_second_placement':bool(args.round10_second_placement),'align_second_grasp':bool(args.align_second_grasp),'free_release':bool(args.free_release),'place_lower_z_m':args.place_lower_z,'first_orientation_reference_sha256':hashlib.sha256(args.first_placement_reference.read_bytes()).hexdigest() if args.first_placement_reference else None,'lift_offset_xy_m':list(TASK_SPEC.lift_offset_xy_m),'place_offset_xy_m':list(TASK_SPEC.place_offset_xy_m),'commanded_initial_lift_m':TASK_SPEC.lift_height_m,'lower_tcp_offset_source':'measured_at_lift_end','dual_first_place_offset_x_m':args.dual_first_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_second_place_offset_x_m':args.dual_second_place_offset_x if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_offset_y_m':args.dual_first_place_offset_y if len(task_picks(TASK_SPEC))==2 else None,'dual_first_place_lower_z_m':args.dual_first_place_lower_z if len(task_picks(TASK_SPEC))==2 else None,'release_ramp_steps':args.release_ramp_steps,'staged_release':bool(args.staged_release),'landing_correction_time_scale':args.landing_correction_time_scale,'release_landing_plan_sha256':hashlib.sha256(args.release_landing_plan.read_bytes()).hexdigest() if args.release_landing_plan else None,'release_escape_plan_sha256':hashlib.sha256(args.release_escape_plan.read_bytes()).hexdigest() if args.release_escape_plan else None,'grasp_pose_calibration_sha256':hashlib.sha256(args.grasp_pose_calibration.read_bytes()).hexdigest() if args.grasp_pose_calibration else None},'success':False,'planner':'curobo','physical_grasp':True,
       'seed':seed,'placement_seed':placement_seed,'fixed_only':True,
       'source_predicate':'Original PickAndPlaceTask: settled, lifted, destination support and low speed',
       'requested_grasp_tilt_deg':args.grasp_tilt,'requested_grasp_yaw_deg':args.grasp_yaw,
@@ -645,6 +645,32 @@ with SimulationAppContext(args):
             capture_placement_checkpoint('banana_1')
             result['restored_first_native_passed']=result['placement_checkpoints']['banana_1']['passed']
             if not result['restored_first_native_passed']:raise RuntimeError('Restored first banana no longer passes native destination predicate; checkpoint invalid for this run')
+        def measured_landing_correction():
+            global phase,q,planner
+            if PICK!='green_ladle':raise RuntimeError('Measured ladle landing policy is only validated for green_ladle')
+            proposal=json.loads(args.release_landing_plan.read_text())
+            if not proposal['all_passed']:raise RuntimeError('Unverified measured landing proposal')
+            state=snapshot();q=state['q'][ids].copy();world.source_detached=True;phase='lower';world.allowed_phase='lower'
+            world.attachment=np.linalg.inv(kin.fk(q))@transform(state['lime'][:3],state['lime'][3:7]);world.planning_gripper_q=geometry(state)['gripper_q'];world.gripper_joint_position=float(state['q'][robot.joint_names.index('finger_joint')])
+            for name in RIGID:
+                if name!=PICK:world.set_obstacle_pose(name,state[name][:7])
+            body_goal=np.asarray(proposal['body_goal']);target=body_goal@np.linalg.inv(world.attachment)
+            goal=kin.ik(target,np.asarray(proposal['joint_goal']),attempts=1)
+            if np.linalg.norm(kin.fk(goal)[:3,3]-target[:3,3])>.001 or Rotation.from_matrix(kin.fk(goal)[:3,:3].T@target[:3,:3]).magnitude()>.02:raise RuntimeError('Measured landing feedback IK residual')
+            planner=LimePlanner(world,kin,dt=e.step_dt,seed=seed,max_joint_speed=.4);planner.single_candidate_round=True;planner.certify_execution_margin=True;planner.query_start_q=q.copy()
+            path=planner.plan_joint_goal(q,goal,(PICK,DEST),grip,phase='lower');checked=planner.validate_path(path['positions'],(PICK,DEST),grip,phase='lower')
+            if not checked['valid']:raise RuntimeError('Measured landing path invalid: '+str(checked))
+            raw=np.asarray(path['positions']);slow=np.column_stack([np.interp(np.linspace(0,1,args.landing_correction_time_scale*(len(raw)-1)+1),np.linspace(0,1,len(raw)),raw[:,j]) for j in range(7)])
+            plans.append({'phase':'lower','metadata':path.get('metadata',{}),'validation':checked,'executed':True,'measured_landing_correction':True})
+            for command in slow:q=command.copy();step(q,grip)
+            # Match ordinary cart(): let the original drives reach the endpoint.
+            for _ in range(12):step(q,grip)
+            measured=snapshot();orientation_error=Rotation.from_matrix(transform(measured['lime'][:3],measured['lime'][3:7])[:3,:3].T@body_goal[:3,:3]).magnitude()
+            result['measured_landing_correction']={'plan':str(args.release_landing_plan),'body_goal':body_goal.tolist(),'orientation_error_deg':float(np.rad2deg(orientation_error)),'actual_body':measured['lime'].tolist()}
+            result['measured_landing_correction']['auxiliary_orientation_within10deg']=bool(orientation_error<=np.deg2rad(10))
+            # Orientation error is an auxiliary diagnostic, not an original task predicate.
+            # Original support, all actual collision gates and final native success remain mandatory.
+            lower_until_supported()
         def staged_release():
             global phase,q,grip,planner
             phase='release';world.attachment=None;world.source_detached=True
@@ -727,30 +753,7 @@ with SimulationAppContext(args):
                 lifted_states=[row[3]['lime'][2] for row in records if row[0]=='lift'];result['lift_m']=float(lifted_states[-1]-initial['lime'][2]) if lifted_states else 0.
                 for key in ('grasp_candidate','grasp_point_body_m','grasp_solutions','grasp_pose_calibration','lift_support_contact_model'):
                     if key in source_result:result[key]=source_result[key]
-            if args.release_landing_plan:
-                proposal=json.loads(args.release_landing_plan.read_text())
-                if not proposal['all_passed']:raise RuntimeError('Unverified measured landing proposal')
-                state=snapshot();q=state['q'][ids].copy();world.source_detached=True;phase='lower';world.allowed_phase='lower'
-                world.attachment=np.linalg.inv(kin.fk(q))@transform(state['lime'][:3],state['lime'][3:7]);world.planning_gripper_q=geometry(state)['gripper_q'];world.gripper_joint_position=float(state['q'][robot.joint_names.index('finger_joint')])
-                for name in RIGID:
-                    if name!=PICK:world.set_obstacle_pose(name,state[name][:7])
-                body_goal=np.asarray(proposal['body_goal']);target=body_goal@np.linalg.inv(world.attachment)
-                goal=kin.ik(target,np.asarray(proposal['joint_goal']),attempts=1)
-                if np.linalg.norm(kin.fk(goal)[:3,3]-target[:3,3])>.001 or Rotation.from_matrix(kin.fk(goal)[:3,:3].T@target[:3,:3]).magnitude()>.02:raise RuntimeError('Measured landing feedback IK residual')
-                planner=LimePlanner(world,kin,dt=e.step_dt,seed=seed,max_joint_speed=.4);planner.single_candidate_round=True;planner.certify_execution_margin=True;planner.query_start_q=q.copy()
-                path=planner.plan_joint_goal(q,goal,(PICK,DEST),grip,phase='lower');checked=planner.validate_path(path['positions'],(PICK,DEST),grip,phase='lower')
-                if not checked['valid']:raise RuntimeError('Measured landing path invalid: '+str(checked))
-                raw=np.asarray(path['positions']);slow=np.column_stack([np.interp(np.linspace(0,1,args.landing_correction_time_scale*(len(raw)-1)+1),np.linspace(0,1,len(raw)),raw[:,j]) for j in range(7)])
-                plans.append({'phase':'lower','metadata':path.get('metadata',{}),'validation':checked,'executed':True,'measured_landing_correction':True})
-                for command in slow:q=command.copy();step(q,grip)
-                # Match ordinary cart(): let the original drives reach the endpoint.
-                for _ in range(12):step(q,grip)
-                measured=snapshot();orientation_error=Rotation.from_matrix(transform(measured['lime'][:3],measured['lime'][3:7])[:3,:3].T@body_goal[:3,:3]).magnitude()
-                result['measured_landing_correction']={'plan':str(args.release_landing_plan),'body_goal':body_goal.tolist(),'orientation_error_deg':float(np.rad2deg(orientation_error)),'actual_body':measured['lime'].tolist()}
-                result['measured_landing_correction']['auxiliary_orientation_within10deg']=bool(orientation_error<=np.deg2rad(10))
-                # Orientation error is an auxiliary diagnostic, not an original task predicate.
-                # Original support, all actual collision gates and final native success remain mandatory.
-                lower_until_supported()
+            if args.release_landing_plan:measured_landing_correction()
             staged_release()
             capture_placement_checkpoint(PICK)
         elif args.replay_prefix_checkpoint:
@@ -971,7 +974,9 @@ with SimulationAppContext(args):
                 'transfer_tcp_m':xfer_tcp.tolist(),'lower_tcp_m':lower_tcp.tolist(),
                 'drop_m':float(xfer_tcp[2]-lower_tcp[2])}
             phase='lower'
-            if args.gentle_supported_placement:
+            if args.release_landing_plan:
+                measured_landing_correction()
+            elif args.gentle_supported_placement:
                 lower_until_supported()
             elif args.placement_goals and args.placement_feedback_lower:
                 cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
@@ -1128,7 +1133,9 @@ with SimulationAppContext(args):
                 lower_tcp=reference_lower_tcp[:3,3]
                 result.setdefault('placement_body_goals',{})[PICK]={'root':lower_root.tolist(),'quaternion':placement_refs[PICK]['quaternion'],'tcp_target':reference_lower_tcp.tolist()}
             phase='lower'
-            if args.gentle_supported_placement:
+            if args.release_landing_plan:
+                measured_landing_correction()
+            elif args.gentle_supported_placement:
                 lower_until_supported()
             elif placement_refs and args.placement_feedback_lower:
                 cart(lower_tcp,rotation=reference_lower_tcp[:3,:3],force_phase='transfer')
