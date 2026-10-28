@@ -1005,21 +1005,22 @@ with SimulationAppContext(args):
                 for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
                     grip=float(target_grip);step(q,grip)
                 grip=0.
-            for _ in range(35):step(q,grip)
-            phase='retreat';before_retreat=len(records)
-            try:cart(snapshot()['tcp']+[0,0,.14])
-            except RuntimeError as exc:
-                # Withdrawal is not part of the source pick-and-place predicate.
-                # If the optional path is rejected before any motion, keep the
-                # already checked open-gripper pose and let the fruit settle.
-                # Never swallow any failure after a retreat action was executed.
-                if len(records)!=before_retreat:raise
-                result['optional_retreat_skipped']={'reason':str(exc),
-                    'executed_actions':0,'policy':'Hold the already safe open-gripper pose; original final support/speed predicate remains mandatory.'}
-            phase='settle_final'
-            for _ in range(300 if args.gentle_supported_placement else 120):
-                step(q,grip)
-                if terminal.get('terms',{}).get('success',False) and all_current_native_predicates():break
+            if not args.staged_release:
+                for _ in range(35):step(q,grip)
+                phase='retreat';before_retreat=len(records)
+                try:cart(snapshot()['tcp']+[0,0,.14])
+                except RuntimeError as exc:
+                    # Withdrawal is not part of the source pick-and-place predicate.
+                    # If the optional path is rejected before any motion, keep the
+                    # already checked open-gripper pose and let the fruit settle.
+                    # Never swallow any failure after a retreat action was executed.
+                    if len(records)!=before_retreat:raise
+                    result['optional_retreat_skipped']={'reason':str(exc),
+                        'executed_actions':0,'policy':'Hold the already safe open-gripper pose; original final support/speed predicate remains mandatory.'}
+                phase='settle_final'
+                for _ in range(300 if args.gentle_supported_placement else 120):
+                    step(q,grip)
+                    if terminal.get('terms',{}).get('success',False) and all_current_native_predicates():break
             capture_placement_checkpoint(PICK)
         # DUAL_PICK_LOOP: place remaining picks (B03 banana_2) with same skill template.
         remaining=list(task_picks(TASK_SPEC))[1:]
@@ -1157,16 +1158,17 @@ with SimulationAppContext(args):
                 for target_grip in np.linspace(grip,0.,args.release_ramp_steps+1)[1:]:
                     grip=float(target_grip);step(q,grip)
                 grip=0.
-            for _ in range(35):step(q,grip)
-            phase='retreat';before_retreat=len(records)
-            try:cart(snapshot()['tcp']+[0,0,.14])
-            except RuntimeError as exc:
-                if len(records)!=before_retreat:raise
-                result.setdefault('extra_optional_retreat_skipped',{})[PICK]={'reason':str(exc),'executed_actions':0}
-            phase='settle_final'
-            for _ in range(300 if args.gentle_supported_placement else 120):
-                step(q,grip)
-                if terminal.get('terms',{}).get('success',False) and all_current_native_predicates():break
+            if not args.staged_release:
+                for _ in range(35):step(q,grip)
+                phase='retreat';before_retreat=len(records)
+                try:cart(snapshot()['tcp']+[0,0,.14])
+                except RuntimeError as exc:
+                    if len(records)!=before_retreat:raise
+                    result.setdefault('extra_optional_retreat_skipped',{})[PICK]={'reason':str(exc),'executed_actions':0}
+                phase='settle_final'
+                for _ in range(300 if args.gentle_supported_placement else 120):
+                    step(q,grip)
+                    if terminal.get('terms',{}).get('success',False) and all_current_native_predicates():break
             capture_placement_checkpoint(PICK)
         final=snapshot();result['final_lime']=final['lime'].tolist();result['terminal_terms']=terminal.get('terms',{})
         result['final_live_success']=bool(arr(e.termination_manager.get_term('success'))[0])
