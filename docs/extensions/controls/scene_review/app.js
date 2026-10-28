@@ -39,6 +39,7 @@ function summary() {
   $("planning-counts").textContent = `返回轨迹 ${scenes.filter(s=>s.planning_status==='generated').length} · 其中辅助预抓取候选 ${auxiliary}（原终点未达） · 失败跳过 ${scenes.filter(s=>['failed','skipped'].includes(s.planning_status)).length} · 运行中 ${scenes.filter(s=>s.planning_status==='running').length} · 全部未做安全验收`;
   $("execution-progress").textContent = `完整执行 ${scenes.filter(s=>s.execution_status==='passed').length} / ${scenes.length}`;
   $("execution-counts").textContent = `待验证 ${scenes.filter(s=>s.execution_status==='recorded').length} · 失败 ${scenes.filter(s=>s.execution_status==='failed').length} · 进行中 ${scenes.filter(s=>['running','baseline'].includes(s.execution_status)).length} · 不继承历史布局的验收结论`;
+  window.renderBenchmarkSummary?.(scenes);
 }
 function showImage(url, label) {
   $("hero").src = url; $("original").href = url; $("filename").textContent = label;

@@ -156,6 +156,9 @@ def test_http_routes_and_csrf(tmp_path):
         with client.open(root + "/") as response:
             assert b'lang="zh-CN"' in response.read()
             assert "frame-ancestors 'none'" in response.headers["Content-Security-Policy"]
+        with client.open(root + "/benchmark.js") as response:
+            assert b'renderBenchmarkSummary' in response.read()
+            assert 'javascript' in response.headers['Content-Type']
         data = json.load(client.open(root + "/api/scenes"))
         sid = data["scenes"][0]["id"]
         body = json.dumps(dict(changes={"notes": "saved"}, base={"notes": ""})).encode()

@@ -37,7 +37,8 @@ def main():
     prim=UsdGeom.Xform.Define(stage,'/World/envs/env_0/'+key)
     prim.GetPrim().GetReferences().AddReference(str(Path(spec['asset']).resolve()))
     prim.AddTranslateOp().Set(Gf.Vec3d(*spec['position']));prim.AddRotateZOp().Set(spec['yaw_deg'])
-    world=ControlsCollisionWorld(stage,kin,env_root='/World/envs/env_0')
+    world=ControlsCollisionWorld(stage,kin,env_root='/World/envs/env_0',
+        fixture_cylinder_segments=config.get('planning_fixture_cylinder_segments',1))
     world.gripper_joint_position=source['gripper_joint_position']
     if args.cpu_source:
         from kitchen_safety.geometry_audit import static_collision_shapes,minimum_distance

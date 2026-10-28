@@ -7,6 +7,36 @@ import numpy as np
 from kitchen_safety.collision_planner import CollisionWorld, _primitive_world_bounds
 
 
+def fixture_cylinder_bounds(prim, matrix, count):
+    """Union of conservative slice AABBs, not an inscribed cylinder mesh."""
+    from pxr import UsdGeom
+    if isinstance(count, bool) or not isinstance(count, int) or not 2 <= count <= 64:
+        raise ValueError('Fixture cylinder subdivision must be an integer from 2 to 64')
+    cylinder = UsdGeom.Cylinder(prim)
+    matrix = np.asarray(matrix, dtype=float)
+    if matrix.shape != (4, 4) or not np.isfinite(matrix).all():
+        raise ValueError('Fixture transform must be a finite 4x4 matrix')
+    axis = {'X': 0, 'Y': 1, 'Z': 2}[str(cylinder.GetAxisAttr().Get())]
+    linear = np.asarray(matrix)[:3, :3]
+    scale = np.linalg.norm(linear, axis=0)
+    if np.any(scale <= 0):
+        raise ValueError('Degenerate fixture scale is unsupported')
+    rotation = linear / scale
+    radial = [i for i in range(3) if i != axis]
+    if (not np.allclose(rotation.T @ rotation, np.eye(3), atol=1e-7) or
+            not np.isclose(scale[radial[0]], scale[radial[1]], rtol=1e-7, atol=1e-8)):
+        raise ValueError('Sheared or elliptical fixture cylinder is unsupported')
+    direction = rotation[:, axis]
+    radius = float(cylinder.GetRadiusAttr().Get()) * scale[radial[0]]
+    length = float(cylinder.GetHeightAttr().Get()) * scale[axis]
+    if not np.isfinite([radius, length]).all() or min(radius, length) <= 0:
+        raise ValueError('Fixture cylinder dimensions must be finite and positive')
+    half = radius * np.sqrt(np.maximum(0., 1 - direction**2)) + length / (2*count) * abs(direction)
+    center = np.asarray(matrix)[:3, 3]
+    return [(c-half, c+half) for c in (
+        center + direction * length * ((i+.5)/count-.5) for i in range(count))]
+
+
 def held_gripper_pose(joint_names, positions, velocities, expected_opening):
     """Capture a settled commanded opening; never changes physical joint states."""
     if not np.isfinite(expected_opening) or not 0<=expected_opening<=np.pi/4:
@@ -48,7 +78,8 @@ class ControlsCollisionWorld(CollisionWorld):
 
     def __init__(self, stage, kin, clearances=None, execution_clearances=None,
                  default_clearance=.002, *, env_root=None, env_origin=None,
-                 contact_body_fragment='/Toaster015_sideL_button_cancel/'):
+                 contact_body_fragment='/Toaster015_sideL_button_cancel/',
+                 fixture_cylinder_segments=1):
         import fcl
         from pxr import Usd, UsdGeom, UsdPhysics
         self.fcl=fcl;self.kin=kin;self.objects=[];self.attachment=None;self.meshes={}
@@ -59,6 +90,10 @@ class ControlsCollisionWorld(CollisionWorld):
         self._last_obstacle_pose_call=None
         self._pair_selection_key=None;self._pair_selection_cache={}
         self._last_robot_shapes=None
+        if (isinstance(fixture_cylinder_segments, bool) or not isinstance(fixture_cylinder_segments, int)
+                or not 1 <= fixture_cylinder_segments <= 64):
+            raise ValueError('Fixture cylinder segments must be an integer from 1 to 64')
+        self.fixture_geometry_refinement=[]
         self.clearances={'person':.03,'glass':.06,'barrier':.02}
         self.execution_clearances={'person':.02,'glass':.05,'barrier':.01}
         if clearances is not None:self.clearances.update(clearances)
@@ -118,12 +153,23 @@ class ControlsCollisionWorld(CollisionWorld):
             else:
                 # Conservative world AABB for primitive USD colliders.
                 obj=fcl.CollisionObject(fcl.Box(*(np.maximum(hi-lo,1e-4))),fcl.Transform((lo+hi)/2))
-            self.objects.append((name,obj,lo,hi))
+            components=[(name,obj,lo,hi)]
+            if (fixture_cylinder_segments > 1 and '/barrier/' in name and p.IsA(UsdGeom.Cylinder)
+                    and UsdGeom.Cylinder(p).GetHeightAttr().Get() > 4*UsdGeom.Cylinder(p).GetRadiusAttr().Get()):
+                pieces=fixture_cylinder_bounds(p,mat,fixture_cylinder_segments)
+                components=[(name+f'/__conservative_segment_{i:02d}',
+                    fcl.CollisionObject(fcl.Box(*(high-low)),fcl.Transform((low+high)/2)),low,high)
+                    for i,(low,high) in enumerate(pieces)]
+                self.fixture_geometry_refinement.append(dict(source_collider=name,
+                    segments=fixture_cylinder_segments,model='Union of circumscribing slice AABBs; no gaps or omitted source volume',
+                    original_margins_retained=True,physics_collider_modified=False))
             # Retain the authored world geometry once. A moving rigid obstacle
             # can then be measured at its observed pose without rebuilding BVHs
             # or accumulating floating-point drift from incremental transforms.
-            self._object_reference.append((np.array(obj.getRotation()),np.array(obj.getTranslation()),
-                                           lo.copy(),hi.copy(),self.meshes.get(name)))
+            for label,component,low,high in components:
+                self.objects.append((label,component,low,high))
+                self._object_reference.append((np.array(component.getRotation()),np.array(component.getTranslation()),
+                                               low.copy(),high.copy(),self.meshes.get(label)))
             ancestor=p
             while ancestor and not ancestor.IsPseudoRoot():
                 ancestor_path=str(ancestor.GetPath())

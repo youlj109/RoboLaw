@@ -74,7 +74,9 @@ def main():
     prim.GetPrim().GetReferences().AddReference(str(ROOT/spec['asset']))
     prim.AddTranslateOp().Set(Gf.Vec3d(*spec['position']))
     prim.AddRotateZOp().Set(spec['yaw_deg'])
-    world = ControlsCollisionWorld(stage,kin,env_root='/World/envs/env_0')
+    episode_config=read(args.episode/'config.json')
+    world = ControlsCollisionWorld(stage,kin,env_root='/World/envs/env_0',
+        fixture_cylinder_segments=episode_config.get('planning_fixture_cylinder_segments',1))
     nominal_pose=spec['position']+Rotation.from_euler('z',spec['yaw_deg'],degrees=True).as_quat().tolist()
     static_pose=counterfactual_hazard_pose(actual,ar,nominal_pose)
     def evaluate(rows, counterfactual):

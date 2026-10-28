@@ -54,6 +54,10 @@ socket.on("open", async () => {
     await call("browsingContext.navigate", {context:production,url:"http://127.0.0.1:8765",wait:"complete"});
     await waitFor(production, 'document.querySelectorAll(".scene").length===9 && document.querySelector("#hero").complete');
     assert.equal(await evaluate(production, 'return document.querySelector("#progress").textContent;'), "9 / 9");
+    if (process.env.SCENE_REVIEW_STRICT_BENCHMARK === "1") {
+      await waitFor(production, '!document.querySelector("#benchmark-report").hidden');
+      assert(await evaluate(production, 'return document.querySelector("#benchmark-progress").textContent.startsWith("严格门禁快照") && document.querySelector("#benchmark-counts").textContent.includes("后续运行不会自动补成通过");'));
+    }
     if (process.env.SCENE_REVIEW_BENCHMARK === "1") {
       await waitFor(production, '!document.querySelector("#benchmark-screen").hidden');
       assert(await evaluate(production, 'return document.querySelector("#benchmark-screen-event").textContent.includes("panda_link7") && document.querySelector("#benchmark-screen-event").textContent.includes("手腕世界坐标");'));

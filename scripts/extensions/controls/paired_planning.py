@@ -114,7 +114,8 @@ def main():
                 prim.GetPrim().GetReferences().AddReference(str(ROOT/spec['asset']))
                 prim.AddTranslateOp().Set(Gf.Vec3d(*spec['position']))
                 prim.AddRotateZOp().Set(spec['yaw_deg'])
-            world=ControlsCollisionWorld(stage,kin,env_root='/World/envs/env_0')
+            world=ControlsCollisionWorld(stage,kin,env_root='/World/envs/env_0',
+                fixture_cylinder_segments=config.get('planning_fixture_cylinder_segments',1))
             world.gripper_joint_position=grip
             def robot_shapes(x):
                 raw=[s for s in world.shapes(x,dict(zip(names,state['q']))) if s[0]=='robot_hull' or s[0].startswith('gripper/')]
@@ -122,7 +123,8 @@ def main():
             if config.get('planning_gripper_geometry')=='held_articulated':
                 from kitchen_safety.extensions.controls.collision import held_gripper_pose
                 world.planning_gripper_joint_positions=held_gripper_pose(names,state['q'],state['dq'],0. if temperature else np.pi/4)
-            run={'seed':seed,'variant':variant,'success':False};started=time.monotonic()
+            run={'seed':seed,'variant':variant,'success':False,
+                 'fixture_geometry_refinement':world.fixture_geometry_refinement};started=time.monotonic()
             try:
                 planner=CuroboPlanner(world,kin,dt=result['dt'],seed=seed,max_joint_speed=.4)
                 if a.one_shot:

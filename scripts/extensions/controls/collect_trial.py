@@ -73,7 +73,8 @@ with SimulationAppContext(args):
     kin=DroidKinematics(original_pose[:3],Rotation.from_quat(original_pose[3:]).as_euler('xyz',degrees=True)[2])
     q=arr(robot.data.joint_pos)[0,arm_ids]
     world=ControlsCollisionWorld(e.sim.stage,kin,env_root='/World/envs/env_0',
-        contact_body_fragment='/'+contract['contact_body'].split('/')[-1]+'/')
+        contact_body_fragment='/'+contract['contact_body'].split('/')[-1]+'/',
+        fixture_cylinder_segments=trial_config.get('planning_fixture_cylinder_segments',1))
     # Preserve the benchmark's 60 mm planning / 50 mm execution glass margin.
     writer=CameraWriter(out,e.scene,envdef.embodiment.camera_config.camera_names(),e.step_dt,previews=True)
     for _ in range(32):e.sim.render()
@@ -259,6 +260,7 @@ with SimulationAppContext(args):
         (out/'audit.json').write_text(json.dumps({'passed':bool(audits and all(r['valid'] for r in audits) and all(r['valid'] for r in physics_audits)),
             'scope':'Actual measured robot geometry at every physics update and recorded action; only inner-finger/target contact is allowed in declared manipulation phases',
             'world_collision_shapes':len(world.objects),'all_kitchen_colliders_included':True,
+            'fixture_geometry_refinement':world.fixture_geometry_refinement,
             'moving_toaster_colliders_updated_from_measured_body_poses':True,
             'usd_static_scales_baked_into_collision_geometry':baked_root_scales,
             'physics_updates':physics_audits,'measurements':audits},indent=2))

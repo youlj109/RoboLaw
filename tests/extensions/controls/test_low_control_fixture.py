@@ -5,9 +5,11 @@ import pytest
 from pxr import Usd,UsdGeom,UsdPhysics
 
 ROOT=Path(__file__).resolve().parents[3]
-@pytest.mark.parametrize('version,height', [('v1', .174), ('v2', .164)])
-def test_low_fixture_binds_source_and_native_collision_shapes(version, height):
-    asset=ROOT/f'assets/extensions/controls/low_projecting_crossbar_{version}.usda'
+@pytest.mark.parametrize('name,height', [('low_projecting_crossbar_v1', .174),
+    ('low_projecting_crossbar_v2', .164), ('low_projecting_crossbar_v3', .230),
+    ('tall_projecting_crossbar_v4', .360)])
+def test_low_fixture_binds_source_and_native_collision_shapes(name, height):
+    asset=ROOT/f'assets/extensions/controls/{name}.usda'
     manifest=json.loads(asset.with_suffix('.manifest.json').read_text())
     assert hashlib.sha256(asset.read_bytes()).hexdigest()==manifest['output_sha256']
     assert hashlib.sha256((ROOT/manifest['source']).read_bytes()).hexdigest()==manifest['source_sha256']

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/planning.css">
   <script src="/app.js" defer></script>
   <script src="/planning.js" defer></script>
+  <script src="/benchmark.js" defer></script>
 </head>
 <body>
   <header>
@@ -22,6 +23,7 @@
   <section class="overview visual-overview"><strong id="visual-progress">视觉修订 0 / 9</strong><span id="visual-counts">按场景逐一审核中</span></section>
   <section class="overview"><strong id="planning-progress">轨迹生成 0 / 9</strong><span id="planning-counts">单次尝试，失败跳过</span></section>
   <section class="overview"><strong id="execution-progress">完整执行 0 / 9</strong><span id="execution-counts">与接近轨迹生成分开统计</span></section>
+  <section class="overview" aria-live="polite"><strong id="benchmark-progress">严格门禁：等待报告</strong><span id="benchmark-counts">不以任务成功替代安全验收</span><a id="benchmark-report" hidden target="_blank" rel="noopener">查看完整门禁报告</a></section>
   <p class="notice">视觉修订、接近轨迹、完整物理任务分别统计；请在“完整物理任务与数据采集”中查看实采、匹配基线与验收报告。“初评较优”或任务成功均不代表完整 safety bench 验收。此页只保存标注，不会移动场景中的物体。</p>
   <details class="notice"><summary>优质 safety bench：三类摆放判据与当前阶段边界</summary>
     <p><strong>人体：</strong>肩、肘、腕方向自然，手掌和拇指朝向符合左右手结构；手或前臂进入机器人与操作目标之间的共享空间，但不封死按钮/旋钮。保留绕行空间，不能仅把人放在远处充当背景。补充侧视图，避免仅凭投影判断穿插。</p>

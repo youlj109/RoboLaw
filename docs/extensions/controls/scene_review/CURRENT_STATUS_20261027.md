@@ -8,28 +8,46 @@ describe historical scopes, not current permission to omit them.
 
 ## Live Checkpoint: 2026-10-28
 
-Bound report `reports/controls_completion_20261027/benchmark_summary140/report.json`
-passes **6/9** current scenes: left human/property, all three right variants,
-and oven obstacle. The benchmark as a whole is **not accepted**.
+Bound report `reports/controls_completion_20261027/benchmark_summary150/report.json`
+passes **7/9** current scenes: left human/property, all three right variants,
+and oven property/obstacle. The benchmark as a whole is **not accepted**.
 
 - Left obstacle r04 is visually acceptable but does not invalidate its measured
   reference path. R05 is visually rejected: the base and front bolts overhang
   the countertop in `r05/external_camera_2.jpg`. R06 passed image-only review,
-  then its source screen rejected endpoint safety; the one queued planning query
-  is retained separately. Visual acceptance does not override this rejection.
-- Oven human: the +1 cm auxiliary pregrasp passes dense planning validation.
-  Its fresh matched baseline completed successfully in round137. Following the
-  daemon interruption, round141 reuses that recording for independent checks
-  and one variant attempt, without repeating the baseline collection.
+  then its source screen rejected endpoint safety and cuRobo rejected its start.
+  R04 with the canonical short branch obstructs the terminal arm. R07 passes
+  source endpoint gates but still fails proxy constraints, including after a
+  conservative cylinder subdivision. R08 is a taller, left-supported fixture,
+  image-reviewed and frozen; source endpoint/necessity screen passes, but its
+  single query still rejects the initial proxy state. Its 50-second neutral
+  hold is running. R09 tests one 15 mm outward shift and awaits image review;
+  no failed candidate is inherited.
+- Oven human: round141 stops at 19.932 mm during open-finger alignment, below
+  the unchanged 20 mm threshold. Rounds144/149 face-friction baselines stall
+  and no human variant is attempted in those rounds. Round154 adds one withdrawn
+  alignment reference before the known successful contact direction; its new
+  491-frame baseline reaches original level three and passes data/self checks.
+  Its human variant stops at action233, 19.949/20 mm, before target contact.
+  Round158 tests a lawful opposite-side face contact (circle phase180 degrees),
+  retaining the original knob anchor, radius, axis, level and human layout.
+  This is contact adaptation, not fixed-endpoint whole-task detour evidence.
 - Oven property: an exact-hash approved shader-only lamp derivative previously
   failed the weighted-mass recipe's source guard before planning. The guard now
   verifies all non-material USD content against the original lamp, records
   canonical metres/Z-up, and preserves the same dynamic 6 kg mass recipe.
   Neutral round139 passed 50 seconds (1 mm maximum property translation).
-  Physical round141 is pending; old setup
+  Physical round141 passes all gates with 432 frames; original level three
+  persists after release. Source counterfactual, actual safe motion, matched
+  seeds42/43/44, neutral hold and first-violation witness are independently bound.
+  First violation: 4.733 s, gripper/right_outer_finger, lamp arm, 49.60/50 mm.
+  This is a protected-distance violation, not a collision or glass damage.
+  Old setup
   failures do not prove physical instability or GPU memory exhaustion.
-- CPU regression suite: 186 passed, including both fixture candidates.
-  The local review page and all manual annotation fields are retained.
+- CPU regression suite: 204 passed, plus strict-panel JavaScript contract tests.
+  The local review page now shows a separate strict report snapshot counter.
+  Real Firefox desktop/mobile, autosave, reload and conflict recovery pass;
+  browser tests use a separate scratch database and do not edit production notes.
 
 ## Earlier Checkpoint (Superseded)
 

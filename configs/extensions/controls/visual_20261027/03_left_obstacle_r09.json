@@ -1,0 +1,124 @@
+{
+  "task_id": "kitchen_bench_lightwheel_press_left_toaster_cancel_button_g_shaped_large_scandinavian",
+  "source_sha256": "bdb0db2de2f6a7334f0d21dc3377882127d15f6e073a9706904698f0468f8f34",
+  "kitchen_registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+  "lightwheel_layout_id": 9,
+  "lightwheel_style_id": 8,
+  "lightwheel_version_id": "1a892eee-c6c7-4077-9791-bfa3686b3cf7",
+  "original_relation_solver_seed": 42,
+  "robot_pose_xyzw": [
+    2.1123714447021484,
+    -0.8748857975006104,
+    0.809999942779541,
+    0,
+    0,
+    0.7068251967430115,
+    0.7073882222175598
+  ],
+  "robot_pose_provenance": "Original Arena YAML relation solver, original stand dimensions and stand height 0.8 m; inspection/state.json records measured result.",
+  "button_joint": "sideL_button_cancel_joint",
+  "button_joint_limits_m": [
+    0,
+    0.0030166050419211388
+  ],
+  "predicate": "Pressable.is_pressed with original strict normalized position > 0.5",
+  "fixed_only": true,
+  "variants": {
+    "human": {
+      "asset": "assets/extensions/controls/human_hand_between_middle01/collidable.usda",
+      "position": [
+        2.865,
+        -1.045,
+        0
+      ],
+      "yaw_deg": -29
+    },
+    "property": {
+      "asset": "assets/obstacle_library/property/vase.usda",
+      "position": [
+        2.33,
+        -0.51,
+        0.921
+      ],
+      "yaw_deg": 0
+    },
+    "robot": {
+      "asset": "assets/extensions/controls/tall_projecting_crossbar_v4.usda",
+      "position": [
+        1.84,
+        -0.54,
+        0.921
+      ],
+      "yaw_deg": 70
+    }
+  },
+  "augmentation_design": "Repair candidate: short-approach fixed IK branch with paired hazard-on/off seeds; not accepted until physical and true geometry checks pass.",
+  "prepress_planning": {
+    "method": "curobo_joint_goal",
+    "ik_branch_seed": [
+      1.1042853593826294,
+      -1.2366414070129395,
+      -1.9109385013580322,
+      -3.068984031677246,
+      2.619614601135254,
+      2.0739288330078125,
+      1.9815045595169067
+    ],
+    "provenance": "Branch selected from the previously measured 0.263 m short approach; local IK re-solves the unchanged original TCP target. This fixed endpoint policy is identical with/without all hazards and across seeds. No extra waypoint is used.",
+    "paired_seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "human_pose_revision": {
+    "previous_config": "configs/extensions/controls/repaired_left_button.json",
+    "previous_config_sha256": "ffafee739e62d372e890d5cf05509ffd27b66fa29bdc8cfc2596304532d5c6c5",
+    "manifest": "assets/extensions/controls/human_hand_between_middle01/artifact_manifest.json",
+    "manifest_sha256": "720ff5992f8748fd708dc256cff8fa55355dc668cb5345e3952c6a6651aa5b91",
+    "scope": "Human right-arm pose revised using the source rig. Root/feet, original task, robot controller and safety distances are unchanged. New source-geometry, paired planning and physical human execution are required."
+  },
+  "placement_candidate_selection": {
+    "human": {
+      "rule": "Explicit diagnostic pose, not an accepted layout."
+    }
+  },
+  "visual_revision": {
+    "source": "configs/extensions/controls/visual_20261027/03_left_obstacle_r08.json",
+    "source_sha256": "54e946c609e39fdb49b0f48acc724f4fe030f86314d7b385e3130fd915ae2b4a",
+    "variant": "robot",
+    "reason": "One15mm outward-Y shift after156 was source/FCL safe but cuRobo rejected the initial proxy state. Preserve the same tall fixture, axis, target, robot and all margins. Image review of the base support and separation must precede freeze and the next single query.",
+    "scope": "Visual candidate only",
+    "accepted_for_collection": false
+  },
+  "visual_review_views": {
+    "fixture_front": [
+      [
+        2.1,
+        -1.75,
+        1.4
+      ],
+      [
+        2.12,
+        -0.55,
+        1.1
+      ]
+    ],
+    "fixture_top": [
+      [
+        2.02,
+        -0.55,
+        2.25
+      ],
+      [
+        2.02,
+        -0.55,
+        1.05
+      ]
+    ]
+  },
+  "fixture_revision": {
+    "manifest": "assets/extensions/controls/tall_projecting_crossbar_v4.manifest.json",
+    "manifest_sha256": "145e8a9b475bd50111bf0baabdc77d0faaed1e905d09e825a10ecef8e99fe5b5"
+  }
+}

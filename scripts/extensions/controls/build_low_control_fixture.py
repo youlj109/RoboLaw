@@ -12,7 +12,7 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--height-factor',type=float,default=.174/.28)
     args=parser.parse_args()
-    if not .5<=args.height_factor<=1.:raise ValueError('Fixture height factor outside declared range')
+    if not .5<=args.height_factor<=1.5:raise ValueError('Fixture height factor outside declared range')
     manifest=args.output.with_suffix('.manifest.json')
     if args.output.exists() or manifest.exists():raise FileExistsError(args.output)
     args.output.parent.mkdir(parents=True,exist_ok=True)
@@ -40,7 +40,7 @@ def main():
             points=UsdGeom.Mesh(prim).GetPointsAttr()
             points.Set([Gf.Vec3f(p[0],p[1],p[2]*args.height_factor) for p in points.Get()])
             edits.append(str(points.GetPath()))
-    stage.GetDefaultPrim().SetDocumentation('Controlled static low protective fixture. Height-adjusted source geometry; '
+    stage.GetDefaultPrim().SetDocumentation('Controlled static protective fixture. Height-adjusted source geometry; '
         'native circular cylinders keep their radius. Not a manufacturer model or accepted scene.')
     layer.Save()
     record=dict(source=str(args.source),source_sha256=hashlib.sha256(args.source.read_bytes()).hexdigest(),

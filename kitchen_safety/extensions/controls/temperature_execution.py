@@ -29,13 +29,14 @@ def face_friction_pose(config,angle_deg,advance_m):
     radius=float(config.get('friction_radius_m',.02))
     maximum=float(config.get('friction_max_axial_advance_m',.025))
     minimum=float(config.get('friction_min_axial_advance_m',0.))
-    if (not np.isfinite([radius,minimum,maximum,angle_deg,advance_m]).all() or
+    start_angle=float(config.get('friction_start_angle_deg',0.))
+    if (not np.isfinite([radius,minimum,maximum,angle_deg,advance_m,start_angle]).all() or
             not 0<radius<=.025 or not -.02<=minimum<=0 or
-            not 0<maximum<=.025 or not minimum<=advance_m<=maximum):
+            not 0<maximum<=.025 or not minimum<=advance_m<=maximum or not -180<=start_angle<=180):
         raise ValueError('Face contact outside declared reference bounds')
     pose=np.eye(4)
     pose[:3,:3]=temperature_grasp_rotation(config)
-    angle=np.deg2rad(angle_deg)
+    angle=np.deg2rad(angle_deg+start_angle)
     pose[:3,3]=np.asarray(config['grasp_tcp_world_m'])+[
         float(config.get('friction_start_x_offset_m',-.02))+advance_m,
         radius*np.cos(angle),radius*np.sin(angle)]
@@ -50,8 +51,7 @@ def execute_face_friction(config,state,step,set_phase,command_pose,q,contact_loa
     command=q()
     for _ in range(20):step(command,grip=1)
     set_phase('approach')
-    goal=face_friction_pose(config,0.,0.)
-    for pose in pregrasp_connection(np.asarray(state()['tcp']),goal[:3,3],goal[:3,:3]):
+    for pose in face_friction_connection(np.asarray(state()['tcp']),config):
         command=command_pose(pose,1)
     set_phase('grasp')
     advance=0.
@@ -140,6 +140,23 @@ def pregrasp_connection(start_pose, grasp_point, grasp_orientation):
         pose[:3,3]=start[:3,3]+(goal-start[:3,3])*fraction
         pose[:3,:3]=interpolate(fraction).as_matrix()
         yield pose
+
+
+def face_friction_connection(start_pose, config):
+    """Optional free-space alignment before the unchanged face-contact target."""
+    goal=face_friction_pose(config,0.,0.)
+    start=np.asarray(start_pose,dtype=float)
+    if 'friction_alignment_world_m' in config:
+        point=np.asarray(config['friction_alignment_world_m'],dtype=float)
+        anchor=np.asarray(config['grasp_tcp_world_m'],dtype=float)
+        if (point.shape!=(3,) or not np.isfinite(point).all() or
+                np.linalg.norm(point-anchor)>.15 or point[0]>goal[0,3]-.02):
+            raise ValueError('Face alignment must be finite, within 15 cm of the original anchor, and withdrawn by 2 cm')
+        for pose in pregrasp_connection(start,point,goal[:3,:3]):
+            yield pose
+        start=np.array(goal,copy=True)
+        start[:3,3]=point
+    yield from pregrasp_connection(start,goal[:3,3],goal[:3,:3])
 
 
 def knob_retreat_poses(terminal_pose, offset):

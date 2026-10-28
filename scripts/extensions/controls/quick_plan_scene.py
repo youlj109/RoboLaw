@@ -126,7 +126,9 @@ def main():
         prim.GetPrim().GetReferences().AddReference(str(root/spec['asset']))
         prim.AddTranslateOp().Set(Gf.Vec3d(*spec['position']))
         prim.AddRotateZOp().Set(spec['yaw_deg'])
-        world = ControlsCollisionWorld(stage, kin, env_root='/World/envs/env_0')
+        world = ControlsCollisionWorld(stage, kin, env_root='/World/envs/env_0',
+            fixture_cylinder_segments=config.get('planning_fixture_cylinder_segments',1))
+        report['fixture_geometry_refinement']=world.fixture_geometry_refinement
         if a.variant=='human' and not any('/person/' in name for name,_,_,_ in world.objects):
             raise ValueError('Human collision payload did not load; refusing a hazard-free success')
         world.gripper_joint_position = grip
