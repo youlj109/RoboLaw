@@ -694,3 +694,4 @@ python3 scripts/benchmark_deferred_rendering.py \
 [全量联合验证](../reports/collection_speed_20261018/persistent_vase2_refresh_before_appearance_validation.json)为 **2/2 通过，3678 张 JPEG 全部解码**，状态链及 RGB 对应动作前观测的检查通过。[独立对照](../reports/collection_speed_20261018/persistent_vase2_refresh_before_appearance_comparison.json)确认实际外观参数、相机元数据及全部逐帧相机位姿与原独立渲染一致；两条各抽查首、中、末三帧的三视角，共18对图，第二条已正确换成暖黄外观，没有沿用第一条粉紫/冷白色调。两条抽样平均 RGB 差分别为 0.631/255、0.966/255。这证明本次两条中的既有串色问题已消失，不证明所有帧像素相同、未测模型都可靠，或 RTX 内部缓存原因已经确定。
 
 上述是已有物理轨迹的持久渲染验证，`production_quota_eligible=false`，不能把两条渲染墙钟或独立CPU检查提速拼接成完整吞吐。后续持久服务的真实请求验证及N4/N8各十六条完整流水线均已完成，结果见本文顶部；正式采集未恢复。
+

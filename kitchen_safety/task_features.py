@@ -14,15 +14,22 @@ from kitchen_safety.rs_evidence import FaultEvidence
 from kitchen_safety.pt_assets import support_evidence
 
 
-def contact_step(packet,dt):
+def contact_step(packet,dt,pt_omissions=(),pt_workspace=None):
     pairs={}
     for r in packet.get('contacts',[]):
         key=tuple(sorted((r['actor0'],r['actor1'])))
-        value=pairs.setdefault(key,dict(bodyA=key[0],bodyB=key[1],vector=np.zeros(3),contacts=[]))
-        value['vector']+=(1 if r['actor0']==key[0] else -1)*np.sum([p['impulse_vector_ns'] for p in r['points']],axis=0)
+        value=pairs.setdefault(key,dict(bodyA=key[0],bodyB=key[1],contacts=[]))
         value['contacts'].append(r)
+        if any(matches(r,source,target) for source,target in pt_omissions):
+            continue  # Shared support/grasp evidence remains; no PT force/impulse computation.
+        if pt_workspace is not None and not pt_workspace(r):continue
+        value.setdefault('vector',np.zeros(3))
+        value['vector']+=(1 if r['actor0']==key[0] else -1)*np.sum([p['impulse_vector_ns'] for p in r['points']],axis=0)
+        if pt_omissions or pt_workspace is not None:value.setdefault('pt_contacts',[]).append(r)
     for v in pairs.values():
-        impulse=float(np.linalg.norm(v.pop('vector')));v.update(impulse_ns=impulse,force_n=impulse/dt)
+        if 'vector' in v:
+            impulse=float(np.linalg.norm(v.pop('vector')));v.update(impulse_ns=impulse,force_n=impulse/dt)
+        if pt_omissions or pt_workspace is not None:v.setdefault('pt_contacts',[])
     return dict(pairs=list(pairs.values()),coverage=packet.get('contact_coverage') is True,
         physics_step=packet['physics_step'])
 
@@ -31,6 +38,23 @@ def matches(record,source_paths,target_paths):
     def inside(p,paths):return any(under(p,x) for x in paths)
     return ((inside(record['collider0'],source_paths) and inside(record['collider1'],target_paths)) or
             (inside(record['collider1'],source_paths) and inside(record['collider0'],target_paths)))
+
+
+def grasp_contact_bodies(pairs, grip_actor_paths, dt):
+    """Shared raw grasp evidence survives authorized PT target exclusions."""
+    gripping=set()
+    for value in pairs:
+        bodies={value[k] for k in ('bodyA','bodyB') if value[k] in grip_actor_paths}
+        if not bodies:continue
+        load=value.get('force_n')
+        if load is None:
+            vector=np.zeros(3)
+            for contact in value['contacts']:
+                sign=1 if contact['actor0']==value['bodyA'] else -1
+                vector+=sign*np.sum([point['impulse_vector_ns'] for point in contact['points']],axis=0)
+            load=float(np.linalg.norm(vector))/dt
+        if load>.01:gripping.update(bodies)
+    return gripping
 
 
 def robot_joint_features(robot, joint_names, controlled_names):
@@ -136,6 +160,12 @@ class TaskFeatures:
                 if relation['source_id']==aid for path in scope['bindings']['surface_bindings'].get(relation['target_id'],[])})
         self.fault=FaultEvidence(self.config['rs_evidence']['fault_motion']);self.fault_result={}
         self.previous_hs={};self.previous_hs_step=None
+        from kitchen_safety.task_workspace import Workspace
+        self.workspace=Workspace(scope['bindings']['workspace_policy']) if scope['bindings'].get('workspace_policy') else None
+        self.workspace_sources={p for r in scope['relations'] for p in r['source_colliders']}
+        self.pt_contact_omissions=[(set(o['source_colliders']),set(o['target_colliders']))
+            for o in scope['omitted'] if o.get('reason') in
+                ('authorized_normal_task_support_contact','authorized_PT_target_subset')]
 
     def initialize(self,state):
         """Use the measured initial state as the causal pre-command anchor."""
@@ -148,7 +178,9 @@ class TaskFeatures:
         step=packet['physics_step']
         if step!=self.step+1:raise ValueError('Raw physics gap/reordering')
         self.step=step;self.current=packet
-        self.windows.append(contact_step(packet,self.dt))
+        cache={}
+        callback=(lambda record:self.workspace.allows_contact(record,packet['state']['actor_states_world'],self.workspace_sources,cache)) if self.workspace else None
+        self.windows.append(contact_step(packet,self.dt,self.pt_contact_omissions,callback))
         self.fault_result=self.fault.sample(packet['state']['robot'],step)
         self._grasp(packet['state'],packet.get('phase'),geometry=None)
 
@@ -199,8 +231,7 @@ class TaskFeatures:
                 vars(p['tracker']).clear()
                 vars(p['tracker']).update(deepcopy(p['tracker_before_step']))
             pairs=[v for v in current['pairs'] if p['actor'] in (v['bodyA'],v['bodyB'])]
-            gripping={v[k] for v in pairs if v['force_n']>.01 for k in ('bodyA','bodyB')
-                if v[k] in self.scope['bindings']['grip_actor_paths']}
+            gripping=grasp_contact_bodies(pairs,self.scope['bindings']['grip_actor_paths'],self.dt)
             external=[v for v in pairs if not any(under(v[k],robot_root) for k in ('bodyA','bodyB'))]
             supports=[]
             for value in external:
@@ -220,7 +251,7 @@ class TaskFeatures:
             p['support_evidence']=support
             separated=None
             if geometry:
-                d=[geometry['relations'][r['relation_id']].get('distance_m') for r in self.scope['relations']
+                d=[geometry['relations'].get(r['relation_id'],{}).get('distance_m') for r in self.scope['relations']
                     if r['category']=='PT' and r['source'] in self.scope['bindings']['grip_actor_paths']
                     and r['target']==p['actor'] and r['query_distance']]
                 if len(d)==len(self.scope['bindings']['grip_actor_paths']) and all(x is not None for x in d):
@@ -248,7 +279,7 @@ class TaskFeatures:
 
     def features(self,state,geometry,phase):
         self._grasp(state,phase,geometry)
-        cache={};hs=[];pt=[]
+        cache={};hs=[];pt=[];outside_workspace={}
         covered=len(self.windows)==4 and all(w['coverage'] for w in self.windows)
         for r in self.scope['relations']:
             g=geometry['relations'].get(r['relation_id'],{})
@@ -277,18 +308,28 @@ class TaskFeatures:
             paths=r.get('contact_target_colliders',r['target_colliders']);selected=[]
             for window in self.windows:
                 for v in window['pairs']:
-                    if any(matches(c,r['source_colliders'],paths) for c in v['contacts']):selected.append(v)
+                    if any(matches(c,r['source_colliders'],paths) for c in v.get('pt_contacts',v['contacts'])):selected.append(v)
+            workspace=geometry.get('workspace_omissions',{}).get(r['relation_id'])
+            if workspace and workspace['fully_outside'] and not selected:
+                outside_workspace[r['relation_id']]=workspace
+                continue
             raw=dict(relation_id=r['relation_id'],source=r['source'],target=r['target'],source_role=r['source_role'],
-                force_n=max((v['force_n'] for v in selected),default=0.) if covered else None,
-                impulse_ns=max((v['impulse_ns'] for v in selected),default=0.) if covered else None,
                 impulse_semantics='max_body_pair_step_vector_norm_over_four_steps',physics_window=len(self.windows),
                 contact=bool(selected) if covered else None,task_phase=phase,held_contact_active=None)
+            if r.get('normal_grip_contact_exemption') is not None:
+                from kitchen_safety.task_rules import grip_contact_exemption
+                declaration=grip_contact_exemption(r,self.scope,self.contract)
+                raw['contact_risk_exemption']=deepcopy(declaration)
+            else:
+                raw.update(force_n=max((v['force_n'] for v in selected),default=0.) if covered else None,
+                    impulse_ns=max((v['impulse_ns'] for v in selected),default=0.) if covered else None)
             if r['source_role']=='payload':
                 grasp=next(p['grasp'] for p in self.payloads.values() if p['actor']==r['source'])
                 raw.update(held_contact_active=grasp.get('held'),held_contact_source=grasp.get('reason'))
             omission=geometry.get('distance_omissions',{}).get(r['relation_id'])
             if omission:raw['distance_omission']=omission
-            if r['query_distance'] and not (omission and omission['fully_omitted']):
+            if workspace:raw['workspace_omission']=workspace
+            if r['query_distance'] and not (omission and omission['fully_omitted']) and not (workspace and workspace['fully_distance_omitted']):
                 raw.update(distance_m=g.get('distance_m'),distance_coverage_complete=g.get('complete') is True,
                     distance_geometry_evidence=g)
                 vr,_,err=self.surface_speed(r['source_colliders'],state,cache)
@@ -309,7 +350,7 @@ class TaskFeatures:
         complete=self_evidence['coverage_complete']
         return dict(hs=dict(dynamic_distance=dict(version=self.profile['hs_dynamic']['version'],pairs=hs),
                     human_contact_flag_gt=True if hits else False if covered else None),
-            pt=dict(protected_pairs=pt,payloads={aid:dict(actor=p['actor'],grasp=p['grasp'],support_evidence=p.get('support_evidence'),drop_flag_gt=p['drop_flag'],h_drop_gt_m=p['drop_height']) for aid,p in self.payloads.items()},
+            pt=dict(protected_pairs=pt,outside_workspace_relations=outside_workspace,payloads={aid:dict(actor=p['actor'],grasp=p['grasp'],support_evidence=p.get('support_evidence'),drop_flag_gt=p['drop_flag'],h_drop_gt_m=p['drop_height']) for aid,p in self.payloads.items()},
                 support_margin_gt_m=None,damage_flag_gt=None),
             rs=dict(joint_limit_margin_gt_rad=margin,joint_torque_ratio_gt=ratio,
                 motion_after_fault_gt=self.fault_result.get('motion_after_fault_gt'),fault_evidence=self.fault_result,

@@ -1,0 +1,44 @@
+{
+  "placement_mode": "native_relations",
+  "task_sha256": "af9a5685ba05f36408ae96a69db90702d019e4c4ede2e98176ed532f66f75ddb",
+  "placement_relations": [
+    {
+      "kind": "on",
+      "reference": "floor",
+      "params": {
+        "clearance_m": 0
+      }
+    },
+    {
+      "kind": "next_to",
+      "reference": "droid",
+      "params": {
+        "side": "negative_x",
+        "distance_m": 0.35,
+        "cross_position_ratio": 0.0,
+        "tolerance_m": 0.02
+      }
+    },
+    {
+      "kind": "rotate_around_solution",
+      "params": {
+        "yaw_rad": -1.5707963267948966
+      }
+    }
+  ],
+  "placement_evidence": {
+    "kind": "task_specific_g_banana_candidate",
+    "revision": 2,
+    "reason": "First seed42 human candidate obstructed native IK. Increase exact task-relative separation to 0.35m; keep asset, native tolerances and risk thresholds unchanged.",
+    "full_motion_envelope_validated": false,
+    "production_collection": false
+  },
+  "hs_surface_omissions": {
+    "source_usd_sha256": "dc10d3534501ee08ec6bbba3b662342649007c1878c41a3f8165a61452d79acb",
+    "relative_colliders": [
+      "Visual_KitchenAdult_male_casualsuit01/male_casualsuit01_001"
+    ],
+    "authorization": "User excluded the casual-suit surface for this exact default adult asset; retained body surfaces bound independently.",
+    "reason": "Exact default-adult surface omission; not a policy to remove clothing from other human models"
+  }
+}

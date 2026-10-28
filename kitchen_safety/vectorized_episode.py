@@ -468,7 +468,7 @@ class VectorizedEpisode:
                 orientations = [(self.args.grasp_tilt_deg, self.args.grasp_yaw_deg)]
         else:
             orientations = [(tilt + 10.0, yaw) for tilt, yaw in orientations]
-
+    
         def record_candidate_failure(tilt, yaw, stage, error, target):
             self.plan_candidate_failures.append({'phase': self.phase, 'backend': self.args.planner, 'tilt_deg': tilt, 'yaw_deg': yaw, 'failure_stage': stage, 'error': str(error), 'start_q_arm': self.q.tolist(), 'target_pose_world': target.tolist(), 'action_index': len(self.records)})
         for tilt, yaw in orientations:
@@ -613,7 +613,7 @@ class VectorizedEpisode:
         placement = dict(strategy='lower-first', hover_height_m=hover_z, lower_xyz_world_m=np.asarray(lower_xyz, dtype=float).tolist(), attachment_measured_after_lift=self.world.attachment.tolist(), seed_semantics='Known joint configurations are IK initial guesses only; paths are regenerated in the live scene', candidates=[], search=diagnostics)
         self.result['placement'] = placement
         self.result['requested_grasp']['tcp_heights_world_m'].update(above_bowl=hover_z, retreat=hover_z)
-
+    
         def save_placement_progress():
             self._save_placement_progress(placement)
         placement['physical_start'] = {key: value.tolist() for key, value in current.items()}

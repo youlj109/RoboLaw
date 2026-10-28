@@ -34,6 +34,27 @@ def geometry_issues(relation, distance, geometry, targets, metric):
     return missing
 
 
+def grip_contact_exemption(relation,scope,contract):
+    """Only a new frozen declaration may remove grip/payload force and impulse."""
+    declaration=relation.get('normal_grip_contact_exemption')
+    if declaration is None:return None  # Historical scopes keep their own rules.
+    payload_roots=[scope['bindings']['asset_roots'][aid] for aid in contract['roles']['payload_ids']]
+    targets=relation.get('contact_target_colliders',relation['target_colliders'])
+    def under(path,root):return path==root or path.startswith(root.rstrip('/')+'/')
+    if (not isinstance(declaration,dict)
+            or declaration.get('version')!='robolaw-grip-target-contact-exclusion-1'
+            or declaration.get('scope')!='declared_grip_parts_to_task_payload_all_phases'
+            or not declaration.get('authorization')
+            or declaration.get('shared_raw_grasp_evidence_retained') is not True
+            or relation.get('category')!='PT' or relation.get('source_role')!='robot'
+            or relation.get('evidence_only') is not True
+            or relation.get('source') not in scope['bindings']['grip_actor_paths']
+            or relation.get('grade_force') is not False or relation.get('grade_impulse') is not False
+            or not targets or not any(under(relation['target'],root) and all(under(p,root) for p in targets) for root in payload_roots)):
+        raise ValueError('Invalid frozen normal grip contact exclusion: '+relation['relation_id'])
+    return declaration
+
+
 class TaskRules:
     def __init__(self,contract,scope,rs_scope,frozen):
         self.scope=scope;self.contract=contract
@@ -52,6 +73,8 @@ class TaskRules:
             raise ValueError('Native task rules require the frozen gDist surface metric')
         self.payload_ids=set(contract['roles']['payload_ids'])
         self.pair_profiles={}
+        self.grip_contact_exemptions={rid:declaration for rid,r in self.relations.items()
+            if (declaration:=grip_contact_exemption(r,scope,contract)) is not None}
         prototype=frozen['profile']['pt_hs_inspired']['objects']['protected_obstacle']
         self.phase_exempt=frozen['profile']['pt_hs_inspired']['pairs'][0]['allowed_grip_phases']
         for rid,r in self.relations.items():
@@ -111,6 +134,7 @@ class TaskRules:
         report=self.base.evaluate(dict(features=dict(features,hs=hs,pt=dict(support_margin_gt_m=None,damage_flag_gt=None))))
         report['rules']=[r for r in report['rules'] if r['rule_id']!='PT-DROP-001']
         report['distance_omissions']={}
+        report['contact_risk_omissions']=deepcopy(self.grip_contact_exemptions)
         payloads=features['pt']['payloads']
         if not set(payloads)<=self.payload_ids:raise ValueError('Unexpected payload feature identity')
         missing_payloads=self.payload_ids-set(payloads)
@@ -125,15 +149,31 @@ class TaskRules:
             rid=raw['relation_id']
             if rid not in self.relations or rid in pairs:raise ValueError('Unexpected or duplicate PT relation feature')
             pairs[rid]=raw
-        missing_relations=set(self.relations)-set(pairs)
+        outside=features['pt'].get('outside_workspace_relations',{})
+        from kitchen_safety.task_workspace import validate_omission
+        for rid,value in outside.items():
+            if rid not in self.relations or rid in pairs:raise ValueError('Invalid outside-workspace PT identity')
+            validate_omission(self.relations[rid],value,self.scope)
+            if value.get('fully_outside') is not True:raise ValueError('Partial workspace row cannot disappear')
+        report['workspace_omissions']=deepcopy(outside)
+        missing_relations=set(self.relations)-set(pairs)-set(outside)
         for rid,r in self.relations.items():
+            if rid in outside:continue # Scope omission, never L0/unknown placeholders.
             raw=pairs.get(rid,dict(relation_id=rid))
             profile=self.pair_profiles[rid]
             settings=profile['pt_hs_inspired'];spec=settings['pairs'][0]
             data=deepcopy(raw);data.update(actor=spec['actor'],object_id=spec['object_id'])
+            if rid in self.grip_contact_exemptions:
+                # Shared contacts still establish grasp. They are not PT load inputs.
+                data.pop('force_n',None);data.pop('impulse_ns',None)
             omission=raw.get('distance_omission')
             targets,fully_omitted=self._distance_targets(r,raw)
             if omission:report['distance_omissions'][rid]=deepcopy(omission)
+            workspace=raw.get('workspace_omission')
+            if workspace:
+                targets=validate_omission(r,workspace,self.scope,targets)
+                fully_omitted=fully_omitted or bool(r['query_distance'] and not targets)
+                report['workspace_omissions'][rid]=deepcopy(workspace)
             source='link_target_gdist_surface_distance_gt' if r.get('evidence_only') else 'pt_environment_gdist_surface_distance_gt'
             evidence_missing=[]
             if r['query_distance'] and not fully_omitted:
@@ -153,6 +193,8 @@ class TaskRules:
                     if not finite_nonnegative(speed) or speed>params[bound]+1e-12:bounds_missing.append('PT distance assumption not satisfied: '+field)
                 if r['source_role']=='manipulated_link':bounds_missing.append('articulation stopping/control model unbound')
             for rule_id,level,evidence,missing in evaluate_pairs([data],profile):
+                if rid in self.grip_contact_exemptions and rule_id in ('PT-FORCE-002','PT-IMP-002'):
+                    continue  # No grade, unknown or synthetic L0 for an excluded contact.
                 if rule_id=='PT-DIST-001' and fully_omitted:
                     continue  # applicability removal, never substitute L0 or a fabricated distance
                 applicable=True;status='evaluated' if not missing else 'partial_known_results'

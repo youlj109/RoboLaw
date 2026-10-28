@@ -20,8 +20,29 @@ docker exec -w /workspace \
   --python /workspace/.venv-arena/bin/python --no-deps \
   -r /workspace/runtime/requirements-curobo.txt
 
-# Use the same pinned source and DROID asset files for either download route.
-python3 scripts/fetch_source_dependencies.py --components curobo
-python3 scripts/restore_downloaded_assets.py --source "${ROBOLAW_DOWNLOAD_SOURCE:-official}"
+curobo_revision=ebb71702f3f70e767f40fd8e050674af0288abe8
+if [[ ! -f third_party/curobo/setup.py ]]; then
+  git clone --filter=blob:none --no-checkout https://github.com/NVlabs/curobo.git third_party/curobo
+  git -C third_party/curobo config core.sparseCheckout true
+  mkdir -p third_party/curobo/.git/info
+  cat > third_party/curobo/.git/info/sparse-checkout <<'EOF'
+/*
+!/images/
+!/src/curobo/content/assets/
+EOF
+fi
+# A downloaded project includes this exact source tree without its .git data.
+# Fetch the pinned revision only for a newly created checkout.
+if [[ -d third_party/curobo/.git ]] && [[ ! -f third_party/curobo/setup.py ]]; then
+  git -C third_party/curobo checkout "$curobo_revision"
+fi
+
+asset_url=https://omniverse-content-staging.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Arena/assets/robot_library/droid/droid_fixed_mimic_joint
+mkdir -p assets/curobo/droid/urdf
+for asset_file in franka_robotiq_2f_85_zero_curobo.yml urdf/franka_robotiq_2f_85_zero.urdf; do
+  if [[ ! -f "assets/curobo/droid/${asset_file}" ]]; then
+    curl -fL "${asset_url}/${asset_file}" -o "assets/curobo/droid/${asset_file}"
+  fi
+done
 bash scripts/build_curobo.sh
 bash scripts/arena_python.sh scripts/smoke_curobo.py

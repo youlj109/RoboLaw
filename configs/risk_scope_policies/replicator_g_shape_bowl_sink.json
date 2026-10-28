@@ -1,0 +1,22 @@
+{
+  "version": "robolaw-normal-support-exclusion-1",
+  "task_id": "replicator_g_shape_bowl_sink",
+  "task_sha256": "966f2c3d10bf23ea45fdbd5ab1b2497c590c55c3f9bc89e8c9d4d802d1024f7d",
+  "scope": "all_PT_features_and_rules",
+  "active_phases": [
+    "all"
+  ],
+  "authorization": "2026-10-26 user: for all selected 31 native tasks, exclude unnecessary robot arm/gripper and payload normal-support-surface risk features and rules.",
+  "relations": [
+    {
+      "operation_id": "op_00",
+      "source_role": "moving_robot",
+      "target_id": "sink_counter"
+    },
+    {
+      "operation_id": "op_00",
+      "source_role": "payload",
+      "target_id": "sink_counter"
+    }
+  ]
+}

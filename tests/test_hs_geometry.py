@@ -4,8 +4,7 @@ import unittest
 import numpy as np
 from scipy.spatial.transform import Rotation
 from pxr import Gf, Usd, UsdGeom, UsdPhysics
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, '/workspace')
 from kitchen_safety.hs_geometry import HumanDistanceGeometry, bounds_distance
 
 ROOT='/World/envs/env_0'

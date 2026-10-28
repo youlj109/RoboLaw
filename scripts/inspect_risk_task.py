@@ -116,6 +116,17 @@ def main():
             if semantic_catalog['schema_version']!='robolaw-task-contact-semantics-1':
                 raise ValueError('Unsupported task contact semantics catalog')
             bind_operation_contacts(contract,inventory,bindings,semantic_catalog['tasks'].get(contract['task_id']))
+            from kitchen_safety.task_contact_policy import load_policy
+            support_policy=load_policy(ROOT,contract)
+            from kitchen_safety.task_workspace import load_policy as load_workspace, materialize as materialize_workspace
+            workspace_request=load_workspace(ROOT,contract)
+            if support_policy is not None:
+                from kitchen_safety.task_target_policy import materialize_target_selection
+                bindings['pt_normal_support_exclusions']=support_policy if workspace_request else materialize_target_selection(
+                    contract,inventory,bindings,measured,args.output/'meshes',support_policy)
+            if workspace_request:
+                bindings['workspace_policy']=materialize_workspace(contract,inventory,bindings,measured,
+                    args.output/'meshes',stage,workspace_request,json.loads((ROOT/config['profile_file']).read_text()))
             scope=bind_scope(contract,inventory,bindings)
             (args.output/'relation_scope.json').write_text(json.dumps(scope,ensure_ascii=False,indent=2)+'\n')
             rs=robot_self_pairs(inventory,robot_root,explicit_structural_pairs=bindings['robot_model']['structural_pairs'])

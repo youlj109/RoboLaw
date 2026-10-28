@@ -114,8 +114,17 @@ class TaskMeshQueries:
         if digest(copied) != identity:
             raise ValueError('Scope hash differs')
         self.scope, self.backend, self.Batch = scope, backend, GeometryBatch
+        from kitchen_safety.task_workspace import Workspace
+        self.workspace=Workspace(scope['bindings']['workspace_policy']) if scope['bindings'].get('workspace_policy') else None
         self.entries, models = {}, {}
         needed = set(scope['rs']['collider_paths'])
+        # Off-scope payloads still need shared shape geometry for grasp/support
+        # reconstruction. Loading a model does not enqueue a distance query.
+        payload_roots=[]
+        if scope.get('pt_target_scope_policy'):
+            payload_roots += [scope['bindings']['asset_roots'][aid] for aid in scope['pt_target_scope_policy'].get('excluded_payload_ids',[])]
+        for e in inventory['colliders']:
+            if any(e['path']==r or e['path'].startswith(r+'/') for r in payload_roots):needed.add(e['path'])
         for rel in scope['relations']:
             if rel['query_distance']:
                 needed.update(rel['source_colliders']); needed.update(rel['target_colliders'])
@@ -143,6 +152,7 @@ class TaskMeshQueries:
         batch = self.Batch(self.backend)
         errors, requests, collisions = {}, {}, {}
         omissions,effective_targets={},{}
+        workspace_omissions={};workspace_cache={}
         for path, entry in self.entries.items():
             try:
                 pose = transform(actor_states_world[entry['actor']]) if entry['dynamic'] else np.eye(4)
@@ -158,8 +168,6 @@ class TaskMeshQueries:
                 raise ValueError(str({p: errors[p] for p in paths if p in errors}))
             return [self.entries[p] for p in paths]
         for relation in self.scope['relations']:
-            if not relation['query_distance']:
-                continue  # no omitted distance record, not even a null/zero placeholder
             rid = relation['relation_id']
             selected=set()
             declarations=[]
@@ -167,11 +175,18 @@ class TaskMeshQueries:
                 if operation_id==declaration['operation_id'] and phase in declaration['allowed_phases']:
                     selected.update(declaration['target_colliders']);declarations.append(declaration['declaration_sha256'])
             targets=sorted(set(relation['target_colliders'])-selected)
-            effective_targets[rid]=targets
             if selected:
                 omissions[rid]=dict(operation_id=operation_id,phase=phase,source=relation['source'],
                     target_colliders=sorted(selected),fully_omitted=not targets,declaration_sha256=declarations,
                     query_distance=False,persist_distance=False,force_and_impulse_retained=True)
+            if self.workspace and relation['category']=='PT':
+                from kitchen_safety.task_workspace import runtime_omission
+                omission=runtime_omission(self.workspace,relation,actor_states_world,workspace_cache,targets)
+                if omission:
+                    workspace_omissions[rid]=omission
+                    targets=sorted(set(targets)-set(omission['excluded_distance_colliders']))
+            effective_targets[rid]=targets
+            if not relation['query_distance']:continue
             if not targets:continue  # no null/zero distance or GPU query for a fully omitted relation
             try:
                 requests[rid] = batch.minimum(get(relation['source_colliders']), get(targets))
@@ -205,5 +220,6 @@ class TaskMeshQueries:
             positive = any(r.get('value') is True for r in requests)
             self_results.append(dict(pair=list(pair), intersection=True if positive else None if missing else False,
                 complete=not missing, errors=missing))
-        return dict(relations=result, distance_omissions=omissions,self_collision=self_results, batch_statistics=dict(batch.stats),
+        return dict(relations=result, distance_omissions=omissions,workspace_omissions=workspace_omissions,
+            self_collision=self_results, batch_statistics=dict(batch.stats),
             scope_sha256=self.scope['scope_sha256'], geometry_backend=self.backend.METRIC)

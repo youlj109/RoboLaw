@@ -1,7 +1,5 @@
 > 当前 HS 已更新为 `arena-hs-dynamic-ssm-1`（适配器 `arena-risk-observer-14-dynamic-hs`）：真实 COM 运动在线保存，完整 Warp 表面距离、动态保护距离与余量离线计算。新规则与实验参数见 [hs_dynamic_distance.md](hs_dynamic_distance.md)；以下旧在线/FCL/固定距离内容仅作历史记录。
 
-2026年10月23日更新：当前人体案例的 HS 休闲服及固定结构数据移除、PT 81 项距离关系排除，分别以 [HS 数据排除](hs_data_omissions.md) 和 [PT 距离排除](pt_distance_omissions.md) 为准。最新已有 2,292 帧验证见 [记录](../validation/hs_pt_latest_review_20261023/README.md)。跨任务的三份 Skill 和两份数据规范见 [规范入口](standards/README.md) 与 [Skill 使用说明](../skills/使用说明.md)。下文早期验证数字属于各自历史版本，不自动代表当前范围。
-
 > 2026-10-22 当前默认：所有场景采用原始证据在线采集，网格距离、风险特征、HS/PT/RS、审计和 RGB/视频离线处理。人体场景仅为验证样例，场景与资产清单从各条数据读取。启动方式见 [offline_risk_workflow.md](offline_risk_workflow.md)。以下旧在线流程和 FCL 说明保留为历史复现记录。
 
 # huirongzeng：完整风险感知与复现

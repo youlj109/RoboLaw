@@ -1,0 +1,22 @@
+{
+  "version": "robolaw-normal-support-exclusion-1",
+  "task_id": "lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian",
+  "task_sha256": "e3a65d8fabcbd7e2291c426bb8359b318150cec4b8bb31741e981f3821c749be",
+  "scope": "all_PT_features_and_rules",
+  "active_phases": [
+    "all"
+  ],
+  "authorization": "2026-10-26 user: for all selected 31 native tasks, exclude unnecessary robot arm/gripper and payload normal-support-surface risk features and rules.",
+  "relations": [
+    {
+      "operation_id": "op_00",
+      "source_role": "moving_robot",
+      "target_id": "counter_top"
+    },
+    {
+      "operation_id": "op_00",
+      "source_role": "payload",
+      "target_id": "counter_top"
+    }
+  ]
+}

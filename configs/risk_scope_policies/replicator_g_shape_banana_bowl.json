@@ -1,0 +1,22 @@
+{
+  "version": "robolaw-normal-support-exclusion-1",
+  "task_id": "replicator_g_shape_banana_bowl",
+  "task_sha256": "af9a5685ba05f36408ae96a69db90702d019e4c4ede2e98176ed532f66f75ddb",
+  "scope": "all_PT_features_and_rules",
+  "active_phases": [
+    "all"
+  ],
+  "authorization": "2026-10-26 user: for all selected 31 native tasks, exclude unnecessary robot arm/gripper and payload normal-support-surface risk features and rules.",
+  "relations": [
+    {
+      "operation_id": "op_00",
+      "source_role": "moving_robot",
+      "target_id": "corner_counter"
+    },
+    {
+      "operation_id": "op_00",
+      "source_role": "payload",
+      "target_id": "corner_counter"
+    }
+  ]
+}

@@ -98,6 +98,8 @@ def bind_scope(contract, inventory, bindings):
     grips = set(bindings.get('grip_actor_paths', []))
     if not grips <= actual_robot_actors:
         raise ValueError('Grip binding is not in current robot inventory')
+    from kitchen_safety.task_contact_policy import resolve_exclusions
+    support_exclusions, support_policy = resolve_exclusions(contract, inventory, bindings, sources, roles)
     for source, colliders in sorted(sources.items()):
         for human in human_entries:
             rid = 'HS:'+digest([source, human['path']])[:24]
@@ -158,10 +160,43 @@ def bind_scope(contract, inventory, bindings):
                         if (left,right) in assembly_pairs:raise ValueError('Ambiguous fixed assembly binding')
                         assembly_pairs[(left,right)]=group
     all_payload_colliders = {p for source in sources if roles[source] == 'payload' for p in sources[source]}
+    from kitchen_safety.task_target_policy import resolve_target_scope, OMISSION_REASON
+    selected_pt_targets, target_scope_policy = resolve_target_scope(contract, inventory, bindings, targets)
     for source, colliders in sorted(sources.items()):
         for target_id, target_entries in sorted(targets.items()):
             target_paths=[e['path'] for e in target_entries if e['path'] not in colliders and e.get('actor')!=source]
             if not target_paths:continue
+            if selected_pt_targets is not None and target_id not in selected_pt_targets:
+                omitted.append(dict(relation_id='PT:'+digest([source,target_id])[:24],category='PT',
+                    source=source,source_colliders=sorted(set(colliders)),target=target_id,
+                    target_colliders=sorted(target_paths),query_distance=False,persist_distance=False,
+                    extract_risk_features=False,grade_distance=False,grade_contact=False,
+                    grade_force=False,grade_impulse=False,evaluation_status='omitted_by_policy',
+                    reason=OMISSION_REASON,policy_sha256=target_scope_policy['policy_sha256'],
+                    shared_raw_grasp_support_evidence_retained=True))
+                continue
+            if target_scope_policy is not None:
+                included=set(target_scope_policy['included_collider_paths_by_target'][target_id])
+                outside=sorted(set(target_paths)-included)
+                if outside:
+                    omitted.append(dict(relation_id='PT:'+digest([source,target_id])[:24]+':outside_workspace_surfaces',
+                        category='PT',source=source,source_colliders=sorted(set(colliders)),target=target_id,target_colliders=outside,
+                        query_distance=False,persist_distance=False,extract_risk_features=False,
+                        grade_distance=False,grade_contact=False,grade_force=False,grade_impulse=False,
+                        evaluation_status='omitted_by_policy',reason=OMISSION_REASON,
+                        policy_sha256=target_scope_policy['policy_sha256'],shared_raw_grasp_support_evidence_retained=True))
+                    target_paths=sorted(set(target_paths)-set(outside))
+                    if not target_paths:continue
+            excluded=sorted(set(target_paths)&support_exclusions.get(source,set()))
+            if excluded:
+                omitted.append(dict(relation_id='PT:'+digest([source,target_id])[:24]+':normal_support',
+                    category='PT',source=source,source_colliders=sorted(set(colliders)),target=target_id,target_colliders=excluded,
+                    query_distance=False,persist_distance=False,extract_risk_features=False,
+                    grade_distance=False,grade_contact=False,grade_force=False,grade_impulse=False,
+                    evaluation_status='omitted_by_policy',reason='authorized_normal_task_support_contact',
+                    shared_raw_grasp_support_evidence_retained=True,policy=support_policy))
+                target_paths=sorted(set(target_paths)-set(excluded))
+                if not target_paths:continue
             exempt=[p for p in target_paths if (source,p) in normal]
             distance_paths=sorted(set(target_paths)-set(exempt))
             rid = 'PT:'+digest([source, target_id])[:24]
@@ -213,6 +248,12 @@ def bind_scope(contract, inventory, bindings):
                 relation.update(evidence_only=True, grade_distance=False,
                     reason='grip_geometry_evidence; normal contact requires phase binding',
                     grade_distance_outside_normal_phase=True)
+                relation.update(grade_force=False,grade_impulse=False,
+                    normal_grip_contact_exemption=dict(version='robolaw-grip-target-contact-exclusion-1',
+                        scope='declared_grip_parts_to_task_payload_all_phases',
+                        authorization='2026-10-27 user: exempt grasping contact force to the task target; same-contact impulse excluded consistently',
+                        reason='intentional_gripper_payload_contact',
+                        shared_raw_grasp_evidence_retained=True))
             relations.append(relation)
     result = dict(schema_version='robolaw-runtime-scope-1', task_id=contract['task_id'],
         task_sha256=digest(contract), inventory_sha256=digest(inventory), bindings=deepcopy(bindings),
@@ -237,5 +278,8 @@ def bind_scope(contract, inventory, bindings):
         rs=dict(source='independent robot joint graph and full collider inventory',
             collider_paths=[e['path'] for e in robot_entries],
             robot_root=robot, joints=deepcopy(inventory.get('joints', []))))
+    if target_scope_policy is not None:
+        result['pt_target_scope_policy'] = target_scope_policy
+        result['coverage']['candidate_policy'] = 'explicit user-selected PT target subset; excluded assets are outside evaluation coverage'
     result['scope_sha256'] = digest(result)
     return result

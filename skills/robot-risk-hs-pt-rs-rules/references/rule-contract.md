@@ -4,6 +4,8 @@
 
 本包基线为 2026-10-23 已运行的组合：HS `arena-hs-dynamic-ssm-1`，PT `pt-hs-inspired-v4`，聚合 `arena-known-results-1`，gDist `arena-gdist-runtime-1`，HS 数据省略 `arena-hs-data-omission-1`。冻结源和配置保存在 assets，文件摘要在每份快照的 SOURCE_MANIFEST.json。
 
+2026-10-26 用户新增正常支撑面整关系排除 `robolaw-normal-support-exclusion-1`，详见 PT 规则。它先于风险查询/特征/分项生成生效，删除明确关系而不修改上述数值公式。历史 assets/frozen-implementation 保持原快照，不声称其中旧距离-only 默认行为已经实现新增授权；新实现必须显式冻结新 scope/代码身份。
+
 优先级：本条数据冻结配置及适用性 → 本包有效包装链 → 冻结的实际代码边界 → 人可读公式。发现冲突应报告具体字段/代码，不自行选择一个方便的版本，也不要静默修补后声称复现原结果。
 
 历史源码中的固定 HS、旧 PT 模式、TTC L0、保守“缺测就不给 L0”的原始聚合不一定是当前有效行为。必须应用动态 HS 和 Arena 适用性/known-results 包装后再比较。

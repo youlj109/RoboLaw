@@ -24,17 +24,23 @@ warning_outer = S_PT + warning_band
 
 ### 来源与关系处理
 
+- **2026-10-26 范围增补**：任务已确认的正常支撑台面，按 `robolaw-normal-support-exclusion-1` 授权机械臂/夹爪→支撑表面、搬运物→支撑表面的整关系排除。在查询、接触力/冲量风险特征提取和规则生成前移除，不生成对应 PT-DIST、PT-FORCE、PT-IMP 或伪 L0。只绑定本任务实际正常支撑表面，不扩大到整个厨房/柜体；混合关系保留其他表面。共享原始支撑/抓持证据、目标物整体掉落检测、HS/RS 保留。数值规则仍为 v4，变化的是显式范围版本；历史记录按原冻结配置回放。
+
 - 当前 gDist metric=`gdist_authored_collision_surface_distance`；源字段分别为 `link_target_gdist_surface_distance_gt`、`pt_environment_gdist_surface_distance_gt`，实际几何结果和特征必须一致且覆盖为 true。不接受 bbox 换名伪装 mesh。
 - 明确 `distance_omissions` 的关系在查询、字段和规则生成前移除，绝不产生 L0 占位。
 - 机器人→任务目标距离按授权全阶段不判级，抓持证据查询可保留。普通抓持源规则还支持确切 grip link 路径和阶段豁免；路径缺失/别名冲突不能被当成物理接近或全豁免。
 - 搬运物关系 held=true 才可按其搬运距离判级；held=null 时距离分项未知；held=false 的原 v4 会给兼容 L0，但明确 held_object_distance_applicable=false，不能进最近有效距离。
-- 目标物→目标容器和目标物→预期支撑面依据任务范围排除；当前案例部分关系是全部 PT 规则不适用，其他只是 distance-only。以冻结策略为准，不向其他分项扩散。
+- 目标物→目标容器和目标物→预期支撑面依据任务范围排除。正常支撑面若带上述整关系授权，力/冲量风险特征及规则也删除；其他仅 distance-only 的关系不向其他分项扩散。2026-10-23 冻结源码保留历史默认行为，不能用它覆盖 2026-10-26 的显式范围授权。
 - 测量支撑临时豁免只在关系/阶段声明存在、接触完整且确实有点、点在 payload 几何中心下方、全部 abs(normal_z)>=0.8、separation>=−0.003 m、payload 线速度模<=0.02 m/s 时成立。这里 z 是参考任务的世界支撑方向；其他重力方向须显式坐标适配，不能盲用 z。
 - 已证实支撑的源规则会给距离兼容 L0，但排除在最近有效距离外；力/冲量保留。
 
 最近有效 PT 距离仅对完整、实际适用、非豁免关系取 min；不包括被删关系、目标抓持距离、held 不适用、已证实支撑或全豁免 grip link。无有效项显示无适用数据/null，不显示 0。
 
 ## PT-FORCE-002 / PT-IMP-002
+
+### 正常夹持接触适用性（2026-10-27）
+
+当前任务冻结 `normal_grip_contact_exemption`、版本 `robolaw-grip-target-contact-exclusion-1` 时，确切夹持部件→本任务搬运目标物的力和同源冲量不参与 PT 判级。核验 source 属于 grip_actor_paths，全部接触目标属于同一个声明的 payload，且 grade_force/grade_impulse 均为 false；无此新声明的历史范围仍按原规则回放。该授权适用于这些精确关系的全任务阶段，不要求 held=true，不豁免机械臂其他部位→目标物或夹爪→外部资产，不延伸到门板/把手。省略对应 PT 风险窗口汇总和规则，不生成伪 L0；保留真实原始接触和抓持必要证据。其他关系继续使用以下数值规则。
 
 ### 统计口径
 

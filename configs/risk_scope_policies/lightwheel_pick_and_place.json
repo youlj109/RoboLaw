@@ -1,0 +1,22 @@
+{
+  "version": "robolaw-normal-support-exclusion-1",
+  "task_id": "lightwheel_pick_and_place",
+  "task_sha256": "b3abec298cbb44941ab69d3584a4daf9f51d786ff612a1c09821fb273f0712e5",
+  "scope": "all_PT_features_and_rules",
+  "active_phases": [
+    "all"
+  ],
+  "authorization": "2026-10-26 user: for all selected 31 native tasks, exclude unnecessary robot arm/gripper and payload normal-support-surface risk features and rules.",
+  "relations": [
+    {
+      "operation_id": "op_00",
+      "source_role": "moving_robot",
+      "target_id": "right_counter_top"
+    },
+    {
+      "operation_id": "op_00",
+      "source_role": "payload",
+      "target_id": "right_counter_top"
+    }
+  ]
+}

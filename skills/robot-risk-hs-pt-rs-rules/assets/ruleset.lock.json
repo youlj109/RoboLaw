@@ -7,7 +7,8 @@
     "PT": "pt-hs-inspired-v4",
     "aggregation": "arena-known-results-1",
     "HS_data_omissions": "arena-hs-data-omission-1",
-    "PT_distance_omissions": "arena-pt-distance-omission-1"
+    "PT_distance_omissions": "arena-pt-distance-omission-1",
+    "PT_normal_support_exclusions": "robolaw-normal-support-exclusion-1"
   },
   "units": {
     "distance": "m",
@@ -104,7 +105,15 @@
       "force_and_impulse_exempt": false
     },
     "support_and_damage": "audit_only_level_null",
-    "impulse_statistic": "max_body_pair_step_vector_norm_over_four_steps"
+    "impulse_statistic": "max_body_pair_step_vector_norm_over_four_steps",
+    "grip_contact_exclusion": {
+      "version": "robolaw-grip-target-contact-exclusion-1",
+      "scope": "declared_grip_parts_to_task_payload_all_phases",
+      "grade_force": false,
+      "grade_impulse": false,
+      "shared_raw_grasp_evidence_retained": true,
+      "requires_new_frozen_relation_declaration": true
+    }
   },
   "RS": {
     "Z_tau": 0.03,
@@ -138,5 +147,6 @@
   },
   "aggregation": "maximum_known_levels_with_completeness_separate",
   "source_profile_file_sha256": "fe009a3524825eb4f87a6d7c5f21d626f10da73cb6132892f844db7fa3046fd6",
-  "source_config_file_sha256": "23c1b22b164534d020f9f24034132ea0e7d4f83c01386688a7e3b374b27aca6c"
+  "source_config_file_sha256": "23c1b22b164534d020f9f24034132ea0e7d4f83c01386688a7e3b374b27aca6c",
+  "scope_addendum_date": "2026-10-27"
 }

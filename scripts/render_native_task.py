@@ -26,6 +26,13 @@ def main():
     args.output.mkdir(parents=True,exist_ok=False)
     for var,suffix in [('WARP_CACHE_PATH','warp_kernels'),('CUDA_CACHE_PATH','cuda_cache'),('TMPDIR','tmp')]:
         folder=args.asset_cache/suffix;folder.mkdir(parents=True,exist_ok=True);os.environ[var]=str(folder)
+    # Dense task reports can contain tens of MB per frame. Use the installed
+    # native JSON decoder for those labels; state/pose replay stays unchanged.
+    try:
+        from orjson import loads as read_label
+        label_decoder='orjson'
+    except ImportError:
+        read_label=json.loads;label_decoder='stdlib_json'
     raw_summary=json.loads((args.episode/'raw_capture_summary.json').read_text())
     risk_summary=json.loads((args.risk/'evaluation_summary.json').read_text())
     if not risk_summary.get('complete') or risk_summary['raw_sha256']!=raw_summary['raw_writer']['sha256']:
@@ -39,7 +46,7 @@ def main():
         physics_steps_advanced=0,frames=0,full_task_execution_verified=raw_summary.get('full_task_execution_verified',False),
         source_raw_sha256=raw_summary['raw_writer']['sha256'],preview_only=preview,
         requested_action_indices=sorted(selected) if preview else None,rendered_action_indices=[],source_samples_checked=0,
-        render_implementation_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+        render_implementation_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),label_decoder=label_decoder)
     frozen_scene=args.episode/'reconstruction.usda'
     frozen_scene_sha256=hashlib.sha256(frozen_scene.read_bytes()).hexdigest()
     report['source_reconstruction_sha256']=frozen_scene_sha256
@@ -115,9 +122,46 @@ def main():
         basis=np.column_stack((forward,left,up));base=root[:3,3]
         # Task-relative close views stay near the working volume, rather than
         # placing fixed global cameras behind kitchen walls or above ceilings.
-        center=base+basis@np.array([.30,0.,.30])
-        positions=[base+basis@np.array(v) for v in ((.55,-.70,.70),(.55,.70,.70),(.30,.01,1.15))]
-        targets=[center.copy(),center.copy(),center.copy()];focal_lengths=[20.]*3
+        # Use this episode's payload/destination or operation surfaces. Views
+        # remain on the robot-facing side instead of crossing the counter wall.
+        from kitchen_safety.task_scope import under
+        contract=json.loads((args.episode/'task_contract.json').read_text())
+        points=[]
+        for aid in contract['roles']['payload_ids']+contract['roles']['destination_ids']:
+            asset_root=scope['bindings']['asset_roots'][aid]
+            if asset_root in first['actor_states_world']:
+                points.append(np.asarray(first['actor_states_world'][asset_root][:3]))
+            else:
+                clouds=[]
+                for entry in inventory['colliders']:
+                    if not under(entry['path'],asset_root):continue
+                    with np.load(args.episode/'meshes'/(entry['fingerprint']+'.npz'),allow_pickle=False) as mesh:
+                        vertices=mesh['vertices'].copy()
+                    if entry['dynamic']:
+                        pose=transform(first['actor_states_world'][entry['actor']]);vertices=vertices@pose[:3,:3].T+pose[:3,3]
+                    clouds.append(vertices)
+                if clouds:
+                    vertices=np.concatenate(clouds);points.append((vertices.min(axis=0)+vertices.max(axis=0))/2)
+        for operation in scope['bindings'].get('operation_contacts',[]):
+            for path in operation['target_colliders']:
+                entry=next(e for e in inventory['colliders'] if e['path']==path)
+                with np.load(args.episode/'meshes'/(entry['fingerprint']+'.npz'),allow_pickle=False) as mesh:vertices=mesh['vertices'].copy()
+                if entry['dynamic']:
+                    pose=transform(first['actor_states_world'][entry['actor']]);vertices=vertices@pose[:3,:3].T+pose[:3,3]
+                points.append((vertices.min(axis=0)+vertices.max(axis=0))/2)
+        center=np.mean(points,axis=0)+up*.08 if points else base+basis@np.array([.30,0.,.30])
+        # A task can be beside the robot (e.g. a stand fitting an island
+        # aisle). Place views on the actual robot-to-work side, not blindly
+        # along the base X axis where a camera can cross a kitchen wall.
+        work_forward=center-base;work_forward[2]=0.
+        if np.linalg.norm(work_forward)>.05:
+            forward=work_forward/np.linalg.norm(work_forward)
+            left=np.array([-forward[1],forward[0],0.])
+        radius=max([float(np.linalg.norm((p-center)[:2])) for p in points]+[.3])
+        distance=max(.95,1.5*radius)
+        positions=[center-forward*distance+left*side*.70+up*.80 for side in (-1,1)]
+        positions.append(center-forward*.75+up*max(1.25,distance))
+        targets=[center.copy(),center.copy(),center.copy()];focal_lengths=[18.]*3
         camera_mode='derived_offline_overview'
         if args.camera_config:
             from kitchen_safety.task_camera import validate_camera_config
@@ -169,11 +213,11 @@ def main():
         writer=video_encoder(video,1920,544,1/30)
         max_error=0.;dark=[]
         try:
-            with (args.episode/'raw_evidence.jsonl').open() as source,(args.risk/'safety_decisions.jsonl').open() as labels:
+            with (args.episode/'raw_evidence.jsonl').open() as source,(args.risk/'safety_decisions.jsonl').open() as labels,(args.output/'risk_timeline.jsonl').open('x') as timeline_out:
                 for line in source:
                     packet=json.loads(line)
                     if packet['kind'] not in ('observation','terminal_observation'):continue
-                    label=json.loads(next(labels))
+                    label=read_label(next(labels))
                     if label['action_index']!=packet['action_index'] or label['source_physics_step']!=packet['source_physics_step']:
                         raise ValueError('RGB/label source-time identity differs')
                     report['source_samples_checked']+=1
@@ -199,7 +243,12 @@ def main():
                     sample='terminal' if packet['kind']=='terminal_observation' else f"obs[{packet['action_index']}]"
                     suffix='SELECTED FRAME PREVIEW; not continuous video' if preview else 'offline replay'
                     draw.text((20,524),f"t={packet['time_s']:.3f}s | {packet['phase']} | measured {sample} | {suffix}",fill='white')
-                    writer.stdin.write(np.asarray(panel).tobytes());report['frames']+=1
+                    writer.stdin.write(np.asarray(panel).tobytes())
+                    timeline_out.write(json.dumps(dict(action_index=packet['action_index'],source_physics_step=packet['source_physics_step'],time_s=packet['time_s'],phase=packet['phase'],
+                        source_raw_sha256=report['source_raw_sha256'],scope_sha256=scope['scope_sha256'],profile_hash=risk_summary.get('profile_hash'),
+                        categories={c:{key:categories[c].get(key) for key in ('level','status','data_complete')} for c in ('HS','PT','RS')},
+                        caption=caption),ensure_ascii=False,separators=(',',':'))+'\n')
+                    report['frames']+=1
                     report['rendered_action_indices'].append(packet['action_index'])
                     if report['frames']==1:panel.save(args.output/'first_frame.png')
                     if preview:panel.save(args.output/f"source_frame_{packet['action_index']:06d}.png")
@@ -209,6 +258,8 @@ def main():
         finally:close_encoders({'risk_review':writer})
         if hashlib.sha256(frozen_scene.read_bytes()).hexdigest()!=frozen_scene_sha256:
             raise ValueError('Offline appearance/rendering modified the frozen source scene')
+        trace=args.output/'risk_timeline.jsonl'
+        report['risk_timeline']=dict(path=str(trace.resolve()),sha256=hashlib.sha256(trace.read_bytes()).hexdigest(),frames=report['frames'],source='The exact categories and caption submitted to each encoded source-time video frame')
         report.update(complete=not dark,physics_steps_advanced=event_count[0],pose_matrix_max_error=max_error,dark_frames=dark,
             video=str(video),RGB_source='frozen scene with actual observed actor transforms, no simulated trajectory replay')
         save()

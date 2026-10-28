@@ -1,0 +1,260 @@
+{
+  "version": "robolaw-normal-support-exclusion-1",
+  "task_id": "replicator_l_island_mustard_bowl",
+  "task_sha256": "cdca06668a8c371e58016c3daa9eab856a72528952332c620711bfeff9d2f3bc",
+  "scope": "all_PT_features_and_rules",
+  "active_phases": [
+    "all"
+  ],
+  "authorization": "2026-10-26 user: for all selected 31 native tasks, exclude unnecessary robot arm/gripper and payload normal-support-surface risk features and rules.",
+  "relations": [
+    {
+      "operation_id": "op_00",
+      "source_role": "moving_robot",
+      "target_id": "island_top"
+    },
+    {
+      "operation_id": "op_00",
+      "source_role": "payload",
+      "target_id": "island_top"
+    }
+  ],
+  "target_scope": {
+    "version": "robolaw-authorized-pt-target-subset-1",
+    "task_id": "replicator_l_island_mustard_bowl",
+    "task_sha256": "cdca06668a8c371e58016c3daa9eab856a72528952332c620711bfeff9d2f3bc",
+    "scope": "all_PT_features_and_rules",
+    "active_phases": [
+      "all"
+    ],
+    "authorization": "2026-10-28 user: keep only island assets and explicitly remove cutting board; mustard task frozen review.",
+    "selection_basis": {
+      "kind": "explicit_user_subset",
+      "support_path": "/World/envs/env_0/replicator_kitchen_l_island/CapSurface_03",
+      "source_raw_sha256": "234bc44c2a4757bb33023ea391c6861c0148b806ef6d07d620fc123899c274dd",
+      "source_scope_sha256": "71de95a7eb088f53d2400a17be18b1a7a22affc78938d0f3375e553e81fa79d0",
+      "support_bounds_world_m": [
+        [
+          -1.2573591463770788,
+          0.11224284205860524,
+          0.8657334772058698
+        ],
+        [
+          0.7871328599248011,
+          1.0167779568237725,
+          0.9147230413862439
+        ]
+      ],
+      "location_tolerance_m": 0.003,
+      "description": "Frozen measured initial collider bounds used to review objects on/inside containers on the island. Not a collision-impossibility certificate or runtime distance estimate."
+    },
+    "included_targets": [
+      {
+        "target": "bowl",
+        "colliders": [
+          "bowl/obj_000013_Mesh"
+        ],
+        "group": "bowl",
+        "initial_bounds_world_m": [
+          [
+            0.29664651304483414,
+            0.23152504116296768,
+            0.9247230421751738
+          ],
+          [
+            0.45809050649404526,
+            0.39263805001974106,
+            0.979693042114377
+          ]
+        ]
+      },
+      {
+        "target": "mustard_bottle",
+        "colliders": [
+          "mustard_bottle/obj_000016_Mesh"
+        ],
+        "group": "mustard_bottle",
+        "initial_bounds_world_m": [
+          [
+            -0.9159754458814859,
+            0.32399842888116837,
+            0.9247230216860771
+          ],
+          [
+            -0.8674012478441,
+            0.3891316279768944,
+            1.0847734287381172
+          ]
+        ]
+      },
+      {
+        "target": "replicator_kitchen_l_island/BagelC01/BagelC01_OnlineVisual/Geometry/sm_food_prepared_bagel_c01_obj_00",
+        "colliders": [
+          "replicator_kitchen_l_island/BagelC01/BagelC01_OnlineVisual/Geometry/sm_food_prepared_bagel_c01_obj_00/sm_food_prepared_bagel_c01_mesh_00/sm_food_prepared_bagel_c01_mesh_00"
+        ],
+        "group": "BagelC01",
+        "initial_bounds_world_m": [
+          [
+            -0.28860834886067027,
+            0.5048728890743611,
+            0.9190258509652944
+          ],
+          [
+            -0.18111111535199723,
+            0.6245004490320629,
+            0.9701993527267004
+          ]
+        ]
+      },
+      {
+        "target": "replicator_kitchen_l_island/BananaA01_01/BananaA01_OnlineVisual/Geometry/sm_food_produce_banana_a01_obj_00",
+        "colliders": [
+          "replicator_kitchen_l_island/BananaA01_01/BananaA01_OnlineVisual/Geometry/sm_food_produce_banana_a01_obj_00/sm_food_produce_banana_a01_mesh_00/sm_food_produce_banana_a01_mesh_00"
+        ],
+        "group": "BananaA01_01",
+        "initial_bounds_world_m": [
+          [
+            -0.08837209724301306,
+            0.26725636531559716,
+            0.9143130976056034
+          ],
+          [
+            0.02678857609766494,
+            0.4294775200415441,
+            0.9490028401189536
+          ]
+        ]
+      },
+      {
+        "target": "replicator_kitchen_l_island/BowlF01/BowlF01_OnlineVisual/Geometry/sm_kitchenware_bowl_f01_obj_00",
+        "colliders": [
+          "replicator_kitchen_l_island/BowlF01/BowlF01_OnlineVisual/Geometry/sm_kitchenware_bowl_f01_obj_00/sm_kitchenware_bowl_f01_mesh_00/sm_kitchenware_bowl_f01_mesh_00"
+        ],
+        "group": "BowlF01",
+        "initial_bounds_world_m": [
+          [
+            -0.4002366879430929,
+            0.3993865457135894,
+            0.9147229075440654
+          ],
+          [
+            -0.06998952417051113,
+            0.7296337988930841,
+            1.0033199935121804
+          ]
+        ]
+      },
+      {
+        "target": "replicator_kitchen_l_island/Toaster/Toaster_OnlineVisual/Geometry/body_obj_01",
+        "colliders": [
+          "replicator_kitchen_l_island/Toaster/Toaster_OnlineVisual/Geometry/body_obj_01/body_mesh_01/body_mesh_01"
+        ],
+        "group": "Toaster",
+        "initial_bounds_world_m": [
+          [
+            -0.4494513858143264,
+            0.22103832090108005,
+            0.9147228044746215
+          ],
+          [
+            -0.16945134788083685,
+            0.37592477635800386,
+            1.0937621176765226
+          ]
+        ]
+      },
+      {
+        "target": "replicator_kitchen_l_island/Toaster/Toaster_OnlineVisual/Geometry/cancel_button_obj_01",
+        "colliders": [
+          "replicator_kitchen_l_island/Toaster/Toaster_OnlineVisual/Geometry/cancel_button_obj_01/cancel_button_mesh_01"
+        ],
+        "group": "Toaster",
+        "initial_bounds_world_m": [
+          [
+            -0.17976076561052018,
+            0.3213732195813167,
+            0.9534272252831282
+          ],
+          [
+            -0.1671915973073113,
+            0.3376580429983712,
+            0.9598272429598149
+          ]
+        ]
+      },
+      {
+        "target": "replicator_kitchen_l_island/Toaster/Toaster_OnlineVisual/Geometry/dial_obj_01",
+        "colliders": [
+          "replicator_kitchen_l_island/Toaster/Toaster_OnlineVisual/Geometry/dial_obj_01/dial_mesh_01/dial_mesh_01"
+        ],
+        "group": "Toaster",
+        "initial_bounds_world_m": [
+          [
+            -0.17909793958101547,
+            0.2831114402224646,
+            0.9474708959449211
+          ],
+          [
+            -0.15344822338213174,
+            0.3139320010238541,
+            0.9782912105143876
+          ]
+        ]
+      },
+      {
+        "target": "replicator_kitchen_l_island/Toaster/Toaster_OnlineVisual/Geometry/lever_obj_01",
+        "colliders": [
+          "replicator_kitchen_l_island/Toaster/Toaster_OnlineVisual/Geometry/lever_obj_01/lever_mesh_01/lever_mesh_01"
+        ],
+        "group": "Toaster",
+        "initial_bounds_world_m": [
+          [
+            -0.20445120739762795,
+            0.276507370778435,
+            1.0545891576229818
+          ],
+          [
+            -0.142882107418932,
+            0.32052163840182757,
+            1.0669891971811956
+          ]
+        ]
+      },
+      {
+        "target": "replicator_kitchen_l_island/Toaster/Toaster_OnlineVisual/Geometry/tray_obj_01",
+        "colliders": [
+          "replicator_kitchen_l_island/Toaster/Toaster_OnlineVisual/Geometry/tray_obj_01/tray_mesh_01"
+        ],
+        "group": "Toaster",
+        "initial_bounds_world_m": [
+          [
+            -0.3918325334349442,
+            0.26192262431576774,
+            1.047957460246876
+          ],
+          [
+            -0.20452844576278967,
+            0.3349149617369311,
+            1.0674359336301302
+          ]
+        ]
+      }
+    ]
+  },
+  "target_scope_request": {
+    "version": "robolaw-initial-support-target-selection-1",
+    "task_id": "replicator_l_island_mustard_bowl",
+    "task_sha256": "cdca06668a8c371e58016c3daa9eab856a72528952332c620711bfeff9d2f3bc",
+    "scope": "all_PT_features_and_rules",
+    "active_phases": [
+      "all"
+    ],
+    "authorization": "2026-10-28 user: remove cutting board and apply island-only PT asset selection to all three L-island native tasks; retain existing normal-task exemptions.",
+    "support_root": "replicator_kitchen_l_island/CapSurface_03",
+    "excluded_asset_roots": [
+      "replicator_kitchen_l_island/CuttingBoardB01"
+    ],
+    "location_tolerance_m": 0.003,
+    "per_episode_initial_measured_geometry": true
+  }
+}

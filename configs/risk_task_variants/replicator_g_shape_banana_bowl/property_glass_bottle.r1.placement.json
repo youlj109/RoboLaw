@@ -1,0 +1,36 @@
+{
+  "placement_mode": "native_relations",
+  "task_sha256": "af9a5685ba05f36408ae96a69db90702d019e4c4ede2e98176ed532f66f75ddb",
+  "placement_relations": [
+    {
+      "kind": "on",
+      "reference": "corner_counter",
+      "params": {
+        "clearance_m": 0.01,
+        "edge_margin_m": 0.05
+      }
+    },
+    {
+      "kind": "next_to",
+      "reference": "banana",
+      "params": {
+        "side": "positive_y",
+        "distance_m": 0.08,
+        "tolerance_m": 0.02
+      }
+    },
+    {
+      "kind": "rotate_around_solution",
+      "params": {
+        "yaw_rad": 0.0
+      }
+    }
+  ],
+  "placement_evidence": {
+    "kind": "task_specific_g_banana_candidate",
+    "revision": 1,
+    "reason": "Bind to this task corner counter, floor and banana; robot is on negative-y side. Native tolerances retained.",
+    "full_motion_envelope_validated": false,
+    "production_collection": false
+  }
+}

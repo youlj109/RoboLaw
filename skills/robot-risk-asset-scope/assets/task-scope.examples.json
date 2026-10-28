@@ -36,16 +36,35 @@
           "reason": "intended_placement_relationship"
         },
         {
-          "relation_id": "payload_support_distance",
+          "relation_id": "payload_support_full_PT_omission",
           "actor": "object_A",
           "object_id": "surface_A",
           "category": "PT",
           "query_distance": false,
           "persist_distance": false,
           "grade_distance": false,
-          "grade_force": true,
-          "grade_impulse": true,
-          "reason": "intended_support_surface_only"
+          "grade_force": false,
+          "grade_impulse": false,
+          "reason": "intended_support_surface_only",
+          "extract_risk_features": false,
+          "evaluation_status": "omitted_by_policy",
+          "authorization": "2026-10-26 normal-support full PT exclusion after exact task binding",
+          "scope_version": "robolaw-normal-support-exclusion-1"
+        },
+        {
+          "relation_id": "moving_robot_support_full_PT_omission",
+          "actor": "bound_moving_robot_and_gripper",
+          "object_id": "surface_A",
+          "category": "PT",
+          "query_distance": false,
+          "persist_distance": false,
+          "extract_risk_features": false,
+          "grade_distance": false,
+          "grade_force": false,
+          "grade_impulse": false,
+          "evaluation_status": "omitted_by_policy",
+          "scope_version": "robolaw-normal-support-exclusion-1",
+          "reason": "authorized_normal_support_surface_in_this_task; preserve other cabinet geometry and shared raw evidence"
         },
         {
           "relation_id": "grasp_geometry_evidence",

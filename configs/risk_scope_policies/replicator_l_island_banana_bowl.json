@@ -1,0 +1,40 @@
+{
+  "version": "robolaw-normal-support-exclusion-1",
+  "task_id": "replicator_l_island_banana_bowl",
+  "task_sha256": "29287e15545fb3a82d0c5aa711fe9501e362130fc7202eaf8dd8054d010ea152",
+  "scope": "all_PT_features_and_rules",
+  "active_phases": [
+    "all"
+  ],
+  "authorization": "2026-10-26 user: for all selected 31 native tasks, exclude unnecessary robot arm/gripper and payload normal-support-surface risk features and rules.",
+  "relations": [
+    {
+      "operation_id": "op_00",
+      "source_role": "moving_robot",
+      "target_id": "corner_counter"
+    },
+    {
+      "operation_id": "op_00",
+      "source_role": "payload",
+      "target_id": "corner_counter"
+    }
+  ],
+  "target_scope_request": {
+    "version": "robolaw-initial-support-target-selection-1",
+    "task_id": "replicator_l_island_banana_bowl",
+    "task_sha256": "29287e15545fb3a82d0c5aa711fe9501e362130fc7202eaf8dd8054d010ea152",
+    "scope": "all_PT_features_and_rules",
+    "active_phases": [
+      "all"
+    ],
+    "authorization": "2026-10-28 user-provided image: replace island targets with assets in the robot-side corner worktop region for the L-island banana-to-bowl task only; retain declared support/grasp exemptions.",
+    "support_root": "replicator_kitchen_l_island/CornerCounter_00_0",
+    "excluded_asset_roots": [
+      "replicator_kitchen_l_island/CuttingBoardB01"
+    ],
+    "location_tolerance_m": 0.003,
+    "per_episode_initial_measured_geometry": true,
+    "selection_region_label": "robot_corner_worktop_region",
+    "source_request_image_sha256": "260e8ed071bf3ccaa17b7eccf6b7e1876952fb25521fcec5e093b5c2beda8541"
+  }
+}

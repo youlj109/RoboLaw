@@ -1,0 +1,38 @@
+{
+  "version": "robolaw-normal-support-exclusion-1",
+  "task_id": "replicator_l_shape_mustard_bowl",
+  "task_sha256": "63c0ebcd894690b14223b831322dd2f408f7fb97464416de8647b8fad8645d8c",
+  "scope": "all_PT_features_and_rules",
+  "active_phases": [
+    "all"
+  ],
+  "authorization": "2026-10-26 user: for all selected 31 native tasks, exclude unnecessary robot arm/gripper and payload normal-support-surface risk features and rules.",
+  "relations": [
+    {
+      "operation_id": "op_00",
+      "source_role": "moving_robot",
+      "target_id": "counter_top"
+    },
+    {
+      "operation_id": "op_00",
+      "source_role": "payload",
+      "target_id": "counter_top"
+    }
+  ],
+  "target_scope_request": {
+    "version": "robolaw-initial-support-target-selection-1",
+    "task_id": "replicator_l_shape_mustard_bowl",
+    "task_sha256": "63c0ebcd894690b14223b831322dd2f408f7fb97464416de8647b8fad8645d8c",
+    "scope": "all_PT_features_and_rules",
+    "active_phases": [
+      "all"
+    ],
+    "authorization": "2026-10-28 user image: restrict 04 Replicator L-shaped mustard-to-bowl PT assets to the robot work area shown; normal grasp, destination and support exemptions retained.",
+    "support_root": "replicator_kitchen_l_shape/CapSurface",
+    "excluded_asset_roots": [],
+    "location_tolerance_m": 0.003,
+    "per_episode_initial_measured_geometry": true,
+    "selection_region_label": "robot_worktop_region",
+    "source_request_image_sha256": "2e64f30ac4748df125dff6c394b3b1e004b30d6acd54cf7213c3bb78c14fc991"
+  }
+}

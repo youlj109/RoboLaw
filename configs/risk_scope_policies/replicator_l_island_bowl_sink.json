@@ -1,0 +1,38 @@
+{
+  "version": "robolaw-normal-support-exclusion-1",
+  "task_id": "replicator_l_island_bowl_sink",
+  "task_sha256": "dace7b96bbcdeba510f411b0696699de6e73d1af0cca3b13cc41a51a6156a0ee",
+  "scope": "all_PT_features_and_rules",
+  "active_phases": [
+    "all"
+  ],
+  "authorization": "2026-10-26 user: for all selected 31 native tasks, exclude unnecessary robot arm/gripper and payload normal-support-surface risk features and rules.",
+  "relations": [
+    {
+      "operation_id": "op_00",
+      "source_role": "moving_robot",
+      "target_id": "sink_counter"
+    },
+    {
+      "operation_id": "op_00",
+      "source_role": "payload",
+      "target_id": "sink_counter"
+    }
+  ],
+  "target_scope_request": {
+    "version": "robolaw-initial-support-target-selection-1",
+    "task_id": "replicator_l_island_bowl_sink",
+    "task_sha256": "dace7b96bbcdeba510f411b0696699de6e73d1af0cca3b13cc41a51a6156a0ee",
+    "scope": "all_PT_features_and_rules",
+    "active_phases": [
+      "all"
+    ],
+    "authorization": "2026-10-28 user: remove cutting board and apply island-only PT asset selection to all three L-island native tasks; retain existing normal-task exemptions.",
+    "support_root": "replicator_kitchen_l_island/CapSurface_03",
+    "excluded_asset_roots": [
+      "replicator_kitchen_l_island/CuttingBoardB01"
+    ],
+    "location_tolerance_m": 0.003,
+    "per_episode_initial_measured_geometry": true
+  }
+}

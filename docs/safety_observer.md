@@ -1,5 +1,3 @@
-> 历史接入记录（截至 2026-10-20 的早期版本）。当前分支的 FCL 测距、已知结果判级和任务豁免以 [risk_perception.md](risk_perception.md) 及配置文件为准；下文包含旧投影测距和旧缺测聚合描述。
-
 # Arena 抓放任务的只读安全评价
 
 本接入依据 `SafeBench-Arena-MD-Code-20261019.zip`。原始说明和参考代码保存在 `third_party/safebench_reference/`；35 个参考文件已与包内来源清单核对，未修改。复用四类评价器，未导入源端控制器或整个 Simbox workflow。

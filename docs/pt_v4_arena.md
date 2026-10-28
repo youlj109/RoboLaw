@@ -1,5 +1,3 @@
-> 历史接入记录（截至 2026-10-20 的早期版本）。当前分支的 FCL 测距、已知结果判级和任务豁免以 [risk_perception.md](risk_perception.md) 及配置文件为准；下文包含旧投影测距和旧缺测聚合描述。
-
 # Arena PT v4（2026-10-20）
 
 默认配置指向 `configs/safety/profile.robot.pick_place.v4.json`。
