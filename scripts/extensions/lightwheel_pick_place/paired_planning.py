@@ -184,6 +184,7 @@ def main():
     p.add_argument('--segments', nargs='+', default=['transfer', 'approach'],
                    choices=['transfer', 'pregrasp', 'approach', 'lift'])
     p.add_argument('--max-joint-speed', type=float, default=0.4)
+    p.add_argument('--match-recorded-execution-certification',action='store_true',help='Match an explicitly recorded ladle execution-margin certification; preserve failed planning-reserve diagnostics')
     a = p.parse_args()
     from kitchen_safety.extensions.lightwheel_pick_place.task_config import resolve_task
     global ACTIVE_VARIANT_CONFIG
@@ -215,6 +216,11 @@ def main():
         a.segments = [recorded['phase']]
         effective=kin.fk(np.asarray(recorded['metadata']['goal_q_arm'])) if recorded.get('metadata',{}).get('goal_q_arm') is not None else np.asarray(recorded['target'],dtype=float)
         targets = {recorded['phase']: effective}
+
+    if a.match_recorded_execution_certification:
+        evidence=(recorded or {}).get('validation',{})
+        if PICK!='green_ladle' or not (evidence.get('valid') is True and evidence.get('planning_reserve_passed') is False and evidence.get('scope')=='Original execution margins at dense joint samples plus original cuRobo constraints; planning reserve remains explicitly not passed'):
+            raise ValueError('Execution certification requires exact recorded original-policy evidence')
 
     with h5py.File(baseline / 'trajectory.h5') as f:
         phases = f['phase'].asstr()[:]
@@ -265,6 +271,8 @@ def main():
         'seeds': list(a.seeds),
         'variants': list(a.variants),
         'segments': list(a.segments),
+        'match_recorded_execution_certification':bool(a.match_recorded_execution_certification),
+        'execution_certification_source_validation':recorded.get('validation',{}) if a.match_recorded_execution_certification else None,
         'max_joint_speed': a.max_joint_speed,
         'dt': result['dt'],
         'control_parameters': {
@@ -304,6 +312,7 @@ def main():
                     world.set_obstacle_pose(active_pick, st['active_pick_pose'])
                     world.source_detached = st['source_detached']
                     planner = LimePlanner(world, kin, dt=result['dt'], seed=int(seed), max_joint_speed=a.max_joint_speed)
+                    planner.certify_execution_margin=bool(a.match_recorded_execution_certification)
                     search_policy=result.get('grasp_search_policy',{})
                     planner.pose_ik_joint_fallback=bool(search_policy.get('pose_ik_joint_goal_fallback',{}).get('enabled') or result.get('transfer_route_policy',{}).get('pose_ik_joint_goal_fallback'))
                     planner.allow_upper_route_policy=bool(search_policy or result.get('transfer_route_policy',{}).get('mode')=='upper')
