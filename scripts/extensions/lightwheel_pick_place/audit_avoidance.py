@@ -154,7 +154,8 @@ def audit(baseline,episode):
     if pick in ('green_ladle','pepsi_can') and br.get('transfer_route_policy')==r.get('transfer_route_policy') and br.get('transfer_route_policy',{}).get('mode')=='upper':
         def normalized_route_methods(m):
             rows=[];plans=[x for x in m.get('plans',[]) if x.get('executed')]
-            if not any(x['phase']=='retreat' for x in plans) and m.get('optional_retreat_skipped',{}).get('executed_actions')!=0:return None
+            completed_local_release=(m.get('task_motion_parameters',{}).get('staged_release') is True and m.get('task_motion_parameters',{}).get('release_escape_local_line') is True and bool(m.get('task_motion_parameters',{}).get('release_escape_plan_sha256')) and m.get('staged_release',{}).get('unloaded') is True and m.get('staged_release',{}).get('geometry_sweep_passed') is True and m.get('release_escape_proposal',{}).get('local_line') is True)
+            if not any(x['phase']=='retreat' for x in plans) and m.get('optional_retreat_skipped',{}).get('executed_actions')!=0 and not completed_local_release:return None
             for x in plans:
                 phase=x['phase'];method=x.get('metadata',{}).get('method')
                 if phase=='retreat':continue
