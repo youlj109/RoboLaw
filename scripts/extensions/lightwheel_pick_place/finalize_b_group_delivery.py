@@ -16,7 +16,9 @@ if not release.exists():
  run(args,out/'final_manifest_generation.log')
 m=json.loads(release.read_text());assert m['passed'] and m['implementation_git_commit']==head
 for name,digest in m['implementation_sha256'].items():
- p=repo/name;assert sha(p)==digest,name;blob=subprocess.check_output(['git','show',head+':'+name]);assert hashlib.sha256(blob).hexdigest()==digest,'Uncommitted required source: '+name;compile(blob,name,'exec')
+ p=repo/name;assert sha(p)==digest,name;blob=subprocess.check_output(['git','show',head+':'+name]);assert hashlib.sha256(blob).hexdigest()==digest,'Uncommitted required source: '+name;
+ if p.suffix=='.py':compile(blob,name,'exec')
+ elif p.suffix=='.sh':subprocess.run(['bash','-n',str(p)],check=True)
 run([py,str(scripts/'restore_control_reference_files.py')],out/'final_control_reference_check.log')
 run([py,str(scripts/'build_group_scope_reviews.py')],out/'final_scope_refresh.log')
 index=json.loads((out/'current_delivery_inventory.json').read_text());assert index['task_scope_acceptance_complete'] and all(t.get('task_scope_passed') for t in index['tasks'].values())
