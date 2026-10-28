@@ -65,6 +65,9 @@ TRAJECTORY_STATUSES = ("pending", "running", "generated", "failed", "skipped")
 PHYSICAL_DEMOS = 'exports/replicator_154_physical_demos_20261028/'
 PHYSICAL_SOURCE = 'reports/replicator_trajectory_retry10_20261028/'
 PHYSICAL_STATUSES = ('pending', 'running', 'success', 'failed', 'error')
+CAMERA_RETAKE_DEMOS = 'exports/replicator_u_banana_camera_retakes_20261028/'
+CAMERA_RETAKE_PLAN = 'configs/extensions/replicator/physical_camera_retake_plan_20261028.json'
+CAMERA_RETAKE_TOTAL = 11
 
 
 def trajectory_report_roots(root):
@@ -786,10 +789,124 @@ class Progress:
         counts.update(planned=sum(row['planning_status'] == 'generated' for row in entries), total=len(entries),
                       video_count=sum(row['video_available'] for row in entries), stale=sum(row['stale'] for row in entries),
                       initialization_error=sum(row['initialization_error'] for row in entries))
+        retakes = self.camera_retakes(entries, indexed, source_path)
         return dict(kind='physical_execution', manifest_present=bool(manifest), manifest_valid=manifest_valid,
                     manifest_path=PHYSICAL_DEMOS + 'manifest.json', counts=counts, entries=entries,
                     updated_at=manifest.get('updated_at'), stage=manifest.get('stage', manifest.get('status', 'waiting')),
-                    notice='每景一次物理仿真尝试，成功、失败和错误分别记录；安全及过程避障未单独验收。')
+                    camera_retakes=retakes,
+                    notice='首轮每景一次物理仿真，成功、失败和错误分别记录；相机补录独立展示，不改变首轮成绩。安全及过程避障未单独验收。')
+
+    def camera_retakes(self, first_entries, first_raw, source_path):
+        """Read-only overlay; never promote a retake outcome into first-pass counts."""
+        manifest = self.json(self.root/CAMERA_RETAKE_DEMOS/'manifest.json')
+        empty = dict(total=CAMERA_RETAKE_TOTAL, saved=0, stale=0, entries=[], manifest_present=bool(manifest))
+        if not manifest:
+            return empty
+        first = {row['scene_id']:row for row in first_entries}
+        def require(value, message):
+            if not value:
+                raise ValueError(message)
+        def bound(path, digest):
+            return valid_digest(digest) and path.is_file() and self.file_sha256(path) == digest
+        def retake_path(value):
+            value = str(value)
+            path = self.local(CAMERA_RETAKE_DEMOS+value if value.startswith(('executions/', 'videos/')) else value)
+            path.relative_to(self.root/CAMERA_RETAKE_DEMOS)
+            return path
+        try:
+            plan_path = self.root/CAMERA_RETAKE_PLAN
+            plan = self.json(plan_path); plan_sha = self.file_sha256(plan_path)
+            planned = plan['entries']; rows = manifest['entries']
+            fixed = {sid for sid,row in first.items() if row['task_id'] == 'kitchen_bench_replicator_u_shape_banana_bowl'
+                     and sid.startswith('u_shape_banana_bowl__')}
+            require(plan.get('kind') == 'physical_camera_retake' and plan.get('select_all_retakes_regardless_of_success') is True
+                    and plan.get('physical_attempt_number') == 2 and len(fixed) == CAMERA_RETAKE_TOTAL,
+                    '补录计划不是固定的 11 景相机补录。')
+            require(len(planned) == len(rows) == len(fixed)
+                    and {r['scene_id'] for r in planned} == {r['scene_id'] for r in rows} == fixed,
+                    '补录场景存在缺失、重复或越界。')
+            require(manifest.get('kind') == 'physical_execution'
+                    and self.local(manifest['source_run']) == source_path.parent
+                    and manifest.get('source_progress_sha256') == self.file_sha256(source_path)
+                    and self.local(plan['first_pass_manifest_path']) == self.root/PHYSICAL_DEMOS/'manifest.json',
+                    '补录来源未绑定本机首轮与规划输入。')
+            override_path = self.local(plan['camera_overrides_path'])
+            require(bound(override_path, plan['camera_overrides_sha256']), '补录相机配置 SHA 无效。')
+            override = self.json(override_path)
+            plan_by_scene = {r['scene_id']:r for r in planned}
+        except (ValueError, KeyError, TypeError, OSError) as error:
+            return dict(empty, stale=CAMERA_RETAKE_TOTAL, reason=str(error))
+        checked = []
+        for raw in rows:
+            sid = raw['scene_id']; approved = plan_by_scene[sid]
+            row = dict(scene_id=sid, physical_attempt_number=2, execution_status='pending',
+                stale=False, saved=False, result_url=None, video_url=None, reason='')
+            try:
+                previous = first_raw[sid]; visible = first[sid]
+                require(visible['result_valid'] and visible['video_available'], '首轮结果或视频来源待核。')
+                require(type(raw.get('physical_attempt_number')) is int and raw['physical_attempt_number'] == 2
+                        and self.local(raw['camera_retake_plan_path']) == plan_path
+                        and raw.get('camera_retake_plan_sha256') == plan_sha,
+                        '补录必须绑定固定计划并明确为第 2 次。')
+                for key in ('scene_id','task_id','variant_id','config_sha256','trajectory_sha256'):
+                    require(raw.get(key) == previous.get(key) == approved.get(key), '补录规划身份不一致：'+key)
+                for key in ('config_path','trajectory_path','result_path'):
+                    require(self.local(raw[key]) == self.local(previous[key]), '补录改动了规划输入路径。')
+                require(raw['result_sha256'] == previous['result_sha256'], '补录规划结果 SHA 不一致。')
+                expected_first = dict(result_path=str(self.local(PHYSICAL_DEMOS+previous['execution_result_path']
+                    if previous['execution_result_path'].startswith('executions/') else previous['execution_result_path']).relative_to(self.root)),
+                    result_sha256=previous['execution_result_sha256'], video_path=PHYSICAL_DEMOS+'videos/'+sid+'.mp4',
+                    video_sha256=previous['video_sha256'], execution_status=visible['execution_status'],
+                    task_success=visible['task_success'], executed=visible['executed'], physical_attempt_number=1)
+                require(raw.get('first_pass') == approved.get('first_pass') == expected_first,
+                        '补录未绑定原首轮结果、视频及真实成绩。')
+                status = raw['execution_status']; require(status in PHYSICAL_STATUSES, '未知补录状态。')
+                row['execution_status'] = status
+                if status in ('pending','running'):
+                    checked.append(row); first[sid]['camera_retake'] = row; continue
+                path = retake_path(raw['execution_result_path'])
+                require(path == self.root/CAMERA_RETAKE_DEMOS/'executions'/sid/'result.json'
+                        and bound(path,raw['execution_result_sha256']), '补录实际结果路径或 SHA 无效。')
+                result = self.json(path)
+                require(result.get('kind') == 'physical_execution'
+                        and all(result.get(k) == raw.get(k) for k in ('scene_id','task_id','variant_id','config_sha256',
+                            'trajectory_sha256','planning_status','execution_status','executed','task_success','attempts',
+                            'physical_attempt_number','first_pass','camera_retake_plan_path','camera_retake_plan_sha256')),
+                        '补录结果与清单不一致。')
+                require(type(result.get('attempts')) is int and result['attempts'] == 1
+                        and type(result.get('executed')) is bool and type(result.get('task_success')) is bool
+                        and result['task_success'] is (status=='success')
+                        and (result['executed'] or status=='error'), '补录实际执行标记矛盾。')
+                require(self.local(result['planning_result_path']) == self.local(previous['result_path'])
+                        and result['planning_result_sha256'] == previous['result_sha256']
+                        and self.local(result['config_path']) == self.local(previous['config_path'])
+                        and self.local(result['trajectory_path']) == self.local(previous['trajectory_path']),
+                        '补录实际结果未绑定原始规划输入。')
+                settings = result.get('runtime_settings', {}); locked = approved['locked_execution_settings']
+                require(set(settings) == set(locked)|{'camera_overrides_path','camera_overrides_sha256',
+                        'camera_retake_plan_path','camera_retake_plan_sha256'}
+                        and all(settings[k]==v for k,v in locked.items())
+                        and self.local(settings['camera_overrides_path']) == override_path
+                        and settings['camera_overrides_sha256'] == plan['camera_overrides_sha256']
+                        and self.local(settings['camera_retake_plan_path']) == plan_path
+                        and settings['camera_retake_plan_sha256'] == plan_sha, '补录运行参数超出相机变化范围。')
+                row.update(result_url='/artifact/'+quote(path.relative_to(self.root).as_posix(),safe='/'),
+                           reason=str(result.get('failure_reason') or result.get('error') or ''),
+                           task_success=result['task_success'], executed=result['executed'])
+                if raw.get('video_path') and result.get('video_path'):
+                    video = retake_path(raw['video_path']); camera = result.get('camera_override', {})
+                    require(video == self.root/CAMERA_RETAKE_DEMOS/'videos'/(sid+'.mp4')
+                            and retake_path(result['video_path']) == video
+                            and result.get('video_sha256') == raw.get('video_sha256')
+                            and bound(video,raw['video_sha256'])
+                            and camera.get('sha256') == plan['camera_overrides_sha256']
+                            and camera.get('applied') == override['tasks'][raw['task_id']], '补录视频或实际相机绑定无效。')
+                    row.update(video_url='/artifact/'+quote(video.relative_to(self.root).as_posix(),safe='/'), saved=True)
+            except (ValueError, KeyError, TypeError, OSError) as error:
+                row.update(stale=True, saved=False, result_url=None, video_url=None, reason=str(error))
+            checked.append(row); first[sid]['camera_retake'] = row
+        return dict(empty, entries=checked, saved=sum(row['saved'] for row in checked),
+                    stale=sum(row['stale'] for row in checked), updated_at=manifest.get('updated_at'))
 
     def json(self, path: Path) -> dict:
         try:
@@ -1923,6 +2040,9 @@ class Progress:
 
 
 def allowed_artifact(rel: str) -> bool:
+    if rel.startswith(CAMERA_RETAKE_DEMOS):
+        tail = rel[len(CAMERA_RETAKE_DEMOS):]
+        return bool(re.fullmatch(r'(?:videos/u_shape_banana_bowl__[A-Za-z0-9_-]+\.mp4|executions/u_shape_banana_bowl__[A-Za-z0-9_-]+/result\.json)', tail))
     if rel.startswith(PHYSICAL_DEMOS):
         tail = rel[len(PHYSICAL_DEMOS):]
         return bool(re.fullmatch(r'(?:videos/[A-Za-z0-9_-]+\.mp4|executions/[A-Za-z0-9_-]+/(?:initialization_retry_01/)?result\.json)', tail))
@@ -2051,8 +2171,9 @@ def handler_for(progress: Progress):
                     path = progress.local(rel)
                     if not allowed_artifact(path.relative_to(progress.root).as_posix()):
                         raise ValueError("Not a dashboard artifact")
-                    if path.relative_to(progress.root).as_posix().startswith(PHYSICAL_DEMOS):
-                        valid_urls = {entry.get(key) for entry in progress.physical_execution()['entries']
+                    if path.relative_to(progress.root).as_posix().startswith((PHYSICAL_DEMOS, CAMERA_RETAKE_DEMOS)):
+                        physical = progress.physical_execution()
+                        valid_urls = {entry.get(key) for entry in [*physical['entries'], *physical['camera_retakes']['entries']]
                                       for key in ('video_url', 'result_url')}
                         if '/artifact/' + quote(path.relative_to(progress.root).as_posix(), safe='/') not in valid_urls:
                             raise ValueError('Physical artifact is not bound by a valid result')

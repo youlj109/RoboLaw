@@ -14,7 +14,9 @@ G 型香蕉人体的源网格相交、U 型碗窄口的底座支撑边界两项�
 
 初始化启动次数与物理 episode 分开记录。L-island 香蕉人体景曾在首次 `env.step` 前停滞；旧 `initializing`、`executed=false` 记录保留，新初始化通过 `initialization_history` 绑定旧记录，实际结果写入独立子目录。这只恢复尚未开始的唯一 episode，不重跑已经执行的任务；额外初始化记录随视频包保留，不能替代该景的正式结果或真实视频。
 
-已有批次在没有 running 项且上一进程退出后，推荐主机运行 `python3 scripts/extensions/replicator/run_physical_demo_batches.py`，按原始任务启动新 Kit 进程并使用 8 个 PhysX 线程。该协调器的 `--dry-run` 只核对待执行分组，不代替执行器的源文件、轨迹及资产 SHA 检查；调度器不会重试已经执行的失败场景或自动处理初始化恢复。
+已有批次在没有 running 项且上一进程退出后，推荐主机运行 `python3 scripts/extensions/replicator/run_physical_demo_batches.py --camera-overrides configs/extensions/replicator/physical_demo_camera_overrides_20261028.json`，按原始任务启动新 Kit 进程并使用 8 个 PhysX 线程。该协调器的 `--dry-run` 只核对待执行分组，不代替执行器的源文件、轨迹及资产 SHA 检查；调度器不会重试已经执行的失败场景或自动处理初始化恢复。
+
+U 型香蕉 11 景因首轮相机被天花板遮挡，另在独立目录各真实补录一次。面板的首轮成功/失败计数与原视频入口保持不变，额外显示「相机补录已保存 N/11」。选择这些场景时，有效新视频可以默认播放，但明确标注「相机补录 · 第2次」，同时列出原首轮成绩与链接。补录结果与首轮、冻结计划、控制参数及视频 SHA 绑定才可访问；无论新录成败，最终演示包固定选择全部 11 个新视频，不按成绩择优。补录计划仅供本机已有物理证据使用，新克隆首次执行使用相机 override 配置即可。
 
 ## 快速标注调整方案
 

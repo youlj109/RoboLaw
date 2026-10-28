@@ -2,7 +2,7 @@
 
 截至 2026-10-28，14 个 Replicator 原始任务 × 11 种安全增广变体，共 **154 景已生成完整 cuRobo 轨迹，0 景规划失败**。每条完整轨迹包含预抓取、接近、抬升、转运、下放和撤离六阶段。
 
-这份发布记录的是**规划结果**。真实 PhysX 执行与视频录制已启动，尚未全部完成，每景只执行一次，失败也保留；实际执行结果及录制视频独立保存。本索引没有把规划轨迹、静态截图或轨迹动画计作物理任务成功。实时执行状态见本机 [物理执行面板](http://127.0.0.1:8765/#physicalWorkspace)，安全避障和长期稳定性未单独验收。
+这份发布记录的是**规划结果**。真实 PhysX 执行与视频录制已启动，首轮每景一次，失败也保留；U 型香蕉 11 景因首轮相机遮挡，另获授权各真实补录一次，首轮与补录成绩分开记录。实际执行结果及视频独立保存，不用规划轨迹、静态截图或轨迹动画计作物理任务成功。完成情况以本机 [物理执行面板](http://127.0.0.1:8765/#physicalWorkspace) 为准，安全避障和长期稳定性未单独验收。
 
 ## 完整索引
 
@@ -35,11 +35,11 @@ NPZ 包含实际规划关节序列 `q`、名义 TCP `tcp_world`、阶段 `phase`
 
 Git 保存代码、技能包、配置、索引和说明。`reports/`、大部分运行资产、轨迹及视频按仓库规则不随代码提交。
 
-单独输入包为 `exports/replicator_154_planning_inputs_20261028.zip`，实际大小 **6,032,835 字节（6.03 MB）**，SHA256 为 `241a49441a3d015d7a8703ad0073c7b6ce31f11f9b46cab52d3cc3a1ab7d56f8`。包内共 **792 个文件**：788 个原路径输入文件，共 10,176,831 字节；另有 README、输入 manifest、外部资产 manifest 和 SHA256SUMS 四个元数据文件。
+单独输入包为 `exports/replicator_154_planning_inputs_20261028.zip`，实际大小 **9,740,639 字节（9.74 MB）**，SHA256 为 `32563dc7d829d1131c1541858b11c255318c618fc308ae0b6f21bcca43d631cd`。包内共 **798 个文件**：原 788 个规划输入加 6 个相机证据文件，共 794 个原路径文件、13,894,697 字节；另有 README、输入 manifest、外部资产 manifest 和 SHA256SUMS 四个元数据文件。
 
-788 个输入包括每景的 **配置、R10 结果 JSON、R10 `source_scene.usda`、实际轨迹 NPZ 和轨迹 JSON**（154 × 5 = 770 个），以及 R10 progress、完整最终索引、14 个原任务 YAML、任务 assignment 和一个 1,242 字节的生成站台 USD。**`source_scene.usda` 是执行器 `load_inputs` 的强制输入，不能省略。** 包内不包含大型源资产、完整运行时、网页截图或物理视频；无需恢复各轮全部失败报告。
+原 788 个输入包括每景的 **配置、R10 结果 JSON、R10 `source_scene.usda`、实际轨迹 NPZ 和轨迹 JSON**（154 × 5 = 770 个），以及 R10 progress、完整最终索引、14 个原任务 YAML、任务 assignment 和一个 1,242 字节的生成站台 USD。**`source_scene.usda` 是执行器 `load_inputs` 的强制输入，不能省略。** 另附新相机强制校验的 3 份报告与 3 张 PNG；相机 override 配置从最新 Git 获取。包内不包含大型源资产、完整运行时、全部网页截图或物理视频；无需恢复各轮全部失败报告。
 
-本包已通过 ZIP CRC、每个成员的 SHA 和原路径字节检查。解压后的 154 景均通过真实执行器 `source_entries/load_inputs` 的 CPU 校验；此校验仅把 21 个未打包的直接源资产路径映射到本机已安装资产，仍执行原始 SHA 校验，并未证明单独解压本包即可运行。源资产及其网格、纹理依赖仍需恢复。
+本包已通过 ZIP CRC、每个成员的 SHA 和原路径字节检查。解压后的 154 景均通过真实执行器 `source_entries/load_inputs` 的 CPU 校验，六份相机证据也由 `load_camera_overrides` 校验；相机配置取当前 Git，21 个未打包直接源资产映射到本机已安装资产，原始 SHA 校验保留。这不表示单独解压本包即可运行，源资产及其网格、纹理依赖仍需恢复。另已执行带新相机参数的真实容器 CLI `--dry-run`，154 景通过，未启动物理或规划。
 
 保留原相对路径及文件字节，按索引 SHA 校验。沿用轨迹的 `artifacts.*.path` 可能指向 R1–R9 的原轮次，因此只复制 R10 的目录不能保证证据自包含。不得为了通过校验改写原始结果或忽略缺失文件。视频包应另附逐景视频与真实执行结果的清单和 SHA；本文件不预先承诺该包已录制完成。
 
@@ -70,7 +70,8 @@ Git 保存代码、技能包、配置、索引和说明。`reports/`、大部分
    ```bash
    docker exec -w /workspace -e PYTHONPATH=/workspace arena-kitchen-dev \
      /workspace/.venv-arena/bin/python scripts/extensions/replicator/execute_planned_trajectories.py \
-     --device cpu --physics-threads 8 --dry-run
+     --device cpu --physics-threads 8 \
+     --camera-overrides configs/extensions/replicator/physical_demo_camera_overrides_20261028.json --dry-run
    ```
 
    当前 Arena CLI 默认 headless=true，不支持 `--headless` 参数。此命令已在真实容器 CLI 上验证通过。预期 `cpu_preflight_passed: true`、`scenes: 154`、`physics_launched: false`。此命令在创建 SimulationApp 之前退出，不启动物理、渲染或规划，且严格检查源资产 SHA。
@@ -80,15 +81,19 @@ Git 保存代码、技能包、配置、索引和说明。`reports/`、大部分
    ```bash
    docker exec -w /workspace -e PYTHONPATH=/workspace arena-kitchen-dev \
      /workspace/.venv-arena/bin/python scripts/extensions/replicator/execute_planned_trajectories.py \
-     --device cpu --physics-threads 8 --source-run reports/replicator_trajectory_retry10_20261028 \
+     --device cpu --physics-threads 8 \
+     --camera-overrides configs/extensions/replicator/physical_demo_camera_overrides_20261028.json \
+     --source-run reports/replicator_trajectory_retry10_20261028 \
      --output exports/replicator_154_physical_demos_20261028
    ```
 
    当前本机批次已运行，不要并行重复启动。`--device cpu` 选择 CPU PhysX，实际相机渲染仍需 GPU/RTX。恢复前确认上一进程已经退出且 manifest 没有 running 项。推荐使用主机协调器，每个原始任务启动一个全新 Kit 进程，默认最多 11 景，显式使用 8 个 PhysX 线程：
 
    ```bash
-   python3 scripts/extensions/replicator/run_physical_demo_batches.py --dry-run
-   python3 scripts/extensions/replicator/run_physical_demo_batches.py
+   python3 scripts/extensions/replicator/run_physical_demo_batches.py \
+     --camera-overrides configs/extensions/replicator/physical_demo_camera_overrides_20261028.json --dry-run
+   python3 scripts/extensions/replicator/run_physical_demo_batches.py \
+     --camera-overrides configs/extensions/replicator/physical_demo_camera_overrides_20261028.json
    ```
 
    协调器的 `--dry-run` **只检查调度**，不等于第 3 步执行器的完整输入检查。协调器要求已有物理 manifest，只消费 pending 景，遇到 running、子进程错误或输入变化就停止，不自动重试或停止其他进程。单次手工恢复仍可在第 4 步执行器命令末尾加 `--resume --limit 11`，但手工限额不会自动保证不跨任务。success/failed/error 不重跑，中断的 running 项需要先核查，不能直接交给协调器。代码或参数变化会拒绝普通恢复，核实后才可在执行器上显式加 `--allow-runtime-revision` 记录新版本；协调器不自动提供该授权。包内 README 是输入包发布时的直接执行器示例，当前分任务恢复优先使用这里的命令。
@@ -97,11 +102,26 @@ Git 保存代码、技能包、配置、索引和说明。`reports/`、大部分
 
 154 份真实视频齐全后，可用 `scripts/extensions/replicator/package_trajectory_demos.py` 校验并打包物理 demo。失败执行的视频也保留；缺视频时拒绝完整打包，不用规划动画补齐。
 
+### 相机补录与最终演示包
+
+U 型香蕉首轮 11 景的相机高度在天花板范围内，视频遮挡，因此这 11 景在独立目录 `exports/replicator_u_banana_camera_retakes_20261028/` 各再真实执行一次。补录仅改相机与曝光，锁定原布局、控制参数和轨迹；原首轮 manifest、结果与视频不改。**无论补录成功还是失败，11 景全部固定选新录，不按成绩择优。** 网页上方仍统计首轮，补录另列已保存数量，视频明确标为第 2 次。
+
+首轮 154 景和补录 11 景全部完成后，运行独立发布入口：
+
+```bash
+python3 scripts/extensions/replicator/package_reviewable_physical_demos.py --validate-only
+python3 scripts/extensions/replicator/package_reviewable_physical_demos.py
+```
+
+输出 `exports/replicator_154_physical_video_bundle_20261028/` 及同名 ZIP：主 `videos/` 154 个（143 首轮 + 11 新录），`first_pass_videos/` 保留 11 个原遮挡视频，共 165 个 MP4；154 份原始结果与 154 份所选结果分目录保存。`demo_selection.json` 逐景给出首轮和所选视频/结果的 SHA、实际状态与尝试编号；README 和网页并列首轮成绩与演示集成绩。原 manifest 作为原字节溯源保存，不将其旧视频路径改指新内容。
+
+`physical_camera_retake_plan_20261028.json` 绑定本机已有首轮物理结果与视频 SHA，**新克隆不能凭规划输入包直接使用该补录计划**。新首次执行只使用上方 `--camera-overrides`，避免旧默认相机再次遮挡，不传 `--camera-retake-plan`。
+
 ### 初始化停滞与唯一物理 episode
 
 本批次的 `l_island_banana_bowl__human_default_mpfb` 在首次 `env.step` 前初始化停滞，旧结果仍为 `status=initializing`、`executed=false`；对应进程已停止。它没有开始物理 episode，不计作抓放失败。恢复只针对这次尚未开始的 episode，在新 Kit 进程中显式使用 8 个 PhysX 线程；已进入执行的场景不适用此例外。
 
-原 `executions/<scene_id>/result.json` 保持原字节，后续结果写入 `executions/<scene_id>/initialization_retry_01/result.json`，唯一正式视频仍为 `videos/<scene_id>.mp4`。清单和实际结果的 `initialization_history` 绑定旧初始化记录及 SHA，视频包额外收录这些历史文件。**154 个场景各自最多一个物理 episode，与额外的初始化启动次数分开统计**；历史初始化文件不能替代任何实际执行结果或视频，也不会将初始化停滞改写成成功。
+原 `executions/<scene_id>/result.json` 保持原字节，后续结果写入 `executions/<scene_id>/initialization_retry_01/result.json`，首轮正式视频仍为 `videos/<scene_id>.mp4`。清单和实际结果的 `initialization_history` 绑定旧初始化记录及 SHA，视频包额外收录这些历史文件。**首轮 154 个场景各自一个物理 episode、额外 11 个相机补录 episode，以及未进入执行的初始化启动分别统计**；历史初始化文件不能替代实际执行结果或视频，也不会将初始化停滞改写成成功。
 
 ## 历史重试的使用边界
 

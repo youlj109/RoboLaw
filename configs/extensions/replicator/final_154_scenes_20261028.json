@@ -52,12 +52,16 @@
       "complete_final_index",
       "source_task_yaml",
       "native_task_assignment",
-      "small_generated_robot_stand"
+      "small_generated_robot_stand",
+      "camera_override_source_reports_and_images"
     ],
     "per_scene_input_unique_files": 770,
     "per_scene_input_total_bytes": 8954514,
-    "minimal_execution_input_unique_files": 788,
-    "minimal_execution_input_total_bytes": 10176831,
+    "original_planning_input_unique_files": 788,
+    "additional_camera_evidence_unique_files": 6,
+    "camera_overrides_config_from_git": "configs/extensions/replicator/physical_demo_camera_overrides_20261028.json",
+    "minimal_execution_input_unique_files": 794,
+    "minimal_execution_input_total_bytes": 13894697,
     "package_path": "exports/replicator_154_planning_inputs_20261028.zip",
     "package_metadata_files": [
       "PLANNING_INPUTS_README.md",
@@ -76,7 +80,7 @@
       "referenced meshes/textures and installed simulator runtime"
     ],
     "external_direct_source_asset_files": 21,
-    "note": "执行器强制读取 R10 progress、每景 result/source_scene/config/实际 trajectory NPZ，并校验直接源资产 SHA。包另含轨迹 JSON、完整索引、14 个原任务 YAML、assignment 及 1 个 1242 字节生成站台 USD，共 788 个原路径输入文件；不包含大型源资产、完整 runtime、截图或物理执行结果。源资产及其网格/纹理依赖仍须按原流程恢复。历史各轮的全部失败报告无需恢复，历史 retry 配方不是从零执行入口。"
+    "note": "执行器强制读取 R10 progress、每景 result/source_scene/config/实际 trajectory NPZ，并校验直接源资产 SHA。包含原 788 个规划输入文件，另附新相机所需 3 份报告和 3 张 PNG，共 794 个原路径文件及 4 份包元数据，798 项。相机 override 配置由最新 Git 提供。未包含大型源资产、完整 runtime、全部网页截图或物理执行结果。源资产及其网格/纹理依赖仍须按原流程恢复。历史各轮的全部失败报告无需恢复，历史 retry 配方不是从零执行入口。"
   },
   "source_assets": {
     "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_g_shape_banana_bowl.yaml": {
