@@ -130,13 +130,13 @@ def build_world(baseline: Path, kin: DroidKinematics, variant: str | None, varia
     return world, stage
 
 
-def plan_segment(planner: LimePlanner, world: CollisionWorld, segment: str, q0, target, grip: float, attachment, recorded_method=None):
+def plan_segment(planner: LimePlanner, world: CollisionWorld, segment: str, q0, target, grip: float, attachment, recorded_method=None, recorded_goal=None):
     pick = getattr(world, 'pick_object', 'lime')
-    if segment in ('transfer', 'lift'):
+    if segment in ('transfer', 'lift', 'lower'):
         world.attachment = np.asarray(attachment, dtype=float)
         world.gripper_joint_position = float(grip)
         world.allowed_phase = segment
-        ignore = (pick,)
+        ignore = (pick,world.destination_object) if segment=='lower' else (pick,)
         grip_binary = 1
         phase = segment
     elif segment in ('pregrasp', 'approach'):
@@ -148,7 +148,9 @@ def plan_segment(planner: LimePlanner, world: CollisionWorld, segment: str, q0, 
         phase = segment
     else:
         raise ValueError(segment)
-    if recorded_method == 'cartesian_line_ik':
+    if recorded_goal is not None:
+        path=planner.plan_joint_goal(np.asarray(q0),np.asarray(recorded_goal),ignore,grip_binary,phase=phase)
+    elif recorded_method == 'cartesian_line_ik':
         path = planner.plan_cartesian_line(np.asarray(q0), np.asarray(target), ignore, grip_binary, phase=phase)
     else:
         planning_phase = 'transfer' if recorded_method in ('motion_gen','motion_gen_joint_goal','motion_gen_upper_route') else phase
@@ -205,18 +207,19 @@ def main():
     kin = (LemonKinematics if PICK=='lemon' else DroidKinematics)(base_pose[:3], Rotation.from_quat(base_pose[3:7]).as_euler('xyz', degrees=True)[2])
     finger = result['robot_joint_names'].index('finger_joint')
     attachment = result['planning_attachment_tcp_to_lime']
-    targets = {row['phase']: np.asarray(row['target'], dtype=float) for row in result['plans']}
+    targets = {row['phase']: np.asarray(row['target'], dtype=float) for row in result['plans'] if 'target' in row}
     recorded = None
     if a.recorded_plan_index is not None:
         recorded = result['plans'][a.recorded_plan_index]
         if not recorded.get('executed'): raise ValueError('Selected recorded plan was not executed')
         a.segments = [recorded['phase']]
-        targets = {recorded['phase']: np.asarray(recorded['target'], dtype=float)}
+        effective=kin.fk(np.asarray(recorded['metadata']['goal_q_arm'])) if recorded.get('metadata',{}).get('goal_q_arm') is not None else np.asarray(recorded['target'],dtype=float)
+        targets = {recorded['phase']: effective}
 
     with h5py.File(baseline / 'trajectory.h5') as f:
         phases = f['phase'].asstr()[:]
         starts = {}
-        for segment in ('transfer', 'pregrasp', 'approach', 'lift'):
+        for segment in ('transfer', 'pregrasp', 'approach', 'lift', 'lower'):
             if segment not in a.segments:
                 continue
             i = phase_start_index(phases, segment)
@@ -275,7 +278,7 @@ def main():
         'segment_starts': {
             s: {
                 'q': starts[s]['q'].tolist(),
-                'gripper_joint_position': starts[s]['gripper_joint_position'] if s in ('transfer', 'lift') else 0.0,
+                'gripper_joint_position': starts[s]['gripper_joint_position'] if s in ('transfer', 'lift', 'lower') else 0.0,
                 'frame_index': starts[s]['frame_index'],'active_pick':starts[s]['active_pick'],
             }
             for s in starts
@@ -305,8 +308,8 @@ def main():
                     planner.pose_ik_joint_fallback=bool(search_policy.get('pose_ik_joint_goal_fallback',{}).get('enabled') or result.get('transfer_route_policy',{}).get('pose_ik_joint_goal_fallback'))
                     planner.allow_upper_route_policy=bool(search_policy or result.get('transfer_route_policy',{}).get('mode')=='upper')
                     q0 = st['q']
-                    grip = st['gripper_joint_position'] if segment in ('transfer', 'lift') else 0.0
-                    if result.get('variant','base')!='base':world.planning_gripper_q=st['measured_gripper_q'];world.gripper_joint_position=grip
+                    grip = st['gripper_joint_position'] if segment in ('transfer', 'lift', 'lower') else 0.0
+                    if result.get('variant','base')!='base' or result.get('planning_attachment_policy')=='measured_segment':world.planning_gripper_q=st['measured_gripper_q'];world.gripper_joint_position=grip
                     target = targets[segment]
                     segment_attachment=attachment
                     measured_attachment_policy=(result.get('planning_attachment_policy')=='measured_segment' or bool(result.get('planning_attachment_updates')))
@@ -315,7 +318,7 @@ def main():
                         segment_attachment=np.linalg.inv(kin.fk(q0))@transform(st['active_pick_pose'][:3],st['active_pick_pose'][3:7])
                     run['active_pick']=active_pick
                     run['attachment_source']='measured selected-pick pose at segment start' if measured_attachment_policy else 'recorded close attachment'
-                    planned = plan_segment(planner, world, segment, q0, target, grip, segment_attachment, recorded['metadata']['method'] if recorded else None)
+                    planned = plan_segment(planner, world, segment, q0, target, grip, segment_attachment, recorded['metadata']['method'] if recorded else None, recorded.get('metadata',{}).get('goal_q_arm') if recorded else None)
                     positions = planned.pop('positions')
                     fname = f'{segment}_{variant}_seed{seed}_positions.npy'
                     np.save(out / fname, positions)
@@ -327,7 +330,7 @@ def main():
                         key = HAZARD_KEY[variant]
                         required = world.execution_clearances[key]
                         # true-shape of actual planned path vs hazard
-                        run['true_shape_actual'] = true_shape_path(world, key, positions, grip if segment in ('transfer', 'lift') else 0.0, required)
+                        run['true_shape_actual'] = true_shape_path(world, key, positions, grip if segment in ('transfer', 'lift', 'lower') else 0.0, required)
                         # counterfactual: base path under this hazard geometry
                         base_file = out / f'{segment}_base_seed{seed}_positions.npy'
                         if (seed, segment) in base_positions or base_file.exists():
@@ -335,7 +338,7 @@ def main():
                             if base_path is None:
                                 base_path = np.load(base_file)
                             run['true_shape_counterfactual'] = true_shape_path(
-                                world, key, base_path, grip if segment in ('transfer', 'lift') else 0.0, required
+                                world, key, base_path, grip if segment in ('transfer', 'lift', 'lower') else 0.0, required
                             )
                     del planner
                 except Exception as exc:
