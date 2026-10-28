@@ -17,9 +17,17 @@ checks={'start':world.clearance(q,(spec.pick_object,spec.destination_object),mod
 report={'scope':'Exact saved final state, same landing goal and fresh measured attachment IK. Read-only FCL; no simulation and no acceptance upgrade.','episode':str(p),'result_sha256':hashlib.sha256((p/'result.json').read_bytes()).hexdigest(),'last_action':i,'q_start':q.tolist(),'q_goal':goal.tolist(),'actual_object_pose':pose.tolist(),'tcp_ik_error_m':float(np.linalg.norm(kin.fk(goal)[:3,3]-target[:3,3])),'checks':checks}
 from kitchen_safety.extensions.lightwheel_pick_place.planner import LimePlanner
 review=json.loads(Path('/root/autodl-tmp/B04-review/fresh_base_landing_query_redundancy_20261028.json').read_text())
-selected=next(x for x in review['same_tcp_redundancy_candidates'] if x['valid'])
+candidates=[x for x in review['same_tcp_redundancy_candidates'] if x['valid']]
 planner=LimePlanner(world,kin,dt=r['dt'],seed=r['seed'],max_joint_speed=.4);planner.single_candidate_round=True;planner.certify_execution_margin=True;planner.query_start_q=q.copy()
-path=planner.plan_joint_goal(q,np.array(selected['q']),(spec.pick_object,spec.destination_object),1.,phase='lower')
-checked=planner.validate_path(path['positions'],(spec.pick_object,spec.destination_object),1.,phase='lower')
-report.update(passed=bool(checked['valid']),selected_candidate=selected['index'],validation=checked,positions=np.asarray(path['positions']).tolist(),planning_metadata=path.get('metadata'))
-Path('/root/autodl-tmp/B04-review/fresh_base_landing_plan_proof_20261028.json').write_text(json.dumps(report,indent=2));print('FRESH_SAME_TARGET_PLAN',report['passed'],selected['index'])
+planner._prepare_path_query((spec.pick_object,spec.destination_object),1.,'lower')
+queries=np.asarray([q]+[x['q'] for x in candidates]);report['curobo_start_goal_valid']=planner.motion_gen.ik_solver.check_valid(planner.args.to_device(queries)).detach().cpu().numpy().tolist()
+report.update(passed=False,attempts=[])
+for selected in candidates:
+ try:
+  path=planner.plan_joint_goal(q,np.array(selected['q']),(spec.pick_object,spec.destination_object),1.,phase='lower')
+  checked=planner.validate_path(path['positions'],(spec.pick_object,spec.destination_object),1.,phase='lower')
+  report['attempts'].append({'candidate':selected['index'],'passed':checked['valid']})
+  if checked['valid']:
+   report.update(passed=True,selected_candidate=selected['index'],validation=checked,positions=np.asarray(path['positions']).tolist(),planning_metadata=path.get('metadata'));break
+ except RuntimeError as exc:report['attempts'].append({'candidate':selected['index'],'passed':False,'error':str(exc)})
+Path('/root/autodl-tmp/B04-review/fresh_base_landing_plan_proof_20261028.json').write_text(json.dumps(report,indent=2));print('FRESH_SAME_TARGET_PLAN',report['passed'],report['curobo_start_goal_valid'],report['attempts'])

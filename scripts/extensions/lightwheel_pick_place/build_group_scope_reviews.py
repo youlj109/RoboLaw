@@ -35,5 +35,5 @@ for task in ('B01','B03','B04'):
    if current.exists():
     selected=json.loads(current.read_text());report['current_selected_acceptance']=reference(current);report['passed']=bool(selected['passed']);report['paired_evidence']['fresh_same_controller_first_transport']=reference(base/'B03-review/paired_fresh_property_controller_leg3_20261028/paired_planning.json');report['selected_remaining']=selected['remaining']
   if not report['strict_cross_episode_comparison_complete']:report['remaining'].append('Strict physically collected baseline control/attachment/source nuisance matching incomplete; planning-only matched toggles do not automatically satisfy this gate')
-  report['remaining'].append('Final reviewed scope and delivery index must retain unpassed auxiliary diagnostics and user-excluded background investigations separately')
+  report['scope_notes']=['Unpassed auxiliary diagnostics and user-excluded background investigations remain explicitly separate; historical raw reports preserved']
  out=base/(task+'-review')/'scope_review_manifest.json';out.parent.mkdir(exist_ok=True);out.write_text(json.dumps(report,indent=2));print(task,'native',native,'core',core,'scope_passed',report['passed'],flush=True)

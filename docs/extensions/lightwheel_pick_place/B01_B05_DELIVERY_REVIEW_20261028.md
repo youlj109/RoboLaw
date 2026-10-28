@@ -1,34 +1,20 @@
-# B01—B05 交付核对（2026-10-28，北京时间）
+# B01-B05 delivery state, 2026-10-28
 
-本报告区分真实采集、安全检查、场景与避障证据，以及严格匹配基线验收。不是“全部验收通过”声明。GitHub推送按用户要求留待早晨；lgd提交和bundle保留。
+Authority: the supplied mentor prompt and the current project B-group skill. See ACCEPTANCE_REQUIREMENT_PROVENANCE_20261028.md. Four task types per original environment: original/base plus human/property/robot. Different controllers require separate successful matched physical baselines, not additional task types. Do not push main. Personal branch lgd preserves user changes.
 
-| 任务 | 已完成 | 当前剩余 |
-| --- | --- | --- |
-| B01 青柠入木碗 | 基线及三类原任务成功，原视频齐；当前20261023核心检查、三变体accepted、静置和三seed既有证据通过，任务范围已汇总 | 历史多seed仅按源报告覆盖范围解释，不推断全任务成功率 |
-| B02 架上柠檬到盘 | 既有基线及三类成功，既有task_scope manifest通过 | 用户排除的无关背景调查不扩展；原full_review=false保留 |
-| B03 双香蕉入木碗 | 基线及三类完整初态执行成功；世界/自碰撞通过，单基线反事实有效，批准场景第一运输段三类42/43/44成对规划通过；双方任务物体背景交叉复核通过 | 严格跨实采基线控制参数匹配未通过；robot辅助源支持诊断false保留 |
-| B04 汤勺到盘 | 三类完整初态执行成功，validation/world/self/source/fixed全部通过，视频齐；三类反事实有效，property/robot基准paired与human实际控制条件paired三seed通过；背景交叉复核通过 | 严格匹配物理基线未通过；两次补采在释放时触发勺/台面真实碰撞，不能计成功 |
-| B05 百事入篮 | 既有基线及三类成功，既有task_scope manifest通过 | 原full_review=false与用户排除项保留，不重采 |
+## Current evidence
 
-## 必须保留的限制
+- B01: existing task-scope aggregation passed; retained original data, neutral and tested-seed evidence.
+- B02/B05: existing task-scope manifests passed; original explicit user background exclusions remain in their reports. No new capture performed on already passed tasks.
+- B03: current selected task-scope acceptance passed with no remaining items. Human092630, robot074115 and property082633 each have real native success, full core safety and accepted matched actual-trajectory comparisons. Current common-controller robot/property transfer planning passed seeds42/43/44; human passed primary planning retained. Neutral120s passed under original user scope. Independent video decode passed, current keyframes inspected and all3 trajectory comparison plots exported. Details: B03_CURRENT_ACCEPTANCE_20261028.md. Authoritative source manifest: /root/autodl-tmp/B03-review/current_selected_acceptance_20261028.json; scope_review_manifest.json and current_delivery_inventory.json refreshed.
+- B04: original four task types have genuine native successes and principal safety evidence, but matched successful physical comparisons remain incomplete. This is an actual project requirement. Failed matching captures remain failures, not accepted samples.
 
-- B03第二运输段human/robot三seed未全部通过；第一运输段三类三seed均通过。只能声明所测第一段存在稳定避障必要性，不能声称每个阶段都需要绕行。
-- B04 human旧控制基线paired未全通过；固定实际成功human09的测得起点、目标、携物关系和控制进行开关对照后三seed通过。关障碍路径是规划结果，不能叫作新增物理基线。
-- B03花瓶底与原生岛台的“非支撑相交”已有独立支持语境复核：底部与台面高度仅差约0.061微米。使用原6mm支持分类规则，未挪几何或改阈值。旧false保留；不是PhysX穿透深度证明。
-- 原native、时间上限、真实执行间隙未降低。20mm规划储备与10mm执行门槛分列。
-- 严格跨实采control、attachment匹配false保留，不能用规划paired补成true。
-- 历史B01/B02部分样本没有逐样本collector源码副本，不补造历史文件。原视频、状态/动作、任务结果及现有审计证据保留。基线无新增障碍，因此固定底座—新增障碍检查不适用；原报告错误不伪改成通过。
+## Active B04 repair
 
-## 自动审批阻止的下一步
+Fresh ordinary original-reset collector now reuses the measured-state landing correction and continuous release proven in robot36 without replaying any prefix or restoring intermediate objects. AST regression verifies the extracted landing algorithm is unchanged apart from function scope/ladle guard; fresh controls record calibration/landing/release hashes. Fresh base091300 grasp/lift/transport succeeded but landing joint-goal query failed before correction execution. Exact saved-state geometry shows start safe, selected redundant IK collides with original cabinet. CPU alternate same-TCP IK18 found3 exact-FCL-safe solutions; all3 remain rejected by original cuRobo constraints. No recapture is justified from these alone. A bounded zero-physics probe now checks nearby commanded pre-landing hover heights with the same body orientation and original cuRobo/FCL constraints; native destination and actual margins are unchanged. Log: /root/autodl-tmp/lgd-day-logs/b04_fresh_landing_hover_proof.log. New capture follows only an evidenced improvement, never an identical failed input loop.
 
-拟议方案：从原始初态真实执行已验证的human09抓取/提升前缀，再在无新增障碍时自主规划运输，尝试补一条匹配物理基线。不恢复中途物体状态，不回放危险反事实，也不直接回放已避障的运输轨迹。
+## Data and handoff
 
-该方案尚未执行。自动审批拒绝了修改collect.py及再次启动采集，理由是已有基线失败，新的跨变体前缀方案成本较高、可能改变验收语义，当前授权不足。不得绕过；需要用户明确批准这个具体方案。所有既有成功结果不受影响。
+The existing v2 evidence ZIP and verified historical full Git bundle remain preserved. They predate current B03 closure and do not replace latest small reports. Final supplement/index/bundle verification will follow B04 completion. Whole-group delivery_complete is still false; no claim that all tasks can already be pushed as accepted. The failed-media cleanup released41.69GiB; all37 success raw datasets were checked intact and all result/trajectory/contact/audit/NPZ plus dependency/representative failure evidence retained. Do not overwrite the executed cleanup manifest or rebuild redundant large archives.
 
-## 文件与早晨操作
-
-- 服务器总清单：/root/autodl-tmp/B-group-review/current_delivery_inventory.json。
-- B01/B03/B04：各自review目录的scope_review_manifest.json；B03/B04仍明确passed=false。
-- B02/B05：各自acceptance_manifest.json，保留原排除项。
-- 证据ZIP含选定成功样本的三路原视频、动作/状态HDF5、接触、审计、历史false与paired；大型图像HDF5和场景资产仍在服务器原位置。
-- 早晨除了GitHub认证/推送，还需决定是否授权上述基线方案。现阶段不能说“只剩推送”。
+GitHub push has not been performed. Preserve all pre-existing user modifications and never reset/force-push. Final handoff must identify the exact branch/commits, reproducible commands, source inputs/hashes, selected raw/video paths, validated requirements and any explicit scope exclusions.
