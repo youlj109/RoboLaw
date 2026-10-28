@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-10-25T09:35:52.741590+00:00",
+  "scope": "Generation provenance only; internal rig checks are not visual acceptance. No scene configuration changed and no GPU rendering performed.",
+  "visual_review_status": "not_reviewed",
+  "source_blend": "assets/people/mpfb_corridor/posed.blend",
+  "source_blend_sha256": "7d022d459ebd584592cde705b7bd73cf112e6cfc719e99b8ea3096506ff650ea",
+  "script": "scripts/extensions/controls/repose_human_arm.py",
+  "script_sha256": "5d97165627ff16a6c8c83929572fe078b2ea4da8e51cc643e6394c1972f8045c",
+  "blender_binary": "/home/oem/Code/MyReal2Sim/tools/blender-4.0.2-linux-x64/blender",
+  "blender_version": "4.0.2",
+  "elbow_up": false,
+  "attempts": [
+    {
+      "attempt": 1,
+      "requested_wrist_asset_m": [
+        -0.59115082,
+        0.48153019,
+        0.985
+      ],
+      "status": "generation_failed",
+      "reason": "Original two-bone IK reachability assertion at repose_human_arm.py line 12: abs(l1-l2)<d<l1+l2. No USD exported; output directory was empty."
+    },
+    {
+      "attempt": 2,
+      "requested_wrist_asset_m": [
+        -0.55,
+        0.44,
+        0.985
+      ],
+      "status": "generated",
+      "actual_wrist_asset_m": [
+        -0.5500001311302185,
+        0.4400000274181366,
+        0.98499995470047
+      ],
+      "pose_path": "assets/extensions/replicator/human_visual_low_reach01/pose.json",
+      "pose_sha256": "77e0f0564fdef9d80f00c2281afaded5cd1b856f405f8cb9a13abcb4328fa6db"
+    }
+  ],
+  "exports": [
+    {
+      "path": "assets/extensions/replicator/human_visual_low_reach01/person.usdc",
+      "sha256": "9c4f4d3c0bfc98fc67a851b89360eda5899ac4565210775612d103e8a09dcdb4"
+    },
+    {
+      "path": "assets/extensions/replicator/human_visual_low_reach01/collidable.usda",
+      "sha256": "69b3fb9503e2a25c700881392f48679b55db02ae8336229b51029bb7f7f887c1"
+    }
+  ],
+  "source_or_scene_configs_modified": false,
+  "note": "Blender 4.0.2 emitted newer-blend/EEVEE_NEXT compatibility warnings on load; the script selected BLENDER_EEVEE and completed the USD export. Materials and rendered appearance remain for actual-image review."
+}

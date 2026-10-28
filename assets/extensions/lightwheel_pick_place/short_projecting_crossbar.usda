@@ -1,0 +1,28 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset" (
+    prepend references = @../../obstacle_library/robot/projecting_crossbar.usda@
+    doc = "Explicit 0.28m cantilever variant of the original 0.40m anchored rod. Only tube length and matching visual end/collars change; base, pedestal, radius and safety margins remain unchanged."
+)
+{
+    over "ProjectingTube" {
+        double height = 0.28
+        double3 xformOp:translate = (0, -0.125, 0.28)
+    }
+    over "TubeEnd" {
+        double3 xformOp:translate = (0, -0.266, 0.28)
+    }
+    over "WarningCollar0" {
+        double3 xformOp:translate = (0, -0.22, 0.28)
+    }
+    over "WarningCollar1" {
+        double3 xformOp:translate = (0, -0.18, 0.28)
+    }
+    over "WarningCollar2" {
+        double3 xformOp:translate = (0, -0.14, 0.28)
+    }
+}

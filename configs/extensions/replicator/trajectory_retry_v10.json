@@ -1,0 +1,655 @@
+{
+  "schema_version": 1,
+  "retry_round": 10,
+  "source_run": "reports/replicator_trajectory_retry9_20261028",
+  "previous_recipe": {
+    "path": "configs/extensions/replicator/trajectory_retry_v9.json",
+    "sha256": "3dcfb29393854a038ea89b19e97760c4574ca8b00ec4e6c8756add8851807ba2"
+  },
+  "scene_adjustment_authorization": {
+    "path": "reports/replicator_scene_retry_round10_analysis_20261028/round_authorization.json",
+    "sha256": "1e93d582e249ecd79a7a45acb45f46f6cd39f9616bb05f98c9639fd7483c4b2c"
+  },
+  "policy": "One frozen candidate per previous failure and one cuRobo pass, stopping at the first failed phase. No further tuning or planning within this round.",
+  "counts": {
+    "plan": 2,
+    "annotate_only": 0
+  },
+  "source_analysis": {
+    "reports/replicator_scene_retry_round10_analysis_20261028/wine.json": "aa40d785972152aabb1d5877300081e12d00bf15b07d63267c158d151f165acc",
+    "reports/replicator_scene_retry_round10_analysis_20261028/crossbar.json": "69741e1293dc44d33c2ae988b9c7d92652ed51e59258dabd86335baa1444515f"
+  },
+  "recipes": {
+    "u_shape_mustard_bowl__property_wine_glass": {
+      "scene_id": "u_shape_mustard_bowl__property_wine_glass",
+      "task_id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+      "payload_name": "mustard_bottle",
+      "layout_fixed": true,
+      "config_sha256": "52e9dfa1bbab51f672b5043acf3132738bd455bd0f29185f8028ccfda58c729d",
+      "result_sha256": "2c6835a4b91fa4bc73969c9f9ac5d9c0020463f5639a48066f325c0f8d81c491",
+      "config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_mustard_bowl/property_wine_glass.json",
+      "previous_stage": "retreat",
+      "previous_failure_code": "MotionGenStatus.IK_FAIL",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "jaw_yaw_local_deg": 90.0,
+        "z_local_m": 0.045,
+        "tcp_raise_m": 0.0
+      },
+      "pregrasp_offset_world_m": [
+        0.005820191698788335,
+        -0.03957430187115567,
+        0.1399999999999999
+      ],
+      "lift_offset_world_xy_m": [
+        0.004364999999999952,
+        -0.029681
+      ],
+      "lift_height_m": 0.15248499996960185,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.08685916209677913
+      ],
+      "summary": "R9已保存195个实际前缀采样，前五阶段成功；开爪撤离起点源模型无碰撞。旧目标单次CPU IK可达，但panda_link6原保守球与固定东侧吊柜底板及门底横档相交，酒杯与夹爪端点未检出碰撞。按腕球最高点与相交源网格AABB下沿计算唯一垂直修正，并加10mm余量，只将retreat降低63.141mm，剩余撤离高度86.859mm；朝向、其余五目标、attachment、初/最终瓶位姿及R9布局精确保留。候选先冻结再以R9实际末q单次CPU IK/原模型端点验证，失败也不再调整；下一步最多一次cuRobo。",
+      "retry_round": 10,
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            2.1592563631529966
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            -0.13003180922909272
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.162392885506153
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            2.1534361714542083
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            -0.09045750735793705
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.022392885506153
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            2.1578011714542082
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            -0.12013850735793705
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.174877885475755
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.4226182617406994,
+            4.635817181403019e-17,
+            0.9063077870366499,
+            2.1908811633342866
+          ],
+          [
+            -1.9591809989522123e-17,
+            0.9999999999999999,
+            -7.176310839451344e-17,
+            0.33954249264206293
+          ],
+          [
+            -0.90630778703665,
+            0.0,
+            0.42261826174069933,
+            1.1105358151680869
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.0,
+            4.6358171814030185e-17,
+            0.9999999999999999,
+            2.209871069160121
+          ],
+          [
+            0.0,
+            0.9999999999999999,
+            -7.610650810070512e-17,
+            0.33954249264206293
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0548778854757548
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.0,
+            4.6358171814030185e-17,
+            0.9999999999999999,
+            2.209871069160121
+          ],
+          [
+            0.0,
+            0.9999999999999999,
+            -7.610650810070512e-17,
+            0.33954249264206293
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.141737047572534
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.04499999999999993
+        ],
+        [
+          6.123233995736766e-17,
+          1.0,
+          0.0,
+          -0.0017199456831396148
+        ],
+        [
+          1.0,
+          -6.123233995736766e-17,
+          0.0,
+          0.0002979538172311891
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "grasp_info": {
+        "rule": "Measured bottle-body horizontal section; one fixed yaw",
+        "center_local_m": [
+          -0.0002979538172312255,
+          0.0017199456831396183,
+          0.045
+        ],
+        "section_width_m": 0.03912682204215487,
+        "jaw_yaw_local_deg": 90.0,
+        "source_sha256": "ee5aa3c97b00f0d945af34a514772fe7c276256f455132eb86ebeadfbaf6e7b9",
+        "nominal_only": true,
+        "physical_contacts_verified": false,
+        "target_tcp_world_m": [
+          2.1534361714542083,
+          -0.09045750735793705,
+          1.022392885506153
+        ]
+      },
+      "review_note": "R9已保存195个实际前缀采样，前五阶段成功；开爪撤离起点源模型无碰撞。旧目标单次CPU IK可达，但panda_link6原保守球与固定东侧吊柜底板及门底横档相交，酒杯与夹爪端点未检出碰撞。按腕球最高点与相交源网格AABB下沿计算唯一垂直修正，并加10mm余量，只将retreat降低63.141mm，剩余撤离高度86.859mm；朝向、其余五目标、attachment、初/最终瓶位姿及R9布局精确保留。候选先冻结再以R9实际末q单次CPU IK/原模型端点验证，失败也不再调整；下一步最多一次cuRobo。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry9_20261028/scenes/u_shape_mustard_bowl__property_wine_glass/result.json",
+        "result_sha256": "2c6835a4b91fa4bc73969c9f9ac5d9c0020463f5639a48066f325c0f8d81c491",
+        "config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_mustard_bowl/property_wine_glass.json",
+        "config_sha256": "52e9dfa1bbab51f672b5043acf3132738bd455bd0f29185f8028ccfda58c729d",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v9.json",
+        "previous_recipe_sha256": "3dcfb29393854a038ea89b19e97760c4574ca8b00ec4e6c8756add8851807ba2",
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry9_20261028/scenes/u_shape_mustard_bowl__property_wine_glass/source_scene.usda",
+          "sha256": "5d1e5df9816dfb864dbb1e42a36f0c835c6f2d24307718414fdad98933731d8a"
+        },
+        "partial_npz_path": "reports/replicator_trajectory_retry9_20261028/scenes/u_shape_mustard_bowl__property_wine_glass/partial_trajectory.npz",
+        "partial_npz_sha256": "ec3bfaee5778ce2c35fd591633f86744640a8d1e1a28d2e0df52a53f5a6ff024",
+        "analysis_evidence": {
+          "path": "reports/replicator_scene_retry_round10_analysis_20261028/wine_evidence.json",
+          "sha256": "68534171188209b88e4939b44f324f022d46efb941a2b4ab91a8e82769aa5ed1"
+        },
+        "source_diagnosis": {
+          "path": "reports/replicator_scene_retry_round10_analysis_20261028/wine_diagnosis.json",
+          "sha256": "2c067a1e833f75dcadb2c08e91507d7233abfaf09e7f1bbde266460ae1d4def4"
+        },
+        "candidate": {
+          "path": "reports/replicator_scene_retry_round10_analysis_20261028/wine_candidate.json",
+          "sha256": "a9fb2f7db922c5b3981381486fd13780e66f8671f0cb81edc533da13ea1fb6ba"
+        },
+        "previous_analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard.json",
+          "sha256": "e8582f295605714b1367b9615f1a28bd1b361811a3b0a84e28ba74d67e738fec"
+        },
+        "previous_result_path": "reports/replicator_trajectory_retry9_20261028/scenes/u_shape_mustard_bowl__property_wine_glass/result.json",
+        "previous_result_sha256": "2c6835a4b91fa4bc73969c9f9ac5d9c0020463f5639a48066f325c0f8d81c491",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round10_analysis_20261028/wine.json",
+          "sha256": "aa40d785972152aabb1d5877300081e12d00bf15b07d63267c158d151f165acc"
+        }
+      },
+      "explicit_targets_override_scalar_recipe": true,
+      "preserved_target_phases": [
+        "pregrasp",
+        "approach",
+        "lift",
+        "transfer",
+        "lower"
+      ],
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "action": "plan",
+      "change_description": "R9已保存195个实际前缀采样，前五阶段成功；开爪撤离起点源模型无碰撞。旧目标单次CPU IK可达，但panda_link6原保守球与固定东侧吊柜底板及门底横档相交，酒杯与夹爪端点未检出碰撞。按腕球最高点与相交源网格AABB下沿计算唯一垂直修正，并加10mm余量，只将retreat降低63.141mm，剩余撤离高度86.859mm；朝向、其余五目标、attachment、初/最终瓶位姿及R9布局精确保留。候选先冻结再以R9实际末q单次CPU IK/原模型端点验证，失败也不再调整；下一步最多一次cuRobo。",
+      "target_only": true,
+      "scene_quality_issues": [],
+      "changed_target_phases": [
+        "retreat"
+      ],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": -0.03
+      },
+      "target_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round10_analysis_20261028/wine.json",
+        "sha256": "aa40d785972152aabb1d5877300081e12d00bf15b07d63267c158d151f165acc"
+      }
+    },
+    "u_shape_mustard_bowl__robot_projecting_crossbar": {
+      "scene_id": "u_shape_mustard_bowl__robot_projecting_crossbar",
+      "task_id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+      "payload_name": "mustard_bottle",
+      "layout_fixed": true,
+      "config_sha256": "20cbbcadd22f61ca60604c72062e13053236df31a72ac45d769016cff3b2d4b5",
+      "result_sha256": "101ebaffd11f34799d570cba8f64fb8ae85d47b696fbb9026650cbf37bf86fdf",
+      "config_path": "configs/extensions/replicator/scene_retry_round9_20261028/u_shape_mustard_bowl/robot_projecting_crossbar.json",
+      "previous_stage": "approach",
+      "previous_failure_code": "MotionGenStatus.IK_FAIL",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "jaw_yaw_local_deg": 90.0,
+        "z_local_m": 0.045,
+        "tcp_raise_m": 0.0,
+        "tool_tilt_about_measured_jaw_deg": -27.0
+      },
+      "pregrasp_offset_world_m": [
+        -0.02772960059538443,
+        0.028828271727948995,
+        0.1399999999999999
+      ],
+      "lift_offset_world_xy_m": [
+        -0.020796999999999954,
+        0.021621
+      ],
+      "lift_height_m": 0.15248499996960185,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.1499999999999999
+      ],
+      "summary": "R9实际39点预抓取前缀末q在approach起点清空；原approach目标所选CPU IK分支的掌/腕7球碰横杆ProjectingTube。保持R9布局、原瓶身z=0.045m实测夹持中心及90度夹持轴，只绕该轴向机器人倾腕27度；角度由旧接触球与原横杆AABB加10mm分离裕量解析计算后向外取整一次。pregrasp目标逐项不变，attachment按原物体初态重算，lift/transfer/lower的原携瓶世界位姿和最终瓶子目标保持，retreat沿原位移撤离。只选此方案、一次CPU验证并冻结，遗留问题照实记录，不换候选；随后仅一次cuRobo。",
+      "retry_round": 10,
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            2.125706570858824
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            -0.06162923562998805
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.162392885506153
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.45399049973954675,
+            6.123233995736766e-17,
+            0.8910065241883678,
+            2.1534361714542083
+          ],
+          [
+            -2.779890061746715e-17,
+            1.0,
+            -5.4558414393334676e-17,
+            -0.09045750735793705
+          ],
+          [
+            -0.8910065241883678,
+            6.162975822039155e-33,
+            0.45399049973954675,
+            1.022392885506153
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.4539904997395468,
+            6.123233995736766e-17,
+            0.8910065241883679,
+            2.1326391714542083
+          ],
+          [
+            -2.779890061746716e-17,
+            1.0,
+            -5.4558414393334676e-17,
+            -0.06883650735793705
+          ],
+          [
+            -0.8910065241883679,
+            1.0982503331704113e-32,
+            0.4539904997395468,
+            1.174877885475755
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.45399049973954675,
+            7.610650810070511e-17,
+            0.8910065241883678,
+            2.209871069160121
+          ],
+          [
+            -2.104616958886333e-17,
+            0.9999999999999999,
+            -4.13054335357462e-17,
+            0.33954249264206293
+          ],
+          [
+            -0.8910065241883679,
+            1.0982503331704113e-32,
+            0.4539904997395468,
+            1.174877885475755
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.45399049973954675,
+            7.610650810070511e-17,
+            0.8910065241883678,
+            2.209871069160121
+          ],
+          [
+            -2.104616958886333e-17,
+            0.9999999999999999,
+            -4.13054335357462e-17,
+            0.33954249264206293
+          ],
+          [
+            -0.8910065241883679,
+            1.0982503331704113e-32,
+            0.4539904997395468,
+            1.0548778854757548
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.45399049973954675,
+            7.610650810070511e-17,
+            0.8910065241883678,
+            2.209871069160121
+          ],
+          [
+            -2.104616958886333e-17,
+            0.9999999999999999,
+            -4.13054335357462e-17,
+            0.33954249264206293
+          ],
+          [
+            -0.8910065241883679,
+            1.0982503331704113e-32,
+            0.4539904997395468,
+            1.2048778854757547
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.45399049973954675,
+          -2.779890061746715e-17,
+          -0.8910065241883679,
+          0.040230561790860556
+        ],
+        [
+          6.123233995736766e-17,
+          1.0,
+          8.969379724168048e-33,
+          -0.0017199456831396148
+        ],
+        [
+          0.8910065241883679,
+          -5.4558414393334676e-17,
+          0.4539904997395468,
+          -0.020164093693219698
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "grasp_info": {
+        "rule": "Measured bottle-body section and closing axis retained; wrist tilted about that axis toward robot",
+        "center_local_m": [
+          -0.0002979538172312255,
+          0.0017199456831396183,
+          0.045
+        ],
+        "section_width_m": 0.03912682204215487,
+        "jaw_yaw_local_deg": 90.0,
+        "z_local_m": 0.045,
+        "tcp_raise_m": 0.0,
+        "tool_tilt_about_measured_jaw_deg": -27.0,
+        "closing_axis_unchanged": true,
+        "source_sha256": "ee5aa3c97b00f0d945af34a514772fe7c276256f455132eb86ebeadfbaf6e7b9",
+        "nominal_only": true,
+        "physical_contacts_verified": false,
+        "target_tcp_world_m": [
+          2.1534361714542083,
+          -0.09045750735793705,
+          1.022392885506153
+        ]
+      },
+      "review_note": "R9实际39点预抓取前缀末q在approach起点清空；原approach目标所选CPU IK分支的掌/腕7球碰横杆ProjectingTube。保持R9布局、原瓶身z=0.045m实测夹持中心及90度夹持轴，只绕该轴向机器人倾腕27度；角度由旧接触球与原横杆AABB加10mm分离裕量解析计算后向外取整一次。pregrasp目标逐项不变，attachment按原物体初态重算，lift/transfer/lower的原携瓶世界位姿和最终瓶子目标保持，retreat沿原位移撤离。只选此方案、一次CPU验证并冻结，遗留问题照实记录，不换候选；随后仅一次cuRobo。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry9_20261028/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+        "result_sha256": "101ebaffd11f34799d570cba8f64fb8ae85d47b696fbb9026650cbf37bf86fdf",
+        "config_sha256": "20cbbcadd22f61ca60604c72062e13053236df31a72ac45d769016cff3b2d4b5",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v9.json",
+        "previous_recipe_sha256": "3dcfb29393854a038ea89b19e97760c4574ca8b00ec4e6c8756add8851807ba2",
+        "source_ancestor_chain": [
+          {
+            "path": "reports/replicator_trajectory_retry6_20261026/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+            "sha256": "9896e2c76a0df82ab1dcf765f3ba2fee72fdb8f8c360cc3e7cca81509ce81254",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry5_20261026/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+            "sha256": "39fd0684963d790c763b9381534965c1d8bf5b6013d0c9ee8b46db06c115eb4f",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry4_20261026/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+            "sha256": "48d275e37f465bc4ba7778ff0c66ecec968c2730ca10c8078adb26c4efd704b7",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry3_20261026/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+            "sha256": "4c3edf414a65613c862dfd4d3a8a3921ac6b37256572a4355758a347a0cae7fd",
+            "stage": "retry_worker"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+            "sha256": "71740b8b3c86211afe3658a9825bc349241f73783461c270915f7340ebcd5264",
+            "stage": "pregrasp"
+          }
+        ],
+        "previous_result_path": "reports/replicator_trajectory_retry9_20261028/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+        "previous_result_sha256": "101ebaffd11f34799d570cba8f64fb8ae85d47b696fbb9026650cbf37bf86fdf",
+        "config_path": "configs/extensions/replicator/scene_retry_round9_20261028/u_shape_mustard_bowl/robot_projecting_crossbar.json",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round10_analysis_20261028/crossbar.json",
+          "sha256": "69741e1293dc44d33c2ae988b9c7d92652ed51e59258dabd86335baa1444515f"
+        },
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry9_20261028/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/source_scene.usda",
+          "sha256": "f6c5c353ea3e7a329151995fcad522239b6dbc23549dac32d9dab69f80783114"
+        },
+        "scene_change_analysis": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard.json",
+          "sha256": "e8582f295605714b1367b9615f1a28bd1b361811a3b0a84e28ba74d67e738fec"
+        },
+        "historical_analysis": {
+          "path": "reports/replicator_trajectory_retry7_analysis_20261026/annotations_revalidation.json",
+          "sha256": "d5234eea8262daf83a788a664843c228f2fe5d59300360a2747e83d19af5df6a"
+        },
+        "analysis_evidence": {
+          "path": "reports/replicator_scene_retry_round10_analysis_20261028/crossbar_evidence.json",
+          "sha256": "81933c9c29ffe7e6e99c3265eb5149ac8e2a365eb99bfdd9c9fe97324e6e6a70"
+        },
+        "partial_npz_path": "reports/replicator_trajectory_retry9_20261028/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/partial_trajectory.npz",
+        "partial_npz_sha256": "2fefac77f610cf097e86bf12939fcec0e24d4ddf5f627f7ecd157a3e36c6ec00",
+        "previous_analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard.json",
+          "sha256": "e8582f295605714b1367b9615f1a28bd1b361811a3b0a84e28ba74d67e738fec"
+        }
+      },
+      "explicit_targets_override_scalar_recipe": true,
+      "preserved_target_phases": [
+        "pregrasp"
+      ],
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "action": "plan",
+      "change_description": "R9实际39点预抓取前缀末q在approach起点清空；原approach目标所选CPU IK分支的掌/腕7球碰横杆ProjectingTube。保持R9布局、原瓶身z=0.045m实测夹持中心及90度夹持轴，只绕该轴向机器人倾腕27度；角度由旧接触球与原横杆AABB加10mm分离裕量解析计算后向外取整一次。pregrasp目标逐项不变，attachment按原物体初态重算，lift/transfer/lower的原携瓶世界位姿和最终瓶子目标保持，retreat沿原位移撤离。只选此方案、一次CPU验证并冻结，遗留问题照实记录，不换候选；随后仅一次cuRobo。",
+      "target_only": true,
+      "scene_quality_issues": [],
+      "changed_target_phases": [
+        "approach",
+        "lift",
+        "transfer",
+        "lower",
+        "retreat"
+      ],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": -0.03
+      },
+      "scene_change": false,
+      "target_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round10_analysis_20261028/crossbar.json",
+        "sha256": "69741e1293dc44d33c2ae988b9c7d92652ed51e59258dabd86335baa1444515f"
+      }
+    }
+  },
+  "scene_adjustment_count": 0,
+  "target_only_retry_count": 2,
+  "scene_settings_changed_once": false,
+  "layout_fixed": true
+}

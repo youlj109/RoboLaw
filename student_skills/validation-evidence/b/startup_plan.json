@@ -1,0 +1,524 @@
+{
+  "schema_version": 1,
+  "student": "B",
+  "group": "lightwheel-pick-place",
+  "skill_path": "/home/oem/Code/RoboLaw/student_skills/robolaw-lightwheel-pick-place/SKILL.md",
+  "task_count": 5,
+  "task_ids": [
+    "kitchen_bench_lightwheel_pick_lemon_shelf_on_plate_u_shaped_with_island_farmhouse2",
+    "kitchen_bench_lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2",
+    "kitchen_bench_lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian",
+    "kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian",
+    "kitchen_bench_lightwheel_place_pepsi_in_basket_u_shaped_with_island_farmhouse2"
+  ],
+  "implementation_order": [
+    "kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian",
+    "kitchen_bench_lightwheel_place_pepsi_in_basket_u_shaped_with_island_farmhouse2",
+    "kitchen_bench_lightwheel_pick_lemon_shelf_on_plate_u_shaped_with_island_farmhouse2",
+    "kitchen_bench_lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2",
+    "kitchen_bench_lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian"
+  ],
+  "branch_expected": "ylj-lightwheel-pick-place",
+  "branch_actual": "ylj",
+  "branch_changed": false,
+  "commit_actual": "cce14d656a2a449e3f04846748025c80adfbc829",
+  "owned_paths": [
+    "kitchen_safety/extensions/lightwheel_pick_place/",
+    "configs/extensions/lightwheel_pick_place/",
+    "scripts/extensions/lightwheel_pick_place/",
+    "tests/extensions/lightwheel_pick_place/",
+    "assets/extensions/lightwheel_pick_place/",
+    "docs/extensions/lightwheel_pick_place/"
+  ],
+  "owned_path_exists": {
+    "kitchen_safety/extensions/lightwheel_pick_place/": false,
+    "configs/extensions/lightwheel_pick_place/": false,
+    "scripts/extensions/lightwheel_pick_place/": false,
+    "tests/extensions/lightwheel_pick_place/": false,
+    "assets/extensions/lightwheel_pick_place/": false,
+    "docs/extensions/lightwheel_pick_place/": false
+  },
+  "constraints": {
+    "write_root": "/tmp/robolaw-skill-test-b",
+    "repository_write_allowed": false,
+    "network_allowed": false,
+    "gpu_allowed": false,
+    "branch_switch_allowed": false,
+    "other_student_code_required": false
+  },
+  "first_task_manifest": "/tmp/robolaw-skill-test-b/first-task-manifest-v2.json",
+  "full_yaml_review": "/tmp/robolaw-skill-test-b/source-task-review.json",
+  "actual_commands": [
+    {
+      "command": "python3 student_skills/robolaw-lightwheel-pick-place/scripts/preflight.py --repo /home/oem/Code/RoboLaw --report /tmp/robolaw-skill-test-b/preflight-all.json",
+      "exit_code": 0,
+      "result": "static_pass: 5 YAML hashes and IDs verified"
+    },
+    {
+      "command": "python3 student_skills/robolaw-lightwheel-pick-place/scripts/preflight.py --repo /home/oem/Code/RoboLaw --task kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian --report /tmp/robolaw-skill-test-b/preflight-first.json --emit-skeleton /tmp/robolaw-skill-test-b/first-task-manifest.json",
+      "exit_code": 0,
+      "result": "首任务 planning_only manifest 已生成；原命令重跑需选择新的 skeleton 文件名"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/restore_downloaded_assets.py --source official --verify-only > /tmp/robolaw-skill-test-b/original-nvidia-assets.json",
+      "exit_code": 0,
+      "result": "13 files verified; no network or repository writes"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/restore_modelscope_assets.py --verify-only > /tmp/robolaw-skill-test-b/original-modelscope-assets.txt",
+      "exit_code": 0,
+      "result": "56 files SHA-256 verified; no network or repository writes"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/check_scene_assets.py --require-restored > /tmp/robolaw-skill-test-b/original-scene-assets.json",
+      "exit_code": 0,
+      "result": "11 published original scene entries checked; missing_files=[]"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 student_skills/robolaw-lightwheel-pick-place/scripts/preflight.py --repo /home/oem/Code/RoboLaw --task not_assigned > /tmp/robolaw-skill-test-b/out-of-scope-preflight.stdout.txt 2> /tmp/robolaw-skill-test-b/out-of-scope-preflight.stderr.txt",
+      "exit_code": 2,
+      "result": "Expected rejection of task outside B assignment"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /tmp/robolaw-skill-test-b/prepare_startup_plan.py",
+      "exit_code": 0,
+      "result": "五任务配置字段对照、首任务关系断言、10个必读模块 AST 语法解析、报告生成通过"
+    },
+    {
+      "command": "python3 student_skills/robolaw-lightwheel-pick-place/scripts/preflight.py --repo /home/oem/Code/RoboLaw --task kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian --report /tmp/robolaw-skill-test-b/preflight-first-v2.json --emit-skeleton /tmp/robolaw-skill-test-b/first-task-manifest-v2.json",
+      "exit_code": 0,
+      "result": "使用导师刚更新的assignment复测通过；生成manifest relations与真实YAML逐项一致"
+    }
+  ],
+  "source_configuration": {
+    "first_task": {
+      "env_name": "kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian",
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_l_shaped_scandinavian",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "objects": [
+        {
+          "id": "lime",
+          "registry_name": "lime01_fruits_veggies_robolab",
+          "params": {}
+        },
+        {
+          "id": "wooden_bowl",
+          "registry_name": "wooden_bowl_hot3d_robolab",
+          "params": {}
+        },
+        {
+          "id": "broccoli",
+          "registry_name": "broccoli",
+          "params": {}
+        },
+        {
+          "id": "sweet_potato",
+          "registry_name": "sweet_potato",
+          "params": {}
+        },
+        {
+          "id": "red_bell_pepper",
+          "registry_name": "red_bell_pepper_objaverse_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "counter_top",
+          "parent_id": "kitchen",
+          "prim_path": "counter_main_main_group/top_geometry_right",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "counter_top",
+          "params": {
+            "side": "negative_y"
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "lime",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "wooden_bowl",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "broccoli",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "sweet_potato",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "red_bell_pepper",
+          "reference": "counter_top",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Pick up the lime from the counter top and place it into the wooden bowl.",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "lime",
+              "destination_location": "wooden_bowl",
+              "background_scene": "kitchen",
+              "destination_object": "wooden_bowl"
+            }
+          }
+        ]
+      }
+    },
+    "robot_world_pose": "由原关系求解及reset确定；不沿用旧layout的绝对坐标",
+    "camera_source": "third_party/IsaacLab-Arena/isaaclab_arena/embodiments/droid/droid.py:568",
+    "cameras": [
+      "external_camera",
+      "external_camera_2",
+      "wrist_camera"
+    ],
+    "camera_resolution": [
+      1280,
+      720
+    ],
+    "success_predicate": {
+      "source": "third_party/IsaacLab-Arena/isaaclab_arena/tasks/pick_and_place_task.py:149",
+      "sequence": [
+        "objects_settled(lime)",
+        "object_is_above_height(lime,use_settled_state=True,distance=0.01), actual comparison >",
+        "object_on_destination(lime,wooden_bowl)"
+      ],
+      "force_threshold_N": 0.1,
+      "linear_speed_strictly_below_m_s": 0.003,
+      "support_cone_half_angle_rad": "pi/4",
+      "placement_consecutive_steps": 1,
+      "additional_geometry": "spawned bounds center within destination footprint and above bottom; filtered upward contact required",
+      "failure": "object root below background.object_min_z",
+      "not_validated_in_physics": true
+    }
+  },
+  "existing_gaps": [
+    {
+      "id": "assets",
+      "evidence": "first-task-asset-review.json",
+      "finding": "首任务厨房及5物品未由原发布包清单覆盖，仓库未发现匹配文件名；外部缓存未知。",
+      "action": "在 assets/extensions/lightwheel_pick_place/ 增加来源/许可/递归引用/哈希清单和恢复脚本；按原registry解析，禁止虚构URL。"
+    },
+    {
+      "id": "environment",
+      "evidence": [
+        "kitchen_safety/environment.py:47",
+        "kitchen_safety/environment.py:55",
+        "kitchen_safety/environment.py:77",
+        "kitchen_safety/environment.py:102"
+      ],
+      "finding": "公共环境固定 one-wall USD、mustard/bowl、layout机器人位姿；会遗漏首任务3个干扰物。",
+      "action": "本组基于原YAML工厂/关系求解建场景，保留所有5物品、支座0.8m、negative_y及1.57rad关系、原reset及相机；局部资产路径解析，禁止复制全局monkeypatch。"
+    },
+    {
+      "id": "world_crop",
+      "evidence": [
+        "kitchen_safety/collision_planner.py:109"
+      ],
+      "finding": "碰撞几何仍裁剪 [1,-1.5,.7]..[3.5,.5,2.5]。",
+      "action": "本组完整有效工作区读取，CPU合成USD测试裁剪外碰撞物、隐藏/guide碰撞、实测位姿同步；用实际基座和运动/携带扫掠范围验证覆盖。"
+    },
+    {
+      "id": "carried_shape",
+      "evidence": [
+        "kitchen_safety/collision_planner.py:349",
+        "kitchen_safety/curobo_backend.py:249",
+        "kitchen_safety/curobo_backend.py:267"
+      ],
+      "finding": "FCL携带物固定 .050x.066x.162m瓶盒，cuRobo固定瓶球模型与缺省0.38rad夹爪。",
+      "action": "青柠真实mesh派生保守碰撞包络和球覆盖；使用实测夹爪角与TCP附着变换，仅规划层attachment，不物理绑物体。"
+    },
+    {
+      "id": "grasp_and_release",
+      "evidence": [
+        "kitchen_safety/grasp_geometry.py:62",
+        "kitchen_safety/grasp_contacts.py:26",
+        "kitchen_safety/grasp_contacts.py:137",
+        "kitchen_safety/placement_planner.py:194"
+      ],
+      "finding": "瓶身90%/70%截面阈值、mustard接触过滤和bowl阶段/支撑假设不适合通用目标。",
+      "action": "青柠握持区域及木碗实际内壁/底部支撑几何；逐阶段允许接触对，只排除必要接触，不禁用整个目标碰撞。其余香蕉/汤勺/盘子独立适配。"
+    },
+    {
+      "id": "collector",
+      "evidence": [
+        "scripts/collect_kitchen.py:259",
+        "scripts/collect_kitchen.py:1162"
+      ],
+      "finding": "状态、附着和成功阈值固定mustard/bowl；现无B组入口或配置。",
+      "action": "独立CLI实现list/dry-run/seed/output/accepted-count/max-attempts/resume；记录5物品及障碍实测状态、7关节+1夹爪动作语义、哈希和退出码。"
+    },
+    {
+      "id": "validator_audit",
+      "evidence": [
+        "scripts/validate_collection.py:50",
+        "scripts/audit_collection_clearance.py:30",
+        "scripts/audit_collection_clearance.py:73",
+        "scripts/audit_collection_clearance.py:104"
+      ],
+      "finding": "RGB/动作对齐可复用；audit强制mustard字段且HAZARDS无base，无障碍首条不能直接调用旧audit。",
+      "action": "B组任务/无障碍baseline审计：原predicate+全场景碰撞、携带物/夹爪/允许接触、三路RGB对齐与全解码；不能把无新增hazard视为无需安全检查。"
+    },
+    {
+      "id": "runtime",
+      "evidence": [
+        "scripts/arena_python.sh:3",
+        "scripts/check_runtime.py:41",
+        "runtime-static.json"
+      ],
+      "finding": "默认容器arena-kitchen-dev和/workspace可能共享；check_runtime会查询CUDA并写仓库reports，故本测试未运行。",
+      "action": "只在GPU空闲或自有设备且明确本组挂载后运行；不结束训练。先新增只读metadata CPU模式和输出可指定的运行时检查。"
+    },
+    {
+      "id": "missing_backends",
+      "evidence": [
+        "scripts/collect_obstacle_library.py:56",
+        "preflight-all.json"
+      ],
+      "finding": "只开放single；parallel_collection.py与collect_kitchen_sequence.py均缺失。",
+      "action": "首轮单环境，不用num-envs、persistent入口冒充并行；本组不依赖其他学生。"
+    }
+  ],
+  "next_implementation_and_validation": [
+    {
+      "order": 1,
+      "type": "CPU implementation after write restriction lifted",
+      "paths": [
+        "assets/extensions/lightwheel_pick_place/",
+        "configs/extensions/lightwheel_pick_place/"
+      ],
+      "work": "把首任务完整YAML关系及资产来源映射写本组配置，提供离线解析和缺失报告；实际下载需另一个允许网络步骤。",
+      "validation": "所有源对象和relations不丢失；source/config hash稳定；资产引用闭包无缺失、原始scale保留。"
+    },
+    {
+      "order": 2,
+      "type": "CPU implementation after write restriction lifted",
+      "paths": [
+        "kitchen_safety/extensions/lightwheel_pick_place/",
+        "tests/extensions/lightwheel_pick_place/"
+      ],
+      "work": "实现环境/碰撞/携带物/抓放/validator局部适配。",
+      "validation": "越界场景碰撞、基座变换、动态物体同步、缺失证据拒收、原predicate阈值不放宽、三路相机元数据/状态链断裂拒收。"
+    },
+    {
+      "order": 3,
+      "type": "CPU CLI implementation after write restriction lifted",
+      "paths": [
+        "scripts/extensions/lightwheel_pick_place/",
+        "docs/extensions/lightwheel_pick_place/"
+      ],
+      "work": "创建本组入口，先验证--help、list、dry-run、无GPU导入与resume/配额/失败分类。",
+      "validation": "下列拟定命令仅在CLI实现并实际--help/dry-run通过后才可执行；当前不存在可采首任务的现成命令。"
+    },
+    {
+      "order": 4,
+      "type": "GPU deferred",
+      "work": "资源空闲后核对ARENA_CONTAINER与挂载、版本、全部资产闭包；首任务无新增障碍1条，执行原reset→settle→物理抓握→lift→transfer→支撑释放→retreat。",
+      "validation": "result、validation、audit和退出码均保存；三路预览人工查看，原任务/物理安全/数据完整性分别通过。"
+    }
+  ],
+  "first_real_collection_plan": {
+    "exists_now": false,
+    "executable_now": false,
+    "help_verified": false,
+    "dry_run_verified": false,
+    "note": "以下是本组将实现的CLI接口契约，不是仓库已有能力；无GPU准备完成并不等于可真实采集。",
+    "commands_after_implementation": [
+      "python3 scripts/extensions/lightwheel_pick_place/collect.py --help",
+      "python3 scripts/extensions/lightwheel_pick_place/collect.py --list-tasks",
+      "python3 scripts/extensions/lightwheel_pick_place/collect.py --task kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian --variant base --seed 0 --accepted-count 1 --max-attempts 10 --output datasets/lightwheel_pick_place/lime_base_seed0 --dry-run",
+      "ARENA_CONTAINER=arena-lightwheel-pick-place-dev bash scripts/arena_python.sh scripts/extensions/lightwheel_pick_place/collect.py --task kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian --variant base --seed 0 --accepted-count 1 --max-attempts 10 --output datasets/lightwheel_pick_place/lime_base_seed0 --record-rgb",
+      "python3 scripts/extensions/lightwheel_pick_place/validate.py datasets/lightwheel_pick_place/lime_base_seed0 --require-rgb --report reports/lightwheel_pick_place/lime_base_validation.json",
+      "python3 scripts/extensions/lightwheel_pick_place/audit.py datasets/lightwheel_pick_place/lime_base_seed0 --report reports/lightwheel_pick_place/lime_base_audit.json"
+    ],
+    "container_name_is_proposed": true,
+    "required_gates": [
+      "不占用现有训练GPU，或使用独立设备",
+      "完成入口实现及--help/dry-run实际验证",
+      "确认本组容器/workspace挂载与依赖",
+      "完整资产恢复和引用闭包已验证",
+      "CPU碰撞/抓取/验证器测试通过"
+    ],
+    "first_baseline": {
+      "accepted_successes": 1,
+      "max_attempts_per_configuration": 10,
+      "seed": 0,
+      "new_obstacles": 0,
+      "stop_after_same_failure_count": 3,
+      "preserve_failures": true,
+      "physical_collection_verified": false
+    },
+    "then_representatives": {
+      "variants": [
+        "property_vase",
+        "robot_projecting_crossbar",
+        "human_default_mpfb"
+      ],
+      "accepted_per_variant": 3,
+      "fixed_seed": 0,
+      "randomized_seeds": [
+        1,
+        2
+      ],
+      "require_recorded_distinct_geometry_or_appearance": true,
+      "seed_only_is_not_randomization": true
+    },
+    "full_group": {
+      "environments": 5,
+      "candidate_safety_variants": 11,
+      "coverage_rows_if_full_cross_product": 55,
+      "coverage_status_initial": "unverified",
+      "inapplicable_requires_geometry_reason": true,
+      "no_200_episode_batch": true
+    }
+  },
+  "verified_results": {
+    "assignment_5_yaml_id_hash": true,
+    "assignment_semantic_fields_match_yaml": true,
+    "first_robot_and_support_relations": true,
+    "original_assets_56_sha256": true,
+    "original_nvidia_assets_13_sha256": true,
+    "original_11_scene_entry_presence": true,
+    "required_python_sources_syntax_only": true,
+    "out_of_scope_task_rejected": true,
+    "first_manifest_planning_only": true,
+    "latest_manifest_preserves_source_relations": true
+  },
+  "unverified_results": [
+    "本组源码实现",
+    "新增任务资产闭包",
+    "容器挂载与完整运行时",
+    "CUDA及cuRobo执行",
+    "物理抓握/成功/接触和间隙",
+    "三路RGB实际采集及轨迹对齐",
+    "随机化安全增广",
+    "200条批量成功数与吞吐"
+  ],
+  "skill_assessment": {
+    "skill_prevents_cpu_progress": false,
+    "can_implement_independently_of_other_students": true,
+    "cannot_collect_yet_due_to": [
+      "本次显式禁止GPU、仓库写入、切分支和下载",
+      "B组执行入口/环境/安全验证尚未实现",
+      "目标资产闭包、运行时未验证"
+    ],
+    "misleading_claims_found": [
+      {
+        "severity": "medium",
+        "location": "SKILL.md 首次执行 + preflight.py",
+        "issue": "“清单与固定源码一致”容易被理解成整个上游源码都已验证；实际只校验任务YAML哈希、环境ID、dependency_mirrors中revision字符串和少数文件存在。",
+        "revision": "改称“任务YAML与分配清单一致”，或增加实际Arena源码/关键predicate文件哈希核验。"
+      },
+      {
+        "severity": "low",
+        "location": "SKILL.md 首次执行",
+        "issue": "生成首任务manifest的--task/--report/--emit-skeleton接口仅在脚本help，正文无示例。",
+        "revision": "给首任务可复制命令并说明输出是规划manifest，重跑需新文件名。"
+      },
+      {
+        "severity": "low",
+        "location": "scripts/preflight.py --emit-skeleton",
+        "issue": "使用open(x)避免覆盖值得保留，但重复路径直接FileExistsError堆栈，且先写report再失败。",
+        "revision": "在写report前检查目标是否已存在，给简明错误或显式--overwrite选项；不静默覆盖。"
+      },
+      {
+        "severity": "medium",
+        "location": "references/workflow.md 执行与验收",
+        "issue": "要求首条无新增障碍同时保存audit；原audit不支持base，隐含实现工作未明确写出。",
+        "revision": "注明B组audit必须支持base全场景安全检查，不能直接调用旧hazard-only audit。"
+      },
+      {
+        "severity": "low",
+        "location": "references/workflow.md 开始工作/README runtime route",
+        "issue": "README的check_runtime会查询CUDA并写reports，CPU预检阶段不能直接调用它。",
+        "revision": "给只读CPU元数据检查路径，明确GPU占用时跳过CUDA/Kit检查并记录未验证。"
+      }
+    ],
+    "no_false_ready_conclusion": true,
+    "strengths": [
+      "5任务和分支owned_paths明确；不依赖其他学生",
+      "明确静态预检不代表仿真通过",
+      "明确缺失并行入口以及瓶碗硬编码",
+      "小样本、真实predicate、失败保留、随机化证据和no-GPU边界明确"
+    ],
+    "test_limitations": [
+      "未实际修改或新增B组实现，因此开发端到端可行性未实证",
+      "未调用资产SDK以避免潜在下载",
+      "未运行仿真、GPU、物理接触或相机采集"
+    ],
+    "resolved_during_test": [
+      "导师补充assignment relations；最新first-task-manifest-v2.json已实测保留完整源relations"
+    ]
+  },
+  "repository_status_before": "?? student_skills/",
+  "repository_status_after": "?? student_skills/",
+  "gpu_started": false,
+  "physical_collection_verified": false
+}

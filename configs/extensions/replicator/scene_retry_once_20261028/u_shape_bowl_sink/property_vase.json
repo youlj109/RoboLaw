@@ -1,0 +1,63 @@
+{
+  "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+  "task": "pick up the bowl and place it in the sink",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_u_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    -1.874651311337948,
+    -0.7400199770927429,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 179.9087476710785,
+  "objects": {
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        -2.266887068748474,
+        -1.1409665629267693,
+        0.9248526819497347
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "property_vase",
+    "label": "Bulbous ceramic vase",
+    "category": "property",
+    "usd_path": "assets/obstacle_library/property/vase.usda",
+    "position": [
+      -2.42393279229571,
+      -1.0473031323834368,
+      0.8978676777610791
+    ],
+    "yaw_deg": -62.92824305237161,
+    "dimensions": [
+      0.1144,
+      0.1144,
+      0.245
+    ],
+    "dimensions_unit": "m",
+    "physics_type": "rigid",
+    "static": false,
+    "mass_kg": 0.68,
+    "physics_material": {
+      "static_friction": 0.55,
+      "dynamic_friction": 0.42,
+      "restitution": 0.03
+    },
+    "collider_count": 121,
+    "collision_model": "compound_convex",
+    "provenance": {
+      "type": "procedural_local",
+      "generator": "scripts/build_library_property.py",
+      "external_sources": [],
+      "textures": "none; authored material colors"
+    },
+    "notes": [
+      "24.5 cm open vase; wide belly, tapered shoulder and narrow mouth.",
+      "Low center of mass and flat 6.8 cm foot support stable placement.",
+      "Compound convex walls preserve the narrow open interior."
+    ],
+    "opening_inner_diameter_m": 0.048
+  }
+}

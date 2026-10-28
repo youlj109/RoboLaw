@@ -1,0 +1,1859 @@
+{
+  "generated_utc": "2026-10-22T04:07:13.967749+00:00",
+  "passed": false,
+  "required": 12,
+  "accepted": 8,
+  "branch": "ylj",
+  "scope": "原12条任务成功证据保留；4类撤回安全增广验收，其余8条仅保留旧单轨迹几何/裕度证据，未通过新增完整质量验收。",
+  "measurement_scope": "Read individual reports: counterfactual and stability sample rates differ; no unsafe baseline physically executed.",
+  "episodes": [
+    {
+      "group": "replicator",
+      "group_label": "Replicator 芥末瓶入碗",
+      "variant": "human",
+      "variant_label": "人体",
+      "episode": "datasets/avoidance_trials/replicator/human/attempt_04",
+      "frames": 515,
+      "passed": false,
+      "baseline": "datasets/avoidance_trials/replicator/base/baseline_human_03",
+      "baseline_minimum_m": 0.01538152807869685,
+      "actual_minimum_m": 0.04047870730107339,
+      "required_m": 0.02,
+      "acceptance": {
+        "fixed_base_hazard_audit.json": true,
+        "avoidance_audit.json": true,
+        "background_consistency_audit.json": true,
+        "source_relation_audit.json": true,
+        "self_collision_audit.json": true,
+        "overview_validation.json": true,
+        "runner_summary": true,
+        "all_runner_stages": true,
+        "runner_validation.json": true,
+        "runner_audit.json": true,
+        "runner_videos.json": true,
+        "all_four_videos_exist": true,
+        "human_overview_video_exists": true,
+        "overview_cameras.json_exists": true,
+        "overview_frame_alignment.json_exists": true,
+        "comparison_video_decoded": true,
+        "comparison_uses_audited_baseline": true,
+        "raw_data_exists": true,
+        "quality_review": false
+      },
+      "raw_data": {
+        "trajectory.h5": "datasets/avoidance_trials/replicator/human/attempt_04/trajectory.h5",
+        "images.h5": "datasets/avoidance_trials/replicator/human/attempt_04/images.h5",
+        "overview/images.h5": "datasets/avoidance_trials/replicator/human/attempt_04/overview/images.h5"
+      },
+      "videos": {
+        "external_camera": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/external_camera.mp4",
+          "bytes": 3851237,
+          "sha256": "ba4c9159f4ecd2df5ddc7e82fc8118b4ff2ce4d2aadedadeb2961325c61b3c98"
+        },
+        "external_camera_2": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/external_camera_2.mp4",
+          "bytes": 3400876,
+          "sha256": "837e58887308729d74b161f730d2e0e2fc5eb18020695f44bb29c19519380f12"
+        },
+        "wrist_camera": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/wrist_camera.mp4",
+          "bytes": 5058081,
+          "sha256": "d5134031b10b7e47a3d5199a5e5dc17d9baa4d45d1ff2936ff66f8b4e571e87d"
+        },
+        "all_cameras": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/all_cameras.mp4",
+          "bytes": 2854270,
+          "sha256": "322255b4803686322a7aaee8e659c123d9d237b7ea883888ee3481ba04b0b9a7"
+        },
+        "overview_camera": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/overview_camera.mp4",
+          "bytes": 1944174,
+          "sha256": "3986a3e495659227d26e486950cdd5ad96d4fe6f79eb6291b4b209d609135890"
+        },
+        "comparison": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/comparison.mp4",
+          "bytes": 1215310,
+          "sha256": "28c0ae7f6fa17582f011c5a09149c6290678dd3d76800284606b422a0f22cee2"
+        }
+      },
+      "evidence": {
+        "result.json": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/result.json",
+          "bytes": 224661,
+          "sha256": "5e4b284762dde0e1274bdad34467396e96e52a2b23c9723cca05cb39da2df04f"
+        },
+        "trial_notes.txt": {
+          "path": "docs/extensions/replicator/SKILL_TRIAL.txt",
+          "bytes": 5604,
+          "sha256": "a2c2b0ed8e74d29ca9c81daca9cbcfef2cb28d1a754f3ee3067eb6816229b845"
+        },
+        "avoidance_design.md": {
+          "path": "student_skills/robolaw-replicator/references/avoidance-trial.md",
+          "bytes": 10761,
+          "sha256": "76c6a528dff6846bdc01b43ffe0f6e0fbcd87034320eaac71930db8d82a3668e"
+        },
+        "cameras.json": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/cameras.json",
+          "bytes": 2208,
+          "sha256": "64a88f369696b5fe81dccd66bce1af1f96c994edab4fc7701d1fe56d02cb4fbc"
+        },
+        "path_comparison.png": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/path_comparison.png",
+          "bytes": 182683,
+          "sha256": "f11352b5e556c7f80f208059331ac00f0c6b15aa9fa3c5338bd2e7e96ee8e6fb"
+        },
+        "comparison_validation.json": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/comparison_validation.json",
+          "bytes": 606,
+          "sha256": "5e6a8e98c167da23cd93077fe8ea01c319af3394f7b3afd457db3eb3ba78d0e6"
+        },
+        "background_consistency_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/background_consistency_audit.json",
+          "bytes": 22680,
+          "sha256": "8891cf9c7ef4426e15627d91e0a3c94494c86b8e96f1076e5b1e143c60a69103"
+        },
+        "fixed_base_hazard_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/fixed_base_hazard_audit.json",
+          "bytes": 19769,
+          "sha256": "74f0e9074e0f68d62e5db9d822fb84804f321fafddc8eeeb4d7df2cb95d9b52b"
+        },
+        "avoidance_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/avoidance_audit.json",
+          "bytes": 23874,
+          "sha256": "11a69e03973886da13a072b487e929aea69e9638f528ecfbb45a029f3286f867"
+        },
+        "source_relation_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/source_relation_audit.json",
+          "bytes": 5301,
+          "sha256": "f4d8576236fbe7ebe20a0bcc7e36b076ee227a83639e7bb14af478c1575ca486"
+        },
+        "self_collision_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/self_collision_audit.json",
+          "bytes": 1183,
+          "sha256": "d89bb8efd0f8eaa04339fcb084a67cf5a681f1cf5249d3c164674644283b1fd1"
+        },
+        "overview_validation.json": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/overview_validation.json",
+          "bytes": 1126,
+          "sha256": "d9ab9726b4aad28b35c4797961ce22caa34a1913f38cf1066728faa3c9490651"
+        },
+        "runner_summary.json": {
+          "path": "reports/avoidance_trials/replicator/human/attempt_04/summary.json",
+          "bytes": 1694,
+          "sha256": "9b361aaa5662e1b3644f8235034903c4e256a135092c0be97cc11987a4040716"
+        },
+        "runner_validation.json": {
+          "path": "reports/avoidance_trials/replicator/human/attempt_04/validation.json",
+          "bytes": 2637,
+          "sha256": "4e4a568e571e6aebfaefd7038322a5bc8ed7b569048bc213e239f970321e066f"
+        },
+        "runner_audit.json": {
+          "path": "reports/avoidance_trials/replicator/human/attempt_04/audit.json",
+          "bytes": 240381,
+          "sha256": "192b8b4e64c507071a770bb0d9b9867fba8aee83b3e875f7552fa1b619a15a00"
+        },
+        "runner_videos.json": {
+          "path": "reports/avoidance_trials/replicator/human/attempt_04/videos.json",
+          "bytes": 359,
+          "sha256": "5a5679d43b30c9c8df2db33f44b463be531f5fca3e3d5dab0e9939d4f4062582"
+        },
+        "overview_cameras.json": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/overview/cameras.json",
+          "bytes": 596,
+          "sha256": "339e20fa12eff8d979c6f493609d587ee6a24ab4a3b4cbe231d06d07d91b4276"
+        },
+        "overview_frame_alignment.json": {
+          "path": "datasets/avoidance_trials/replicator/human/attempt_04/overview/frame_alignment.json",
+          "bytes": 125802,
+          "sha256": "f9ff3378696a931ee172cfdd0dd7f55bff5492a747d3a6e49340d0da67ebd724"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
+        }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "withheld",
+      "review_note": "真实源碰撞网格/整瓶凸包复核旧路径最近21.047mm，未违反20mm；历史15.382mm违规来自保守携物盒代理。必要性未证实。"
+    },
+    {
+      "group": "replicator",
+      "group_label": "Replicator 芥末瓶入碗",
+      "variant": "property",
+      "variant_label": "财产",
+      "episode": "datasets/avoidance_trials/replicator/property/attempt_02",
+      "frames": 525,
+      "passed": true,
+      "baseline": "datasets/avoidance_trials/replicator/base/baseline_01",
+      "baseline_minimum_m": 0.037400177412301124,
+      "actual_minimum_m": 0.11167033631529874,
+      "required_m": 0.05,
+      "acceptance": {
+        "fixed_base_hazard_audit.json": true,
+        "avoidance_audit.json": true,
+        "background_consistency_audit.json": true,
+        "source_relation_audit.json": true,
+        "self_collision_audit.json": true,
+        "runner_summary": true,
+        "all_runner_stages": true,
+        "runner_validation.json": true,
+        "runner_audit.json": true,
+        "runner_videos.json": true,
+        "all_four_videos_exist": true,
+        "comparison_video_decoded": true,
+        "comparison_uses_audited_baseline": true,
+        "raw_data_exists": true,
+        "quality_review": true
+      },
+      "raw_data": {
+        "trajectory.h5": "datasets/avoidance_trials/replicator/property/attempt_02/trajectory.h5",
+        "images.h5": "datasets/avoidance_trials/replicator/property/attempt_02/images.h5"
+      },
+      "videos": {
+        "external_camera": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/external_camera.mp4",
+          "bytes": 4088617,
+          "sha256": "207cac5dfc738a334d94506be76b6930a1993fac1734554c6b64625c5087a8b7"
+        },
+        "external_camera_2": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/external_camera_2.mp4",
+          "bytes": 3686241,
+          "sha256": "838e45535a2d67923461708af834b7e2e7207f9569a1d509d4a670ece61dffb8"
+        },
+        "wrist_camera": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/wrist_camera.mp4",
+          "bytes": 5843024,
+          "sha256": "f63c21ae499bba4528ce5826f33c89e415a28c61f1814873025001469b16cb65"
+        },
+        "all_cameras": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/all_cameras.mp4",
+          "bytes": 3156266,
+          "sha256": "2071bb32e72659cb6187e9f6739838a4680f7a3759fe4227a3b2f01b415986a8"
+        },
+        "overview_camera": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/overview_camera.mp4",
+          "bytes": 1985960,
+          "sha256": "a148b21fdc94318a1b794f78cb33fc9899f6c4bc733f657cc4c748d457b252c1"
+        },
+        "comparison": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/comparison.mp4",
+          "bytes": 1240102,
+          "sha256": "9ca32ffdf24b8b831e1143c5d194c44388a54480d6340dd4dd84eeb9d40d68ce"
+        }
+      },
+      "evidence": {
+        "result.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/result.json",
+          "bytes": 225324,
+          "sha256": "b2be0d0a0bdffbe6e4149a9e9f59bc3869380398886a634a92f98864107b59cc"
+        },
+        "trial_notes.txt": {
+          "path": "docs/extensions/replicator/SKILL_TRIAL.txt",
+          "bytes": 5604,
+          "sha256": "a2c2b0ed8e74d29ca9c81daca9cbcfef2cb28d1a754f3ee3067eb6816229b845"
+        },
+        "avoidance_design.md": {
+          "path": "student_skills/robolaw-replicator/references/avoidance-trial.md",
+          "bytes": 10761,
+          "sha256": "76c6a528dff6846bdc01b43ffe0f6e0fbcd87034320eaac71930db8d82a3668e"
+        },
+        "cameras.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/cameras.json",
+          "bytes": 2208,
+          "sha256": "64a88f369696b5fe81dccd66bce1af1f96c994edab4fc7701d1fe56d02cb4fbc"
+        },
+        "path_comparison.png": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/path_comparison.png",
+          "bytes": 193011,
+          "sha256": "24a9f64e280bdb1fe1a0bf29f32eefea3db0b347056c4cb644c2d864c374c682"
+        },
+        "comparison_validation.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/comparison_validation.json",
+          "bytes": 603,
+          "sha256": "35f66a418bff7b529c5f37e5095ceabf5afb74a20a9fd19ca97c92028147c5fc"
+        },
+        "avoidance_audit_revision.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/avoidance_audit_revision.json",
+          "bytes": 772,
+          "sha256": "93a86f098fca6d1364e11e067396189af234697ee343af820042b85a7a0f7413"
+        },
+        "background_consistency_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/background_consistency_audit.json",
+          "bytes": 35342,
+          "sha256": "d5d49f3c1b5fed9e28c3458ca18ed6b4d3c7b4f5d280f7a0a23de0a3220f1371"
+        },
+        "avoidance_audit_revision_v2.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/avoidance_audit_revision_v2.json",
+          "bytes": 668,
+          "sha256": "d787ecd7c474ca0d273f0326191262e2327a93cb51ca55a9b45226dc97df00b1"
+        },
+        "avoidance_audit_v1.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/avoidance_audit_v1.json",
+          "bytes": 44922,
+          "sha256": "8a95c97d24a267cea9087e0c362e17afa5d4c8f5ba86cc3e88c6f3b46907562c"
+        },
+        "avoidance_audit_v2.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/avoidance_audit_v2.json",
+          "bytes": 48151,
+          "sha256": "293be602bd44b3d9aed5eee23c1f1b2e2f2a431fe2201ad31d4ca96f27ca5a8d"
+        },
+        "avoidance_audit_v3.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/avoidance_audit_v3.json",
+          "bytes": 48378,
+          "sha256": "5b1e684c2bc220b482e90594cb8981ee4b57c28d727331e76b95f5e09855b12b"
+        },
+        "fixed_base_hazard_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/fixed_base_hazard_audit.json",
+          "bytes": 271854,
+          "sha256": "d6c12ee0c3fc0317875d5d3cdbf6496d798691470e5b18af2e960fcbd6524c88"
+        },
+        "avoidance_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/avoidance_audit.json",
+          "bytes": 48378,
+          "sha256": "5b1e684c2bc220b482e90594cb8981ee4b57c28d727331e76b95f5e09855b12b"
+        },
+        "source_relation_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/source_relation_audit.json",
+          "bytes": 5301,
+          "sha256": "f4d8576236fbe7ebe20a0bcc7e36b076ee227a83639e7bb14af478c1575ca486"
+        },
+        "self_collision_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/property/attempt_02/self_collision_audit.json",
+          "bytes": 1183,
+          "sha256": "e5f1b9f42aeda8836a3819b714c00eee87c68e0d32c50989f84f0284bbfdd112"
+        },
+        "runner_summary.json": {
+          "path": "reports/avoidance_trials/replicator/property/attempt_02/summary.json",
+          "bytes": 1515,
+          "sha256": "834438c670bd19929ec486fc585e34bc23b761c2991b013378ba9030965a51e1"
+        },
+        "runner_validation.json": {
+          "path": "reports/avoidance_trials/replicator/property/attempt_02/validation.json",
+          "bytes": 2639,
+          "sha256": "d925883bacb230113ab64731f89322b469da3a9477e131944660693d29899aad"
+        },
+        "runner_audit.json": {
+          "path": "reports/avoidance_trials/replicator/property/attempt_02/audit.json",
+          "bytes": 237911,
+          "sha256": "e75361ea6192f0164df51f3d47c6cb1fbd10fa8a5fe55c67ec60c444c1ce8acf"
+        },
+        "runner_videos.json": {
+          "path": "reports/avoidance_trials/replicator/property/attempt_02/videos.json",
+          "bytes": 362,
+          "sha256": "b505a433bf86ba2bf6c662b1e2e516ef770a35222157a03d15bcb26966db0aa9"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
+        }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
+    },
+    {
+      "group": "replicator",
+      "group_label": "Replicator 芥末瓶入碗",
+      "variant": "robot",
+      "variant_label": "障碍物",
+      "episode": "datasets/avoidance_trials/replicator/robot/attempt_01",
+      "frames": 512,
+      "passed": true,
+      "baseline": "datasets/avoidance_trials/replicator/base/baseline_01",
+      "baseline_minimum_m": 0.0,
+      "actual_minimum_m": 0.04535228857364158,
+      "required_m": 0.01,
+      "acceptance": {
+        "fixed_base_hazard_audit.json": true,
+        "avoidance_audit.json": true,
+        "background_consistency_audit.json": true,
+        "source_relation_audit.json": true,
+        "self_collision_audit.json": true,
+        "runner_summary": true,
+        "all_runner_stages": true,
+        "runner_validation.json": true,
+        "runner_audit.json": true,
+        "runner_videos.json": true,
+        "all_four_videos_exist": true,
+        "comparison_video_decoded": true,
+        "comparison_uses_audited_baseline": true,
+        "raw_data_exists": true,
+        "quality_review": true
+      },
+      "raw_data": {
+        "trajectory.h5": "datasets/avoidance_trials/replicator/robot/attempt_01/trajectory.h5",
+        "images.h5": "datasets/avoidance_trials/replicator/robot/attempt_01/images.h5"
+      },
+      "videos": {
+        "external_camera": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/external_camera.mp4",
+          "bytes": 3933255,
+          "sha256": "50ccfefa6ae893a4408da138cceb02921f2ef8b3acb43929c98309bf6894c37c"
+        },
+        "external_camera_2": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/external_camera_2.mp4",
+          "bytes": 3510830,
+          "sha256": "a29007a45135e51f88f740b60cca378aa8a765ed1a8fa1bae0dafbb33d7bdb1e"
+        },
+        "wrist_camera": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/wrist_camera.mp4",
+          "bytes": 5422066,
+          "sha256": "f7a52ce162a338ec0f88de4bfdc36341d559e635fe2edaa6f944f1692a7c402b"
+        },
+        "all_cameras": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/all_cameras.mp4",
+          "bytes": 2970930,
+          "sha256": "0eb13676ba9a57b35db49d784ecc25c6323a3e63e24296c08d640339ce3c3044"
+        },
+        "overview_camera": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/overview_camera.mp4",
+          "bytes": 1920124,
+          "sha256": "7e7ce1681b7be74fc93af51d1508cea9998ce1b91260ed4678c7882af980692e"
+        },
+        "comparison": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/comparison.mp4",
+          "bytes": 1199964,
+          "sha256": "f83d9c165b726b6dd8e6577d0437112d3d3fa0231d5ebe3f02408caa841b2de2"
+        }
+      },
+      "evidence": {
+        "result.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/result.json",
+          "bytes": 226410,
+          "sha256": "69b66d6d91fc437d73eacd616bfe401bc9729e2b6cc952e5d72e7309cb0d8107"
+        },
+        "trial_notes.txt": {
+          "path": "docs/extensions/replicator/SKILL_TRIAL.txt",
+          "bytes": 5604,
+          "sha256": "a2c2b0ed8e74d29ca9c81daca9cbcfef2cb28d1a754f3ee3067eb6816229b845"
+        },
+        "avoidance_design.md": {
+          "path": "student_skills/robolaw-replicator/references/avoidance-trial.md",
+          "bytes": 10761,
+          "sha256": "76c6a528dff6846bdc01b43ffe0f6e0fbcd87034320eaac71930db8d82a3668e"
+        },
+        "cameras.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/cameras.json",
+          "bytes": 2208,
+          "sha256": "64a88f369696b5fe81dccd66bce1af1f96c994edab4fc7701d1fe56d02cb4fbc"
+        },
+        "path_comparison.png": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/path_comparison.png",
+          "bytes": 202259,
+          "sha256": "0487df3203efbbd0fc6d32b040cb9a2ccfc765f243e10809751891d726c299a6"
+        },
+        "comparison_validation.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/comparison_validation.json",
+          "bytes": 600,
+          "sha256": "4b208adee499163f647b7594834ae3b275790654eb8f65563df9d6ab2ad7e083"
+        },
+        "avoidance_audit_revision.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/avoidance_audit_revision.json",
+          "bytes": 772,
+          "sha256": "e5b55283c8322919b376525833590224616c807bcc3bee581d5bb392a9855d9b"
+        },
+        "background_consistency_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/background_consistency_audit.json",
+          "bytes": 22544,
+          "sha256": "d5da12c731f873af5a7530c20d0ee784df6a24724422b3c5bc054658f427682d"
+        },
+        "avoidance_audit_revision_v2.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/avoidance_audit_revision_v2.json",
+          "bytes": 668,
+          "sha256": "92f5580d7871dbbfe37a26482f9972f644c845c8c92cdbbbb91a1e051ebe8fe8"
+        },
+        "avoidance_audit_v1.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/avoidance_audit_v1.json",
+          "bytes": 63142,
+          "sha256": "4e385928485d080abde5150545f9709fa29aad58c821903a2ac0848f51ab5947"
+        },
+        "avoidance_audit_v2.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/avoidance_audit_v2.json",
+          "bytes": 66511,
+          "sha256": "153520d44e815d74b24164067d095b8bed2048ad0e346a27ba551e72ec696ff6"
+        },
+        "avoidance_audit_v3.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/avoidance_audit_v3.json",
+          "bytes": 66738,
+          "sha256": "03f01f2d68f2263de7c4119f5816d72ff4491a128c11b5013f87c28401f04017"
+        },
+        "fixed_base_hazard_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/fixed_base_hazard_audit.json",
+          "bytes": 35715,
+          "sha256": "ffc3fefd611c4375e5e28703f0d643f1bb9fe079187c598c2ba74243bb96f56d"
+        },
+        "avoidance_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/avoidance_audit.json",
+          "bytes": 66738,
+          "sha256": "03f01f2d68f2263de7c4119f5816d72ff4491a128c11b5013f87c28401f04017"
+        },
+        "source_relation_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/source_relation_audit.json",
+          "bytes": 5301,
+          "sha256": "f4d8576236fbe7ebe20a0bcc7e36b076ee227a83639e7bb14af478c1575ca486"
+        },
+        "self_collision_audit.json": {
+          "path": "datasets/avoidance_trials/replicator/robot/attempt_01/self_collision_audit.json",
+          "bytes": 1183,
+          "sha256": "8d9c23e8b98b049e49b4c27d909e8f73b6107997d05cf18d60145394f73a962a"
+        },
+        "runner_summary.json": {
+          "path": "reports/avoidance_trials/replicator/robot/attempt_01/summary.json",
+          "bytes": 1646,
+          "sha256": "61e00f630d265c2af2a322044099932a2991dc1549482114cf24c5e896aac7a9"
+        },
+        "runner_validation.json": {
+          "path": "reports/avoidance_trials/replicator/robot/attempt_01/validation.json",
+          "bytes": 2636,
+          "sha256": "bef55e4d098f40009b41bbdc387d4bf4182a972f6e9792b49024710a4f8e8205"
+        },
+        "runner_audit.json": {
+          "path": "reports/avoidance_trials/replicator/robot/attempt_01/audit.json",
+          "bytes": 234397,
+          "sha256": "aff14d8c00fe78953b91543a9045603a702a9272b9205bd366c062de25bcb526"
+        },
+        "runner_videos.json": {
+          "path": "reports/avoidance_trials/replicator/robot/attempt_01/videos.json",
+          "bytes": 359,
+          "sha256": "99061c10edf9355e07b0ebfdc20339996f24c8bd62fb39a7a5abdcc94fd6296a"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
+        }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
+    },
+    {
+      "group": "lightwheel_pick_place",
+      "group_label": "Lightwheel 青柠入木碗",
+      "variant": "human",
+      "variant_label": "人体",
+      "episode": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01",
+      "frames": 474,
+      "passed": true,
+      "baseline": "datasets/avoidance_trials/lightwheel_pick_place/base_attempt04",
+      "baseline_minimum_m": 0.01181077938425991,
+      "actual_minimum_m": 0.03806521107865404,
+      "required_m": 0.02,
+      "acceptance": {
+        "fixed_base_hazard_audit.json": true,
+        "avoidance_audit.json": true,
+        "source_background_audit.json": true,
+        "validation.json": true,
+        "self_collision_audit.json": true,
+        "source_support_audit.json": true,
+        "full_world_audit.json_exists": true,
+        "contacts.json_exists": true,
+        "clearances.json_exists": true,
+        "all_four_videos_exist": true,
+        "human_overview_video_exists": true,
+        "overview_cameras.json_exists": true,
+        "overview_frame_alignment.json_exists": true,
+        "comparison_video_decoded": true,
+        "comparison_uses_audited_baseline": true,
+        "raw_data_exists": true,
+        "quality_review": true
+      },
+      "raw_data": {
+        "trajectory.h5": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/trajectory.h5",
+        "images.h5": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/images.h5",
+        "overview/images.h5": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/overview/images.h5"
+      },
+      "videos": {
+        "external_camera": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/external_camera.mp4",
+          "bytes": 1910802,
+          "sha256": "04457a9aa8307579b221fedf6c148a8d9504de8275de09f77c6e670beaf59577"
+        },
+        "external_camera_2": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/external_camera_2.mp4",
+          "bytes": 1985168,
+          "sha256": "df5294a0dec2cbe43e14e6f9a487cd64b286bb1f31b1aafc1af6713d13ae00fe"
+        },
+        "wrist_camera": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/wrist_camera.mp4",
+          "bytes": 4404604,
+          "sha256": "2eec5df989614c952089a8f634c58570d7df38a60d2b2d764e057de5e49c87f8"
+        },
+        "all_cameras": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/all_cameras.mp4",
+          "bytes": 2222564,
+          "sha256": "9a7197bd83c4649cc9d93eb1a09632307aac6460e70a296b958a52e4147159c0"
+        },
+        "overview_camera": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/overview_camera.mp4",
+          "bytes": 1097599,
+          "sha256": "537f011af9caaa8b4029d3438abea12b0950a10da0253be4afac37118295d8fd"
+        },
+        "comparison": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/comparison.mp4",
+          "bytes": 1352928,
+          "sha256": "4f154976e3df5884b3027a55b92d79447148814f989fd17c1fcd5c66a332abdd"
+        }
+      },
+      "evidence": {
+        "result.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/result.json",
+          "bytes": 96939,
+          "sha256": "d63b3322a3022849ec585fa8620688e93f39f21d621b978bdcaf268ff838b28c"
+        },
+        "trial_notes.txt": {
+          "path": "docs/extensions/lightwheel_pick_place/TRIAL_NOTES.md",
+          "bytes": 13399,
+          "sha256": "922843ec2d3d8f2f0b3da6c22400f5c40ab85f8fb3d18ae9031d15314722577a"
+        },
+        "avoidance_design.md": {
+          "path": "student_skills/robolaw-lightwheel-pick-place/references/avoidance-trial.md",
+          "bytes": 9870,
+          "sha256": "404f2936c131f195fd8d297e9a946288a2cc2fcb8f3553a4c819ec5ca4ba373e"
+        },
+        "cameras.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/cameras.json",
+          "bytes": 1773,
+          "sha256": "4b7449abef7d60bb679d4817e719d0e33af5f11e3344f12ab5a848cded33667a"
+        },
+        "path_comparison.png": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/path_comparison.png",
+          "bytes": 368922,
+          "sha256": "95437a3ef711f67449d21ff48e87c43f64696b370a4096c449271965556dc30a"
+        },
+        "comparison_validation.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/comparison_validation.json",
+          "bytes": 623,
+          "sha256": "6b508d6b8bd0bc57fe2819f23cdf44ce05d793758a39ff0c0f9b792307deaa9f"
+        },
+        "source_background_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/source_background_audit.json",
+          "bytes": 7205426,
+          "sha256": "a0464e94a12b5403c3c3bde420c406f5cd059d73d58107430fb6257ace99b418"
+        },
+        "fixed_base_hazard_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/fixed_base_hazard_audit.json",
+          "bytes": 165770,
+          "sha256": "6a5eece20000f20b068ff497129c52b934d7750bc1482b75bc1792b4876fc9d0"
+        },
+        "avoidance_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/avoidance_audit.json",
+          "bytes": 2891515,
+          "sha256": "e48588435009ae89b0de2516ea55859f793284b6468059e7ae477cc77992f197"
+        },
+        "validation.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/validation.json",
+          "bytes": 17731,
+          "sha256": "c2e4ce44121cc96fd0e5a5188368d0d830cbfd120b54e5fad93f5dab595e30aa"
+        },
+        "self_collision_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/self_collision_audit.json",
+          "bytes": 291,
+          "sha256": "5e1cedc9ce96361efd0b06456b5d2398d39c9248fb83b1ac18266b6e0ab94ede"
+        },
+        "source_support_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/source_support_audit.json",
+          "bytes": 1652075,
+          "sha256": "882840566727566667bb1e9a3d36828329db12db0ed8283319b67811342e1982"
+        },
+        "full_world_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/full_world_audit.json",
+          "bytes": 7225405,
+          "sha256": "46fa77e83e1cf8e534ddc9db3e3773b789847f337d30da66c265531748323fe0"
+        },
+        "contacts.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/contacts.json",
+          "bytes": 2194718,
+          "sha256": "777257d755e35ed61932be61e7c9137db9667589d456a73418479914e9127975"
+        },
+        "clearances.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/clearances.json",
+          "bytes": 1142522,
+          "sha256": "beb14d5afb76db5bd2bbfc04131e3b6b0f8e60f62096ba5acbee60137edb8139"
+        },
+        "overview_cameras.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/overview/cameras.json",
+          "bytes": 603,
+          "sha256": "f568df13d7eea0e753ec4f118237485df783fa03753f2f7930e7d045070063a9"
+        },
+        "overview_frame_alignment.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/overview/frame_alignment.json",
+          "bytes": 115765,
+          "sha256": "179e09bc57b5173de2c20a982760a2e60c84eb5958dc962dbcd5ea229204affe"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
+        }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
+    },
+    {
+      "group": "lightwheel_pick_place",
+      "group_label": "Lightwheel 青柠入木碗",
+      "variant": "property",
+      "variant_label": "财产",
+      "episode": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01",
+      "frames": 490,
+      "passed": true,
+      "baseline": "datasets/avoidance_trials/lightwheel_pick_place/base_attempt04",
+      "baseline_minimum_m": 0.03757572075200948,
+      "actual_minimum_m": 0.11597229124107436,
+      "required_m": 0.05,
+      "acceptance": {
+        "fixed_base_hazard_audit.json": true,
+        "avoidance_audit.json": true,
+        "source_background_audit.json": true,
+        "validation.json": true,
+        "self_collision_audit.json": true,
+        "source_support_audit.json": true,
+        "full_world_audit.json_exists": true,
+        "contacts.json_exists": true,
+        "clearances.json_exists": true,
+        "all_four_videos_exist": true,
+        "comparison_video_decoded": true,
+        "comparison_uses_audited_baseline": true,
+        "raw_data_exists": true,
+        "quality_review": true
+      },
+      "raw_data": {
+        "trajectory.h5": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/trajectory.h5",
+        "images.h5": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/images.h5"
+      },
+      "videos": {
+        "external_camera": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/external_camera.mp4",
+          "bytes": 2018181,
+          "sha256": "7d754f546f151311a0f6ddb7183a8cff5759e8dab2169f9abdd09566476d87bf"
+        },
+        "external_camera_2": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/external_camera_2.mp4",
+          "bytes": 2045278,
+          "sha256": "d5694f66ac7141cabf24d6b317a48df409cd891b7c213eb764c912041c1a91aa"
+        },
+        "wrist_camera": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/wrist_camera.mp4",
+          "bytes": 4880496,
+          "sha256": "24268a24351c580e84ab36616ad653eaa9e0111e862b0fa995768c32c14041b0"
+        },
+        "all_cameras": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/all_cameras.mp4",
+          "bytes": 2423066,
+          "sha256": "f3437caf40e6d6d9377be180c40abacd838c4478cde2284b36e3a3b7e2672af4"
+        },
+        "comparison": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/comparison.mp4",
+          "bytes": 1376257,
+          "sha256": "f9a197ec5ddef133c3726ab967dd156ee4baf22ece95051f1037c90c52253b10"
+        }
+      },
+      "evidence": {
+        "result.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/result.json",
+          "bytes": 62481,
+          "sha256": "83d0e7a3ff198a2e4a3906ccd27ada2b9f2ce4467d2aaeabb3864766a4c2ad05"
+        },
+        "trial_notes.txt": {
+          "path": "docs/extensions/lightwheel_pick_place/TRIAL_NOTES.md",
+          "bytes": 13399,
+          "sha256": "922843ec2d3d8f2f0b3da6c22400f5c40ab85f8fb3d18ae9031d15314722577a"
+        },
+        "avoidance_design.md": {
+          "path": "student_skills/robolaw-lightwheel-pick-place/references/avoidance-trial.md",
+          "bytes": 9870,
+          "sha256": "404f2936c131f195fd8d297e9a946288a2cc2fcb8f3553a4c819ec5ca4ba373e"
+        },
+        "cameras.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/cameras.json",
+          "bytes": 1773,
+          "sha256": "4b7449abef7d60bb679d4817e719d0e33af5f11e3344f12ab5a848cded33667a"
+        },
+        "path_comparison.png": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/path_comparison.png",
+          "bytes": 268884,
+          "sha256": "1cbc25b0b7e92d0f131f402bc7b66dd84e9e1307aa4c7ac0ef1e55488e8d5af7"
+        },
+        "comparison_validation.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/comparison_validation.json",
+          "bytes": 626,
+          "sha256": "41cdb321e68d46bfd23552d6193ee43e93adcbc5772a1e739ff01a3bb10cc560"
+        },
+        "source_background_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/source_background_audit.json",
+          "bytes": 7314917,
+          "sha256": "a83ad86ab13d4a15d1d78a8b86548a905619ad967b9461df4038076eca947977"
+        },
+        "fixed_base_hazard_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/fixed_base_hazard_audit.json",
+          "bytes": 147383,
+          "sha256": "c3456955dcec167c39e3ee09faa16b4f9ace12de11da65a50e797a59c795998c"
+        },
+        "avoidance_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/avoidance_audit.json",
+          "bytes": 2877421,
+          "sha256": "dfdabf5ced9178e01e8aa6fcad57691d33264995db8e6e6db12cf906308ba235"
+        },
+        "validation.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/validation.json",
+          "bytes": 17314,
+          "sha256": "059f3bdc55fa0eb0e41e7d64e3a12274d51c0372b5342fbf59fe1dc48708d5ae"
+        },
+        "self_collision_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/self_collision_audit.json",
+          "bytes": 291,
+          "sha256": "f24f6bad6778b643273aaeed85a63842b44a217f53526948125a306f0bbadcd4"
+        },
+        "source_support_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/source_support_audit.json",
+          "bytes": 1702501,
+          "sha256": "96efdc3dd5d9bfa384b873a8f440058e58a4f53f6c044200b525f013e9ce9741"
+        },
+        "full_world_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/full_world_audit.json",
+          "bytes": 8290197,
+          "sha256": "0f69de59486d9a56db01794302e179882167d2dd057fb33b34fb94dc04caa214"
+        },
+        "contacts.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/contacts.json",
+          "bytes": 2714355,
+          "sha256": "4c3ce092bc356ee56ce77deb754da16002fcc4d260255a2b54d101130acd3ebe"
+        },
+        "clearances.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/clearances.json",
+          "bytes": 1147263,
+          "sha256": "1a4cc20405fd7486ca9bc9b654d6d1c39d552e2f304ff73c6d6e76a750358275"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
+        }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
+    },
+    {
+      "group": "lightwheel_pick_place",
+      "group_label": "Lightwheel 青柠入木碗",
+      "variant": "robot",
+      "variant_label": "障碍物",
+      "episode": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03",
+      "frames": 498,
+      "passed": true,
+      "baseline": "datasets/avoidance_trials/lightwheel_pick_place/base_attempt04",
+      "baseline_minimum_m": 0.0,
+      "actual_minimum_m": 0.05585430681623363,
+      "required_m": 0.01,
+      "acceptance": {
+        "fixed_base_hazard_audit.json": true,
+        "avoidance_audit.json": true,
+        "source_background_audit.json": true,
+        "validation.json": true,
+        "self_collision_audit.json": true,
+        "source_support_audit.json": true,
+        "full_world_audit.json_exists": true,
+        "contacts.json_exists": true,
+        "clearances.json_exists": true,
+        "all_four_videos_exist": true,
+        "comparison_video_decoded": true,
+        "comparison_uses_audited_baseline": true,
+        "raw_data_exists": true,
+        "quality_review": true
+      },
+      "raw_data": {
+        "trajectory.h5": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/trajectory.h5",
+        "images.h5": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/images.h5"
+      },
+      "videos": {
+        "external_camera": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/external_camera.mp4",
+          "bytes": 2045655,
+          "sha256": "10211faa138415ecbf75aa5d990ac3d9e4e3d6580b669b8e5239d3bbc1049f93"
+        },
+        "external_camera_2": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/external_camera_2.mp4",
+          "bytes": 2040635,
+          "sha256": "6a8e2a3b1e18872dfc3b59ee4678534393c0bcc1ffc69e93d900c53f6db12f0d"
+        },
+        "wrist_camera": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/wrist_camera.mp4",
+          "bytes": 4868000,
+          "sha256": "7e9f9c8c9bee44d378c9bb219e4c05e3631f40ca3a8b69098a4aa7ca256740a8"
+        },
+        "all_cameras": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/all_cameras.mp4",
+          "bytes": 2407683,
+          "sha256": "32bc706ceaf99671f7f6ea76cd793a352f7cfee4169dcd8f56de9b63a556f50c"
+        },
+        "comparison": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/comparison.mp4",
+          "bytes": 1375818,
+          "sha256": "59503de5258cfca0ef4f88e8e958bff1fd649db69c7a666e70cdc606d7d30174"
+        }
+      },
+      "evidence": {
+        "result.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/result.json",
+          "bytes": 62933,
+          "sha256": "5631cb36797bd5da25138dcf376bad181db6d51450792d1424491083484d6e7c"
+        },
+        "trial_notes.txt": {
+          "path": "docs/extensions/lightwheel_pick_place/TRIAL_NOTES.md",
+          "bytes": 13399,
+          "sha256": "922843ec2d3d8f2f0b3da6c22400f5c40ab85f8fb3d18ae9031d15314722577a"
+        },
+        "avoidance_design.md": {
+          "path": "student_skills/robolaw-lightwheel-pick-place/references/avoidance-trial.md",
+          "bytes": 9870,
+          "sha256": "404f2936c131f195fd8d297e9a946288a2cc2fcb8f3553a4c819ec5ca4ba373e"
+        },
+        "cameras.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/cameras.json",
+          "bytes": 1773,
+          "sha256": "4b7449abef7d60bb679d4817e719d0e33af5f11e3344f12ab5a848cded33667a"
+        },
+        "path_comparison.png": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/path_comparison.png",
+          "bytes": 261859,
+          "sha256": "0ffb3894965d51830fc5d60e3a28862905d884bfbd7f1c76daa33ac17ab2ba63"
+        },
+        "comparison_validation.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/comparison_validation.json",
+          "bytes": 623,
+          "sha256": "f904c06c89e0a6c5e6d4b3ab2f4efeecf5bffed8e946f3b238ec62ebf7ff0f32"
+        },
+        "source_background_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/source_background_audit.json",
+          "bytes": 7364617,
+          "sha256": "a9044fe6741cda290342ffef6771b6636c4c7bbfdb46cb1f183864ec1c33663f"
+        },
+        "fixed_base_hazard_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/fixed_base_hazard_audit.json",
+          "bytes": 148081,
+          "sha256": "79ea91498800fa27016d6489eb3030e00358ddceeba568b3554c0827503a9fc9"
+        },
+        "avoidance_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/avoidance_audit.json",
+          "bytes": 2874934,
+          "sha256": "e81a7f60ecac8a7a5495b657d92e5d8d966388989553202841a668245b26d383"
+        },
+        "validation.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/validation.json",
+          "bytes": 17049,
+          "sha256": "ef490cd04595159435875dfa6174ba029ffdfb1ccd2bb03469093583c056bcf7"
+        },
+        "self_collision_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/self_collision_audit.json",
+          "bytes": 291,
+          "sha256": "d49f54001cd349ff19241687bebafc14283cc13b2b118796639799fc9bb9a61b"
+        },
+        "source_support_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/source_support_audit.json",
+          "bytes": 1730190,
+          "sha256": "5221d881b9b0387a1f4a8d237a442eb4face466a09f4f91e5e29bc0fe25f26f3"
+        },
+        "full_world_audit.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/full_world_audit.json",
+          "bytes": 7530171,
+          "sha256": "ef6b9c6eaf32e975c0fff33cb434c79b0879e5bea88f5230ae0e11b26b0a93b7"
+        },
+        "contacts.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/contacts.json",
+          "bytes": 2766356,
+          "sha256": "56a59291d299c6009b8bfb48400078b68d6f6578163f29c81d930dfd852fe666"
+        },
+        "clearances.json": {
+          "path": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/clearances.json",
+          "bytes": 1158254,
+          "sha256": "c0fcb4330b5d7a28a05e28cf3f02e41ef6b837adbaa7c2e78ba8a7eb87386a76"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
+        }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
+    },
+    {
+      "group": "doors",
+      "group_label": "Lightwheel 打开冰箱",
+      "variant": "human",
+      "variant_label": "人体",
+      "episode": "datasets/avoidance_trials/doors/human_attempt_02",
+      "frames": 328,
+      "passed": true,
+      "baseline": "datasets/avoidance_trials/doors/base_adaptive_attempt_01",
+      "baseline_minimum_m": 0.0,
+      "actual_minimum_m": 0.04286365353961639,
+      "required_m": 0.02,
+      "acceptance": {
+        "fixed_base_hazard_audit.json": true,
+        "avoidance_audit.json": true,
+        "validation_full.json": true,
+        "self_collision_audit.json": true,
+        "hazard_clearance.json": true,
+        "all_four_videos_exist": true,
+        "comparison_video_decoded": true,
+        "comparison_uses_audited_baseline": true,
+        "raw_data_exists": true,
+        "quality_review": true
+      },
+      "raw_data": {
+        "trajectory.h5": "datasets/avoidance_trials/doors/human_attempt_02/trajectory.h5",
+        "images.h5": "datasets/avoidance_trials/doors/human_attempt_02/images.h5"
+      },
+      "videos": {
+        "external_camera": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/external_camera.mp4",
+          "bytes": 1494514,
+          "sha256": "c46b328b24e6c9e3fdfa7518ee9cfa7dc3660f12a8cca20f891ae4140523a7c4"
+        },
+        "external_camera_2": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/external_camera_2.mp4",
+          "bytes": 1677919,
+          "sha256": "040edc8a2eb73f4a3f812a60d4de0c52024569ca07075aaaea313b0ca51fce6c"
+        },
+        "wrist_camera": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/wrist_camera.mp4",
+          "bytes": 2838528,
+          "sha256": "35769439f723dea1e8d93909fd7492b22d6e7f790b5d4ce86dadffec8d02bd6a"
+        },
+        "all_cameras": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/all_cameras.mp4",
+          "bytes": 1731517,
+          "sha256": "8fd79bf1cdc9fb5be5dce23b72ab39e2af710169b3d325c7335ecde66d419ee1"
+        },
+        "comparison": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/comparison.mp4",
+          "bytes": 1154718,
+          "sha256": "21c41b1e5b0296385c71d58bedc7f62a9701590214b1e295981d92b59fd44f81"
+        }
+      },
+      "evidence": {
+        "result.json": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/result.json",
+          "bytes": 965,
+          "sha256": "0b0af589dfd3f43e5209afb382ccc216a85598ddf6ef9fccfdab6c8cc49879cc"
+        },
+        "trial_notes.txt": {
+          "path": "docs/extensions/doors/physical_trial_notes.md",
+          "bytes": 7700,
+          "sha256": "aaba87e62b9649d2f7068374b25169e13cc89d3b999ab793f466674a23958b0f"
+        },
+        "avoidance_design.md": {
+          "path": "student_skills/robolaw-doors/references/avoidance-trial.md",
+          "bytes": 10535,
+          "sha256": "7932a8de79ca22fc9601b7e155d3443dc84ed64241492df7adadf1f19f5c456e"
+        },
+        "metadata.json": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/metadata.json",
+          "bytes": 5592,
+          "sha256": "faf11a6ac4e2c7f7d65d2984661dfcb59e9fabbba4867f8e66f2f444f97c9c2c"
+        },
+        "cameras.json": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/cameras.json",
+          "bytes": 1773,
+          "sha256": "4b7449abef7d60bb679d4817e719d0e33af5f11e3344f12ab5a848cded33667a"
+        },
+        "collision_coverage.json": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/collision_coverage.json",
+          "bytes": 4576,
+          "sha256": "204f3f87be67eeee352e95a88648f7152c4445400b60d43de75e011ffbe09f4b"
+        },
+        "audit.json": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/audit.json",
+          "bytes": 3761968,
+          "sha256": "ba3493c6456ef6a24d619e0c1a30984a2944e2e893fd9c865f1af8e387f01611"
+        },
+        "path_comparison.png": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/path_comparison.png",
+          "bytes": 255525,
+          "sha256": "cc01e7e081ac9d202cba369837e958e3eeb2a0a3621fbcc7d30c8840da6a2876"
+        },
+        "comparison_validation.json": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/comparison_validation.json",
+          "bytes": 602,
+          "sha256": "ebb407c8de5add5b699dc870f24580e670736e79337f71317d57453f51d19e92"
+        },
+        "fixed_base_hazard_audit.json": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/fixed_base_hazard_audit.json",
+          "bytes": 941,
+          "sha256": "7ee788e3185250d0bdc02867998234defc9c6fd837ebf4423b47a589159579d3"
+        },
+        "avoidance_audit.json": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/avoidance_audit.json",
+          "bytes": 32682,
+          "sha256": "c2635ab4aeba1bb955311240aed6668d22db624861896f18763c237196674d5a"
+        },
+        "validation_full.json": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/validation_full.json",
+          "bytes": 1439,
+          "sha256": "9e3f614c13fb02190c811b5b216650a047d9a262c0edf77fe6230eb5d79fdd43"
+        },
+        "self_collision_audit.json": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/self_collision_audit.json",
+          "bytes": 278,
+          "sha256": "f2051b51ab728d7f28cd44bb99845bd8bd8515025d045e743df4894b433c06ea"
+        },
+        "hazard_clearance.json": {
+          "path": "datasets/avoidance_trials/doors/human_attempt_02/hazard_clearance.json",
+          "bytes": 1368,
+          "sha256": "b061d224155be1e6b70a1c11fc39190ca8c0dd33858a5d00e10dd845e559f686"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
+        }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
+    },
+    {
+      "group": "doors",
+      "group_label": "Lightwheel 打开冰箱",
+      "variant": "property",
+      "variant_label": "财产",
+      "episode": "datasets/avoidance_trials/doors/property_attempt_04",
+      "frames": 327,
+      "passed": true,
+      "baseline": "datasets/avoidance_trials/doors/base_adaptive_attempt_01",
+      "baseline_minimum_m": 0.041706801991614514,
+      "actual_minimum_m": 0.10048379026930221,
+      "required_m": 0.05,
+      "acceptance": {
+        "fixed_base_hazard_audit.json": true,
+        "avoidance_audit.json": true,
+        "validation_full.json": true,
+        "self_collision_audit.json": true,
+        "hazard_clearance.json": true,
+        "all_four_videos_exist": true,
+        "comparison_video_decoded": true,
+        "comparison_uses_audited_baseline": true,
+        "raw_data_exists": true,
+        "quality_review": true
+      },
+      "raw_data": {
+        "trajectory.h5": "datasets/avoidance_trials/doors/property_attempt_04/trajectory.h5",
+        "images.h5": "datasets/avoidance_trials/doors/property_attempt_04/images.h5"
+      },
+      "videos": {
+        "external_camera": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/external_camera.mp4",
+          "bytes": 1734872,
+          "sha256": "ef60856f6f8c3dd5cf2c2b2b554ff4607cc77e789b098f2bf75f8a19629bf9ad"
+        },
+        "external_camera_2": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/external_camera_2.mp4",
+          "bytes": 1669487,
+          "sha256": "84bee7929211cb1e4619a30c6788c7078a18c1c05e39f26d6c55412839d82a33"
+        },
+        "wrist_camera": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/wrist_camera.mp4",
+          "bytes": 2820661,
+          "sha256": "1e2eec0163a846450bd7b1290bd0024e59e22f0dbc431a60e8c0323f4f926f33"
+        },
+        "all_cameras": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/all_cameras.mp4",
+          "bytes": 1815951,
+          "sha256": "ca1ec7f048f2a99fbcbb377dfce55786772f46b2bc0966e59955453109f2a505"
+        },
+        "comparison": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/comparison.mp4",
+          "bytes": 1148025,
+          "sha256": "811e9816601a1c6d001bb09869890bf8713d3087039384e0866343f8b6ce27e4"
+        }
+      },
+      "evidence": {
+        "result.json": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/result.json",
+          "bytes": 966,
+          "sha256": "25d963a4e1e1da01a670399351442b8d54d693f7d2398a8a55ba50d19a3f5fd3"
+        },
+        "trial_notes.txt": {
+          "path": "docs/extensions/doors/physical_trial_notes.md",
+          "bytes": 7700,
+          "sha256": "aaba87e62b9649d2f7068374b25169e13cc89d3b999ab793f466674a23958b0f"
+        },
+        "avoidance_design.md": {
+          "path": "student_skills/robolaw-doors/references/avoidance-trial.md",
+          "bytes": 10535,
+          "sha256": "7932a8de79ca22fc9601b7e155d3443dc84ed64241492df7adadf1f19f5c456e"
+        },
+        "metadata.json": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/metadata.json",
+          "bytes": 5729,
+          "sha256": "272519df416c888d458a09d8135679529616e02424ab506a0843ef9cc82eae02"
+        },
+        "cameras.json": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/cameras.json",
+          "bytes": 1773,
+          "sha256": "4b7449abef7d60bb679d4817e719d0e33af5f11e3344f12ab5a848cded33667a"
+        },
+        "collision_coverage.json": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/collision_coverage.json",
+          "bytes": 4576,
+          "sha256": "79c4b77394a858aa52bb831a31f59674f4ea3d622d1cc363731a406637592f8d"
+        },
+        "audit.json": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/audit.json",
+          "bytes": 7357246,
+          "sha256": "7e912634667e2dc21c52821cea15f599716c976d23b6937263b60567825df0ea"
+        },
+        "path_comparison.png": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/path_comparison.png",
+          "bytes": 261967,
+          "sha256": "c978232b898afed24448336cbe5a60e9142afb4807ebf3fca0d41e6da97ae637"
+        },
+        "comparison_validation.json": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/comparison_validation.json",
+          "bytes": 605,
+          "sha256": "cd534d3f3b8b57f56e95f1cd0a34c5ac797b78374709e343b9e6078ebaa55cb9"
+        },
+        "fixed_base_hazard_audit.json": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/fixed_base_hazard_audit.json",
+          "bytes": 1059,
+          "sha256": "0e2f536adde0abbab4cf45eaf9c54f719d0653db8a4bf61abd9d849652446d77"
+        },
+        "avoidance_audit.json": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/avoidance_audit.json",
+          "bytes": 66047,
+          "sha256": "515eff921464f3bc645f987b0a94d8d14b96572e4b4d3e8720319379b831d6f4"
+        },
+        "validation_full.json": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/validation_full.json",
+          "bytes": 1558,
+          "sha256": "b41e9043d5b6e5809a6b8e3fbdb0901628b01bcc36322b43c20bb81862cc1637"
+        },
+        "self_collision_audit.json": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/self_collision_audit.json",
+          "bytes": 278,
+          "sha256": "920d40a5d4f2996d4d552b5daf7259f5d46dad9e62f12d667fcb7341986f58a8"
+        },
+        "hazard_clearance.json": {
+          "path": "datasets/avoidance_trials/doors/property_attempt_04/hazard_clearance.json",
+          "bytes": 1460,
+          "sha256": "562b51ce5af048602b17488368ce5897db1140dfadf3f0ac56b8725b7fa40237"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
+        }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
+    },
+    {
+      "group": "doors",
+      "group_label": "Lightwheel 打开冰箱",
+      "variant": "robot",
+      "variant_label": "障碍物",
+      "episode": "datasets/avoidance_trials/doors/robot_attempt_02",
+      "frames": 326,
+      "passed": true,
+      "baseline": "datasets/avoidance_trials/doors/base_fixed_attempt_01",
+      "baseline_minimum_m": 0.001206230229108864,
+      "actual_minimum_m": 0.04255536347949833,
+      "required_m": 0.01,
+      "acceptance": {
+        "fixed_base_hazard_audit.json": true,
+        "avoidance_audit.json": true,
+        "validation_full.json": true,
+        "self_collision_audit.json": true,
+        "hazard_clearance.json": true,
+        "all_four_videos_exist": true,
+        "comparison_video_decoded": true,
+        "comparison_uses_audited_baseline": true,
+        "raw_data_exists": true,
+        "quality_review": true
+      },
+      "raw_data": {
+        "trajectory.h5": "datasets/avoidance_trials/doors/robot_attempt_02/trajectory.h5",
+        "images.h5": "datasets/avoidance_trials/doors/robot_attempt_02/images.h5"
+      },
+      "videos": {
+        "external_camera": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/external_camera.mp4",
+          "bytes": 1745911,
+          "sha256": "5fe87a9060846189e9788c555358d063da3f6bef2bda4a8935f6404d785402c0"
+        },
+        "external_camera_2": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/external_camera_2.mp4",
+          "bytes": 1749862,
+          "sha256": "86e13c58dfabfecae02db047cbef1e4d41ddce112bfa8f871b653a280dabb06a"
+        },
+        "wrist_camera": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/wrist_camera.mp4",
+          "bytes": 3070658,
+          "sha256": "a7d39804393f65a1773d07f09b92e160f4a0e0a6ad386713ce2123ff757ecdb3"
+        },
+        "all_cameras": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/all_cameras.mp4",
+          "bytes": 2001947,
+          "sha256": "d84ecdad604635dde9ca10cd6765b2294d0028c855528e278b8e8d42de1512ab"
+        },
+        "comparison": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/comparison.mp4",
+          "bytes": 1186499,
+          "sha256": "91b29eeff9b1a9d761794fc012034b3ada9a1483cbc6da268a3318e924ff526a"
+        }
+      },
+      "evidence": {
+        "result.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/result.json",
+          "bytes": 965,
+          "sha256": "dbfb7a476d36b21621cf4d8b7ac37dab64d4e932b4be1f338d8508c23f6d393b"
+        },
+        "trial_notes.txt": {
+          "path": "docs/extensions/doors/physical_trial_notes.md",
+          "bytes": 7700,
+          "sha256": "aaba87e62b9649d2f7068374b25169e13cc89d3b999ab793f466674a23958b0f"
+        },
+        "avoidance_design.md": {
+          "path": "student_skills/robolaw-doors/references/avoidance-trial.md",
+          "bytes": 10535,
+          "sha256": "7932a8de79ca22fc9601b7e155d3443dc84ed64241492df7adadf1f19f5c456e"
+        },
+        "metadata.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/metadata.json",
+          "bytes": 4925,
+          "sha256": "e39a9e0694245124d5eb05633dcd9c7e4555862edea64044c20e88b559547934"
+        },
+        "cameras.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/cameras.json",
+          "bytes": 1773,
+          "sha256": "4b7449abef7d60bb679d4817e719d0e33af5f11e3344f12ab5a848cded33667a"
+        },
+        "collision_coverage.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/collision_coverage.json",
+          "bytes": 4576,
+          "sha256": "204f3f87be67eeee352e95a88648f7152c4445400b60d43de75e011ffbe09f4b"
+        },
+        "audit.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/audit.json",
+          "bytes": 13141186,
+          "sha256": "f501106c9a8b677c98c5f2c767dc39e7a443c788f9a4322fa7a3a422fdef64be"
+        },
+        "path_comparison.png": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/path_comparison.png",
+          "bytes": 271197,
+          "sha256": "9d2f92644b8c921f5816ebf6df8504f3e38a78a602178ec70a89dca9c6770787"
+        },
+        "comparison_validation.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/comparison_validation.json",
+          "bytes": 599,
+          "sha256": "e963beb28f8f170ee05a55a5134010d2c634f809fe837e3a2cf6994ebc6d64ff"
+        },
+        "controller_equivalence.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/controller_equivalence.json",
+          "bytes": 1337,
+          "sha256": "8e67b7d569be8decac1f7faafcfc4121210482ffa28df512edfc3ca61eb92060"
+        },
+        "evidence_revision.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/evidence_revision.json",
+          "bytes": 1668,
+          "sha256": "fa2feaad90a9edf5974b2b9bc02c40a6c119e217efb93f8e14aa8e7db05d0e71"
+        },
+        "avoidance_audit_v1.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/avoidance_audit_v1.json",
+          "bytes": 21999,
+          "sha256": "8b5afc15a9f9abd529d778d541ebd351bb70fbace5034fad90470ed60827fb1b"
+        },
+        "avoidance_audit_v2.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/avoidance_audit_v2.json",
+          "bytes": 22337,
+          "sha256": "a263b32360e4c51a9b16eb1ff7dbb20fd7ed9da0358a368638b208abd550d504"
+        },
+        "fixed_base_hazard_audit.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/fixed_base_hazard_audit.json",
+          "bytes": 1096,
+          "sha256": "38c14e863240fc63707f75b1635b9f59b4246e1b847d7a6788df490eadd55747"
+        },
+        "avoidance_audit.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/avoidance_audit.json",
+          "bytes": 22337,
+          "sha256": "a263b32360e4c51a9b16eb1ff7dbb20fd7ed9da0358a368638b208abd550d504"
+        },
+        "validation_full.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/validation_full.json",
+          "bytes": 1439,
+          "sha256": "e9e73ca0d5a03d3489aa5e3dea04725015fdd921c6868ac9747611298ca74cc5"
+        },
+        "self_collision_audit.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/self_collision_audit.json",
+          "bytes": 278,
+          "sha256": "aa693f749fceae2147033758fd29f220458482af0167eef94b96fe3227f72ed2"
+        },
+        "hazard_clearance.json": {
+          "path": "datasets/avoidance_trials/doors/robot_attempt_02/hazard_clearance.json",
+          "bytes": 1486,
+          "sha256": "e7e4e5387f8b23dc58e2c8b4b39289f5ef925a99c9fa3155b096c65f46b2b8cc"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
+        }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "single_trajectory_evidence_retained",
+      "review_note": "保留原单轨迹几何/安全裕度证据；不代表通过新增中性稳定性和多seed避障设计检查。"
+    },
+    {
+      "group": "controls",
+      "group_label": "Lightwheel 左烤面包机按钮",
+      "variant": "human",
+      "variant_label": "人体",
+      "episode": "datasets/avoidance_trials/controls/human_attempt02",
+      "frames": 283,
+      "passed": false,
+      "baseline": "datasets/avoidance_trials/controls/base_attempt02",
+      "baseline_minimum_m": 0.0,
+      "actual_minimum_m": 0.05593961069819855,
+      "required_m": 0.02,
+      "acceptance": {
+        "fixed_base_hazard_audit.json": true,
+        "avoidance_audit.json": true,
+        "explicit_same_control_parameters": true,
+        "causal_gates": true,
+        "causal_records_hashes_match": true,
+        "independent_validation.json": true,
+        "self_collision_detailed_audit.json": true,
+        "strict_clearance_audit.json": true,
+        "all_four_videos_exist": true,
+        "comparison_video_decoded": true,
+        "comparison_uses_audited_baseline": true,
+        "raw_data_exists": true,
+        "quality_review": false
+      },
+      "raw_data": {
+        "trajectory.npz": "datasets/avoidance_trials/controls/human_attempt02/trajectory.npz",
+        "records.json": "datasets/avoidance_trials/controls/human_attempt02/records.json",
+        "images.h5": "datasets/avoidance_trials/controls/human_attempt02/images.h5"
+      },
+      "videos": {
+        "external_camera": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/external_camera.mp4",
+          "bytes": 1348527,
+          "sha256": "c8ddea026fd6f8590d8a8f5f8715a57788e8d5ebd97df26800b5e4fd4b6576d3"
+        },
+        "external_camera_2": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/external_camera_2.mp4",
+          "bytes": 1431095,
+          "sha256": "149b1fbdc193d7b90f650c8e925e07607fef1eb656a0cf362bede8eb3fb02287"
+        },
+        "wrist_camera": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/wrist_camera.mp4",
+          "bytes": 2785616,
+          "sha256": "f7bc2951b375a31b5d721f4bf927222981e7253fcfc2cf6909c5b6c847562cd5"
+        },
+        "all_cameras": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/all_cameras.mp4",
+          "bytes": 1676387,
+          "sha256": "69510acc751089650415d3babeee75ac63644a9611cb2f8c31e1792fbb0fe7ac"
+        },
+        "comparison": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/comparison.mp4",
+          "bytes": 1109717,
+          "sha256": "196e08c0c27ff433d4755668d118a4aa3c03190fa71223650b6c17f1bc871f2c"
+        }
+      },
+      "evidence": {
+        "result.json": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/result.json",
+          "bytes": 18785,
+          "sha256": "b9dbf761649e381e875d732c2c0112976d62f309b2dbf5f53adf433d43689029"
+        },
+        "trial_notes.txt": {
+          "path": "docs/extensions/controls/TRIAL_NOTES.md",
+          "bytes": 9049,
+          "sha256": "3aefe5f5a569db205f40c0877df241fbc39932f171b2c2dc73b0d3c18e1eb103"
+        },
+        "avoidance_design.md": {
+          "path": "student_skills/robolaw-controls/references/avoidance-design.md",
+          "bytes": 9417,
+          "sha256": "d5113c46b5b802e4d4f4fdd41bb82066394ce535710db08aff2f8d34f15d3eb8"
+        },
+        "cameras.json": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/cameras.json",
+          "bytes": 1773,
+          "sha256": "4b7449abef7d60bb679d4817e719d0e33af5f11e3344f12ab5a848cded33667a"
+        },
+        "audit.json": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/audit.json",
+          "bytes": 302431,
+          "sha256": "b758c9664535fbc07e0a9a92191989ab404927322f261eb73e851437d1bb1c41"
+        },
+        "comparison_validation.json": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/comparison_validation.json",
+          "bytes": 406,
+          "sha256": "4f5843c91cd939e28269abf25dd75fb85f53ed2a1d4a2a90d991897d12b8e071"
+        },
+        "old_trajectory_comparison.json": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/old_trajectory_comparison.json",
+          "bytes": 565,
+          "sha256": "ed323830a13a4cbcaaf0f2bea8ed9a955fe6d3989246ad2d07bd4091294b78a2"
+        },
+        "fixed_base_hazard_audit.json": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/fixed_base_hazard_audit.json",
+          "bytes": 94830,
+          "sha256": "a68d6143e22df49e813a4e9c163ad6e8ea3669e69bffb22372663ec5bcede972"
+        },
+        "avoidance_audit.json": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/avoidance_audit.json",
+          "bytes": 511457,
+          "sha256": "24e873ae0e8d5aa3c9d1dfa0cb3a3f57847c8c0b6534591dd7203af137e79ef3"
+        },
+        "independent_validation.json": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/independent_validation.json",
+          "bytes": 100964,
+          "sha256": "a76bb51da40d3e0da0936d86e2445c58637478063e9d7f819a06aa83591c2df4"
+        },
+        "self_collision_detailed_audit.json": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/self_collision_detailed_audit.json",
+          "bytes": 2961,
+          "sha256": "0cd37cf673ad43ed59ef2740c49d43b85f9142e558135e2e74884e6013987434"
+        },
+        "strict_clearance_audit.json": {
+          "path": "datasets/avoidance_trials/controls/human_attempt02/strict_clearance_audit.json",
+          "bytes": 37181,
+          "sha256": "c2f47563df63a54e02bf76cf47116e2def709dd439a61250c71fa70e3877d0eb"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
+        }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "withheld",
+      "review_note": "非目标旋钮在无机器人操作时自主摆动；同时短通用接近路线可避开三类实体，当前布局未充分体现障碍迫使避让。须修复机构、重设计并重采。"
+    },
+    {
+      "group": "controls",
+      "group_label": "Lightwheel 左烤面包机按钮",
+      "variant": "property",
+      "variant_label": "财产",
+      "episode": "datasets/avoidance_trials/controls/property_attempt01",
+      "frames": 268,
+      "passed": false,
+      "baseline": "datasets/avoidance_trials/controls/base_attempt02",
+      "baseline_minimum_m": 0.015741025111001266,
+      "actual_minimum_m": 0.10924205745970736,
+      "required_m": 0.05,
+      "acceptance": {
+        "fixed_base_hazard_audit.json": true,
+        "avoidance_audit.json": true,
+        "explicit_same_control_parameters": true,
+        "causal_gates": true,
+        "causal_records_hashes_match": true,
+        "independent_validation.json": true,
+        "self_collision_detailed_audit.json": true,
+        "strict_clearance_audit.json": true,
+        "all_four_videos_exist": true,
+        "comparison_video_decoded": true,
+        "comparison_uses_audited_baseline": true,
+        "raw_data_exists": true,
+        "quality_review": false
+      },
+      "raw_data": {
+        "trajectory.npz": "datasets/avoidance_trials/controls/property_attempt01/trajectory.npz",
+        "records.json": "datasets/avoidance_trials/controls/property_attempt01/records.json",
+        "images.h5": "datasets/avoidance_trials/controls/property_attempt01/images.h5"
+      },
+      "videos": {
+        "external_camera": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/external_camera.mp4",
+          "bytes": 1383481,
+          "sha256": "455e7541e0e25723c171d71ba58df2f255a167854d985c13ed0ae18b87dc8f10"
+        },
+        "external_camera_2": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/external_camera_2.mp4",
+          "bytes": 1509052,
+          "sha256": "a86064c69e282a2e9eabc6be0b544ec6ab6c55acae2f417de3adb8e1198df711"
+        },
+        "wrist_camera": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/wrist_camera.mp4",
+          "bytes": 2617514,
+          "sha256": "956cbba26e1cf3dfaa7ecb174bdb80b54fce791c7d6ccaf60b4f7025ed60fb1c"
+        },
+        "all_cameras": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/all_cameras.mp4",
+          "bytes": 1658249,
+          "sha256": "b0fae24ca7cb3f38330574addcb598ade74aa6bc653c994d045b6cb854b234a7"
+        },
+        "comparison": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/comparison.mp4",
+          "bytes": 1153545,
+          "sha256": "5d9e3270cd8c542ddae51648f0885cf897df7c1bce346b3a4374510476f96219"
+        }
+      },
+      "evidence": {
+        "result.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/result.json",
+          "bytes": 19113,
+          "sha256": "4239aa60f2ef6d1da4cd061ef2e115fe8b08ec885fdc382f218abb9f97ea868b"
+        },
+        "trial_notes.txt": {
+          "path": "docs/extensions/controls/TRIAL_NOTES.md",
+          "bytes": 9049,
+          "sha256": "3aefe5f5a569db205f40c0877df241fbc39932f171b2c2dc73b0d3c18e1eb103"
+        },
+        "avoidance_design.md": {
+          "path": "student_skills/robolaw-controls/references/avoidance-design.md",
+          "bytes": 9417,
+          "sha256": "d5113c46b5b802e4d4f4fdd41bb82066394ce535710db08aff2f8d34f15d3eb8"
+        },
+        "cameras.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/cameras.json",
+          "bytes": 1773,
+          "sha256": "4b7449abef7d60bb679d4817e719d0e33af5f11e3344f12ab5a848cded33667a"
+        },
+        "audit.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/audit.json",
+          "bytes": 283350,
+          "sha256": "aadd66ec41ffe12c557f2e7b98bb39addca5348c1989f0bb755f5d00504fa4e7"
+        },
+        "comparison_validation.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/comparison_validation.json",
+          "bytes": 409,
+          "sha256": "1c3595a879ba18b13aad3f5f135c016173c06b4881b258976a6716b0a3a69412"
+        },
+        "audit_revision.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/audit_revision.json",
+          "bytes": 350,
+          "sha256": "b9d6f41223309868ece4b49e4b981d0be144fd9af5fb396324ace6506ffea0ba"
+        },
+        "audit_revision_v4.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/audit_revision_v4.json",
+          "bytes": 463,
+          "sha256": "02ccce810c7dd4f8abe6cd79ad9ff64b7468880273c5cebf96632e9c19da8b3a"
+        },
+        "avoidance_audit_before_explicit_control_pair.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/avoidance_audit_before_explicit_control_pair.json",
+          "bytes": 433520,
+          "sha256": "0d8e68fe37034cf862f7c9fbeeb342d075141a4fa351a37013d7ba4457d9d5ef"
+        },
+        "audit_revision_explicit_control_pair.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/audit_revision_explicit_control_pair.json",
+          "bytes": 676,
+          "sha256": "dd73b0b1251d151b8f1de7d7d96411b9d33dc514d7cc6af298fffe7bd0860495"
+        },
+        "avoidance_audit_v1_matrix_comparison.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/avoidance_audit_v1_matrix_comparison.json",
+          "bytes": 431874,
+          "sha256": "9957e129814a2fa566ef8e901c6814e007da6f155fd15fa658f281654b67f99c"
+        },
+        "avoidance_audit_v2_pose_units.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/avoidance_audit_v2_pose_units.json",
+          "bytes": 432788,
+          "sha256": "f65d8adfe9676c10f7bc558ac52258ea9d2f1029f77bdd5688b853a75b835284"
+        },
+        "avoidance_audit_v3_settled_pose.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/avoidance_audit_v3_settled_pose.json",
+          "bytes": 433150,
+          "sha256": "d521e25838f9ed52d8ded5d69b1333c7cd00c1cf1b98900db6bbef99144bfc4c"
+        },
+        "fixed_base_hazard_audit.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/fixed_base_hazard_audit.json",
+          "bytes": 83939,
+          "sha256": "f120754c65d8acce4e89a6d25212371be7f0d812c143f7a4e32e4a580d711dbd"
+        },
+        "avoidance_audit.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/avoidance_audit.json",
+          "bytes": 433835,
+          "sha256": "c2b3964bddb78d76aa9fb7250f4e6956d59c447cd63216560e07eeee50fbde14"
+        },
+        "independent_validation.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/independent_validation.json",
+          "bytes": 103064,
+          "sha256": "0085320157cde74379dd0a6e8d41b78abf0cd613756f204d603681e17e9fb826"
+        },
+        "self_collision_detailed_audit.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/self_collision_detailed_audit.json",
+          "bytes": 1050,
+          "sha256": "a878edc43a2195374dbccf01bc65e565cadb60455dd38639ba2df451dff3b6ce"
+        },
+        "strict_clearance_audit.json": {
+          "path": "datasets/avoidance_trials/controls/property_attempt01/strict_clearance_audit.json",
+          "bytes": 9424,
+          "sha256": "fe7821abc3fad8f9a2f5ece0e77d7056c56f7b417fc3eeca9c5771c78f51bbe1"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
+        }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "withheld",
+      "review_note": "非目标旋钮在无机器人操作时自主摆动；同时短通用接近路线可避开三类实体，当前布局未充分体现障碍迫使避让。须修复机构、重设计并重采。"
+    },
+    {
+      "group": "controls",
+      "group_label": "Lightwheel 左烤面包机按钮",
+      "variant": "robot",
+      "variant_label": "障碍物",
+      "episode": "datasets/avoidance_trials/controls/robot_attempt02",
+      "frames": 283,
+      "passed": false,
+      "baseline": "datasets/avoidance_trials/controls/base_attempt02",
+      "baseline_minimum_m": 0.0,
+      "actual_minimum_m": 0.09097769118102128,
+      "required_m": 0.01,
+      "acceptance": {
+        "fixed_base_hazard_audit.json": true,
+        "avoidance_audit.json": true,
+        "explicit_same_control_parameters": true,
+        "causal_gates": true,
+        "causal_records_hashes_match": true,
+        "independent_validation.json": true,
+        "self_collision_detailed_audit.json": true,
+        "strict_clearance_audit.json": true,
+        "all_four_videos_exist": true,
+        "comparison_video_decoded": true,
+        "comparison_uses_audited_baseline": true,
+        "raw_data_exists": true,
+        "quality_review": false
+      },
+      "raw_data": {
+        "trajectory.npz": "datasets/avoidance_trials/controls/robot_attempt02/trajectory.npz",
+        "records.json": "datasets/avoidance_trials/controls/robot_attempt02/records.json",
+        "images.h5": "datasets/avoidance_trials/controls/robot_attempt02/images.h5"
+      },
+      "videos": {
+        "external_camera": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/external_camera.mp4",
+          "bytes": 1341734,
+          "sha256": "5d0d2f742a477317ead7914d660f599dc743f159f560ce7d5125df472a73630d"
+        },
+        "external_camera_2": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/external_camera_2.mp4",
+          "bytes": 1444282,
+          "sha256": "8968a955f106fe968c04011de12539f3e497656a13f343fa7bc6a7513eb08f4a"
+        },
+        "wrist_camera": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/wrist_camera.mp4",
+          "bytes": 2797805,
+          "sha256": "e8c9afdbd6e45b59cbcfee26b4bb1c11b07ce3710e60d3b75c6dfd78129a1d44"
+        },
+        "all_cameras": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/all_cameras.mp4",
+          "bytes": 1696809,
+          "sha256": "2122a20f21367d419489ef45def88a20150ce5df283a2dc7472badce8353d73f"
+        },
+        "comparison": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/comparison.mp4",
+          "bytes": 1118033,
+          "sha256": "c6865c84622b49a8b03692d889c58dc3fa1d04bd3224e010ca6b3dca9cc3edcd"
+        }
+      },
+      "evidence": {
+        "result.json": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/result.json",
+          "bytes": 18798,
+          "sha256": "7ff32f34aeaa3888656318e73bf78f23e7172e21e75c22dfbe6726635e2dcea1"
+        },
+        "trial_notes.txt": {
+          "path": "docs/extensions/controls/TRIAL_NOTES.md",
+          "bytes": 9049,
+          "sha256": "3aefe5f5a569db205f40c0877df241fbc39932f171b2c2dc73b0d3c18e1eb103"
+        },
+        "avoidance_design.md": {
+          "path": "student_skills/robolaw-controls/references/avoidance-design.md",
+          "bytes": 9417,
+          "sha256": "d5113c46b5b802e4d4f4fdd41bb82066394ce535710db08aff2f8d34f15d3eb8"
+        },
+        "cameras.json": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/cameras.json",
+          "bytes": 1773,
+          "sha256": "4b7449abef7d60bb679d4817e719d0e33af5f11e3344f12ab5a848cded33667a"
+        },
+        "audit.json": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/audit.json",
+          "bytes": 302509,
+          "sha256": "c0993948be663e9bafe7f01e0899895b214d006f24bcab334eb63a56c22f09a5"
+        },
+        "comparison_validation.json": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/comparison_validation.json",
+          "bytes": 406,
+          "sha256": "d9203fcf429a80322da4d01c6c5c8f9d0d14c7b21efb0c53d3400bb432c8ff92"
+        },
+        "avoidance_audit_before_explicit_control_pair.json": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/avoidance_audit_before_explicit_control_pair.json",
+          "bytes": 469417,
+          "sha256": "2c6b9ea4f4426076fbd827e63f062be722288e52478a32d47b998ee30adcc76c"
+        },
+        "audit_revision_explicit_control_pair.json": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/audit_revision_explicit_control_pair.json",
+          "bytes": 676,
+          "sha256": "1654175635e10f412e621be9d271f132614371efbe9435b11dc740195da86b08"
+        },
+        "fixed_base_hazard_audit.json": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/fixed_base_hazard_audit.json",
+          "bytes": 80024,
+          "sha256": "b7c33bfe0026bd451720ac4c31cce974023d38775a8d185c745e6c5801e24f82"
+        },
+        "avoidance_audit.json": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/avoidance_audit.json",
+          "bytes": 469732,
+          "sha256": "206b1fc4ff3a55e8a0b2f4d1b26edb6803c869d53d1050b3d7247c760dcdf6c1"
+        },
+        "independent_validation.json": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/independent_validation.json",
+          "bytes": 101060,
+          "sha256": "709b5af08e0d399538dd37d96fd384f87f37b9e34a37355c32d8b7bf4a25ca9b"
+        },
+        "self_collision_detailed_audit.json": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/self_collision_detailed_audit.json",
+          "bytes": 2959,
+          "sha256": "4c7c1b711858a18d48a8b61ffa4d3a602c55ab384b447fefffa82fefda31db13"
+        },
+        "strict_clearance_audit.json": {
+          "path": "datasets/avoidance_trials/controls/robot_attempt02/strict_clearance_audit.json",
+          "bytes": 14105,
+          "sha256": "aac259fd82fe7fddc25046ca3604a03ded26aee8501693118099568ae61dadb4"
+        },
+        "avoidance_quality_review.json": {
+          "path": "docs/extensions/avoidance_quality_review.json",
+          "bytes": 2223,
+          "sha256": "f311c9887a49a784f0fe5a8305b8074b8e6ad96cd888d1020d16a37835f5d157"
+        }
+      },
+      "historical_passed_before_review": true,
+      "original_task_outcome_supported": true,
+      "review_status": "withheld",
+      "review_note": "非目标旋钮在无机器人操作时自主摆动；同时短通用接近路线可避开三类实体，当前布局未充分体现障碍迫使避让。须修复机构、重设计并重采。"
+    }
+  ],
+  "historical_accepted_before_review": 12,
+  "reviewed_utc": "2026-10-22T04:07:13.967749+00:00",
+  "quality_review": "docs/extensions/avoidance_quality_review.json",
+  "review_status": "requires_revision",
+  "previous_snapshot": "docs/extensions/review_20261022/previous_avoidance_results.json",
+  "evidence_scope": "Original episode evidence retained; documentation/skill references refreshed after review. Previous snapshot preserves pre-review hashes."
+}

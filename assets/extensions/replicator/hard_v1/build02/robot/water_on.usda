@@ -1,0 +1,35 @@
+#usda 1.0
+(
+    subLayers = [
+        @scene.usda@
+    ]
+)
+
+over "World"
+{
+    over "hard"
+    {
+        over "water"
+        {
+            custom bool hard:flowing = 1
+            custom float hard:valveAngleDeg = 55
+            custom float hard:valveOpenFraction = 1
+
+            over "FlowVisual"
+            {
+                token visibility = "inherited"
+            }
+
+            over "ValveLever"
+            {
+                float xformOp:rotateZ = -125
+            }
+
+            over "ValveJoint"
+            {
+                float drive:angular:physics:targetPosition = 55
+            }
+        }
+    }
+}
+

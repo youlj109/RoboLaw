@@ -1,0 +1,751 @@
+{
+  "schema_version": 1,
+  "student": "C",
+  "group": "doors",
+  "skill": "robolaw-doors",
+  "label": "Lightwheel 全部8个开门环境",
+  "branch": null,
+  "branch_naming": "student_name_initials",
+  "base_branch": "origin/ylj",
+  "base_repository": "https://github.com/youlj109/RoboLaw",
+  "base_commit": "cce14d656a2a449e3f04846748025c80adfbc829",
+  "arena_revision": "7050ecbc9b3fc689df51ea7cc7f9a64b18294bf6",
+  "representative_task": "kitchen_bench_lightwheel_open_fridge",
+  "owned_paths": [
+    "kitchen_safety/extensions/doors/",
+    "configs/extensions/doors/",
+    "scripts/extensions/doors/",
+    "tests/extensions/doors/",
+    "assets/extensions/doors/",
+    "docs/extensions/doors/"
+  ],
+  "environment_count": 8,
+  "tasks": [
+    {
+      "id": "kitchen_bench_lightwheel_open_cabinet_u_shaped_with_island_farmhouse2",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_cabinet_u_shaped_with_island_farmhouse2.yaml",
+      "source_sha256": "24720152158816d3a9c0ba00eda1afd20720366d49aef33508e7c0d38922dced",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_u_shaped_with_island_farmhouse2",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 1.3,
+          "stand_footprint_xy_m": [
+            0.54,
+            0.91032
+          ],
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "cabinet",
+          "parent_id": "kitchen",
+          "prim_path": "cab_main_main_group",
+          "object_type": "articulation",
+          "params": {
+            "openable_joint_name": "left_door_joint"
+          }
+        },
+        {
+          "id": "shelf",
+          "parent_id": "kitchen",
+          "prim_path": "shelves_main_group/corpus/board_0",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "counter_top",
+          "parent_id": "kitchen",
+          "prim_path": "counter_main_main_group/top_geometry_right",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Open the cabinet door next to the shelf.",
+        "subtasks": [
+          {
+            "kind": "OpenDoorTask",
+            "params": {
+              "openable_object": "cabinet",
+              "openness_threshold": 0.2,
+              "reset_openness": 0.0
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "cabinet",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "shelf",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "counter_top",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.3
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_open_freezer_g_shaped_large_scandinavian",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_freezer_g_shaped_large_scandinavian.yaml",
+      "source_sha256": "6e1292687fffaf8a797b6ddcf3e1450877d8de7fae0d32f74a78d0f77f6cef82",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "fridge",
+          "parent_id": "kitchen",
+          "prim_path": "fridge_right_group",
+          "object_type": "articulation",
+          "params": {
+            "openable_joint_name": "freezer_door_joint"
+          }
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Open the freezer right door.",
+        "subtasks": [
+          {
+            "kind": "OpenDoorTask",
+            "params": {
+              "openable_object": "fridge",
+              "openness_threshold": 0.4,
+              "reset_openness": 0.0
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "fridge",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "fridge",
+          "params": {
+            "side": "negative_x",
+            "distance_m": 0.6
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_open_fridge",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_fridge.yaml",
+      "source_sha256": "679575de18414f7ccb49a5d43bcb2e1b952eb4c82c680ab79c55734aa638d3ee",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_one_wall_coastal",
+        "params": {}
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8
+        }
+      },
+      "objects": [],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "fridge",
+          "parent_id": "kitchen",
+          "prim_path": "fridge_main_group",
+          "object_type": "articulation",
+          "params": {
+            "openable_joint_name": "fridge_door_joint"
+          }
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "open the fridge door",
+        "subtasks": [
+          {
+            "kind": "OpenDoorTask",
+            "params": {
+              "openable_object": "fridge",
+              "openness_threshold": 0.2,
+              "reset_openness": 0.0
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "fridge",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "fridge",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.1
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_fridge_g_shaped_large_scandinavian.yaml",
+      "source_sha256": "f9b1d691f9976b45ef8b67b1f338788c8c1bc6a71b5cb9e54b322f4b6cdb7f8c",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "fridge",
+          "parent_id": "kitchen",
+          "prim_path": "fridge_right_group",
+          "object_type": "articulation",
+          "params": {
+            "openable_joint_name": "fridge_door_joint"
+          }
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Open the fridge left door.",
+        "subtasks": [
+          {
+            "kind": "OpenDoorTask",
+            "params": {
+              "openable_object": "fridge",
+              "openness_threshold": 0.4,
+              "reset_openness": 0.0
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "fridge",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "fridge",
+          "params": {
+            "side": "negative_x",
+            "distance_m": 0.6
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_fridge_u_shaped_with_island_farmhouse2.yaml",
+      "source_sha256": "d8e2b5045e36a90a78baa47a23d83e40f22b55e4cfda2bb5e0df8877284cfc0e",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_u_shaped_with_island_farmhouse2",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "stand_footprint_xy_m": [
+            0.27,
+            0.91032
+          ],
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "fridge",
+          "parent_id": "kitchen",
+          "prim_path": "fridge_right_group",
+          "object_type": "articulation",
+          "params": {
+            "openable_joint_name": "fridge_door_joint"
+          }
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Open the fridge door.",
+        "subtasks": [
+          {
+            "kind": "OpenDoorTask",
+            "params": {
+              "openable_object": "fridge",
+              "openness_threshold": 0.2
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "fridge",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "fridge",
+          "params": {
+            "side": "negative_x",
+            "distance_m": 0.5
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_open_microwave",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_microwave.yaml",
+      "source_sha256": "c0a197bdc1cb961edfd6080d4008b357e8e20ed15d6bef2c639feaacca7345c0",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_one_wall_coastal",
+        "params": {}
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 1.1
+        }
+      },
+      "objects": [],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "microwave",
+          "parent_id": "kitchen",
+          "prim_path": "microwave_main_group",
+          "object_type": "articulation",
+          "params": {
+            "openable_joint_name": "microjoint"
+          }
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "open the microwave door",
+        "subtasks": [
+          {
+            "kind": "OpenDoorTask",
+            "params": {
+              "openable_object": "microwave",
+              "openness_threshold": 0.1,
+              "reset_openness": 0.0
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "microwave",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "microwave",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.3
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_microwave_g_shaped_large_scandinavian.yaml",
+      "source_sha256": "689cd31b246562d594b65859b8a1fad265d8368f5e47b7a30de51ad3823867f0",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 1.0,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "microwave",
+          "parent_id": "kitchen",
+          "prim_path": "microwave_right_group",
+          "object_type": "articulation",
+          "params": {
+            "openable_joint_name": "microjoint"
+          }
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Open the microwave door.",
+        "subtasks": [
+          {
+            "kind": "OpenDoorTask",
+            "params": {
+              "openable_object": "microwave",
+              "openness_threshold": 0.4,
+              "reset_openness": 0.0
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "microwave",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "microwave",
+          "params": {
+            "side": "negative_x",
+            "distance_m": 0.5
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_open_oven_g_shaped_large_scandinavian",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_open_oven_g_shaped_large_scandinavian.yaml",
+      "source_sha256": "f9726fe55ba90cb4845c8ab068cc937e6acd882083e3e38608e110bd7fa471ac",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.7,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "oven",
+          "parent_id": "kitchen",
+          "prim_path": "oven_right_group",
+          "object_type": "articulation",
+          "params": {
+            "openable_joint_name": "door_joint"
+          }
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Open the oven door below the microwave.",
+        "subtasks": [
+          {
+            "kind": "OpenDoorTask",
+            "params": {
+              "openable_object": "oven",
+              "openness_threshold": 0.4,
+              "reset_openness": 0.0
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "oven",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "oven",
+          "params": {
+            "side": "negative_x",
+            "distance_m": 0.45
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 0.0
+          }
+        }
+      ]
+    }
+  ]
+}

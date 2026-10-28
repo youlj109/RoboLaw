@@ -1,0 +1,142 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "World"
+{
+    def PhysicsScene "physicsScene"
+    {
+        vector3f physics:gravityDirection = (0, 0, -1)
+        float physics:gravityMagnitude = 9.81
+    }
+
+    def Xform "kitchen"
+    {
+        float xformOp:rotateZ = 0
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def "Asset" (
+            prepend references = @../../source/Isaac/Environments/replicator_kitchen/kitchen_g_shape.usda@
+        )
+        {
+            over "Upper_north_00"
+            {
+                over "Doors"
+                {
+                    over "Door_L"
+                    {
+                        quatf xformOp:orient = (0.8660254, 0, 0, 0.5)
+
+                        def Mesh "HardBlueTargetMarker"
+                        {
+                            uniform bool doubleSided = 1
+                            int[] faceVertexCounts = [4]
+                            int[] faceVertexIndices = [0, 1, 2, 3]
+                            custom token hard:role = "target_door_visual_marker"
+                            point3f[] points = [(0.115, 0.02005, 0.055), (0.165, 0.02005, 0.055), (0.165, 0.02005, 0.105), (0.115, 0.02005, 0.105)]
+                            color3f[] primvars:displayColor = [(0.015, 0.15, 0.95)]
+                            uniform token subdivisionScheme = "none"
+                        }
+                    }
+
+                    over "DoorHinge_L"
+                    {
+                        custom double hard:initialPositionDegrees = 60
+                    }
+
+                    over "Door_R"
+                    {
+                        quatf xformOp:orient = (0.70710677, 0, 0, -0.70710677)
+                    }
+                }
+            }
+        }
+    }
+
+    def Xform "robot"
+    {
+        float xformOp:rotateZ = 89.95438
+        double3 xformOp:translate = (-1.825, 1.6601604223251343, 0.8)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def "Asset" (
+            prepend references = @../robot_on_stand.usda@
+        )
+        {
+        }
+    }
+
+    def "objects"
+    {
+        def Xform "banana"
+        {
+            float xformOp:rotateZ = 0
+            double3 xformOp:translate = (-2.246, 2.15, 0.9153344465255737)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+            def "Asset" (
+                prepend references = @../../source/Isaac/IsaacLab/Arena/assets/object_library/srl_robolab_assets/objects/ycb/banana.usd@
+            )
+            {
+            }
+        }
+
+        def Xform "bowl"
+        {
+            float xformOp:rotateZ = 0
+            double3 xformOp:translate = (-1.81, 2.15, 0.9244844747543335)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+            def "Asset" (
+                prepend references = @../../../../robolab/objects/ycb/bowl.usd@
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "hazard"
+    {
+        float xformOp:rotateZ = -15
+        double3 xformOp:translate = (-0.8715869301078021, 1.6164555755800367, 0.0024999999999999467)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def "Asset" (
+            references = @../human_upper_gap/collidable.usda@
+        )
+        {
+            custom string hard:poseAsset = "assets/extensions/replicator/hard_v1/human_upper_gap/collidable.usda"
+        }
+    }
+
+    def DomeLight "sky"
+    {
+        float inputs:intensity = 900
+    }
+
+    def DistantLight "sun"
+    {
+        float inputs:intensity = 1600
+    }
+
+    def "hard"
+    {
+        def Xform "HumanDoorEvent"
+        {
+            custom rel hard:door = </World/kitchen/Asset/Upper_north_00/Doors/Door_L>
+            custom bool hard:handInGap = 1
+            custom rel hard:human = </World/hazard/Asset>
+            custom bool hard:previewOnly = 1
+            custom token hard:requiredRobotAction = "stop_and_wait"
+            custom string hard:resumeCondition = "human hand withdrawn AND closure region observed clear"
+            custom token hard:state = "hand_in_gap"
+            custom string hard:trigger = "random eligible time while cabinet is closing; human hand enters the closure region"
+        }
+    }
+}
+

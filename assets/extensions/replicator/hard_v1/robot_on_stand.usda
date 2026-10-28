@@ -1,0 +1,26 @@
+#usda 1.0
+(
+    defaultPrim = "panda"
+)
+
+def Xform "panda" (
+    prepend references = @../../../nvidia/Assets/Isaac/6.1/Isaac/IsaacLab/Arena/assets/robot_library/droid/franka_robotiq_2f_85_flattened.usd@</panda>
+)
+{
+    over "panda_link0"
+    {
+        def Xform "stand_instanceable"
+        {
+            float3 xformOp:scale = (1.2, 1.2, 1.0066692)
+            double3 xformOp:translate = (-0.05, 0, 2.384185648907078e-8)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+            def "franka_table" (
+                prepend references = @../../../nvidia/Assets/Isaac/6.1/Isaac/IsaacLab/Arena/assets/object_library/srl_robolab_assets/robots/franka_stand_grey.usda@</World/franka_table>
+            )
+            {
+            }
+        }
+    }
+}
+

@@ -1,0 +1,453 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-10-22T04:03:38.186524+00:00",
+  "source_head": "9974113c1103cf9e5b6c1537a850cc7c1fd099e0",
+  "scope": "Read-only adversarial design review; no GPU, no simulation execution, no changes to source configs or episode artifacts. Independent CPU geometric counterfactuals only. Physical task-success and passive appliance-joint causality are separate root/agent reviews.",
+  "headline": "不能继续把历史12/12概括为12条真实必要且清晰展示避障的有效样本。A人体必要性只由盒代理造成；D三条仅排除一条弯曲旧路线，设计明显性不足。其余保留为单固定样本的几何/裕度对照证据，非稳定benchmark成功率。",
+  "withdraw_or_qualify": [
+    "撤回“12/12均已充分体现有效避障”这一未经区分的表述；保留历史原报告供追溯。",
+    "A人体标记真实几何必要性未证实，重新摆放或换更可靠的人体风险位置。不能为通过而放松20mm门槛。",
+    "D三条标记设计需改进，任务成功结论等待独立按钮机构因果审查。",
+    "C人体/财产是改抓点并避让；原任务语义一致不等于TCP目标完全相同。",
+    "安全距离违规不是必然物理碰撞；5cm财产距离是保护裕度，不是破碎仿真。"
+  ],
+  "episodes": [
+    {
+      "group": "replicator",
+      "variant": "human",
+      "episode": "datasets/avoidance_trials/replicator/human/attempt_04",
+      "baseline": "datasets/avoidance_trials/replicator/base/baseline_human_03",
+      "historical_accepted": true,
+      "review_conclusion": "真实几何必要性未证实，需要重新设计",
+      "detail": "唯一失败来自50×66×162mm携带物盒代理。独立整瓶源顶点凸包+机器人/夹爪碰撞网格，全3848个原基线物理子步最低21.0467mm，高于20mm；原33个违规子步全部消失。没有验证PhysX cooked shape及contact offsets，不能反向宣称物理无风险。",
+      "baseline_minimum_m": 0.01538152807869685,
+      "execution_margin_m": 0.02,
+      "actual_reported_minimum_m": 0.04047870730107339,
+      "evidence": "datasets/avoidance_trials/replicator/human/attempt_04/avoidance_audit.json",
+      "evidence_sha256": "11a69e03973886da13a072b487e929aea69e9638f528ecfbb45a029f3286f867"
+    },
+    {
+      "group": "replicator",
+      "variant": "property",
+      "episode": "datasets/avoidance_trials/replicator/property/attempt_02",
+      "baseline": "datasets/avoidance_trials/replicator/base/baseline_01",
+      "historical_accepted": true,
+      "review_conclusion": "单基线安全裕度避让证据仍成立",
+      "detail": "源瓶凸包替换盒子后，原102个代理违规子步中仍61个违规，最低44.3429mm<50mm。不是实体接触或打碎证据。任务迁移路径改变约22cm，视觉上应重点呈现携带物与瓶子/花瓶表面的裕度。",
+      "baseline_minimum_m": 0.037400177412301124,
+      "execution_margin_m": 0.05,
+      "actual_reported_minimum_m": 0.11167033631529874,
+      "evidence": "datasets/avoidance_trials/replicator/property/attempt_02/avoidance_audit.json",
+      "evidence_sha256": "5b1e684c2bc220b482e90594cb8981ee4b57c28d727331e76b95f5e09855b12b"
+    },
+    {
+      "group": "replicator",
+      "variant": "robot",
+      "episode": "datasets/avoidance_trials/replicator/robot/attempt_01",
+      "baseline": "datasets/avoidance_trials/replicator/base/baseline_01",
+      "historical_accepted": true,
+      "review_conclusion": "单基线几何相交避让证据仍成立",
+      "detail": "真实Cylinder对robot_hull仍相交；165个原代理违规子步中153个真几何违规。迁移阶段路径约22cm变化是较清晰案例，但未做多seed稳定性或最短无障碍路线集合测试。",
+      "baseline_minimum_m": 0.0,
+      "execution_margin_m": 0.01,
+      "actual_reported_minimum_m": 0.04535228857364158,
+      "evidence": "datasets/avoidance_trials/replicator/robot/attempt_01/avoidance_audit.json",
+      "evidence_sha256": "03f01f2d68f2263de7c4119f5816d72ff4491a128c11b5013f87c28401f04017"
+    },
+    {
+      "group": "lightwheel_pick_place",
+      "variant": "human",
+      "episode": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01",
+      "baseline": "datasets/avoidance_trials/lightwheel_pick_place/base_attempt04",
+      "historical_accepted": true,
+      "review_conclusion": "主要是冗余关节姿态避让，不是明显TCP绕行",
+      "detail": "近人体的原机器人hull最低11.8108mm<20mm；新38.0652mm。原TCP抓取目标与方向保持，额外lookahead拒绝不安全接触列后换冗余IK姿态。预抓TCP最大变化仅23mm，arm q差约0.523rad；只看末端难看出避障。",
+      "baseline_minimum_m": 0.01181077938425991,
+      "execution_margin_m": 0.02,
+      "actual_reported_minimum_m": 0.03806521107865404,
+      "evidence": "datasets/avoidance_trials/lightwheel_pick_place/human_attempt01/avoidance_audit.json",
+      "evidence_sha256": "e48588435009ae89b0de2516ea55859f793284b6468059e7ae477cc77992f197"
+    },
+    {
+      "group": "lightwheel_pick_place",
+      "variant": "property",
+      "episode": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01",
+      "baseline": "datasets/avoidance_trials/lightwheel_pick_place/base_attempt04",
+      "historical_accepted": true,
+      "review_conclusion": "单基线安全裕度避让证据仍成立",
+      "detail": "旧37.5757mm<50mm，新115.9723mm；没有旧实体相撞证据。携带物/末端迁移约17.6cm改变，图示缺少实体轮廓与膨胀安全边界。",
+      "baseline_minimum_m": 0.03757572075200948,
+      "execution_margin_m": 0.05,
+      "actual_reported_minimum_m": 0.11597229124107436,
+      "evidence": "datasets/avoidance_trials/lightwheel_pick_place/property_attempt01/avoidance_audit.json",
+      "evidence_sha256": "dfdabf5ced9178e01e8aa6fcad57691d33264995db8e6e6db12cf906308ba235"
+    },
+    {
+      "group": "lightwheel_pick_place",
+      "variant": "robot",
+      "episode": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03",
+      "baseline": "datasets/avoidance_trials/lightwheel_pick_place/base_attempt04",
+      "historical_accepted": true,
+      "review_conclusion": "单基线真实几何避让较清晰",
+      "detail": "最终采用short_projecting_crossbar，不是早期未通过的长横杆。旧真实几何相交，新55.8543mm；预抓与原几乎相同，差异集中transfer，末端最大12.43cm/携带青柠13.49cm。应展示这段及横杆投影，不能只展示关节差条图。",
+      "baseline_minimum_m": 0.0,
+      "execution_margin_m": 0.01,
+      "actual_reported_minimum_m": 0.05585430681623363,
+      "evidence": "datasets/avoidance_trials/lightwheel_pick_place/robot_attempt03/avoidance_audit.json",
+      "evidence_sha256": "e81a7f60ecac8a7a5495b657d92e5d8d966388989553202841a668245b26d383"
+    },
+    {
+      "group": "doors",
+      "variant": "human",
+      "episode": "datasets/avoidance_trials/doors/human_attempt_02",
+      "baseline": "datasets/avoidance_trials/doors/base_adaptive_attempt_01",
+      "historical_accepted": true,
+      "review_conclusion": "避让同时改变抓取点，不能称同一TCP目标的绕行",
+      "detail": "相同候选政策由+12cm改抓+18cm真实源把手位置，旧几何相交、新42.8637mm。可称障碍感知的接近/抓点选择，不能说纯粹在固定末端目标下绕路。",
+      "baseline_minimum_m": 0.0,
+      "execution_margin_m": 0.02,
+      "actual_reported_minimum_m": 0.04286365353961639,
+      "evidence": "datasets/avoidance_trials/doors/human_attempt_02/avoidance_audit.json",
+      "evidence_sha256": "c2635ab4aeba1bb955311240aed6668d22db624861896f18763c237196674d5a"
+    },
+    {
+      "group": "doors",
+      "variant": "property",
+      "episode": "datasets/avoidance_trials/doors/property_attempt_04",
+      "baseline": "datasets/avoidance_trials/doors/base_adaptive_attempt_01",
+      "historical_accepted": true,
+      "review_conclusion": "安全裕度与抓点共同适配；需要明确标注",
+      "detail": "旧41.7068mm<50mm，新100.4838mm；抓点同样提高60mm。无障碍和有障碍曲线终点不同，当前侧视图主要差异可由抬高抓点解释。薄高独立地台虽有支撑，但场景语义/自然摆放值得重新设计。",
+      "baseline_minimum_m": 0.041706801991614514,
+      "execution_margin_m": 0.05,
+      "actual_reported_minimum_m": 0.10048379026930221,
+      "evidence": "datasets/avoidance_trials/doors/property_attempt_04/avoidance_audit.json",
+      "evidence_sha256": "515eff921464f3bc645f987b0a94d8d14b96572e4b4d3e8720319379b831d6f4"
+    },
+    {
+      "group": "doors",
+      "variant": "robot",
+      "episode": "datasets/avoidance_trials/doors/robot_attempt_02",
+      "baseline": "datasets/avoidance_trials/doors/base_fixed_attempt_01",
+      "historical_accepted": true,
+      "review_conclusion": "单基线固定抓点避让证据仍成立",
+      "detail": "固定+12cm抓点，两侧同政策；旧真实圆柱/夹爪最小1.2062mm<10mm，新42.5554mm，并非几何相交。应展示源把手、横杆和夹爪的局部最近点。",
+      "baseline_minimum_m": 0.001206230229108864,
+      "execution_margin_m": 0.01,
+      "actual_reported_minimum_m": 0.04255536347949833,
+      "evidence": "datasets/avoidance_trials/doors/robot_attempt_02/avoidance_audit.json",
+      "evidence_sha256": "a263b32360e4c51a9b16eb1ff7dbb20fd7ed9da0358a368638b208abd550d504"
+    },
+    {
+      "group": "controls",
+      "variant": "human",
+      "episode": "datasets/avoidance_trials/controls/human_attempt02",
+      "baseline": "datasets/avoidance_trials/controls/base_attempt02",
+      "historical_accepted": true,
+      "review_conclusion": "确实排除所选旧轨迹，但障碍设计弱",
+      "detail": "旧轨迹手指碰撞人体；新路线0.263m，较旧0.829m反而短，且新路线对三个障碍分别都安全。无法据此宣称人迫使明显绕行。按钮机构自主运动/任务因果性由主审另查。",
+      "baseline_minimum_m": 0.0,
+      "execution_margin_m": 0.02,
+      "actual_reported_minimum_m": 0.05593961069819855,
+      "evidence": "datasets/avoidance_trials/controls/human_attempt02/avoidance_audit.json",
+      "evidence_sha256": "24e873ae0e8d5aa3c9d1dfa0cb3a3f57847c8c0b6534591dd7203af137e79ef3"
+    },
+    {
+      "group": "controls",
+      "variant": "property",
+      "episode": "datasets/avoidance_trials/controls/property_attempt01",
+      "baseline": "datasets/avoidance_trials/controls/base_attempt02",
+      "historical_accepted": true,
+      "review_conclusion": "确实排除所选旧轨迹，但障碍设计弱且视频误导风险高",
+      "detail": "旧15.7410mm<50mm，新109.2421mm；新路线0.953m，另一个已执行的0.253m controls路线在该财产位姿仍有109.2140mm裕度。只证明某条绕远旧路线被花瓶排除，尚不能说明直接操作路线受阻。目标是烤面包机左cancel按钮，微波炉称谓错误；画面旋钮自主运动由主审检查。",
+      "baseline_minimum_m": 0.015741025111001266,
+      "execution_margin_m": 0.05,
+      "actual_reported_minimum_m": 0.10924205745970736,
+      "evidence": "datasets/avoidance_trials/controls/property_attempt01/avoidance_audit.json",
+      "evidence_sha256": "c2b3964bddb78d76aa9fb7250f4e6956d59c447cd63216560e07eeee50fbde14"
+    },
+    {
+      "group": "controls",
+      "variant": "robot",
+      "episode": "datasets/avoidance_trials/controls/robot_attempt02",
+      "baseline": "datasets/avoidance_trials/controls/base_attempt02",
+      "historical_accepted": true,
+      "review_conclusion": "真实相交反事实成立，但场景并不迫使明显绕路",
+      "detail": "旧robot_hull与真实圆柱相交；新路线0.253m，对三种障碍分别都安全。与human路线TCP Hausdorff仅6.854mm，接近路线通用而非针对该横杆显著绕行。",
+      "baseline_minimum_m": 0.0,
+      "execution_margin_m": 0.01,
+      "actual_reported_minimum_m": 0.09097769118102128,
+      "evidence": "datasets/avoidance_trials/controls/robot_attempt02/avoidance_audit.json",
+      "evidence_sha256": "206b1fc4ff3a55e8a0b2f4d1b26edb6803c869d53d1050b3d7247c760dcdf6c1"
+    }
+  ],
+  "controls_cross_path_findings": {
+    "prepress_path": {
+      "base": {
+        "tcp_path_m": 0.82871034008893,
+        "start_goal_euclidean_m": 0.14808216534544813,
+        "start": [
+          2.11265763260397,
+          -0.515192581101543,
+          1.1507417232872834
+        ],
+        "goal": [
+          2.0807073529198488,
+          -0.4400636610011357,
+          1.0271975907432824
+        ]
+      },
+      "human": {
+        "tcp_path_m": 0.26327339669365823,
+        "start_goal_euclidean_m": 0.148144531779959,
+        "start": [
+          2.11265763260397,
+          -0.515192581101543,
+          1.1507417232872834
+        ],
+        "goal": [
+          2.080831431140112,
+          -0.4401388160141533,
+          1.0270452094201088
+        ]
+      },
+      "property": {
+        "tcp_path_m": 0.9528329187837691,
+        "start_goal_euclidean_m": 0.14800889397868178,
+        "start": [
+          2.11265763260397,
+          -0.515192581101543,
+          1.1507417232872834
+        ],
+        "goal": [
+          2.081270970592842,
+          -0.44020007879897727,
+          1.027058115873077
+        ]
+      },
+      "robot": {
+        "tcp_path_m": 0.25310212720021186,
+        "start_goal_euclidean_m": 0.14814784235740344,
+        "start": [
+          2.11265763260397,
+          -0.515192581101543,
+          1.1507417232872834
+        ],
+        "goal": [
+          2.0808309039613038,
+          -0.44013807119686343,
+          1.027041832090773
+        ]
+      }
+    },
+    "human_vs_robot_tcp_hausdorff_m": 0.006853521530665636,
+    "new_human_and_robot_paths_each_safe_under_all_three_individual_hazards": true,
+    "scope": "CPU-only cross-evaluation of measured actual action-after states. No unsafe playback. Each controls variant hazard evaluated independently; this does not prove combined-hazard physical success or dense substep safety of hypothetical substitutions. Exact robot_hull/individual gripper vs authored primitives supplementary geometry excludes redundant capsules.",
+    "conclusion": "A previously executed short path is an available counterexample to the implication that each chosen control hazard demands a visibly long detour. This does not invalidate that the single selected baseline violates its specified clearance."
+  },
+  "replicator_human_proxy_review": {
+    "source_asset": "assets/robolab/objects/hope/mustard_bottle.usd",
+    "source_sha256": "ee5aa3c97b00f0d945af34a514772fe7c276256f455132eb86ebeadfbaf6e7b9",
+    "source_default_prim": "/mustard_bottle",
+    "source_root_xform_ops": [
+      "xformOp:translate",
+      "xformOp:rotateXYZ",
+      "xformOp:scale"
+    ],
+    "enabled_collision_meshes": [
+      {
+        "path": "/mustard_bottle/obj_000016_Mesh",
+        "vertices": 10676,
+        "approximation": "convexDecomposition",
+        "local_to_root_matrix": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "bounds_min": [
+          -0.02428709901869297,
+          -0.03256659954786301,
+          -0.08002520352602005
+        ],
+        "bounds_max": [
+          0.02428709901869297,
+          0.03256659954786301,
+          0.08002520352602005
+        ]
+      }
+    ],
+    "enabled_collider_count": 1,
+    "proxy_half_extents_m": [
+      0.025,
+      0.033,
+      0.081
+    ],
+    "proxy_contains_all_authored_collision_vertices": true,
+    "largest_vertex_excess_m": -0.00043340045213699496,
+    "minimum_box_padding_per_axis_m": [
+      0.0007129009813070311,
+      0.00043340045213699496,
+      0.0009747964739799525
+    ],
+    "convex_hull_contained_by_box": true,
+    "pose_source": "datasets/avoidance_trials/replicator/base/baseline_human_03/physics_states.npz",
+    "pose_sha256": "df090ea5d4690a29d7b32e8270ab4c9dbf06543071b1c7d85e36b77f2951f20a",
+    "recorded_pose_format": "xyz + xyzw, same scipy Rotation.from_quat and translation used by original CollisionWorld._object_pose/transform",
+    "pose_quaternion_norm_minmax": [
+      0.9999999776588806,
+      1.0000002621208144
+    ],
+    "original_unsafe_physics_samples": 33,
+    "full_saved_physics_samples": 3848,
+    "full_probe_minimum": {
+      "physics_index": 1875,
+      "action_index": 264,
+      "phase": "above_bowl",
+      "valid": true,
+      "distance_m": 0.0210466764090978,
+      "required_m": 0.02,
+      "slack_m": 0.0010466764090978006,
+      "robot_part": "source_mustard//Bottle/obj_000016_Mesh",
+      "obstacle": "/World/Person/Visual_KitchenAdult/base_001",
+      "intersecting": false
+    },
+    "full_probe_unsafe_samples": 0,
+    "source_spawn_provenance": "kitchen_safety/extensions/replicator/environment.py:58 directly references source USD as RIGID object, no dimensions/scale override. Authored root transform ops evaluate to identity. Review reference clears root ops and applies exactly the recorded rigid root xyz+xyzw; child mesh transform is preserved.",
+    "limitations": [
+      "No Isaac/PhysX cook or physical counterfactual executed. Convex-decomposition cooking/contact offsets can differ from raw mesh/hull.",
+      "21.047 mm margin leaves only 1.047 mm over requested 20 mm; this is evidence existing broad box-based true-necessity assertion is unestablished, not a certified physically safe execution.",
+      "Probe preserves existing source robot_hulls and measured articulated gripper collision meshes; excludes extra arm/finger/capsule envelopes. Fixed base legality is not reevaluated here."
+    ],
+    "source_root_xform_values": {
+      "xformOp:translate": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "xformOp:rotateXYZ": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "xformOp:scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "source_root_local_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "methodological_limits": [
+    "每个配置只有一条成功无障碍基线和一条挑选后的成功有障碍样本；相同seed不能替代fresh/reused planner RNG状态、geometry world更改和fallback分支的逐项因果对照。",
+    "在已有基线上搜索并挑选违规最多的摆放会对该轨迹过拟合；尤其D基线0.829m而已存在合法0.253m路径。",
+    "路径长度或形状不同本身不证明是障碍驱动；现有反事实提高了证据质量，但并未测多数可行直接路线被阻断，也未测试策略/布局随机化稳定性。",
+    "源/新目标相对关系与路径形状不同需要分别报告。C+60mm抓点变化不能全算局部绕障。",
+    "CPU authored mesh/primitive/hull测试不等同于PhysX cooked geometry/contact generation；这里不执行任何可能不安全的反事实。"
+  ],
+  "visualization_review": [
+    "B机器人图上灰色稀疏点只有边界采样，无法直观看清横杆实体或10mm膨胀边界；底部距离曲线有证据，但需要空间解释。",
+    "C财产图上没有障碍轮廓且末端终点提高60mm，容易误把选抓点当同目标绕行；应明确标注。",
+    "D同屏左无障碍右有障碍视频未把旧轨迹投影到右场景；观众看不到“旧路线哪里会违规”。需要明确标注的离线ghost轨迹、最近点、margin边界，不能物理执行危险旧轨迹。",
+    "对关节冗余避让展示肘部/前臂与手部，不只画TCP；对财产保护展示50mm保护区并说明非碰撞阈值。"
+  ],
+  "recommended_acceptance_changes": [
+    {
+      "priority": 0,
+      "action": "独立核实每种原任务是机器人接触导致成功",
+      "evidence_needed": "中立保持负对照、按钮/旋钮/门的全关节状态、时间对齐真实接触及第一次成功前因果链；由主审实施。"
+    },
+    {
+      "priority": 0,
+      "action": "区分planner保守模型与物理必要性模型",
+      "evidence_needed": "以真实源碰撞hull/primitive复核所有旧违规状态；任何只存在于盒子/capsule冗余膨胀的违规单独标为保守模型触发。"
+    },
+    {
+      "priority": 1,
+      "action": "重做D布局，明确围绕原本短、自然接近走廊设计障碍",
+      "evidence_needed": "保留原机器人初态、目标、厨房与margin；至少包含当前0.253m可执行路线在内的无障碍路线集合，不再只挑0.829m路径。排除终点/初态封死。"
+    },
+    {
+      "priority": 1,
+      "action": "成对开关障碍，控制planner RNG和内部阶段状态",
+      "evidence_needed": "相同起点、末端目标、源布局、候选抓点政策和规划器fresh/reset模式；保存每次请求与失败原因。只在几何上执行危险反事实。"
+    },
+    {
+      "priority": 1,
+      "action": "将“改变抓点”和“固定目标绕行”分为不同增广能力",
+      "evidence_needed": "同把手任务允许变化时明确报告选点变化，并独立报告阻挡点与抓点是否合法，不混用固定目标宣传。"
+    },
+    {
+      "priority": 2,
+      "action": "增加少量多seed/多摆放检验与更直接的视频证据",
+      "evidence_needed": "不要求200条，但应保存全部尝试与成功/失败，使用实景相机+同场景ghost几何+最近距离标注，按操作阶段对齐并保留真实原速视频。"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "reports/review_20261022/controls_cross_path_review.json",
+      "sha256": "6937f0941b00976e6ce3ea39f7d419820df6efd0e1aef64d43a0983b9f9c95ad"
+    },
+    {
+      "path": "reports/review_20261022/replicator_exact_probe.json",
+      "sha256": "c44937aa84c9346ce5da4d802007dcac3048e44e122f7b722a3fbeafeb96b663"
+    },
+    {
+      "path": "reports/review_20261022/replicator_convex_hull_probe.json",
+      "sha256": "820890087bf1ea9bf649cb906d1e2329d10084839d34c5cddf09519d42292a2b"
+    },
+    {
+      "path": "reports/review_20261022/replicator_human_full_hull_probe.json",
+      "sha256": "a647b735d44cbd5e60175a4bb709a9f62ad55d52108a633d0542c3f873207a80"
+    },
+    {
+      "path": "reports/review_20261022/replicator_bottle_proxy_provenance.json",
+      "sha256": "3587f9298054d3c8dd38f8fff0abd14251cfbce2239edf5e0e0b5b102895bc63"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "task_id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+  "task": "pick up the mustard bottle and place it in the red bowl",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_u_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    1.7523482277989388,
+    0.09782254695892334,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 0.0,
+  "objects": {
+    "mustard_bottle": {
+      "usd_path": "assets/robolab/objects/hope/mustard_bottle.usd",
+      "position": [
+        2.1537341252714395,
+        -0.09217745304107666,
+        0.9773928855061531
+      ],
+      "yaw_deg": 0.0
+    },
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        2.210169022977352,
+        0.33782254695892333,
+        0.9248526819497347
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "robot_projecting_crossbar",
+    "label": "Pedestal-mounted projecting metal bar",
+    "position": [
+      2.3194470304846626,
+      -0.264456049116847,
+      0.8978676778653872
+    ],
+    "yaw_deg": 225,
+    "dimensions": {
+      "overall_xyz_m": [
+        0.1599999964237213,
+        0.4684999981559813,
+        0.31249999891221525
+      ],
+      "tube_diameter_m": 0.036,
+      "tube_length_m": 0.4,
+      "tube_center_height_m": 0.28
+    },
+    "risk_region": "wrist / forearm",
+    "notes": [
+      "Static, countertop-bolted pedestal; cantilever projects toward the transport corridor.",
+      "Round steel tube and exposed tip create a narrow sweeping-collision hazard.",
+      "Warning collars and bolt heads are visual detail, not separate contact obstacles."
+    ],
+    "category": "robot",
+    "static": true,
+    "usd_path": "assets/obstacle_library/robot/projecting_crossbar.usda",
+    "provenance": {
+      "type": "procedural_local",
+      "generator": "scripts/build_library_robot.py",
+      "source": "Original parameterized geometry; no downloaded third-party meshes."
+    },
+    "asset_validation": {
+      "usd_valid": true,
+      "static": true,
+      "colliders": 5,
+      "visual_bounds_min_m": [
+        -0.07999999821186066,
+        -0.38849999994412066,
+        -1.0430812810713341e-10
+      ],
+      "visual_bounds_max_m": [
+        0.07999999821186066,
+        0.07999999821186066,
+        0.31249999880790713
+      ],
+      "measured_dimensions_xyz_m": [
+        0.1599999964237213,
+        0.4684999981559813,
+        0.31249999891221525
+      ]
+    }
+  }
+}

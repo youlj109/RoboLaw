@@ -1,0 +1,500 @@
+{
+  "schema_version": 1,
+  "student": "A/Cursor",
+  "group": "replicator",
+  "task_count": 14,
+  "task_ids": [
+    "kitchen_bench_replicator_g_shape_banana_bowl",
+    "kitchen_bench_replicator_g_shape_bowl_sink",
+    "kitchen_bench_replicator_g_shape_mustard_bowl",
+    "kitchen_bench_replicator_l_island_banana_bowl",
+    "kitchen_bench_replicator_l_island_bowl_sink",
+    "kitchen_bench_replicator_l_island_mustard_bowl",
+    "kitchen_bench_replicator_l_shape_banana_bowl",
+    "kitchen_bench_replicator_l_shape_bowl_sink",
+    "kitchen_bench_replicator_l_shape_mustard_bowl",
+    "kitchen_bench_replicator_peninsula_bowl_sink",
+    "kitchen_bench_replicator_peninsula_mustard_bowl",
+    "kitchen_bench_replicator_u_shape_banana_bowl",
+    "kitchen_bench_replicator_u_shape_bowl_sink",
+    "kitchen_bench_replicator_u_shape_mustard_bowl"
+  ],
+  "branch": {
+    "expected": "ylj-replicator",
+    "actual": "ylj",
+    "head": "cce14d656a2a449e3f04846748025c80adfbc829",
+    "remote": "https://github.com/youlj109/RoboLaw",
+    "created_or_switched": false,
+    "reason": "Forward-test user scope forbids changing branches or writing the repository"
+  },
+  "owned_paths": [
+    "kitchen_safety/extensions/replicator/",
+    "configs/extensions/replicator/",
+    "scripts/extensions/replicator/",
+    "tests/extensions/replicator/",
+    "assets/extensions/replicator/",
+    "docs/extensions/replicator/"
+  ],
+  "test_scope": {
+    "read_repository": true,
+    "write_root": "/tmp/robolaw-skill-test-a",
+    "network_downloads": false,
+    "gpu_started": false,
+    "repository_modified_by_this_student": false,
+    "other_students_required": false,
+    "training_status": "User reports training is running; no training/container/GPU action taken"
+  },
+  "status": "cpu_preparation_complete; first physical collection not ready",
+  "representative_task": "kitchen_bench_replicator_g_shape_mustard_bowl",
+  "first_task_manifest": "/tmp/robolaw-skill-test-a/first_task_manifest_v2.json",
+  "first_task_source_semantics": {
+    "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_g_shape_mustard_bowl.yaml",
+    "sha256": "cc781d2eadbfa2a3d3b884938f92a453ce09cf76db73590700eafcf15c9a69c1",
+    "background": {
+      "id": "kitchen",
+      "registry_name": "replicator_kitchen_g_shape",
+      "params": {
+        "collision_mode": "mesh"
+      }
+    },
+    "embodiment": {
+      "id": "droid",
+      "registry_name": "droid_abs_joint_pos",
+      "params": {
+        "stand_height_m": 0.8,
+        "placement_bbox_stand_only": true
+      }
+    },
+    "objects": [
+      {
+        "id": "mustard_bottle",
+        "registry_name": "mustard_bottle_hope_robolab",
+        "params": {}
+      },
+      {
+        "id": "bowl",
+        "registry_name": "bowl_ycb_robolab",
+        "params": {}
+      }
+    ],
+    "references": [
+      {
+        "id": "floor",
+        "parent_id": "kitchen",
+        "prim_path": "KitchenRoom/Floor",
+        "object_type": "base",
+        "params": {}
+      },
+      {
+        "id": "island_top",
+        "parent_id": "kitchen",
+        "prim_path": "CapSurface_03",
+        "object_type": "base",
+        "params": {}
+      }
+    ],
+    "relations": [
+      {
+        "kind": "is_anchor",
+        "subject": "floor",
+        "params": {}
+      },
+      {
+        "kind": "is_anchor",
+        "subject": "island_top",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "droid",
+        "reference": "floor",
+        "params": {}
+      },
+      {
+        "kind": "next_to",
+        "subject": "droid",
+        "reference": "island_top",
+        "params": {
+          "side": "positive_y",
+          "distance_m": 0.15,
+          "tolerance_m": 0.15
+        }
+      },
+      {
+        "kind": "rotate_around_solution",
+        "subject": "droid",
+        "params": {
+          "yaw_rad": -1.57
+        }
+      },
+      {
+        "kind": "on",
+        "subject": "mustard_bottle",
+        "reference": "island_top",
+        "params": {}
+      },
+      {
+        "kind": "on",
+        "subject": "bowl",
+        "reference": "island_top",
+        "params": {}
+      }
+    ],
+    "world_coordinates": "Not inferred from one-wall layout. Solve original relations after restoring real G-shape geometry, then read world transforms and support bounds.",
+    "success": {
+      "task_kind": "PickAndPlaceTask",
+      "sequence": [
+        "objects_settled",
+        "object_is_above_height over measured resting height by >0.01 m",
+        "object_on_destination with spawned geometry, upward destination contact and low speed"
+      ],
+      "placement_speed_m_s_strictly_below": 0.003,
+      "force_threshold_n": 0.1,
+      "support_cone_half_angle_rad": "pi/4",
+      "placement_consecutive_steps": 1,
+      "drop_failure_below_background_min_z_m": -0.2,
+      "evidence": [
+        "third_party/IsaacLab-Arena/isaaclab_arena/tasks/pick_and_place_task.py:65",
+        "third_party/IsaacLab-Arena/isaaclab_arena/tasks/pick_and_place_task.py:152",
+        "third_party/IsaacLab-Arena/isaaclab_arena/tasks/predicates/spatial.py:282",
+        "third_party/IsaacLab-Arena/isaaclab_arena/tasks/predicates/spatial.py:396"
+      ]
+    },
+    "cameras": {
+      "names": [
+        "external_camera",
+        "external_camera_2",
+        "wrist_camera"
+      ],
+      "resolution_each": [
+        1280,
+        720
+      ],
+      "mounts": [
+        "panda_link0",
+        "panda_link0",
+        "Gripper/Robotiq_2F_85/base_link"
+      ],
+      "preserve_original_mount_offsets_and_intrinsics": true,
+      "source": "third_party/IsaacLab-Arena/isaaclab_arena/embodiments/droid/droid.py:567"
+    },
+    "action_contract": "Original DROID absolute arm joint position: seven arm target values plus one binary gripper action. Preserve units/semantics and original camera timing; do not merely preserve shape."
+  },
+  "actual_commands_executed": [
+    {
+      "command": "python3 student_skills/robolaw-replicator/scripts/preflight.py --repo /home/oem/Code/RoboLaw --report /tmp/robolaw-skill-test-a/preflight_all.json",
+      "exit_code": 0,
+      "result": "14/14 pinned YAML hashes and environment IDs matched"
+    },
+    {
+      "command": "python3 student_skills/robolaw-replicator/scripts/preflight.py --repo /home/oem/Code/RoboLaw --task kitchen_bench_replicator_g_shape_mustard_bowl --report /tmp/robolaw-skill-test-a/preflight_first.json --emit-skeleton /tmp/robolaw-skill-test-a/first_task_manifest.json",
+      "exit_code": 0,
+      "result": "Initial planning manifest created; initial skill omitted relations"
+    },
+    {
+      "command": "python3 student_skills/robolaw-replicator/scripts/preflight.py --repo /home/oem/Code/RoboLaw --task kitchen_bench_replicator_g_shape_mustard_bowl --report /tmp/robolaw-skill-test-a/preflight_first_v2.json --emit-skeleton /tmp/robolaw-skill-test-a/first_task_manifest_v2.json",
+      "exit_code": 0,
+      "result": "After maintainer repair, regenerated manifest retains all seven source relations; equality assertion passed"
+    },
+    {
+      "command": "python3 scripts/check_scene_assets.py --require-restored",
+      "exit_code": 0,
+      "result": "Original 11 scene entries have required local files, including 13 external assets; does not validate Replicator scenes"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /tmp/robolaw-skill-test-a/cpu_prepare.py",
+      "exit_code": 0,
+      "result": "All 14 YAML semantic mappings and relation references checked; all 13 external asset hashes/sizes matched; local bottle mesh geometry calculation passed"
+    },
+    {
+      "command": "git status --short --branch",
+      "exit_code": 0,
+      "result": "branch ylj; untracked student_skills/; no branch or tracked source changes made by this test"
+    },
+    {
+      "command": "git remote -v",
+      "exit_code": 0,
+      "result": "origin is assigned base repository"
+    }
+  ],
+  "source_findings_and_gaps": [
+    {
+      "gap": "Group code/configuration/CLI does not yet exist in any owned directory",
+      "verified_by": {
+        "kitchen_safety/extensions/replicator/": false,
+        "configs/extensions/replicator/": false,
+        "scripts/extensions/replicator/": false,
+        "tests/extensions/replicator/": false,
+        "assets/extensions/replicator/": false,
+        "docs/extensions/replicator/": false
+      },
+      "impact": "Cannot give an existing executable first-task collection command"
+    },
+    {
+      "gap": "Five Replicator kitchen USD roots and banana USD were not found under repository assets/",
+      "scope": "Does not establish remote availability or a container cache state; only local repository was inspected",
+      "verified_by": {
+        "replicator_kitchens": [
+          "kitchen_g_shape.usda",
+          "kitchen_l_island.usda",
+          "kitchen_l_shape.usda",
+          "kitchen_peninsula.usda",
+          "kitchen_u_shape.usda"
+        ],
+        "banana_usd_found": []
+      },
+      "upstream_source": "background_library.py:243/251/259/267/275 uses ISAAC_STAGING_NUCLEUS_DIR/Environments/replicator_kitchen/*.usda; object_library.py:1541 uses ARENA_NUCLEUS_DIR/.../objects/ycb/banana.usd",
+      "next_action": "Implement group asset manifest and recursive reference resolver with source/license/hash evidence; obtain assets only when downloads are allowed. Do not claim existing baseline restore scripts cover these assets."
+    },
+    {
+      "gap": "Host Python lacks fcl, torch, curobo, isaaclab and isaaclab_arena; repository .venv-arena/bin/python absent",
+      "scope": "Module discovery only; connected container runtime not inspected or declared absent",
+      "impact": "Host cannot run collector. Later use an independent verified container/mount after GPU is available.",
+      "source": "scripts/arena_python.sh always executes /workspace/.venv-arena/bin/python in ARENA_CONTAINER, default arena-kitchen-dev"
+    },
+    {
+      "gap": "Public environment constructs fixed Lightwheel kitchen, mustard and bowl from global layout",
+      "source": "kitchen_safety/environment.py:45",
+      "next_action": "Implement local task-driven environment adapter preserving upstream relations, stand height, cameras, reset and success predicates; do not alter baseline/global registry"
+    },
+    {
+      "gap": "CollisionWorld drops geometry outside [1,-1.5,0.7]..[3.5,0.5,2.5]",
+      "source": "kitchen_safety/collision_planner.py:109",
+      "next_action": "Implement group collision reader over complete valid task workspace; test colliders outside old crop, origins, frame transforms and carried-object sweep"
+    },
+    {
+      "gap": "Collector, grasp/contact/carry logic and audit have bottle/bowl names and phases",
+      "source": [
+        "scripts/collect_kitchen.py:259",
+        "scripts/audit_collection_clearance.py:30",
+        "scripts/audit_collection_clearance.py:104",
+        "kitchen_safety/grasp_geometry.py:1",
+        "kitchen_safety/placement_geometry.py:1",
+        "kitchen_safety/guided_transport.py:47"
+      ],
+      "next_action": "Reuse validated mustard mesh functions for first task only; independently adapt banana grasp geometry and bowl-to-sink target/support geometry. Make task-aware safety/data validator, retaining shared alignment checks."
+    },
+    {
+      "gap": "Human catalog absent, but default MPFB files exist; only 10 nonhuman catalog entries",
+      "next_action": "Locally register human_default_mpfb alias to actual MPFB collider; do not assume other human IDs are restored"
+    },
+    {
+      "gap": "No parallel_collection.py or collect_kitchen_sequence.py; only execution-backend single accepted",
+      "source": "scripts/collect_obstacle_library.py:56",
+      "next_action": "Use single environment first; do not treat --num-envs as parallel support"
+    },
+    {
+      "gap": "Original scene runner only accepts published 11 scene IDs",
+      "source": "scripts/run_robolaw_scenes.py:18",
+      "next_action": "Implement new owned CLI with list/dry-run/seed/output/success quota/max attempts/resume before writing final run commands"
+    }
+  ],
+  "next_implementation_and_validation": [
+    {
+      "order": 1,
+      "paths": [
+        "configs/extensions/replicator/",
+        "assets/extensions/replicator/",
+        "scripts/extensions/replicator/"
+      ],
+      "work": "Import pinned source task semantics including relations; create missing-asset manifest, source/license reference inventory and verified local mapping. Explicitly fail on unavailable geometry.",
+      "cpu_acceptance": "14 unique tasks, no peninsula banana, semantic and hash agreement, reference closure, unresolved asset diagnostics"
+    },
+    {
+      "order": 2,
+      "paths": [
+        "kitchen_safety/extensions/replicator/"
+      ],
+      "work": "Build independent G-shape environment adapter, collision reader, measured base transform and first-task cuRobo executor; preserve original reset/cameras/predicate.",
+      "cpu_acceptance": "Frame conversion round trips; colliders beyond legacy AABB retained; semantic support/contact rules; entrypoint imports and --help/dry-run do not initialize GPU"
+    },
+    {
+      "order": 3,
+      "paths": [
+        "scripts/extensions/replicator/",
+        "tests/extensions/replicator/"
+      ],
+      "work": "Create task-aware collector, recorder, validation/audit, resume ledger and failure taxonomy. Preserve real q/object/target/hazard poses and result/validation/audit exit codes.",
+      "cpu_acceptance": "Reject malformed/missing state, camera misalignment, mismatched IDs/hashes and partial output; quota counts accepted successes and retains all failures"
+    },
+    {
+      "order": 4,
+      "paths": [
+        "configs/extensions/replicator/",
+        "docs/extensions/replicator/"
+      ],
+      "work": "Prepare base plus property_vase/robot_projecting_crossbar/human_default_mpfb anchored to actual G-shape geometry. Include meaningful geometry changes for random seeds, allowed contacts and feasibility/effect evidence.",
+      "cpu_acceptance": "All proposed spawn volumes supported and nonintersecting in actual restored geometry; collision meshes present; specification records per-episode perturbation"
+    },
+    {
+      "order": 5,
+      "work": "After GPU resource is available, verify independent ARENA_CONTAINER and /workspace mount; run runtime check and owned dry-run/help, then real baseline and diagnostics.",
+      "gpu_acceptance": "Actual G-shape transforms/supports, complete scene geometry and inherited camera settings verified before counting any rollout"
+    }
+  ],
+  "first_physical_collection_plan": {
+    "current_executable_collection_command": null,
+    "reason": "Owned collection entrypoint has not been implemented. A synthetic shell command would misrepresent current capability.",
+    "proposed_entrypoint_only": "scripts/extensions/replicator/collect.py",
+    "interface_to_implement_and_then_verify": [
+      "--task",
+      "--variant",
+      "--seed",
+      "--output",
+      "--success-quota",
+      "--max-attempts",
+      "--resume",
+      "--list-tasks",
+      "--list-variants",
+      "--dry-run"
+    ],
+    "command_release_gate": "Only after implementation, inspect actual --help and execute CPU dry-run; record its exact validated invocation and separate container prefix. Do not launch an invented command now.",
+    "preconditions": [
+      "G-shape and all referenced assets restored with source/hash/license records",
+      "Original relations resolved, including stand 0.8m and yaw -1.57, with measured world/local transforms",
+      "Complete collision world and gripper/carried-object geometry verified",
+      "Owned collector, original success predicate, task-aware audit and three-camera recorder ready",
+      "Independent container/mount/output confirmed and GPU free; ongoing training preserved"
+    ],
+    "baseline": {
+      "variant": "base/no_added_obstacle",
+      "seed": 42,
+      "accepted_success_quota": 1,
+      "max_attempts": 10,
+      "stop_and_diagnose_after_same_failure_count": 3,
+      "output_when_authorized": "datasets/replicator/kitchen_bench_replicator_g_shape_mustard_bowl/base/",
+      "reports_when_authorized": "reports/replicator/kitchen_bench_replicator_g_shape_mustard_bowl/base/"
+    },
+    "post_baseline_variants": [
+      {
+        "variant": "property_vase",
+        "accepted_success_quota": 3,
+        "seeds": [
+          42,
+          1001,
+          1002
+        ],
+        "seed_semantics": "one fixed + two distinct recorded geometry/appearance samples; seed alone is insufficient",
+        "max_attempts": 10
+      },
+      {
+        "variant": "robot_projecting_crossbar",
+        "accepted_success_quota": 3,
+        "seeds": [
+          42,
+          1001,
+          1002
+        ],
+        "seed_semantics": "one fixed + two distinct recorded geometry/appearance samples; seed alone is insufficient",
+        "max_attempts": 10
+      },
+      {
+        "variant": "human_default_mpfb",
+        "accepted_success_quota": 3,
+        "seeds": [
+          42,
+          1001,
+          1002
+        ],
+        "seed_semantics": "one fixed + two distinct recorded geometry/appearance samples; seed alone is insufficient",
+        "max_attempts": 10
+      }
+    ],
+    "evidence_per_attempt": [
+      "result.json content and exit code",
+      "original Arena predicate sequence and measured physical contacts",
+      "planning clearance separately from physics execution/contact/clearance checks",
+      "validation report and exit code, full RGB decoding and image/action/state alignment",
+      "audit report and exit code including final next_obs",
+      "3 original 1280x720 camera streams and preview reviewed on first success",
+      "source/config hashes, software versions, seed and actual randomized specification, phase/failure/timing"
+    ],
+    "acceptance": "Require task completion AND physical safety AND complete aligned recording. Keep fixed_only when only fixed layout is evidenced. No 200-episode batch.",
+    "later_order": [
+      "other four mustard_bowl tasks",
+      "four banana_bowl tasks",
+      "five bowl_sink tasks"
+    ]
+  },
+  "verification_summary": {
+    "verified": [
+      "all 14 assigned source YAML SHA256 and IDs",
+      "all 14 semantic structures and relation references",
+      "current skill-generated first manifest contains all seven source relations",
+      "original 11 scene required files exist",
+      "13 external assets exact size and SHA256",
+      "CPU-only source bottle mesh calculation: 160 sections",
+      "documented public code limitations from actual source",
+      "host dependency availability by discovery only"
+    ],
+    "not_verified": [
+      "Replicator kitchen/reference geometry and license retrieval",
+      "remote asset availability",
+      "container runtime or GPU availability",
+      "resolved G-shape world placement/collision/contact",
+      "cuRobo or PhysX execution",
+      "three-camera RGB capture/alignment",
+      "physical task success or safety",
+      "randomized variant effectiveness"
+    ],
+    "bottle_geometry": {
+      "passed": true,
+      "sections": 160,
+      "mesh_bounds_m": [
+        [
+          -0.02428709901869297,
+          -0.03256659954786301,
+          -0.08002520352602005
+        ],
+        [
+          0.02428709901869297,
+          0.03256659954786301,
+          0.08002520352602005
+        ]
+      ],
+      "safe_contact_z_range_m": [
+        -0.059025203526020045,
+        0.019974796473980053
+      ],
+      "identity_pose_tcp_target_m": [
+        -0.0002059754784878593,
+        0.0007122332005342433,
+        0.0
+      ],
+      "meaning": "Local source mesh geometry only; no G kitchen placement or physical grasp verified"
+    },
+    "physical_collection_verified": false
+  },
+  "independent_skill_evaluation": {
+    "blocked_by_skill": false,
+    "assessment": "The skill gives sufficient independent scope, source assignment, CPU entrypoint, ownership and acceptance rules to begin without other students. It explicitly distinguishes a planning manifest from working scene code. Physical execution is presently gated by missing implementation/assets and occupied GPU, not by an instruction to wait for other students.",
+    "defect_found_and_retested": {
+      "issue": "Initial assignment/manifest omitted source relations, so using the manifest alone could lose robot orientation/relative positioning and support surfaces",
+      "maintainer_fix_during_test": "Added relations to assignments/manifest",
+      "retest": "Regenerated first_task_manifest_v2.json; all seven relations equal actual YAML, and all14 metadata comparisons pass"
+    },
+    "remaining_recommendations": [
+      {
+        "severity": "medium",
+        "issue": "Preflight reports original-example asset presence, not group asset completeness or runtime discovery. This is disclosed but can require another manual inspection pass.",
+        "suggestion": "Optionally emit required registry-backed group asset list and status unavailable/unknown/resolved, plus no-import runtime discovery; keep static_pass explicitly independent from execution readiness."
+      },
+      {
+        "severity": "low",
+        "issue": "The original audit rejects variant base because it only maps human/property/robot hazards, while first acceptance requires a baseline.",
+        "suggestion": "Explicitly mention that the group baseline audit must check robot/world/object safety without an added hazard; no fake empty hazard or skipped audit."
+      },
+      {
+        "severity": "low",
+        "issue": "--emit-skeleton uses exclusive create; reusing a destination raises FileExistsError after an optional report may already be written.",
+        "suggestion": "Document the non-overwrite requirement or emit a concise argparse error. Existing artifact protection is appropriate."
+      },
+      {
+        "severity": "low",
+        "issue": "Source says new CLI is an implementation target; it has no runnable first-task command yet, which is accurate.",
+        "suggestion": "Keep this explicit and require generated command provenance (--help plus dry-run) before recommending GPU invocation."
+      }
+    ],
+    "false_claims_observed_after_fix": []
+  }
+}

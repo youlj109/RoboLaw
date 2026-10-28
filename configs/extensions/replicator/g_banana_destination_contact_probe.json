@@ -1,0 +1,43 @@
+{
+  "schema_version": 3,
+  "task_id": "kitchen_bench_replicator_g_shape_banana_bowl",
+  "diagnostic_only": true,
+  "accepted": false,
+  "physical_trial_passed": false,
+  "task_success": false,
+  "noncontact_clearance_m": 0.002,
+  "release_gap_window_m": [
+    0.003,
+    0.005
+  ],
+  "maximum_extra_lower_hold_actions": 5,
+  "maximum_release_actions": 7,
+  "maximum_release_physics_steps": 56,
+  "physics_dt_s": 0.008333333333333333,
+  "action_dt_s": 0.06666666666666667,
+  "payload_body": "/World/envs/env_0/banana",
+  "release_target": "/World/envs/env_0/bowl",
+  "release_mesh": "/World/envs/env_0/bowl/obj_000013_Mesh",
+  "force_threshold_n": 0.1,
+  "velocity_threshold_m_s": 0.003,
+  "support_cone_half_angle_rad": 0.7853981633974483,
+  "placement_consecutive_steps": 1,
+  "contact_capacity": 4096,
+  "source_assets": {
+    "banana": {
+      "path": "assets/extensions/replicator/source/Isaac/IsaacLab/Arena/assets/object_library/srl_robolab_assets/objects/ycb/banana.usd",
+      "sha256": "a0aee64b0d9f6aae5689c1787e176776696ff38f23d17da0e226da19f0d9b064"
+    },
+    "bowl": {
+      "path": "assets/robolab/objects/ycb/bowl.usd",
+      "sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e"
+    }
+  },
+  "original_collector_sha256": "9b105d072423f5cc23039b85c7c181d7b175d417664f663779bb4ef1b8649e95",
+  "continuation_scope": "Only exact source banana/bowl intersection during bounded release; strict rejection retained. Source intersection clipping and original center region, complete exact native observation and every other original pair remain mandatory. No source/native penetration tolerance or accepted task output.",
+  "source_region_rule": "Reconstructed triangle intersections and native contact points in actual bowl-local XY footprint and above its lower Z bound; actual banana spawned-bounds center obeys the same original spatial predicate. No full banana containment or flat-floor assumption.",
+  "native_support_rule": "Every bounded release substep needs complete finite native data for the exact pair. A complete empty contact buffer, zero aggregate, or transient non-upward force is an observation, not missing data or terminal task failure. Preserve all signed scalars, normals and separations; nonempty native points must remain in the original destination region.",
+  "surface_location_rule": "Triangle-pair clipping only; approximate FCL contact.pos never permits continuation.",
+  "native_force_agreement_rule": "Record native-minus-original force without a numerical agreement gate: the compiled backend aggregation order is unavailable, so no unsupported rounding bound is imposed.",
+  "terminal_predicate_rule": "Record the unchanged original predicate every physics step and report its final value after exactly 56 release steps. Do not require intermediate support or rest, and never turn a diagnostic into an accepted task."
+}

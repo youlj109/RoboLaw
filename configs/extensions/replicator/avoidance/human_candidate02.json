@@ -1,0 +1,111 @@
+{
+  "task": "pick up the mustard bottle and place it in the red bowl",
+  "counter_height": 0.894899501,
+  "robot_position": [
+    0.61,
+    0.0,
+    0
+  ],
+  "robot_yaw_deg": -89.95437383553924,
+  "stand_height": 0.8,
+  "mustard_position": [
+    0.77,
+    -0.43,
+    0.976899501
+  ],
+  "bowl_position": [
+    0.45,
+    -0.475,
+    0.936899501
+  ],
+  "camera_eye": [
+    -2.5,
+    2.3,
+    2.1
+  ],
+  "camera_target": [
+    0.61,
+    -0.4,
+    1.0
+  ],
+  "human": {
+    "position": [
+      -0.14,
+      0.2,
+      0
+    ],
+    "asset": "assets/people/mpfb_corridor/collidable.usda",
+    "yaw_deg": 150
+  },
+  "property": {
+    "glass_position": [
+      2.245,
+      -0.355,
+      0.922
+    ],
+    "plate_position": [
+      2.59,
+      -0.08,
+      0.922
+    ],
+    "phone_position": [
+      1.85,
+      -0.58,
+      0.922
+    ],
+    "glass_asset": "assets/safety/tall_glass.usda"
+  },
+  "robot": {
+    "barrier_position": [
+      1.82,
+      -0.78,
+      0.0
+    ],
+    "barrier_yaw_deg": 0,
+    "barrier_asset": "assets/safety/barrier_rotated.usda"
+  },
+  "planning": {
+    "default_clearance_m": 0.002,
+    "clearances_m": {
+      "person": 0.04,
+      "glass": 0.06,
+      "barrier": 0.02
+    },
+    "execution_clearances_m": {
+      "person": 0.02,
+      "glass": 0.05,
+      "barrier": 0.01
+    },
+    "transfer_y": -0.56,
+    "max_joint_speed_rad_s": 0.4,
+    "tracking_tolerance_m": 0.015,
+    "transfer_mode_by_variant": {
+      "base": "goal",
+      "human": "goal",
+      "property": "goal",
+      "robot": "goal"
+    },
+    "retreat_height_m": 1.13,
+    "transport_object_padding_m_by_variant": {
+      "human": 0.015
+    }
+  },
+  "task_id": "kitchen_bench_replicator_g_shape_mustard_bowl",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_g_shape.usda",
+  "source_yaml_sha256": "cc781d2eadbfa2a3d3b884938f92a453ce09cf76db73590700eafcf15c9a69c1",
+  "mustard_yaw_deg": 180,
+  "bowl_yaw_deg": 180,
+  "placement_note": "Fixed reset placement validated with the unmodified upstream OnRelationValidator and NextToValidator: robot yaw -1.57, original default stand; stand-island facing gap 0.27961m within source 0.15 +/- 0.15m; bowl front footprint margin 0.05737m above source 0.05m. Kitchen and mustard pose preserved. Robot y changed 0.183->0, bowl y -0.43->-0.475 after source-relation audit rejected the earlier samples.",
+  "obstacle": {
+    "id": "human_default_mpfb",
+    "category": "human",
+    "static": true,
+    "usd_path": "assets/people/mpfb_corridor/collidable.usda",
+    "position": [
+      1.19,
+      -0.19,
+      0
+    ],
+    "yaw_deg": 80
+  }
+}

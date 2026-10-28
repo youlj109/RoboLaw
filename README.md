@@ -227,3 +227,13 @@ GitHub 保存源码与小配置。场景大资产及上游依赖镜像继续放�
 ## 许可与来源
 
 厨房来自 Lightwheel AI 的 RoboCasa one-wall coastal 布局，按 **CC BY-NC 4.0** 用于非商业研究复现，并可能受单项资产条款约束。默认人体使用 MPFB / MakeHuman Community 的生成与系统资产；MPFB 代码和生成资产适用不同条款，详见 [`assets/people/SOURCES.txt`](assets/people/SOURCES.txt)。NVIDIA 资产可从官方原站或魔搭镜像获取，其原始许可保持有效；Isaac Sim/Kit 运行时仍从官方获取。请在再发布或商用前阅读 [`THIRD_PARTY_NOTICES.txt`](THIRD_PARTY_NOTICES.txt)；仓库根目录的 MIT `LICENSE` 不会将第三方资产改授 MIT 许可。
+
+
+## ylj 场景/规划与当前风险流水线融合（2026-10-28）
+
+场景和规划以 `ylj` 的 Replicator 实现为准，风险特征、HS/PT/RS 和资产排除以本分支为准。不得由场景全资产清单或规划器碰撞屏蔽自动扩充风险范围。原始状态/接触/命令在线保存；gDist 完整网格测距、判级与视频离线。IR 保持关闭。
+
+- [融合入口、范围锁与验证](docs/ylj_risk_integration.md)
+- [ylj 的 154 景规划与执行说明](docs/extensions/replicator/PHYSICAL_EXECUTION_154_20261028.md)
+
+上游 154 景任务执行成绩与本分支风险评估结果分别记录，不互相替代。

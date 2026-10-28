@@ -1,0 +1,72 @@
+{
+  "task_id": "kitchen_bench_replicator_u_shape_banana_bowl",
+  "task": "pick up the banana and place it in the red bowl",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_u_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    -1.9064095616340637,
+    1.3535947859287263,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 89.95437383553924,
+  "objects": {
+    "banana": {
+      "usd_path": "assets/extensions/replicator/source/Isaac/IsaacLab/Arena/assets/object_library/srl_robolab_assets/objects/ycb/banana.usd",
+      "position": [
+        -2.0964095616340637,
+        1.8202620205283164,
+        0.9157026816606522
+      ],
+      "yaw_deg": 0.0
+    },
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        -1.7164095616340638,
+        1.811612522304058,
+        0.9248526819497347
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "property_ceramic_mug",
+    "label": "Tall glazed ceramic mug",
+    "category": "property",
+    "usd_path": "assets/obstacle_library/property/ceramic_mug.usda",
+    "position": [
+      -1.904589086173715,
+      1.8959165554158472,
+      0.8978676777610791
+    ],
+    "yaw_deg": 180.0,
+    "dimensions": [
+      0.1215,
+      0.088,
+      0.16
+    ],
+    "dimensions_unit": "m",
+    "physics_type": "rigid",
+    "static": false,
+    "mass_kg": 0.48,
+    "physics_material": {
+      "static_friction": 0.55,
+      "dynamic_friction": 0.42,
+      "restitution": 0.03
+    },
+    "collider_count": 93,
+    "collision_model": "compound_convex",
+    "provenance": {
+      "type": "procedural_local",
+      "generator": "scripts/build_library_property.py",
+      "external_sources": [],
+      "textures": "none; authored material colors"
+    },
+    "notes": [
+      "16 cm tall large mug, cream open interior and real loop handle.",
+      "Handle collision is segmented; it does not fill the handle opening.",
+      "Ceramic is a material/semantic label, not a fracture simulation."
+    ],
+    "opening_inner_diameter_m": 0.079
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+  "task": "pick up the bowl and place it in the sink",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_u_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    -1.874651311337948,
+    -0.7400199770927429,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 179.9087476710785,
+  "objects": {
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        -2.266887068748474,
+        -1.1409665629267693,
+        0.9248526819497347
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "robot_sharp_equipment_housing",
+    "label": "Bolted metal enclosure with projecting angled nose",
+    "position": [
+      -2.3943269771933413,
+      -1.361056045792088,
+      0.8978676778653872
+    ],
+    "yaw_deg": 150,
+    "dimensions": {
+      "overall_xyz_m": [
+        0.27000001072883606,
+        0.3909999994989485,
+        0.26089999090135096
+      ],
+      "nose_projection_m": 0.19,
+      "nose_center_height_m": 0.175
+    },
+    "risk_region": "fingers / wrist / forearm",
+    "notes": [
+      "Countertop-bolted sheet-metal enclosure with a pointed convex profile.",
+      "The protruding nose changes obstacle shape and approach clearance; no damage physics is claimed.",
+      "The housing and leading edge collide; vents/buttons/paint are visual only."
+    ],
+    "category": "robot",
+    "static": true,
+    "usd_path": "assets/obstacle_library/robot/sharp_equipment_housing.usda",
+    "provenance": {
+      "type": "procedural_local",
+      "generator": "scripts/build_library_robot.py",
+      "source": "Original parameterized geometry; no downloaded third-party meshes."
+    },
+    "asset_validation": {
+      "usd_valid": true,
+      "static": true,
+      "colliders": 3,
+      "visual_bounds_min_m": [
+        -0.13500000536441803,
+        -0.28100000009499493,
+        -1.0430812810713341e-10
+      ],
+      "visual_bounds_max_m": [
+        0.13500000536441803,
+        0.10999999940395355,
+        0.26089999079704285
+      ],
+      "measured_dimensions_xyz_m": [
+        0.27000001072883606,
+        0.3909999994989485,
+        0.26089999090135096
+      ]
+    }
+  }
+}

@@ -1,0 +1,1901 @@
+{
+  "status": "accepted_current_g_shape_background_physics_and_mobility",
+  "asset_diff": {
+    "passed": true,
+    "existing_prim_property_or_metadata_changes": [],
+    "added_prims": [
+      "/World/Fridge/RoboLawHousingInstallation"
+    ],
+    "provenance": {
+      "recipe": "fixed-refrigerator-housing-v1",
+      "recipe_sha256": "6c577536586ec4e51664af174955e6f5be08007ec2b0830082b37857ffbd0767",
+      "source": "/workspace/assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_g_shape.usda",
+      "source_sha256": "3c502506532233850196fabe24f03dc488245de72951ce069e1e84f536a9fa01",
+      "overlay_sha256": "cee43da5405daa08c6383c64726de287264ca2431af203586fd3125e4461659c",
+      "mount_joint": "/World/Fridge/RoboLawHousingInstallation",
+      "mounted_body": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00",
+      "world_anchor_position_m": [
+        2.5437664985656223,
+        -1.409422159194943,
+        -0.00026475999146339217
+      ],
+      "world_anchor_quaternion_wxyz": [
+        2.83276944882399e-16,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "assumption": "Refrigerator housing is installed and anchored at its original authored kitchen placement; this is a local extension assumption, not an upstream constraint.",
+      "preserved": [
+        "All source geometry and collision settings",
+        "All mass, COM and inertia metadata",
+        "Both refrigerator revolute door joints and their original limits",
+        "Original internal fixed joints",
+        "Gravity on all bodies",
+        "Robot, mustard, bowl, layout relations and task predicate"
+      ],
+      "runtime_state_writes": false
+    },
+    "source_geometry_mass_joint_limits_collision_settings_unchanged": true
+  },
+  "root_cause": {
+    "explanation": "A dynamic refrigerator housing tips under gravity on its floor contacts; initially vertical un-driven door hinges then tilt and convert gravity of the right door/panel into opening torque. Existing joints are retained; no evidence of internal contact forcing or lost joints.",
+    "gravity_balance": [
+      {
+        "experiment": "original",
+        "samples": [
+          {
+            "t": 0.0,
+            "housing_hinge_axis_world": [
+              -5.5804841376651554e-05,
+              -3.875232849695e-05,
+              0.9999999976920383
+            ],
+            "tilt_from_vertical_deg": 0.0038927089185219373,
+            "door_panel_gravity_torque_about_axis_nm": -0.0013163714656377367,
+            "combined_axis_inertia_kg_m2": 2.61572700492714,
+            "predicted_free_acceleration_deg_s2": -0.02883425109364333,
+            "measured_door_angular_velocity_world_rad_s": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "t": 0.06666666666666667,
+            "housing_hinge_axis_world": [
+              -0.00015830991640844918,
+              -2.589557427300188e-06,
+              0.9999999874656322
+            ],
+            "tilt_from_vertical_deg": 0.009071703498391247,
+            "door_panel_gravity_torque_about_axis_nm": -0.004327701843382524,
+            "combined_axis_inertia_kg_m2": 2.61573949760562,
+            "predicted_free_acceleration_deg_s2": -0.09479500953507806,
+            "measured_door_angular_velocity_world_rad_s": [
+              -0.0015385462902486324,
+              -0.0026251610834151506,
+              -8.696642908034846e-07
+            ]
+          },
+          {
+            "t": 1.0,
+            "housing_hinge_axis_world": [
+              -0.006033926568415505,
+              0.003425811773931522,
+              0.9999759274821857
+            ],
+            "tilt_from_vertical_deg": 0.39755686737995394,
+            "door_panel_gravity_torque_about_axis_nm": -0.18579136998948506,
+            "combined_axis_inertia_kg_m2": 2.615734962377674,
+            "predicted_free_acceleration_deg_s2": -4.0696253723943006,
+            "measured_door_angular_velocity_world_rad_s": [
+              0.0004002425994258374,
+              -0.00022338831331580877,
+              -0.06611156463623047
+            ]
+          },
+          {
+            "t": 2.0,
+            "housing_hinge_axis_world": [
+              -0.006033971295297239,
+              0.0034258461879210357,
+              0.9999759270943999
+            ],
+            "tilt_from_vertical_deg": 0.3975600695150215,
+            "door_panel_gravity_torque_about_axis_nm": -0.1904847698507709,
+            "combined_axis_inertia_kg_m2": 2.6157262989389967,
+            "predicted_free_acceleration_deg_s2": -4.17244471579346,
+            "measured_door_angular_velocity_world_rad_s": [
+              0.0008085009176284075,
+              -0.0004522530362010002,
+              -0.1337440013885498
+            ]
+          },
+          {
+            "t": 3.0,
+            "housing_hinge_axis_world": [
+              -0.006033881865711021,
+              0.0034258220179326205,
+              0.9999759277168287
+            ],
+            "tilt_from_vertical_deg": 0.397554929805928,
+            "door_panel_gravity_torque_about_axis_nm": -0.1940628991666108,
+            "combined_axis_inertia_kg_m2": 2.6157372619476824,
+            "predicted_free_acceleration_deg_s2": -4.250803490118286,
+            "measured_door_angular_velocity_world_rad_s": [
+              0.0012076261918991804,
+              -0.0006892690435051918,
+              -0.2002096027135849
+            ]
+          },
+          {
+            "t": 3.933333333333333,
+            "housing_hinge_axis_world": [
+              -0.00603354659596056,
+              0.003425881153024304,
+              0.9999759295372065
+            ],
+            "tilt_from_vertical_deg": 0.3975398976479017,
+            "door_panel_gravity_torque_about_axis_nm": -0.19070679221522302,
+            "combined_axis_inertia_kg_m2": 2.615720070762645,
+            "predicted_free_acceleration_deg_s2": -4.177317917365986,
+            "measured_door_angular_velocity_world_rad_s": [
+              0.001566762337461114,
+              -0.0009103815536946058,
+              -0.2599184215068817
+            ]
+          }
+        ]
+      },
+      {
+        "experiment": "nogravity",
+        "samples": [
+          {
+            "t": 0.0,
+            "housing_hinge_axis_world": [
+              -6.407432353894239e-07,
+              -5.071134453141832e-07,
+              0.999999999999666
+            ],
+            "tilt_from_vertical_deg": 4.682541780500861e-05,
+            "door_panel_gravity_torque_about_axis_nm": -1.4769866494690842e-05,
+            "combined_axis_inertia_kg_m2": 2.615725943476776,
+            "predicted_free_acceleration_deg_s2": -0.0003235243417713122,
+            "measured_door_angular_velocity_world_rad_s": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "t": 0.06666666666666667,
+            "housing_hinge_axis_world": [
+              -5.289851414469892e-07,
+              -4.861567474495487e-07,
+              0.9999999999997421
+            ],
+            "tilt_from_vertical_deg": 4.114976411688717e-05,
+            "door_panel_gravity_torque_about_axis_nm": -1.1820607337866075e-05,
+            "combined_axis_inertia_kg_m2": 2.6157270840205067,
+            "predicted_free_acceleration_deg_s2": -0.0002589226207422593,
+            "measured_door_angular_velocity_world_rad_s": [
+              -8.543978857744605e-09,
+              -9.10422492950147e-09,
+              4.638960433567263e-07
+            ]
+          },
+          {
+            "t": 1.0,
+            "housing_hinge_axis_world": [
+              -3.7252308503525803e-07,
+              -4.912770736722173e-07,
+              0.9999999999998099
+            ],
+            "tilt_from_vertical_deg": 3.5326013072887316e-05,
+            "door_panel_gravity_torque_about_axis_nm": -7.5010309770074385e-06,
+            "combined_axis_inertia_kg_m2": 2.6157270423438743,
+            "predicted_free_acceleration_deg_s2": -0.0001643051472963739,
+            "measured_door_angular_velocity_world_rad_s": [
+              1.3172847257436615e-09,
+              -4.119232954735708e-09,
+              9.023376712491427e-09
+            ]
+          },
+          {
+            "t": 2.0,
+            "housing_hinge_axis_world": [
+              -3.799735286713175e-07,
+              -5.029186911184262e-07,
+              0.9999999999998016
+            ],
+            "tilt_from_vertical_deg": 3.609150741591905e-05,
+            "door_panel_gravity_torque_about_axis_nm": -7.641007832734515e-06,
+            "combined_axis_inertia_kg_m2": 2.615727030451069,
+            "predicted_free_acceleration_deg_s2": -0.00016737124896652378,
+            "measured_door_angular_velocity_world_rad_s": [
+              1.0115834836454951e-09,
+              -2.5274327075663905e-09,
+              -5.181666296039111e-08
+            ]
+          },
+          {
+            "t": 3.0,
+            "housing_hinge_axis_world": [
+              -3.7252295829652346e-07,
+              -5.024529376827871e-07,
+              0.9999999999998047
+            ],
+            "tilt_from_vertical_deg": 3.5807637219738385e-05,
+            "door_panel_gravity_torque_about_axis_nm": -7.439234983092723e-06,
+            "combined_axis_inertia_kg_m2": 2.615727055086544,
+            "predicted_free_acceleration_deg_s2": -0.00016295154592235804,
+            "measured_door_angular_velocity_world_rad_s": [
+              3.875936158692639e-07,
+              1.3368607199026883e-07,
+              -2.0251970909157535e-06
+            ]
+          },
+          {
+            "t": 3.933333333333333,
+            "housing_hinge_axis_world": [
+              -3.5017126950110455e-07,
+              -4.973304038417719e-07,
+              0.9999999999998151
+            ],
+            "tilt_from_vertical_deg": 3.4837731211880276e-05,
+            "door_panel_gravity_torque_about_axis_nm": -6.854520712587086e-06,
+            "combined_axis_inertia_kg_m2": 2.6157270372084493,
+            "predicted_free_acceleration_deg_s2": -0.0001501437657024716,
+            "measured_door_angular_velocity_world_rad_s": [
+              7.697131265693713e-10,
+              -5.63201130177049e-09,
+              9.358094743561196e-09
+            ]
+          }
+        ]
+      },
+      {
+        "experiment": "solver32",
+        "samples": [
+          {
+            "t": 0.0,
+            "housing_hinge_axis_world": [
+              -5.5924050367403264e-05,
+              -3.8561873471821475e-05,
+              0.9999999976927412
+            ],
+            "tilt_from_vertical_deg": 0.003892116117494204,
+            "door_panel_gravity_torque_about_axis_nm": -0.0013206708979116727,
+            "combined_axis_inertia_kg_m2": 2.6157267560367035,
+            "predicted_free_acceleration_deg_s2": -0.028928430082178616,
+            "measured_door_angular_velocity_world_rad_s": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "t": 0.06666666666666667,
+            "housing_hinge_axis_world": [
+              -0.00015852598334079135,
+              -2.415858723152657e-06,
+              0.9999999874318379
+            ],
+            "tilt_from_vertical_deg": 0.009083924518260742,
+            "door_panel_gravity_torque_about_axis_nm": -0.004334572226097943,
+            "combined_axis_inertia_kg_m2": 2.615737594428224,
+            "predicted_free_acceleration_deg_s2": -0.09494556911176932,
+            "measured_door_angular_velocity_world_rad_s": [
+              -0.001060324371792376,
+              -0.002906396286562085,
+              2.4826545995892957e-05
+            ]
+          },
+          {
+            "t": 1.0,
+            "housing_hinge_axis_world": [
+              -0.0060328842563754205,
+              0.0034256893900504325,
+              0.9999759341902945
+            ],
+            "tilt_from_vertical_deg": 0.3975014711959783,
+            "door_panel_gravity_torque_about_axis_nm": -0.18576467923250178,
+            "combined_axis_inertia_kg_m2": 2.615735938033599,
+            "predicted_free_acceleration_deg_s2": -4.069039212966294,
+            "measured_door_angular_velocity_world_rad_s": [
+              0.0007093350868672132,
+              -0.0005217989673838019,
+              -0.06590001285076141
+            ]
+          },
+          {
+            "t": 2.0,
+            "housing_hinge_axis_world": [
+              -0.006032645921075775,
+              0.0034256589853788057,
+              0.9999759357323089
+            ],
+            "tilt_from_vertical_deg": 0.3974887360069355,
+            "door_panel_gravity_torque_about_axis_nm": -0.1904527468422735,
+            "combined_axis_inertia_kg_m2": 2.615729238572716,
+            "predicted_free_acceleration_deg_s2": -4.171738584338356,
+            "measured_door_angular_velocity_world_rad_s": [
+              0.0011153311934322119,
+              -0.0008303644135594368,
+              -0.1333521455526352
+            ]
+          },
+          {
+            "t": 3.0,
+            "housing_hinge_axis_world": [
+              -0.006032318050825232,
+              0.0034257135539498477,
+              0.9999759375232885
+            ],
+            "tilt_from_vertical_deg": 0.3974739441520035,
+            "door_panel_gravity_torque_about_axis_nm": -0.1940233313271833,
+            "combined_axis_inertia_kg_m2": 2.615735693653275,
+            "predicted_free_acceleration_deg_s2": -4.249939334118967,
+            "measured_door_angular_velocity_world_rad_s": [
+              0.0014936381485313177,
+              -0.0008860481902956963,
+              -0.20014719665050507
+            ]
+          },
+          {
+            "t": 3.933333333333333,
+            "housing_hinge_axis_world": [
+              -0.006032936434569592,
+              0.0034256935364868797,
+              0.9999759338612958
+            ],
+            "tilt_from_vertical_deg": 0.3975041882778735,
+            "door_panel_gravity_torque_about_axis_nm": -0.19068261510007334,
+            "combined_axis_inertia_kg_m2": 2.6157206688836925,
+            "predicted_free_acceleration_deg_s2": -4.176787377076591,
+            "measured_door_angular_velocity_world_rad_s": [
+              0.001883643213659525,
+              -0.0012405714951455593,
+              -0.259711354970932
+            ]
+          }
+        ]
+      }
+    ],
+    "source_joint_frames": [
+      {
+        "joint": "/World/Fridge/Fridge_OnlineVisual/Joints/joint_sm_rc_refrigerator_a01_door_right_01_joint_00",
+        "frames": [
+          {
+            "target": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00/sm_rc_refrigerator_a01_body_01_mesh_00",
+            "physical_body": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00",
+            "world_axis_z": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "world_anchor": [
+              2.2473675906657657,
+              -0.975820124149319,
+              0.8815046587249673
+            ],
+            "body_world_transform": [
+              [
+                -1.0,
+                -5.66553889764798e-16,
+                0.0,
+                2.5437664985656223
+              ],
+              [
+                5.66553889764798e-16,
+                -1.0,
+                0.0,
+                -1.409422159194943
+              ],
+              [
+                0.0,
+                0.0,
+                1.0,
+                -0.00026475999146339217
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "authored_pose_scale": "( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0.0000010163307706534397, 4.410190967973904e-7, 0.00003523876875988208, 1) )",
+            "initial_velocity": "(0.00028770338, 0.0001236997, -0.00013986597)",
+            "initial_angular_velocity": "(-0.014494985, -0.013894615, 0.017774623)"
+          },
+          {
+            "target": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_right_01_obj_00/sm_rc_refrigerator_a01_door_right_01_mesh_00",
+            "physical_body": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_right_01_obj_00",
+            "world_axis_z": [
+              1.7373903303990069e-06,
+              -2.0959612516574865e-06,
+              0.9999999999962942
+            ],
+            "world_anchor": [
+              2.2473700077056886,
+              -0.9758226931647833,
+              0.8815062556266786
+            ],
+            "body_world_transform": [
+              [
+                -0.999999523165065,
+                -0.0009765585615671608,
+                1.7373903303990069e-06,
+                2.2473700077056886
+              ],
+              [
+                0.0009765585579249885,
+                -0.9999995231643812,
+                -2.0959612516574865e-06,
+                -0.9758226931647833
+              ],
+              [
+                1.739436330854433e-06,
+                -2.0942635888343317e-06,
+                0.9999999999962942,
+                0.8815062556266786
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "authored_pose_scale": "( (0.999999523165065, -0.0009765585579244219, 0.000001739436330854433, 0), (0.0009765585615665942, 0.9999995231643812, -0.0000020942635888343317, 0), (-0.0000017373903303990082, 0.0000020959612516574857, 0.9999999999962942, 0), (0.29639750719070435, -0.4335990250110626, 0.8818062543869019, 1) )",
+            "initial_velocity": "(0.000113466755, 0.00009283604, 0.0010989105)",
+            "initial_angular_velocity": "(0.011057962, 0.02261071, -0.019219173)"
+          }
+        ],
+        "anchor_separation_m": 3.871952675391941e-06
+      },
+      {
+        "joint": "/World/Fridge/Fridge_OnlineVisual/Joints/joint_sm_rc_refrigerator_a01_door_left_01_joint_00",
+        "frames": [
+          {
+            "target": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00/sm_rc_refrigerator_a01_body_01_mesh_00",
+            "physical_body": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00",
+            "world_axis_z": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "world_anchor": [
+              2.247346699237772,
+              -1.8429836630821193,
+              0.9044108429214395
+            ],
+            "body_world_transform": [
+              [
+                -1.0,
+                -5.66553889764798e-16,
+                0.0,
+                2.5437664985656223
+              ],
+              [
+                5.66553889764798e-16,
+                -1.0,
+                0.0,
+                -1.409422159194943
+              ],
+              [
+                0.0,
+                0.0,
+                1.0,
+                -0.00026475999146339217
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "authored_pose_scale": "( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0.0000010163307706534397, 4.410190967973904e-7, 0.00003523876875988208, 1) )",
+            "initial_velocity": "(0.00028770338, 0.0001236997, -0.00013986597)",
+            "initial_angular_velocity": "(-0.014494985, -0.013894615, 0.017774623)"
+          },
+          {
+            "target": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_left_01_obj_00/sm_rc_refrigerator_a01_door_left_01_mesh_00",
+            "physical_body": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_left_01_obj_00",
+            "world_axis_z": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "world_anchor": [
+              2.247349980545044,
+              -1.8429859936790045,
+              0.9044105920791627
+            ],
+            "body_world_transform": [
+              [
+                -1.0,
+                -5.66553889764798e-16,
+                0.0,
+                2.247349980545044
+              ],
+              [
+                5.66553889764798e-16,
+                -1.0,
+                0.0,
+                -1.8429859936790045
+              ],
+              [
+                0.0,
+                0.0,
+                1.0,
+                0.9044105920791627
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "authored_pose_scale": "( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0.2964175343513489, 0.43356427550315857, 0.904710590839386, 1) )",
+            "initial_velocity": "(-0.00008510906, 0.000052190386, 0.00063178764)",
+            "initial_angular_velocity": "(-0.0010377084, -0.024974702, 0.0025247694)"
+          }
+        ],
+        "anchor_separation_m": 4.032565077395016e-06
+      },
+      {
+        "joint": "/World/Fridge/Fridge_OnlineVisual/Joints/joint_sm_rc_refrigerator_a01_glass_drawer_01_joint_00",
+        "frames": [
+          {
+            "target": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00/sm_rc_refrigerator_a01_body_01_mesh_00",
+            "physical_body": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00",
+            "world_axis_z": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "world_anchor": [
+              2.5271287690847597,
+              -1.5990866571664777,
+              0.6790560522338784
+            ],
+            "body_world_transform": [
+              [
+                -1.0,
+                -5.66553889764798e-16,
+                0.0,
+                2.5437664985656223
+              ],
+              [
+                5.66553889764798e-16,
+                -1.0,
+                0.0,
+                -1.409422159194943
+              ],
+              [
+                0.0,
+                0.0,
+                1.0,
+                -0.00026475999146339217
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "authored_pose_scale": "( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0.0000010163307706534397, 4.410190967973904e-7, 0.00003523876875988208, 1) )",
+            "initial_velocity": "(0.00028770338, 0.0001236997, -0.00013986597)",
+            "initial_angular_velocity": "(-0.014494985, -0.013894615, 0.017774623)"
+          },
+          {
+            "target": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_glass_drawer_01_obj_00/sm_rc_refrigerator_a01_glass_drawer_01_mesh_00",
+            "physical_body": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_glass_drawer_01_obj_00",
+            "world_axis_z": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "world_anchor": [
+              2.5271303646981718,
+              -1.5990890324668465,
+              0.6790553245544435
+            ],
+            "body_world_transform": [
+              [
+                -1.0,
+                -5.66553889764798e-16,
+                0.0,
+                2.5271303646981718
+              ],
+              [
+                5.66553889764798e-16,
+                -1.0,
+                0.0,
+                -1.5990890324668465
+              ],
+              [
+                0.0,
+                0.0,
+                1.0,
+                0.6790553245544435
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "authored_pose_scale": "( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0.016637150198221207, 0.18966731429100037, 0.6793553233146667, 1) )",
+            "initial_velocity": "(0.0007844541, -0.00023812534, 0.00094167126)",
+            "initial_angular_velocity": "(0.0109166, 0.0013690428, 0.06518525)"
+          }
+        ],
+        "anchor_separation_m": 2.95254997637488e-06
+      },
+      {
+        "joint": "/World/Fridge/Fridge_OnlineVisual/Joints/joint_sm_rc_refrigerator_a01_door_panel_01_joint_00",
+        "frames": [
+          {
+            "target": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_right_01_obj_00/sm_rc_refrigerator_a01_door_right_01_mesh_00",
+            "physical_body": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_right_01_obj_00",
+            "world_axis_z": [
+              1.7373903303990069e-06,
+              -2.0959612516574865e-06,
+              0.9999999999962942
+            ],
+            "world_anchor": [
+              2.222782839488861,
+              -1.1448334319035318,
+              1.070845224233408
+            ],
+            "body_world_transform": [
+              [
+                -0.999999523165065,
+                -0.0009765585615671608,
+                1.7373903303990069e-06,
+                2.2473700077056886
+              ],
+              [
+                0.0009765585579249885,
+                -0.9999995231643812,
+                -2.0959612516574865e-06,
+                -0.9758226931647833
+              ],
+              [
+                1.739436330854433e-06,
+                -2.0942635888343317e-06,
+                0.9999999999962942,
+                0.8815062556266786
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "authored_pose_scale": "( (0.999999523165065, -0.0009765585579244219, 0.000001739436330854433, 0), (0.0009765585615665942, 0.9999995231643812, -0.0000020942635888343317, 0), (-0.0000017373903303990082, 0.0000020959612516574857, 0.9999999999962942, 0), (0.29639750719070435, -0.4335990250110626, 0.8818062543869019, 1) )",
+            "initial_velocity": "(0.000113466755, 0.00009283604, 0.0010989105)",
+            "initial_angular_velocity": "(0.011057962, 0.02261071, -0.019219173)"
+          },
+          {
+            "target": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_panel_01_obj_00/sm_rc_refrigerator_a01_door_panel_01_mesh_00",
+            "physical_body": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_panel_01_obj_00",
+            "world_axis_z": [
+              1.7394469636663553e-06,
+              -2.0980504139473135e-06,
+              0.9999999999962863
+            ],
+            "world_anchor": [
+              2.222799542617798,
+              -1.1448361933784064,
+              1.0708450589179994
+            ],
+            "body_world_transform": [
+              [
+                -0.9999995231650693,
+                -0.0009765585534238767,
+                1.7394469636663553e-06,
+                2.222799542617798
+              ],
+              [
+                0.0009765585497737592,
+                -0.9999995231643848,
+                -2.0980504139473135e-06,
+                -1.1448361933784064
+              ],
+              [
+                1.741495003313347e-06,
+                -2.096350741719344e-06,
+                0.9999999999962863,
+                1.0708450589179994
+              ],
+              [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+              ]
+            ],
+            "authored_pose_scale": "( (0.9999995231650693, -0.0009765585497731926, 0.000001741495003313347, 0), (0.0009765585534233101, 0.9999995231643848, -0.000002096350741719344, 0), (-0.0000017394469636663566, 0.0000020980504139473126, 0.9999999999962863, 0), (0.32096797227859497, -0.2645855247974396, 1.0711450576782227, 1) )",
+            "initial_velocity": "(0.00020886987, 0.00004238791, 0.0010849384)",
+            "initial_angular_velocity": "(0.011057886, 0.022610713, -0.019219182)"
+          }
+        ],
+        "anchor_separation_m": 1.6930670067919332e-05
+      }
+    ]
+  },
+  "experiments": {
+    "original": {
+      "evidence": "reports/repair_review_20261022/replicator/fridge_runtime_original/runtime.json",
+      "sha256": "0dc482b6619f00a5f1c8f330258b2c0d21d2518f6b0c4ed4fe679194fd06738b",
+      "frames": 60,
+      "dt": 0.06666666666666667,
+      "duration_of_steps_s": 4.0,
+      "sampled_time_span_s": 3.933333333333333,
+      "bodies": [
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_panel_01_obj_00",
+          "max_rotation_deg": 28.96125436786678,
+          "max_translation_m": 0.09278656197748966
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_left_01_obj_00",
+          "max_rotation_deg": 0.491153214141148,
+          "max_translation_m": 0.006269441798240746
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00",
+          "max_rotation_deg": 0.3959043949402749,
+          "max_translation_m": 5.055799970032718e-05
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_glass_drawer_01_obj_00",
+          "max_rotation_deg": 0.39590422993024627,
+          "max_translation_m": 0.00473661216170737
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_right_01_obj_00",
+          "max_rotation_deg": 28.96125464243212,
+          "max_translation_m": 0.006882591611905409
+        }
+      ],
+      "masses_kg": [
+        [
+          22.0
+        ],
+        [
+          26.29749298095703
+        ],
+        [
+          371.6996154785156
+        ],
+        [
+          110.0
+        ],
+        [
+          28.408374786376953
+        ]
+      ],
+      "coms_local_xyzw": [
+        [
+          0.0010747074848040938,
+          -0.04192780703306198,
+          0.17332911491394043,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.013918326236307621,
+          -0.0035216237884014845,
+          -0.008842334151268005,
+          0.9998578429222107
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.018733642995357513,
+          -0.04722180217504501,
+          0.06312325596809387,
+          0.9967119693756104
+        ],
+        [
+          -0.028712628409266472,
+          0.04201286658644676,
+          0.9199033975601196,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          -0.008697833865880966,
+          -0.005264038220047951,
+          0.04119116812944412,
+          0.9990995526313782
+        ]
+      ],
+      "inertias_kg_m2": [
+        [
+          7.437439441680908,
+          0.0,
+          0.0,
+          0.0,
+          8.145995140075684,
+          0.0,
+          0.0,
+          0.0,
+          0.9906460046768188
+        ],
+        [
+          8.038658142089844,
+          -0.034806981682777405,
+          0.043254055082798004,
+          -0.03480697423219681,
+          6.1262969970703125,
+          0.11510956287384033,
+          0.0432540588080883,
+          0.11510957777500153,
+          1.977341651916504
+        ],
+        [
+          441.37493896484375,
+          0.7863717079162598,
+          36.75568389892578,
+          0.7863717079162598,
+          425.797607421875,
+          16.723447799682617,
+          36.75568389892578,
+          16.723447799682617,
+          47.403629302978516
+        ],
+        [
+          309.52642822265625,
+          0.0,
+          0.0,
+          0.0,
+          348.4768981933594,
+          0.0,
+          0.0,
+          0.0,
+          106.6295166015625
+        ],
+        [
+          6.442769527435303,
+          0.09763358533382416,
+          0.05665856972336769,
+          0.09763361513614655,
+          5.278594017028809,
+          -0.06712635606527328,
+          0.05665857717394829,
+          -0.06712635606527328,
+          1.2553454637527466
+        ]
+      ],
+      "inertia_eigenvalues": [
+        [
+          0.9906460046768188,
+          7.437439441680908,
+          8.145995140075684
+        ],
+        [
+          1.973828309558751,
+          6.128897340363751,
+          8.039571141154157
+        ],
+        [
+          43.28515465539948,
+          426.2258026190908,
+          445.0652184152069
+        ],
+        [
+          106.6295166015625,
+          309.52642822265625,
+          348.4768981933594
+        ],
+        [
+          1.2535709835818136,
+          5.271738375555318,
+          6.451399649079724
+        ]
+      ],
+      "inertia_condition": [
+        8.222912222548329,
+        4.073085334839179,
+        10.282167684473977,
+        3.2681091436951424,
+        5.146417501341819
+      ],
+      "maximum_internal_contact_force_n": 0.0
+    },
+    "nogravity": {
+      "evidence": "reports/repair_review_20261022/replicator/fridge_runtime_nogravity/runtime.json",
+      "sha256": "3654748b5353bf66abc1d5c9a52f762751c60e9f1f338d5e99623c05a747941f",
+      "frames": 60,
+      "dt": 0.06666666666666667,
+      "duration_of_steps_s": 4.0,
+      "sampled_time_span_s": 3.933333333333333,
+      "bodies": [
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_panel_01_obj_00",
+          "max_rotation_deg": 0.00031773382571496017,
+          "max_translation_m": 2.5843958125923634e-06
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_left_01_obj_00",
+          "max_rotation_deg": 0.00041527375169058886,
+          "max_translation_m": 1.8078983888749005e-06
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00",
+          "max_rotation_deg": 0.00012220627629602913,
+          "max_translation_m": 7.62520357966423e-07
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_glass_drawer_01_obj_00",
+          "max_rotation_deg": 0.00012115025402704279,
+          "max_translation_m": 8.429369702178807e-07
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_right_01_obj_00",
+          "max_rotation_deg": 0.0003176096524912174,
+          "max_translation_m": 2.908437943161929e-06
+        }
+      ],
+      "masses_kg": [
+        [
+          22.0
+        ],
+        [
+          26.29749298095703
+        ],
+        [
+          371.6996154785156
+        ],
+        [
+          110.0
+        ],
+        [
+          28.408374786376953
+        ]
+      ],
+      "coms_local_xyzw": [
+        [
+          0.0010747074848040938,
+          -0.04192780703306198,
+          0.17332911491394043,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.013918326236307621,
+          -0.0035216237884014845,
+          -0.008842334151268005,
+          0.9998578429222107
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.018733642995357513,
+          -0.04722180217504501,
+          0.06312325596809387,
+          0.9967119693756104
+        ],
+        [
+          -0.028712628409266472,
+          0.04201286658644676,
+          0.9199033975601196,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          -0.008697833865880966,
+          -0.005264038220047951,
+          0.04119116812944412,
+          0.9990995526313782
+        ]
+      ],
+      "inertias_kg_m2": [
+        [
+          7.437439441680908,
+          0.0,
+          0.0,
+          0.0,
+          8.145995140075684,
+          0.0,
+          0.0,
+          0.0,
+          0.9906460046768188
+        ],
+        [
+          8.038658142089844,
+          -0.034806981682777405,
+          0.043254055082798004,
+          -0.03480697423219681,
+          6.1262969970703125,
+          0.11510956287384033,
+          0.0432540588080883,
+          0.11510957777500153,
+          1.977341651916504
+        ],
+        [
+          441.37493896484375,
+          0.7863717079162598,
+          36.75568389892578,
+          0.7863717079162598,
+          425.797607421875,
+          16.723447799682617,
+          36.75568389892578,
+          16.723447799682617,
+          47.403629302978516
+        ],
+        [
+          309.52642822265625,
+          0.0,
+          0.0,
+          0.0,
+          348.4768981933594,
+          0.0,
+          0.0,
+          0.0,
+          106.6295166015625
+        ],
+        [
+          6.442769527435303,
+          0.09763358533382416,
+          0.05665856972336769,
+          0.09763361513614655,
+          5.278594017028809,
+          -0.06712635606527328,
+          0.05665857717394829,
+          -0.06712635606527328,
+          1.2553454637527466
+        ]
+      ],
+      "inertia_eigenvalues": [
+        [
+          0.9906460046768188,
+          7.437439441680908,
+          8.145995140075684
+        ],
+        [
+          1.973828309558751,
+          6.128897340363751,
+          8.039571141154157
+        ],
+        [
+          43.28515465539948,
+          426.2258026190908,
+          445.0652184152069
+        ],
+        [
+          106.6295166015625,
+          309.52642822265625,
+          348.4768981933594
+        ],
+        [
+          1.2535709835818136,
+          5.271738375555318,
+          6.451399649079724
+        ]
+      ],
+      "inertia_condition": [
+        8.222912222548329,
+        4.073085334839179,
+        10.282167684473977,
+        3.2681091436951424,
+        5.146417501341819
+      ],
+      "maximum_internal_contact_force_n": 0.0
+    },
+    "solver32": {
+      "evidence": "reports/repair_review_20261022/replicator/fridge_runtime_solver32/runtime.json",
+      "sha256": "97f2ade000e5368cd0f66d5767b6c2df60fb46153a3fba111041483c00001821",
+      "frames": 60,
+      "dt": 0.06666666666666667,
+      "duration_of_steps_s": 4.0,
+      "sampled_time_span_s": 3.933333333333333,
+      "bodies": [
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_panel_01_obj_00",
+          "max_rotation_deg": 28.97261292540922,
+          "max_translation_m": 0.0928193275142698
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_left_01_obj_00",
+          "max_rotation_deg": 0.49458111407128924,
+          "max_translation_m": 0.006268409985957102
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00",
+          "max_rotation_deg": 0.39583867113070137,
+          "max_translation_m": 5.064855604900066e-05
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_glass_drawer_01_obj_00",
+          "max_rotation_deg": 0.3958375807321216,
+          "max_translation_m": 0.004736365197074119
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_right_01_obj_00",
+          "max_rotation_deg": 28.972608386371505,
+          "max_translation_m": 0.006881810850276027
+        }
+      ],
+      "masses_kg": [
+        [
+          22.0
+        ],
+        [
+          26.29749298095703
+        ],
+        [
+          371.6996154785156
+        ],
+        [
+          110.0
+        ],
+        [
+          28.408374786376953
+        ]
+      ],
+      "coms_local_xyzw": [
+        [
+          0.0010747074848040938,
+          -0.04192780703306198,
+          0.17332911491394043,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.013918326236307621,
+          -0.0035216237884014845,
+          -0.008842334151268005,
+          0.9998578429222107
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.018733642995357513,
+          -0.04722180217504501,
+          0.06312325596809387,
+          0.9967119693756104
+        ],
+        [
+          -0.028712628409266472,
+          0.04201286658644676,
+          0.9199033975601196,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          -0.008697833865880966,
+          -0.005264038220047951,
+          0.04119116812944412,
+          0.9990995526313782
+        ]
+      ],
+      "inertias_kg_m2": [
+        [
+          7.437439441680908,
+          0.0,
+          0.0,
+          0.0,
+          8.145995140075684,
+          0.0,
+          0.0,
+          0.0,
+          0.9906460046768188
+        ],
+        [
+          8.038658142089844,
+          -0.034806981682777405,
+          0.043254055082798004,
+          -0.03480697423219681,
+          6.1262969970703125,
+          0.11510956287384033,
+          0.0432540588080883,
+          0.11510957777500153,
+          1.977341651916504
+        ],
+        [
+          441.37493896484375,
+          0.7863717079162598,
+          36.75568389892578,
+          0.7863717079162598,
+          425.797607421875,
+          16.723447799682617,
+          36.75568389892578,
+          16.723447799682617,
+          47.403629302978516
+        ],
+        [
+          309.52642822265625,
+          0.0,
+          0.0,
+          0.0,
+          348.4768981933594,
+          0.0,
+          0.0,
+          0.0,
+          106.6295166015625
+        ],
+        [
+          6.442769527435303,
+          0.09763358533382416,
+          0.05665856972336769,
+          0.09763361513614655,
+          5.278594017028809,
+          -0.06712635606527328,
+          0.05665857717394829,
+          -0.06712635606527328,
+          1.2553454637527466
+        ]
+      ],
+      "inertia_eigenvalues": [
+        [
+          0.9906460046768188,
+          7.437439441680908,
+          8.145995140075684
+        ],
+        [
+          1.973828309558751,
+          6.128897340363751,
+          8.039571141154157
+        ],
+        [
+          43.28515465539948,
+          426.2258026190908,
+          445.0652184152069
+        ],
+        [
+          106.6295166015625,
+          309.52642822265625,
+          348.4768981933594
+        ],
+        [
+          1.2535709835818136,
+          5.271738375555318,
+          6.451399649079724
+        ]
+      ],
+      "inertia_condition": [
+        8.222912222548329,
+        4.073085334839179,
+        10.282167684473977,
+        3.2681091436951424,
+        5.146417501341819
+      ],
+      "maximum_internal_contact_force_n": 0.0
+    },
+    "mount": {
+      "evidence": "reports/repair_review_20261022/replicator/fridge_runtime_mount/runtime.json",
+      "sha256": "79af334e7631865b599ea2f5132cae972d9e4ea6602732c6bcd9146f492d8144",
+      "frames": 60,
+      "dt": 0.06666666666666667,
+      "duration_of_steps_s": 4.0,
+      "sampled_time_span_s": 3.933333333333333,
+      "bodies": [
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_panel_01_obj_00",
+          "max_rotation_deg": 0.00015717506332403082,
+          "max_translation_m": 1.1920928955078125e-07
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_left_01_obj_00",
+          "max_rotation_deg": 0.0018210993831580145,
+          "max_translation_m": 0.0
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00",
+          "max_rotation_deg": 0.0,
+          "max_translation_m": 0.0
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_glass_drawer_01_obj_00",
+          "max_rotation_deg": 6.569397005784546e-12,
+          "max_translation_m": 0.0
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_right_01_obj_00",
+          "max_rotation_deg": 0.00015712409938591852,
+          "max_translation_m": 0.0
+        }
+      ],
+      "masses_kg": [
+        [
+          22.0
+        ],
+        [
+          26.29749298095703
+        ],
+        [
+          371.6996154785156
+        ],
+        [
+          110.0
+        ],
+        [
+          28.408374786376953
+        ]
+      ],
+      "coms_local_xyzw": [
+        [
+          0.0010747074848040938,
+          -0.04192780703306198,
+          0.17332911491394043,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.013918326236307621,
+          -0.0035216237884014845,
+          -0.008842334151268005,
+          0.9998578429222107
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.018733642995357513,
+          -0.04722180217504501,
+          0.06312325596809387,
+          0.9967119693756104
+        ],
+        [
+          -0.028712628409266472,
+          0.04201286658644676,
+          0.9199033975601196,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          -0.008697833865880966,
+          -0.005264038220047951,
+          0.04119116812944412,
+          0.9990995526313782
+        ]
+      ],
+      "inertias_kg_m2": [
+        [
+          7.437439441680908,
+          0.0,
+          0.0,
+          0.0,
+          8.145995140075684,
+          0.0,
+          0.0,
+          0.0,
+          0.9906460046768188
+        ],
+        [
+          8.038658142089844,
+          -0.034806981682777405,
+          0.043254055082798004,
+          -0.03480697423219681,
+          6.1262969970703125,
+          0.11510956287384033,
+          0.0432540588080883,
+          0.11510957777500153,
+          1.977341651916504
+        ],
+        [
+          441.37493896484375,
+          0.7863717079162598,
+          36.75568389892578,
+          0.7863717079162598,
+          425.797607421875,
+          16.723447799682617,
+          36.75568389892578,
+          16.723447799682617,
+          47.403629302978516
+        ],
+        [
+          309.52642822265625,
+          0.0,
+          0.0,
+          0.0,
+          348.4768981933594,
+          0.0,
+          0.0,
+          0.0,
+          106.6295166015625
+        ],
+        [
+          6.442769527435303,
+          0.09763358533382416,
+          0.05665856972336769,
+          0.09763361513614655,
+          5.278594017028809,
+          -0.06712635606527328,
+          0.05665857717394829,
+          -0.06712635606527328,
+          1.2553454637527466
+        ]
+      ],
+      "inertia_eigenvalues": [
+        [
+          0.9906460046768188,
+          7.437439441680908,
+          8.145995140075684
+        ],
+        [
+          1.973828309558751,
+          6.128897340363751,
+          8.039571141154157
+        ],
+        [
+          43.28515465539948,
+          426.2258026190908,
+          445.0652184152069
+        ],
+        [
+          106.6295166015625,
+          309.52642822265625,
+          348.4768981933594
+        ],
+        [
+          1.2535709835818136,
+          5.271738375555318,
+          6.451399649079724
+        ]
+      ],
+      "inertia_condition": [
+        8.222912222548329,
+        4.073085334839179,
+        10.282167684473977,
+        3.2681091436951424,
+        5.146417501341819
+      ],
+      "maximum_internal_contact_force_n": 0.0
+    }
+  },
+  "mobility": {
+    "passed": true,
+    "checks": {
+      "doors_neutral_before_torque": true,
+      "doors_both_movable": true,
+      "housing_remains_installed": true,
+      "force_applied_each_physics_substep": true
+    },
+    "background_physics_provenance": {
+      "recipe": "fixed-refrigerator-housing-v1",
+      "recipe_sha256": "6c577536586ec4e51664af174955e6f5be08007ec2b0830082b37857ffbd0767",
+      "source": "/workspace/assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_g_shape.usda",
+      "source_sha256": "3c502506532233850196fabe24f03dc488245de72951ce069e1e84f536a9fa01",
+      "overlay_sha256": "cee43da5405daa08c6383c64726de287264ca2431af203586fd3125e4461659c",
+      "mount_joint": "/World/Fridge/RoboLawHousingInstallation",
+      "mounted_body": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00",
+      "world_anchor_position_m": [
+        2.5437664985656223,
+        -1.409422159194943,
+        -0.00026475999146339217
+      ],
+      "world_anchor_quaternion_wxyz": [
+        2.83276944882399e-16,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "assumption": "Refrigerator housing is installed and anchored at its original authored kitchen placement; this is a local extension assumption, not an upstream constraint.",
+      "preserved": [
+        "All source geometry and collision settings",
+        "All mass, COM and inertia metadata",
+        "Both refrigerator revolute door joints and their original limits",
+        "Original internal fixed joints",
+        "Gravity on all bodies",
+        "Robot, mustard, bowl, layout relations and task predicate"
+      ],
+      "runtime_state_writes": false
+    },
+    "source_joint_limits_deg": {
+      "left": [
+        0.0,
+        110.0
+      ],
+      "right": [
+        -110.0,
+        0.0
+      ]
+    },
+    "torques_nm_world": {
+      "left": [
+        0,
+        0,
+        0.3
+      ],
+      "right": [
+        0,
+        0,
+        -0.3
+      ]
+    },
+    "pulse_seconds": 2.0,
+    "neutral_seconds": 2.0,
+    "post_pulse_seconds": 2.0,
+    "dt": 0.06666666666666667,
+    "physics_dt": 0.008333333333333333,
+    "changes": {
+      "left": {
+        "initial_hold_max_rotation_deg": 0.0009257067965469279,
+        "rotation_at_pulse_end_deg": 16.82357534883525,
+        "maximum_rotation_deg": 47.32157672322979,
+        "maximum_translation_m": 0.0
+      },
+      "right": {
+        "initial_hold_max_rotation_deg": 4.364508422090204e-05,
+        "rotation_at_pulse_end_deg": 12.77933859227018,
+        "maximum_rotation_deg": 36.146969658670606,
+        "maximum_translation_m": 1.1920928955078125e-07
+      },
+      "housing": {
+        "initial_hold_max_rotation_deg": 0.0,
+        "rotation_at_pulse_end_deg": 0.0,
+        "maximum_rotation_deg": 0.0,
+        "maximum_translation_m": 0.0
+      }
+    },
+    "force_applications": 720,
+    "overview": {
+      "name": "overview_camera",
+      "position_world": [
+        1.0,
+        -2.3,
+        1.5
+      ],
+      "target_world": [
+        2.4,
+        -1.4,
+        0.85
+      ],
+      "quaternion_opengl_xyzw": [
+        0.49503764238830655,
+        -0.2702664011690539,
+        -0.39569846694469096,
+        0.7247872296580401
+      ],
+      "width": 1280,
+      "height": 720,
+      "purpose": "Supplementary scene overview; not a replacement for any original DROID policy camera."
+    },
+    "scope": "External torque is diagnostic, not robot task completion. The original un-driven door may coast after a deliberate pulse; this is separate from the 40s no-torque neutral validation.",
+    "decoded_frames": {
+      "external_camera": 90,
+      "external_camera_2": 90,
+      "wrist_camera": 90,
+      "all_cameras": 90,
+      "overview_camera": 90
+    },
+    "evidence": "reports/replicator_physics/mobility_mount_01/mobility_probe.json",
+    "sha256": "7908ab1e1672e75375cb9803b68f8f79f7fe019a156b860a26ffef985e2290d1"
+  },
+  "retained_failed_probe": {
+    "path": "reports/replicator_physics/neutral_mount_01.log",
+    "reason": "Probe rejected a valid static cabinet-frame joint anchor before collecting; static and dynamic endpoints must be distinguished."
+  },
+  "effective_runtime_parameters_unchanged": {
+    "masses_kg": true,
+    "coms_local_xyzw": true,
+    "inertias_kg_m2": true
+  },
+  "first_long_neutral": {
+    "original_probe_passed": false,
+    "original_background_window_seconds": 2.0,
+    "observed_bodies": 104,
+    "observed_joint_bodies": 88,
+    "missing_joint_bodies": [
+      "/World/envs/env_0/kitchen/Range/Range_OnlineVisual/Geometry/sm_rc_stove_body_a01_01_obj_00"
+    ],
+    "pear": {
+      "path": "/World/envs/env_0/kitchen/PearA01/PearA01_OnlineVisual/Geometry/pear_01_obj_00",
+      "last_nonzero_native_velocity_time_s": 3.0,
+      "fully_static_tail_start_s": 3.0666666666666664,
+      "static_tail_duration_s": 36.86666666666666,
+      "tail_poses_bitwise_constant": true,
+      "tail_velocities_exactly_zero": true,
+      "max_translation_from_reset_m": 0.000630837632343173,
+      "max_rotation_from_reset_deg": 4.079186620116271,
+      "source_mass_kg": 0.24505208657783942,
+      "diagnosis": "Finite initial settling followed by exactly static native poses/velocities, consistent with PhysX sleep (sleep flag not queried), not persistent uncontrolled rotation; original 2s settling gate still fails. No pear physics or state was changed.",
+      "video_scope": "Pear is not visible in the original robot cameras or the supplementary refrigerator overview; this finding relies on native body pose and velocity evidence."
+    },
+    "fridge_from_reset": [
+      {
+        "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_panel_01_obj_00",
+        "max_translation_m": 0.0,
+        "max_rotation_deg": 4.344172490305758e-05
+      },
+      {
+        "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_left_01_obj_00",
+        "max_translation_m": 0.0,
+        "max_rotation_deg": 0.00018889820565627966
+      },
+      {
+        "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00",
+        "max_translation_m": 0.0,
+        "max_rotation_deg": 0.0
+      },
+      {
+        "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_glass_drawer_01_obj_00",
+        "max_translation_m": 0.0,
+        "max_rotation_deg": 7.906139890245894e-12
+      },
+      {
+        "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_right_01_obj_00",
+        "max_translation_m": 0.0,
+        "max_rotation_deg": 4.364508422090204e-05
+      }
+    ],
+    "new_preregistered_protocol": {
+      "free_background_settling_seconds": 5.0,
+      "post_settling_observation_seconds": 35.0,
+      "background_translation_tolerance_m": 0.002,
+      "background_rotation_tolerance_deg": 1.0,
+      "joint_connected_tolerances_apply_from_reset": true,
+      "all_new_collection_initial_neutral_seconds": 5.0,
+      "status": "Not yet executed; original failure retained"
+    },
+    "decoded": {
+      "external_camera": 600,
+      "external_camera_2": 600,
+      "wrist_camera": 600,
+      "all_cameras": 600,
+      "overview/overview_camera": 600
+    },
+    "input_sha256": {
+      "neutral_probe.json": "74ceb531ca638e68820d79daa93ce2d99b5c2a6cd106f943a51256d843a8f0ba",
+      "neutral_states.npz": "8abc185e22e77db719f3b7a6c9fdb0f980bd2400f06cf4c219c32a3ff215bd2a",
+      "probe_source.py": "c9063ef0a374308371b5d4eaf0d4db5280e3d4d43ef7f9791eba7982c4dcfb64"
+    },
+    "evidence": "reports/replicator_physics/neutral_mount_02/independent_review.json"
+  },
+  "final_long_neutral": {
+    "passed": true,
+    "checks": {
+      "finite": true,
+      "frames_and_duration": true,
+      "all_104_background_after_5s": true,
+      "all_89_joint_bodies_from_reset": true,
+      "robot_held": true,
+      "task_objects_after_2s": true,
+      "camera_capture_does_not_advance_physics": true,
+      "physics_advances_exactly_8_substeps_per_frame": true,
+      "static_anchor_matrices_stable": true,
+      "static_anchor_source_and_animation_pass": true,
+      "all_videos_fully_decode": true
+    },
+    "scope": "Independent recomputation from recorded native arrays; source/runtime mapping metadata and source code additionally inspected. Current single environment only; original rejected 2s-window probe retained.",
+    "frames": 600,
+    "duration_s": 40.0,
+    "sampling_interval_s": 0.06666666666666667,
+    "physics_interval_s": 0.008333333333333333,
+    "task_objects": {
+      "mustard": {
+        "translation_m": 8.940696716308594e-08,
+        "rotation_deg": 5.949256119299204e-05
+      },
+      "bowl": {
+        "translation_m": 0.0,
+        "rotation_deg": 6.113723098273824e-06
+      }
+    },
+    "robot_max_joint_drift_rad": 0.0,
+    "observed_dynamic_bodies": 104,
+    "joint_connected_bodies": 89,
+    "static_anchors": 66,
+    "articulation_root_aliases": {
+      "/World/envs/env_0/kitchen/Range/Range_OnlineVisual/Geometry/sm_rc_stove_body_a01_01_obj_00": {
+        "native_path": "/World/envs/env_0/kitchen/Range/Range_OnlineVisual",
+        "unique_joint_graph_root": [
+          "/World/envs/env_0/kitchen/Range/Range_OnlineVisual/Geometry/sm_rc_stove_body_a01_01_obj_00"
+        ],
+        "source_mass_kg": 126.0,
+        "native_mass_kg": 125.99999237060547,
+        "initial_translation_error_m": 4.054868435969159e-06,
+        "initial_rotation_error_deg": 1.1489984035168277e-05
+      }
+    },
+    "decoded": {
+      "external_camera": {
+        "frames": 600,
+        "fps": 15.0,
+        "passed": true
+      },
+      "external_camera_2": {
+        "frames": 600,
+        "fps": 15.0,
+        "passed": true
+      },
+      "wrist_camera": {
+        "frames": 600,
+        "fps": 15.0,
+        "passed": true
+      },
+      "all_cameras": {
+        "frames": 600,
+        "fps": 15.0,
+        "passed": true
+      },
+      "overview/overview_camera": {
+        "frames": 600,
+        "fps": 15.0,
+        "passed": true
+      }
+    },
+    "background_physics": {
+      "recipe": "fixed-refrigerator-housing-v1",
+      "recipe_sha256": "6c577536586ec4e51664af174955e6f5be08007ec2b0830082b37857ffbd0767",
+      "source": "/workspace/assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_g_shape.usda",
+      "source_sha256": "3c502506532233850196fabe24f03dc488245de72951ce069e1e84f536a9fa01",
+      "overlay_sha256": "cee43da5405daa08c6383c64726de287264ca2431af203586fd3125e4461659c",
+      "mount_joint": "/World/Fridge/RoboLawHousingInstallation",
+      "mounted_body": "/World/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00",
+      "world_anchor_position_m": [
+        2.5437664985656223,
+        -1.409422159194943,
+        -0.00026475999146339217
+      ],
+      "world_anchor_quaternion_wxyz": [
+        2.83276944882399e-16,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "assumption": "Refrigerator housing is installed and anchored at its original authored kitchen placement; this is a local extension assumption, not an upstream constraint.",
+      "preserved": [
+        "All source geometry and collision settings",
+        "All mass, COM and inertia metadata",
+        "Both refrigerator revolute door joints and their original limits",
+        "Original internal fixed joints",
+        "Gravity on all bodies",
+        "Robot, mustard, bowl, layout relations and task predicate"
+      ],
+      "runtime_state_writes": false
+    },
+    "sha256": {
+      "neutral_probe.json": "5053c414423485ea2bb6d71de7fc41680806abf98406c5fe4fc853a9d1810699",
+      "neutral_states.npz": "8abc185e22e77db719f3b7a6c9fdb0f980bd2400f06cf4c219c32a3ff215bd2a"
+    },
+    "visual_review": "Viewed the supplementary refrigerator overview at 0, 2, 5, 10, 20 and 39.933 seconds: both doors and housing remain visually still, matching native poses. All original three views, composite and overview fully decoded at 600 frames / 15 fps. Pear is outside these cameras, assessed from native body traces.",
+    "probe_code_sha256": "a4ec87441b74187ad0fc1f828a9be4bad88146f305ef5b5e1399a3e8a35d79ce",
+    "evidence": "reports/replicator_physics/neutral_mount_03/independent_review.json",
+    "all_body_summary": {
+      "all_104_bodies_after_5s_max_translation_m": 0.0,
+      "all_104_bodies_after_5s_max_rotation_deg": 0.0,
+      "all_89_joint_bodies_from_reset_max_translation_m": 0.0012234400492161512,
+      "all_89_joint_bodies_from_reset_max_rotation_deg": 0.3225867736422586,
+      "fridge": [
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_panel_01_obj_00",
+          "joint_connected": true,
+          "from_reset": {
+            "translation_m": 0.0,
+            "rotation_deg": 4.344172490305758e-05,
+            "passed": true
+          },
+          "after_5s": {
+            "translation_m": 0.0,
+            "rotation_deg": 0.0,
+            "passed": true
+          },
+          "after_5s_peak_speed_m_s": 0.0,
+          "after_5s_peak_angular_speed_rad_s": 0.0
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_left_01_obj_00",
+          "joint_connected": true,
+          "from_reset": {
+            "translation_m": 0.0,
+            "rotation_deg": 0.00018889820565627964,
+            "passed": true
+          },
+          "after_5s": {
+            "translation_m": 0.0,
+            "rotation_deg": 0.0,
+            "passed": true
+          },
+          "after_5s_peak_speed_m_s": 0.0,
+          "after_5s_peak_angular_speed_rad_s": 0.0
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_body_01_obj_00",
+          "joint_connected": true,
+          "from_reset": {
+            "translation_m": 0.0,
+            "rotation_deg": 0.0,
+            "passed": true
+          },
+          "after_5s": {
+            "translation_m": 0.0,
+            "rotation_deg": 0.0,
+            "passed": true
+          },
+          "after_5s_peak_speed_m_s": 0.0,
+          "after_5s_peak_angular_speed_rad_s": 0.0
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_glass_drawer_01_obj_00",
+          "joint_connected": true,
+          "from_reset": {
+            "translation_m": 0.0,
+            "rotation_deg": 7.906139890245894e-12,
+            "passed": true
+          },
+          "after_5s": {
+            "translation_m": 0.0,
+            "rotation_deg": 0.0,
+            "passed": true
+          },
+          "after_5s_peak_speed_m_s": 0.0,
+          "after_5s_peak_angular_speed_rad_s": 0.0
+        },
+        {
+          "path": "/World/envs/env_0/kitchen/Fridge/Fridge_OnlineVisual/Geometry/sm_rc_refrigerator_a01_door_right_01_obj_00",
+          "joint_connected": true,
+          "from_reset": {
+            "translation_m": 0.0,
+            "rotation_deg": 4.364508422090204e-05,
+            "passed": true
+          },
+          "after_5s": {
+            "translation_m": 0.0,
+            "rotation_deg": 0.0,
+            "passed": true
+          },
+          "after_5s_peak_speed_m_s": 0.0,
+          "after_5s_peak_angular_speed_rad_s": 0.0
+        }
+      ]
+    }
+  }
+}

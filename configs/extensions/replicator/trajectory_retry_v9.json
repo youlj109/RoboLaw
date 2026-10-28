@@ -1,0 +1,4494 @@
+{
+  "schema_version": 1,
+  "layout_fixed": false,
+  "scene_settings_changed_once": true,
+  "retry_round": 9,
+  "source_run": "reports/replicator_trajectory_retry8_20261028",
+  "previous_recipe": {
+    "path": "configs/extensions/replicator/trajectory_retry_v8.json",
+    "sha256": "2c1b1943d12e3a5c62535edd9a00e2fa46d114b5d52d69ba8dd0d664c0ac5c81"
+  },
+  "scene_adjustment_authorization": {
+    "path": "reports/replicator_scene_retry_round9_analysis_20261028/round_authorization.json",
+    "sha256": "d445643b7e9f13ae1791f55526943e8c070c8759a2fa108c957d5bdcd60393b3"
+  },
+  "policy": "One frozen hazard-pose OR target-only optimization per previous failure, then one complete cuRobo pass stopping at first failed phase. No second candidate or pass in this round.",
+  "counts": {
+    "plan": 11,
+    "annotate_only": 0
+  },
+  "scene_adjustment_count": 5,
+  "target_only_retry_count": 6,
+  "source_analysis": {
+    "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4",
+    "reports/replicator_scene_retry_round9_analysis_20261028/property.json": "2ee1a72793c78057a80825e5f2e730da514ad0171af0cc06785cc638d8cbec8f",
+    "reports/replicator_scene_retry_round9_analysis_20261028/mustard.json": "e8582f295605714b1367b9615f1a28bd1b361811a3b0a84e28ba74d67e738fec"
+  },
+  "recipes": {
+    "l_island_bowl_sink__property_vase": {
+      "scene_id": "l_island_bowl_sink__property_vase",
+      "task_id": "kitchen_bench_replicator_l_island_bowl_sink",
+      "payload_name": "bowl",
+      "layout_fixed": true,
+      "config_sha256": "f4a83873505939e36b101c9115b5acdd047ce3254b98eed4083ed9d52d117b49",
+      "result_sha256": "45be5fd9abe952568bb0b03241094b502b8e22f02b7ddc5d8deeee0a054e2f3f",
+      "config_path": "configs/extensions/replicator/scene_retry_once_20261028/l_island_bowl_sink/property_vase.json",
+      "previous_stage": "lower",
+      "previous_failure_code": "MotionGenStatus.IK_FAIL",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "rim_azimuth_local_deg": -135.0,
+        "tcp_raise_m": 0.0,
+        "jaw_flip": 1.0
+      },
+      "pregrasp_offset_world_m": [
+        0.024788688375869117,
+        -0.024708721711251158,
+        0.08000000000000007
+      ],
+      "lift_offset_world_xy_m": [
+        0.01770620598276368,
+        -0.017649086936607716
+      ],
+      "lift_height_m": 0.10000000000000009,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.15000000000000002
+      ],
+      "summary": "R8实际末q/原目标定位夹爪碰原Sink/BasinFront，与财产物无关，保持R8布局不做无效平移。R9唯一候选为源网格实测-135度对角碗沿径向夹持，重算attachment与六个TCP；碗初态、最终世界位姿及中间携物世界位姿都保持，原始q、模型、掩码不变。唯一CPU检查端点清空=True、含顺序全臂IK清空=True；无论检查或随后一次规划结果，不再换候选。",
+      "review_note": "R8实际末q/原目标定位夹爪碰原Sink/BasinFront，与财产物无关，保持R8布局不做无效平移。R9唯一候选为源网格实测-135度对角碗沿径向夹持，重算attachment与六个TCP；碗初态、最终世界位姿及中间携物世界位姿都保持，原始q、模型、掩码不变。唯一CPU检查端点清空=True、含顺序全臂IK清空=True；无论检查或随后一次规划结果，不再换候选。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry8_20261028/scenes/l_island_bowl_sink__property_vase/result.json",
+        "result_sha256": "45be5fd9abe952568bb0b03241094b502b8e22f02b7ddc5d8deeee0a054e2f3f",
+        "config_sha256": "f4a83873505939e36b101c9115b5acdd047ce3254b98eed4083ed9d52d117b49",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v8.json",
+        "previous_recipe_sha256": "2c1b1943d12e3a5c62535edd9a00e2fa46d114b5d52d69ba8dd0d664c0ac5c81",
+        "source_ancestor_chain": [
+          {
+            "path": "reports/replicator_trajectory_retry6_20261026/scenes/l_island_bowl_sink__property_vase/result.json",
+            "sha256": "6747fcf5d8e8b8a98d27b49d7c92f09834dc94f75408f70026a730e141d32ca1",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry5_20261026/scenes/l_island_bowl_sink__property_vase/result.json",
+            "sha256": "9154c3ffa384cf6a2e9a6531c20a1a121f711481a9f10cf18a013d358a1c2a72",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry4_20261026/scenes/l_island_bowl_sink__property_vase/result.json",
+            "sha256": "bb91d00afc81feee175111cb1b5532f8fa671fc859caeb148ca31a181930161e",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry3_20261026/scenes/l_island_bowl_sink__property_vase/result.json",
+            "sha256": "7cd2c329efdd2813be7024c3afcefc20dfa11439d454123bb99fa062a353af5c",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry2_20261026/scenes/l_island_bowl_sink__property_vase/result.json",
+            "sha256": "cc62e996b9818de8a28a8cdf41dceec86d391e6bd8c3bee3bd9668ae25a8ae88",
+            "stage": "lift"
+          }
+        ],
+        "partial_npz_path": "reports/replicator_trajectory_retry6_20261026/scenes/l_island_bowl_sink__property_vase/partial_trajectory.npz",
+        "partial_npz_sha256": "d2a5f8e006f9a74938f58dbba5faf3ad4a7720ebfd1e3dcb7225024780241bbf",
+        "previous_result_path": "reports/replicator_trajectory_retry8_20261028/scenes/l_island_bowl_sink__property_vase/result.json",
+        "previous_result_sha256": "45be5fd9abe952568bb0b03241094b502b8e22f02b7ddc5d8deeee0a054e2f3f",
+        "config_path": "configs/extensions/replicator/scene_retry_once_20261028/l_island_bowl_sink/property_vase.json",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/property.json",
+          "sha256": "2ee1a72793c78057a80825e5f2e730da514ad0171af0cc06785cc638d8cbec8f"
+        },
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry2_20261026/scenes/l_island_bowl_sink__property_vase/source_scene.usda",
+          "sha256": "8d95ac1600ebc40f4e6e925f0db6d40cd58966e5bc1855df12855eaeb1e3fc9e"
+        },
+        "scene_change_analysis": {
+          "path": "reports/replicator_scene_retry_once_analysis_20261028/bowl.json",
+          "sha256": "6f413b149f590ef49be610d75a511b09e658be100f8535b1169ea30756763620"
+        },
+        "analysis_evidence": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/property_evidence/l_island_bowl_sink__property_vase.json",
+          "sha256": "b01405c013c995ff53a7a2dc5cea0b9e3e6eddc10c68c7f9a5dcd08cf0b29fe6"
+        },
+        "historical_analysis": {
+          "path": "reports/replicator_trajectory_retry7_analysis_20261026/annotations_revalidation.json",
+          "sha256": "d5234eea8262daf83a788a664843c228f2fe5d59300360a2747e83d19af5df6a"
+        }
+      },
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -0.41402930638862523
+          ],
+          [
+            0.0,
+            -0.7071067811865476,
+            0.7071067811865475,
+            2.20296847110484
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0496930386126042
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -0.43881799476449435
+          ],
+          [
+            0.0,
+            -0.7071067811865476,
+            0.7071067811865475,
+            2.227677192816091
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.9696930386126041
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -0.42111178878173067
+          ],
+          [
+            0.0,
+            -0.7071067811865476,
+            0.7071067811865475,
+            2.2100281058794833
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0696930386126042
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.0,
+            -0.7071067811865476,
+            -0.7071067811865477,
+            -0.06246910402411377
+          ],
+          [
+            0.0,
+            -0.7071067811865476,
+            0.7071067811865475,
+            2.22767716232806
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0696930386126042
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.0,
+            -0.7071067811865476,
+            -0.7071067811865477,
+            -0.06246910402411377
+          ],
+          [
+            0.0,
+            -0.7071067811865476,
+            0.7071067811865475,
+            2.22767716232806
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.8165514180791524
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.0,
+            -0.7071067811865476,
+            -0.7071067811865477,
+            -0.06246910402411377
+          ],
+          [
+            0.0,
+            -0.7071067811865476,
+            0.7071067811865475,
+            2.22767716232806
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.9665514180791525
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.02548499996960163
+        ],
+        [
+          -0.7071067811865475,
+          -0.7071067811865476,
+          0.0,
+          -0.07742431350000012
+        ],
+        [
+          -0.7071067811865476,
+          0.7071067811865475,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "goal_vertical_clearance_m": 0.012722078223748903,
+      "goal_correction_evidence": {
+        "path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_clearance.json",
+        "sha256": "fdf63b353804327a1d2c0e1ab6e84ed4970937d2a45458a211dfc93217622942",
+        "kitchen_key": "l_island",
+        "measurements": {
+          "goal_vertical_clearance_m": 0.012722078223748903,
+          "same_sink_xy_orientation": true,
+          "goal_before": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -0.0077218469195505235
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              2.2824244194326235
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7783443398858019
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "goal_after": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -0.0077218469195505235
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              2.2824244194326235
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7910664181095508
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "drain_collider": {
+            "path": "/World/kitchen/Asset/Sink/Drain_0",
+            "minimum_sphere_to_AABB_m": -0.0107120782237487,
+            "sphere_index": 24,
+            "bounds": [
+              [
+                -0.032721846919550525,
+                2.2262966611542336,
+                0.7458593403557355
+              ],
+              [
+                0.017278153080449478,
+                2.2762966611542335,
+                0.7518593403557355
+              ]
+            ],
+            "representation": "Original primitive AABB used by existing planningworld"
+          },
+          "payload_source_mesh_bottom_before_m": 0.7508593399162002,
+          "payload_source_mesh_bottom_after_m": 0.7635814181399492,
+          "payload_source_mesh_top_after_m": 0.8185514180791524,
+          "payload_sphere_bottom_before_m": 0.7411472621319868,
+          "payload_sphere_bottom_after_m": 0.7538693403557357,
+          "drain_top_m": 0.7518593403557355,
+          "sink_rim_m": 0.9348792124978476,
+          "payload_top_below_sink_rim_m": 0.11632779441869512,
+          "planner_sphere_drain_gap_before_m": -0.0107120782237487,
+          "planner_sphere_drain_gap_after_m": 0.002010000000000234,
+          "clearance_target_m": 0.002,
+          "numerical_extra_m": 1e-05,
+          "payload_geometry_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+          "payload_sphere_cover": {
+            "voxel_size_m": [
+              0.026907332241535187,
+              0.026852168142795563,
+              0.02748499996960163
+            ],
+            "count": 68,
+            "coverage": "Complete source convex hull; enclosing voxel spheres, no surface-sampling gaps"
+          },
+          "source_result_path": "reports/replicator_trajectory_retry_20261026/scenes/l_island_bowl_sink__property_glass_bottle/result.json",
+          "source_result_sha256": "eb01066b661f08e25356194c7920025faf9519b9d81bfc35cae5cef8b003eb2a",
+          "source_geometry_evidence_path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_probe.json",
+          "source_geometry_evidence_sha256": "a15623baef502d1c8f51cde725169d331bc742906994ecae3dfd465283ac1520",
+          "scope": "Correct computed release height inside original sink, only +Z. No layout/model/mask changes. Candidate held pose; physics release/settling unverified."
+        }
+      },
+      "retry_round": 9,
+      "action": "plan",
+      "change_description": "R8实际末q/原目标定位夹爪碰原Sink/BasinFront，与财产物无关，保持R8布局不做无效平移。R9唯一候选为源网格实测-135度对角碗沿径向夹持，重算attachment与六个TCP；碗初态、最终世界位姿及中间携物世界位姿都保持，原始q、模型、掩码不变。唯一CPU检查端点清空=True、含顺序全臂IK清空=True；无论检查或随后一次规划结果，不再换候选。",
+      "target_only": true,
+      "grasp_info": {
+        "rule": "Measured upper bowl wall; radial pinch, never diameter grip",
+        "center_local_m": [
+          -0.05474725710456316,
+          -0.054747257104563164,
+          0.02548499996960163
+        ],
+        "wall_thickness_m": 0.005764213000000004,
+        "rim_azimuth_local_deg": -135.0,
+        "slice_z_local_m": 0.02548499996960163,
+        "inner_outer_radius_m": [
+          0.074542207,
+          0.08030642
+        ],
+        "source_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+        "nominal_only": true,
+        "physical_contacts_verified": false,
+        "target_tcp_world_m": [
+          -0.43881799476449435,
+          2.227677192816091,
+          0.9696930386126041
+        ]
+      },
+      "scene_quality_issues": [],
+      "explicit_targets_override_scalar_recipe": true,
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "preserved_target_phases": [],
+      "changed_target_phases": [
+        "pregrasp",
+        "approach",
+        "lift",
+        "transfer",
+        "lower",
+        "retreat"
+      ],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": 0.0
+      },
+      "target_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round9_analysis_20261028/property.json",
+        "sha256": "2ee1a72793c78057a80825e5f2e730da514ad0171af0cc06785cc638d8cbec8f"
+      }
+    },
+    "l_island_bowl_sink__robot_projecting_crossbar": {
+      "scene_id": "l_island_bowl_sink__robot_projecting_crossbar",
+      "task_id": "kitchen_bench_replicator_l_island_bowl_sink",
+      "payload_name": "bowl",
+      "layout_fixed": false,
+      "config_sha256": "af9f11e9aaf4497cd34e80ae1c63a0f21b9bb690eb16bed1329fdcab58ee400f",
+      "result_sha256": "38ffddeb33231c8f15ae983bb1cec5cac06b50e75973405c42ee6a9183fefce2",
+      "config_path": "configs/extensions/replicator/scene_retry_once_20261028/l_island_bowl_sink/robot_projecting_crossbar.json",
+      "previous_stage": "pregrasp",
+      "previous_failure_code": "MotionGenStatus.IK_FAIL",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "rim_azimuth_local_deg": -30,
+        "tcp_raise_m": 0.0
+      },
+      "pregrasp_offset_world_m": [
+        0.024788688375869172,
+        -0.024708721711251158,
+        0.08000000000000007
+      ],
+      "lift_offset_world_xy_m": [
+        0.01770620598276368,
+        -0.017649086936607716
+      ],
+      "lift_height_m": 0.10000000000000009,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.15000000000000002
+      ],
+      "summary": "四景同一固定 pregrasp 的原腕部/夹爪球都与斜向 ProjectingTube 的原 primitive AABB 接触，原厨房未检出其它端点接触。仅将横杆朝向对齐台面轴，缩减斜杆 AABB 在腕部方向的占据，保持基座位置不动；270°向左、0°向下、180°向上分别按台面边界和目标腕部相对方位直接选定。方形底座随朝向对齐，由约21–22cm投影恢复16cm投影，消除边缘悬出提示。没有缩减资产或替换原规划模型。",
+      "review_note": "四景同一固定 pregrasp 的原腕部/夹爪球都与斜向 ProjectingTube 的原 primitive AABB 接触，原厨房未检出其它端点接触。仅将横杆朝向对齐台面轴，缩减斜杆 AABB 在腕部方向的占据，保持基座位置不动；270°向左、0°向下、180°向上分别按台面边界和目标腕部相对方位直接选定。方形底座随朝向对齐，由约21–22cm投影恢复16cm投影，消除边缘悬出提示。没有缩减资产或替换原规划模型。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry8_20261028/scenes/l_island_bowl_sink__robot_projecting_crossbar/result.json",
+        "result_sha256": "38ffddeb33231c8f15ae983bb1cec5cac06b50e75973405c42ee6a9183fefce2",
+        "config_sha256": "af9f11e9aaf4497cd34e80ae1c63a0f21b9bb690eb16bed1329fdcab58ee400f",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v8.json",
+        "previous_recipe_sha256": "2c1b1943d12e3a5c62535edd9a00e2fa46d114b5d52d69ba8dd0d664c0ac5c81",
+        "source_ancestor_chain": [
+          {
+            "path": "reports/replicator_trajectory_retry6_20261026/scenes/l_island_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "ceee1d95648bfac481614459f3ca78b00ebed5ea747c3430a22f20dc5a4da4ec",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry5_20261026/scenes/l_island_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "41b3b081d64f99f708f9f561034b0a7d495ce242bb3ac1279cb8d53933c23685",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry4_20261026/scenes/l_island_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "d55cf8e49459b042fcf25b9696bf9fc18b5e11ca528b62da0305b3fed47f4b00",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry3_20261026/scenes/l_island_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "81837b0ac48a0c2e29eaa8d8a4cb7e2b89aacf1b3e7368e30a0171ac06dbd297",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry2_20261026/scenes/l_island_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "3a08d9d212a1d693e845a4e83abdfb6b35ebbc69d97a8d290142463d3808bb8b",
+            "stage": "pregrasp"
+          }
+        ],
+        "previous_result_path": "reports/replicator_trajectory_retry8_20261028/scenes/l_island_bowl_sink__robot_projecting_crossbar/result.json",
+        "previous_result_sha256": "38ffddeb33231c8f15ae983bb1cec5cac06b50e75973405c42ee6a9183fefce2",
+        "config_path": "configs/extensions/replicator/scene_retry_once_20261028/l_island_bowl_sink/robot_projecting_crossbar.json",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+          "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+        },
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry2_20261026/scenes/l_island_bowl_sink__robot_projecting_crossbar/source_scene.usda",
+          "sha256": "e6dba3e1dae0856ffd62a3c5c64ee15df26ee1a6e1b2b45528044985bdbb6fa6"
+        },
+        "scene_change_analysis": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+          "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+        },
+        "historical_analysis": {
+          "path": "reports/replicator_trajectory_retry7_analysis_20261026/annotations_revalidation.json",
+          "sha256": "d5234eea8262daf83a788a664843c228f2fe5d59300360a2747e83d19af5df6a"
+        }
+      },
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            0.8660254037844387,
+            -0.49999999999999994,
+            -0.2924265036822941
+          ],
+          [
+            0.0,
+            -0.49999999999999994,
+            -0.8660254037844387,
+            2.2191166609594033
+          ],
+          [
+            -1.0,
+            0.0,
+            -0.0,
+            1.0496930386126042
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.0,
+            0.8660254037844387,
+            -0.49999999999999994,
+            -0.3172151920581633
+          ],
+          [
+            0.0,
+            -0.49999999999999994,
+            -0.8660254037844387,
+            2.2438253826706545
+          ],
+          [
+            -1.0,
+            0.0,
+            -0.0,
+            0.9696930386126041
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.0,
+            0.8660254037844387,
+            -0.49999999999999994,
+            -0.2995089860753996
+          ],
+          [
+            0.0,
+            -0.49999999999999994,
+            -0.8660254037844387,
+            2.2261762957340467
+          ],
+          [
+            -1.0,
+            0.0,
+            -0.0,
+            1.0696930386126042
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.0,
+            0.8660254037844387,
+            -0.49999999999999994,
+            0.05913369868221738
+          ],
+          [
+            0.0,
+            -0.4999999999999999,
+            -0.8660254037844387,
+            2.2438253521826232
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0696930386126042
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.0,
+            0.8660254037844387,
+            -0.49999999999999994,
+            0.05913369868221738
+          ],
+          [
+            0.0,
+            -0.4999999999999999,
+            -0.8660254037844387,
+            2.2438253521826232
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.8165514180791524
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.0,
+            0.8660254037844387,
+            -0.49999999999999994,
+            0.05913369868221738
+          ],
+          [
+            0.0,
+            -0.4999999999999999,
+            -0.8660254037844387,
+            2.2438253521826232
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.9665514180791525
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.02548499996960163
+        ],
+        [
+          0.8660254037844387,
+          -0.49999999999999994,
+          0.0,
+          -0.07719813450000013
+        ],
+        [
+          -0.4999999999999999,
+          -0.8660254037844387,
+          0.0,
+          -2.220446049250313e-16
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "goal_vertical_clearance_m": 0.012722078223748903,
+      "goal_correction_evidence": {
+        "path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_clearance.json",
+        "sha256": "fdf63b353804327a1d2c0e1ab6e84ed4970937d2a45458a211dfc93217622942",
+        "kitchen_key": "l_island",
+        "measurements": {
+          "goal_vertical_clearance_m": 0.012722078223748903,
+          "same_sink_xy_orientation": true,
+          "goal_before": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -0.0077218469195505235
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              2.2824244194326235
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7783443398858019
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "goal_after": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -0.0077218469195505235
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              2.2824244194326235
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7910664181095508
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "drain_collider": {
+            "path": "/World/kitchen/Asset/Sink/Drain_0",
+            "minimum_sphere_to_AABB_m": -0.0107120782237487,
+            "sphere_index": 24,
+            "bounds": [
+              [
+                -0.032721846919550525,
+                2.2262966611542336,
+                0.7458593403557355
+              ],
+              [
+                0.017278153080449478,
+                2.2762966611542335,
+                0.7518593403557355
+              ]
+            ],
+            "representation": "Original primitive AABB used by existing planningworld"
+          },
+          "payload_source_mesh_bottom_before_m": 0.7508593399162002,
+          "payload_source_mesh_bottom_after_m": 0.7635814181399492,
+          "payload_source_mesh_top_after_m": 0.8185514180791524,
+          "payload_sphere_bottom_before_m": 0.7411472621319868,
+          "payload_sphere_bottom_after_m": 0.7538693403557357,
+          "drain_top_m": 0.7518593403557355,
+          "sink_rim_m": 0.9348792124978476,
+          "payload_top_below_sink_rim_m": 0.11632779441869512,
+          "planner_sphere_drain_gap_before_m": -0.0107120782237487,
+          "planner_sphere_drain_gap_after_m": 0.002010000000000234,
+          "clearance_target_m": 0.002,
+          "numerical_extra_m": 1e-05,
+          "payload_geometry_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+          "payload_sphere_cover": {
+            "voxel_size_m": [
+              0.026907332241535187,
+              0.026852168142795563,
+              0.02748499996960163
+            ],
+            "count": 68,
+            "coverage": "Complete source convex hull; enclosing voxel spheres, no surface-sampling gaps"
+          },
+          "source_result_path": "reports/replicator_trajectory_retry_20261026/scenes/l_island_bowl_sink__property_glass_bottle/result.json",
+          "source_result_sha256": "eb01066b661f08e25356194c7920025faf9519b9d81bfc35cae5cef8b003eb2a",
+          "source_geometry_evidence_path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_probe.json",
+          "source_geometry_evidence_sha256": "a15623baef502d1c8f51cde725169d331bc742906994ecae3dfd465283ac1520",
+          "scope": "Correct computed release height inside original sink, only +Z. No layout/model/mask changes. Candidate held pose; physics release/settling unverified."
+        }
+      },
+      "retry_round": 9,
+      "action": "plan",
+      "change_description": "四景同一固定 pregrasp 的原腕部/夹爪球都与斜向 ProjectingTube 的原 primitive AABB 接触，原厨房未检出其它端点接触。仅将横杆朝向对齐台面轴，缩减斜杆 AABB 在腕部方向的占据，保持基座位置不动；270°向左、0°向下、180°向上分别按台面边界和目标腕部相对方位直接选定。方形底座随朝向对齐，由约21–22cm投影恢复16cm投影，消除边缘悬出提示。没有缩减资产或替换原规划模型。",
+      "target_only": false,
+      "scene_quality_issues": [],
+      "explicit_targets_override_scalar_recipe": true,
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "preserved_target_phases": [
+        "pregrasp",
+        "approach",
+        "lift",
+        "transfer",
+        "lower",
+        "retreat"
+      ],
+      "changed_target_phases": [],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": 0.0
+      },
+      "scene_adjustment": {
+        "adjustments": 1,
+        "source_config_path": "configs/extensions/replicator/scene_retry_once_20261028/l_island_bowl_sink/robot_projecting_crossbar.json",
+        "source_config_sha256": "af9f11e9aaf4497cd34e80ae1c63a0f21b9bb690eb16bed1329fdcab58ee400f",
+        "config_path": "configs/extensions/replicator/scene_retry_round9_20261028/l_island_bowl_sink/robot_projecting_crossbar.json",
+        "config_sha256": "112d3f78dc64fe3ae6a46ebe53ba7cf34507ebab4b1f3e8ef93d1a13877b943e",
+        "delta_world_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "previous_obstacle_pose": {
+          "position": [
+            -0.3319270530256035,
+            2.0744522960898677,
+            0.917223041490552
+          ],
+          "yaw_deg": 206.6391753855071
+        },
+        "obstacle_pose": {
+          "position": [
+            -0.3319270530256035,
+            2.0744522960898677,
+            0.917223041490552
+          ],
+          "yaw_deg": 270.0
+        },
+        "scene_quality_issues": [],
+        "source_evidence": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+          "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+        },
+        "task_layout_preserved": true,
+        "collision_shape_assets_preserved": true
+      },
+      "scene_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+        "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+      }
+    },
+    "l_shape_bowl_sink__robot_projecting_crossbar": {
+      "scene_id": "l_shape_bowl_sink__robot_projecting_crossbar",
+      "task_id": "kitchen_bench_replicator_l_shape_bowl_sink",
+      "payload_name": "bowl",
+      "layout_fixed": false,
+      "config_sha256": "853aaefa5528c2591a6adb10ac335a90440cea22436bb619ac27a2723862abc8",
+      "result_sha256": "cd455b400b3c2d863b52d1a92bd135df4cb20561dfb221d334ab42cc2d99a9c1",
+      "config_path": "configs/extensions/replicator/scene_retry_once_20261028/l_shape_bowl_sink/robot_projecting_crossbar.json",
+      "previous_stage": "pregrasp",
+      "previous_failure_code": "MotionGenStatus.IK_FAIL",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "rim_azimuth_local_deg": 60,
+        "tcp_raise_m": 0.0
+      },
+      "pregrasp_offset_world_m": [
+        0.025174123501288115,
+        0.024315910551363257,
+        0.08000000000000007
+      ],
+      "lift_offset_world_xy_m": [
+        0.0179815167866344,
+        0.017368507536688046
+      ],
+      "lift_height_m": 0.10000000000000009,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.15000000000000002
+      ],
+      "summary": "四景同一固定 pregrasp 的原腕部/夹爪球都与斜向 ProjectingTube 的原 primitive AABB 接触，原厨房未检出其它端点接触。仅将横杆朝向对齐台面轴，缩减斜杆 AABB 在腕部方向的占据，保持基座位置不动；270°向左、0°向下、180°向上分别按台面边界和目标腕部相对方位直接选定。方形底座随朝向对齐，由约21–22cm投影恢复16cm投影，消除边缘悬出提示。没有缩减资产或替换原规划模型。",
+      "review_note": "四景同一固定 pregrasp 的原腕部/夹爪球都与斜向 ProjectingTube 的原 primitive AABB 接触，原厨房未检出其它端点接触。仅将横杆朝向对齐台面轴，缩减斜杆 AABB 在腕部方向的占据，保持基座位置不动；270°向左、0°向下、180°向上分别按台面边界和目标腕部相对方位直接选定。方形底座随朝向对齐，由约21–22cm投影恢复16cm投影，消除边缘悬出提示。没有缩减资产或替换原规划模型。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry8_20261028/scenes/l_shape_bowl_sink__robot_projecting_crossbar/result.json",
+        "result_sha256": "cd455b400b3c2d863b52d1a92bd135df4cb20561dfb221d334ab42cc2d99a9c1",
+        "config_sha256": "853aaefa5528c2591a6adb10ac335a90440cea22436bb619ac27a2723862abc8",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v8.json",
+        "previous_recipe_sha256": "2c1b1943d12e3a5c62535edd9a00e2fa46d114b5d52d69ba8dd0d664c0ac5c81",
+        "source_ancestor_chain": [
+          {
+            "path": "reports/replicator_trajectory_retry6_20261026/scenes/l_shape_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "49fccf969555104d193e5ad03b35aa80b4683ee6f6c18d54e1565f1d1a7ad7d5",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry5_20261026/scenes/l_shape_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "741f6b5e68ad7c89288130f38de8d8df0faae3322e3b0605c50ebea5fc293212",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry4_20261026/scenes/l_shape_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "7f9a8f2cfb3a40f552c645fb4a908514ed98ccaa31495d7f8186061ce519843c",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry3_20261026/scenes/l_shape_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "cb88502f25b7d65234f5973c815a205cc8a5ea39d9a89a7c9381d8fbb9ddaa31",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry2_20261026/scenes/l_shape_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "39af39119ca83fd254836aa558bef6e2302a8738744871696682bc3408558707",
+            "stage": "pregrasp"
+          }
+        ],
+        "previous_result_path": "reports/replicator_trajectory_retry8_20261028/scenes/l_shape_bowl_sink__robot_projecting_crossbar/result.json",
+        "previous_result_sha256": "cd455b400b3c2d863b52d1a92bd135df4cb20561dfb221d334ab42cc2d99a9c1",
+        "config_path": "configs/extensions/replicator/scene_retry_once_20261028/l_shape_bowl_sink/robot_projecting_crossbar.json",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+          "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+        },
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry2_20261026/scenes/l_shape_bowl_sink__robot_projecting_crossbar/source_scene.usda",
+          "sha256": "0b6fce4a35b95f00b1c371e7c9616b6e871c6c26d6e38d2ff7161485a3e595a7"
+        },
+        "scene_change_analysis": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+          "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+        },
+        "historical_analysis": {
+          "path": "reports/replicator_trajectory_retry7_analysis_20261026/annotations_revalidation.json",
+          "sha256": "d5234eea8262daf83a788a664843c228f2fe5d59300360a2747e83d19af5df6a"
+        }
+      },
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            0.5000000000000001,
+            0.8660254037844386,
+            -1.9923383466406794
+          ],
+          [
+            0.0,
+            0.8660254037844386,
+            -0.5000000000000001,
+            0.09899176747319476
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0311324502527714
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.0,
+            0.5000000000000001,
+            0.8660254037844386,
+            -2.0175124701419676
+          ],
+          [
+            0.0,
+            0.8660254037844386,
+            -0.5000000000000001,
+            0.0746758569218315
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.9511324502527714
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.0,
+            0.5000000000000001,
+            0.8660254037844386,
+            -1.9995309533553332
+          ],
+          [
+            0.0,
+            0.8660254037844386,
+            -0.5000000000000001,
+            0.09204436445851955
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0511324502527715
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.0,
+            0.5000000000000001,
+            0.8660254037844386,
+            -2.017512452133973
+          ],
+          [
+            0.0,
+            0.8660254037844385,
+            -0.5000000000000001,
+            0.45685179978414614
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0511324502527715
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.0,
+            0.5000000000000001,
+            0.8660254037844386,
+            -2.017512452133973
+          ],
+          [
+            0.0,
+            0.8660254037844385,
+            -0.5000000000000001,
+            0.45685179978414614
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.7706286961628969
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.0,
+            0.5000000000000001,
+            0.8660254037844386,
+            -2.017512452133973
+          ],
+          [
+            0.0,
+            0.8660254037844385,
+            -0.5000000000000001,
+            0.45685179978414614
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.9206286961628969
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.02548499996960163
+        ],
+        [
+          0.5000000000000001,
+          0.8660254037844386,
+          0.0,
+          -0.07766836950000011
+        ],
+        [
+          0.8660254037844385,
+          -0.5000000000000001,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "goal_vertical_clearance_m": 0.012722077861433497,
+      "goal_correction_evidence": {
+        "path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_clearance.json",
+        "sha256": "fdf63b353804327a1d2c0e1ab6e84ed4970937d2a45458a211dfc93217622942",
+        "kitchen_key": "l_shape",
+        "measurements": {
+          "goal_vertical_clearance_m": 0.012722077861433497,
+          "same_sink_xy_orientation": true,
+          "goal_before": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -2.056346636883973
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.38958901872662954
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7324216183318617
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "goal_after": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -2.056346636883973
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.38958901872662954
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7451436961932952
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "drain_collider": {
+            "path": "/World/kitchen/Asset/Sink/Drain_0",
+            "minimum_sphere_to_AABB_m": -0.01071207786141909,
+            "sphere_index": 38,
+            "bounds": [
+              [
+                -2.0469792346220745,
+                0.3645890187266295,
+                0.6999366184394658
+              ],
+              [
+                -1.9969792346220747,
+                0.41458901872662957,
+                0.7059366184394658
+              ]
+            ],
+            "representation": "Original primitive AABB used by existing planningworld"
+          },
+          "payload_source_mesh_bottom_before_m": 0.7049366183622601,
+          "payload_source_mesh_bottom_after_m": 0.7176586962236936,
+          "payload_source_mesh_top_after_m": 0.7726286961628969,
+          "payload_sphere_bottom_before_m": 0.6952245405780466,
+          "payload_sphere_bottom_after_m": 0.7079466184394801,
+          "drain_top_m": 0.7059366184394658,
+          "sink_rim_m": 0.9163789066584105,
+          "payload_top_below_sink_rim_m": 0.14375021049551362,
+          "planner_sphere_drain_gap_before_m": -0.01071207786141909,
+          "planner_sphere_drain_gap_after_m": 0.0020100000000144447,
+          "clearance_target_m": 0.002,
+          "numerical_extra_m": 1e-05,
+          "payload_geometry_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+          "payload_sphere_cover": {
+            "voxel_size_m": [
+              0.026907332241535187,
+              0.026852168142795563,
+              0.02748499996960163
+            ],
+            "count": 68,
+            "coverage": "Complete source convex hull; enclosing voxel spheres, no surface-sampling gaps"
+          },
+          "source_result_path": "reports/replicator_trajectory_retry_20261026/scenes/l_shape_bowl_sink__property_glass_bottle/result.json",
+          "source_result_sha256": "7c881ef6b71d13d27fa7138bfdc07a7412cc7b01140aed7b2fe634d53c29fe3b",
+          "source_geometry_evidence_path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_probe.json",
+          "source_geometry_evidence_sha256": "a15623baef502d1c8f51cde725169d331bc742906994ecae3dfd465283ac1520",
+          "scope": "Correct computed release height inside original sink, only +Z. No layout/model/mask changes. Candidate held pose; physics release/settling unverified."
+        }
+      },
+      "retry_round": 9,
+      "action": "plan",
+      "change_description": "四景同一固定 pregrasp 的原腕部/夹爪球都与斜向 ProjectingTube 的原 primitive AABB 接触，原厨房未检出其它端点接触。仅将横杆朝向对齐台面轴，缩减斜杆 AABB 在腕部方向的占据，保持基座位置不动；270°向左、0°向下、180°向上分别按台面边界和目标腕部相对方位直接选定。方形底座随朝向对齐，由约21–22cm投影恢复16cm投影，消除边缘悬出提示。没有缩减资产或替换原规划模型。",
+      "target_only": false,
+      "scene_quality_issues": [],
+      "explicit_targets_override_scalar_recipe": true,
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "preserved_target_phases": [
+        "pregrasp",
+        "approach",
+        "lift",
+        "transfer",
+        "lower",
+        "retreat"
+      ],
+      "changed_target_phases": [],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": 0.0
+      },
+      "scene_adjustment": {
+        "adjustments": 1,
+        "source_config_path": "configs/extensions/replicator/scene_retry_once_20261028/l_shape_bowl_sink/robot_projecting_crossbar.json",
+        "source_config_sha256": "853aaefa5528c2591a6adb10ac335a90440cea22436bb619ac27a2723862abc8",
+        "config_path": "configs/extensions/replicator/scene_retry_round9_20261028/l_shape_bowl_sink/robot_projecting_crossbar.json",
+        "config_sha256": "afd1ce43422491127907494c376ca26e608dee355f36a518a75ea7a53710c854",
+        "delta_world_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "previous_obstacle_pose": {
+          "position": [
+            -1.8487838593710169,
+            0.034397766901136044,
+            0.8986624325700037
+          ],
+          "yaw_deg": -64.22157257062347
+        },
+        "obstacle_pose": {
+          "position": [
+            -1.8487838593710169,
+            0.034397766901136044,
+            0.8986624325700037
+          ],
+          "yaw_deg": 0.0
+        },
+        "scene_quality_issues": [],
+        "source_evidence": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+          "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+        },
+        "task_layout_preserved": true,
+        "collision_shape_assets_preserved": true
+      },
+      "scene_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+        "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+      }
+    },
+    "l_shape_mustard_bowl__robot_steel_clamp": {
+      "scene_id": "l_shape_mustard_bowl__robot_steel_clamp",
+      "task_id": "kitchen_bench_replicator_l_shape_mustard_bowl",
+      "payload_name": "mustard_bottle",
+      "layout_fixed": true,
+      "config_sha256": "4e3b4ca2e4cd577ef6c8d43d4ddd37092fdce8ffe6387bd0ada5414170294c5a",
+      "result_sha256": "3eef96d8364c98d7d8c5a8be282cfb3c00f1704a08e186afcf3000b1c13fae89",
+      "config_path": "configs/extensions/replicator/scene_retry_once_20261028/l_shape_mustard_bowl/robot_steel_clamp.json",
+      "previous_stage": "pregrasp",
+      "previous_failure_code": "MotionGenStatus.IK_FAIL",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "jaw_yaw_local_deg": 90.0,
+        "z_local_m": 0.045,
+        "tcp_raise_m": 0.0
+      },
+      "pregrasp_offset_world_m": [
+        0.0,
+        0.0,
+        0.06000000000000005
+      ],
+      "lift_offset_world_xy_m": [
+        0.015212000000000003,
+        0.02585700000000002
+      ],
+      "lift_height_m": 0.16248499996960164,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.1499999999999999
+      ],
+      "summary": "R8 pregrasp 的已测IK分支同时撞钢夹具和北侧吊柜，移动hazard不能解除吊柜问题。保留原瓶身合法抓点/夹持方向及attachment，仅将接近目标降为抓点正上方6cm。其余五目标、attachment和最终瓶子位姿精确保持。本轮只选一个方案、一次CPU验证并冻结，遗留问题照实记录，不再调整；随后最多一次cuRobo。 唯一CPU检查仍有23处钢夹模型接触，候选保持，随后只规划一次。",
+      "retry_round": 9,
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            -0.755464138123376
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            1.6883390841027677
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0831876538395881
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            -0.755464138123376
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            1.6883390841027677
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.023187653839588
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            -0.740252138123376
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            1.7141960841027677
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.1856726538091897
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.0,
+            5.3795255885698935e-17,
+            1.0,
+            -0.0754641381233759
+          ],
+          [
+            0.0,
+            1.0,
+            -7.610650810070511e-17,
+            1.6263289889832913
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.1856726538091897
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.0,
+            5.3795255885698935e-17,
+            1.0,
+            -0.0754641381233759
+          ],
+          [
+            0.0,
+            1.0,
+            -7.610650810070511e-17,
+            1.6263289889832913
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0556726538091898
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.0,
+            5.3795255885698935e-17,
+            1.0,
+            -0.0754641381233759
+          ],
+          [
+            0.0,
+            1.0,
+            -7.610650810070511e-17,
+            1.6263289889832913
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.2056726538091898
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.04499999999999993
+        ],
+        [
+          6.123233995736766e-17,
+          1.0,
+          0.0,
+          -0.001719945683139601
+        ],
+        [
+          1.0,
+          -6.123233995736766e-17,
+          0.0,
+          0.0002979538172311891
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "grasp_info": {
+        "rule": "Measured bottle-body horizontal section; one fixed yaw",
+        "center_local_m": [
+          -0.0002979538172312255,
+          0.0017199456831396183,
+          0.045
+        ],
+        "section_width_m": 0.03912682204215487,
+        "jaw_yaw_local_deg": 90.0,
+        "source_sha256": "ee5aa3c97b00f0d945af34a514772fe7c276256f455132eb86ebeadfbaf6e7b9",
+        "nominal_only": true,
+        "physical_contacts_verified": false,
+        "target_tcp_world_m": [
+          -0.755464138123376,
+          1.6883390841027677,
+          1.023187653839588
+        ]
+      },
+      "review_note": "R8 pregrasp 的已测IK分支同时撞钢夹具和北侧吊柜，移动hazard不能解除吊柜问题。保留原瓶身合法抓点/夹持方向及attachment，仅将接近目标降为抓点正上方6cm。其余五目标、attachment和最终瓶子位姿精确保持。本轮只选一个方案、一次CPU验证并冻结，遗留问题照实记录，不再调整；随后最多一次cuRobo。 唯一CPU检查仍有23处钢夹模型接触，候选保持，随后只规划一次。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry8_20261028/scenes/l_shape_mustard_bowl__robot_steel_clamp/result.json",
+        "result_sha256": "3eef96d8364c98d7d8c5a8be282cfb3c00f1704a08e186afcf3000b1c13fae89",
+        "config_sha256": "4e3b4ca2e4cd577ef6c8d43d4ddd37092fdce8ffe6387bd0ada5414170294c5a",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v8.json",
+        "previous_recipe_sha256": "2c1b1943d12e3a5c62535edd9a00e2fa46d114b5d52d69ba8dd0d664c0ac5c81",
+        "source_ancestor_chain": [
+          {
+            "path": "reports/replicator_trajectory_retry6_20261026/scenes/l_shape_mustard_bowl__robot_steel_clamp/result.json",
+            "sha256": "42c4adf7ec34815cdd730e05a6a48ad3fd4f6edb04d5236297781b4c0598c282",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry5_20261026/scenes/l_shape_mustard_bowl__robot_steel_clamp/result.json",
+            "sha256": "3fbf9febbfc5aa46c51a70b8bc9b692e9f1f7ec06d06c26338b810e30aca7b9e",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry4_20261026/scenes/l_shape_mustard_bowl__robot_steel_clamp/result.json",
+            "sha256": "7bc56f6c9a4bfc20d57923d0d6e1edfbba23795abe1540ec5d2fac3782a28364",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry3_20261026/scenes/l_shape_mustard_bowl__robot_steel_clamp/result.json",
+            "sha256": "9c479aa9adee01e1180480cfdc0c93260563382252101659f651885f87abcbd4",
+            "stage": "retry_worker"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry2_20261026/scenes/l_shape_mustard_bowl__robot_steel_clamp/result.json",
+            "sha256": "e453494a27419f332e33bcc57ccb5f63c38900f50eab891d6a89ba78391e5da1",
+            "stage": "pregrasp"
+          }
+        ],
+        "previous_result_path": "reports/replicator_trajectory_retry8_20261028/scenes/l_shape_mustard_bowl__robot_steel_clamp/result.json",
+        "previous_result_sha256": "3eef96d8364c98d7d8c5a8be282cfb3c00f1704a08e186afcf3000b1c13fae89",
+        "config_path": "configs/extensions/replicator/scene_retry_once_20261028/l_shape_mustard_bowl/robot_steel_clamp.json",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard.json",
+          "sha256": "e8582f295605714b1367b9615f1a28bd1b361811a3b0a84e28ba74d67e738fec"
+        },
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry2_20261026/scenes/l_shape_mustard_bowl__robot_steel_clamp/source_scene.usda",
+          "sha256": "12a06d32e446db0a25e1a2a61fbde53cad227a6121ffb729c8da80b9fe9107ef"
+        },
+        "scene_change_analysis": {
+          "path": "reports/replicator_scene_retry_once_analysis_20261028/robot.json",
+          "sha256": "aeeb7211c88754244eed50fa21339e953d97e2a1182bc32b8b488279ff69d00e"
+        },
+        "historical_analysis": {
+          "path": "reports/replicator_trajectory_retry7_analysis_20261026/annotations_revalidation.json",
+          "sha256": "d5234eea8262daf83a788a664843c228f2fe5d59300360a2747e83d19af5df6a"
+        },
+        "analysis_evidence": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard_evidence/l_shape_mustard_bowl__robot_steel_clamp.json",
+          "sha256": "208a35e519192d411fddaa04316ea9d9b46a16a7d35ebfbd100ff946407bd683"
+        }
+      },
+      "explicit_targets_override_scalar_recipe": true,
+      "preserved_target_phases": [
+        "approach",
+        "lift",
+        "transfer",
+        "lower",
+        "retreat"
+      ],
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "action": "plan",
+      "change_description": "R8 pregrasp 的已测IK分支同时撞钢夹具和北侧吊柜，移动hazard不能解除吊柜问题。保留原瓶身合法抓点/夹持方向及attachment，仅将接近目标降为抓点正上方6cm。其余五目标、attachment和最终瓶子位姿精确保持。本轮只选一个方案、一次CPU验证并冻结，遗留问题照实记录，不再调整；随后最多一次cuRobo。 唯一CPU检查仍有23处钢夹模型接触，候选保持，随后只规划一次。",
+      "target_only": true,
+      "scene_quality_issues": [
+        {
+          "code": "selected_failed_phase_endpoint_model_contacts",
+          "count": 23,
+          "objects": [
+            "/World/hazard/Asset/Fixture/Frame/PinchUpperBeam",
+            "/World/hazard/Asset/Fixture/Frame/UpperJawFace"
+          ]
+        }
+      ],
+      "changed_target_phases": [
+        "pregrasp"
+      ],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": 0.0
+      },
+      "target_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard.json",
+        "sha256": "e8582f295605714b1367b9615f1a28bd1b361811a3b0a84e28ba74d67e738fec"
+      }
+    },
+    "peninsula_bowl_sink__property_vase": {
+      "scene_id": "peninsula_bowl_sink__property_vase",
+      "task_id": "kitchen_bench_replicator_peninsula_bowl_sink",
+      "payload_name": "bowl",
+      "layout_fixed": true,
+      "config_sha256": "9bfc89b7002bc06fffe407ee55ed70c9f0d657f452d16c5cf0b0235f6baca3d3",
+      "result_sha256": "d84b5e21abec33d91cdcba919d744cbf564ce750c194101df946cb994e5a992c",
+      "config_path": "configs/extensions/replicator/scene_retry_once_20261028/peninsula_bowl_sink/property_vase.json",
+      "previous_stage": "lower",
+      "previous_failure_code": "MotionGenStatus.IK_FAIL",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "rim_azimuth_local_deg": -135.0,
+        "tcp_raise_m": 0.0,
+        "jaw_flip": 1.0
+      },
+      "pregrasp_offset_world_m": [
+        0.024408848052557303,
+        -0.025084021542551627,
+        0.08000000000000007
+      ],
+      "lift_offset_world_xy_m": [
+        0.017434891466112462,
+        -0.017917158244679765
+      ],
+      "lift_height_m": 0.10000000000000009,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.15000000000000002
+      ],
+      "summary": "R8实际末q/原目标定位夹爪碰原Sink/BasinFront，与财产物无关，保持R8布局不做无效平移。R9唯一候选为源网格实测-135度对角碗沿径向夹持，重算attachment与六个TCP；碗初态、最终世界位姿及中间携物世界位姿都保持，原始q、模型、掩码不变。唯一CPU检查端点清空=True、含顺序全臂IK清空=True；无论检查或随后一次规划结果，不再换候选。",
+      "review_note": "R8实际末q/原目标定位夹爪碰原Sink/BasinFront，与财产物无关，保持R8布局不做无效平移。R9唯一候选为源网格实测-135度对角碗沿径向夹持，重算attachment与六个TCP；碗初态、最终世界位姿及中间携物世界位姿都保持，原始q、模型、掩码不变。唯一CPU检查端点清空=True、含顺序全臂IK清空=True；无论检查或随后一次规划结果，不再换候选。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry8_20261028/scenes/peninsula_bowl_sink__property_vase/result.json",
+        "result_sha256": "d84b5e21abec33d91cdcba919d744cbf564ce750c194101df946cb994e5a992c",
+        "config_sha256": "9bfc89b7002bc06fffe407ee55ed70c9f0d657f452d16c5cf0b0235f6baca3d3",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v8.json",
+        "previous_recipe_sha256": "2c1b1943d12e3a5c62535edd9a00e2fa46d114b5d52d69ba8dd0d664c0ac5c81",
+        "source_ancestor_chain": [
+          {
+            "path": "reports/replicator_trajectory_retry6_20261026/scenes/peninsula_bowl_sink__property_vase/result.json",
+            "sha256": "b5fead53a0a2bc6f47c8ec5975d6f92cbfdef3c156f861bb1f78b52b48426b4a",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry5_20261026/scenes/peninsula_bowl_sink__property_vase/result.json",
+            "sha256": "55b21c3c2dfb28bc8342c1d09414bcf63389e900d10126a1aeaa56fc58169a66",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry4_20261026/scenes/peninsula_bowl_sink__property_vase/result.json",
+            "sha256": "29fbb95a255ffa82e64b8ccd2f0a6b5e6338d2b636f8906a4488d96305e8fa81",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry3_20261026/scenes/peninsula_bowl_sink__property_vase/result.json",
+            "sha256": "2e7c00ae83269418118a9c0d2bee5242bf19801c196d1ac8c657ccd21abbd844",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry2_20261026/scenes/peninsula_bowl_sink__property_vase/result.json",
+            "sha256": "59ea8212803190477bc5e5d215723f5fd237476849f3777d19559f7c8ae7c495",
+            "stage": "lift"
+          }
+        ],
+        "partial_npz_path": "reports/replicator_trajectory_retry6_20261026/scenes/peninsula_bowl_sink__property_vase/partial_trajectory.npz",
+        "partial_npz_sha256": "e90057829417c8709e7051284d631e12c17aa076371e724932983599fbe7447c",
+        "previous_result_path": "reports/replicator_trajectory_retry8_20261028/scenes/peninsula_bowl_sink__property_vase/result.json",
+        "previous_result_sha256": "d84b5e21abec33d91cdcba919d744cbf564ce750c194101df946cb994e5a992c",
+        "config_path": "configs/extensions/replicator/scene_retry_once_20261028/peninsula_bowl_sink/property_vase.json",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/property.json",
+          "sha256": "2ee1a72793c78057a80825e5f2e730da514ad0171af0cc06785cc638d8cbec8f"
+        },
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry2_20261026/scenes/peninsula_bowl_sink__property_vase/source_scene.usda",
+          "sha256": "e7e12df0e79ee5c84ef95a64ee6e0768d7336858bc04ad4f15207f50b343eccf"
+        },
+        "scene_change_analysis": {
+          "path": "reports/replicator_scene_retry_once_analysis_20261028/bowl.json",
+          "sha256": "6f413b149f590ef49be610d75a511b09e658be100f8535b1169ea30756763620"
+        },
+        "analysis_evidence": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/property_evidence/peninsula_bowl_sink__property_vase.json",
+          "sha256": "628ee1d7e3546a96d429329f07b113dc204cba2e3ec7a2606fa9bcad780dc3da"
+        },
+        "historical_analysis": {
+          "path": "reports/replicator_trajectory_retry7_analysis_20261026/annotations_revalidation.json",
+          "sha256": "d5234eea8262daf83a788a664843c228f2fe5d59300360a2747e83d19af5df6a"
+        }
+      },
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            0.11233347554434195
+          ],
+          [
+            0.0,
+            -0.7071067811865476,
+            0.7071067811865475,
+            1.8556523558247786
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0144860650599004
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            0.08792462749178465
+          ],
+          [
+            0.0,
+            -0.7071067811865476,
+            0.7071067811865475,
+            1.8807363773673302
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.9344860650599003
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            0.10535951895789711
+          ],
+          [
+            0.0,
+            -0.7071067811865476,
+            0.7071067811865475,
+            1.8628192191226505
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0344860650599004
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.0,
+            -0.7071067811865476,
+            -0.7071067811865477,
+            0.4616142177595573
+          ],
+          [
+            0.0,
+            -0.7071067811865476,
+            0.7071067811865475,
+            1.8807363878629157
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0344860650599004
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.0,
+            -0.7071067811865476,
+            -0.7071067811865477,
+            0.4616142177595573
+          ],
+          [
+            0.0,
+            -0.7071067811865476,
+            0.7071067811865475,
+            1.8807363878629157
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.7682167011454245
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.0,
+            -0.7071067811865476,
+            -0.7071067811865477,
+            0.4616142177595573
+          ],
+          [
+            0.0,
+            -0.7071067811865476,
+            0.7071067811865475,
+            1.8807363878629157
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.9182167011454245
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.02548499996960163
+        ],
+        [
+          -0.7071067811865475,
+          -0.7071067811865476,
+          0.0,
+          -0.07742431349999968
+        ],
+        [
+          -0.7071067811865476,
+          0.7071067811865475,
+          0.0,
+          2.220446049250313e-16
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "goal_vertical_clearance_m": 0.012722077844871598,
+      "goal_correction_evidence": {
+        "path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_clearance.json",
+        "sha256": "fdf63b353804327a1d2c0e1ab6e84ed4970937d2a45458a211dfc93217622942",
+        "kitchen_key": "peninsula",
+        "measurements": {
+          "goal_vertical_clearance_m": 0.012722077844871598,
+          "same_sink_xy_orientation": true,
+          "goal_before": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.5163614748641202
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              1.9354836449674786
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7300096233309513
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "goal_after": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.5163614748641202
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              1.9354836449674786
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7427317011758229
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "drain_collider": {
+            "path": "/World/kitchen/Asset/Sink/Drain_0",
+            "minimum_sphere_to_AABB_m": -0.010712077844848233,
+            "sphere_index": 24,
+            "bounds": [
+              [
+                0.4913614748641202,
+                1.8766467952358057,
+                0.6975246234219845
+              ],
+              [
+                0.5413614748641202,
+                1.9266467952358055,
+                0.7035246234219845
+              ]
+            ],
+            "representation": "Original primitive AABB used by existing planningworld"
+          },
+          "payload_source_mesh_bottom_before_m": 0.7025246233613497,
+          "payload_source_mesh_bottom_after_m": 0.7152467012062212,
+          "payload_source_mesh_top_after_m": 0.7702167011454245,
+          "payload_sphere_bottom_before_m": 0.6928125455771363,
+          "payload_sphere_bottom_after_m": 0.7055346234220079,
+          "drain_top_m": 0.7035246234219845,
+          "sink_rim_m": 0.9045160894359549,
+          "payload_top_below_sink_rim_m": 0.13429938829053034,
+          "planner_sphere_drain_gap_before_m": -0.010712077844848233,
+          "planner_sphere_drain_gap_after_m": 0.0020100000000233265,
+          "clearance_target_m": 0.002,
+          "numerical_extra_m": 1e-05,
+          "payload_geometry_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+          "payload_sphere_cover": {
+            "voxel_size_m": [
+              0.026907332241535187,
+              0.026852168142795563,
+              0.02748499996960163
+            ],
+            "count": 68,
+            "coverage": "Complete source convex hull; enclosing voxel spheres, no surface-sampling gaps"
+          },
+          "source_result_path": "reports/replicator_trajectory_retry_20261026/scenes/peninsula_bowl_sink__property_glass_bottle/result.json",
+          "source_result_sha256": "7fed304e58ba58ce471b63e506261166122e3e2ace2555af748a1af383edb49f",
+          "source_geometry_evidence_path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_probe.json",
+          "source_geometry_evidence_sha256": "a15623baef502d1c8f51cde725169d331bc742906994ecae3dfd465283ac1520",
+          "scope": "Correct computed release height inside original sink, only +Z. No layout/model/mask changes. Candidate held pose; physics release/settling unverified."
+        }
+      },
+      "retry_round": 9,
+      "action": "plan",
+      "change_description": "R8实际末q/原目标定位夹爪碰原Sink/BasinFront，与财产物无关，保持R8布局不做无效平移。R9唯一候选为源网格实测-135度对角碗沿径向夹持，重算attachment与六个TCP；碗初态、最终世界位姿及中间携物世界位姿都保持，原始q、模型、掩码不变。唯一CPU检查端点清空=True、含顺序全臂IK清空=True；无论检查或随后一次规划结果，不再换候选。",
+      "target_only": true,
+      "grasp_info": {
+        "rule": "Measured upper bowl wall; radial pinch, never diameter grip",
+        "center_local_m": [
+          -0.05474725710456316,
+          -0.054747257104563164,
+          0.02548499996960163
+        ],
+        "wall_thickness_m": 0.005764213000000004,
+        "rim_azimuth_local_deg": -135.0,
+        "slice_z_local_m": 0.02548499996960163,
+        "inner_outer_radius_m": [
+          0.074542207,
+          0.08030642
+        ],
+        "source_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+        "nominal_only": true,
+        "physical_contacts_verified": false,
+        "target_tcp_world_m": [
+          0.08792462749178465,
+          1.8807363773673302,
+          0.9344860650599003
+        ]
+      },
+      "scene_quality_issues": [],
+      "explicit_targets_override_scalar_recipe": true,
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "preserved_target_phases": [],
+      "changed_target_phases": [
+        "pregrasp",
+        "approach",
+        "lift",
+        "transfer",
+        "lower",
+        "retreat"
+      ],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": 0.0
+      },
+      "target_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round9_analysis_20261028/property.json",
+        "sha256": "2ee1a72793c78057a80825e5f2e730da514ad0171af0cc06785cc638d8cbec8f"
+      }
+    },
+    "peninsula_bowl_sink__robot_projecting_crossbar": {
+      "scene_id": "peninsula_bowl_sink__robot_projecting_crossbar",
+      "task_id": "kitchen_bench_replicator_peninsula_bowl_sink",
+      "payload_name": "bowl",
+      "layout_fixed": false,
+      "config_sha256": "1dacb3ce8082074ef7a04d2923046f8c8d87a10e33a8c647a72dbfafd25529ee",
+      "result_sha256": "77f25c01cea4b05bf605177acd33ccef2c936aed60903bc34f460b75a0e90c0f",
+      "config_path": "configs/extensions/replicator/scene_retry_once_20261028/peninsula_bowl_sink/robot_projecting_crossbar.json",
+      "previous_stage": "pregrasp",
+      "previous_failure_code": "MotionGenStatus.IK_FAIL",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "rim_azimuth_local_deg": -30,
+        "tcp_raise_m": 0.0
+      },
+      "pregrasp_offset_world_m": [
+        0.024408848052556886,
+        -0.025084021542551627,
+        0.08000000000000007
+      ],
+      "lift_offset_world_xy_m": [
+        0.017434891466112074,
+        -0.017917158244679765
+      ],
+      "lift_height_m": 0.10000000000000009,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.15000000000000002
+      ],
+      "summary": "四景同一固定 pregrasp 的原腕部/夹爪球都与斜向 ProjectingTube 的原 primitive AABB 接触，原厨房未检出其它端点接触。仅将横杆朝向对齐台面轴，缩减斜杆 AABB 在腕部方向的占据，保持基座位置不动；270°向左、0°向下、180°向上分别按台面边界和目标腕部相对方位直接选定。方形底座随朝向对齐，由约21–22cm投影恢复16cm投影，消除边缘悬出提示。没有缩减资产或替换原规划模型。",
+      "review_note": "四景同一固定 pregrasp 的原腕部/夹爪球都与斜向 ProjectingTube 的原 primitive AABB 接触，原厨房未检出其它端点接触。仅将横杆朝向对齐台面轴，缩减斜杆 AABB 在腕部方向的占据，保持基座位置不动；270°向左、0°向下、180°向上分别按台面边界和目标腕部相对方位直接选定。方形底座随朝向对齐，由约21–22cm投影恢复16cm投影，消除边缘悬出提示。没有缩减资产或替换原规划模型。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry8_20261028/scenes/peninsula_bowl_sink__robot_projecting_crossbar/result.json",
+        "result_sha256": "77f25c01cea4b05bf605177acd33ccef2c936aed60903bc34f460b75a0e90c0f",
+        "config_sha256": "1dacb3ce8082074ef7a04d2923046f8c8d87a10e33a8c647a72dbfafd25529ee",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v8.json",
+        "previous_recipe_sha256": "2c1b1943d12e3a5c62535edd9a00e2fa46d114b5d52d69ba8dd0d664c0ac5c81",
+        "source_ancestor_chain": [
+          {
+            "path": "reports/replicator_trajectory_retry6_20261026/scenes/peninsula_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "c1f8053429a699301ae11ef22c778f99e7071d8652d643bbc6c82422dfdd611c",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry5_20261026/scenes/peninsula_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "d06629bcf3d6c09bd0a730cbe5be5ecb0030df18f9b52a34b31d788d961aad5f",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry4_20261026/scenes/peninsula_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "bbd0f13676280d26a70ef4d5525cf6b28129a16d1f98cc3b9c5090c2c6cf788d",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry3_20261026/scenes/peninsula_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "440f2527abe603f9bfb6f4ca3ef3be232105af12af0828416b41b42936248991",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry2_20261026/scenes/peninsula_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "069f9ae6112cf7390431137b2bd8134dc08ddf2e558e7f4fb34afc7fb729961b",
+            "stage": "pregrasp"
+          }
+        ],
+        "previous_result_path": "reports/replicator_trajectory_retry8_20261028/scenes/peninsula_bowl_sink__robot_projecting_crossbar/result.json",
+        "previous_result_sha256": "77f25c01cea4b05bf605177acd33ccef2c936aed60903bc34f460b75a0e90c0f",
+        "config_path": "configs/extensions/replicator/scene_retry_once_20261028/peninsula_bowl_sink/robot_projecting_crossbar.json",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+          "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+        },
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry2_20261026/scenes/peninsula_bowl_sink__robot_projecting_crossbar/source_scene.usda",
+          "sha256": "27ca127980fd8562a3ea556b9f027d2466cd992b9dadd08ed543fd7a72b920c4"
+        },
+        "scene_change_analysis": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+          "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+        },
+        "historical_analysis": {
+          "path": "reports/replicator_trajectory_retry7_analysis_20261026/annotations_revalidation.json",
+          "sha256": "d5234eea8262daf83a788a664843c228f2fe5d59300360a2747e83d19af5df6a"
+        }
+      },
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            0.8660254037844387,
+            -0.49999999999999994,
+            0.2339362782506726
+          ],
+          [
+            0.0,
+            -0.49999999999999994,
+            -0.8660254037844387,
+            1.8718005456793416
+          ],
+          [
+            -1.0,
+            0.0,
+            -0.0,
+            1.0144860650599004
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.0,
+            0.8660254037844387,
+            -0.49999999999999994,
+            0.2095274301981157
+          ],
+          [
+            0.0,
+            -0.49999999999999994,
+            -0.8660254037844387,
+            1.8968845672218932
+          ],
+          [
+            -1.0,
+            0.0,
+            -0.0,
+            0.9344860650599003
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.0,
+            0.8660254037844387,
+            -0.49999999999999994,
+            0.22696232166422778
+          ],
+          [
+            0.0,
+            -0.49999999999999994,
+            -0.8660254037844387,
+            1.8789674089772135
+          ],
+          [
+            -1.0,
+            0.0,
+            -0.0,
+            1.0344860650599004
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.0,
+            0.8660254037844387,
+            -0.49999999999999994,
+            0.5832170204658881
+          ],
+          [
+            0.0,
+            -0.4999999999999999,
+            -0.8660254037844387,
+            1.8968845777174783
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0344860650599004
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.0,
+            0.8660254037844387,
+            -0.49999999999999994,
+            0.5832170204658881
+          ],
+          [
+            0.0,
+            -0.4999999999999999,
+            -0.8660254037844387,
+            1.8968845777174783
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.7682167011454245
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.0,
+            0.8660254037844387,
+            -0.49999999999999994,
+            0.5832170204658881
+          ],
+          [
+            0.0,
+            -0.4999999999999999,
+            -0.8660254037844387,
+            1.8968845777174783
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.9182167011454245
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.02548499996960163
+        ],
+        [
+          0.8660254037844387,
+          -0.49999999999999994,
+          0.0,
+          -0.07719813450000013
+        ],
+        [
+          -0.4999999999999999,
+          -0.8660254037844387,
+          0.0,
+          -2.220446049250313e-16
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "goal_vertical_clearance_m": 0.012722077844871598,
+      "goal_correction_evidence": {
+        "path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_clearance.json",
+        "sha256": "fdf63b353804327a1d2c0e1ab6e84ed4970937d2a45458a211dfc93217622942",
+        "kitchen_key": "peninsula",
+        "measurements": {
+          "goal_vertical_clearance_m": 0.012722077844871598,
+          "same_sink_xy_orientation": true,
+          "goal_before": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.5163614748641202
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              1.9354836449674786
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7300096233309513
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "goal_after": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.5163614748641202
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              1.9354836449674786
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7427317011758229
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "drain_collider": {
+            "path": "/World/kitchen/Asset/Sink/Drain_0",
+            "minimum_sphere_to_AABB_m": -0.010712077844848233,
+            "sphere_index": 24,
+            "bounds": [
+              [
+                0.4913614748641202,
+                1.8766467952358057,
+                0.6975246234219845
+              ],
+              [
+                0.5413614748641202,
+                1.9266467952358055,
+                0.7035246234219845
+              ]
+            ],
+            "representation": "Original primitive AABB used by existing planningworld"
+          },
+          "payload_source_mesh_bottom_before_m": 0.7025246233613497,
+          "payload_source_mesh_bottom_after_m": 0.7152467012062212,
+          "payload_source_mesh_top_after_m": 0.7702167011454245,
+          "payload_sphere_bottom_before_m": 0.6928125455771363,
+          "payload_sphere_bottom_after_m": 0.7055346234220079,
+          "drain_top_m": 0.7035246234219845,
+          "sink_rim_m": 0.9045160894359549,
+          "payload_top_below_sink_rim_m": 0.13429938829053034,
+          "planner_sphere_drain_gap_before_m": -0.010712077844848233,
+          "planner_sphere_drain_gap_after_m": 0.0020100000000233265,
+          "clearance_target_m": 0.002,
+          "numerical_extra_m": 1e-05,
+          "payload_geometry_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+          "payload_sphere_cover": {
+            "voxel_size_m": [
+              0.026907332241535187,
+              0.026852168142795563,
+              0.02748499996960163
+            ],
+            "count": 68,
+            "coverage": "Complete source convex hull; enclosing voxel spheres, no surface-sampling gaps"
+          },
+          "source_result_path": "reports/replicator_trajectory_retry_20261026/scenes/peninsula_bowl_sink__property_glass_bottle/result.json",
+          "source_result_sha256": "7fed304e58ba58ce471b63e506261166122e3e2ace2555af748a1af383edb49f",
+          "source_geometry_evidence_path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_probe.json",
+          "source_geometry_evidence_sha256": "a15623baef502d1c8f51cde725169d331bc742906994ecae3dfd465283ac1520",
+          "scope": "Correct computed release height inside original sink, only +Z. No layout/model/mask changes. Candidate held pose; physics release/settling unverified."
+        }
+      },
+      "retry_round": 9,
+      "action": "plan",
+      "change_description": "四景同一固定 pregrasp 的原腕部/夹爪球都与斜向 ProjectingTube 的原 primitive AABB 接触，原厨房未检出其它端点接触。仅将横杆朝向对齐台面轴，缩减斜杆 AABB 在腕部方向的占据，保持基座位置不动；270°向左、0°向下、180°向上分别按台面边界和目标腕部相对方位直接选定。方形底座随朝向对齐，由约21–22cm投影恢复16cm投影，消除边缘悬出提示。没有缩减资产或替换原规划模型。",
+      "target_only": false,
+      "scene_quality_issues": [],
+      "explicit_targets_override_scalar_recipe": true,
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "preserved_target_phases": [
+        "pregrasp",
+        "approach",
+        "lift",
+        "transfer",
+        "lower",
+        "retreat"
+      ],
+      "changed_target_phases": [],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": 0.0
+      },
+      "scene_adjustment": {
+        "adjustments": 1,
+        "source_config_path": "configs/extensions/replicator/scene_retry_once_20261028/peninsula_bowl_sink/robot_projecting_crossbar.json",
+        "source_config_sha256": "1dacb3ce8082074ef7a04d2923046f8c8d87a10e33a8c647a72dbfafd25529ee",
+        "config_path": "configs/extensions/replicator/scene_retry_round9_20261028/peninsula_bowl_sink/robot_projecting_crossbar.json",
+        "config_sha256": "4c13993a5b34e0cf92be8e3d8f9f892f75cc9650d6b38d0fa016066edac2f660",
+        "delta_world_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "previous_obstacle_pose": {
+          "position": [
+            0.08586714768334844,
+            1.7217518893954171,
+            0.8820160893539984
+          ],
+          "yaw_deg": 135
+        },
+        "obstacle_pose": {
+          "position": [
+            0.08586714768334844,
+            1.7217518893954171,
+            0.8820160893539984
+          ],
+          "yaw_deg": 180.0
+        },
+        "scene_quality_issues": [],
+        "source_evidence": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+          "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+        },
+        "task_layout_preserved": true,
+        "collision_shape_assets_preserved": true
+      },
+      "scene_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+        "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+      }
+    },
+    "u_shape_bowl_sink__property_vase": {
+      "scene_id": "u_shape_bowl_sink__property_vase",
+      "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+      "payload_name": "bowl",
+      "layout_fixed": true,
+      "config_sha256": "14fac2694720bc78a90939ded5e02ee30fe3d5771eb4375401b9653b88b9de60",
+      "result_sha256": "f28aba3c1a12fe9b98c7feba2b570f024146e39a76a7c56127fe535dbb8185a5",
+      "config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_bowl_sink/property_vase.json",
+      "previous_stage": "retreat",
+      "previous_failure_code": "MotionGenStatus.INVALID_START_STATE_WORLD_COLLISION",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "rim_azimuth_local_deg": -45.0,
+        "tcp_raise_m": 0.0,
+        "jaw_flip": 1.0
+      },
+      "pregrasp_offset_world_m": [
+        0.024475467677065765,
+        0.02501902240274201,
+        0.08000000000000007
+      ],
+      "lift_offset_world_xy_m": [
+        0.017482476912189515,
+        0.01787073028767283
+      ],
+      "lift_height_m": 0.10000000000000009,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.15000000000000002
+      ],
+      "summary": "R8实际末q/原目标定位夹爪碰原Sink/BasinFront，与财产物无关，保持R8布局不做无效平移。R9唯一候选为源网格实测-45度对角碗沿径向夹持，重算attachment与六个TCP；碗初态、最终世界位姿及中间携物世界位姿都保持，原始q、模型、掩码不变。唯一CPU检查端点清空=True、含顺序全臂IK清空=True；无论检查或随后一次规划结果，不再换候选。",
+      "review_note": "R8实际末q/原目标定位夹爪碰原Sink/BasinFront，与财产物无关，保持R8布局不做无效平移。R9唯一候选为源网格实测-45度对角碗沿径向夹持，重算attachment与六个TCP；碗初态、最终世界位姿及中间携物世界位姿都保持，原始q、模型、掩码不变。唯一CPU检查端点清空=True、含顺序全臂IK清空=True；无论检查或随后一次规划结果，不再换候选。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry8_20261028/scenes/u_shape_bowl_sink__property_vase/result.json",
+        "result_sha256": "f28aba3c1a12fe9b98c7feba2b570f024146e39a76a7c56127fe535dbb8185a5",
+        "config_sha256": "14fac2694720bc78a90939ded5e02ee30fe3d5771eb4375401b9653b88b9de60",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v8.json",
+        "previous_recipe_sha256": "2c1b1943d12e3a5c62535edd9a00e2fa46d114b5d52d69ba8dd0d664c0ac5c81",
+        "source_ancestor_chain": [
+          {
+            "path": "reports/replicator_trajectory_retry6_20261026/scenes/u_shape_bowl_sink__property_vase/result.json",
+            "sha256": "a8b6e3e6a5f84de897ae562a30b044cb65b46aafeb55f3584c3b2aaf6994f2fd",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry5_20261026/scenes/u_shape_bowl_sink__property_vase/result.json",
+            "sha256": "00f401642629b2a66422e5a92ed6dfe98a5bdd42cc92a3f95c7938ff7def52d1",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry4_20261026/scenes/u_shape_bowl_sink__property_vase/result.json",
+            "sha256": "5170d41bfa0c9cb996130bf29555e206b8e8a7117cc0583f177698609dbb039e",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry3_20261026/scenes/u_shape_bowl_sink__property_vase/result.json",
+            "sha256": "8c2559b1f5c9774338bd69fe2939871d1edfd095c0fa9b1aaf2713d4eb837a50",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_bowl_sink__property_vase/result.json",
+            "sha256": "cfe58de6c3a009b65e8338c2839b791a6ad6ba6f766f6e9f8d626a373a6de2a5",
+            "stage": "lift"
+          }
+        ],
+        "partial_npz_path": "reports/replicator_trajectory_retry6_20261026/scenes/u_shape_bowl_sink__property_vase/partial_trajectory.npz",
+        "partial_npz_sha256": "9a8a0dcb6d41a1e7dad5cb0230fe5bc58f20ea8ae53697221e6aaf1042cb271b",
+        "previous_result_path": "reports/replicator_trajectory_retry8_20261028/scenes/u_shape_bowl_sink__property_vase/result.json",
+        "previous_result_sha256": "f28aba3c1a12fe9b98c7feba2b570f024146e39a76a7c56127fe535dbb8185a5",
+        "config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_bowl_sink/property_vase.json",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/property.json",
+          "sha256": "2ee1a72793c78057a80825e5f2e730da514ad0171af0cc06785cc638d8cbec8f"
+        },
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_bowl_sink__property_vase/source_scene.usda",
+          "sha256": "7f7bc394e18f1eda7a80323ca15496133062266a4208502387ec713b53443a94"
+        },
+        "scene_change_analysis": {
+          "path": "reports/replicator_scene_retry_once_analysis_20261028/bowl.json",
+          "sha256": "6f413b149f590ef49be610d75a511b09e658be100f8535b1169ea30756763620"
+        },
+        "analysis_evidence": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/property_evidence/u_shape_bowl_sink__property_vase.json",
+          "sha256": "5f0d1fdac9cdb88947fe392f62c2eb17ca18b58b75a92ba27c11df862698e1a1"
+        },
+        "historical_analysis": {
+          "path": "reports/replicator_trajectory_retry7_analysis_20261026/annotations_revalidation.json",
+          "sha256": "d5234eea8262daf83a788a664843c228f2fe5d59300360a2747e83d19af5df6a"
+        }
+      },
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865475,
+            -2.1879003822208127
+          ],
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -1.1704587593746227
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0303376819193364
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865475,
+            -2.2123758498978785
+          ],
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -1.1954777817773647
+          ],
+          [
+            -1.0,
+            0.0,
+            -0.0,
+            0.9503376819193363
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865475,
+            -2.194893372985689
+          ],
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -1.177607051489692
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0503376819193364
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865475,
+            -2.2123758163792155
+          ],
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -0.7945312022719909
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0503376819193364
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865475,
+            -2.2123758163792155
+          ],
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -0.7945312022719909
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.7987604695985844
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865475,
+            -2.2123758163792155
+          ],
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -0.7945312022719909
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.9487604695985844
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.02548499996960163
+        ],
+        [
+          0.7071067811865476,
+          -0.7071067811865475,
+          0.0,
+          -0.07709050500000014
+        ],
+        [
+          -0.7071067811865475,
+          -0.7071067811865476,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "goal_vertical_clearance_m": 0.012722077881596997,
+      "goal_correction_evidence": {
+        "path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_clearance.json",
+        "sha256": "fdf63b353804327a1d2c0e1ab6e84ed4970937d2a45458a211dfc93217622942",
+        "kitchen_key": "u_shape",
+        "measurements": {
+          "goal_vertical_clearance_m": 0.012722077881596997,
+          "same_sink_xy_orientation": true,
+          "goal_before": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -2.266887035229811
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.7400199834213954
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7605533917473858
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "goal_after": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -2.266887035229811
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.7400199834213954
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7732754696289827
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "drain_collider": {
+            "path": "/World/kitchen/Asset/Sink/Drain_0",
+            "minimum_sphere_to_AABB_m": -0.010712077881589288,
+            "sphere_index": 38,
+            "bounds": [
+              [
+                -2.257355367253642,
+                -0.7650199834213954,
+                0.72806839187516
+              ],
+              [
+                -2.2073553672536423,
+                -0.7150199834213954,
+                0.73406839187516
+              ]
+            ],
+            "representation": "Original primitive AABB used by existing planningworld"
+          },
+          "payload_source_mesh_bottom_before_m": 0.7330683917777842,
+          "payload_source_mesh_bottom_after_m": 0.7457904696593811,
+          "payload_source_mesh_top_after_m": 0.8007604695985844,
+          "payload_sphere_bottom_before_m": 0.7233563139935708,
+          "payload_sphere_bottom_after_m": 0.7360783918751678,
+          "drain_top_m": 0.73406839187516,
+          "sink_rim_m": 0.9189258414151615,
+          "payload_top_below_sink_rim_m": 0.11816537181657716,
+          "planner_sphere_drain_gap_before_m": -0.010712077881589288,
+          "planner_sphere_drain_gap_after_m": 0.0020100000000076723,
+          "clearance_target_m": 0.002,
+          "numerical_extra_m": 1e-05,
+          "payload_geometry_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+          "payload_sphere_cover": {
+            "voxel_size_m": [
+              0.026907332241535187,
+              0.026852168142795563,
+              0.02748499996960163
+            ],
+            "count": 68,
+            "coverage": "Complete source convex hull; enclosing voxel spheres, no surface-sampling gaps"
+          },
+          "source_result_path": "reports/replicator_trajectory_retry_20261026/scenes/u_shape_bowl_sink__property_glass_bottle/result.json",
+          "source_result_sha256": "bf74b7a7878487dffc04b8204d09de99d68f711ba43279fa63a8c7089c9a978f",
+          "source_geometry_evidence_path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_probe.json",
+          "source_geometry_evidence_sha256": "a15623baef502d1c8f51cde725169d331bc742906994ecae3dfd465283ac1520",
+          "scope": "Correct computed release height inside original sink, only +Z. No layout/model/mask changes. Candidate held pose; physics release/settling unverified."
+        }
+      },
+      "retry_round": 9,
+      "action": "plan",
+      "change_description": "R8实际末q/原目标定位夹爪碰原Sink/BasinFront，与财产物无关，保持R8布局不做无效平移。R9唯一候选为源网格实测-45度对角碗沿径向夹持，重算attachment与六个TCP；碗初态、最终世界位姿及中间携物世界位姿都保持，原始q、模型、掩码不变。唯一CPU检查端点清空=True、含顺序全臂IK清空=True；无论检查或随后一次规划结果，不再换候选。",
+      "target_only": true,
+      "grasp_info": {
+        "rule": "Measured upper bowl wall; radial pinch, never diameter grip",
+        "center_local_m": [
+          0.054511218850595455,
+          -0.05451121885059545,
+          0.02548499996960163
+        ],
+        "wall_thickness_m": 0.006070309999999995,
+        "rim_azimuth_local_deg": -45.0,
+        "slice_z_local_m": 0.02548499996960163,
+        "inner_outer_radius_m": [
+          0.07405535,
+          0.08012566
+        ],
+        "source_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+        "nominal_only": true,
+        "physical_contacts_verified": false,
+        "target_tcp_world_m": [
+          -2.2123758498978785,
+          -1.1954777817773647,
+          0.9503376819193363
+        ]
+      },
+      "scene_quality_issues": [],
+      "explicit_targets_override_scalar_recipe": true,
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "preserved_target_phases": [],
+      "changed_target_phases": [
+        "pregrasp",
+        "approach",
+        "lift",
+        "transfer",
+        "lower",
+        "retreat"
+      ],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": 0.0
+      },
+      "target_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round9_analysis_20261028/property.json",
+        "sha256": "2ee1a72793c78057a80825e5f2e730da514ad0171af0cc06785cc638d8cbec8f"
+      }
+    },
+    "u_shape_bowl_sink__property_wine_glass": {
+      "scene_id": "u_shape_bowl_sink__property_wine_glass",
+      "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+      "payload_name": "bowl",
+      "layout_fixed": true,
+      "config_sha256": "ea8ddafbb0c2ad265d99b1d9cdd573b60611c36cd9daec6d0bcdb021e90c5a97",
+      "result_sha256": "007f4aa2ce2e2378ee9ddeffbbe6b29be58a19692ff23b2eeeb86404e73664d2",
+      "config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_bowl_sink/property_wine_glass.json",
+      "previous_stage": "retreat",
+      "previous_failure_code": "MotionGenStatus.INVALID_START_STATE_WORLD_COLLISION",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "rim_azimuth_local_deg": -45.0,
+        "tcp_raise_m": 0.0,
+        "jaw_flip": 1.0
+      },
+      "pregrasp_offset_world_m": [
+        0.024475467677065765,
+        0.02501902240274201,
+        0.08000000000000007
+      ],
+      "lift_offset_world_xy_m": [
+        0.017482476912189515,
+        0.01787073028767283
+      ],
+      "lift_height_m": 0.10000000000000009,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.15000000000000002
+      ],
+      "summary": "R8实际末q/原目标定位夹爪碰原Sink/BasinFront，与财产物无关，保持R8布局不做无效平移。R9唯一候选为源网格实测-45度对角碗沿径向夹持，重算attachment与六个TCP；碗初态、最终世界位姿及中间携物世界位姿都保持，原始q、模型、掩码不变。唯一CPU检查端点清空=True、含顺序全臂IK清空=True；无论检查或随后一次规划结果，不再换候选。",
+      "review_note": "R8实际末q/原目标定位夹爪碰原Sink/BasinFront，与财产物无关，保持R8布局不做无效平移。R9唯一候选为源网格实测-45度对角碗沿径向夹持，重算attachment与六个TCP；碗初态、最终世界位姿及中间携物世界位姿都保持，原始q、模型、掩码不变。唯一CPU检查端点清空=True、含顺序全臂IK清空=True；无论检查或随后一次规划结果，不再换候选。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry8_20261028/scenes/u_shape_bowl_sink__property_wine_glass/result.json",
+        "result_sha256": "007f4aa2ce2e2378ee9ddeffbbe6b29be58a19692ff23b2eeeb86404e73664d2",
+        "config_sha256": "ea8ddafbb0c2ad265d99b1d9cdd573b60611c36cd9daec6d0bcdb021e90c5a97",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v8.json",
+        "previous_recipe_sha256": "2c1b1943d12e3a5c62535edd9a00e2fa46d114b5d52d69ba8dd0d664c0ac5c81",
+        "source_ancestor_chain": [
+          {
+            "path": "reports/replicator_trajectory_retry6_20261026/scenes/u_shape_bowl_sink__property_wine_glass/result.json",
+            "sha256": "59d6866b421f3f09cea8c2c964ea69efab6fb36bbe56a44fc6297317b2a91615",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry5_20261026/scenes/u_shape_bowl_sink__property_wine_glass/result.json",
+            "sha256": "35de7f87c607908b41de4e640057f4bc1d90f7e4c874b172c4217d56e46c91a9",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry4_20261026/scenes/u_shape_bowl_sink__property_wine_glass/result.json",
+            "sha256": "f12ea33613a1de352584c9f654258756ed4c3f1a21309b738367508265ef7826",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry3_20261026/scenes/u_shape_bowl_sink__property_wine_glass/result.json",
+            "sha256": "6c3248c952d81f4479d819dd34ca32f5d764e5752067181d102cf14f270931f9",
+            "stage": "lift"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_bowl_sink__property_wine_glass/result.json",
+            "sha256": "1d2002144e383a96a34237e586be8c9ff9b79b5d3abeef408d2bbd9c4a902ef0",
+            "stage": "lift"
+          }
+        ],
+        "partial_npz_path": "reports/replicator_trajectory_retry6_20261026/scenes/u_shape_bowl_sink__property_wine_glass/partial_trajectory.npz",
+        "partial_npz_sha256": "7101404eae55a628b709732b61297cfb908829ab7e613f199cd9d686776a38f4",
+        "previous_result_path": "reports/replicator_trajectory_retry8_20261028/scenes/u_shape_bowl_sink__property_wine_glass/result.json",
+        "previous_result_sha256": "007f4aa2ce2e2378ee9ddeffbbe6b29be58a19692ff23b2eeeb86404e73664d2",
+        "config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_bowl_sink/property_wine_glass.json",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/property.json",
+          "sha256": "2ee1a72793c78057a80825e5f2e730da514ad0171af0cc06785cc638d8cbec8f"
+        },
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_bowl_sink__property_wine_glass/source_scene.usda",
+          "sha256": "c4fdab0c499204cd86f2d755c7c897a49fb01d93eeda0db2073cc7173c3d67db"
+        },
+        "scene_change_analysis": {
+          "path": "reports/replicator_scene_retry_once_analysis_20261028/bowl.json",
+          "sha256": "6f413b149f590ef49be610d75a511b09e658be100f8535b1169ea30756763620"
+        },
+        "analysis_evidence": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/property_evidence/u_shape_bowl_sink__property_wine_glass.json",
+          "sha256": "cde7ac3fe13d90b1bb88ce477b2107614a1e689a2e444c01b81c77ac96d1474d"
+        },
+        "historical_analysis": {
+          "path": "reports/replicator_trajectory_retry7_analysis_20261026/annotations_revalidation.json",
+          "sha256": "d5234eea8262daf83a788a664843c228f2fe5d59300360a2747e83d19af5df6a"
+        }
+      },
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865475,
+            -2.1879003822208127
+          ],
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -1.1704587593746227
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0303376819193364
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865475,
+            -2.2123758498978785
+          ],
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -1.1954777817773647
+          ],
+          [
+            -1.0,
+            0.0,
+            -0.0,
+            0.9503376819193363
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865475,
+            -2.194893372985689
+          ],
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -1.177607051489692
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0503376819193364
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865475,
+            -2.2123758163792155
+          ],
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -0.7945312022719909
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0503376819193364
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865475,
+            -2.2123758163792155
+          ],
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -0.7945312022719909
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.7987604695985844
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865475,
+            -2.2123758163792155
+          ],
+          [
+            0.0,
+            -0.7071067811865475,
+            -0.7071067811865476,
+            -0.7945312022719909
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.9487604695985844
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.02548499996960163
+        ],
+        [
+          0.7071067811865476,
+          -0.7071067811865475,
+          0.0,
+          -0.07709050500000014
+        ],
+        [
+          -0.7071067811865475,
+          -0.7071067811865476,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "goal_vertical_clearance_m": 0.012722077881596997,
+      "goal_correction_evidence": {
+        "path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_clearance.json",
+        "sha256": "fdf63b353804327a1d2c0e1ab6e84ed4970937d2a45458a211dfc93217622942",
+        "kitchen_key": "u_shape",
+        "measurements": {
+          "goal_vertical_clearance_m": 0.012722077881596997,
+          "same_sink_xy_orientation": true,
+          "goal_before": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -2.266887035229811
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.7400199834213954
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7605533917473858
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "goal_after": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -2.266887035229811
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.7400199834213954
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7732754696289827
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "drain_collider": {
+            "path": "/World/kitchen/Asset/Sink/Drain_0",
+            "minimum_sphere_to_AABB_m": -0.010712077881589288,
+            "sphere_index": 38,
+            "bounds": [
+              [
+                -2.257355367253642,
+                -0.7650199834213954,
+                0.72806839187516
+              ],
+              [
+                -2.2073553672536423,
+                -0.7150199834213954,
+                0.73406839187516
+              ]
+            ],
+            "representation": "Original primitive AABB used by existing planningworld"
+          },
+          "payload_source_mesh_bottom_before_m": 0.7330683917777842,
+          "payload_source_mesh_bottom_after_m": 0.7457904696593811,
+          "payload_source_mesh_top_after_m": 0.8007604695985844,
+          "payload_sphere_bottom_before_m": 0.7233563139935708,
+          "payload_sphere_bottom_after_m": 0.7360783918751678,
+          "drain_top_m": 0.73406839187516,
+          "sink_rim_m": 0.9189258414151615,
+          "payload_top_below_sink_rim_m": 0.11816537181657716,
+          "planner_sphere_drain_gap_before_m": -0.010712077881589288,
+          "planner_sphere_drain_gap_after_m": 0.0020100000000076723,
+          "clearance_target_m": 0.002,
+          "numerical_extra_m": 1e-05,
+          "payload_geometry_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+          "payload_sphere_cover": {
+            "voxel_size_m": [
+              0.026907332241535187,
+              0.026852168142795563,
+              0.02748499996960163
+            ],
+            "count": 68,
+            "coverage": "Complete source convex hull; enclosing voxel spheres, no surface-sampling gaps"
+          },
+          "source_result_path": "reports/replicator_trajectory_retry_20261026/scenes/u_shape_bowl_sink__property_glass_bottle/result.json",
+          "source_result_sha256": "bf74b7a7878487dffc04b8204d09de99d68f711ba43279fa63a8c7089c9a978f",
+          "source_geometry_evidence_path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_probe.json",
+          "source_geometry_evidence_sha256": "a15623baef502d1c8f51cde725169d331bc742906994ecae3dfd465283ac1520",
+          "scope": "Correct computed release height inside original sink, only +Z. No layout/model/mask changes. Candidate held pose; physics release/settling unverified."
+        }
+      },
+      "retry_round": 9,
+      "action": "plan",
+      "change_description": "R8实际末q/原目标定位夹爪碰原Sink/BasinFront，与财产物无关，保持R8布局不做无效平移。R9唯一候选为源网格实测-45度对角碗沿径向夹持，重算attachment与六个TCP；碗初态、最终世界位姿及中间携物世界位姿都保持，原始q、模型、掩码不变。唯一CPU检查端点清空=True、含顺序全臂IK清空=True；无论检查或随后一次规划结果，不再换候选。",
+      "target_only": true,
+      "grasp_info": {
+        "rule": "Measured upper bowl wall; radial pinch, never diameter grip",
+        "center_local_m": [
+          0.054511218850595455,
+          -0.05451121885059545,
+          0.02548499996960163
+        ],
+        "wall_thickness_m": 0.006070309999999995,
+        "rim_azimuth_local_deg": -45.0,
+        "slice_z_local_m": 0.02548499996960163,
+        "inner_outer_radius_m": [
+          0.07405535,
+          0.08012566
+        ],
+        "source_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+        "nominal_only": true,
+        "physical_contacts_verified": false,
+        "target_tcp_world_m": [
+          -2.2123758498978785,
+          -1.1954777817773647,
+          0.9503376819193363
+        ]
+      },
+      "scene_quality_issues": [],
+      "explicit_targets_override_scalar_recipe": true,
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "preserved_target_phases": [],
+      "changed_target_phases": [
+        "pregrasp",
+        "approach",
+        "lift",
+        "transfer",
+        "lower",
+        "retreat"
+      ],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": 0.0
+      },
+      "target_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round9_analysis_20261028/property.json",
+        "sha256": "2ee1a72793c78057a80825e5f2e730da514ad0171af0cc06785cc638d8cbec8f"
+      }
+    },
+    "u_shape_bowl_sink__robot_projecting_crossbar": {
+      "scene_id": "u_shape_bowl_sink__robot_projecting_crossbar",
+      "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+      "payload_name": "bowl",
+      "layout_fixed": false,
+      "config_sha256": "1c62f9862dde4be91396b000983abbf809e4b879d606584ef4583e7a3fe31d8b",
+      "result_sha256": "edeb41d6e2fc50396dd5ae1636a69c342f3344057ab5615968184731f01cf524",
+      "config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_bowl_sink/robot_projecting_crossbar.json",
+      "previous_stage": "pregrasp",
+      "previous_failure_code": "MotionGenStatus.IK_FAIL",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "rim_azimuth_local_deg": 30,
+        "tcp_raise_m": 0.0
+      },
+      "pregrasp_offset_world_m": [
+        0.024475467677065765,
+        0.02501902240274223,
+        0.08000000000000007
+      ],
+      "lift_offset_world_xy_m": [
+        0.017482476912189515,
+        0.017870730287673053
+      ],
+      "lift_height_m": 0.10000000000000009,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.15000000000000002
+      ],
+      "summary": "四景同一固定 pregrasp 的原腕部/夹爪球都与斜向 ProjectingTube 的原 primitive AABB 接触，原厨房未检出其它端点接触。仅将横杆朝向对齐台面轴，缩减斜杆 AABB 在腕部方向的占据，保持基座位置不动；270°向左、0°向下、180°向上分别按台面边界和目标腕部相对方位直接选定。方形底座随朝向对齐，由约21–22cm投影恢复16cm投影，消除边缘悬出提示。没有缩减资产或替换原规划模型。",
+      "review_note": "四景同一固定 pregrasp 的原腕部/夹爪球都与斜向 ProjectingTube 的原 primitive AABB 接触，原厨房未检出其它端点接触。仅将横杆朝向对齐台面轴，缩减斜杆 AABB 在腕部方向的占据，保持基座位置不动；270°向左、0°向下、180°向上分别按台面边界和目标腕部相对方位直接选定。方形底座随朝向对齐，由约21–22cm投影恢复16cm投影，消除边缘悬出提示。没有缩减资产或替换原规划模型。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry8_20261028/scenes/u_shape_bowl_sink__robot_projecting_crossbar/result.json",
+        "result_sha256": "edeb41d6e2fc50396dd5ae1636a69c342f3344057ab5615968184731f01cf524",
+        "config_sha256": "1c62f9862dde4be91396b000983abbf809e4b879d606584ef4583e7a3fe31d8b",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v8.json",
+        "previous_recipe_sha256": "2c1b1943d12e3a5c62535edd9a00e2fa46d114b5d52d69ba8dd0d664c0ac5c81",
+        "source_ancestor_chain": [
+          {
+            "path": "reports/replicator_trajectory_retry6_20261026/scenes/u_shape_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "e8dece532169d80d6605dc0bc749023b16dbc25cbeb1b3dd287c04419a89aa1c",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry5_20261026/scenes/u_shape_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "5e980e1f611b726b464dc9fecaa73df9f57b6d78b908e8541911d56f5f398ead",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry4_20261026/scenes/u_shape_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "5636d627212afc2bb32c4841df09982de45c4b972d7bf8927d1dad953d83bab5",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry3_20261026/scenes/u_shape_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "1eb9c60920fea431b5f58cba9b881f29dcd0e9beb09f046bd3b9397698446f10",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_bowl_sink__robot_projecting_crossbar/result.json",
+            "sha256": "78882f9c0edafee35368bb81ba99c3f3e196958aaa7dc24d5693cf91c440e173",
+            "stage": "pregrasp"
+          }
+        ],
+        "previous_result_path": "reports/replicator_trajectory_retry8_20261028/scenes/u_shape_bowl_sink__robot_projecting_crossbar/result.json",
+        "previous_result_sha256": "edeb41d6e2fc50396dd5ae1636a69c342f3344057ab5615968184731f01cf524",
+        "config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_bowl_sink/robot_projecting_crossbar.json",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+          "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+        },
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_bowl_sink__robot_projecting_crossbar/source_scene.usda",
+          "sha256": "94c1f58301cfa7131998eb3dfe928e219ba6ece70ef3c3479dcf02ccd00d7999"
+        },
+        "scene_change_analysis": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+          "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+        },
+        "historical_analysis": {
+          "path": "reports/replicator_trajectory_retry7_analysis_20261026/annotations_revalidation.json",
+          "sha256": "d5234eea8262daf83a788a664843c228f2fe5d59300360a2747e83d19af5df6a"
+        }
+      },
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            0.8660254037844387,
+            0.49999999999999994,
+            -2.1749882584710174
+          ],
+          [
+            0.0,
+            0.49999999999999994,
+            -0.8660254037844387,
+            -1.0770206555240271
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0303376819193364
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.0,
+            0.8660254037844387,
+            0.49999999999999994,
+            -2.199463726148083
+          ],
+          [
+            0.0,
+            0.49999999999999994,
+            -0.8660254037844387,
+            -1.1020396779267694
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.9503376819193363
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.0,
+            0.8660254037844387,
+            0.49999999999999994,
+            -2.1819812492358936
+          ],
+          [
+            0.0,
+            0.49999999999999994,
+            -0.8660254037844387,
+            -1.0841689476390963
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0503376819193364
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.0,
+            0.8660254037844389,
+            0.5,
+            -2.19946369262942
+          ],
+          [
+            0.0,
+            0.4999999999999999,
+            -0.8660254037844387,
+            -0.7010930984213954
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0503376819193364
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.0,
+            0.8660254037844389,
+            0.5,
+            -2.19946369262942
+          ],
+          [
+            0.0,
+            0.4999999999999999,
+            -0.8660254037844387,
+            -0.7010930984213954
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.7987604695985844
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.0,
+            0.8660254037844389,
+            0.5,
+            -2.19946369262942
+          ],
+          [
+            0.0,
+            0.4999999999999999,
+            -0.8660254037844387,
+            -0.7010930984213954
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            0.9487604695985844
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.02548499996960163
+        ],
+        [
+          0.8660254037844387,
+          0.49999999999999994,
+          0.0,
+          -0.07785376999999993
+        ],
+        [
+          0.4999999999999999,
+          -0.8660254037844387,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "goal_vertical_clearance_m": 0.012722077881596997,
+      "goal_correction_evidence": {
+        "path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_clearance.json",
+        "sha256": "fdf63b353804327a1d2c0e1ab6e84ed4970937d2a45458a211dfc93217622942",
+        "kitchen_key": "u_shape",
+        "measurements": {
+          "goal_vertical_clearance_m": 0.012722077881596997,
+          "same_sink_xy_orientation": true,
+          "goal_before": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -2.266887035229811
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.7400199834213954
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7605533917473858
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "goal_after": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              -2.266887035229811
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.7400199834213954
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.7732754696289827
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "drain_collider": {
+            "path": "/World/kitchen/Asset/Sink/Drain_0",
+            "minimum_sphere_to_AABB_m": -0.010712077881589288,
+            "sphere_index": 38,
+            "bounds": [
+              [
+                -2.257355367253642,
+                -0.7650199834213954,
+                0.72806839187516
+              ],
+              [
+                -2.2073553672536423,
+                -0.7150199834213954,
+                0.73406839187516
+              ]
+            ],
+            "representation": "Original primitive AABB used by existing planningworld"
+          },
+          "payload_source_mesh_bottom_before_m": 0.7330683917777842,
+          "payload_source_mesh_bottom_after_m": 0.7457904696593811,
+          "payload_source_mesh_top_after_m": 0.8007604695985844,
+          "payload_sphere_bottom_before_m": 0.7233563139935708,
+          "payload_sphere_bottom_after_m": 0.7360783918751678,
+          "drain_top_m": 0.73406839187516,
+          "sink_rim_m": 0.9189258414151615,
+          "payload_top_below_sink_rim_m": 0.11816537181657716,
+          "planner_sphere_drain_gap_before_m": -0.010712077881589288,
+          "planner_sphere_drain_gap_after_m": 0.0020100000000076723,
+          "clearance_target_m": 0.002,
+          "numerical_extra_m": 1e-05,
+          "payload_geometry_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+          "payload_sphere_cover": {
+            "voxel_size_m": [
+              0.026907332241535187,
+              0.026852168142795563,
+              0.02748499996960163
+            ],
+            "count": 68,
+            "coverage": "Complete source convex hull; enclosing voxel spheres, no surface-sampling gaps"
+          },
+          "source_result_path": "reports/replicator_trajectory_retry_20261026/scenes/u_shape_bowl_sink__property_glass_bottle/result.json",
+          "source_result_sha256": "bf74b7a7878487dffc04b8204d09de99d68f711ba43279fa63a8c7089c9a978f",
+          "source_geometry_evidence_path": "reports/replicator_trajectory_retry2_analysis_20261026/bowl_goal_probe.json",
+          "source_geometry_evidence_sha256": "a15623baef502d1c8f51cde725169d331bc742906994ecae3dfd465283ac1520",
+          "scope": "Correct computed release height inside original sink, only +Z. No layout/model/mask changes. Candidate held pose; physics release/settling unverified."
+        }
+      },
+      "retry_round": 9,
+      "action": "plan",
+      "change_description": "四景同一固定 pregrasp 的原腕部/夹爪球都与斜向 ProjectingTube 的原 primitive AABB 接触，原厨房未检出其它端点接触。仅将横杆朝向对齐台面轴，缩减斜杆 AABB 在腕部方向的占据，保持基座位置不动；270°向左、0°向下、180°向上分别按台面边界和目标腕部相对方位直接选定。方形底座随朝向对齐，由约21–22cm投影恢复16cm投影，消除边缘悬出提示。没有缩减资产或替换原规划模型。",
+      "target_only": false,
+      "scene_quality_issues": [],
+      "explicit_targets_override_scalar_recipe": true,
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "preserved_target_phases": [
+        "pregrasp",
+        "approach",
+        "lift",
+        "transfer",
+        "lower",
+        "retreat"
+      ],
+      "changed_target_phases": [],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": 0.0
+      },
+      "scene_adjustment": {
+        "adjustments": 1,
+        "source_config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_bowl_sink/robot_projecting_crossbar.json",
+        "source_config_sha256": "1c62f9862dde4be91396b000983abbf809e4b879d606584ef4583e7a3fe31d8b",
+        "config_path": "configs/extensions/replicator/scene_retry_round9_20261028/u_shape_bowl_sink/robot_projecting_crossbar.json",
+        "config_sha256": "ab29a8a210c36a28e30f5bd9dc2f5c38c9ecec0de630570bee85b6e8d540cfac",
+        "delta_world_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "previous_obstacle_pose": {
+          "position": [
+            -2.3891679263168717,
+            -1.3508422313278081,
+            0.8978676778653872
+          ],
+          "yaw_deg": 150.0
+        },
+        "obstacle_pose": {
+          "position": [
+            -2.3891679263168717,
+            -1.3508422313278081,
+            0.8978676778653872
+          ],
+          "yaw_deg": 180.0
+        },
+        "scene_quality_issues": [],
+        "source_evidence": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+          "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+        },
+        "task_layout_preserved": true,
+        "collision_shape_assets_preserved": true
+      },
+      "scene_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round9_analysis_20261028/crossbar.json",
+        "sha256": "2393b1fbd7658162cacc9dc529de9888b73d8d31a5838ecc2bba2f6c7b870ce4"
+      }
+    },
+    "u_shape_mustard_bowl__property_wine_glass": {
+      "scene_id": "u_shape_mustard_bowl__property_wine_glass",
+      "task_id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+      "payload_name": "mustard_bottle",
+      "layout_fixed": true,
+      "config_sha256": "52e9dfa1bbab51f672b5043acf3132738bd455bd0f29185f8028ccfda58c729d",
+      "result_sha256": "3a7f4334bd1554e038bb19af64ba4f82394e3b9ec00679a144b4b8469390db25",
+      "config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_mustard_bowl/property_wine_glass.json",
+      "previous_stage": "transfer",
+      "previous_failure_code": "MotionGenStatus.IK_FAIL",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "jaw_yaw_local_deg": 90.0,
+        "z_local_m": 0.045,
+        "tcp_raise_m": 0.0
+      },
+      "pregrasp_offset_world_m": [
+        0.005820191698788335,
+        -0.03957430187115567,
+        0.1399999999999999
+      ],
+      "lift_offset_world_xy_m": [
+        0.004364999999999952,
+        -0.029681
+      ],
+      "lift_height_m": 0.15248499996960185,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.1499999999999999
+      ],
+      "summary": "R8 transfer 的已测IK分支只撞固定东侧吊柜，酒杯端点未检出碰撞，因此保持R8布局不做无效移物；仅将临时携瓶目标降为最终瓶子高度上方6cm，并绕旧夹爪轴向机器人侧倾转25°。其余五目标、attachment和最终瓶子位姿精确保持。本轮只选一个方案、一次CPU验证并冻结，遗留问题照实记录，不再调整；随后最多一次cuRobo。",
+      "retry_round": 9,
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            2.1592563631529966
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            -0.13003180922909272
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.162392885506153
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            2.1534361714542083
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            -0.09045750735793705
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.022392885506153
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            2.1578011714542082
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            -0.12013850735793705
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.174877885475755
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.4226182617406994,
+            4.635817181403019e-17,
+            0.9063077870366499,
+            2.1908811633342866
+          ],
+          [
+            -1.9591809989522123e-17,
+            0.9999999999999999,
+            -7.176310839451344e-17,
+            0.33954249264206293
+          ],
+          [
+            -0.90630778703665,
+            0.0,
+            0.42261826174069933,
+            1.1105358151680869
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.0,
+            4.6358171814030185e-17,
+            0.9999999999999999,
+            2.209871069160121
+          ],
+          [
+            0.0,
+            0.9999999999999999,
+            -7.610650810070512e-17,
+            0.33954249264206293
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0548778854757548
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.0,
+            4.6358171814030185e-17,
+            0.9999999999999999,
+            2.209871069160121
+          ],
+          [
+            0.0,
+            0.9999999999999999,
+            -7.610650810070512e-17,
+            0.33954249264206293
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.2048778854757547
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.04499999999999993
+        ],
+        [
+          6.123233995736766e-17,
+          1.0,
+          0.0,
+          -0.0017199456831396148
+        ],
+        [
+          1.0,
+          -6.123233995736766e-17,
+          0.0,
+          0.0002979538172311891
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "grasp_info": {
+        "rule": "Measured bottle-body horizontal section; one fixed yaw",
+        "center_local_m": [
+          -0.0002979538172312255,
+          0.0017199456831396183,
+          0.045
+        ],
+        "section_width_m": 0.03912682204215487,
+        "jaw_yaw_local_deg": 90.0,
+        "source_sha256": "ee5aa3c97b00f0d945af34a514772fe7c276256f455132eb86ebeadfbaf6e7b9",
+        "nominal_only": true,
+        "physical_contacts_verified": false,
+        "target_tcp_world_m": [
+          2.1534361714542083,
+          -0.09045750735793705,
+          1.022392885506153
+        ]
+      },
+      "review_note": "R8 transfer 的已测IK分支只撞固定东侧吊柜，酒杯端点未检出碰撞，因此保持R8布局不做无效移物；仅将临时携瓶目标降为最终瓶子高度上方6cm，并绕旧夹爪轴向机器人侧倾转25°。其余五目标、attachment和最终瓶子位姿精确保持。本轮只选一个方案、一次CPU验证并冻结，遗留问题照实记录，不再调整；随后最多一次cuRobo。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry8_20261028/scenes/u_shape_mustard_bowl__property_wine_glass/result.json",
+        "result_sha256": "3a7f4334bd1554e038bb19af64ba4f82394e3b9ec00679a144b4b8469390db25",
+        "config_sha256": "52e9dfa1bbab51f672b5043acf3132738bd455bd0f29185f8028ccfda58c729d",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v8.json",
+        "previous_recipe_sha256": "2c1b1943d12e3a5c62535edd9a00e2fa46d114b5d52d69ba8dd0d664c0ac5c81",
+        "source_ancestor_chain": [
+          {
+            "path": "reports/replicator_trajectory_retry6_20261026/scenes/u_shape_mustard_bowl__property_wine_glass/result.json",
+            "sha256": "70dc39dce4b35941d4c85bf3bf074ca9cbf2db20e85d321c995590f41bb457fa",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry5_20261026/scenes/u_shape_mustard_bowl__property_wine_glass/result.json",
+            "sha256": "69e5dbabec90a7274130bcffb20aac598c8d2ba9f333c59213d6060247cd4ec5",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry4_20261026/scenes/u_shape_mustard_bowl__property_wine_glass/result.json",
+            "sha256": "ee2d24b2ea0cabbea8c233402da4fba29a3f6b7cdbd2533610a23d3e6f3b8357",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry3_20261026/scenes/u_shape_mustard_bowl__property_wine_glass/result.json",
+            "sha256": "3b536a4e2c2244110394e52b7009dd5db235c033a90665f7ec049cae04c1630c",
+            "stage": "retry_worker"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_mustard_bowl__property_wine_glass/result.json",
+            "sha256": "a7cf344936813393a479245b18ec2ccbc97585c5640bd1cb26b6a8ab67e37458",
+            "stage": "pregrasp"
+          }
+        ],
+        "previous_result_path": "reports/replicator_trajectory_retry8_20261028/scenes/u_shape_mustard_bowl__property_wine_glass/result.json",
+        "previous_result_sha256": "3a7f4334bd1554e038bb19af64ba4f82394e3b9ec00679a144b4b8469390db25",
+        "config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_mustard_bowl/property_wine_glass.json",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard.json",
+          "sha256": "e8582f295605714b1367b9615f1a28bd1b361811a3b0a84e28ba74d67e738fec"
+        },
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_mustard_bowl__property_wine_glass/source_scene.usda",
+          "sha256": "741a5ff041e3f96bb6613383cd22a49d53d874f9e3c3c2c7db9a453147ee2c2d"
+        },
+        "scene_change_analysis": {
+          "path": "reports/replicator_scene_retry_once_analysis_20261028/robot.json",
+          "sha256": "aeeb7211c88754244eed50fa21339e953d97e2a1182bc32b8b488279ff69d00e"
+        },
+        "historical_analysis": {
+          "path": "reports/replicator_trajectory_retry7_analysis_20261026/annotations_revalidation.json",
+          "sha256": "d5234eea8262daf83a788a664843c228f2fe5d59300360a2747e83d19af5df6a"
+        },
+        "analysis_evidence": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard_evidence/u_shape_mustard_bowl__property_wine_glass.json",
+          "sha256": "9395be1ff72593364cbf394de20ab3c98589bcd2ce03181fcec6762f9de10877"
+        }
+      },
+      "explicit_targets_override_scalar_recipe": true,
+      "preserved_target_phases": [
+        "pregrasp",
+        "approach",
+        "lift",
+        "lower",
+        "retreat"
+      ],
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "action": "plan",
+      "change_description": "R8 transfer 的已测IK分支只撞固定东侧吊柜，酒杯端点未检出碰撞，因此保持R8布局不做无效移物；仅将临时携瓶目标降为最终瓶子高度上方6cm，并绕旧夹爪轴向机器人侧倾转25°。其余五目标、attachment和最终瓶子位姿精确保持。本轮只选一个方案、一次CPU验证并冻结，遗留问题照实记录，不再调整；随后最多一次cuRobo。",
+      "target_only": true,
+      "scene_quality_issues": [],
+      "changed_target_phases": [
+        "transfer"
+      ],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": -0.03
+      },
+      "target_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard.json",
+        "sha256": "e8582f295605714b1367b9615f1a28bd1b361811a3b0a84e28ba74d67e738fec"
+      }
+    },
+    "u_shape_mustard_bowl__robot_projecting_crossbar": {
+      "scene_id": "u_shape_mustard_bowl__robot_projecting_crossbar",
+      "task_id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+      "payload_name": "mustard_bottle",
+      "layout_fixed": false,
+      "config_sha256": "c55357470f907c82ce390694c3493acba1a3d9c0b3b92b084742797b1d27c131",
+      "result_sha256": "0aed9530c7623d89890726b4a82965982d2e72f5290be5639bbc3981890cd543",
+      "config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_mustard_bowl/robot_projecting_crossbar.json",
+      "previous_stage": "pregrasp",
+      "previous_failure_code": "MotionGenStatus.IK_FAIL",
+      "initial_state_collision_warning": false,
+      "grasp": {
+        "jaw_yaw_local_deg": 90.0,
+        "z_local_m": 0.045,
+        "tcp_raise_m": 0.0
+      },
+      "pregrasp_offset_world_m": [
+        -0.02772960059538443,
+        0.028828271727948995,
+        0.1399999999999999
+      ],
+      "lift_offset_world_xy_m": [
+        -0.020796999999999954,
+        0.021621
+      ],
+      "lift_height_m": 0.15248499996960185,
+      "retreat_offset_world_m": [
+        0.0,
+        0.0,
+        0.1499999999999999
+      ],
+      "summary": "R8 pregrasp 原目标的掌部/多根手指球碰撞 ProjectingTube；保留全部六目标和 attachment。按原碰撞部位计算唯一水平远离方向及10mm余量的解析分离位移，并受原台面完整脚印边界约束；只移动新增横杆一次，保持高度、朝向、资产和任务布局。本轮只选一个方案、一次CPU验证并冻结，遗留问题照实记录，不再调整；随后最多一次cuRobo。",
+      "retry_round": 9,
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            2.125706570858824
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            -0.06162923562998805
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.162392885506153
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            2.1534361714542083
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            -0.09045750735793705
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.022392885506153
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.0,
+            6.123233995736766e-17,
+            1.0,
+            2.1326391714542083
+          ],
+          [
+            0.0,
+            1.0,
+            -6.123233995736766e-17,
+            -0.06883650735793705
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.174877885475755
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.0,
+            7.610650810070511e-17,
+            0.9999999999999999,
+            2.209871069160121
+          ],
+          [
+            0.0,
+            0.9999999999999999,
+            -4.635817181403018e-17,
+            0.33954249264206293
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.174877885475755
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.0,
+            7.610650810070511e-17,
+            0.9999999999999999,
+            2.209871069160121
+          ],
+          [
+            0.0,
+            0.9999999999999999,
+            -4.635817181403018e-17,
+            0.33954249264206293
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.0548778854757548
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.0,
+            7.610650810070511e-17,
+            0.9999999999999999,
+            2.209871069160121
+          ],
+          [
+            0.0,
+            0.9999999999999999,
+            -4.635817181403018e-17,
+            0.33954249264206293
+          ],
+          [
+            -1.0,
+            0.0,
+            0.0,
+            1.2048778854757547
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.04499999999999993
+        ],
+        [
+          6.123233995736766e-17,
+          1.0,
+          0.0,
+          -0.0017199456831396148
+        ],
+        [
+          1.0,
+          -6.123233995736766e-17,
+          0.0,
+          0.0002979538172311891
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "grasp_info": {
+        "rule": "Measured bottle-body horizontal section; one fixed yaw",
+        "center_local_m": [
+          -0.0002979538172312255,
+          0.0017199456831396183,
+          0.045
+        ],
+        "section_width_m": 0.03912682204215487,
+        "jaw_yaw_local_deg": 90.0,
+        "source_sha256": "ee5aa3c97b00f0d945af34a514772fe7c276256f455132eb86ebeadfbaf6e7b9",
+        "nominal_only": true,
+        "physical_contacts_verified": false,
+        "target_tcp_world_m": [
+          2.1534361714542083,
+          -0.09045750735793705,
+          1.022392885506153
+        ]
+      },
+      "review_note": "R8 pregrasp 原目标的掌部/多根手指球碰撞 ProjectingTube；保留全部六目标和 attachment。按原碰撞部位计算唯一水平远离方向及10mm余量的解析分离位移，并受原台面完整脚印边界约束；只移动新增横杆一次，保持高度、朝向、资产和任务布局。本轮只选一个方案、一次CPU验证并冻结，遗留问题照实记录，不再调整；随后最多一次cuRobo。",
+      "provenance": {
+        "result_path": "reports/replicator_trajectory_retry8_20261028/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+        "result_sha256": "0aed9530c7623d89890726b4a82965982d2e72f5290be5639bbc3981890cd543",
+        "config_sha256": "c55357470f907c82ce390694c3493acba1a3d9c0b3b92b084742797b1d27c131",
+        "previous_recipe_path": "configs/extensions/replicator/trajectory_retry_v8.json",
+        "previous_recipe_sha256": "2c1b1943d12e3a5c62535edd9a00e2fa46d114b5d52d69ba8dd0d664c0ac5c81",
+        "source_ancestor_chain": [
+          {
+            "path": "reports/replicator_trajectory_retry6_20261026/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+            "sha256": "9896e2c76a0df82ab1dcf765f3ba2fee72fdb8f8c360cc3e7cca81509ce81254",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry5_20261026/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+            "sha256": "39fd0684963d790c763b9381534965c1d8bf5b6013d0c9ee8b46db06c115eb4f",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry4_20261026/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+            "sha256": "48d275e37f465bc4ba7778ff0c66ecec968c2730ca10c8078adb26c4efd704b7",
+            "stage": "pregrasp"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry3_20261026/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+            "sha256": "4c3edf414a65613c862dfd4d3a8a3921ac6b37256572a4355758a347a0cae7fd",
+            "stage": "retry_worker"
+          },
+          {
+            "path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+            "sha256": "71740b8b3c86211afe3658a9825bc349241f73783461c270915f7340ebcd5264",
+            "stage": "pregrasp"
+          }
+        ],
+        "previous_result_path": "reports/replicator_trajectory_retry8_20261028/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/result.json",
+        "previous_result_sha256": "0aed9530c7623d89890726b4a82965982d2e72f5290be5639bbc3981890cd543",
+        "config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_mustard_bowl/robot_projecting_crossbar.json",
+        "analysis_source": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard.json",
+          "sha256": "e8582f295605714b1367b9615f1a28bd1b361811a3b0a84e28ba74d67e738fec"
+        },
+        "source_scene_evidence": {
+          "path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_mustard_bowl__robot_projecting_crossbar/source_scene.usda",
+          "sha256": "ea2841e6219cf3794bfcf4f4257e8d16037e716c4aa9f857ea7f73b83d13a9a2"
+        },
+        "scene_change_analysis": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard.json",
+          "sha256": "e8582f295605714b1367b9615f1a28bd1b361811a3b0a84e28ba74d67e738fec"
+        },
+        "historical_analysis": {
+          "path": "reports/replicator_trajectory_retry7_analysis_20261026/annotations_revalidation.json",
+          "sha256": "d5234eea8262daf83a788a664843c228f2fe5d59300360a2747e83d19af5df6a"
+        },
+        "analysis_evidence": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard_evidence/u_shape_mustard_bowl__robot_projecting_crossbar.json",
+          "sha256": "ebaa37bd0d7660bf678e6b4701b09f4a8a700d991c27db990f4308ce4b398b64"
+        }
+      },
+      "explicit_targets_override_scalar_recipe": true,
+      "preserved_target_phases": [
+        "pregrasp",
+        "approach",
+        "lift",
+        "transfer",
+        "lower",
+        "retreat"
+      ],
+      "final_payload_pose_preserved": true,
+      "collision_models_and_masks_unchanged": true,
+      "action": "plan",
+      "change_description": "R8 pregrasp 原目标的掌部/多根手指球碰撞 ProjectingTube；保留全部六目标和 attachment。按原碰撞部位计算唯一水平远离方向及10mm余量的解析分离位移，并受原台面完整脚印边界约束；只移动新增横杆一次，保持高度、朝向、资产和任务布局。本轮只选一个方案、一次CPU验证并冻结，遗留问题照实记录，不再调整；随后最多一次cuRobo。",
+      "target_only": false,
+      "scene_quality_issues": [],
+      "changed_target_phases": [],
+      "historical_scalar_parameters": {
+        "carry_height_delta_m": -0.03
+      },
+      "scene_adjustment": {
+        "adjustments": 1,
+        "source_config_path": "configs/extensions/replicator/scene_retry_once_20261028/u_shape_mustard_bowl/robot_projecting_crossbar.json",
+        "source_config_sha256": "c55357470f907c82ce390694c3493acba1a3d9c0b3b92b084742797b1d27c131",
+        "config_path": "configs/extensions/replicator/scene_retry_round9_20261028/u_shape_mustard_bowl/robot_projecting_crossbar.json",
+        "config_sha256": "20cbbcadd22f61ca60604c72062e13053236df31a72ac45d769016cff3b2d4b5",
+        "delta_world_m": [
+          0.11472325791198168,
+          -0.12188179243389963,
+          0.0
+        ],
+        "previous_obstacle_pose": {
+          "position": [
+            2.3360879628817575,
+            -0.28825181923148036,
+            0.8978676778653872
+          ],
+          "yaw_deg": 225
+        },
+        "obstacle_pose": {
+          "position": [
+            2.450811220793739,
+            -0.41013361166538,
+            0.8978676778653872
+          ],
+          "yaw_deg": 225
+        },
+        "scene_quality_issues": [],
+        "source_evidence": {
+          "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard.json",
+          "sha256": "e8582f295605714b1367b9615f1a28bd1b361811a3b0a84e28ba74d67e738fec"
+        },
+        "task_layout_preserved": true,
+        "collision_shape_assets_preserved": true
+      },
+      "scene_adjustment_evidence": {
+        "path": "reports/replicator_scene_retry_round9_analysis_20261028/mustard.json",
+        "sha256": "e8582f295605714b1367b9615f1a28bd1b361811a3b0a84e28ba74d67e738fec"
+      }
+    }
+  }
+}

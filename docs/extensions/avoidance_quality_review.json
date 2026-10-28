@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-10-22T05:35:51.261556+00:00",
+  "source_head": "d87f3123a53bc467d7eb0bd961ae0fcb8004199d",
+  "report": "docs/extensions/AVOIDANCE_REPAIR_20261022.md",
+  "status": "resolved",
+  "withheld_categories": [],
+  "physical_original_task_outcomes": {
+    "supported": 12,
+    "required": 12,
+    "scope": "Six newly repaired A/D samples have complete new physical task evidence; six Lightwheel pick-place/door samples retain historical task evidence only. Historical review did not equate button success with non-target knob stability."
+  },
+  "resolution_requirements": [
+    "修复并记录按钮资产有效角向参数，通过无接触中性稳定性试验后重采3条。不得逐步写关节角伪造静止。",
+    "重新设计A人体及D三类风险位置，源真实碰撞几何确认旧代表性短路径风险；同控制策略/原始目标的多seed障碍开关对照，并记录接近/抓点适配与路径避让的区别。",
+    "更换attempt名字不能解除阻断；必须补充复审证据并显式更新本registry。"
+  ],
+  "additional_findings_during_repair": [
+    {
+      "group": "replicator",
+      "finding": "16s neutral hold revealed unoperated right refrigerator door rotation of about102.87 degrees; bottle/bowl stability alone cannot certify scene quality. All three Replicator variants require background mechanism repair and recollection.",
+      "evidence": "reports/repair_20261022/replicator/neutral_repaired01/neutral_probe.json"
+    }
+  ],
+  "historical_review": "docs/extensions/AVOIDANCE_REVIEW_20261022.md",
+  "resolved_categories": [
+    {
+      "group": "controls",
+      "variant": "human",
+      "episode": "datasets/avoidance_trials/controls/human_repaired01",
+      "acceptance_sha256": "5bb57b729d5a71c74e133e9b18ccba20d750cc95d87512bbb5694a6f66c7e904"
+    },
+    {
+      "group": "controls",
+      "variant": "property",
+      "episode": "datasets/avoidance_trials/controls/property_repaired01",
+      "acceptance_sha256": "101bb22c5464e58bf8bf968d92cf27a8b333b008cfb4e122f82f8a5f145938a2"
+    },
+    {
+      "group": "controls",
+      "variant": "robot",
+      "episode": "datasets/avoidance_trials/controls/robot_repaired01",
+      "acceptance_sha256": "7a6e9c2ad59a7a0efebf5a6c33e138a5a75ea1da81fce3cfa59f64a7aaa90264"
+    },
+    {
+      "group": "replicator",
+      "variant": "human",
+      "episode": "datasets/avoidance_trials/replicator/human/repaired_03",
+      "acceptance_sha256": "f1a13740a7148f49712a7e95229e223e5ce4182a75d64f49ac1175a236681be2"
+    },
+    {
+      "group": "replicator",
+      "variant": "property",
+      "episode": "datasets/avoidance_trials/replicator/property/repaired_01",
+      "acceptance_sha256": "316e42c2125cbf1f9f541ea6e466b2056dfe063fec4df926e76d650b5ab433ae"
+    },
+    {
+      "group": "replicator",
+      "variant": "robot",
+      "episode": "datasets/avoidance_trials/replicator/robot/repaired_01",
+      "acceptance_sha256": "7d30f45b18bb8fe2a5a60bcd0ab57bb6d1a135904f8bb806d7aa83aed658f2f9"
+    }
+  ],
+  "remaining_six_scope": "青柠与开冰箱共6条仅保留原单轨迹证据，不代表通过本轮新增中性稳定性和多seed检查。",
+  "resolution_media": [
+    {
+      "path": "reports/repair_20261022/review/toaster_passive_before_after.mp4",
+      "sha256": "f24ea33e38e205772b42da3bdc761fb5450098cd1e62f36ececc8562f0c94437",
+      "title": "烤面包机非目标旋钮：修复前后静置对照",
+      "description": "同一原相机、原时间尺度，机器人保持不动；左为旧资产自行摆动，右为平衡并加被动阻尼后的资产。完整30秒静置及外力矩可动性证据另存。"
+    },
+    {
+      "path": "reports/controls_physics/neutral_repair_02/external_camera_2.mp4",
+      "title": "烤面包机旋钮：完整静置和可动性试验",
+      "description": "原速连续记录：30秒中性保持、2秒外力矩脉冲、3秒撤力观察。外力矩仅用于验证旋钮仍可转动，不是机器人操作成功录像。",
+      "sha256": "b56434a33cf55627f0a02e5a5b86565f28deaf2dcdbcd4bb731406ca8ad74db4"
+    },
+    {
+      "path": "reports/replicator_physics/neutral_mount_03/overview/overview_camera.mp4",
+      "title": "Replicator 冰箱：完整40秒静置",
+      "description": "额外诊断视角，完整原速；原三路相机仍保留。门从第一帧检查，自由松散物体允许前5秒自然沉降。",
+      "sha256": "c74e14793bf5bca9d09ea56bafe5a2ace319215e1dbf286d35be0b6157cb219b"
+    },
+    {
+      "path": "reports/replicator_physics/mobility_mount_01/overview/overview_camera.mp4",
+      "title": "Replicator 冰箱：门仍能被外力打开",
+      "description": "2秒静置、2秒真实外加力矩、2秒撤力观察；仅验证固定机身没有锁死门，不是机器人开门任务。",
+      "sha256": "d0f2c5d50d984690b856cda4852761e40d777ea1095c41830e20f1df27adf62e"
+    }
+  ],
+  "resolution_evidence": [
+    "docs/extensions/controls/REPAIRED_LEFT_BUTTON.md",
+    "docs/extensions/controls/PASSIVE_KNOB_REPAIR.md",
+    "docs/extensions/replicator/REPAIR_20261022.md",
+    "docs/extensions/replicator/REFRIGERATOR_MOUNT_REPAIR.md",
+    "datasets/avoidance_trials/controls/human_repaired01/repair_acceptance.json",
+    "datasets/avoidance_trials/controls/property_repaired01/repair_acceptance.json",
+    "datasets/avoidance_trials/controls/robot_repaired01/repair_acceptance.json",
+    "datasets/avoidance_trials/replicator/human/repaired_03/repair_acceptance.json",
+    "datasets/avoidance_trials/replicator/property/repaired_01/repair_acceptance.json",
+    "datasets/avoidance_trials/replicator/robot/repaired_01/repair_acceptance.json"
+  ],
+  "resolution_scope": "Six exact replacement episodes only; three-seed planning pairs for controls3 and replicator human. Replicator property/bar are single-baseline source-geometry evidence. Remaining six keep previous gates and are not claimed to pass new neutral/multi-seed review.",
+  "working_tree_note": "source_head identifies the pre-repair repository base; reviewed new artifacts are bound by SHA256 in each acceptance. No new commit was made by this review."
+}

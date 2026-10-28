@@ -21,8 +21,11 @@ def run(args):
             production_acceptance='not inferred from stage execution',**details))
         write(ledger,entries)
     if stage=='capture':
-        if not args.task_contract or not args.policy_factory or not args.asset_cache:
-            raise ValueError('Native capture requires --task-contract, --policy-factory and --asset-cache')
+        ylj_scene=getattr(args,'ylj_scene',None)
+        if not args.task_contract or not (args.policy_factory or ylj_scene) or not args.asset_cache:
+            raise ValueError('Native capture requires --task-contract, --asset-cache and either --policy-factory or --ylj-scene')
+        if ylj_scene and (args.policy_factory or args.policy_config or args.obstacle_binding):
+            raise ValueError('ylj scene/trajectory already freezes its controller and obstacle; do not overlay a second policy')
         if args.episode_specs:raise ValueError('Choose native task contract or legacy episode specs')
         base.mkdir(parents=True,exist_ok=False);policy=read(args.policy)
         if policy['capture_mode']!='raw-only':raise ValueError('Native safety collection is raw-only')
@@ -35,7 +38,7 @@ def run(args):
         write(base/'workflow_policy.json',policy)
         binding=dict(version='robolaw-native-workflow-1',task_contract=str(args.task_contract.resolve()),
             task_sha256=hashlib.sha256(args.task_contract.read_bytes()).hexdigest(),
-            asset_cache=str(args.asset_cache.resolve()),policy_factory=args.policy_factory)
+            asset_cache=str(args.asset_cache.resolve()),policy_factory=args.policy_factory,ylj_scene=ylj_scene)
         write(base/'native_workflow.json',binding)
         command=[sys.executable,str(ROOT/'scripts/collect_native_task.py'),'--task-contract',str(args.task_contract.resolve()),
             '--output',str(base/'capture/native_000'),'--asset-cache',binding['asset_cache'],
@@ -44,6 +47,11 @@ def run(args):
         command+=['--seed',str(args.seed)]
         if args.placement_seed is not None:command+=['--placement_seed',str(args.placement_seed)]
         if args.obstacle_binding:command+=['--obstacle-binding',str(args.obstacle_binding.resolve())]
+        if ylj_scene:
+            command=[sys.executable,str(ROOT/'scripts/collect_ylj_risk_task.py'),
+                '--task-contract',str(args.task_contract.resolve()),'--scene',ylj_scene,
+                '--output',str(base/'capture/native_000'),'--asset-cache',binding['asset_cache'],
+                '--max-actions',str(args.max_actions),'--seed',str(args.seed),'--device','cpu','--num_envs','1']
     else:
         binding=read(base/'native_workflow.json');episode=base/'capture/native_000/raw_episode'
         risk=base/'risk/native_000';render=base/'rendered/native_000'

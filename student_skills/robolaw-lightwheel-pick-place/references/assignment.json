@@ -1,0 +1,816 @@
+{
+  "schema_version": 1,
+  "student": "B",
+  "group": "lightwheel-pick-place",
+  "skill": "robolaw-lightwheel-pick-place",
+  "label": "Lightwheel 剩余5个抓放环境",
+  "branch": null,
+  "branch_naming": "student_name_initials",
+  "base_branch": "origin/ylj",
+  "base_repository": "https://github.com/youlj109/RoboLaw",
+  "base_commit": "cce14d656a2a449e3f04846748025c80adfbc829",
+  "arena_revision": "7050ecbc9b3fc689df51ea7cc7f9a64b18294bf6",
+  "representative_task": "kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian",
+  "owned_paths": [
+    "kitchen_safety/extensions/lightwheel_pick_place/",
+    "configs/extensions/lightwheel_pick_place/",
+    "scripts/extensions/lightwheel_pick_place/",
+    "tests/extensions/lightwheel_pick_place/",
+    "assets/extensions/lightwheel_pick_place/",
+    "docs/extensions/lightwheel_pick_place/"
+  ],
+  "environment_count": 5,
+  "tasks": [
+    {
+      "id": "kitchen_bench_lightwheel_pick_lemon_shelf_on_plate_u_shaped_with_island_farmhouse2",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_pick_lemon_shelf_on_plate_u_shaped_with_island_farmhouse2.yaml",
+      "source_sha256": "65d78b5a4504b7ea5ffddf54e5aacbd2b9d67dd8640fb7ed5fbad0bb67cdd860",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_u_shaped_with_island_farmhouse2",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 1.2,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [
+        {
+          "id": "bowl",
+          "registry_name": "bowl_ycb_robolab",
+          "params": {}
+        },
+        {
+          "id": "lemon",
+          "registry_name": "lemon_01_fruits_veggies_robolab",
+          "params": {}
+        },
+        {
+          "id": "orange",
+          "registry_name": "orange_01_fruits_veggies_robolab",
+          "params": {}
+        },
+        {
+          "id": "apple",
+          "registry_name": "apple_01_objaverse_robolab",
+          "params": {}
+        },
+        {
+          "id": "plate",
+          "registry_name": "plate_large_vomp_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "counter_top",
+          "parent_id": "kitchen",
+          "prim_path": "counter_main_main_group/top_geometry_right",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "shelf",
+          "parent_id": "kitchen",
+          "prim_path": "shelves_main_group/corpus/board_0",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Pick up the fruit from the shelf and place it into the plate.",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "lemon",
+              "destination_location": "plate",
+              "background_scene": "kitchen",
+              "destination_object": "plate"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "shelf",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "counter_top",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.3,
+            "cross_position_ratio": -0.4
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "plate",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "lemon",
+          "reference": "shelf",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "bowl",
+          "reference": "shelf",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "lemon",
+          "reference": "bowl",
+          "params": {
+            "side": "negative_y",
+            "distance_m": 0.05
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "orange",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "apple",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_place_bananas_in_wooden_bowl_u_shaped_with_island_farmhouse2.yaml",
+      "source_sha256": "14c51493082a7f8ca2956d7f59ba0fab0ba22332599966067180ad96b0c26515",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_u_shaped_with_island_farmhouse2",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [
+        {
+          "id": "banana_1",
+          "registry_name": "banana_ycb_robolab",
+          "params": {}
+        },
+        {
+          "id": "banana_2",
+          "registry_name": "banana_ycb_robolab",
+          "params": {}
+        },
+        {
+          "id": "plate",
+          "registry_name": "plate_large_vomp_robolab",
+          "params": {}
+        },
+        {
+          "id": "wooden_bowl",
+          "registry_name": "wooden_bowl_hot3d_robolab",
+          "params": {}
+        },
+        {
+          "id": "apple",
+          "registry_name": "apple_01_objaverse_robolab",
+          "params": {}
+        },
+        {
+          "id": "orange",
+          "registry_name": "orange_01_fruits_veggies_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "island",
+          "parent_id": "kitchen",
+          "prim_path": "island_island_group/top_geometry_right",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "parallel",
+        "description": "Pick up both bananas from the plate and place them into the wooden bowl in either order.",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "banana_1",
+              "destination_location": "wooden_bowl",
+              "destination_object": "wooden_bowl",
+              "background_scene": "kitchen"
+            }
+          },
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "banana_2",
+              "destination_location": "wooden_bowl",
+              "destination_object": "wooden_bowl",
+              "background_scene": "kitchen"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "island",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "island",
+          "params": {
+            "side": "negative_x"
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "plate",
+          "reference": "island",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "banana_1",
+          "reference": "plate",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "banana_2",
+          "reference": "plate",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "wooden_bowl",
+          "reference": "island",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "wooden_bowl",
+          "reference": "plate",
+          "params": {
+            "side": "negative_x"
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "apple",
+          "reference": "island",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "orange",
+          "reference": "island",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_place_ladle_in_plate_g_shaped_large_scandinavian.yaml",
+      "source_sha256": "2549b637b9ac32cfc2cc07686746f39fdf29c29ad8e6e7a53825484b9447412f",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_g_shaped_large_scandinavian",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [
+        {
+          "id": "green_ladle",
+          "registry_name": "ladle_handal_robolab",
+          "params": {}
+        },
+        {
+          "id": "plate",
+          "registry_name": "plate_large_vomp_robolab",
+          "params": {}
+        },
+        {
+          "id": "spoon_1",
+          "registry_name": "spoon_1_handal_robolab",
+          "params": {}
+        },
+        {
+          "id": "spoon_2",
+          "registry_name": "spoon_2_handal_robolab",
+          "params": {}
+        },
+        {
+          "id": "spoon_3",
+          "registry_name": "spoon_big_vomp_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "counter_top",
+          "parent_id": "kitchen",
+          "prim_path": "counter_main_main_group/top_geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "toaster",
+          "parent_id": "kitchen",
+          "prim_path": "toaster_main_group",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Pick up the ladle from the counter top and place it into the plate.",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "green_ladle",
+              "destination_location": "plate",
+              "background_scene": "kitchen",
+              "destination_object": "plate"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "toaster",
+          "params": {}
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "counter_top",
+          "params": {
+            "side": "negative_y"
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "green_ladle",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "plate",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "spoon_1",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "spoon_2",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "spoon_3",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "green_ladle",
+          "reference": "toaster",
+          "params": {
+            "side": "negative_y"
+          }
+        },
+        {
+          "kind": "next_to",
+          "subject": "plate",
+          "reference": "toaster",
+          "params": {
+            "side": "negative_x"
+          }
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian.yaml",
+      "source_sha256": "c49ae7320caaa136df9aa6e25194e862b555379ae4fc3f5b4e1f559093005598",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_l_shaped_scandinavian",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [
+        {
+          "id": "lime",
+          "registry_name": "lime01_fruits_veggies_robolab",
+          "params": {}
+        },
+        {
+          "id": "wooden_bowl",
+          "registry_name": "wooden_bowl_hot3d_robolab",
+          "params": {}
+        },
+        {
+          "id": "broccoli",
+          "registry_name": "broccoli",
+          "params": {}
+        },
+        {
+          "id": "sweet_potato",
+          "registry_name": "sweet_potato",
+          "params": {}
+        },
+        {
+          "id": "red_bell_pepper",
+          "registry_name": "red_bell_pepper_objaverse_robolab",
+          "params": {}
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "counter_top",
+          "parent_id": "kitchen",
+          "prim_path": "counter_main_main_group/top_geometry_right",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Pick up the lime from the counter top and place it into the wooden bowl.",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "lime",
+              "destination_location": "wooden_bowl",
+              "background_scene": "kitchen",
+              "destination_object": "wooden_bowl"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "counter_top",
+          "params": {
+            "side": "negative_y"
+          }
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": 1.57
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "lime",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "wooden_bowl",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "broccoli",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "sweet_potato",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "red_bell_pepper",
+          "reference": "counter_top",
+          "params": {}
+        }
+      ]
+    },
+    {
+      "id": "kitchen_bench_lightwheel_place_pepsi_in_basket_u_shaped_with_island_farmhouse2",
+      "source_yaml": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_lightwheel_place_pepsi_in_basket_u_shaped_with_island_farmhouse2.yaml",
+      "source_sha256": "5c0d444c51ba2fdc036e58c6f76aa1450f8562560657568fa4eae576b2d3a757",
+      "background": {
+        "id": "kitchen",
+        "registry_name": "lightwheel_kitchen_u_shaped_with_island_farmhouse2",
+        "params": {
+          "collision_mode": "mesh",
+          "repair_collision_mesh_non_watertight": false
+        }
+      },
+      "embodiment": {
+        "id": "droid",
+        "registry_name": "droid_abs_joint_pos",
+        "params": {
+          "stand_height_m": 0.8,
+          "placement_bbox_stand_only": true,
+          "collision_mode": "mesh"
+        }
+      },
+      "objects": [
+        {
+          "id": "tuna_can",
+          "registry_name": "tuna_can_ycb_robolab",
+          "params": {}
+        },
+        {
+          "id": "mug",
+          "registry_name": "mug",
+          "params": {}
+        },
+        {
+          "id": "pepsi_can",
+          "registry_name": "simready_usd_object",
+          "params": {
+            "usd_path": "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.0/Isaac/SimReady/Residential/Kitchen/Food/Canned_Goods/Can_M01/sm_food_beverage_can_m01_01.usd"
+          }
+        },
+        {
+          "id": "corn_can",
+          "registry_name": "corn_can_hope_robolab",
+          "params": {}
+        },
+        {
+          "id": "mini_plastic_basket",
+          "registry_name": "simready_usd_object",
+          "params": {
+            "usd_path": "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.0/Isaac/SimReady/Residential/Kitchen/Baskets/Plastic_Basket_A01/sm_misc_basket_plastic_a01_01.usd"
+          }
+        }
+      ],
+      "object_references": [
+        {
+          "id": "floor",
+          "parent_id": "kitchen",
+          "prim_path": "floor_room/geometry",
+          "object_type": "base",
+          "params": {}
+        },
+        {
+          "id": "counter_top",
+          "parent_id": "kitchen",
+          "prim_path": "island_island_group/top_geometry_left",
+          "object_type": "base",
+          "params": {}
+        }
+      ],
+      "task": {
+        "composition": "atomic",
+        "description": "Pick up the Pepsi can from the counter top and place it into the mini plastic basket.",
+        "subtasks": [
+          {
+            "kind": "PickAndPlaceTask",
+            "params": {
+              "pick_up_object": "pepsi_can",
+              "destination_location": "mini_plastic_basket",
+              "background_scene": "kitchen",
+              "destination_object": "mini_plastic_basket"
+            }
+          }
+        ]
+      },
+      "relations": [
+        {
+          "kind": "is_anchor",
+          "subject": "floor",
+          "params": {}
+        },
+        {
+          "kind": "is_anchor",
+          "subject": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "droid",
+          "reference": "floor",
+          "params": {}
+        },
+        {
+          "kind": "next_to",
+          "subject": "droid",
+          "reference": "counter_top",
+          "params": {
+            "side": "positive_y"
+          }
+        },
+        {
+          "kind": "on",
+          "subject": "tuna_can",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "mini_plastic_basket",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "mug",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "pepsi_can",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "on",
+          "subject": "corn_can",
+          "reference": "counter_top",
+          "params": {}
+        },
+        {
+          "kind": "rotate_around_solution",
+          "subject": "droid",
+          "params": {
+            "yaw_rad": -1.57
+          }
+        }
+      ]
+    }
+  ]
+}

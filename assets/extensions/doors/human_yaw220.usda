@@ -1,0 +1,18 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset"
+{
+    def Xform "Geometry" (
+        prepend references = @human_reach_elbow_up/collidable.usda@
+    )
+    {
+        float xformOp:rotateZ = 220
+        uniform token[] xformOpOrder = ["xformOp:rotateZ"]
+    }
+}
+

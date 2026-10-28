@@ -1,0 +1,22 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    subLayers = [
+        @../water_valve.usda@
+    ]
+)
+
+over "Asset"
+{
+    over "ValveJoint" (
+        apiSchemas = ["PhysxJointAPI", "PhysxJointAxisAPI:angular"]
+    )
+    {
+        custom string execution:passiveDampingRevision = "damped_v1: velocity-proportional passive dissipation; no drive or actuator"
+        float physxJointAxis:angular:armature = 0.0002
+        float physxJointAxis:angular:dynamicFrictionEffort = 0
+        float physxJointAxis:angular:staticFrictionEffort = 0
+        float physxJointAxis:angular:viscousFrictionCoefficient = 0.0001
+    }
+}
+

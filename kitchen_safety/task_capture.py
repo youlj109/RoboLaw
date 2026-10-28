@@ -94,7 +94,8 @@ def freeze_implementation(directory, config):
     files=list((ROOT/'kitchen_safety').glob('*.py'))
     files+=list((ROOT/'third_party/safebench_reference/reference_code/evaluator/safety_risk').glob('*.py'))
     files+=[ROOT/'scripts'/name for name in ('evaluate_native_task.py','collect_native_task.py',
-        'inspect_risk_task.py','audit_native_task.py','build_gdist_backend.py')]
+        'inspect_risk_task.py','audit_native_task.py','build_gdist_backend.py','collect_ylj_risk_task.py')]
+    files+=list((ROOT/'kitchen_safety/extensions/replicator').glob('*.py'))
     files+=list((ROOT/'native/gdist').glob('*.cu'))+list((ROOT/'native/gdist').glob('*.inc'))+list((ROOT/'native/gdist').glob('*.patch'))
     files=[p for p in files if p.is_file()]
     sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
@@ -111,7 +112,8 @@ def freeze_implementation(directory, config):
 
 
 class TaskRawRecorder:
-    def __init__(self, env, directory, contract, inventory, scope, rs_scope, config, mesh_directory):
+    def __init__(self, env, directory, contract, inventory, scope, rs_scope, config, mesh_directory,
+                 *, allow_terminal_continuation=False):
         self.env=env;self.e=env.unwrapped;self.directory=Path(directory)
         if self.e.num_envs!=1:raise ValueError('One immutable episode/environment per recorder')
         if getattr(self.e,'_episode_limit',None)!=1:
@@ -151,6 +153,7 @@ class TaskRawRecorder:
         self.sink=TaskRawSink(self.directory,self.identity,self.dt,self.action_dt)
         self.started=time.perf_counter();self.active=False;self.waiting_update=False;self.closed=False;self.terminal=False
         self.action_index=0;self.phase=None;self.operation_id=None;self.command_events=[]
+        self.allow_terminal_continuation=bool(allow_terminal_continuation)
         self.originals=[]
         self._hook_commands()
         self._hook_physics()
@@ -163,7 +166,8 @@ class TaskRawRecorder:
             observation_semantics='obs[t] saved before action[t], source_physics_step=4*t-1',
             episode_boundary_required=True,native_episode_limit=1,native_episode_index=self.episode_index,
             terminal_sample_required=True,terminal_semantics='one measured final state after the last action; no next action',
-            risk_queries_online=0,features_online=0,grades_online=0,IR='disabled'))
+            risk_queries_online=0,features_online=0,grades_online=0,IR='disabled',
+            allow_terminal_continuation=self.allow_terminal_continuation))
 
     def capture_state(self):
         row=self.telemetry.capture();data=self.robot.data;robot={};errors=[]
@@ -229,7 +233,7 @@ class TaskRawRecorder:
         self._set(self.e.sim,'step',physical);self._set(self.e.scene,'update',updated)
 
     def step(self,action,*,phase,operation_id=None,controller_evidence=None,diagnostic_actuation=None):
-        if self.closed or self.terminal:raise RuntimeError('Episode already closed or terminated; freeze a new reset')
+        if self.closed or (self.terminal and not self.allow_terminal_continuation):raise RuntimeError('Episode already closed or terminated; freeze a new reset')
         if self.active or self.sink.steps!=4*self.action_index:raise RuntimeError('Invalid action/physics alignment')
         if self.diagnostic_actuation is not None:
             from kitchen_safety.task_articulation_probe import validate_transition

@@ -1,0 +1,25 @@
+RoboLaw 四位学生独立任务分工与技能使用（2026-10-23）
+
+一、共同基线与分支
+共同基线是 https://github.com/youlj109/RoboLaw/tree/ylj 。每位学生自己从最新origin/ylj创建本人姓名缩写分支，例如zxw、lgd、lwx；不加ylj-前缀，不预设姓名与A/B/C/D的对应关系。姓名未知时Agent先问学生本人。assignment.json的base_commit仅用于上游来源追溯，不能回退到旧提交；branch=null表示实际个人分支名由学生提供。
+已经安装主分支的同学先获取ylj，再创建或同步姓名分支；使用独立工作目录，保留未提交修改和已有个人提交。完整分支命令、single-branch克隆处理与快速开始见仓库docs/student_assignments/README.md。
+
+二、独立分工
+A：Replicator全部14个抓放环境；技能robolaw-replicator；先G型芥末瓶入碗，再同布局香蕉入碗/碗入水槽，随后其他布局。
+B：Lightwheel其余5个抓放环境；技能robolaw-lightwheel-pick-place；青柠、柠檬、双香蕉、汤勺、百事可乐。
+C：Lightwheel全部8个开门环境；技能robolaw-doors；先基础冰箱，再按共享任务表开发剩余门任务。
+D：Lightwheel左右按钮与温度旋钮3个环境；技能robolaw-controls；左取消按钮、右取消按钮、温度旋钮。
+共30个原始环境，无串联依赖。31个环境中的原Lightwheel pick_and_place芥末瓶入碗及11变体是共同回归参考，已从新增任务中排除。完整ID、源YAML和哈希以各技能references/assignment.json为准。
+
+三、直接使用
+每人获取本组完整技能目录，必须保留SKILL.md、references/、scripts/和START_PROMPT.txt。可复制本组START_PROMPT.txt的全文给Codex/Cursor；其正文与仓库docs/student_assignments中本组MD的Prompt代码块保持一致。Cursor也可把SKILL.md加入上下文；无需假设IDE自动发现技能。
+先处理代码基线和姓名分支，再读取当前技能、执行CPU预检、检查已安装依赖/资产。不要盲目重装，技能ZIP不含仿真执行器、USD大资产或数据。换克隆必须确认容器/workspace映射本人代码；同机GPU任务使用同一个宿主锁文件，runner已持锁时不重复套锁，不结束他人任务。
+
+四、当前交付要求
+每个原始任务：匹配的无新增风险成功基线，人体/财产/障碍物三个变体各1条完整真实成功数据，保留原三路视频，必要时增加人体总览，生成原速同视角基线对照。不同控制参数须有各自匹配基线。
+先验证场景物理静置与真实机器人操作，再以源几何确认新增实体影响基线；以预声明seed42/43/44做同参数成对规划。三个规划seed不是三条物理采集，不是随机化布局。危险旧路径只做离线检查。禁止通过传送、写目标关节或仿真焊接伪造成功，不降低原任务谓词或安全距离。
+现有11类资产只作候选库，当前不要求每任务扩满11类。每配置初始最多10次尝试，连续3次同类失败先修复，保留失败。学生完成少量验证即可增量提交自己的姓名分支；200条批采交后续人员。
+
+五、证据范围
+已有四个首任务的局部执行器可参考，其余26个环境仍需实现。A/D六条修复后替代样本与B/C六条历史样本分开报告。A人体与D三类有三个seed的分段规划对照；A财产/横杆仍仅单基线必要性；B/C尚缺本轮新增完整静置和多seed检查。不能以旧accepted=true或历史12/12替代新版门禁。详见各技能references/review-gates.md。
+CPU预检/包验证不证明GPU、物理成功或30任务已跑通。学生须补齐未测项；数据、资产与视频按仓库忽略规则另行交接路径/哈希，不宣称随Git上传。

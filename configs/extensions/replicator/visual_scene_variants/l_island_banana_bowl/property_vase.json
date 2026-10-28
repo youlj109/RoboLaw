@@ -1,0 +1,72 @@
+{
+  "task_id": "kitchen_bench_replicator_l_island_banana_bowl",
+  "task": "pick up the banana and place it in the red bowl",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_l_island.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    -2.1830884218215942,
+    1.7693166792392732,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 89.95437383553924,
+  "objects": {
+    "banana": {
+      "usd_path": "assets/extensions/replicator/source/Isaac/IsaacLab/Arena/assets/object_library/srl_robolab_assets/objects/ycb/banana.usd",
+      "position": [
+        -2.373088421821594,
+        2.2359839138388633,
+        0.93505803835392
+      ],
+      "yaw_deg": 0.0
+    },
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        -1.9930884218215943,
+        2.227334415614605,
+        0.9442080386430025
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "property_vase",
+    "label": "Bulbous ceramic vase",
+    "category": "property",
+    "usd_path": "assets/obstacle_library/property/vase.usda",
+    "position": [
+      -2.1812679463612454,
+      2.311638448726394,
+      0.9172230413862439
+    ],
+    "yaw_deg": 180.0,
+    "dimensions": [
+      0.1144,
+      0.1144,
+      0.245
+    ],
+    "dimensions_unit": "m",
+    "physics_type": "rigid",
+    "static": false,
+    "mass_kg": 0.68,
+    "physics_material": {
+      "static_friction": 0.55,
+      "dynamic_friction": 0.42,
+      "restitution": 0.03
+    },
+    "collider_count": 121,
+    "collision_model": "compound_convex",
+    "provenance": {
+      "type": "procedural_local",
+      "generator": "scripts/build_library_property.py",
+      "external_sources": [],
+      "textures": "none; authored material colors"
+    },
+    "notes": [
+      "24.5 cm open vase; wide belly, tapered shoulder and narrow mouth.",
+      "Low center of mass and flat 6.8 cm foot support stable placement.",
+      "Compound convex walls preserve the narrow open interior."
+    ],
+    "opening_inner_diameter_m": 0.048
+  }
+}

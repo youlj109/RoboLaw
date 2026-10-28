@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "task_id": "kitchen_bench_replicator_g_shape_bowl_sink",
+  "instruction": "\u628a\u53f0\u9762\u4e0a\u7684\u7897\u653e\u8fdb\u6b63\u5728\u6d41\u6c34\u7684\u6c34\u69fd\uff1b\u5148\u5173\u9600\u786e\u8ba4\u505c\u6c34\uff0c\u518d\u6293\u8d77\u53f0\u9762\u7897\u653e\u5165\u6c34\u69fd\u3002",
+  "native_materials_lights": true,
+  "accepted_demo": {
+    "path": "assets/extensions/replicator/hard_demo_v1/water/scene.usda",
+    "sha256": "8651d2d5776606733f2e640db2fe8c137112e7906bfbe5161f1cd3ecf7fb9dfa"
+  },
+  "accepted_layout": {
+    "path": "configs/extensions/replicator/visual_scene_variants_final03/g_shape_bowl_sink/robot_projecting_crossbar.json",
+    "sha256": "d9fc3920d22b2d8e7a162c746078093f5186c5f1109eeee3125e8b03c31d5703"
+  },
+  "valve_asset": "assets/extensions/replicator/hard_execution_v1/water/damped_v1/water_valve.usda",
+  "visual_asset": "assets/extensions/replicator/hard_execution_v1/water/water_visual.usda",
+  "pivot_world_m": [
+    2.80814020579,
+    0.05503975221,
+    0.96739950094
+  ],
+  "outlet_world_m": [
+    2.69701275134,
+    0.05503975221,
+    1.20431055282
+  ],
+  "basin_surface_z_m": 0.741896693157,
+  "joint_name": "ValveJoint",
+  "axis": "Z",
+  "closed_world_yaw_deg": 180.0,
+  "fixed_world_anchor": {
+    "position_m": [
+      2.80814020579,
+      0.05503975221,
+      0.96739950094
+    ],
+    "quaternion_xyzw": [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    "scope": "World-body joint frame; intentionally does not inherit asset spawn transform"
+  },
+  "initial_angle_deg": 55.0,
+  "joint_limits_deg": [
+    0.0,
+    55.0
+  ],
+  "flow_off_angle_deg": 2.0,
+  "contact_region_lever_local_m": [
+    [
+      0.03,
+      -0.011,
+      -0.009
+    ],
+    [
+      0.099,
+      0.011,
+      0.009
+    ]
+  ],
+  "grasp_center_lever_local_m": [
+    0.072,
+    0.0,
+    0.0
+  ],
+  "grasp_tcp": {
+    "tilt_about_local_y_deg": 55.0,
+    "retract_from_handle_along_tcp_x_m": 0.03,
+    "approach_distance_along_negative_tcp_x_m": 0.1
+  },
+  "valve_dynamic": true,
+  "valve_kinematic": false,
+  "joint_enabled": true,
+  "joint_actuator": false,
+  "water_colliders": false,
+  "mounting_revision": {
+    "articulation_api_on_parent": true,
+    "connector_size_m": [
+      0.034,
+      0.016,
+      0.014
+    ],
+    "connector_center_base_local_m": [
+      -0.01,
+      0.0,
+      -0.0275
+    ],
+    "source_kitchen_modified": false
+  },
+  "close_success": {
+    "max_angle_deg": 2.0,
+    "stable_seconds": 1.0,
+    "minimum_loaded_contact_n": 0.01,
+    "require_contact_precedes_movement": true,
+    "require_release_and_stable_closed": true,
+    "raw_speed_diagnostic_only": true,
+    "require_remaining_off_during_bowl": true
+  },
+  "physical_execution_verified": false,
+  "accepted": false,
+  "asset_sha256": {
+    "assets/extensions/replicator/hard_execution_v1/water/water_valve.usda": "fba3f2faaf7c3ebaf25e42567043f3718b02ed0b25a53d594049fd5fb0909277",
+    "assets/extensions/replicator/hard_execution_v1/water/water_visual.usda": "8a5a092c47e2cfdc7260b0875ce11251fb8d9f2a684bb01dc9e3b1d6deca017d",
+    "assets/extensions/replicator/hard_execution_v1/water/damped_v1/water_valve.usda": "70d0fd55632d4912d5651439a3bfb5952b6981a614737dc8656cf9128238407b"
+  },
+  "parent_mechanism": {
+    "path": "configs/extensions/replicator/hard_execution_v1/water/mechanism.json",
+    "sha256": "3a3ea138b58be985ad15eab54af975da5357239710855b186071ecf48a6b7148"
+  },
+  "passive_damping": {
+    "revision": "damped_v1",
+    "api": "PhysxJointAxisAPI:angular",
+    "usd_viscous_friction_nm_s_per_degree": 0.0001,
+    "expected_native_viscous_friction_nm_s_per_radian": 0.005729577951308232,
+    "static_friction_effort_nm": 0.0,
+    "dynamic_friction_effort_nm": 0.0,
+    "retained_armature_kg_m2": 0.0002,
+    "inertia_estimate_kg_m2": 0.00038268,
+    "ideal_unforced_time_constant_s": 0.066790259815319,
+    "ideal_coast_from_7_deg_s_deg": 0.46753181870723304,
+    "damping_torque_at_10_deg_s_nm": 0.001,
+    "basis": "Axis inertia = COM Izz + mass*COM_radius\u00b2 + unchanged armature; linear unforced estimate only. Coefficient must be verified by native readback and contact-operated closure.",
+    "source_schema": "isaacsim/extscache/omni.usd.schema.physx-110.3.2+110.3.0.lx64.r.cp312.u7f4/plugins/PhysxSchemaAddition/resources/schema.usda",
+    "conversion_source": "isaacsim.robot_setup.sysid/usd_parameter_io.py:_read_joint_axis_friction",
+    "geometry_limits_and_mass_unchanged": true,
+    "active_drive": false,
+    "actuators": false,
+    "native_readback_verified": false
+  }
+}

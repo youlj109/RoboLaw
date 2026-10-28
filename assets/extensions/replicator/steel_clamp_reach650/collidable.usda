@@ -1,0 +1,65 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset" (
+    doc = "Derived anchored static fixture: 0.65m beam reach; original foot, upright, jaw heights and spacing retained. No real anchor strength/damage certification."
+    prepend references = @../../../obstacle_library/robot/steel_clamp.usda@
+)
+{
+    over "Fixture"
+    {
+        over "Frame"
+        {
+            over "PinchUpperBeam"
+            {
+                float3 xformOp:scale = (0.68, 0.06, 0.06)
+                double3 xformOp:translate = (0.31, 0, 1.33)
+            }
+
+            over "PinchLowerBeam"
+            {
+                float3 xformOp:scale = (0.68, 0.06, 0.06)
+                double3 xformOp:translate = (0.31, 0, 0.99)
+            }
+
+            over "UpperJawFace"
+            {
+                float3 xformOp:scale = (0.62, 0.064, 0.004)
+                double3 xformOp:translate = (0.34, 0, 1.298)
+            }
+
+            over "LowerJawFace"
+            {
+                float3 xformOp:scale = (0.62, 0.064, 0.004)
+                double3 xformOp:translate = (0.34, 0, 1.022)
+            }
+
+            over "UpperBeamEnd"
+            {
+                double3 xformOp:translate = (0.651, 0, 1.33)
+            }
+
+            over "LowerBeamEnd"
+            {
+                double3 xformOp:translate = (0.651, 0, 0.99)
+            }
+
+            over "FrontUpperPaint"
+            {
+                float3 xformOp:scale = (0.674, 0.0006, 0.052)
+                double3 xformOp:translate = (0.31, -0.0305, 1.33)
+            }
+
+            over "FrontLowerPaint"
+            {
+                float3 xformOp:scale = (0.674, 0.0006, 0.052)
+                double3 xformOp:translate = (0.31, -0.0305, 0.99)
+            }
+        }
+    }
+}
+

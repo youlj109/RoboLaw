@@ -1,0 +1,17 @@
+#usda 1.0
+(
+    defaultPrim = "Pedestal"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Pedestal" {
+    custom string provenance = "Locally authored anchored floor display pedestal; dimensions from CPU counterfactual search. No source kitchen geometry changed."
+    def Cube "SolidColumn" (prepend apiSchemas = ["PhysicsCollisionAPI"]) {
+        double size = 1
+        color3f[] primvars:displayColor = [(0.19, 0.23, 0.28)]
+        bool physics:collisionEnabled = true
+        double3 xformOp:translate = (0, 0, 0.438)
+        double3 xformOp:scale = (0.09999999999999964, 0.10000000000000009, 0.876)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}

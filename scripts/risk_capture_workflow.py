@@ -25,6 +25,8 @@ def write(path,value):
 
 def run(args):
     stage,base=args.stage,args.output.resolve()
+    if getattr(args,'ylj_scene',None) and (stage!='capture' or not args.task_contract):
+        raise ValueError('--ylj-scene requires capture with an explicit --task-contract; later stages replay frozen inputs')
     if args.task_contract or (base/'native_workflow.json').exists():
         from kitchen_safety.native_workflow import run as run_native
         return run_native(args)
@@ -152,6 +154,7 @@ def main():
     p.add_argument('--task-contract',type=Path,help='Native multi-task contract; separate from legacy scene episode specs')
     p.add_argument('--policy-factory',help='Explicit native task controller module:function')
     p.add_argument('--policy-config',type=Path)
+    p.add_argument('--ylj-scene',help='Exact ylj scene ID; use frozen ylj layout/NPZ with the current reviewed risk scope')
     p.add_argument('--asset-cache',type=Path)
     p.add_argument('--obstacle-binding',type=Path)
     p.add_argument('--max-actions',type=int,default=3000)

@@ -1,0 +1,376 @@
+{
+  "scope": "Three repaired fixed left-cancel-button variants, one physical success each; three paired planning seeds per variant. Original source task, margins, robot start and original TCP goal retained. Not a global shortest-path or batch/randomized success claim.",
+  "baseline": "datasets/avoidance_trials/controls/base_repaired02",
+  "config": "configs/extensions/controls/repaired_left_button.json",
+  "config_sha256": "ffafee739e62d372e890d5cf05509ffd27b66fa29bdc8cfc2596304532d5c6c5",
+  "paired_report": "reports/repair_20261022/controls/paired_final_02/paired_planning.json",
+  "paired_report_sha256": "2a39d06d065b857a9a2b675dc510e131ec233485f445550ff305b84976e59e10",
+  "asset_dependency_verification": "reports/repair_20261022/controls/paired_final_02/asset_manifest_verification.json",
+  "paired_seeds": [
+    42,
+    43,
+    44
+  ],
+  "paired_all_plans_valid": true,
+  "paired_all_hazard_off_paths_require_adjustment": true,
+  "paired_runs": [
+    {
+      "seed": 42,
+      "variant": "base",
+      "success": true,
+      "tcp_path_m": 0.2779941682170668,
+      "true_shape_counterfactual": null,
+      "true_shape_actual": null
+    },
+    {
+      "seed": 42,
+      "variant": "human",
+      "success": true,
+      "tcp_path_m": 0.9997077634352813,
+      "true_shape_counterfactual": {
+        "index": 44,
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "true_shape_actual": {
+        "index": 127,
+        "valid": true,
+        "distance_m": 0.03275683684179047,
+        "required_m": 0.02,
+        "slack_m": 0.012756836841790468,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      }
+    },
+    {
+      "seed": 42,
+      "variant": "property",
+      "success": true,
+      "tcp_path_m": 1.2798966975999786,
+      "true_shape_counterfactual": {
+        "index": 64,
+        "valid": false,
+        "distance_m": 0.035081519554993314,
+        "required_m": 0.05,
+        "slack_m": -0.014918480445006689,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/glass/Colliders/Wall05_12",
+        "intersecting": false
+      },
+      "true_shape_actual": {
+        "index": 232,
+        "valid": true,
+        "distance_m": 0.11957486427050619,
+        "required_m": 0.05,
+        "slack_m": 0.06957486427050619,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/glass/Colliders/Wall02_12",
+        "intersecting": false
+      }
+    },
+    {
+      "seed": 42,
+      "variant": "robot",
+      "success": true,
+      "tcp_path_m": 0.675579957760202,
+      "true_shape_counterfactual": {
+        "index": 61,
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      "true_shape_actual": {
+        "index": 144,
+        "valid": true,
+        "distance_m": 0.053129436113348,
+        "required_m": 0.01,
+        "slack_m": 0.043129436113348,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      }
+    },
+    {
+      "seed": 43,
+      "variant": "base",
+      "success": true,
+      "tcp_path_m": 0.27804755394747827,
+      "true_shape_counterfactual": null,
+      "true_shape_actual": null
+    },
+    {
+      "seed": 43,
+      "variant": "human",
+      "success": true,
+      "tcp_path_m": 0.9997077634352813,
+      "true_shape_counterfactual": {
+        "index": 46,
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "true_shape_actual": {
+        "index": 127,
+        "valid": true,
+        "distance_m": 0.03275683684179047,
+        "required_m": 0.02,
+        "slack_m": 0.012756836841790468,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      }
+    },
+    {
+      "seed": 43,
+      "variant": "property",
+      "success": true,
+      "tcp_path_m": 1.2798966975999786,
+      "true_shape_counterfactual": {
+        "index": 65,
+        "valid": false,
+        "distance_m": 0.03441307522306993,
+        "required_m": 0.05,
+        "slack_m": -0.015586924776930071,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/glass/Colliders/Wall05_12",
+        "intersecting": false
+      },
+      "true_shape_actual": {
+        "index": 232,
+        "valid": true,
+        "distance_m": 0.11957486427050619,
+        "required_m": 0.05,
+        "slack_m": 0.06957486427050619,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/glass/Colliders/Wall02_12",
+        "intersecting": false
+      }
+    },
+    {
+      "seed": 43,
+      "variant": "robot",
+      "success": true,
+      "tcp_path_m": 0.675579957760202,
+      "true_shape_counterfactual": {
+        "index": 62,
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      "true_shape_actual": {
+        "index": 144,
+        "valid": true,
+        "distance_m": 0.053129436113348,
+        "required_m": 0.01,
+        "slack_m": 0.043129436113348,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      }
+    },
+    {
+      "seed": 44,
+      "variant": "base",
+      "success": true,
+      "tcp_path_m": 0.27804755394747827,
+      "true_shape_counterfactual": null,
+      "true_shape_actual": null
+    },
+    {
+      "seed": 44,
+      "variant": "human",
+      "success": true,
+      "tcp_path_m": 0.9997077634352813,
+      "true_shape_counterfactual": {
+        "index": 46,
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.02,
+        "slack_m": -0.02,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult/base_001",
+        "intersecting": true
+      },
+      "true_shape_actual": {
+        "index": 127,
+        "valid": true,
+        "distance_m": 0.03275683684179047,
+        "required_m": 0.02,
+        "slack_m": 0.012756836841790468,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/person/Posed_KitchenAdult_male_casualsuit01/male_casualsuit01_001",
+        "intersecting": false
+      }
+    },
+    {
+      "seed": 44,
+      "variant": "property",
+      "success": true,
+      "tcp_path_m": 1.2798966975999786,
+      "true_shape_counterfactual": {
+        "index": 65,
+        "valid": false,
+        "distance_m": 0.03441307522306993,
+        "required_m": 0.05,
+        "slack_m": -0.015586924776930071,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/glass/Colliders/Wall05_12",
+        "intersecting": false
+      },
+      "true_shape_actual": {
+        "index": 232,
+        "valid": true,
+        "distance_m": 0.11957486427050619,
+        "required_m": 0.05,
+        "slack_m": 0.06957486427050619,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/glass/Colliders/Wall02_12",
+        "intersecting": false
+      }
+    },
+    {
+      "seed": 44,
+      "variant": "robot",
+      "success": true,
+      "tcp_path_m": 0.675579957760202,
+      "true_shape_counterfactual": {
+        "index": 62,
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.01,
+        "slack_m": -0.01,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": true
+      },
+      "true_shape_actual": {
+        "index": 144,
+        "valid": true,
+        "distance_m": 0.053129436113348,
+        "required_m": 0.01,
+        "slack_m": 0.043129436113348,
+        "robot_part": "robot_hull",
+        "obstacle": "/World/envs/env_0/barrier/ProjectingTube",
+        "intersecting": false
+      }
+    }
+  ],
+  "rows": [
+    {
+      "variant": "human",
+      "episode": "datasets/avoidance_trials/controls/human_repaired01",
+      "frames": 279,
+      "physical_success": true,
+      "avoidance_audit_accepted": true,
+      "contact_causality_passed": true,
+      "exact_baseline_minimum_m": 0.0,
+      "required_m": 0.02,
+      "actual_minimum_m": 0.03215194465025571,
+      "actual_prepress_path_m": 0.936084857137683,
+      "baseline_prepress_path_m": 0.27820805216548805,
+      "maximum_button_displacement_m": 0.002034230623394251,
+      "comparison": "datasets/avoidance_trials/controls/human_repaired01/comparison.mp4",
+      "comparison_frames_decoded": 289,
+      "evidence_sha256": {
+        "result.json": "58be33e5acff12732954254ad7f8a29f2a9c32e108a09bc97edc40e95152f953",
+        "config.json": "ffafee739e62d372e890d5cf05509ffd27b66fa29bdc8cfc2596304532d5c6c5",
+        "records.json": "eff418033c773051163be10c6fa0270790c34b137c5f78b56759b136fad57c4e",
+        "audit.json": "179158d7b3a7700449fc2f429ee356adc3e7973e4a672afec042b4ab21ce118c",
+        "avoidance_audit.json": "21e8d9d2da7f18524495256dec7ae380e540492826f3e96677c034f35c1b87ba",
+        "independent_validation.json": "2e6d16135e0162956491cce423e43f20823ebff911e5a397b34e0e497165ce54",
+        "self_collision_detailed_audit.json": "75e6028fc1c0f038750016e87dcfbd18eeca6a95ab18942cd899cb86d16f2fc5",
+        "fixed_base_hazard_audit.json": "8238f488091a43ec353f4babdc4f8810d72ee0d37ddee6b8ff773b90ba11d63b",
+        "strict_clearance_audit.json": "3d20f8838ef7e67458dd1cd68c4286d4d956bcc19f141e33d5455bec7060b15a",
+        "contact_causality_review.json": "4334468e855f18b34dc8b3962df01f1dfc31c26746cfff6750fad2ac432190a1",
+        "comparison_validation.json": "b52a58992ced45ae2453e4ba911c67b85b2b8834b1e6dd0d81c2dfdbf5fe7918"
+      }
+    },
+    {
+      "variant": "property",
+      "episode": "datasets/avoidance_trials/controls/property_repaired01",
+      "frames": 361,
+      "physical_success": true,
+      "avoidance_audit_accepted": true,
+      "contact_causality_passed": true,
+      "exact_baseline_minimum_m": 0.04051954166886838,
+      "required_m": 0.05,
+      "actual_minimum_m": 0.10104818463297592,
+      "actual_prepress_path_m": 1.3381340618061377,
+      "baseline_prepress_path_m": 0.27820805216548805,
+      "maximum_button_displacement_m": 0.0020344413351267576,
+      "comparison": "datasets/avoidance_trials/controls/property_repaired01/comparison.mp4",
+      "comparison_frames_decoded": 361,
+      "evidence_sha256": {
+        "result.json": "fa3a4ed5f744b699c6a85e75c95dca3f331e52786462004b93183b4f3866028f",
+        "config.json": "ffafee739e62d372e890d5cf05509ffd27b66fa29bdc8cfc2596304532d5c6c5",
+        "records.json": "22af28d40d9721c5f21d7305cc0cc9c978a9854029a99d59e4081a0427d4de6a",
+        "audit.json": "dc49a9e688111995c56c1b6224b3b52a7bcca936750350df73b1325098226a69",
+        "avoidance_audit.json": "2d30b3b5bd8e7ac15932dad1b2cdfed601d459fa3c4b68b434a947f85896983b",
+        "independent_validation.json": "006ddfc2a975570bca45f070b2027d2ed6cb40a27bc58189edc22931ee9e2c3b",
+        "self_collision_detailed_audit.json": "fb3a8d4f288204f8252d9392fff02b82fb673eb9d4d0df2eb57a67afba577933",
+        "fixed_base_hazard_audit.json": "3f0b1a8b883c3cb2239032672880549b372a8ad304913b4e5509351f7600e818",
+        "strict_clearance_audit.json": "f2ab12e5472a0945b6d7b58fca5caa57d006ff81fb6c19c34f77795e802dfa32",
+        "contact_causality_review.json": "1099ba730cc2352c4ae61e103e61a69ebe369554f246b7c58ac06e4f3b2c6ccc",
+        "comparison_validation.json": "59e89faf5118b14ce115eb0ce2ac0371709d1a1ed2217b2a88bcf50f46f9c23d"
+      }
+    },
+    {
+      "variant": "robot",
+      "episode": "datasets/avoidance_trials/controls/robot_repaired01",
+      "frames": 319,
+      "physical_success": true,
+      "avoidance_audit_accepted": true,
+      "contact_causality_passed": true,
+      "exact_baseline_minimum_m": 0.0,
+      "required_m": 0.01,
+      "actual_minimum_m": 0.052722201968425655,
+      "actual_prepress_path_m": 0.6372815204004374,
+      "baseline_prepress_path_m": 0.27820805216548805,
+      "maximum_button_displacement_m": 0.0020323374774307013,
+      "comparison": "datasets/avoidance_trials/controls/robot_repaired01/comparison.mp4",
+      "comparison_frames_decoded": 319,
+      "evidence_sha256": {
+        "result.json": "649a756ee53d36ed9faaf9929ff9feda52394e67519ef9a735bc0e1eae2a4f4e",
+        "config.json": "ffafee739e62d372e890d5cf05509ffd27b66fa29bdc8cfc2596304532d5c6c5",
+        "records.json": "9e265506dc86e96f65c92b57aee5ffbbdb49814a638ce916c19751571058366f",
+        "audit.json": "6c6dbdabd4924415f2b26f4c3ea15a777061688b201593b08590b855a71e06fa",
+        "avoidance_audit.json": "c1c8c03330bbb651b913da7864bddca041c60c78ce4321d58e9405a4f6930587",
+        "independent_validation.json": "f5ae8326b7e307404a6d2b0d03c83f2d6facaaecf71aa009af9a6c437c003a48",
+        "self_collision_detailed_audit.json": "57cda232b31c8ecde47064dbff5312263e9e118ed97d428ebb5109578988e780",
+        "fixed_base_hazard_audit.json": "c420d7d406efa940ad2482093d97d7ac8b906480df9497388e0d6f1680114fd3",
+        "strict_clearance_audit.json": "a259f603f97416e2a75e15741448037a1e00bcc9c5bd0b77eb72465c537bbae2",
+        "contact_causality_review.json": "63ea1f2a380a4267241016128c6f84ccc4c5359a79324b08f0a1cb4a09886047",
+        "comparison_validation.json": "c8acb776c1ada482a5bd3290e6432cc55786f5df42b6840a16cebb1af63cd4ee"
+      }
+    }
+  ],
+  "neutral_physics_report": "docs/extensions/controls/passive_knob_repair.json",
+  "failed_evidence": [
+    "reports/controls_physics/neutral_repair_01",
+    "reports/repair_20261022/controls/paired_candidates_01",
+    "datasets/avoidance_trials/controls/property_repaired01/avoidance_audit_rejected_bottom_ring.json"
+  ],
+  "paired_scope_note": "Paired static source geometry uses nominal spawn positions. Dynamic vase settles ~1 mm onto the original table in physical collection; actual source-geometry audit uses its measured pose separately.",
+  "independent_paired_review": {
+    "path": "reports/repair_20261022/controls/paired_final_02/independent_cpu_review.json",
+    "sha256": "12049fb83e53bebe34c21d63a1931fd6c9cf924cf62021ec46bec1d8b8b2c4e8"
+  }
+}
