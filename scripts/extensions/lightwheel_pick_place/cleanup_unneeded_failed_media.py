@@ -54,7 +54,9 @@ for n,ep,r in failed:
   if f.resolve().parent!=ep.resolve() or ep.resolve().parent!=data:raise RuntimeError('Path outside intended dataset root')
   stat=f.stat();files.append({'path':str(f.resolve()),'episode':n,'bytes':stat.st_size,'mtime_ns':stat.st_mtime_ns,'type':'scene' if scene else 'failed_media'})
 manifest={'created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope':'Only unsuccessful, inactive, non-dependent runs; keep every result/trajectory/contact/audit/NPZ and all successful raw data. Keep representative failure videos/scenes, delete their redundant images only. No whole directories removed.','active_preserved':sorted(active_names),'dependency_preserved':sorted(dependency),'representative_failure_media_preserved':sorted(representatives),'planned_files':len(files),'planned_bytes':sum(x['bytes'] for x in files),'files':files,'executed':False}
-out=review/'failed_media_cleanup_20261028.json';out.write_text(json.dumps(manifest,indent=2));print(json.dumps({k:v for k,v in manifest.items() if k in ('planned_files','planned_bytes','active_preserved')}),flush=True)
+out=review/'failed_media_cleanup_20261028.json'
+if out.exists() and read(out).get('executed'):raise FileExistsError('Preserve completed deletion manifest; choose a new manifest filename for future cleanup')
+out.write_text(json.dumps(manifest,indent=2));print(json.dumps({k:v for k,v in manifest.items() if k in ('planned_files','planned_bytes','active_preserved')}),flush=True)
 if '--execute' in sys.argv:
  deleted=[]
  for x in files:
