@@ -20,6 +20,7 @@ SETTING_KEYS = ('device', 'seed', 'torch_threads', 'physics_threads', 'episode_s
 SOURCES = tuple(dict.fromkeys(base.RUNTIME_SOURCES + (
     'scripts/extensions/replicator/execute_failure_retry.py',
     'kitchen_safety/extensions/replicator/retry_physical_execution.py',
+    'kitchen_safety/extensions/replicator/physical_retry_plan.py',
     'third_party/IsaacLab-Arena/isaaclab_arena/utils/isaaclab_utils/simulation_app.py',
     'third_party/IsaacLab-Arena/submodules/IsaacLab/source/isaaclab/isaaclab/app/app_launcher.py',
     'third_party/IsaacLab-Arena/submodules/IsaacLab/source/isaaclab/isaaclab/envs/manager_based_rl_env.py',
@@ -27,6 +28,39 @@ SOURCES = tuple(dict.fromkeys(base.RUNTIME_SOURCES + (
 )))
 SOURCE_FIELDS = ('scene_id','task_id','variant_id','result_path','result_sha256','config_path',
     'config_sha256','source_scene_path','source_scene_sha256')
+PREDICATE_SOURCES = tuple(p for p in base.RUNTIME_SOURCES if
+    '/tasks/' in p or p.endswith(('planned_execution.py', 'task_collection_evidence.py')))
+
+
+def round_two(plan):
+    version = plan.get('schema_version', 1)
+    if version not in (1, 2): raise ValueError('Unsupported retry schema')
+    if version == 2 and plan.get('retry_round') != 2:
+        raise ValueError('Schema 2 is restricted to the authorized second retry round')
+    return version == 2
+
+
+def entry_settings(entry, args):
+    """Only bounded close/release durations may differ for a frozen candidate."""
+    settings = entry.get('execution_overrides', {})
+    if not isinstance(settings, dict) or set(settings) - {'close_seconds', 'release_seconds'}:
+        raise ValueError('Only close/release hold overrides are permitted')
+    if settings and entry.get('retry_schema_version', 1) != 2:
+        raise ValueError('Round 1 hold settings remain frozen')
+    result = copy.copy(args)
+    for key, value in settings.items():
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not np.isfinite(value) or not .1 <= value <= 10.:
+            raise ValueError('Close/release override must be finite and within 0.1..10 seconds')
+        setattr(result, key, value)
+    return result
+
+
+def planning_result_bindings(entry):
+    original=dict(path=entry['result_path'],sha256=entry['result_sha256'])
+    candidate=entry['candidate_planning_result'] if entry.get('retry_schema_version',1)==2 else original
+    result=dict(planning_result_path=candidate['path'],planning_result_sha256=candidate['sha256'])
+    if entry.get('retry_schema_version',1)==2:result['original_planning_result']=original
+    return result
 
 
 def runtime_hashes():
@@ -78,10 +112,104 @@ def validate_prior(row, source, *, number):
     return prior_binding(row)
 
 
+def validate_previous_retry(row, original, history, manifest):
+    """Bind the completed round-1 failure without rereading its large recordings."""
+    result = bound_json(dict(path=row['execution_result_path'], sha256=row['execution_result_sha256']))
+    number = len(history) + 1
+    if (result.get('kind') != 'physical_failure_retry_execution' or result.get('status') != 'complete'
+            or result.get('execution_status') != 'failed' or result.get('task_success') is not False
+            or result.get('executed') is not True or result.get('attempts') != 1
+            or result.get('physical_attempt_number') != number):
+        raise ValueError('Previous retry must be one completed real failed physical trial')
+    for key in SOURCE_FIELDS:
+        if row[key] != original[key]: raise ValueError('Previous retry original source differs: '+key)
+    for key in ('scene_id','task_id','variant_id','config_path','config_sha256','trajectory_path','trajectory_sha256',
+                'source_trajectory_path','source_trajectory_sha256','physical_attempt_number',
+                'executed','task_success','execution_status','attempts','prior_physical_attempts'):
+        if result.get(key) != row.get(key): raise ValueError('Previous retry result differs: '+key)
+    if (result['planning_result_path'] != original['result_path']
+            or result['planning_result_sha256'] != original['result_sha256']
+            or result['prior_physical_attempts'] != history
+            or result['source_trajectory_path'] != original['trajectory_path']
+            or result['source_trajectory_sha256'] != original['trajectory_sha256']):
+        raise ValueError('Previous retry lineage differs')
+    for key in ('retry_plan_path', 'retry_plan_sha256'):
+        if result[key] != manifest[key] or row[key] != manifest[key]:
+            raise ValueError('Previous retry plan binding differs')
+    if sha(local(row['trajectory_path'])) != row['trajectory_sha256']:
+        raise ValueError('Previous retry trajectory changed')
+    if (result.get('source_inputs_unchanged') is not True or result.get('execution_sources_unchanged') is not True
+            or result.get('rendering_enabled') is not False or result.get('render_generation_delta') != 0
+            or result.get('render_state_start', {}).get('passed') is not True
+            or result.get('render_state_end', {}).get('passed') is not True
+            or any(result.get(k) is not False for k in
+                ('runtime_state_setters_used','physical_weld_used','payload_attachment_used'))):
+        raise ValueError('Previous retry provenance/no-render gate differs')
+    for path in PREDICATE_SOURCES:
+        if result['execution_source_sha256_start'].get(path) != sha(ROOT/path):
+            raise ValueError('Original physical success predicate source changed: '+path)
+    return prior_binding(row)
+
+
+def load_grasp_candidate(entry, original_plan, layout):
+    """Read a new cuRobo candidate and verify the unchanged retiming policy."""
+    from .physical_retry_plan import validate_candidate, validate_source
+    candidate = bound_json(entry['candidate_planning_result'])
+    for key in ('scene_id','task_id','variant_id','config_path','config_sha256'):
+        if candidate.get(key) != entry[key]: raise ValueError('Candidate planning identity differs: '+key)
+    if (candidate.get('planning_only') is not True or candidate.get('executed') is not False
+            or candidate.get('attempts') != 1 or candidate.get('per_stage_max_attempts') != 1
+            or candidate.get('scene_settings_changed_once', False) is not False):
+        raise ValueError('Candidate must be one planning-only attempt with unchanged layout')
+    status = entry.get('planning_status')
+    if status == 'failed':
+        if (candidate.get('status') != 'failed' or candidate.get('trajectory_complete') is not False
+                or not entry.get('failure_reason') or entry.get('trajectory_path') is not None
+                or entry.get('trajectory_sha256') is not None):
+            raise ValueError('Failed planning may not supply an executable trajectory')
+        return candidate, layout, None
+    if status != 'generated' or candidate.get('status') != 'generated' or candidate.get('trajectory_complete') is not True:
+        raise ValueError('New candidate must be generated or explicitly planning_failed')
+    if (np.asarray(candidate.get('start_q')).shape != (7,)
+            or not np.allclose(candidate['start_q'], original_plan['start_q'], atol=1e-5, rtol=0)):
+        raise ValueError('New candidate changed the frozen robot start')
+    old_assets = original_plan['composition']['source_paths_sha256']
+    new_assets = candidate['composition']['source_paths_sha256']
+    if old_assets != new_assets: raise ValueError('New candidate changed source asset bindings')
+    for path, digest in new_assets.items():
+        if sha(local(path)) != digest: raise ValueError('Candidate source asset changed: '+path)
+    binding = candidate['artifacts']['trajectory']
+    raw_path, path = local(binding['path']), local(entry['trajectory_path'])
+    if len({raw_path, path, local(entry['source_trajectory_path'])}) != 3:
+        raise ValueError('Raw/retimed/original trajectories must have distinct paths')
+    if sha(raw_path) != binding['sha256'] or sha(path) != entry['trajectory_sha256']:
+        raise ValueError('Candidate raw/retimed trajectory changed')
+    with np.load(raw_path, allow_pickle=False) as archive: raw = dict(archive)
+    with np.load(path, allow_pickle=False) as archive: data = dict(archive)
+    validate_planned_arrays(raw); validate_planned_arrays(data); validate_source(raw)
+    if not np.allclose(raw['q'][0], original_plan['start_q'], atol=1e-5, rtol=0):
+        raise ValueError('New trajectory changed frozen start q')
+    if np.any(raw['gripper'] < 0) or np.any(raw['gripper'] > .8):
+        raise ValueError('Candidate gripper command outside 0..0.8 rad')
+    grip = np.unique(raw['gripper'][np.isin(raw['phase'], ('lift','transfer','lower'))])
+    if (len(grip) != 1 or not np.isclose(grip[0], candidate['nominal_gripper_joint_rad'], atol=1e-8, rtol=0)):
+        raise ValueError('Candidate nominal gripper differs from raw trajectory')
+    validate_candidate(raw, data)
+    if not np.allclose(data['tcp_world'][data['source_vertex_output_index']], raw['tcp_world'], atol=2e-6, rtol=0):
+        raise ValueError('Retimed candidate TCP vertices differ')
+    return candidate, layout, data
+
+
 def load_retry_inputs(entry):
     original = dict(entry, trajectory_path=entry['source_trajectory_path'],
                     trajectory_sha256=entry['source_trajectory_sha256'])
     plan, layout, source_data = base.load_inputs(original)
+    adjustment = entry['adjustment']
+    if not adjustment.get('kind') or not adjustment.get('description'): raise ValueError('Missing adjustment explanation')
+    bound_json(dict(path=adjustment['evidence_path'], sha256=adjustment['evidence_sha256']))
+    if entry.get('retry_schema_version', 1) == 2:
+        if adjustment.get('candidate_count') != 1: raise ValueError('Exactly one new candidate is authorized')
+        return load_grasp_candidate(entry, plan, layout)
     path = local(entry['trajectory_path'])
     if sha(path) != entry['trajectory_sha256']: raise ValueError('Adjusted trajectory changed')
     data = dict(np.load(path, allow_pickle=False)); validate_planned_arrays(data)
@@ -94,21 +222,37 @@ def load_retry_inputs(entry):
             raise ValueError('Timing-only adjustment changed phase endpoints: '+phase)
         if not np.array_equal(np.unique(data['gripper'][new]), np.unique(source_data['gripper'][old])):
             raise ValueError('Timing-only adjustment changed nominal gripper: '+phase)
-    adjustment = entry['adjustment']
-    if not adjustment.get('kind') or not adjustment.get('description'): raise ValueError('Missing adjustment explanation')
-    bound_json(dict(path=adjustment['evidence_path'], sha256=adjustment['evidence_sha256']))
     return plan, layout, data
 
 
 def validate_plan(path):
     path = local(path); plan = json.loads(path.read_text())
     if plan.get('kind') != 'physical_failure_retry_plan': raise ValueError('Explicit failure retry plan required')
+    second = round_two(plan)
     first = rows_by_id(bound_json(plan['source_first_pass_manifest']))
     retakes = rows_by_id(bound_json(plan['source_camera_retake_manifest']))
     selected = rows_by_id(plan)
     failures = {sid for sid, row in first.items() if row['execution_status']=='failed'}
-    if len(first) != 154 or len(failures) != 84 or set(selected) != failures:
+    if len(first) != 154 or len(failures) != 84:
         raise ValueError('Whitelist must equal all 84 frozen first-pass failures')
+    previous = None; previous_rows = {}
+    if second:
+        for key, expected in dict(expected_scene_count=48,candidate_count_per_scene=1,physical_retries_per_scene=1,
+                                  layout_changed=False,success_predicate_changed=False).items():
+            if plan.get(key) != expected: raise ValueError('Round 2 authorization differs: '+key)
+        previous = bound_json(plan['source_previous_retry_manifest'])
+        previous_rows = rows_by_id(previous)
+        if (previous.get('kind') != 'physical_failure_retry' or previous.get('schema_version') != 1
+                or previous.get('stage') != 'complete' or set(previous_rows) != failures
+                or sum(r['execution_status']=='success' for r in previous_rows.values()) != 36
+                or sum(r['execution_status']=='failed' for r in previous_rows.values()) != 48):
+            raise ValueError('Expected completed round 1: 36 successes and 48 failures')
+        for key in ('source_first_pass_manifest','source_camera_retake_manifest'):
+            if previous[key] != plan[key]: raise ValueError('Previous round historical source differs')
+        bound_json(dict(path=previous['retry_plan_path'],sha256=previous['retry_plan_sha256']))
+        failures = {sid for sid, row in previous_rows.items() if row['execution_status']=='failed'}
+    if set(selected) != failures:
+        raise ValueError('Whitelist must equal all '+('48 previous-round' if second else '84 frozen first-pass')+' failures')
     output = []
     for sid, row in selected.items():
         original = first[sid]
@@ -122,14 +266,25 @@ def validate_plan(path):
             history.append(validate_prior(retakes[sid], original, number=2))
             if retakes[sid]['first_pass']['result_sha256'] != original['execution_result_sha256']:
                 raise ValueError('Camera history does not bind first physical attempt')
+        if second:
+            prior = previous_rows[sid]
+            expected = dict(path=prior['execution_result_path'],sha256=prior['execution_result_sha256'])
+            if row.get('previous_retry_result') != expected: raise ValueError('Previous retry result binding differs')
+            history.append(validate_previous_retry(prior, original, history, previous))
         if row['physical_attempt_number'] != len(history)+1: raise ValueError('Physical attempt number does not include camera history')
         entry = copy.deepcopy(row)
+        if second: entry['retry_schema_version'] = 2
         entry.update(retry_plan_path=str(path.relative_to(ROOT)), retry_plan_sha256=sha(path),
             prior_physical_attempts=history, execution_status='pending', attempts=0, executed=False,
             task_success=False, video_path=None, video_sha256=None, planning_status='generated')
+        if second:
+            entry['planning_status'] = row.get('planning_status')
+            if entry['planning_status'] == 'failed': entry['execution_status'] = 'planning_failed'
         load_retry_inputs(entry)
+        # Validate overrides before initialization; durations are applied per row.
+        entry_settings(entry, type('Settings', (), {})())
         output.append(entry)
-    if sum(e['physical_attempt_number']==3 for e in output) != 4:
+    if not second and sum(e['physical_attempt_number']==3 for e in output) != 4:
         raise ValueError('Expected exactly four failed U-banana scenes with two prior physical episodes')
     return plan, output
 
@@ -139,6 +294,10 @@ def validate_entry_lineage(entry, args):
         raise ValueError('Retry plan changed')
     plan = json.loads(local(args.plan).read_text()); row = rows_by_id(plan)[entry['scene_id']]
     bound_json(plan['source_first_pass_manifest']); bound_json(plan['source_camera_retake_manifest'])
+    if round_two(plan):
+        previous = bound_json(plan['source_previous_retry_manifest'])
+        bound_json(dict(path=previous['retry_plan_path'],sha256=previous['retry_plan_sha256']))
+        if entry.get('retry_schema_version') != 2: raise ValueError('Retry schema changed')
     for key, value in row.items():
         if entry.get(key) != value: raise ValueError('Retry entry differs from frozen plan: '+key)
     for binding in entry['prior_physical_attempts']:
@@ -180,6 +339,8 @@ def validate_budget(data, args):
 
 def execute_one(entry, output_root, args):
     """Exactly one physical episode; initialization/runtime failures are retained."""
+    if entry.get('planning_status') != 'generated': raise ValueError('Cannot execute a failed planning candidate')
+    args = entry_settings(entry, args)
     import torch
     from isaaclab.sensors import ContactSensorCfg
     from isaaclab_arena.environments.arena_env_builder import ArenaEnvBuilder
@@ -200,14 +361,20 @@ def execute_one(entry, output_root, args):
         runtime_revision_id=entry.get('runtime_revision_id', 0), runtime_settings=runtime_settings(args),
         execution_source_sha256_start=runtime_hashes(),
         scope='One native PhysX execution of frozen planned joint targets; physical task success measured separately, no safety acceptance.')
+    result.update(planning_result_bindings(entry))
     for key in ('source_trajectory_path','source_trajectory_sha256','adjustment','prior_physical_attempts',
                 'retry_plan_path','retry_plan_sha256'):
         result[key] = copy.deepcopy(entry[key])
+    for key in ('retry_schema_version','candidate_planning_result','previous_retry_result','execution_overrides'):
+        if key in entry: result[key] = copy.deepcopy(entry[key])
     retry_plan = json.loads(local(args.plan).read_text())
     for key in ('source_first_pass_manifest','source_camera_retake_manifest'):
         result[key] = copy.deepcopy(retry_plan[key])
+    if round_two(retry_plan): result['source_previous_retry_manifest'] = copy.deepcopy(retry_plan['source_previous_retry_manifest'])
     result.update(rendering_enabled=False, camera_entities_enabled=False, video_expected=False,
-        scope='One additional real physical test of an adjusted timing-only trajectory. No render/camera/video, no planning or scene change; previous attempts retained.')
+        scope=('One real physical test of one new source-bound grasp/trajectory candidate; frozen layout and original success predicate, '
+               'zero render/camera/video, no runtime planning or object state writes; prior attempts retained.' if round_two(retry_plan) else
+               'One additional real physical test of an adjusted timing-only trajectory. No render/camera/video, no planning or scene change; previous attempts retained.'))
     write_json(out/'result.json', result)
     env = recorder = predicates = None
     original_reset = None

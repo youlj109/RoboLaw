@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 from kitchen_safety.extensions.replicator import retry_physical_execution as execution
 
-TERMINAL = {'success','failed','error'}
+TERMINAL = {'success','failed','error','planning_failed'}
 DEFAULTS = dict(device='cpu', seed=42, physics_threads=8, torch_threads=4,
     episode_seconds=200., max_actions=6000, initial_settle_seconds=5.,
     close_seconds=2., release_seconds=2., final_settle_seconds=3.)
@@ -64,6 +64,11 @@ def select_pending(manifest, args):
     for row in manifest['entries']:
         if row['execution_status'] not in TERMINAL | {'pending','running'}:
             raise ValueError('Unknown execution state')
+        if row['execution_status']=='planning_failed' and (row.get('planning_status') != 'failed'
+                or row.get('attempts') != 0 or row.get('executed') is not False or row.get('task_success') is not False):
+            raise ValueError('Planning failure cannot consume a physical attempt')
+        if row['execution_status'] in {'success','failed','error','running'} and row.get('attempts') != 1:
+            raise ValueError('Attempted scene must consume exactly one physical attempt')
         if row['execution_status']=='pending':
             if row.get('attempts') != 0 or row.get('executed') is not False:
                 raise ValueError('Pending scene has a prior or uncertain attempt')
@@ -96,7 +101,7 @@ def check_existing(manifest, source, args):
 def save(output, manifest):
     manifest['updated_at']=execution.stamp()
     manifest['counts']={s:sum(e['execution_status']==s for e in manifest['entries'])
-        for s in ('pending','running','success','failed','error')}
+        for s in ('pending','running','success','failed','error','planning_failed')}
     manifest['stage']='complete' if not manifest['counts']['pending'] and not manifest['counts']['running'] else 'executing'
     execution.write_json(output/'manifest.json',manifest)
 
@@ -106,18 +111,23 @@ def main(argv=None):
     args.plan=execution.local(args.plan); args.output=execution.local(args.output)
     if args.limit<0: raise ValueError('Negative scene limit')
     plan,source=execution.validate_plan(args.plan); apply_settings(args,plan)
-    for key in ('source_first_pass_manifest','source_camera_retake_manifest'):
+    source_keys = ['source_first_pass_manifest','source_camera_retake_manifest']
+    if execution.round_two(plan): source_keys.append('source_previous_retry_manifest')
+    for key in source_keys:
         oldroot=execution.local(plan[key]['path']).parent
         if args.output==oldroot or args.output.is_relative_to(oldroot):
             raise ValueError('Retry output cannot be inside retained first-pass/camera evidence')
-    candidate=dict(kind='physical_failure_retry',schema_version=1,total=len(source),entries=source,
+    candidate=dict(kind='physical_failure_retry',schema_version=plan.get('schema_version',1),total=len(source),entries=source,
         retry_plan_path=str(args.plan.relative_to(ROOT)),retry_plan_sha256=execution.sha(args.plan),
         source_first_pass_manifest=plan['source_first_pass_manifest'],
         source_camera_retake_manifest=plan['source_camera_retake_manifest'],
         created_at=execution.stamp(),rendering_enabled=False,video_expected=False,one_additional_attempt_per_scene=True,
-        scope='84 frozen first-pass failures, one adjusted timing-only real physical test each; zero cameras/rendering, original layouts/predicates retained.',
+        scope=(f'{len(source)} frozen failures, one candidate per scene and at most one real physical test of each generated candidate; '
+               'planning failures are retained without physical execution, zero cameras/rendering, original layouts/predicates retained.'),
         runtime_revisions=[dict(id=0,created_at=execution.stamp(),source_sha256=execution.runtime_hashes(),
                                settings=execution.runtime_settings(args))])
+    if execution.round_two(plan):
+        candidate.update(retry_round=2, source_previous_retry_manifest=plan['source_previous_retry_manifest'])
     mp=args.output/'manifest.json'
     existing=json.loads(mp.read_text()) if mp.exists() else None
     if existing:
@@ -126,10 +136,12 @@ def main(argv=None):
     manifest=existing or candidate
     selected=select_pending(manifest,args)
     for row in selected:
-        _,_,data=execution.load_retry_inputs(row); execution.validate_budget(data,args)
+        _,_,data=execution.load_retry_inputs(row)
+        execution.validate_budget(data,execution.entry_settings(row,args))
     if args.dry_run:
         print(json.dumps(dict(cpu_preflight_passed=True,whitelist_scenes=len(source),
-            selected_pending=len(selected),scene_ids=[r['scene_id'] for r in selected],
+            selected_pending=len(selected),planning_failed=sum(r['execution_status']=='planning_failed' for r in manifest['entries']),
+            scene_ids=[r['scene_id'] for r in selected],
             runtime_settings=execution.runtime_settings(args),physics_launched=False,
             rendering_launched=False,source_plan_sha256=execution.sha(args.plan)),ensure_ascii=False))
         return

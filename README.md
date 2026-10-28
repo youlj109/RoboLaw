@@ -6,9 +6,9 @@
 
 ## Replicator 154 景：逐景成功与失败
 
-截至 2026-10-28，**154 景全部完成规划；最新实际成功 106 景，仍失败 48 景**。首轮为 70 成功、84 任务失败、0 执行错误，每景均有实际视频；对 84 个失败场景各做一次时序调整和无渲染物理测试，新增 36 景成功、48 景失败、0 执行错误。U 型香蕉 11 景此前另作相机补录，结果为 7 成功、4 失败，单独记录，不改首轮成绩。
+截至 2026-10-28，**154 景均有历史完整规划；最新实际成功 125 景，剩余 29 景**。首轮 70 成功、84 失败；第一轮时序调整新增 36 景成功。第二轮对剩余 48 景各冻结一个抓姿或轨迹候选，29 景规划通过后各做一次无渲染物理测试：**19 成功、10 失败、0 执行异常**；另外 **19 景新规划失败，零次新物理执行**。这些规划失败不否定其保留的历史轨迹，也不等于场景无解。U 型香蕉 11 景此前的相机补录单独保留，不改变首轮成绩。
 
-**[查看最新 154 景结果与失败诊断](docs/extensions/replicator/PHYSICAL_RETRY_ROUND1_20261028.md)** · [最新结果 JSON](configs/extensions/replicator/physical_retry_results_round1_20261028.json) · [保留的首轮结果](docs/extensions/replicator/PHYSICAL_EXECUTION_154_20261028.md) · [发布说明与输入恢复](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md)
+**[查看最新 154 景结果与失败诊断](docs/extensions/replicator/PHYSICAL_RETRY_ROUND2_20261028.md)** · [最新结果 JSON](configs/extensions/replicator/physical_retry_results_round2_20261028.json) · [保留的首轮结果](docs/extensions/replicator/PHYSICAL_EXECUTION_154_20261028.md) · [发布说明与输入恢复](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md)
 
 Git 保存逐景状态与证据 SHA；规划输入和视频另行打包，原始物理状态与接触记录保留本机，不随代码提交。文档中的本机视频路径不是 GitHub 在线视频链接。实际任务成功不等于安全避障验收。
 

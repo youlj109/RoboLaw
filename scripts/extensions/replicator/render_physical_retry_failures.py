@@ -93,11 +93,15 @@ def load_record(manifest_path, row):
         source_paths_sha256=planned['composition']['source_paths_sha256'])
     observation = result
     if result['kind'] == 'physical_failure_retry_execution':
-        prior = result['prior_physical_attempts'][-1]
-        prior_path = bound(prior['result_path'],prior['result_sha256'])
-        observation = json.loads(prior_path.read_text())
-        if observation.get('scene_id') != result['scene_id'] or observation.get('config_sha256') != result['config_sha256']:
-            raise ValueError('Diagnostic observation reference belongs to another scene/config')
+        # Later rounds also contain earlier no-render retries. Walk the frozen
+        # history to the newest actual camera observation, never invent one.
+        for prior in reversed(result['prior_physical_attempts']):
+            prior_path = bound(prior['result_path'],prior['result_sha256'])
+            observation = json.loads(prior_path.read_text())
+            if observation.get('scene_id') != result['scene_id'] or observation.get('config_sha256') != result['config_sha256']:
+                raise ValueError('Diagnostic observation reference belongs to another scene/config')
+            if observation.get('overview') or observation.get('camera_override',{}).get('applied'):break
+        else:raise ValueError('No recorded camera in the physical history')
         binding['observation_reference_path'] = relative(prior_path)
         binding['observation_reference_sha256'] = prior['result_sha256']
     # No-render retry has no camera. Reuse the last hash-bound camera observation

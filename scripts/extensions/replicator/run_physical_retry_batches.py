@@ -16,7 +16,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_PLAN = 'configs/extensions/replicator/physical_retry_round1_20261028.json'
 DEFAULT_OUTPUT = 'exports/replicator_physical_retry_round1_20261028'
-TERMINAL = {'success', 'failed', 'error'}
+TERMINAL = {'success', 'failed', 'error', 'planning_failed'}
 
 
 def read(path):
@@ -35,8 +35,12 @@ def local(value):
 
 def pending_task(manifest):
     rows = manifest['entries']
-    if len(rows) != 84 or len({row['scene_id'] for row in rows}) != 84:
-        raise ValueError('Expected exactly the fixed 84-scene cohort')
+    version = manifest.get('schema_version', 1)
+    if version not in (1, 2) or version == 2 and manifest.get('retry_round') != 2:
+        raise ValueError('Unsupported retry cohort schema/round')
+    expected = 48 if version == 2 else 84
+    if len(rows) != expected or len({row['scene_id'] for row in rows}) != expected:
+        raise ValueError(f'Expected exactly the fixed {expected}-scene cohort')
     for row in rows:
         if row['execution_status'] == 'running':
             raise ValueError('An episode is still running or interrupted: '+row['scene_id'])
@@ -44,6 +48,9 @@ def pending_task(manifest):
             raise ValueError('Unknown execution status')
         if row['execution_status'] == 'pending' and (row.get('attempts') != 0 or row.get('executed') is not False):
             raise ValueError('Pending row already consumed or has uncertain execution')
+        if row['execution_status'] == 'planning_failed' and (version != 2 or row.get('attempts') != 0
+                or row.get('executed') is not False or row.get('planning_status') != 'failed'):
+            raise ValueError('Planning failure cannot consume a physical attempt')
     pending = [row for row in rows if row['execution_status'] == 'pending']
     if not pending:
         return []
@@ -69,11 +76,13 @@ def verify(before, after, chosen):
                 raise ValueError('Unselected scene changed: '+sid)
             continue
         updated = new[sid]
-        if updated['execution_status'] not in TERMINAL or updated.get('attempts') != 1:
+        if updated['execution_status'] not in {'success','failed','error'} or updated.get('attempts') != 1:
             raise ValueError('Selected scene did not finish its single allowed attempt: '+sid)
         for key in ('task_id', 'variant_id', 'config_path', 'config_sha256', 'trajectory_path',
                     'trajectory_sha256', 'source_scene_path', 'source_scene_sha256',
-                    'source_trajectory_path', 'source_trajectory_sha256', 'physical_attempt_number'):
+                    'source_trajectory_path', 'source_trajectory_sha256', 'physical_attempt_number',
+                    'candidate_planning_result','previous_retry_result','execution_overrides','retry_schema_version',
+                    'planning_status','prior_physical_attempts'):
             if row.get(key) != updated.get(key):
                 raise ValueError('Source/attempt identity changed: '+sid+' '+key)
 
@@ -82,6 +91,8 @@ def run(plan, output, max_batches=0, dry_run=False):
     path = output/'manifest.json'
     manifest = read(path)
     plan_hash = digest(plan)
+    if manifest.get('retry_plan_sha256') != plan_hash or local(manifest['retry_plan_path']) != plan:
+        raise ValueError('Batch manifest belongs to a different frozen plan')
     tasks = []
     draft = json.loads(json.dumps(manifest))
     while chosen := pending_task(draft):

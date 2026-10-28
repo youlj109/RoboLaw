@@ -36,6 +36,68 @@ U 型香蕉 11 景因首轮相机被天花板遮挡，另在独立目录各真�
 
 本轮是独立结果集，原 154 景发布快照、首轮视频及已发布视频包不被改写。任务成功、诊断回放和安全避障验收仍分别记录。
 
+## 第二轮剩余 48 景：抓姿与轨迹调整
+
+**第二轮 48 景已结束：29 景各实际测试一次，其中 19 成功、10 失败、0 执行错误；另有 19 景规划失败，零次新物理测试。最新累计 125/154 景通过，剩余 29 景。** 每景只冻结一个抓点、抓姿、夹爪指令或轨迹目标调整候选，保持场景布局及原始任务判据。全部 48 景审计已通过，10 景实际失败已完成逐景视觉复核，19 景规划失败已完成绑定候选结果的只读 CPU 诊断。详见[第二轮完整结果与失败建议](PHYSICAL_RETRY_ROUND2_20261028.md)及[机器可读状态](../../../configs/extensions/replicator/physical_retry_results_round2_20261028.json)。
+
+已生成 **190 张可用状态重建图：95 张主图、95 张有效补图**。逐景复核记录明确列出实际查看的 **164 个图像路径**，覆盖全部 10 景实际失败；可用图片总数不代表每张均已人工查看。补图只改变观察视角和曝光，仍使用同一次真实执行保存的物理状态，没有新增物理执行。原图遮挡、曝光及无法确认的接触原因保留在各景复核说明中。
+
+在[物理执行面板](http://127.0.0.1:8765/#physicalWorkspace)的「重试轮次」选择 **第二轮 · 抓姿与轨迹（48 景）**，再用「所选轮次」筛选全部 48 景、等待规划、规划中、规划失败、待测、运行、成功、失败或错误。切回 **第一轮 · 时序优化（84 景）** 可查看历史结果；「首轮执行结果」仍筛选最初的 154 景。上方播放器仍播放首轮或明确标记的相机补录视频，第二轮无渲染测试没有新执行视频。
+
+第二轮已有 **19 景规划失败，均为 `planning_failed`、`attempts=0`、`executed=false`**；这些景没有本轮物理结果或新诊断图，不能计为本轮实际抓放失败或成功。网页保留其上一轮实际失败，并显示新规划的失败阶段和原因。其余候选的待测、运行及实际结果分别统计；「最新实际成功」只合并已验证的新物理成功，不把规划生成或CPU诊断当作成功。
+
+本轮来源彼此独立：
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 冻结的 48 景调整计划 | `configs/extensions/replicator/physical_retry_round2_20261028.json` |
+| 新规划进度及候选结果 | `reports/replicator_physical_retry_round2_planning_20261028/progress.json` |
+| 实际执行进度 | `exports/replicator_physical_retry_round2_20261028/manifest.json` |
+| 第二轮人工物理标注 | `reports/replicator_dashboard/physical_retry_round2_annotations.json` |
+| 实际失败的状态重建图 | `reports/replicator_physical_retry_round2_diagnostics_20261028/scenes/<scene_id>/` |
+| 19 景规划失败的只读CPU诊断 | `reports/replicator_physical_retry_round2_20261028/planning_failure_diagnostics.json` |
+
+第二轮的「实际失败原因 / 后续调整方案」约 0.65 秒自动保存，绑定第二轮实际结果及配置 SHA；接口为 `GET/POST /api/physical-retry-round2-annotations`。第一轮仍使用原来的 `physical_retry_annotations.json` 和 `/api/physical-retry-annotations`，同一场景跨轮次也不会覆盖标注。只有本轮实际结果已落盘且来源有效时才能保存物理标注；规划失败景没有本轮实际结果，查看其规划诊断及建议即可。来源变化、并发编辑或保存失败时保留草稿，先核对再重试，不会触发新规划或物理执行。
+
+### 第二轮结束后的审计、渲染与发布命令
+
+以下命令在仓库根目录执行，要求第二轮 manifest 为 `complete`。本轮实际执行、审计、失败诊断、视觉复核及结果发布现已完成；以下保留复现入口，发布脚本仍须验证终态来源及逐景绑定，且不会覆盖已存在的发布文件。命令不会再做一轮抓放。
+
+先完成全部 48 景的只读审计，包括 19 景规划失败的零物理尝试检查：
+
+```bash
+bash scripts/arena_python.sh scripts/extensions/replicator/audit_physical_retry_round2.py \
+  --demos exports/replicator_physical_retry_round2_20261028 \
+  --output reports/replicator_physical_retry_round2_20261028/audit_execution.json \
+  --require-complete
+```
+
+仅为本轮 `executed=true` 的实际失败生成诊断图。先做不启动 Kit 的来源与状态预检，再运行渲染：
+
+```bash
+bash scripts/arena_python.sh scripts/extensions/replicator/render_physical_retry_failures.py \
+  --manifest exports/replicator_physical_retry_round2_20261028/manifest.json \
+  --output reports/replicator_physical_retry_round2_diagnostics_20261028 \
+  --dry-run
+
+bash scripts/arena_python.sh scripts/extensions/replicator/render_physical_retry_failures.py \
+  --manifest exports/replicator_physical_retry_round2_20261028/manifest.json \
+  --output reports/replicator_physical_retry_round2_diagnostics_20261028
+```
+
+需要单景时增加 `--scene <scene_id>`；恢复同一最终 manifest 的未完成渲染使用 `--resume`。`--frame-hints <JSON>` 可加入绑定实际状态 SHA 的事件帧。若本轮没有实际执行失败，跳过渲染。诊断图来自保存的实测状态，时间轴停止且没有新物理步；规划失败不参与此渲染。
+
+实际查看所有本轮失败图片后，将逐景可见事实、保守推断和下一步建议保存为 `reports/replicator_physical_retry_round2_20261028/failure_visual_review.json`。每条复核需绑定该景本轮 `execution_result_sha256` 和 `diagnostic_report_sha256`，不能复用上一轮图片冒充本轮观察。无实际失败时可没有该文件，或保留合法的空 `entries`；19 景规划失败另由CPU诊断完整覆盖，不宣称根因确认或场景无解。
+
+最后先核对发布条件，再生成独立的第二轮结果：
+
+```bash
+python3 scripts/extensions/replicator/publish_physical_retry_round2.py --dry-run
+python3 scripts/extensions/replicator/publish_physical_retry_round2.py
+```
+
+发布脚本默认读取上述 manifest、审计、CPU诊断和视觉复核；`--dry-run` 也要求最终来源一致，但不写文件。正式输出为 `configs/extensions/replicator/physical_retry_results_round2_20261028.json` 与 `docs/extensions/replicator/PHYSICAL_RETRY_ROUND2_20261028.md`，包含 154 景最新状态、14 × 11 矩阵、48 景调整结果及 19 景规划诊断。旧 `retry`、旧文档及视频保留，新记录写入 `retry_round2`；已存在的发布文件不会被自动覆盖。任务成功仍不代表安全避障或长期稳定验收。
+
 ## 快速标注调整方案
 
 1. 打开看图标注链接；若已打开旧版，刷新一次。「场景调整 · 看图标注」可按任务、布局、人体／财产／障碍物、标注状态筛选，也可以搜索场景名称。桌面点击「专注标注」可让图片、视角切换、方案和保存状态同屏显示，`Esc` 退出。
