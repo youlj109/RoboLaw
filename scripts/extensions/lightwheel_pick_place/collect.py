@@ -8,6 +8,7 @@ from isaaclab_arena.utils.isaaclab_utils.simulation_app import SimulationAppCont
 parser=get_isaaclab_arena_cli_parser()
 parser.add_argument('--task',default='kitchen_bench_lightwheel_place_lime_in_wooden_bowl_l_shaped_scandinavian',
     help='Arena env id; default B01 lime. Use lemon shelf→plate id for B02.')
+parser.add_argument('--b03-stage-profile',type=Path,help='Explicit per-pick control parameters, fresh planning only; no trajectory/state replay')
 parser.add_argument('--pick-order',nargs='+',help='Execution order only for original parallel multi-pick task; all original picks remain required')
 parser.add_argument('--variant',choices=['base','human','property','robot'],default='base')
 parser.add_argument('--output',required=True)
@@ -233,6 +234,12 @@ with SimulationAppContext(args):
             terminal['state']=snapshot()
             terminal['terms']={n:bool(arr(e.termination_manager.get_term(n))[0]) for n in e.termination_manager.active_terms}
     e._reset_idx=capture_reset
+    stage_profile=(json.loads(args.b03_stage_profile.read_text()) if args.b03_stage_profile else None)
+    if stage_profile:
+        if tuple(task_picks(TASK_SPEC))!=('banana_1','banana_2'):raise RuntimeError('Stage profile is B03 only')
+        if any((args.development_checkpoint,args.development_release_checkpoint,args.replay_prefix_checkpoint,args.replay_second_grasp_prefix,args.cross_variant_prefix)):raise RuntimeError('Stage profile forbids all checkpoint/prefix execution')
+        for item in stage_profile['source_results']:
+            if hashlib.sha256(Path(item['path']).read_bytes()).hexdigest()!=item['sha256']:raise RuntimeError('Stage source provenance changed')
     def reference_placement_goal(state,destination,above):
         ref=placement_refs[PICK]
         if args.placement_goals:
@@ -240,6 +247,7 @@ with SimulationAppContext(args):
             if args.gentle_supported_placement and PICK in ('banana_1','banana_2'):
                 center_offset=Rotation.from_quat(ref['quaternion']).apply(world.object_center)
                 offset_xy=([.045,-.035] if args.variant=='property' and PICK=='banana_2' else [-.035 if PICK=='banana_1' else .035,0.])
+                if stage_profile:offset_xy=stage_profile['stages'][PICK]['center_offset_xy_m']
                 root[:2]=destination[:2]+np.array(offset_xy)-center_offset[:2]
             if args.keep_transport_wrist and PICK=='green_ladle':
                 target=kin.fk(state['q'][ids]).copy();target[:3,3]=root+(state['tcp']-state['lime'][:3])
@@ -426,6 +434,7 @@ with SimulationAppContext(args):
     previous_signal_handlers={sig:signal.signal(sig,preserve_on_external_stop) for sig in (signal.SIGTERM,signal.SIGINT)}
     try:
         for _ in range(20):step(q,grip)
+        if stage_profile:result['explicit_b03_stage_profile']={'path':str(args.b03_stage_profile),'sha256':hashlib.sha256(args.b03_stage_profile.read_bytes()).hexdigest(),'profile':stage_profile,'execution':'Original reset, each segment freshly planned; no saved commands or intermediate-state restoration'}
         initial=snapshot();result['initial_object_states']={name:arr(scene[name].data.root_state_w)[0].tolist() for name in RIGID};result['initial_lime_pose']=initial['lime'].tolist();result['initial_bowl_pose']=initial['wooden_bowl'].tolist();result['pick_object']=PICK;result['destination_object']=DEST;result['pick_objects']=list(task_picks(TASK_SPEC))
         base=arr(robot.data.root_state_w)[0,:7];kin=(LemonKinematics if PICK=='lemon' else DroidKinematics)(base[:3],Rotation.from_quat(base[3:7]).as_euler('xyz',degrees=True)[2])
         result['fk_error_m']=float(np.linalg.norm(kin.fk(initial['q'][ids])[:3,3]-initial['tcp']))
@@ -1000,6 +1009,19 @@ with SimulationAppContext(args):
         for pick_name in remaining:
             pick_action_ranges[PICK]['end']=len(records)
             PICK=pick_name
+            if stage_profile:
+                stage=stage_profile['stages'][PICK]
+                allowed={'gentle_supported_placement','round10_second_placement','release_ramp_steps','dual_first_place_offset_x','dual_second_place_offset_x','dual_first_place_offset_y','align_second_grasp','free_release'}
+                if set(stage['args'])-allowed:raise RuntimeError('Unapproved stage parameter')
+                for key,value in stage['args'].items():setattr(args,key,value)
+                goal_path=Path(stage['placement_goals'])
+                if hashlib.sha256(goal_path.read_bytes()).hexdigest()!=stage['placement_goals_sha256']:raise RuntimeError('Stage goals changed')
+                goal_report=json.loads(goal_path.read_text())
+                if not goal_report['all_passed']:raise RuntimeError('Unverified body goals')
+                args.placement_goals=goal_path;args.placement_joint_goals=None
+                placement_refs=goal_report['goals'];placement_joint_goals={}
+                LimePlanner.joint_second_placement=bool(args.round10_second_placement)
+                result.setdefault('executed_stage_control_profiles',{})[PICK]=stage
             pick_action_ranges[PICK]={'start':len(records)}
             world.bind_pick(PICK)
             contacts=LimeGraspContacts(scene['robot_contacts']._physics_sim_view,cfg.sim.dt,pick_object=PICK,rigid_body_path=pick_rigid_paths[PICK])

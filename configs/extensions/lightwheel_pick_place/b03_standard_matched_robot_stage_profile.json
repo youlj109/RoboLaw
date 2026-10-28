@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "matching_target_variant": "robot",
+  "source_results": [
+    {
+      "path": "/root/autodl-tmp/RoboLaw-lgd/datasets/skill_trials/lightwheel_pick_place/robot_lgd_b03_round17_20261026T225657Z/result.json",
+      "sha256": "53e9f8d8bd5da95ed8657044545669f387508798cc68be22e580b27eb2f7aa44"
+    },
+    {
+      "path": "/root/autodl-tmp/RoboLaw-lgd/datasets/skill_trials/lightwheel_pick_place/robot_lgd_b03_checkpoint_replay_20261027T033440Z/result.json",
+      "sha256": "4032ac95a7342f92e49178d651ab721eb57e19677eac9ad990121dcb1be6db18"
+    }
+  ],
+  "scope": "Reconstruct measured per-pick parameter recipe, not saved trajectory execution. This does not by itself certify equivalence of autonomous grasp generation versus archived command replay. Native and strict comparison gates remain mandatory.",
+  "stages": {
+    "banana_1": {
+      "source": {
+        "path": "/root/autodl-tmp/RoboLaw-lgd/datasets/skill_trials/lightwheel_pick_place/robot_lgd_b03_round17_20261026T225657Z/result.json",
+        "sha256": "53e9f8d8bd5da95ed8657044545669f387508798cc68be22e580b27eb2f7aa44"
+      },
+      "logged_motion_parameters": {
+        "release_retract_z_m": 0.0,
+        "loaded_transfer_time_scale": 1.0,
+        "pre_release_hold_steps": 0,
+        "placement_joint_goals_sha256": "578c85b61a5a15aea11c1ede0a237e4a86835ad95b3762e47ee4670f431c11f0",
+        "placement_goals_sha256": null,
+        "round10_second_placement": false,
+        "align_second_grasp": false,
+        "free_release": false,
+        "place_lower_z_m": null,
+        "first_orientation_reference_sha256": null,
+        "lift_offset_xy_m": [
+          0.0,
+          0.0
+        ],
+        "place_offset_xy_m": [
+          0.0,
+          0.0
+        ],
+        "commanded_initial_lift_m": 0.16,
+        "lower_tcp_offset_source": "measured_at_lift_end",
+        "dual_first_place_offset_x_m": -0.03,
+        "dual_second_place_offset_x_m": 0.075,
+        "dual_first_place_offset_y_m": 0.0,
+        "dual_first_place_lower_z_m": null,
+        "release_ramp_steps": 12
+      },
+      "center_offset_xy_m": null
+    },
+    "banana_2": {
+      "source": {
+        "path": "/root/autodl-tmp/RoboLaw-lgd/datasets/skill_trials/lightwheel_pick_place/robot_lgd_b03_checkpoint_replay_20261027T033440Z/result.json",
+        "sha256": "4032ac95a7342f92e49178d651ab721eb57e19677eac9ad990121dcb1be6db18"
+      },
+      "logged_motion_parameters": {
+        "release_retract_z_m": 0.0,
+        "loaded_transfer_time_scale": 1.0,
+        "pre_release_hold_steps": 0,
+        "gentle_supported_placement": true,
+        "placement_feedback_lower": false,
+        "placement_joint_goals_sha256": null,
+        "placement_goals_sha256": "f290a6ffa38296ff0cb1b5d25ac2010627b1f9c42fa1bf19fc447f6cb560bcc4",
+        "round10_second_placement": true,
+        "align_second_grasp": false,
+        "free_release": false,
+        "place_lower_z_m": null,
+        "first_orientation_reference_sha256": null,
+        "lift_offset_xy_m": [
+          0.0,
+          0.0
+        ],
+        "place_offset_xy_m": [
+          0.0,
+          0.0
+        ],
+        "commanded_initial_lift_m": 0.16,
+        "lower_tcp_offset_source": "measured_at_lift_end",
+        "dual_first_place_offset_x_m": -0.06,
+        "dual_second_place_offset_x_m": 0.06,
+        "dual_first_place_offset_y_m": 0.0,
+        "dual_first_place_lower_z_m": null,
+        "release_ramp_steps": 30
+      },
+      "args": {
+        "gentle_supported_placement": true,
+        "round10_second_placement": true,
+        "release_ramp_steps": 30,
+        "dual_first_place_offset_x": -0.06,
+        "dual_second_place_offset_x": 0.06,
+        "dual_first_place_offset_y": 0.0,
+        "align_second_grasp": false,
+        "free_release": false
+      },
+      "placement_goals": "/root/autodl-tmp/B03-review/planning_round_18.json",
+      "placement_goals_sha256": "f290a6ffa38296ff0cb1b5d25ac2010627b1f9c42fa1bf19fc447f6cb560bcc4",
+      "center_offset_xy_m": [
+        0.035,
+        0
+      ]
+    }
+  }
+}
