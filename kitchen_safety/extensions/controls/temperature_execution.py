@@ -146,12 +146,21 @@ def face_friction_connection(start_pose, config):
     """Optional free-space alignment before the unchanged face-contact target."""
     goal=face_friction_pose(config,0.,0.)
     start=np.asarray(start_pose,dtype=float)
-    if 'friction_alignment_world_m' in config:
-        point=np.asarray(config['friction_alignment_world_m'],dtype=float)
+    if 'friction_connection_world_m' in config:
+        points=config['friction_connection_world_m']
+        if ('friction_alignment_world_m' in config or not isinstance(points,list)
+                or not 1<=len(points)<=2):
+            raise ValueError('Declare one connection policy with at most two bounded references')
+    else:
+        points=[config['friction_alignment_world_m']] if 'friction_alignment_world_m' in config else []
+    for point in points:
+        point=np.asarray(point,dtype=float)
         anchor=np.asarray(config['grasp_tcp_world_m'],dtype=float)
+        limit=(anchor[0]-.02 if 'friction_connection_world_m' in config else goal[0,3]-.02)
         if (point.shape!=(3,) or not np.isfinite(point).all() or
-                np.linalg.norm(point-anchor)>.15 or point[0]>goal[0,3]-.02):
-            raise ValueError('Face alignment must be finite, within 15 cm of the original anchor, and withdrawn by 2 cm')
+                np.linalg.norm(point-anchor)>.15 or point[0]>limit):
+            # These are reference bounds, not collision-distance exemptions.
+            raise ValueError('Face alignment must be finite, within 15 cm of the original anchor, and behind its policy reference bound')
         for pose in pregrasp_connection(start,point,goal[:3,:3]):
             yield pose
         start=np.array(goal,copy=True)

@@ -44,8 +44,18 @@ and oven property/obstacle. The benchmark as a whole is **not accepted**.
   Round170 axial45 degrees also stalls below level three; recorded commanded
   versus measured TCP error reaches11.1 mm during that contact trial. Round172
   forks the tested158 pose family with one top-side circle phase90 degree
-  contact-point change. Its new baseline is running; no human layout or
-  target/margin edits are made.
+  contact-point change; that baseline stalls too. Round174's two-reference
+  connection fails baseline IK. CPU-only rounds176/178/180/182 reject their
+  nominal connections; no physical success is inferred. Round183 checks two
+  real successful baselines offline against the frozen human: both original
+  pinch and phase0 friction manipulation states violate source-mesh distances.
+  This is not unsafe physical playback or proof that every legal pose fails.
+  Rounds184-192 each declare one tool/contact-family candidate and perform
+  one nominal CPU preflight: all fail, with no MotionGen or physical steps.
+  See [contact diagnosis rounds](CONTACT_DIAGNOSIS_183_192.md). Current layout,
+  20 mm execution margin and original level-three goal remain unchanged.
+  Re-entering visual arm-pose revision has been proposed to the user; it is
+  not performed without resolving the earlier frozen-layout instruction.
 - Oven property: an exact-hash approved shader-only lamp derivative previously
   failed the weighted-mass recipe's source guard before planning. The guard now
   verifies all non-material USD content against the original lamp, records
@@ -58,7 +68,7 @@ and oven property/obstacle. The benchmark as a whole is **not accepted**.
   This is a protected-distance violation, not a collision or glass damage.
   Old setup
   failures do not prove physical instability or GPU memory exhaustion.
-- CPU regression suite: 207 passed, plus strict-panel JavaScript contract tests.
+- CPU regression suite: 222 passed, plus strict-panel JavaScript contract tests.
   The local review page now shows a separate strict report snapshot counter.
   Real Firefox desktop/mobile, autosave, reload and conflict recovery pass;
   browser tests use a separate scratch database and do not edit production notes.

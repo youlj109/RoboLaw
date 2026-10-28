@@ -44,6 +44,41 @@ def test_alignment_keeps_original_anchor_and_bounded_pose_steps():
     assert controller_signature(cfg)!=controller_signature(original)
 
 
+def test_two_reference_connection_moves_outward_before_entering_known_contact_ray():
+    cfg=config()
+    cfg['friction_connection_world_m']=[[5.219,-3.27609,1.36588],[5.219,-3.21209,1.28388]]
+    start=face_friction_pose(cfg,0.,0.)
+    start[:3,3]=[5.17,-3.27609,1.36588]
+    poses=[start,*face_friction_connection(start,cfg)]
+    first=next(i for i,p in enumerate(poses) if np.allclose(p[:3,3],cfg['friction_connection_world_m'][0]))
+    assert all(np.allclose(p[1:3,3],start[1:3,3]) for p in poses[:first+1])
+    assert all(any(np.allclose(p[:3,3],point) for p in poses) for point in cfg['friction_connection_world_m'])
+    assert max(np.linalg.norm(b[:3,3]-a[:3,3]) for a,b in zip(poses,poses[1:]))<=.001000001
+    assert np.allclose(poses[-1],face_friction_pose(config(),0.,0.))
+    assert controller_signature(cfg)!=controller_signature(config())
+    cfg['friction_alignment_world_m']=[5.17,-3.22609,1.32588]
+    with pytest.raises(ValueError):list(face_friction_connection(start,cfg))
+
+
+def test_close_reference_is_withdrawn_from_original_anchor_not_offset_tcp():
+    cfg=config()
+    goal=face_friction_pose(cfg,0.,0.)
+    cfg['friction_connection_world_m']=[[5.23,goal[1,3],goal[2,3]]]
+    start=goal.copy();start[0,3]=5.17
+    poses=list(face_friction_connection(start,cfg))
+    assert any(np.allclose(p[:3,3],cfg['friction_connection_world_m'][0]) for p in poses)
+    assert max(p[0,3] for p in poses)<=goal[0,3]
+    cfg['friction_connection_world_m'][0][0]=5.25
+    with pytest.raises(ValueError):list(face_friction_connection(start,cfg))
+
+
+def test_legacy_alignment_keeps_its_original_stricter_reference_bound():
+    cfg=config()
+    goal=face_friction_pose(cfg,0.,0.)
+    cfg['friction_alignment_world_m']=[5.23,goal[1,3],goal[2,3]]
+    with pytest.raises(ValueError):list(face_friction_connection(goal,cfg))
+
+
 @pytest.mark.parametrize('point', [[5.3,-3.22609,1.26588], [5.1,0.,1.3], [float('nan'),0.,0.], [1.,2.]])
 def test_invalid_alignment_fails_closed(point):
     cfg=config()
