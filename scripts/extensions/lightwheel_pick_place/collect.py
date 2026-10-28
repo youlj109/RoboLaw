@@ -1018,6 +1018,11 @@ with SimulationAppContext(args):
                 if hashlib.sha256(goal_path.read_bytes()).hexdigest()!=stage['placement_goals_sha256']:raise RuntimeError('Stage goals changed')
                 goal_report=json.loads(goal_path.read_text())
                 if not goal_report['all_passed']:raise RuntimeError('Unverified body goals')
+                # Re-evaluate the original first-fruit native predicate under
+                # the now-active supported-placement policy, exactly as the
+                # successful prefix branch did before starting the second pick.
+                capture_placement_checkpoint(TASK_SPEC.pick_object)
+                if not result['placement_checkpoints'][TASK_SPEC.pick_object]['passed']:raise RuntimeError('First-fruit native support lost before stage switch')
                 args.placement_goals=goal_path;args.placement_joint_goals=None
                 placement_refs=goal_report['goals'];placement_joint_goals={}
                 LimePlanner.joint_second_placement=bool(args.round10_second_placement)
