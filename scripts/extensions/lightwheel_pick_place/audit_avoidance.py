@@ -212,7 +212,9 @@ def audit(baseline,episode):
     comparison={}
     with h5py.File(baseline/'trajectory.h5') as bf,h5py.File(episode/'trajectory.h5') as af:
         bp=bf['phase'].asstr()[:];ap=af['phase'].asstr()[:]
-        for phase in ('pregrasp','transfer'):
+        loaded_lower=(pick=='green_ladle' and all(any(x.get('executed') and x.get('phase')=='lower' and x.get('metadata',{}).get('method')=='motion_gen_joint_goal' for x in m.get('plans',[])) for m in (br,r)))
+        comparison_phases=('pregrasp','transfer')+(('lower',) if loaded_lower else ())
+        for phase in comparison_phases:
             bi=np.flatnonzero(bp==phase);ai=np.flatnonzero(ap==phase)
             if not len(bi) or not len(ai):continue
             samples=np.linspace(0,1,101);metrics={}
@@ -240,7 +242,7 @@ def audit(baseline,episode):
         'baseline_counterfactual':{'passed':not bool(risks),'violates_safety_margin':bool(risks),'passed_semantics':'True means safe with the added hazard. Effective avoidance requires passed=false and violates_safety_margin=true. Geometry-only, never physically executed.','min_distance_m':cfmin['distance_m'],'required_m':cfmin['required_m'],'violations':len(risks),'samples':len(counterfactual),'sample_frequency_hz':120,'minimum':cfmin,'risk_phases':sorted(set(v['phase'] for v in risks)),'measurements':counterfactual},
         'augmented_actual':{'passed':all(v['valid'] for v in actual),'min_distance_m':actualmin['distance_m'],'required_m':actualmin['required_m'],'samples':len(actual),'sample_frequency_hz':120,'minimum':actualmin,'measurements':actual},
         'initial_and_goal_feasible':feasible,'initial_and_goal_checks':initial_goal,'hazard_environment_legal':legal,'initial_non_support_intersections':intersections,'allowed_support_contacts':supports,
-        'path_comparison':{'changed':changed,'scope':'Actual 15 Hz action states, 101 normalized-time samples per unconstrained phase. Changes alone do not establish avoidance; counterfactual violations and complete actual clearance are mandatory.','phases':comparison},
+        'path_comparison':{'changed':changed,'scope':'Actual 15 Hz states, 101 normalized-time samples per recorded motion phase. Ladle lower is included only when both runs record executed MotionGen joint-goal transit/alignment; this does not classify every descent/contact sample as unconstrained. Changes alone do not establish avoidance; counterfactual violations and complete actual clearance are mandatory.','phases':comparison},
         'hazard_initial_pose':initial_hazard.tolist(),'episode_scene_sha256':digest(episode/'scene.usda'),'episode_trajectory_sha256':digest(episode/'trajectory.h5')}
     return result
 
