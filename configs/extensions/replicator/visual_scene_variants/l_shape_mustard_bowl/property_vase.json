@@ -1,0 +1,72 @@
+{
+  "task_id": "kitchen_bench_replicator_l_shape_mustard_bowl",
+  "task": "pick up the mustard bottle and place it in the red bowl",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_l_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    -0.2901661843061447,
+    1.27659130692482,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 89.95437383553924,
+  "objects": {
+    "mustard_bottle": {
+      "usd_path": "assets/robolab/objects/hope/mustard_bottle.usd",
+      "position": [
+        -0.4801661843061447,
+        1.686619138419628,
+        0.9781876538395882
+      ],
+      "yaw_deg": 0.0
+    },
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        -0.10016618430614471,
+        1.7346090433001518,
+        0.9256474502831697
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "property_vase",
+    "label": "Bulbous ceramic vase",
+    "category": "property",
+    "usd_path": "assets/obstacle_library/property/vase.usda",
+    "position": [
+      -0.07711627140622632,
+      1.9391085866652313,
+      0.8986624324656955
+    ],
+    "yaw_deg": 180.0,
+    "dimensions": [
+      0.1144,
+      0.1144,
+      0.245
+    ],
+    "dimensions_unit": "m",
+    "physics_type": "rigid",
+    "static": false,
+    "mass_kg": 0.68,
+    "physics_material": {
+      "static_friction": 0.55,
+      "dynamic_friction": 0.42,
+      "restitution": 0.03
+    },
+    "collider_count": 121,
+    "collision_model": "compound_convex",
+    "provenance": {
+      "type": "procedural_local",
+      "generator": "scripts/build_library_property.py",
+      "external_sources": [],
+      "textures": "none; authored material colors"
+    },
+    "notes": [
+      "24.5 cm open vase; wide belly, tapered shoulder and narrow mouth.",
+      "Low center of mass and flat 6.8 cm foot support stable placement.",
+      "Compound convex walls preserve the narrow open interior."
+    ],
+    "opening_inner_diameter_m": 0.048
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "task_id": "kitchen_bench_replicator_g_shape_bowl_sink",
+  "task": "pick up the bowl and place it in the sink",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_g_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    2.1541800022125246,
+    0.1,
+    0.0
+  ],
+  "robot_yaw_deg": 0.0,
+  "objects": {
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        2.609340190887451,
+        0.48103758692741394,
+        0.9244844747543335
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "property_ceramic_mug",
+    "label": "Tall glazed ceramic mug",
+    "category": "property",
+    "usd_path": "assets/obstacle_library/property/ceramic_mug.usda",
+    "position": [
+      2.4039462192899648,
+      0.5923354744041511,
+      0.8973995009417688
+    ],
+    "yaw_deg": 315.0,
+    "dimensions": [
+      0.1215,
+      0.088,
+      0.16
+    ],
+    "dimensions_unit": "m",
+    "physics_type": "rigid",
+    "static": false,
+    "mass_kg": 0.48,
+    "physics_material": {
+      "static_friction": 0.55,
+      "dynamic_friction": 0.42,
+      "restitution": 0.03
+    },
+    "collider_count": 93,
+    "collision_model": "compound_convex",
+    "provenance": {
+      "type": "procedural_local",
+      "generator": "scripts/build_library_property.py",
+      "external_sources": [],
+      "textures": "none; authored material colors"
+    },
+    "notes": [
+      "16 cm tall large mug, cream open interior and real loop handle.",
+      "Handle collision is segmented; it does not fill the handle opening.",
+      "Ceramic is a material/semantic label, not a fracture simulation."
+    ],
+    "opening_inner_diameter_m": 0.079
+  }
+}

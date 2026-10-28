@@ -1,0 +1,217 @@
+{
+  "method": "FCL triangle mesh checks using the actual connected human hand skin and original cabinet colliders; discrete angular samples only",
+  "hand_gap_bounds_m": [
+    [
+      2.267925975297457,
+      -0.1607730718775744,
+      0.6204667115211487
+    ],
+    [
+      2.4099294796740476,
+      0.03757538123741888,
+      0.723949375152588
+    ]
+  ],
+  "hand_clear_bounds_m": [
+    [
+      2.049336514569865,
+      -0.456391178958853,
+      0.6646890664100648
+    ],
+    [
+      2.1535992130065944,
+      -0.25422674007078294,
+      0.8159213089942933
+    ]
+  ],
+  "open_door_to_gap_hand": {
+    "valid": true,
+    "distance_m": 0.027745560113078157,
+    "required_m": 0.002,
+    "slack_m": 0.02574556011307816,
+    "robot_part": "original_MPFB_hand_and_fingers",
+    "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+    "intersecting": false
+  },
+  "open_door_to_withdrawn_hand": {
+    "valid": true,
+    "distance_m": 0.13240195260575544,
+    "required_m": 0.002,
+    "slack_m": 0.13040195260575543,
+    "robot_part": "original_MPFB_hand_and_fingers",
+    "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+    "intersecting": false
+  },
+  "closed_door_to_gap_hand_counterfactual": {
+    "valid": false,
+    "distance_m": 0.0,
+    "required_m": 0.0,
+    "slack_m": 0.0,
+    "robot_part": "original_MPFB_hand_and_fingers",
+    "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+    "intersecting": true
+  },
+  "closed_door_to_withdrawn_hand": {
+    "valid": true,
+    "distance_m": 0.14954435813314162,
+    "required_m": 0.002,
+    "slack_m": 0.14754435813314162,
+    "robot_part": "original_MPFB_hand_and_fingers",
+    "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+    "intersecting": false
+  },
+  "discrete_closure_checks": [
+    {
+      "angle_deg": 0.0,
+      "gap": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.002,
+        "slack_m": -0.002,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": true
+      },
+      "clear": {
+        "valid": true,
+        "distance_m": 0.14954435813314162,
+        "required_m": 0.002,
+        "slack_m": 0.14754435813314162,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": false
+      }
+    },
+    {
+      "angle_deg": 5.0,
+      "gap": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.002,
+        "slack_m": -0.002,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": true
+      },
+      "clear": {
+        "valid": true,
+        "distance_m": 0.14926683647624608,
+        "required_m": 0.002,
+        "slack_m": 0.14726683647624608,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": false
+      }
+    },
+    {
+      "angle_deg": 10.0,
+      "gap": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.002,
+        "slack_m": -0.002,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": true
+      },
+      "clear": {
+        "valid": true,
+        "distance_m": 0.14809737350771815,
+        "required_m": 0.002,
+        "slack_m": 0.14609737350771815,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": false
+      }
+    },
+    {
+      "angle_deg": 15.0,
+      "gap": {
+        "valid": false,
+        "distance_m": 0.0,
+        "required_m": 0.002,
+        "slack_m": -0.002,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": true
+      },
+      "clear": {
+        "valid": true,
+        "distance_m": 0.14579447709368173,
+        "required_m": 0.002,
+        "slack_m": 0.14379447709368173,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": false
+      }
+    },
+    {
+      "angle_deg": 20.0,
+      "gap": {
+        "valid": true,
+        "distance_m": 0.008688948859624382,
+        "required_m": 0.002,
+        "slack_m": 0.006688948859624382,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": false
+      },
+      "clear": {
+        "valid": true,
+        "distance_m": 0.1423832006643763,
+        "required_m": 0.002,
+        "slack_m": 0.1403832006643763,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": false
+      }
+    },
+    {
+      "angle_deg": 25.0,
+      "gap": {
+        "valid": true,
+        "distance_m": 0.01828682039424396,
+        "required_m": 0.002,
+        "slack_m": 0.016286820394243957,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": false
+      },
+      "clear": {
+        "valid": true,
+        "distance_m": 0.13790170703997667,
+        "required_m": 0.002,
+        "slack_m": 0.13590170703997667,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": false
+      }
+    },
+    {
+      "angle_deg": 30.0,
+      "gap": {
+        "valid": true,
+        "distance_m": 0.027745560113078157,
+        "required_m": 0.002,
+        "slack_m": 0.02574556011307816,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": false
+      },
+      "clear": {
+        "valid": true,
+        "distance_m": 0.13240195260575544,
+        "required_m": 0.002,
+        "slack_m": 0.13040195260575543,
+        "robot_part": "original_MPFB_hand_and_fingers",
+        "obstacle": "/World/kitchen/Asset/Base_east_sink/Doors/Door_L/Panel_L",
+        "intersecting": false
+      }
+    }
+  ],
+  "current_hand_pose_clear_of_open_door": true,
+  "counterfactual_closure_would_hit_hand": true,
+  "withdrawn_hand_clear_at_all_sampled_angles": true,
+  "continuous_sweep_verified": false,
+  "physics_verified": false
+}

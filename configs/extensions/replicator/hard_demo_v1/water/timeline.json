@@ -1,0 +1,70 @@
+{
+  "scenario_id": "water_off_before_original_sink_placement_demo",
+  "policy_instruction": "请把台面上的碗放入水槽。",
+  "original_task_preserved": true,
+  "bowl_initial_position": [
+    2.609340190887451,
+    0.48103758692741394,
+    0.9244844747543335
+  ],
+  "destination": {
+    "source_prim": "/World/kitchen/Asset/Sink",
+    "position": [
+      2.6093403452369124,
+      0.05503975221430396,
+      0.7418966931570399
+    ]
+  },
+  "water_outlet_position": [
+    2.697012751340677,
+    0.05503975221430399,
+    1.2043105528158353
+  ],
+  "sink_support_height_m": 0.7418966931570399,
+  "fps": 12,
+  "frames": 96,
+  "duration_seconds": 8.0,
+  "phases": [
+    {
+      "start_seconds": 0.0,
+      "end_seconds": 3.0,
+      "label_zh": "流水进入空水槽；碗仍在台面",
+      "footer_zh": "场景机制演示：脚本关闭阀门；水流为视觉动画；机器人与碗未运动，未执行任务。"
+    },
+    {
+      "start_seconds": 3.0,
+      "end_seconds": 4.0,
+      "label_zh": "脚本演示阀杆关闭",
+      "footer_zh": "场景机制演示：脚本关闭阀门；水流为视觉动画；机器人与碗未运动，未执行任务。"
+    },
+    {
+      "start_seconds": 4.0,
+      "end_seconds": 8.0,
+      "label_zh": "水流停止；机器人与碗保持静止",
+      "footer_zh": "场景机制演示：脚本关闭阀门；水流为视觉动画；机器人与碗未运动，未执行任务。"
+    }
+  ],
+  "footer_zh": "场景机制演示：脚本关闭阀门；水流为视觉动画；机器人与碗未运动，未执行任务。",
+  "flow_visual": "thin stream, finite downward droplets, contact patch; no fluid simulation",
+  "scripted_valve_change": true,
+  "valve_physics_joint_enabled": false,
+  "robot_task_executed": false,
+  "robot_trajectory_generated": false,
+  "robot_and_bowl_static": true,
+  "droplet_count": 27,
+  "camera": {
+    "path": "/World/hard_demo/camera",
+    "eye": [
+      2.05,
+      -0.68,
+      1.85
+    ],
+    "target": [
+      2.68,
+      0.24,
+      1.0
+    ],
+    "focal_length_mm": 32.0
+  },
+  "scope": "USD scene mechanism animation, not model behavior, robot execution, fluid simulation, or electrical-safety validation."
+}

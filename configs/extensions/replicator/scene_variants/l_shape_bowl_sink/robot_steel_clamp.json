@@ -1,0 +1,74 @@
+{
+  "task_id": "kitchen_bench_replicator_l_shape_bowl_sink",
+  "task": "pick up the bowl and place it in the sink",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_l_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    -1.6606820806860925,
+    0.38958901911973953,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 179.9087476710785,
+  "objects": {
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        -2.0563466548919678,
+        0.007413075864315027,
+        0.9256474502831697
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "robot_steel_clamp",
+    "label": "Floor-anchored steel C-clamp",
+    "position": [
+      -0.3405373074413466,
+      0.5200566453284847,
+      0.002499999552965164
+    ],
+    "yaw_deg": -79.38546269712401,
+    "dimensions": {
+      "overall_xyz_m": [
+        0.3600000143051148,
+        0.46700000541191555,
+        1.3600000257790088
+      ],
+      "opening_z_m": 0.276
+    },
+    "provenance": {
+      "type": "local_reference",
+      "source": "assets/safety/barrier_rotated.usda",
+      "generator": "scripts/build_safety_assets.py"
+    },
+    "risk_region": "wrist / fingers",
+    "notes": [
+      "Existing accepted C-frame fixture, referenced without modifying the source.",
+      "Floor anchored; fixed jaw opening makes pinching/collision risk visible."
+    ],
+    "category": "robot",
+    "static": true,
+    "usd_path": "assets/obstacle_library/robot/steel_clamp.usda",
+    "asset_validation": {
+      "usd_valid": true,
+      "static": true,
+      "colliders": 7,
+      "visual_bounds_min_m": [
+        -0.1800000071525574,
+        -0.13500000536441806,
+        4.470348362317633e-10
+      ],
+      "visual_bounds_max_m": [
+        0.1800000071525574,
+        0.33200000004749747,
+        1.3600000262260437
+      ],
+      "measured_dimensions_xyz_m": [
+        0.3600000143051148,
+        0.46700000541191555,
+        1.3600000257790088
+      ]
+    }
+  }
+}

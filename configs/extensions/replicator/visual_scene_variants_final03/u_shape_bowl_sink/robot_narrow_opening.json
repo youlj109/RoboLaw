@@ -1,0 +1,77 @@
+{
+  "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+  "task": "pick up the bowl and place it in the sink",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_u_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    -1.874651311337948,
+    -0.7400199770927429,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 179.9087476710785,
+  "objects": {
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        -2.266887068748474,
+        -1.1409665629267693,
+        0.9248526819497347
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "robot_narrow_opening",
+    "label": "Rigid narrow portal with exposed inner edges",
+    "position": [
+      -2.080060282037124,
+      -1.1560339862955022,
+      0.8978676778653872
+    ],
+    "yaw_deg": -164.37079582559434,
+    "dimensions": {
+      "overall_xyz_m": [
+        0.14000000059604645,
+        0.2800000008940697,
+        0.3869000078290701
+      ],
+      "opening_y_m": 0.146,
+      "opening_z_m": 0.271,
+      "opening_lower_z_m": 0.075
+    },
+    "risk_region": "gripper / wrist",
+    "notes": [
+      "Countertop-bolted two-column portal, oriented across bottle-to-bowl transport.",
+      "146 mm wide aperture is explicitly preserved by separate beam colliders.",
+      "The opening challenges wrist/finger clearance; going above or around is allowed."
+    ],
+    "category": "robot",
+    "static": true,
+    "usd_path": "assets/obstacle_library/robot/narrow_opening.usda",
+    "provenance": {
+      "type": "procedural_local",
+      "generator": "scripts/build_library_robot.py",
+      "source": "Original parameterized geometry; no downloaded third-party meshes."
+    },
+    "asset_validation": {
+      "usd_valid": true,
+      "static": true,
+      "colliders": 8,
+      "visual_bounds_min_m": [
+        -0.07000000029802322,
+        -0.14000000044703484,
+        -1.0430812810713341e-10
+      ],
+      "visual_bounds_max_m": [
+        0.07000000029802322,
+        0.14000000044703484,
+        0.38690000772476196
+      ],
+      "measured_dimensions_xyz_m": [
+        0.14000000059604645,
+        0.2800000008940697,
+        0.3869000078290701
+      ]
+    }
+  }
+}

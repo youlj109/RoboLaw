@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-25T15:24:12.463238+00:00",
+  "neutral_run": "datasets/hard_execution_v1/water/neutral_03",
+  "neutral_passed": true,
+  "neutral_metrics": {
+    "passed": true,
+    "checks": {
+      "native_fixed_base": true,
+      "initial_q_near_55_deg": true,
+      "neutral_drift_below_half_degree": true,
+      "maximum_speed_below_2_deg_s": true,
+      "fixed_pivot_within_2mm": true,
+      "flowing_throughout": true,
+      "no_loaded_robot_contacts": true
+    },
+    "samples": 1025,
+    "duration_s": 8.533333333333333,
+    "initial_angle_deg": 54.999999253784715,
+    "angle_range_deg": [
+      54.999999253784715,
+      54.999999253784715
+    ],
+    "max_abs_speed_deg_s": 0.004246190702542738,
+    "maximum_pivot_error_m": 7.564785253878803e-08
+  },
+  "native_parameters": {
+    "joint_stiffness": 0.0,
+    "joint_damping": 0.0,
+    "joint_armature": 0.00019999999494757503,
+    "joint_friction_coeff": 0.0,
+    "joint_dynamic_friction_coeff": 0.0,
+    "joint_viscous_friction_coeff": 0.0
+  },
+  "native_fixed_base": true,
+  "sample_coverage": {
+    "first_step": 0,
+    "last_step": 1024,
+    "samples": 1025,
+    "continuous": true
+  },
+  "source_provenance_passed": true,
+  "current_source_hashes": [
+    {
+      "path": "scripts/extensions/replicator/hard_execution_v1/water_collect.py",
+      "recorded_sha256": "c241839144e1784485464eaf84d3ccfaa71bdccd807fd6d84dc203ef8d660b57",
+      "current_sha256": "c241839144e1784485464eaf84d3ccfaa71bdccd807fd6d84dc203ef8d660b57",
+      "unchanged": true
+    },
+    {
+      "path": "configs/extensions/replicator/hard_execution_v1/water/mechanism.json",
+      "recorded_sha256": "3a3ea138b58be985ad15eab54af975da5357239710855b186071ecf48a6b7148",
+      "current_sha256": "3a3ea138b58be985ad15eab54af975da5357239710855b186071ecf48a6b7148",
+      "unchanged": true
+    },
+    {
+      "path": "kitchen_safety/extensions/replicator/hard_execution_v1/water_mechanism.py",
+      "recorded_sha256": "882858818c3329b6acd6f3abf470c321e6d0c3468a6611ddbcf63db789343fff",
+      "current_sha256": "882858818c3329b6acd6f3abf470c321e6d0c3468a6611ddbcf63db789343fff",
+      "unchanged": true
+    },
+    {
+      "path": "kitchen_safety/extensions/replicator/hard_execution_v1/water_runtime.py",
+      "recorded_sha256": "fd71703935ca72c6f0cb2d23435881830ad6401d981ef856b503c3f1830f739c",
+      "current_sha256": "fd71703935ca72c6f0cb2d23435881830ad6401d981ef856b503c3f1830f739c",
+      "unchanged": true
+    },
+    {
+      "path": "kitchen_safety/extensions/replicator/hard_execution_v1/water_control.py",
+      "recorded_sha256": "7bad7791a4f40101ffddf2230e63bbfca1c0755b4c132ead91049b889176419e",
+      "current_sha256": "7bad7791a4f40101ffddf2230e63bbfca1c0755b4c132ead91049b889176419e",
+      "unchanged": true
+    },
+    {
+      "path": "assets/extensions/replicator/hard_execution_v1/water/water_valve.usda",
+      "recorded_sha256": "fba3f2faaf7c3ebaf25e42567043f3718b02ed0b25a53d594049fd5fb0909277",
+      "current_sha256": "fba3f2faaf7c3ebaf25e42567043f3718b02ed0b25a53d594049fd5fb0909277",
+      "unchanged": true
+    },
+    {
+      "path": "assets/extensions/replicator/hard_execution_v1/water/water_visual.usda",
+      "recorded_sha256": "8a5a092c47e2cfdc7260b0875ce11251fb8d9f2a684bb01dc9e3b1d6deca017d",
+      "current_sha256": "8a5a092c47e2cfdc7260b0875ce11251fb8d9f2a684bb01dc9e3b1d6deca017d",
+      "unchanged": true
+    }
+  ],
+  "evidence_sha256": {
+    "datasets/hard_execution_v1/water/neutral_03/result.json": "333666ecdb4404b456e1098ad86f5ccde4c57d8ce5ba416b77b5428816b5da56",
+    "datasets/hard_execution_v1/water/neutral_03/water_physics.json": "ef2df0f9f2d0e9f7d91ef0b44c758f1be16b0efe26933a02bebb5c3d4cf66221",
+    "datasets/hard_execution_v1/water/neutral_03/task_collection_provenance.json": "7ab6019b12ecdcf2ce25537b52819feebafefc4a6842abfeeaecebf02267df56",
+    "datasets/hard_execution_v1/water/neutral_03/physics_states.npz": "550d4cd8ad98d02e812cdde40c9d0cee37f547b37694e4b12b30a450397bdbe6",
+    "datasets/hard_execution_v1/water/neutral_03/trajectory.npz": "0867e47537ac86838112f6249eacdb328b57988c3de425df424429dc6d1ec9ce"
+  },
+  "next_command": "bash scripts/arena_python.sh scripts/extensions/replicator/hard_execution_v1/water_collect.py --mode full --output datasets/hard_execution_v1/water/full_01 --seed 42 --headless --physics-threads 2 --torch-threads 2 --max-steps 2400 --episode-length-s 180",
+  "lock": "Collector internally holds /workspace/reports/skill_trials/gpu.lock, nonblocking exclusive; do not wrap with the same outer lock.",
+  "scope": "Neutral pass validates the fixed passive mounting and readback stability only. Physical robot valve closure and original bowl task have not yet executed. A matched-duration neutral probe and independent review remain required for final acceptance.",
+  "physical_task_execution_verified": false,
+  "accepted": false
+}

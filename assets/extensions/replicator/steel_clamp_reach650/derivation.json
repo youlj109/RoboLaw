@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "asset_type": "robot_steel_clamp",
+  "asset_variant": "reach650",
+  "source_asset": "assets/obstacle_library/robot/steel_clamp.usda",
+  "source_asset_sha256": "460d0db9c29c084ba8bc06d8fb11f866ec8fa005b46d39b9bb1c86054f5e5bb8",
+  "source_layers_sha256": {
+    "assets/obstacle_library/robot/steel_clamp.usda": "460d0db9c29c084ba8bc06d8fb11f866ec8fa005b46d39b9bb1c86054f5e5bb8",
+    "assets/safety/barrier.usda": "fd53940831712ca5727b08cfec337a93f25d9c499440bf6187e8e4b0f362894a",
+    "assets/safety/barrier_rotated.usda": "fd7dc06e275ae0e6f04d66ec82fb8dd22d061f008d14482f65d0528bc2ce5030"
+  },
+  "output_asset": "assets/extensions/replicator/steel_clamp_reach650/collidable.usda",
+  "output_asset_sha256": "981ee5acb5da7026e3e754f42ff1930afc432528e3186c78798c9f3512ea9771",
+  "reach_m": 0.65,
+  "original_reach_m": 0.33,
+  "beam_root_x_m": -0.03,
+  "beam_length_m": 0.68,
+  "beam_center_x_m": 0.31,
+  "jaw_root_x_m": 0.03,
+  "jaw_length_m": 0.62,
+  "jaw_center_x_m": 0.34,
+  "unchanged": [
+    "AnchoredFoot",
+    "Upright",
+    "bolt/other source colliders",
+    "beam/jaw Z positions and vertical gap",
+    "source materials",
+    "static floor-anchor semantics"
+  ],
+  "override_attributes": {
+    "/Asset/Fixture/Frame/PinchUpperBeam": {
+      "xformOp:scale": [
+        0.6800000071525574,
+        0.05999999865889549,
+        0.05999999865889549
+      ],
+      "xformOp:translate": [
+        0.31,
+        0.0,
+        1.33
+      ]
+    },
+    "/Asset/Fixture/Frame/PinchLowerBeam": {
+      "xformOp:scale": [
+        0.6800000071525574,
+        0.05999999865889549,
+        0.05999999865889549
+      ],
+      "xformOp:translate": [
+        0.31,
+        0.0,
+        0.99
+      ]
+    },
+    "/Asset/Fixture/Frame/UpperJawFace": {
+      "xformOp:scale": [
+        0.6200000047683716,
+        0.06400000303983688,
+        0.004000000189989805
+      ],
+      "xformOp:translate": [
+        0.34,
+        0.0,
+        1.298
+      ]
+    },
+    "/Asset/Fixture/Frame/LowerJawFace": {
+      "xformOp:scale": [
+        0.6200000047683716,
+        0.06400000303983688,
+        0.004000000189989805
+      ],
+      "xformOp:translate": [
+        0.34,
+        0.0,
+        1.022
+      ]
+    },
+    "/Asset/Fixture/Frame/UpperBeamEnd": {
+      "xformOp:translate": [
+        0.651,
+        0.0,
+        1.33
+      ]
+    },
+    "/Asset/Fixture/Frame/LowerBeamEnd": {
+      "xformOp:translate": [
+        0.651,
+        0.0,
+        0.99
+      ]
+    },
+    "/Asset/Fixture/Frame/FrontUpperPaint": {
+      "xformOp:scale": [
+        0.6740000247955322,
+        0.0006000000284984708,
+        0.052000001072883606
+      ],
+      "xformOp:translate": [
+        0.31,
+        -0.0305,
+        1.33
+      ]
+    },
+    "/Asset/Fixture/Frame/FrontLowerPaint": {
+      "xformOp:scale": [
+        0.6740000247955322,
+        0.0006000000284984708,
+        0.052000001072883606
+      ],
+      "xformOp:translate": [
+        0.31,
+        -0.0305,
+        0.99
+      ]
+    }
+  },
+  "implementation_path": "scripts/extensions/replicator/build_extended_steel_clamp.py",
+  "implementation_sha256": "273ccaf430ae4d5e107cb3735fc0e43e69532872cf6a2f91a0c7a53da1faf090",
+  "scope": "Source collider length adaptation only. Native stability, anchor strength, avoidance necessity and task success unverified."
+}

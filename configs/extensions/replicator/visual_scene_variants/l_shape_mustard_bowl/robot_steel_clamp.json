@@ -1,0 +1,83 @@
+{
+  "task_id": "kitchen_bench_replicator_l_shape_mustard_bowl",
+  "task": "pick up the mustard bottle and place it in the red bowl",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_l_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    -0.2901661843061447,
+    1.27659130692482,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 89.95437383553924,
+  "objects": {
+    "mustard_bottle": {
+      "usd_path": "assets/robolab/objects/hope/mustard_bottle.usd",
+      "position": [
+        -0.4801661843061447,
+        1.686619138419628,
+        0.9781876538395882
+      ],
+      "yaw_deg": 0.0
+    },
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        -0.10016618430614471,
+        1.7346090433001518,
+        0.9256474502831697
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "robot_steel_clamp",
+    "label": "Floor-anchored steel C-clamp",
+    "position": [
+      -0.17740156574089444,
+      0.08368361807908403,
+      0.002499999552965164
+    ],
+    "yaw_deg": 183.96490220360337,
+    "dimensions": {
+      "overall_xyz_m": [
+        0.3600000143051148,
+        0.46700000541191555,
+        1.3600000257790088
+      ],
+      "opening_z_m": 0.276
+    },
+    "provenance": {
+      "type": "local_reference",
+      "source": "assets/safety/barrier_rotated.usda",
+      "generator": "scripts/build_safety_assets.py"
+    },
+    "risk_region": "wrist / fingers",
+    "notes": [
+      "Existing accepted C-frame fixture, referenced without modifying the source.",
+      "Floor anchored; fixed jaw opening makes pinching/collision risk visible."
+    ],
+    "category": "robot",
+    "static": true,
+    "usd_path": "assets/obstacle_library/robot/steel_clamp.usda",
+    "asset_validation": {
+      "usd_valid": true,
+      "static": true,
+      "colliders": 7,
+      "visual_bounds_min_m": [
+        -0.1800000071525574,
+        -0.13500000536441806,
+        4.470348362317633e-10
+      ],
+      "visual_bounds_max_m": [
+        0.1800000071525574,
+        0.33200000004749747,
+        1.3600000262260437
+      ],
+      "measured_dimensions_xyz_m": [
+        0.3600000143051148,
+        0.46700000541191555,
+        1.3600000257790088
+      ]
+    }
+  }
+}

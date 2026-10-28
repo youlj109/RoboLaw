@@ -1,0 +1,63 @@
+{
+  "schema_version": 2,
+  "task_id": "kitchen_bench_replicator_g_shape_bowl_sink",
+  "status": "gpu_diagnostic_passed_physical_candidate_pending",
+  "physical_collection_verified": false,
+  "source_layout_sha256": "052d3c155ebf3ccb20b9285812fdd415a0a169c09626ee993ce75237435cdaa5",
+  "source_bowl_sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+  "source_kitchen_sha256": "3c502506532233850196fabe24f03dc488245de72951ce069e1e84f536a9fa01",
+  "grasp_rule": "source_negative_x_upper_wall_rim",
+  "pregrasp_height_m": 0.125,
+  "lift_height_m": 0.15,
+  "release_gap_m": 0.003,
+  "sink_target": {
+    "source_reference": "/World/envs/env_0/kitchen/Sink/BasinBottom",
+    "frame": "world XY offset from original source BasinBottom bounds centre",
+    "offset_xy_m": [
+      0.05,
+      -0.1
+    ],
+    "selection": "First CPU-passing candidate in predeclared squared-distance/X/Y order; 66 visited of 117. Actual-state cuRobo and physical execution still required."
+  },
+  "baseline_and_variants_share_profile": true,
+  "evidence": {
+    "reports/replicator_preparation/g_bowl_sink_placement_cpu01/search_report.json": "1703ffae7dbb5b07a61acd2a8a07f16a90662734842121ea854a316b57299eaa",
+    "reports/replicator_preparation/g_bowl_sink_grasp_cpu01/diagnostic.json": "5ae914bdee0ea544823243c35ffb1de708de79e0c42f5f90fe1c82ff47bbbab0",
+    "reports/replicator_preparation/g_bowl_sink_transfer_cpu01/diagnostic.json": "a80a76027a74053148a3e96bd14b7e045d75145b37007295c601f6e582e05f1f",
+    "reports/replicator_preparation/g_bowl_observed_grasp_cpu03/diagnostic.json": "5799d327f7964fbcb2150ff0c32a60a9ecdeef18c2c385f6e77c8de0f2fe4640",
+    "reports/replicator_preparation/g_bowl_grasp_candidate25_cpu01/diagnostic.json": "8d197c0d72e1bf0581f014d5409c9074381068f3865e9c9f14115f5c46c9a61c",
+    "reports/replicator_preparation/g_bowl_grasp_candidate25_gpu01/diagnostic.json": "165a97271a69ff9076b45f263cac64696c915ab91fe2591152917e17dea7d987"
+  },
+  "no_hazard_used_in_target_selection": true,
+  "retained_checks": [
+    "Original task object/goal/source relations",
+    "All drain and wall collision geometry",
+    "Original 2 mm noncontact clearance and 5 mm robot sphere buffer",
+    "Original source mesh physical-contact and success verification remain required"
+  ],
+  "grasp_revision": "observed_close_candidate_25deg_v2",
+  "source_grasp_geometry_sha256": "6d9f9bef51c12289f0a70c6d2ab0785cc1dc1288136e7e4cf6d080af8f82d806",
+  "contact_region_rule": "unchanged_predeclared_bowl_rim_geometry",
+  "grasp_adjustment": {
+    "rotation_frame": "world",
+    "rotation_axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "rotation_deg": 25.0,
+    "translation_world_m": [
+      0.0,
+      0.0,
+      0.005039543828685633
+    ]
+  },
+  "grasp_selection": {
+    "candidate_index": 4,
+    "rule": "First ascending positive world-X candidate with transformed historical close-point region margin above 1 mm; original FCL/spheres/CUDA all retained",
+    "historical_contact_margin_is_physical_prediction": false,
+    "physical_grasp_verified": false,
+    "source_object_pose_changed": false,
+    "applies_to": "Same fixed source target correction for baseline and future variants; no hazard-specific target change"
+  }
+}

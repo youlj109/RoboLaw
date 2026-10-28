@@ -1,0 +1,88 @@
+{
+  "episode": "datasets/hard_execution_v1/water/full_04",
+  "raw_sha256": "17617795059b9b004edcead4d2fd0d9c7ca2fd28a81bcb1728c8f21e3ce78e7d",
+  "phases": {
+    "valve_turn": {
+      "first_step": 2689,
+      "last_step": 4536,
+      "q_first_deg": 54.93487681514323,
+      "q_last_deg": 0.8776706638884701,
+      "dq_first_deg_s": -2.165781695711581,
+      "dq_last_deg_s": 4.329803337051415,
+      "max_abs_force_n": 3.560974359512329,
+      "last120_as_stop_hold": {
+        "stable": false,
+        "sampled_steps": 120,
+        "required_steps": 120,
+        "angle_min_deg": 0.8776706638884701,
+        "angle_max_deg": 4.114038088057535,
+        "maximum_abs_speed_deg_s": 10.324500289012935,
+        "last_physics_step": 4536
+      }
+    },
+    "valve_release": {
+      "first_step": 4537,
+      "last_step": 4656,
+      "q_first_deg": 0.912732799662496,
+      "q_last_deg": 5.054902195755492,
+      "dq_first_deg_s": 4.259584723515452,
+      "dq_last_deg_s": 4.096465718870385,
+      "max_abs_force_n": 0.0,
+      "last120_as_stop_hold": {
+        "stable": false,
+        "sampled_steps": 120,
+        "required_steps": 120,
+        "angle_min_deg": 0.912732799662496,
+        "angle_max_deg": 5.054902195755492,
+        "maximum_abs_speed_deg_s": 4.259584723515452,
+        "last_physics_step": 4656
+      }
+    },
+    "valve_retreat": {
+      "first_step": 4657,
+      "last_step": 5080,
+      "q_first_deg": 5.089025820848876,
+      "q_last_deg": 18.590501090494502,
+      "dq_first_deg_s": 4.095123159811655,
+      "dq_last_deg_s": 3.5819219554839368,
+      "max_abs_force_n": 0.0,
+      "last120_as_stop_hold": {
+        "stable": false,
+        "sampled_steps": 120,
+        "required_steps": 120,
+        "angle_min_deg": 14.972563547517087,
+        "angle_max_deg": 18.590501090494502,
+        "maximum_abs_speed_deg_s": 3.7168510618770694,
+        "last_physics_step": 5080
+      }
+    },
+    "valve_closed_settle": {
+      "first_step": 5081,
+      "last_step": 5224,
+      "q_first_deg": 18.620335356789116,
+      "q_last_deg": 22.794818911453973,
+      "dq_first_deg_s": 3.5808129035174563,
+      "dq_last_deg_s": 3.427530225050853,
+      "max_abs_force_n": 0.0,
+      "last120_as_stop_hold": {
+        "stable": false,
+        "sampled_steps": 120,
+        "required_steps": 120,
+        "angle_min_deg": 19.33373495521861,
+        "angle_max_deg": 22.794818911453973,
+        "maximum_abs_speed_deg_s": 3.5544560572840234,
+        "last_physics_step": 5224
+      }
+    }
+  },
+  "new_stop_profile": {
+    "maximum_hold_seconds": 10.0,
+    "stable_window_seconds": 1.0,
+    "angle_min_deg": -0.5,
+    "angle_max_deg": 1.0,
+    "maximum_speed_deg_s": 0.01,
+    "release_target_rate_rad_s": 0.05,
+    "purpose": "Remove measured residual valve velocity before gradual actuator-target release; no valve state or physical parameter writes"
+  },
+  "evidence_scope": "Full04 true contact-driven turn reached .877671deg; raw residual opening speed +4.33deg/s coasted to22.7948deg after load vanished. No closed-valve or bowl success claimed. New stop window only tested with recorded data and synthetic boundary checks, no new physics execution."
+}

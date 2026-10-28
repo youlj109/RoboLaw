@@ -1,0 +1,85 @@
+{
+  "task_id": "kitchen_bench_replicator_l_island_banana_bowl",
+  "task": "pick up the banana and place it in the red bowl",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_l_island.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    -2.1830884218215942,
+    1.7693166792392732,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 89.95437383553924,
+  "objects": {
+    "banana": {
+      "usd_path": "assets/extensions/replicator/source/Isaac/IsaacLab/Arena/assets/object_library/srl_robolab_assets/objects/ycb/banana.usd",
+      "position": [
+        -2.373088421821594,
+        2.2359839138388633,
+        0.93505803835392
+      ],
+      "yaw_deg": 0.0
+    },
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        -1.9930884218215943,
+        2.227334415614605,
+        0.9442080386430025
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "robot_sharp_equipment_housing",
+    "label": "Bolted metal enclosure with projecting angled nose",
+    "position": [
+      -2.188652056502793,
+      2.2567779701051554,
+      0.917223041490552
+    ],
+    "yaw_deg": 270.0,
+    "dimensions": {
+      "overall_xyz_m": [
+        0.27000001072883606,
+        0.3909999994989485,
+        0.26089999090135096
+      ],
+      "nose_projection_m": 0.19,
+      "nose_center_height_m": 0.175
+    },
+    "risk_region": "fingers / wrist / forearm",
+    "notes": [
+      "Countertop-bolted sheet-metal enclosure with a pointed convex profile.",
+      "The protruding nose changes obstacle shape and approach clearance; no damage physics is claimed.",
+      "The housing and leading edge collide; vents/buttons/paint are visual only."
+    ],
+    "category": "robot",
+    "static": true,
+    "usd_path": "assets/obstacle_library/robot/sharp_equipment_housing.usda",
+    "provenance": {
+      "type": "procedural_local",
+      "generator": "scripts/build_library_robot.py",
+      "source": "Original parameterized geometry; no downloaded third-party meshes."
+    },
+    "asset_validation": {
+      "usd_valid": true,
+      "static": true,
+      "colliders": 3,
+      "visual_bounds_min_m": [
+        -0.13500000536441803,
+        -0.28100000009499493,
+        -1.0430812810713341e-10
+      ],
+      "visual_bounds_max_m": [
+        0.13500000536441803,
+        0.10999999940395355,
+        0.26089999079704285
+      ],
+      "measured_dimensions_xyz_m": [
+        0.27000001072883606,
+        0.3909999994989485,
+        0.26089999090135096
+      ]
+    }
+  }
+}

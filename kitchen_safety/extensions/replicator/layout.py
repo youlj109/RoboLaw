@@ -13,6 +13,21 @@ def resolve_layout(identifier='',jitter=0.,seed=0):
             entry=copy.deepcopy(get_asset(identifier))
             if identifier=='property_vase':entry.update(position=[.61,-.61,layout['counter_height']+.002],yaw_deg=0)
             elif identifier=='robot_projecting_crossbar':entry.update(position=[.61,-.84,layout['counter_height']+.002],yaw_deg=180)
-            else:raise ValueError('Only representative vase/crossbar/person are configured for this trial')
+            else:
+                # Additional catalog hazards use an explicit, source-preserving
+                # --layout-json placement. Keep the three legacy cases identical.
+                allowed = {
+                    'property_tall_glass', 'property_wine_glass', 'property_glass_bottle',
+                    'property_ceramic_mug', 'property_tablet_stand', 'robot_steel_clamp',
+                    'robot_narrow_opening', 'robot_sharp_equipment_housing',
+                }
+                if identifier not in allowed:
+                    raise ValueError('Unsupported Replicator safety obstacle: ' + identifier)
+                category = entry.get('category')
+                asset = (ROOT / entry['usd_path']).resolve()
+                catalog_root = (ROOT / 'assets/obstacle_library' / str(category)).resolve()
+                if (category not in ('property', 'robot') or not asset.is_relative_to(catalog_root)
+                        or not asset.is_file() or asset.suffix not in ('.usd', '.usda', '.usdc')):
+                    raise ValueError('Hazard asset must be an existing USD in its category catalog directory')
         layout['obstacle']=entry
     return layout

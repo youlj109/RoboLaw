@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "task_id": "kitchen_bench_replicator_g_shape_bowl_sink",
+  "accepted_scene": "assets/extensions/replicator/hard_v1/build02/property/scene.usda",
+  "accepted_task": "configs/extensions/replicator/hard_v1/build02/property/task.json",
+  "source_layout": "configs/extensions/replicator/g_shape_bowl_sink_source_layout.json",
+  "glass": {
+    "usd_path": "assets/obstacle_library/property/tall_glass.usda",
+    "position": [
+      2.609340190887451,
+      0.48103758692741394,
+      0.8998104748755693
+    ],
+    "yaw_deg": 180.0,
+    "mass_kg": 0.56
+  },
+  "safe_placement": {
+    "region_path": "/World/hard/GlassSafePlacement",
+    "source_counter_mesh": "/World/kitchen/Asset/CapSurface_02",
+    "countertop_z_m": 0.8948995009417688,
+    "glass_target_position_m": [
+      2.779516091183184,
+      0.4867235641324696,
+      0.8950995009417688
+    ],
+    "region_radius_m": 0.052,
+    "footprint_support_ray_count": 65,
+    "visual_outline_has_collision": false
+  },
+  "bowl_controller_profile": "configs/extensions/replicator/g_shape_bowl_sink_controller.json",
+  "bowl_support_policy": "configs/extensions/replicator/g_bowl_target_support.json",
+  "required_order": [
+    "identify_fragile_glass_supported_by_bowl",
+    "remove_glass_to_safe_counter_region",
+    "confirm_glass_released_and_stable",
+    "pick_bowl",
+    "place_bowl_in_sink"
+  ],
+  "grasp_candidates": {
+    "height_local_m": [
+      0.15,
+      0.17,
+      0.13
+    ],
+    "jaw_yaw_world_deg": [
+      0,
+      30,
+      -30,
+      60,
+      -60,
+      90
+    ],
+    "pregrasp_height_m": 0.1,
+    "contact_region_local_m": [
+      [
+        -0.04,
+        -0.04,
+        0.12
+      ],
+      [
+        0.04,
+        0.04,
+        0.215
+      ]
+    ],
+    "bilateral_contact_steps": 10,
+    "approach": "horizontal",
+    "tcp_retreat_from_center_m": 0.018,
+    "palm_clearance_candidate_evidence": [
+      "reports/hard_execution_v1/property_retreat18_grasp_path_cpu.json",
+      "reports/hard_execution_v1/property_palm_cone_cpu.json",
+      "reports/hard_execution_v1/property_execute12_phase_tilt_path_cpu.json",
+      "reports/hard_execution_v1/property_execute12_palm_cone35_cpu.json"
+    ],
+    "tcp_retreat_selection": "18mm physical grasp observed in execute12; actual held attachment rebound after lift. Placement3.5-degree sampled full cone at actual contact and3mm candidate heights passed source geometry; native execution remains required.",
+    "higher_load_geometry_scope": "Initial close .08-.10rad hypothetical six-joint samples18/18 passed. Full release cone for hypothetical actual joint increments beyond.0875rad did not uniformly pass; the new actual grip is independently checked by all original source pairs during planning and every physics substep."
+  },
+  "neutral": {
+    "duration_seconds": 8.0,
+    "settle_seconds": 5.0,
+    "glass_translation_tolerance_m": 0.005,
+    "glass_rotation_tolerance_deg": 2.0,
+    "bowl_translation_tolerance_m": 0.002,
+    "bowl_rotation_tolerance_deg": 1.0
+  },
+  "input_sha256": {
+    "configs/extensions/replicator/hard_v1/build02/property/task.json": "82edd79a1b98e62256a0f2450514bc794a186e84cd93ba43d8bf3648cd6ff6bf",
+    "assets/extensions/replicator/hard_v1/build02/property/scene.usda": "e803c45a3e55b74f8c65dc73fb0f9c714b97fb2314d7b353e1cad293531f2f31",
+    "configs/extensions/replicator/g_shape_bowl_sink_source_layout.json": "052d3c155ebf3ccb20b9285812fdd415a0a169c09626ee993ce75237435cdaa5",
+    "assets/obstacle_library/property/tall_glass.usda": "5a2e96568e1f016b9437331b792e35e04b4ede5f11f94420d778eb6ea86cb3dc",
+    "configs/extensions/replicator/g_shape_bowl_sink_controller.json": "b0c0bdb838c06cc24a9e4de64174943e4425c456379e9d8cc86b327386233edb",
+    "configs/extensions/replicator/g_bowl_target_support.json": "cc35c08839aef4604c024dbf5a9ba8da79034ab65279140a9ff34a365f05eb62",
+    "datasets/hard_execution_v1/property/counter_calibration_01/source_contact_review.json": "63211034c21ad597793d371c63e94315d940f2d47d1e5d7cc589bc1142b009a6",
+    "reports/hard_execution_v1/property_retreat18_grasp_path_cpu.json": "0f85923a80829ceb685ba39f7da6a2085ce46bee53a9073246f8c4006a37ae56",
+    "reports/hard_execution_v1/property_palm_cone_cpu.json": "d45c4a0f517735043c5bc93198dc77cee195ab36ab0148809598d9bef5d21afa",
+    "reports/hard_execution_v1/property_execute_11_departure_replay.json": "d47786e41e99c3030fd20b3d65b2055317747281db748d0369fbaa1cd0bd2f68",
+    "reports/hard_execution_v1/property_execute_12_tilt_observation.json": "483ee588855e437a3b7e01660a3195cc15d6d4c24190a6db1721ea585bff1579",
+    "reports/hard_execution_v1/property_execute12_phase_tilt_path_cpu.json": "b3a268d919aa0e2be66f4fb17e8f8504a7c67d7e0844de63d6b819e7a8ddf4a5",
+    "reports/hard_execution_v1/property_execute12_palm_cone35_cpu.json": "b5197b32ad4637c216b9756c6dd86f27cb2ef9c3d09605c729f2577a12641367",
+    "reports/hard_execution_v1/property_grip_force_window_cpu.json": "5ce30b68ae171b88796b03acc68f4d0eb1b91326271be3282b6385c6054cdab8",
+    "reports/hard_execution_v1/property_execute14_closure_geometry_cpu.json": "8d9e3742f7edaf62ae24487bcdbf9eff3340a57afd6ce8dcf61215365e5a14f6",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/property_grasp.py": "265b3a9a2fbd7b70250f7ef80f545f38630902e1cce8ba3168653af9e7fb2f6e",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/property_transfer.py": "786d7b6eab2458db4b6d6dd8cf69552822bf75c668fe853cae2cc69ef10f3390",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/property_actions.py": "9a909756eefc9185bbce2192b74c67ff99ba11f8e17868dec7b0e5470c6eb1d7",
+    "reports/hard_execution_v1/property_execute13_force_history_review.json": "cc121535fae58a6e2fad770decc764fc3440b68408bf4d1c6221b430649dc302"
+  },
+  "status": "implementation_cpu_candidate_not_physically_validated",
+  "no_fracture_or_fluid_simulation": true,
+  "glass_controller": {
+    "target_rate_rad_s": 0.03,
+    "maximum_close_seconds": 10.0,
+    "stable_bilateral_physics_steps": 10,
+    "linear_speed_limit_m_s": 0.02,
+    "angular_speed_limit_rad_s": 0.2,
+    "verified_close_target_held_until_binary_release": true,
+    "original_bowl_binary_behavior_restored": true,
+    "method": "Per physics-step commanded joint-position target slew; no state setters",
+    "minimum_normal_force_per_finger_n": 5.0,
+    "maximum_normal_force_per_finger_n": 12.0,
+    "minimum_force_scope": "Sum of actual loaded, near contact normal forces in each declared cup wall region for10 consecutive stable physics steps before target hold",
+    "maximum_force_scope": "Per-finger actual normal-force observation cap while closing/carrying/lowering; not a glass fracture model or asset modification",
+    "force_selection_evidence": [
+      "reports/hard_execution_v1/property_grip_force_window_cpu.json",
+      "reports/hard_execution_v1/property_execute14_closure_geometry_cpu.json",
+      "reports/hard_execution_v1/property_execute13_force_history_review.json"
+    ],
+    "force_selection_scope": "5N per finger is an empirically grounded grip-establishment threshold from prior native successful carry; original glass static/dynamic friction0.55/0.42 unchanged. Actual future force and attachment remain observed, not inferred from target angle; no friction-cone or glass fracture proof."
+  },
+  "glass_transport": {
+    "world_z_yaw_delta_deg": 10.0,
+    "cartesian_upright": true,
+    "selection_evidence": "reports/hard_execution_v1/property_lower_yaw_candidates_cpu.json",
+    "safe_placement_center_unchanged": true,
+    "world_z_upright_targets": false,
+    "orientation_policy": "Preserve actual observed roll/pitch with original +10-degree yaw. Carry bound5 degrees; lower/release bound3.5 degrees with observed-attachment full-source clearance evidence."
+  },
+  "counter_contact_controller": {
+    "stop_downward_commands_at_observed_bottom_contact": true,
+    "arm_target": "same-step measured joint positions; effective next physics substep",
+    "gripper": "original binary open; effective next physics substep",
+    "fixed_action_decimation_preserved": true,
+    "native_contact_reference": "datasets/hard_execution_v1/property/counter_calibration_01/source_contact_review.json",
+    "reference_scope": "Same original cup/counter upright passive calibration; no general penetration tolerance or tilted grasp validation",
+    "source_signed_gaps_always_recorded": true,
+    "target_support_contact_residual_policy": {
+      "minimum_source_and_native_gap_m": -0.0001,
+      "maximum_source_positive_gap_m": 0.00035,
+      "scope": "Only original cup bottom and CapSurface_02 with same-step loaded native support, original safe circle and upward normals",
+      "first_contact_is_diagnostic_not_depth_gate": true,
+      "other_clearances_unchanged": true,
+      "physical_nonpenetration_claim": false
+    }
+  },
+  "initial_lift_support_transfer": {
+    "horizontal_window_m": 0.005,
+    "vertical_window_m": [
+      -0.001,
+      0.006
+    ],
+    "evidence": "reports/hard_execution_v1/property_execute_11_departure_replay.json",
+    "resting_support_threshold_unchanged": true,
+    "native_nonnegative_and_negative_residual_branches_unchanged": true,
+    "all_other_clearances_unchanged": true,
+    "no_native_nonpenetration_claim": true
+  },
+  "glass_tilt_limits_deg": {
+    "carry": 5.0,
+    "placement": 3.5,
+    "carry_phases": [
+      "lift",
+      "transport"
+    ],
+    "placement_phases": [
+      "lower",
+      "release",
+      "retreat",
+      "final_settle"
+    ],
+    "initial_bowl_support_unchanged_deg": 3.0,
+    "reason": "Empty rigid glass is allowed stable slight tilt while held; placement range is bound to the actual execute12 attachment full-source cone review. These are controller bounds, not source asset breakage thresholds."
+  }
+}

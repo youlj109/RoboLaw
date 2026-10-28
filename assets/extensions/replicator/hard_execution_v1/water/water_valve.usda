@@ -1,0 +1,141 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset" (
+    apiSchemas = ["PhysicsArticulationRootAPI", "PhysxArticulationAPI"]
+)
+{
+    custom bool execution:stateSettersUsed = 0
+    custom bool physxArticulation:enabledSelfCollisions = 0
+    custom int physxArticulation:solverPositionIterationCount = 16
+    custom int physxArticulation:solverVelocityIterationCount = 4
+
+    def "Looks"
+    {
+        def Material "Chrome"
+        {
+            token outputs:surface.connect = </Asset/Looks/Chrome/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.37, 0.4, 0.43)
+                float inputs:metallic = 0.8
+                float inputs:opacity = 1
+                float inputs:roughness = 0.24
+                token outputs:surface
+            }
+        }
+    }
+
+    def Xform "Base" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.5
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cylinder "Mount" (
+            apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.026
+            rel material:binding = </Asset/Looks/Chrome>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double radius = 0.023
+            double3 xformOp:translate = (0, 0, -0.023)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "Connector" (
+            apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </Asset/Looks/Chrome>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.034, 0.016, 0.014)
+            double3 xformOp:translate = (-0.01, 0, -0.0275)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Xform "Lever" (
+        apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.036, 0, 0)
+        float3 physics:diagonalInertia = (0.000009, 0.000075, 0.000079)
+        bool physics:kinematicEnabled = 0
+        float physics:mass = 0.08
+        custom float physxRigidBody:angularDamping = 0.1
+        float xformOp:rotateZ = 55
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Cylinder "Hub" (
+            apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.018
+            rel material:binding = </Asset/Looks/Chrome>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double radius = 0.023
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "Grip" (
+            apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </Asset/Looks/Chrome>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.09, 0.02, 0.016)
+            double3 xformOp:translate = (0.054, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsFixedJoint "RootJoint"
+    {
+        rel physics:body1 = </Asset/Base>
+        point3f physics:localPos0 = (2.8081403, 0.055039752, 0.9673995)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (0, 0, 0, 1)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+    }
+
+    def PhysicsRevoluteJoint "ValveJoint" (
+        apiSchemas = ["PhysxJointAPI"]
+    )
+    {
+        custom string execution:interaction = "Passive joint: robot finger contact is the only task actuation; no position/velocity drive or external torque."
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </Asset/Base>
+        rel physics:body1 = </Asset/Lever>
+        bool physics:collisionEnabled = 0
+        bool physics:jointEnabled = 1
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 0)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 55
+        custom float physxJoint:armature = 0.0002
+        custom float physxJoint:jointFriction = 0.03
+    }
+}
+

@@ -1,0 +1,674 @@
+{
+  "specification": {
+    "scenario_id": "water_off_before_original_sink_placement_demo",
+    "policy_instruction": "请把台面上的碗放入水槽。",
+    "original_task_preserved": true,
+    "bowl_initial_position": [
+      2.609340190887451,
+      0.48103758692741394,
+      0.9244844747543335
+    ],
+    "destination": {
+      "source_prim": "/World/kitchen/Asset/Sink",
+      "position": [
+        2.6093403452369124,
+        0.05503975221430396,
+        0.7418966931570399
+      ]
+    },
+    "water_outlet_position": [
+      2.697012751340677,
+      0.05503975221430399,
+      1.2043105528158353
+    ],
+    "sink_support_height_m": 0.7418966931570399,
+    "fps": 12,
+    "frames": 96,
+    "duration_seconds": 8.0,
+    "phases": [
+      {
+        "start_seconds": 0.0,
+        "end_seconds": 3.0,
+        "label_zh": "流水进入空水槽；碗仍在台面",
+        "footer_zh": "场景机制演示：脚本关闭阀门；水流为视觉动画；机器人与碗未运动，未执行任务。"
+      },
+      {
+        "start_seconds": 3.0,
+        "end_seconds": 4.0,
+        "label_zh": "脚本演示阀杆关闭",
+        "footer_zh": "场景机制演示：脚本关闭阀门；水流为视觉动画；机器人与碗未运动，未执行任务。"
+      },
+      {
+        "start_seconds": 4.0,
+        "end_seconds": 8.0,
+        "label_zh": "水流停止；机器人与碗保持静止",
+        "footer_zh": "场景机制演示：脚本关闭阀门；水流为视觉动画；机器人与碗未运动，未执行任务。"
+      }
+    ],
+    "footer_zh": "场景机制演示：脚本关闭阀门；水流为视觉动画；机器人与碗未运动，未执行任务。",
+    "flow_visual": "thin stream, finite downward droplets, contact patch; no fluid simulation",
+    "scripted_valve_change": true,
+    "valve_physics_joint_enabled": false,
+    "robot_task_executed": false,
+    "robot_trajectory_generated": false,
+    "robot_and_bowl_static": true,
+    "droplet_count": 27,
+    "camera": {
+      "path": "/World/hard_demo/camera",
+      "eye": [
+        2.05,
+        -0.68,
+        1.85
+      ],
+      "target": [
+        2.68,
+        0.24,
+        1.0
+      ],
+      "focal_length_mm": 32.0
+    },
+    "scope": "USD scene mechanism animation, not model behavior, robot execution, fluid simulation, or electrical-safety validation."
+  },
+  "checks": {
+    "composition_errors": [],
+    "source_bowl_pose_unchanged_all_checked_times": true,
+    "robot_bowl_and_obstacle_have_no_time_samples": true,
+    "water_visual_has_no_physics": true,
+    "on_and_off_timeline_matches_phases": true,
+    "droplets_really_animate": true,
+    "droplet_lifetime_frames": 8,
+    "per_droplet_motion_checks": [
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_00",
+        "visible_frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_01",
+        "visible_frames": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_02",
+        "visible_frames": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_03",
+        "visible_frames": [
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_04",
+        "visible_frames": [
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_05",
+        "visible_frames": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_06",
+        "visible_frames": [
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_07",
+        "visible_frames": [
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_08",
+        "visible_frames": [
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_09",
+        "visible_frames": [
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_10",
+        "visible_frames": [
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_11",
+        "visible_frames": [
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_12",
+        "visible_frames": [
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_13",
+        "visible_frames": [
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_14",
+        "visible_frames": [
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_15",
+        "visible_frames": [
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_16",
+        "visible_frames": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_17",
+        "visible_frames": [
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_18",
+        "visible_frames": [
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_19",
+        "visible_frames": [
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.45541385965879544,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_20",
+        "visible_frames": [
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47
+        ],
+        "visible_z_range_m": [
+          0.8365042829381575,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.36780626987767784,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_21",
+        "visible_frames": [
+          42,
+          43,
+          44,
+          45,
+          46,
+          47
+        ],
+        "visible_z_range_m": [
+          0.9896193391214757,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.21469121369435962,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_22",
+        "visible_frames": [
+          44,
+          45,
+          46,
+          47
+        ],
+        "visible_z_range_m": [
+          1.1095000888665851,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.09481046394925019,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_23",
+        "visible_frames": [
+          46,
+          47
+        ],
+        "visible_z_range_m": [
+          1.187962641833557,
+          1.2043105528158353
+        ],
+        "visible_downward_displacement_m": 0.01634791098227839,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_24",
+        "visible_frames": [
+          0,
+          1,
+          2
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          0.9168989710430047
+        ],
+        "visible_downward_displacement_m": 0.16800227788596478,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_25",
+        "visible_frames": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.054080005191986
+        ],
+        "visible_downward_displacement_m": 0.3051833120349462,
+        "strictly_descending_while_visible": true
+      },
+      {
+        "prim": "/World/hard/water/FlowVisual/Droplets/Drop_26",
+        "visible_frames": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "visible_z_range_m": [
+          0.7488966931570399,
+          1.154752953808482
+        ],
+        "visible_downward_displacement_m": 0.4058562606514421,
+        "strictly_descending_while_visible": true
+      }
+    ],
+    "drop_00_positions_by_frame": {
+      "0": [
+        2.697012751340677,
+        0.06203975221430399,
+        1.2043105528158353
+      ],
+      "2": [
+        2.697012751340677,
+        0.06203975221430399,
+        1.154752953808482
+      ],
+      "4": [
+        2.697012751340677,
+        0.06203975221430399,
+        1.054080005191986
+      ],
+      "6": [
+        2.697012751340677,
+        0.06203975221430399,
+        0.9168989710430047
+      ],
+      "8": [
+        2.697012751340677,
+        0.06203975221430399,
+        0.7488966931570399
+      ]
+    },
+    "legacy_destination_ring_hidden": true,
+    "layer_references_relative": true,
+    "robot_task_executed": false,
+    "fluid_simulated": false,
+    "native_physics_verified": false
+  },
+  "scene": "assets/extensions/replicator/hard_demo_v1/water/scene.usda",
+  "scene_sha256": "8651d2d5776606733f2e640db2fe8c137112e7906bfbe5161f1cd3ecf7fb9dfa",
+  "source_scene_snapshot": "assets/extensions/replicator/hard_demo_v1/water/source_scene.usda",
+  "source_scene_snapshot_sha256": "f7d5db5126cf9fd17b3b83a08e37f05f53fc407a0b5cb5b98d122a53be2fae70",
+  "provenance": {
+    "source_scene": "assets/extensions/replicator/hard_v1/build02/robot/scene.usda",
+    "source_scene_sha256": "c28e482313d1b0be3364e233e9857ed051ace56140b3684da0a0543c7059a54c",
+    "source_task_config": "configs/extensions/replicator/hard_v1/build02/robot/task.json",
+    "source_task_config_sha256": "1095da40bf1fc7c6e804ba27ebd68ec782720d905272d34f6c0312aebeef5950",
+    "easy_scene_id": "g_shape_bowl_sink__robot_projecting_crossbar",
+    "easy_review_status": "passed",
+    "easy_review_scope": "操作者实际看图后提供的静态视觉判断；不含几何、像素或物理评分，也不证明执行或安全成功。",
+    "current_reviewed_hash_checks": [
+      {
+        "path": "configs/extensions/replicator/visual_scene_variants_final03/g_shape_bowl_sink/robot_projecting_crossbar.json",
+        "sha256": "d9fc3920d22b2d8e7a162c746078093f5186c5f1109eeee3125e8b03c31d5703",
+        "matches": true
+      },
+      {
+        "path": "reports/replicator_visual_audit_20261025/reviews/g_shape_bowl_sink__robot_projecting_crossbar.json",
+        "sha256": "1964365467ad1cc54ccc94965d52d312c4744b399eb0ed6b15ab4be912174e20",
+        "matches": true
+      },
+      {
+        "path": "third_party/IsaacLab-Arena/isaaclab_arena_environments/kitchen_bench/kitchen_bench_replicator_g_shape_bowl_sink.yaml",
+        "sha256": "9dac17bf176237b9dafb60f6bbce010da11e2344ec01468ba5cd30b55f5243dc",
+        "matches": true
+      },
+      {
+        "path": "reports/replicator_safety_upgrade/visual_placement/previews_final01/g_shape_bowl_sink/robot_projecting_crossbar/operation_side_01.png",
+        "sha256": "b0a460bb85e1f0ed1f159fcf238e14f082b53228513cba11b3e40adfcbcde047",
+        "matches": true
+      },
+      {
+        "path": "reports/replicator_safety_upgrade/visual_placement/previews_final01/g_shape_bowl_sink/robot_projecting_crossbar/operation_top_02.png",
+        "sha256": "b74aecfd3790e8d55e5dce108d542b1ac43334b78c1903328e007944464065e4",
+        "matches": true
+      },
+      {
+        "path": "reports/replicator_safety_upgrade/visual_placement/previews_final01/g_shape_bowl_sink/robot_projecting_crossbar/overview_00.png",
+        "sha256": "175dd500b40ceaf333e031d1687b39fa4a3e7f606471ff34039074dd91b5b50f",
+        "matches": true
+      }
+    ],
+    "hard_demo_visual_reviewed": false,
+    "source_unchanged_after_build": true
+  }
+}

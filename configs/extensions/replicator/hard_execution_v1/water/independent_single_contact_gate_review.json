@@ -1,0 +1,364 @@
+{
+  "scope": "CPU native-record replay and gate counterexamples; no simulation; full02 remains an incomplete turn",
+  "passed": true,
+  "tests": {
+    "actual_single_right_contact_allowed": true,
+    "zero_force_rejected": true,
+    "far_contact_rejected": true,
+    "outside_region_rejected": true,
+    "other_loaded_finger_outside_rejected": true,
+    "one_missing_step_rejected": true
+  },
+  "source_sha256": {
+    "datasets/hard_execution_v1/water/full_02/water_physics.json": "eaa0e8c9fd2aa4d22ac15585aded3e9046bd9377dd04830232289f15be1961c7",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/water_runtime.py": "081872e1caf8b0007da9101e57048b00f3968fb2508c01417f6daa7a53077c57",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/water_control.py": "9b493422218cb02f28aa96db6cedb0251485d3fcbb96da710d9b6dbe9ad78ded"
+  },
+  "actual_last10": {
+    "object_name": "water_valve_lever",
+    "phase": "valve_grasp",
+    "scope": "Native signed contacts preserved; at least one allowed finger may push. Bilateral fields are diagnostic, not required for valve actuation",
+    "force_sign_interpretation": "Native articulation pair reports negative compressive scalar; loading uses its magnitude, raw signed values unchanged",
+    "region_object_local_m": [
+      [
+        0.03,
+        -0.011,
+        -0.009
+      ],
+      [
+        0.099,
+        0.011,
+        0.009
+      ]
+    ],
+    "requested_steps": 10,
+    "sampled_steps": 10,
+    "minimum_force_n": 0.01,
+    "max_separation_m": 0.00025,
+    "steps": [
+      {
+        "physics_step": 2343,
+        "fingers": {
+          "left_inner_finger": {
+            "loaded_in_region": false,
+            "near_in_region": false,
+            "loaded_contact_count": 0,
+            "any_loaded_near_in_region": false,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 0.0,
+            "signed_loaded_forces_n": [],
+            "loaded_separations_m": []
+          },
+          "right_inner_finger": {
+            "loaded_in_region": true,
+            "near_in_region": true,
+            "loaded_contact_count": 1,
+            "any_loaded_near_in_region": true,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 1.090570330619812,
+            "signed_loaded_forces_n": [
+              -1.090570330619812
+            ],
+            "loaded_separations_m": [
+              -8.307397365570068e-06
+            ]
+          }
+        },
+        "bilateral_loaded": false,
+        "bilateral_near": false,
+        "any_allowed_loaded_near": true
+      },
+      {
+        "physics_step": 2344,
+        "fingers": {
+          "left_inner_finger": {
+            "loaded_in_region": false,
+            "near_in_region": false,
+            "loaded_contact_count": 0,
+            "any_loaded_near_in_region": false,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 0.0,
+            "signed_loaded_forces_n": [],
+            "loaded_separations_m": []
+          },
+          "right_inner_finger": {
+            "loaded_in_region": true,
+            "near_in_region": true,
+            "loaded_contact_count": 1,
+            "any_loaded_near_in_region": true,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 1.0773940086364746,
+            "signed_loaded_forces_n": [
+              -1.0773940086364746
+            ],
+            "loaded_separations_m": [
+              1.516193151473999e-05
+            ]
+          }
+        },
+        "bilateral_loaded": false,
+        "bilateral_near": false,
+        "any_allowed_loaded_near": true
+      },
+      {
+        "physics_step": 2345,
+        "fingers": {
+          "left_inner_finger": {
+            "loaded_in_region": false,
+            "near_in_region": false,
+            "loaded_contact_count": 0,
+            "any_loaded_near_in_region": false,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 0.0,
+            "signed_loaded_forces_n": [],
+            "loaded_separations_m": []
+          },
+          "right_inner_finger": {
+            "loaded_in_region": true,
+            "near_in_region": true,
+            "loaded_contact_count": 1,
+            "any_loaded_near_in_region": true,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 1.0886543989181519,
+            "signed_loaded_forces_n": [
+              -1.0886543989181519
+            ],
+            "loaded_separations_m": [
+              -3.8743019104003906e-07
+            ]
+          }
+        },
+        "bilateral_loaded": false,
+        "bilateral_near": false,
+        "any_allowed_loaded_near": true
+      },
+      {
+        "physics_step": 2346,
+        "fingers": {
+          "left_inner_finger": {
+            "loaded_in_region": false,
+            "near_in_region": false,
+            "loaded_contact_count": 0,
+            "any_loaded_near_in_region": false,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 0.0,
+            "signed_loaded_forces_n": [],
+            "loaded_separations_m": []
+          },
+          "right_inner_finger": {
+            "loaded_in_region": true,
+            "near_in_region": true,
+            "loaded_contact_count": 1,
+            "any_loaded_near_in_region": true,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 1.0606412887573242,
+            "signed_loaded_forces_n": [
+              -1.0606412887573242
+            ],
+            "loaded_separations_m": [
+              -2.130866050720215e-06
+            ]
+          }
+        },
+        "bilateral_loaded": false,
+        "bilateral_near": false,
+        "any_allowed_loaded_near": true
+      },
+      {
+        "physics_step": 2347,
+        "fingers": {
+          "left_inner_finger": {
+            "loaded_in_region": false,
+            "near_in_region": false,
+            "loaded_contact_count": 0,
+            "any_loaded_near_in_region": false,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 0.0,
+            "signed_loaded_forces_n": [],
+            "loaded_separations_m": []
+          },
+          "right_inner_finger": {
+            "loaded_in_region": true,
+            "near_in_region": true,
+            "loaded_contact_count": 1,
+            "any_loaded_near_in_region": true,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 1.052960753440857,
+            "signed_loaded_forces_n": [
+              -1.052960753440857
+            ],
+            "loaded_separations_m": [
+              -6.378022590070032e-07
+            ]
+          }
+        },
+        "bilateral_loaded": false,
+        "bilateral_near": false,
+        "any_allowed_loaded_near": true
+      },
+      {
+        "physics_step": 2348,
+        "fingers": {
+          "left_inner_finger": {
+            "loaded_in_region": false,
+            "near_in_region": false,
+            "loaded_contact_count": 0,
+            "any_loaded_near_in_region": false,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 0.0,
+            "signed_loaded_forces_n": [],
+            "loaded_separations_m": []
+          },
+          "right_inner_finger": {
+            "loaded_in_region": true,
+            "near_in_region": true,
+            "loaded_contact_count": 1,
+            "any_loaded_near_in_region": true,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 1.0376622676849365,
+            "signed_loaded_forces_n": [
+              -1.0376622676849365
+            ],
+            "loaded_separations_m": [
+              1.9803643226623535e-05
+            ]
+          }
+        },
+        "bilateral_loaded": false,
+        "bilateral_near": false,
+        "any_allowed_loaded_near": true
+      },
+      {
+        "physics_step": 2349,
+        "fingers": {
+          "left_inner_finger": {
+            "loaded_in_region": false,
+            "near_in_region": false,
+            "loaded_contact_count": 0,
+            "any_loaded_near_in_region": false,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 0.0,
+            "signed_loaded_forces_n": [],
+            "loaded_separations_m": []
+          },
+          "right_inner_finger": {
+            "loaded_in_region": true,
+            "near_in_region": true,
+            "loaded_contact_count": 1,
+            "any_loaded_near_in_region": true,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 1.0625439882278442,
+            "signed_loaded_forces_n": [
+              -1.0625439882278442
+            ],
+            "loaded_separations_m": [
+              4.470348358154297e-07
+            ]
+          }
+        },
+        "bilateral_loaded": false,
+        "bilateral_near": false,
+        "any_allowed_loaded_near": true
+      },
+      {
+        "physics_step": 2350,
+        "fingers": {
+          "left_inner_finger": {
+            "loaded_in_region": false,
+            "near_in_region": false,
+            "loaded_contact_count": 0,
+            "any_loaded_near_in_region": false,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 0.0,
+            "signed_loaded_forces_n": [],
+            "loaded_separations_m": []
+          },
+          "right_inner_finger": {
+            "loaded_in_region": true,
+            "near_in_region": true,
+            "loaded_contact_count": 1,
+            "any_loaded_near_in_region": true,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 0.9576908349990845,
+            "signed_loaded_forces_n": [
+              -0.9576908349990845
+            ],
+            "loaded_separations_m": [
+              -3.146857352476218e-07
+            ]
+          }
+        },
+        "bilateral_loaded": false,
+        "bilateral_near": false,
+        "any_allowed_loaded_near": true
+      },
+      {
+        "physics_step": 2351,
+        "fingers": {
+          "left_inner_finger": {
+            "loaded_in_region": false,
+            "near_in_region": false,
+            "loaded_contact_count": 0,
+            "any_loaded_near_in_region": false,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 0.0,
+            "signed_loaded_forces_n": [],
+            "loaded_separations_m": []
+          },
+          "right_inner_finger": {
+            "loaded_in_region": true,
+            "near_in_region": true,
+            "loaded_contact_count": 1,
+            "any_loaded_near_in_region": true,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 0.9873663187026978,
+            "signed_loaded_forces_n": [
+              -0.9873663187026978
+            ],
+            "loaded_separations_m": [
+              1.4338642358779907e-05
+            ]
+          }
+        },
+        "bilateral_loaded": false,
+        "bilateral_near": false,
+        "any_allowed_loaded_near": true
+      },
+      {
+        "physics_step": 2352,
+        "fingers": {
+          "left_inner_finger": {
+            "loaded_in_region": false,
+            "near_in_region": false,
+            "loaded_contact_count": 0,
+            "any_loaded_near_in_region": false,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 0.0,
+            "signed_loaded_forces_n": [],
+            "loaded_separations_m": []
+          },
+          "right_inner_finger": {
+            "loaded_in_region": true,
+            "near_in_region": true,
+            "loaded_contact_count": 1,
+            "any_loaded_near_in_region": true,
+            "loaded_outside_region": false,
+            "maximum_force_magnitude_n": 1.039968729019165,
+            "signed_loaded_forces_n": [
+              -1.039968729019165
+            ],
+            "loaded_separations_m": [
+              -2.644956111907959e-07
+            ]
+          }
+        },
+        "bilateral_loaded": false,
+        "bilateral_near": false,
+        "any_allowed_loaded_near": true
+      }
+    ],
+    "both_fingers_loaded": false,
+    "both_fingers_near": false,
+    "each_step_any_loaded_near_in_region": true
+  }
+}

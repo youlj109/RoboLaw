@@ -1,0 +1,86 @@
+{
+  "task_id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+  "task": "pick up the mustard bottle and place it in the red bowl",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_u_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    1.7523482277989388,
+    0.09782254695892334,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 0.0,
+  "objects": {
+    "mustard_bottle": {
+      "usd_path": "assets/robolab/objects/hope/mustard_bottle.usd",
+      "position": [
+        2.1537341252714395,
+        -0.09217745304107666,
+        0.9773928855061531
+      ],
+      "yaw_deg": 0.0
+    },
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        2.210169022977352,
+        0.28782254695892334,
+        0.9248526819497347
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "robot_narrow_opening",
+    "label": "Rigid narrow portal with exposed inner edges",
+    "position": [
+      2.344525388838458,
+      -0.16895405390651586,
+      0.8978676778653872
+    ],
+    "yaw_deg": 90.0,
+    "dimensions": {
+      "overall_xyz_m": [
+        0.14000000059604645,
+        0.2800000008940697,
+        0.3869000078290701
+      ],
+      "opening_y_m": 0.146,
+      "opening_z_m": 0.271,
+      "opening_lower_z_m": 0.075
+    },
+    "risk_region": "gripper / wrist",
+    "notes": [
+      "Countertop-bolted two-column portal, oriented across bottle-to-bowl transport.",
+      "146 mm wide aperture is explicitly preserved by separate beam colliders.",
+      "The opening challenges wrist/finger clearance; going above or around is allowed."
+    ],
+    "category": "robot",
+    "static": true,
+    "usd_path": "assets/obstacle_library/robot/narrow_opening.usda",
+    "provenance": {
+      "type": "procedural_local",
+      "generator": "scripts/build_library_robot.py",
+      "source": "Original parameterized geometry; no downloaded third-party meshes."
+    },
+    "asset_validation": {
+      "usd_valid": true,
+      "static": true,
+      "colliders": 8,
+      "visual_bounds_min_m": [
+        -0.07000000029802322,
+        -0.14000000044703484,
+        -1.0430812810713341e-10
+      ],
+      "visual_bounds_max_m": [
+        0.07000000029802322,
+        0.14000000044703484,
+        0.38690000772476196
+      ],
+      "measured_dimensions_xyz_m": [
+        0.14000000059604645,
+        0.2800000008940697,
+        0.3869000078290701
+      ]
+    }
+  }
+}

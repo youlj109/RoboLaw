@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "task_id": "kitchen_bench_replicator_g_shape_bowl_sink",
+  "payload": "/World/envs/env_0/bowl",
+  "target": "/World/envs/env_0/kitchen/Sink/BasinBottom",
+  "noncontact_clearance_m": 0.002,
+  "lower_clearance_m": 0.002,
+  "release_gap_window_m": [
+    0.003,
+    0.005
+  ],
+  "landing_xy_tolerance_m": 0.005,
+  "release_seconds": 2.0,
+  "retreat_height_m": 0.15,
+  "final_settle_seconds": 4.0,
+  "force_threshold_n": 0.1,
+  "support_cone_half_angle_rad": 0.7853981633974483,
+  "velocity_threshold_m_s": 0.003,
+  "placement_consecutive_steps": 1,
+  "physics_dt_s": 0.008333333333333333,
+  "action_dt_s": 0.06666666666666667,
+  "contact_capacity": 4096,
+  "source_intersection_role": "Retained representation observation for this original necessary support pair; no zero-intersection claim or fitted penetration tolerance.",
+  "spatial_bounds": "All source bowl XY and native points inside original floor footprint; all source bowl vertices and native points above original floor entity bottom. Every other pair retains original checks.",
+  "native_support": "Original body/filter identity and complete scalar*normal force vectors; both original sensor and native aggregate meet original force and +Z cone. No scalar sign assumption or extra per-point force cone.",
+  "original_success": "Original predicate unchanged; speed, original temporal state, release and final state must pass independent review.",
+  "snapshot_limit": "Fresh source-bound public cooking query. No historical native shape export or shape-slot geometry equivalence. Prev/current states retained; lag evidence is not an API timing contract.",
+  "evidence_sha256": {
+    "reports/replicator_preparation/g_bowl_cooked_snapshot_02/snapshot.json": "980672489be1df9b52631d1d9933c0854a7ed38e5e97966cbf701e9c0ab6c020",
+    "reports/replicator_preparation/g_bowl_cooked_snapshot_02/independent_geometry_review01.json": "b89a637760debf5b4bb3f9354d36548ee43960f0184b7759e3cdc6bbbf1c1953",
+    "reports/replicator_preparation/g_bowl_cooked_snapshot_02/contact_timing_review01.json": "457d9ed8f175ad8312922ae05966d71e6a90ac113374d40862c180ee396edf17",
+    "reports/replicator_execution_20261023/g_bowl_sink/destination_probe01_diagnostic_bundle02.json": "6eec34055a3e152bcd8c7571a5850cc3664e25461d264df0f31782dcd97f33a9",
+    "assets/robolab/objects/ycb/bowl.usd": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+    "configs/extensions/replicator/g_shape_bowl_sink_source_layout.json": "052d3c155ebf3ccb20b9285812fdd415a0a169c09626ee993ce75237435cdaa5"
+  },
+  "unloaded_transition_rule": "complete_native_contacts_all_separations_nonnegative_and_no_downward_aggregate",
+  "unloaded_transition_scope": "Only complete raw original-pair potential contacts with nonnegative native separations, no downward aggregate and all source/native spatial bounds. May occur before support or during unloading/bounce; never counts as support/success and cannot issue a retreat support certificate."
+}

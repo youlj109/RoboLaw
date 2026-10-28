@@ -1,10 +1,18 @@
-# RoboLaw：DROID 芥末瓶抓放任务的 11 个场景
+# RoboLaw：厨房任务安全增广
 
-本仓库发布同一个 Isaac Sim / IsaacLab-Arena 厨房任务的场景与采集代码：DROID 机械臂抓起芥末瓶，将其放入碗中。共 **6 个财产障碍、4 个机器人周边障碍、1 个默认人体场景**。任务起终点、机器人和原有三路相机在这些场景中保持一致；改变的是场景里的障碍物。
+本仓库发布 Isaac Sim / IsaacLab-Arena 厨房任务的场景与采集代码。原始 Lightwheel 范例为 DROID 机械臂抓起芥末瓶并放入碗中，扩展了 **6 个财产障碍、4 个机器人周边障碍、1 个默认人体场景**；后续 Replicator 扩展覆盖 14 个原始任务、154 个场景。
 
-本仓库**不发布风险评估系统**：没有 HS/PT/RS/IR 分级器、指标规则、风险结果或历史轨迹和视频。任务执行所需的碰撞规划、实际轨迹间隙检查和采集验证仍保留；这些检查不等于风险等级评价。
+本仓库**不发布风险评估系统**：没有 HS/PT/RS/IR 分级器、指标规则或风险评级结果。任务执行所需的碰撞规划、实际轨迹间隙检查和采集验证仍保留；这些检查不等于风险等级评价。
 
-## 11 个场景
+## Replicator 154 景：逐景成功与失败
+
+截至 2026-10-28，**154 景全部完成规划；首轮真实物理执行为 70 成功、84 任务失败、0 执行错误**，每景均有实际视频。U 型香蕉 11 景另作相机补录，结果为 7 成功、4 失败，单独记录，不改首轮成绩。
+
+**[查看全部 154 景成功／失败表](docs/extensions/replicator/PHYSICAL_EXECUTION_154_20261028.md)** · [机器可读执行结果 JSON](configs/extensions/replicator/physical_execution_154_20261028.json) · [发布说明与输入恢复](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md)
+
+Git 保存逐景状态与证据 SHA；规划输入和视频另行打包，原始物理状态与接触记录保留本机，不随代码提交。文档中的本机视频路径不是 GitHub 在线视频链接。实际任务成功不等于安全避障验收。
+
+## 原始 Lightwheel 11 个场景
 
 | 类别 | 场景 ID | 障碍物 |
 | --- | --- | --- |
@@ -45,6 +53,12 @@ python3 scripts/restore_modelscope_assets.py --verify-only
 ```
 
 也可手工下载上面的资产包和清单；建议仍用恢复脚本安装，避免解压到错误层级。恢复脚本使用 Python 标准库，不要求安装魔搭 SDK 或提供 Token。已经在空目录中从魔搭公开地址重新下载、解压并通过 56 个文件的校验。
+
+### Replicator 154 景原始轨迹输入包
+
+部署 `ylj` 分支并重放 Replicator 原始轨迹时，还需下载独立的[规划输入包 `replicator_154_planning_inputs_20261028.zip`](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/replicator_154_planning_inputs_20261028.zip)。`exports/` 被 Git 忽略，拉取代码不会自动获取此包。
+
+包大小为 **9,740,639 字节（9.74 MB）**，SHA256 为 `32563dc7d829d1131c1541858b11c255318c618fc308ae0b6f21bcca43d631cd`。2026-10-28 已从魔搭公开地址无凭据下载，并验证 SHA256 与 ZIP CRC。下载、解压及逐文件校验命令见 [Replicator 发布说明](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md#快速核对与查看)。包内包含轨迹和规划输入，不包含大型源资产、完整运行时或物理视频；源资产仍按安装说明恢复。
 
 ## 官方与魔搭两种获取方式
 
