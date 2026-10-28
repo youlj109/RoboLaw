@@ -50,7 +50,117 @@ def runtime_hashes():
     return {p: sha(ROOT/p) for p in RUNTIME_SOURCES}
 
 def runtime_settings(args):
-    return {k: getattr(args, k) for k in SETTING_KEYS}
+    values = {k: getattr(args, k) for k in SETTING_KEYS}
+    path = getattr(args, 'camera_overrides', None)
+    values.update(camera_overrides_path=str(local(path).relative_to(ROOT)) if path else None,
+        camera_overrides_sha256=sha(local(path)) if path else None)
+    retake = getattr(args, 'camera_retake_plan', None)
+    values.update(camera_retake_plan_path=str(local(retake).relative_to(ROOT)) if retake else None,
+        camera_retake_plan_sha256=sha(local(retake)) if retake else None)
+    return values
+
+RENDER_SETTING_KEYS = ('/rtx/post/tonemap/op', '/rtx/post/tonemap/exposureTime',
+    '/rtx/post/tonemap/filmIso', '/rtx/post/tonemap/fNumber',
+    '/rtx/post/tonemap/responsivity', '/rtx/post/histogram/enabled')
+
+def load_camera_overrides(path):
+    if not path: return None
+    path = local(path); data = json.loads(path.read_text())
+    if data.get('kind') != 'physical_execution_camera_overrides' or not isinstance(data.get('tasks'), dict):
+        raise ValueError('Invalid camera override document')
+    allowed = {'eye','target','focal_length_mm','horizontal_aperture_mm','vertical_aperture_mm',
+        'clipping_range_m','renderer_settings','evidence_path','evidence_sha256',
+        'image_path','image_sha256','evidence_config_sha256'}
+    for task, row in data['tasks'].items():
+        if not task.startswith('kitchen_bench_replicator_') or set(row) != allowed:
+            raise ValueError('Only the declared camera/exposure fields are permitted')
+        eye, target = np.asarray(row['eye'], dtype=float), np.asarray(row['target'], dtype=float)
+        if eye.shape != (3,) or target.shape != (3,) or not np.isfinite([eye,target]).all() or np.linalg.norm(eye-target) < 1e-6:
+            raise ValueError('Invalid camera eye/target')
+        for key in ('focal_length_mm','horizontal_aperture_mm','vertical_aperture_mm'):
+            if not np.isfinite(row[key]) or row[key] <= 0: raise ValueError('Invalid camera optics')
+        clip = np.asarray(row['clipping_range_m'], dtype=float)
+        if clip.shape != (2,) or not np.isfinite(clip).all() or not 0 < clip[0] < clip[1]:
+            raise ValueError('Invalid camera clipping range')
+        render = row['renderer_settings']
+        if set(render) != set(RENDER_SETTING_KEYS) or type(render['/rtx/post/histogram/enabled']) is not bool:
+            raise ValueError('Only the declared exposure settings are permitted')
+        if any(not np.isfinite(render[k]) or render[k] <= 0 for k in RENDER_SETTING_KEYS[:-1]):
+            raise ValueError('Invalid exposure value')
+        for field in ('evidence','image'):
+            if sha(local(row[field+'_path'])) != row[field+'_sha256']:
+                raise ValueError('Camera screenshot evidence changed')
+    return dict(path=str(path.relative_to(ROOT)), sha256=sha(path), tasks=data['tasks'])
+
+def apply_render_override(values):
+    import carb
+    settings = carb.settings.get_settings()
+    before = {key: settings.get(key) for key in RENDER_SETTING_KEYS}
+    if any(value is None for value in before.values()):
+        raise RuntimeError('Cannot preserve an absent exposure setting')
+    try:
+        for key, value in values.items(): settings.set(key, value)
+        actual = {key: settings.get(key) for key in RENDER_SETTING_KEYS}
+        if any(not np.isclose(actual[k], values[k], rtol=1e-6, atol=1e-12) for k in values):
+            raise RuntimeError('Exposure readback mismatch')
+    except Exception:
+        for key, value in before.items(): settings.set(key, value)
+        raise
+    return dict(original=before, requested=copy.deepcopy(values), applied=actual, restored=False)
+
+def validate_physical_attempt(entry, args, output_root):
+    """Additional physical runs require an exact, source-bound camera-retake whitelist."""
+    number = entry.get('physical_attempt_number', 1)
+    if type(number) is not int or number not in (1, 2): raise ValueError('Invalid physical attempt number')
+    if number == 1:
+        if any(k in entry for k in ('first_pass','camera_retake_plan_path','camera_retake_plan_sha256')):
+            raise ValueError('Retake provenance cannot be labelled first physical attempt')
+        return
+    first = entry['first_pass']; rp = local(first['result_path']); vp = local(first['video_path'])
+    if sha(rp) != first['result_sha256'] or sha(vp) != first['video_sha256']:
+        raise ValueError('First physical result/video changed')
+    prior = json.loads(rp.read_text())
+    if prior.get('kind') != 'physical_execution' or prior.get('scene_id') != entry['scene_id'] or prior.get('executed') is not True:
+        raise ValueError('A real first physical execution is required')
+    if first.get('physical_attempt_number') != 1 or prior.get('physical_attempt_number', 1) != 1:
+        raise ValueError('Only a second physical attempt is authorized')
+    if prior.get('status') != 'complete' or prior.get('execution_status') not in ('success','failed'):
+        raise ValueError('First physical attempt is not a completed recorded trial')
+    for key in ('execution_status','task_success','executed'):
+        if first[key] != prior[key]: raise ValueError('First-pass outcome differs')
+    if local(prior['video_path']) != vp or prior['video_sha256'] != first['video_sha256']:
+        raise ValueError('First-pass video identity differs')
+    for key in ('config','trajectory'):
+        if local(prior[key+'_path']) != local(entry[key+'_path']) or prior[key+'_sha256'] != entry[key+'_sha256']:
+            raise ValueError('Retake must retain original configuration and trajectory')
+    if local(prior['planning_result_path']) != local(entry['result_path']) or prior['planning_result_sha256'] != entry['result_sha256']:
+        raise ValueError('Retake planning result differs')
+    if execution_output_path(output_root, entry) == rp.parent or Path(output_root)/'videos'/(entry['scene_id']+'.mp4') == vp:
+        raise ValueError('Retake output would overwrite first physical evidence')
+    plan_path = local(entry['camera_retake_plan_path'])
+    if sha(plan_path) != entry['camera_retake_plan_sha256']: raise ValueError('Camera retake plan changed')
+    selected_plan = getattr(args, 'camera_retake_plan', None)
+    if not selected_plan or local(selected_plan) != plan_path:
+        raise ValueError('Retake requires the same explicit --camera-retake-plan')
+    plan = json.loads(plan_path.read_text())
+    if plan.get('kind') != 'physical_camera_retake': raise ValueError('Invalid camera-retake plan kind')
+    rows = [row for row in plan['entries'] if row['scene_id'] == entry['scene_id']]
+    if len(rows) != 1: raise ValueError('Scene is not uniquely whitelisted for camera retake')
+    row = rows[0]
+    for key in ('scene_id','config_sha256','trajectory_sha256','first_pass','physical_attempt_number'):
+        if row[key] != entry[key]: raise ValueError('Camera retake whitelist differs: '+key)
+    for key in ('config_path','trajectory_path'):
+        if local(row[key]) != local(entry[key]): raise ValueError('Camera retake source path differs')
+    settings = runtime_settings(args)
+    if row.get('locked_execution_settings') != prior['runtime_settings']:
+        raise ValueError('Locked execution settings differ from first physical evidence')
+    for key in SETTING_KEYS:
+        if settings[key] != prior['runtime_settings'][key]:
+            raise ValueError('Camera-only retake cannot change execution settings: '+key)
+    if local(plan['camera_overrides_path']) != local(settings['camera_overrides_path']) or plan['camera_overrides_sha256'] != settings['camera_overrides_sha256']:
+        raise ValueError('Retake camera configuration differs from the whitelist')
+    camera = load_camera_overrides(getattr(args, 'camera_overrides', None))
+    if not camera or entry['task_id'] not in camera['tasks']: raise ValueError('Retake requires a task camera override')
 
 def configure_physics_threads(requested):
     """Set native worker scheduling before scene initialization, with live readback."""
@@ -300,12 +410,14 @@ def execute_one(entry, output_root, args):
     from .task_collection_evidence import TaskPredicateRecorder
     from .overview import configure_overview
     from kitchen_safety.dataset import CameraWriter, decode_video
+    validate_physical_attempt(entry, args, output_root)
     out = execution_output_path(output_root, entry); out.mkdir(parents=True, exist_ok=False)
     started = time.monotonic()
     result = dict(kind='physical_execution', scene_id=entry['scene_id'], task_id=entry['task_id'], variant_id=entry['variant_id'],
         config_path=entry['config_path'], config_sha256=entry['config_sha256'], planning_result_path=entry['result_path'],
         planning_result_sha256=entry['result_sha256'], trajectory_path=entry['trajectory_path'], trajectory_sha256=entry['trajectory_sha256'],
         planning_status='generated', execution_status='error', task_success=False, executed=False, attempts=1,
+        physical_attempt_number=entry.get('physical_attempt_number', 1),
         status='initializing', started_at=stamp(), physical_execution=True, runtime_state_setters_used=False,
         physical_weld_used=False, payload_attachment_used=False, planning_rerun=False, accepted=False,
         safety_certified=False, long_term_stability_verified=False, video_path=None, video_sha256=None,
@@ -316,13 +428,18 @@ def execute_one(entry, output_root, args):
         result['execution_subdirectory'] = entry['execution_subdirectory']
     if 'initialization_history' in entry:
         result['initialization_history'] = copy.deepcopy(entry['initialization_history'])
+    for key in ('first_pass','camera_retake_plan_path','camera_retake_plan_sha256'):
+        if key in entry: result[key] = copy.deepcopy(entry[key])
     write_json(out/'result.json', result)
     env = recorder = writer = predicates = None
     original_reset = None
     actions, camera_frames, terminal_events = [], [], []
     physical_arrays = None
+    render_override = None
     try:
         plan, layout, data = load_inputs(entry)
+        camera_document = load_camera_overrides(getattr(args, 'camera_overrides', None))
+        camera = camera_document['tasks'].get(entry['task_id']) if camera_document else None
         torch.set_num_threads(args.torch_threads)
         result['runtime_threads'] = configure_physics_threads(args.physics_threads)
         result['runtime_threads'].update(requested_torch_threads=args.torch_threads,
@@ -340,7 +457,22 @@ def execute_one(entry, output_root, args):
         cfg.observations.camera_obs = None
         cfg.sim.dt = 1/120; cfg.decimation = 4; cfg.sim.render_interval = 4
         cfg.scene.robot_contacts = ContactSensorCfg(prim_path='{ENV_REGEX_NS}/Robot/.*', update_period=0., history_length=1)
-        overview = configure_overview(cfg.scene, eye=plan['composition']['camera_eye'], target=plan['composition']['camera_target'])
+        original_eye, original_target = plan['composition']['camera_eye'], plan['composition']['camera_target']
+        overview = configure_overview(cfg.scene, eye=camera['eye'] if camera else original_eye,
+            target=camera['target'] if camera else original_target)
+        if camera:
+            spawn = cfg.scene.overview_camera.spawn
+            original_optics = dict(focal_length_mm=spawn.focal_length,
+                horizontal_aperture_mm=spawn.horizontal_aperture, vertical_aperture_mm=spawn.vertical_aperture,
+                clipping_range_m=list(spawn.clipping_range))
+            spawn.focal_length = camera['focal_length_mm']
+            spawn.horizontal_aperture = camera['horizontal_aperture_mm']
+            spawn.vertical_aperture = camera['vertical_aperture_mm']
+            spawn.clipping_range = tuple(camera['clipping_range_m'])
+            overview.update({k: camera[k] for k in original_optics})
+            result['camera_override'] = dict(path=camera_document['path'], sha256=camera_document['sha256'],
+                task_id=entry['task_id'], original=dict(eye=original_eye, target=original_target, **original_optics),
+                applied=copy.deepcopy(camera), scope='Camera optics/pose and renderer exposure only; all physical task inputs retained')
         cfg.scene.overview_camera.width = args.width; cfg.scene.overview_camera.height = args.height
         overview.update(width=args.width, height=args.height)
         result['overview'] = overview
@@ -382,6 +514,9 @@ def execute_one(entry, output_root, args):
             # Keep actual terminal state; no state reset after the sole initialization.
         e._reset_idx = no_autoreset
         writer = CameraWriter(out, e.scene, ['overview_camera'], e.step_dt*args.video_stride, previews=True)
+        if camera:
+            render_override = apply_render_override(camera['renderer_settings'])
+            result['camera_renderer'] = render_override
         result['appearance_warmup'] = writer.warm_up(e.sim, min_frames=32, max_frames=128, sample_every=8, stable_windows=2)
         if int(e.sim.get_physics_step_count()) != recorder.metadata['reset_physics_step']:
             raise RuntimeError('Camera warmup advanced unrecorded physics')
@@ -465,7 +600,10 @@ def execute_one(entry, output_root, args):
             except Exception as error: result['video_error'] = repr(error)
         else: result['video_missing'] = True
         try:
-            load_inputs(entry); result['source_inputs_unchanged'] = True
+            load_inputs(entry); validate_physical_attempt(entry, args, output_root)
+            if runtime_settings(args) != result['runtime_settings']:
+                raise ValueError('Runtime settings/camera/retake source changed during episode')
+            result['source_inputs_unchanged'] = True
         except Exception as error: result.update(source_inputs_unchanged=False, source_binding_error=repr(error))
         result['execution_source_sha256_end'] = runtime_hashes()
         result['execution_sources_unchanged'] = result['execution_source_sha256_start'] == result['execution_source_sha256_end']
@@ -481,5 +619,16 @@ def execute_one(entry, output_root, args):
             if original_reset is not None: env.unwrapped._reset_idx = original_reset
             try: env.close()
             except Exception as error: result['environment_close_error'] = repr(error)
+        if render_override is not None:
+            try:
+                import carb
+                settings = carb.settings.get_settings()
+                for key, value in render_override['original'].items(): settings.set(key, value)
+                render_override['restored_values'] = {key: settings.get(key) for key in RENDER_SETTING_KEYS}
+                render_override['restored'] = all(np.isclose(render_override['restored_values'][k], v, rtol=1e-6, atol=1e-12)
+                    for k, v in render_override['original'].items())
+                if not render_override['restored']: raise RuntimeError('Renderer exposure restore mismatch')
+            except Exception as error:
+                result.update(renderer_restore_error=repr(error), execution_status='error', task_success=False)
         write_json(out/'result.json', result)
     return result, out/'result.json'

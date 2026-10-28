@@ -128,6 +128,17 @@ class PhysicalBatchTests(unittest.TestCase):
         self.assertFalse(self.manifest_path.exists())
         popen.assert_not_called()
 
+    def test_optional_camera_profile_is_forwarded_without_revision_approval(self):
+        profile = self.root / 'configs/camera.json'
+        with patch.object(batch.subprocess, 'Popen') as popen, redirect_stdout(io.StringIO()) as output:
+            batch.run_batches(self.source, self.output, dry_run=True, camera_overrides=profile)
+        for plan in json.loads(output.getvalue())['batches']:
+            command = plan['command']
+            self.assertEqual(command[command.index('--camera-overrides') + 1], 'configs/camera.json')
+            self.assertNotIn('--allow-runtime-revision', command)
+        self.assertNotIn('--camera-overrides', batch.driver_command(self.source, self.output, 11))
+        popen.assert_not_called()
+
     def test_keyboard_interrupt_does_not_kill_child(self):
         with patch.object(batch.subprocess, 'Popen') as popen:
             popen.return_value.wait.side_effect = KeyboardInterrupt
@@ -146,7 +157,7 @@ class ArenaParserCompatibilityTests(unittest.TestCase):
     -p test_physical_demo_batches.py to exercise the actual pinned Arena parser.
     """
 
-    def parse_generated_command(self, extra=()):
+    def parse_generated_command(self, extra=(), camera_overrides=None):
         try:
             from isaaclab_arena.cli.isaaclab_arena_cli import get_isaaclab_arena_cli_parser
         except ModuleNotFoundError as error:
@@ -154,7 +165,8 @@ class ArenaParserCompatibilityTests(unittest.TestCase):
         self.assertTrue(callable(get_isaaclab_arena_cli_parser))
         from scripts.extensions.replicator import execute_planned_trajectories as driver
         command = batch.driver_command(batch.ROOT / batch.DEFAULT_SOURCE,
-                                       batch.ROOT / batch.DEFAULT_OUTPUT, 11)
+                                       batch.ROOT / batch.DEFAULT_OUTPUT, 11,
+                                       camera_overrides=camera_overrides)
         original_parse = argparse.ArgumentParser.parse_args
         captured = []
 
@@ -183,6 +195,12 @@ class ArenaParserCompatibilityTests(unittest.TestCase):
         self.assertFalse(parsed.allow_runtime_revision)
         self.assertEqual(str(parsed.source_run), batch.DEFAULT_SOURCE)
         self.assertEqual(str(parsed.output), batch.DEFAULT_OUTPUT)
+
+    def test_camera_profile_is_accepted_by_actual_driver_parser(self):
+        path = 'configs/extensions/replicator/physical_demo_camera_overrides_20261028.json'
+        parsed = self.parse_generated_command(camera_overrides=batch.ROOT / path)
+        self.assertEqual(str(parsed.camera_overrides), path)
+        self.assertFalse(parsed.allow_runtime_revision)
 
 
 if __name__ == '__main__':

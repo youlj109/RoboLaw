@@ -72,14 +72,17 @@ def next_batch(manifest, limit=11):
     return selected
 
 
-def driver_command(source, output, count, physics_threads=8):
+def driver_command(source, output, count, physics_threads=8, camera_overrides=None):
     if count < 1 or physics_threads < 1:
         raise ValueError('Scene count and physics threads must be positive')
-    return ['bash', str(ROOT / 'scripts/arena_python.sh'),
+    command = ['bash', str(ROOT / 'scripts/arena_python.sh'),
             'scripts/extensions/replicator/execute_planned_trajectories.py',
             '--device', 'cpu', '--physics-threads', str(physics_threads),
             '--source-run', str(source.relative_to(ROOT)),
             '--output', str(output.relative_to(ROOT)), '--resume', '--limit', str(count)]
+    if camera_overrides is not None:
+        command += ['--camera-overrides', str(repository_path(camera_overrides).relative_to(ROOT))]
+    return command
 
 
 def verify_batch(before, after, selected):
@@ -105,7 +108,7 @@ def verify_batch(before, after, selected):
 
 
 def run_batches(source, output, *, batch_size=11, physics_threads=8, max_batches=0,
-                dry_run=False):
+                dry_run=False, camera_overrides=None):
     manifest_path = output / 'manifest.json'
     manifest, digest = read_manifest(manifest_path, source)
     if dry_run:
@@ -114,7 +117,7 @@ def run_batches(source, output, *, batch_size=11, physics_threads=8, max_batches
         batches = []
         while batch := next_batch({'entries': rows}, batch_size):
             batches.append(dict(task_id=batch[0]['task_id'], scenes=[r['scene_id'] for r in batch],
-                command=driver_command(source, output, len(batch), physics_threads)))
+                command=driver_command(source, output, len(batch), physics_threads, camera_overrides)))
             for row in batch:
                 row['execution_status'] = 'success'  # In-memory scheduling only.
             if max_batches and len(batches) >= max_batches:
@@ -138,7 +141,7 @@ def run_batches(source, output, *, batch_size=11, physics_threads=8, max_batches
             if not selected:
                 print('ALL_PENDING_BATCHES_FINISHED', flush=True)
                 return completed
-            command = driver_command(source, output, len(selected), physics_threads)
+            command = driver_command(source, output, len(selected), physics_threads, camera_overrides)
             log_dir = output / 'batch_logs'
             log_dir.mkdir(exist_ok=True)
             stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S.%fZ')
@@ -179,6 +182,7 @@ def main():
     parser.add_argument('--output', default=DEFAULT_OUTPUT)
     parser.add_argument('--batch-size', type=int, default=11, help='Maximum scenes in a process; never crosses task boundary')
     parser.add_argument('--physics-threads', type=int, default=8)
+    parser.add_argument('--camera-overrides', help='Forward an explicit camera profile; runtime revision approval is never automatic')
     parser.add_argument('--max-batches', type=int, default=0, help='0 runs all remaining task batches')
     parser.add_argument('--dry-run', action='store_true', help='Host-only inspection; creates no files and starts no process')
     args = parser.parse_args()
@@ -187,7 +191,8 @@ def main():
     try:
         run_batches(repository_path(args.source_run), repository_path(args.output),
                     batch_size=args.batch_size, physics_threads=args.physics_threads,
-                    max_batches=args.max_batches, dry_run=args.dry_run)
+                    max_batches=args.max_batches, dry_run=args.dry_run,
+                    camera_overrides=repository_path(args.camera_overrides) if args.camera_overrides else None)
     except (ValueError, RuntimeError, OSError, KeyError) as error:
         print('BATCH_COORDINATOR_STOP: ' + str(error), file=sys.stderr)
         return 1

@@ -14,7 +14,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 from kitchen_safety.extensions.replicator.planned_execution import (local, load_inputs, sha, stamp,
-    write_json, runtime_hashes, runtime_settings)
+    write_json, runtime_hashes, runtime_settings, load_camera_overrides, validate_physical_attempt)
 
 
 def source_entries(source):
@@ -46,6 +46,27 @@ def save_manifest(output, manifest):
     manifest['stage'] = 'complete' if not manifest['counts']['pending'] and not manifest['counts']['running'] else 'executing'
     write_json(output/'manifest.json', manifest)
 
+def retake_entries(source, args):
+    if not args.camera_retake_plan: return source
+    path = local(args.camera_retake_plan); plan = json.loads(path.read_text())
+    if plan.get('kind') != 'physical_camera_retake' or plan.get('physical_attempt_number') != 2:
+        raise ValueError('Invalid explicit camera-retake plan')
+    rows = plan['entries']; lookup = {row['scene_id']: row for row in source}
+    if not rows or len({row['scene_id'] for row in rows}) != len(rows):
+        raise ValueError('Camera-retake whitelist must be nonempty and unique')
+    selected = []
+    for row in rows:
+        entry = dict(lookup[row['scene_id']])
+        for key in ('task_id','variant_id','config_sha256','trajectory_sha256','source_scene_sha256'):
+            if row[key] != entry[key]: raise ValueError('Retake source binding differs: '+key)
+        for key in ('config_path','trajectory_path','source_scene_path'):
+            if local(row[key]) != local(entry[key]): raise ValueError('Retake source path differs: '+key)
+        entry.update(physical_attempt_number=2, first_pass=row['first_pass'],
+            camera_retake_plan_path=str(path.relative_to(ROOT)), camera_retake_plan_sha256=sha(path))
+        validate_physical_attempt(entry, args, args.output)
+        selected.append(entry)
+    return selected
+
 
 def main():
     from isaaclab_arena.cli.isaaclab_arena_cli import get_isaaclab_arena_cli_parser
@@ -53,6 +74,10 @@ def main():
     parser.add_argument('--source-run', type=Path, default=ROOT/'reports/replicator_trajectory_retry10_20261028')
     parser.add_argument('--output', type=Path, default=ROOT/'exports/replicator_154_physical_demos_20261028')
     parser.add_argument('--scene', default='')
+    parser.add_argument('--task', default='', help='Filter pending scenes by their complete original task_id')
+    parser.add_argument('--camera-overrides', type=Path)
+    parser.add_argument('--camera-retake-plan', type=Path,
+        help='Explicit source-bound whitelist for a separate second physical camera recording')
     parser.add_argument('--limit', type=int, default=0)
     parser.add_argument('--resume', action='store_true')
     parser.add_argument('--allow-runtime-revision', action='store_true',
@@ -80,10 +105,22 @@ def main():
     if min(args.initial_settle_seconds,args.close_seconds,args.release_seconds,args.final_settle_seconds) < 0:
         parser.error('Negative physical hold duration')
     pp, source = source_entries(args.source_run)
+    load_camera_overrides(args.camera_overrides)
+    source = retake_entries(source, args)
     if args.scene and args.scene not in {r['scene_id'] for r in source}: parser.error('Unknown scene')
+    if args.task and args.task not in {r['task_id'] for r in source}: parser.error('Unknown task')
+    if args.dry_run and (args.output/'manifest.json').exists():
+        existing = json.loads((args.output/'manifest.json').read_text())
+        expected_plan = str(local(args.camera_retake_plan).relative_to(ROOT)) if args.camera_retake_plan else None
+        if existing.get('camera_retake_plan_path') != expected_plan:
+            raise ValueError('Existing recording requires the same explicit retake plan')
+        for row in existing['entries']:
+            if row['execution_status']=='pending' and (not args.scene or row['scene_id']==args.scene) and (not args.task or row['task_id']==args.task):
+                load_inputs(row); validate_physical_attempt(row, args, args.output)
     if args.dry_run:
         print(json.dumps(dict(cpu_preflight_passed=True, scenes=len(source), source_progress_sha256=sha(pp),
-            selected_scene=args.scene or None, physics_launched=False, planning_launched=False,
+            selected_scene=args.scene or None, selected_task=args.task or None,
+            runtime_settings=runtime_settings(args), physics_launched=False, planning_launched=False,
             controller='PhysX actuator position targets', payload_pose_writes=False), ensure_ascii=False)); return
     mp = args.output/'manifest.json'
     if mp.exists():
@@ -91,6 +128,11 @@ def main():
         manifest = json.loads(mp.read_text())
         if manifest['kind'] != 'physical_execution' or manifest['source_progress_sha256'] != sha(pp):
             raise ValueError('Execution/source identity changed')
+        expected_plan = str(local(args.camera_retake_plan).relative_to(ROOT)) if args.camera_retake_plan else None
+        if manifest.get('camera_retake_plan_path') != expected_plan or manifest.get('camera_retake_plan_sha256') != (sha(local(args.camera_retake_plan)) if args.camera_retake_plan else None):
+            raise ValueError('Existing recording requires the same explicit retake plan')
+        if {row['scene_id'] for row in manifest['entries']} != {row['scene_id'] for row in source}:
+            raise ValueError('Recording scene set differs from its source/retake whitelist')
         prior_revision = manifest['runtime_revisions'][-1]
         if prior_revision['source_sha256'] != runtime_hashes() or prior_revision['settings'] != runtime_settings(args):
             if not args.allow_runtime_revision:
@@ -104,15 +146,21 @@ def main():
                 row.update(execution_status='error', failure_reason='Previous process interrupted; one attempt retained, no automatic repeat')
     else:
         args.output.mkdir(parents=True, exist_ok=True)
-        manifest = dict(schema_version=1, kind='physical_execution', created_at=stamp(), total=154,
+        manifest = dict(schema_version=1, kind='physical_execution', created_at=stamp(), total=len(source),
             source_run=str(args.source_run.relative_to(ROOT)), source_progress_sha256=sha(pp), entries=source,
             scope='Native one-shot PhysX execution of cuRobo joint targets. Payload never attached or teleported. Original task predicates retained; safety acceptance separate.',
-            one_attempt_per_scene=True, planning_rerun=False,
+            one_attempt_per_scene=not bool(args.camera_retake_plan), planning_rerun=False,
+            camera_retake_plan_path=str(local(args.camera_retake_plan).relative_to(ROOT)) if args.camera_retake_plan else None,
+            camera_retake_plan_sha256=sha(local(args.camera_retake_plan)) if args.camera_retake_plan else None,
             initial_settings=runtime_settings(args), initial_execution_source_sha256=runtime_hashes(),
             runtime_revisions=[dict(id=0, created_at=stamp(), source_sha256=runtime_hashes(), settings=runtime_settings(args))])
+        if args.camera_retake_plan:
+            manifest['scope'] = 'Additional second physical executions for camera visibility only; original first-pass outcomes and videos retained, no task optimization or replanning.'
         save_manifest(args.output, manifest)
-    selected = [r for r in manifest['entries'] if r['execution_status']=='pending' and (not args.scene or r['scene_id']==args.scene)]
+    selected = [r for r in manifest['entries'] if r['execution_status']=='pending' and (not args.scene or r['scene_id']==args.scene) and (not args.task or r['task_id']==args.task)]
     if args.limit: selected = selected[:args.limit]
+    for row in selected:
+        load_inputs(row); validate_physical_attempt(row, args, args.output)
     if not selected:
         save_manifest(args.output, manifest); print('NO_PENDING_SCENES'); return
     args.enable_cameras = True
@@ -129,7 +177,7 @@ def main():
                 row.update(execution_status='running', attempts=1, started_at=stamp()); save_manifest(args.output, manifest)
                 print('PHYSICAL_EXECUTION_START', row['scene_id'], flush=True)
                 result, path = execute_one(row, args.output, args)
-                for key in ('execution_status','task_success','attempts','executed','video_sha256','frame_count','fps','width','height','duration_seconds','failure_reason'):
+                for key in ('execution_status','task_success','attempts','physical_attempt_number','executed','video_sha256','frame_count','fps','width','height','duration_seconds','failure_reason'):
                     row[key] = result.get(key)
                 row['video_path'] = str(local(result['video_path']).relative_to(args.output)) if result.get('video_path') else None
                 row.update(execution_result_path=str(path.relative_to(ROOT)), execution_result_sha256=sha(path), finished_at=stamp())
