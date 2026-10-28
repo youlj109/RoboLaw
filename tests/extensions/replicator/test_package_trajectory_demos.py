@@ -11,6 +11,7 @@ import cv2
 import numpy as np
 
 from scripts.extensions.replicator import package_trajectory_demos as package
+from tests.extensions.replicator.physical_history_fixture import initialization_fixture
 
 
 class PhysicalDemoPackagingTests(unittest.TestCase):
@@ -70,6 +71,72 @@ class PhysicalDemoPackagingTests(unittest.TestCase):
 
     def validate(self):
         return package.validate_entry(self.entry, self.row, self.source, self.demos)
+
+    def initialization(self, count=1):
+        initialization_fixture(self.root, self.demos, self.entry, self.physical, count)
+        self.bind_physical()
+
+    def test_recovery_preserves_initialization_evidence_without_second_episode(self):
+        self.initialization()
+        checked = self.validate()
+        self.assertEqual(checked['attempts'], 1)
+        self.assertEqual(checked['additional_initialization_starts'], 1)
+        self.assertEqual(len(checked['initialization_history'][0]['evidence_files']), 7)
+
+    def test_changed_old_initialization_file_or_mismatched_history_is_rejected(self):
+        self.initialization()
+        history = self.entry['initialization_history']
+        old_path = self.root/history[0]['prior_result_path']
+        original = old_path.read_bytes()
+        old_path.write_bytes(b'changed old checkpoint')
+        with self.assertRaisesRegex(ValueError, 'SHA256 mismatch'):
+            self.validate()
+        old_path.write_bytes(original)
+        self.physical['initialization_history'] = []
+        self.bind_physical()
+        with self.assertRaisesRegex(ValueError, 'history differs'):
+            self.validate()
+
+    def test_started_episode_cannot_be_reclassified_as_initialization(self):
+        self.initialization()
+        item = self.entry['initialization_history'][0]
+        old_path = self.root/item['prior_result_path']
+        old = json.loads(old_path.read_text())
+        old.update(status='executing', executed=True, action_count=1)
+        self.write(old_path, old)
+        item['prior_result_sha256'] = package.sha(old_path)
+        self.physical['initialization_history'] = json.loads(json.dumps(self.entry['initialization_history']))
+        self.bind_physical()
+        with self.assertRaisesRegex(ValueError, 'already have entered'):
+            self.validate()
+
+    def test_initialization_history_does_not_substitute_for_missing_video(self):
+        self.initialization()
+        (self.demos/self.entry['video_path']).unlink()
+        with self.assertRaisesRegex(ValueError, 'missing/empty file'):
+            self.validate()
+
+    def test_history_package_contains_all_evidence_and_deduplicates_shared_log(self):
+        self.initialization(count=2)
+        self.write(self.source/'progress.json', dict(stage='complete', entries=[self.row]))
+        self.write(self.demos/'manifest.json', dict(schema_version=1, kind='physical_execution',
+            source_run='reports/run10', source_progress_sha256=package.sha(self.source/'progress.json'),
+            entries=[self.entry]))
+        output = self.root/'history.zip'
+        with patch.object(package, 'TOTAL', 1), patch.object(package, 'KNOWN_WARNINGS', set()):
+            report = package.package(self.demos, self.source, output, workers=1)
+        self.assertEqual(report['additional_initialization_starts'], 2)
+        with zipfile.ZipFile(output) as archive:
+            names = archive.namelist()
+            self.assertEqual(sum(name.endswith('.log') for name in names), 1)
+            self.assertEqual(sum(name.startswith('results/') for name in names), 1)
+            self.assertEqual(sum(name.startswith('videos/') for name in names), 1)
+            for event in report['entries'][0]['initialization_history']:
+                for ref in event['evidence_files']:
+                    self.assertEqual(hashlib.sha256(archive.read(ref['package_path'])).hexdigest(), ref['sha256'])
+            for line in archive.read('SHA256SUMS.txt').decode().splitlines():
+                digest, name = line.split('  ', 1)
+                self.assertEqual(hashlib.sha256(archive.read(name)).hexdigest(), digest)
 
     def test_failed_execution_keeps_real_video_and_source_bindings(self):
         checked = self.validate()

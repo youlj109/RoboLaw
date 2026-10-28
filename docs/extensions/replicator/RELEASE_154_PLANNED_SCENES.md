@@ -35,7 +35,7 @@ NPZ 包含实际规划关节序列 `q`、名义 TCP `tcp_world`、阶段 `phase`
 
 Git 保存代码、技能包、配置、索引和说明。`reports/`、大部分运行资产、轨迹及视频按仓库规则不随代码提交。
 
-单独输入包为 `exports/replicator_154_planning_inputs_20261028.zip`，实际大小 **6,032,626 字节（6.03 MB）**，SHA256 为 `1c0945b8859e5593fc412c18624c43417643b4b72016b6058ae7b54a90f544d7`。包内共 **792 个文件**：788 个原路径输入文件，共 10,176,831 字节；另有 README、输入 manifest、外部资产 manifest 和 SHA256SUMS 四个元数据文件。
+单独输入包为 `exports/replicator_154_planning_inputs_20261028.zip`，实际大小 **6,032,835 字节（6.03 MB）**，SHA256 为 `241a49441a3d015d7a8703ad0073c7b6ce31f11f9b46cab52d3cc3a1ab7d56f8`。包内共 **792 个文件**：788 个原路径输入文件，共 10,176,831 字节；另有 README、输入 manifest、外部资产 manifest 和 SHA256SUMS 四个元数据文件。
 
 788 个输入包括每景的 **配置、R10 结果 JSON、R10 `source_scene.usda`、实际轨迹 NPZ 和轨迹 JSON**（154 × 5 = 770 个），以及 R10 progress、完整最终索引、14 个原任务 YAML、任务 assignment 和一个 1,242 字节的生成站台 USD。**`source_scene.usda` 是执行器 `load_inputs` 的强制输入，不能省略。** 包内不包含大型源资产、完整运行时、网页截图或物理视频；无需恢复各轮全部失败报告。
 
@@ -70,25 +70,38 @@ Git 保存代码、技能包、配置、索引和说明。`reports/`、大部分
    ```bash
    docker exec -w /workspace -e PYTHONPATH=/workspace arena-kitchen-dev \
      /workspace/.venv-arena/bin/python scripts/extensions/replicator/execute_planned_trajectories.py \
-     --headless --device cpu --dry-run
+     --device cpu --physics-threads 8 --dry-run
    ```
 
-   预期 `cpu_preflight_passed: true`、`scenes: 154`、`physics_launched: false`。此命令在创建 SimulationApp 之前退出，不启动物理、渲染或规划，且严格检查源资产 SHA。
+   当前 Arena CLI 默认 headless=true，不支持 `--headless` 参数。此命令已在真实容器 CLI 上验证通过。预期 `cpu_preflight_passed: true`、`scenes: 154`、`physics_launched: false`。此命令在创建 SimulationApp 之前退出，不启动物理、渲染或规划，且严格检查源资产 SHA。
 
 4. 首次启动物理执行（只用于没有执行 manifest 的输出目录）：
 
    ```bash
    docker exec -w /workspace -e PYTHONPATH=/workspace arena-kitchen-dev \
      /workspace/.venv-arena/bin/python scripts/extensions/replicator/execute_planned_trajectories.py \
-     --headless --device cpu --source-run reports/replicator_trajectory_retry10_20261028 \
+     --device cpu --physics-threads 8 --source-run reports/replicator_trajectory_retry10_20261028 \
      --output exports/replicator_154_physical_demos_20261028
    ```
 
-   当前本机批次已运行，不要并行重复启动。`--device cpu` 选择 CPU PhysX，实际相机渲染仍需 GPU/RTX。进程退出后，恢复同一批次只需在上述命令末尾加 `--resume`；该参数仅运行 pending 景，success/failed/error 不重跑，中断的 running 景记为 error。代码或参数变更会拒绝普通恢复，核实后才可显式加 `--allow-runtime-revision` 记录新版本。包内 README 含完整首次、恢复命令。
+   当前本机批次已运行，不要并行重复启动。`--device cpu` 选择 CPU PhysX，实际相机渲染仍需 GPU/RTX。恢复前确认上一进程已经退出且 manifest 没有 running 项。推荐使用主机协调器，每个原始任务启动一个全新 Kit 进程，默认最多 11 景，显式使用 8 个 PhysX 线程：
+
+   ```bash
+   python3 scripts/extensions/replicator/run_physical_demo_batches.py --dry-run
+   python3 scripts/extensions/replicator/run_physical_demo_batches.py
+   ```
+
+   协调器的 `--dry-run` **只检查调度**，不等于第 3 步执行器的完整输入检查。协调器要求已有物理 manifest，只消费 pending 景，遇到 running、子进程错误或输入变化就停止，不自动重试或停止其他进程。单次手工恢复仍可在第 4 步执行器命令末尾加 `--resume --limit 11`，但手工限额不会自动保证不跨任务。success/failed/error 不重跑，中断的 running 项需要先核查，不能直接交给协调器。代码或参数变化会拒绝普通恢复，核实后才可在执行器上显式加 `--allow-runtime-revision` 记录新版本；协调器不自动提供该授权。包内 README 是输入包发布时的直接执行器示例，当前分任务恢复优先使用这里的命令。
 
 5. 启动网页：`python3 scripts/extensions/replicator/progress_dashboard.py --port 8765`，打开 [物理执行面板](http://127.0.0.1:8765/#physicalWorkspace)。实际输出在 `exports/replicator_154_physical_demos_20261028/manifest.json`、`executions/` 和 `videos/`。初始化错误 `executed=false` 不算抓放失败或成功；只有真实任务判据通过才记执行成功。最小输入包不包含全部截图、网页历史和标注，新克隆时不保证显示本机历史的全部图片与人工记录。
 
 154 份真实视频齐全后，可用 `scripts/extensions/replicator/package_trajectory_demos.py` 校验并打包物理 demo。失败执行的视频也保留；缺视频时拒绝完整打包，不用规划动画补齐。
+
+### 初始化停滞与唯一物理 episode
+
+本批次的 `l_island_banana_bowl__human_default_mpfb` 在首次 `env.step` 前初始化停滞，旧结果仍为 `status=initializing`、`executed=false`；对应进程已停止。它没有开始物理 episode，不计作抓放失败。恢复只针对这次尚未开始的 episode，在新 Kit 进程中显式使用 8 个 PhysX 线程；已进入执行的场景不适用此例外。
+
+原 `executions/<scene_id>/result.json` 保持原字节，后续结果写入 `executions/<scene_id>/initialization_retry_01/result.json`，唯一正式视频仍为 `videos/<scene_id>.mp4`。清单和实际结果的 `initialization_history` 绑定旧初始化记录及 SHA，视频包额外收录这些历史文件。**154 个场景各自最多一个物理 episode，与额外的初始化启动次数分开统计**；历史初始化文件不能替代任何实际执行结果或视频，也不会将初始化停滞改写成成功。
 
 ## 历史重试的使用边界
 

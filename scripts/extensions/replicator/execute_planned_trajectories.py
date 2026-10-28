@@ -62,6 +62,8 @@ def main():
     parser.add_argument('--height', type=int, default=640)
     parser.add_argument('--video-stride', type=int, default=2)
     parser.add_argument('--torch-threads', type=int, default=4)
+    parser.add_argument('--physics-threads', type=int, default=8,
+        help='Explicit native PhysX worker count, set before each environment is constructed')
     parser.add_argument('--episode-seconds', type=float, default=120.)
     parser.add_argument('--max-actions', type=int, default=3000)
     parser.add_argument('--initial-settle-seconds', type=float, default=5.)
@@ -71,6 +73,8 @@ def main():
     args = parser.parse_args()
     args.output, args.source_run = args.output.resolve(), args.source_run.resolve()
     if not args.output.is_relative_to(ROOT): parser.error('Output must be inside repository')
+    if args.physics_threads < 1 or args.torch_threads < 1:
+        parser.error('Physics and Torch thread counts must be positive')
     if args.width % 2 or args.height % 2 or args.video_stride < 1 or 30 % args.video_stride:
         parser.error('Use even dimensions and a positive video stride dividing 30')
     if min(args.initial_settle_seconds,args.close_seconds,args.release_seconds,args.final_settle_seconds) < 0:

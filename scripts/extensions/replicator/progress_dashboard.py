@@ -654,7 +654,7 @@ class Progress:
 
         def demo_local(value):
             value = str(value)
-            path = self.local(PHYSICAL_DEMOS + value if value.startswith(('executions/', 'videos/')) else value)
+            path = self.local(PHYSICAL_DEMOS + value if value.startswith(('executions/', 'videos/', 'initialization_history/')) else value)
             path.relative_to(self.root / PHYSICAL_DEMOS)
             return path
 
@@ -663,7 +663,8 @@ class Progress:
             row = {key: prior.get(key) for key in ('scene_id', 'task_id', 'variant_id', 'variant_name', 'category', 'config_sha256')}
             row.update(planning_status=prior.get('status'), execution_status='pending', executed=None,
                 task_success=None, attempts=0, stale=False, result_valid=False, reason='', result_url=None,
-                video_url=None, video_available=False, initialization_error=False, historical_quality_issues=[])
+                video_url=None, video_available=False, initialization_error=False,
+                additional_initialization_starts=0, historical_quality_issues=[])
             raw = indexed.get(sid, {})
             planning_path = source_root / 'scenes' / sid / 'result.json'
             planning = self.json(planning_path)
@@ -698,13 +699,58 @@ class Progress:
                     entries.append(row)
                     continue
                 result_path = demo_local(raw['execution_result_path'])
-                if result_path != self.root / PHYSICAL_DEMOS / 'executions' / sid / 'result.json' or not bound(result_path, raw.get('execution_result_sha256')):
+                episode_dir = self.root / PHYSICAL_DEMOS / 'executions' / sid
+                subdirectory = raw.get('execution_subdirectory', '')
+                if subdirectory not in ('', 'initialization_retry_01'):
+                    raise ValueError('不允许的物理执行恢复目录。')
+                expected_result = episode_dir / subdirectory / 'result.json'
+                if result_path != expected_result or not bound(result_path, raw.get('execution_result_sha256')):
                     raise ValueError('实际执行结果缺失或哈希未匹配，等待有效记录。')
                 result = self.json(result_path)
                 if result.get('kind') != 'physical_execution' or any(result.get(key) != raw.get(key) for key in (
                     'scene_id', 'task_id', 'variant_id', 'config_sha256', 'planning_status',
                     'execution_status', 'executed', 'task_success', 'attempts')):
                     raise ValueError('实际执行结果与清单不一致。')
+                history = raw.get('initialization_history', [])
+                if (not isinstance(history, list) or result.get('initialization_history', []) != history
+                        or result.get('execution_subdirectory', '') != subdirectory
+                        or bool(history) != bool(subdirectory) or len(history) > 1):
+                    raise ValueError('初始化恢复目录与双方历史记录不一致。')
+                if history:
+                    item = history[0]
+                    event_dir = self.root / PHYSICAL_DEMOS / 'initialization_history' / sid / 'initialization_01'
+                    if (not isinstance(item, dict) or item.get('kind') != 'initialization_interruption'
+                            or item.get('execution_started') is not False
+                            or demo_local(item['prior_result_path']) != episode_dir/'result.json'
+                            or demo_local(item['recovery_event_path']) != event_dir/'recovery_event.json'
+                            or not bound(episode_dir/'result.json', item.get('prior_result_sha256'))
+                            or not bound(event_dir/'recovery_event.json', item.get('recovery_event_sha256'))):
+                        raise ValueError('旧初始化结果或恢复事件的路径/SHA 无效。')
+                    old = self.json(episode_dir/'result.json')
+                    event = self.json(event_dir/'recovery_event.json')
+                    if (old.get('scene_id') != sid or old.get('status') != 'initializing'
+                            or old.get('executed') is not False or old.get('task_success') is not False
+                            or old.get('action_count', 0) != 0 or old.get('video_path') or old.get('video_sha256')
+                            or event.get('scene_id') != sid or event.get('kind') != 'initialization_interruption'
+                            or event.get('execution_started') is not False
+                            or event.get('prior_process_confirmed_stopped') is not True
+                            or event.get('no_actuator_commands_verified') is not True
+                            or event.get('prior_result', {}).get('sha256') != item['prior_result_sha256']
+                            or demo_local(event['prior_result']['path']) != episode_dir/'result.json'):
+                        raise ValueError('旧记录不足以证明物理 episode 尚未开始。')
+                    for key, raw_key in (('config_sha256', 'config_sha256'),
+                                         ('planning_result_sha256', 'result_sha256'),
+                                         ('trajectory_sha256', 'trajectory_sha256')):
+                        if old.get(key) != raw.get(raw_key):
+                            raise ValueError('初始化历史与当前规划输入不一致。')
+                    for key in ('prior_source', 'prior_log', 'prior_manifest', 'operator_stop', 'diagnosis'):
+                        ref = event[key]
+                        if not bound(demo_local(ref['path']), ref.get('sha256')):
+                            raise ValueError('初始化恢复的历史证据 SHA 无效：' + key)
+                    if (old.get('execution_source_sha256_start', {}).get('kitchen_safety/extensions/replicator/planned_execution.py')
+                            != event['prior_source']['sha256']):
+                        raise ValueError('旧初始化记录未绑定保留的执行源码。')
+                    row['additional_initialization_starts'] = 1
                 if (self.local(result['planning_result_path']) != planning_path
                         or result.get('planning_result_sha256') != raw['result_sha256']
                         or self.local(result['config_path']) != config
@@ -734,7 +780,7 @@ class Progress:
             except (ValueError, OSError, KeyError, TypeError) as error:
                 row.update(stale=True, execution_status='pending', executed=None, task_success=None,
                            result_valid=False, result_url=None, video_url=None, video_available=False,
-                           initialization_error=False, reason=str(error))
+                           initialization_error=False, additional_initialization_starts=0, reason=str(error))
             entries.append(row)
         counts = {state: sum(row['execution_status'] == state for row in entries) for state in PHYSICAL_STATUSES}
         counts.update(planned=sum(row['planning_status'] == 'generated' for row in entries), total=len(entries),
@@ -1879,7 +1925,7 @@ class Progress:
 def allowed_artifact(rel: str) -> bool:
     if rel.startswith(PHYSICAL_DEMOS):
         tail = rel[len(PHYSICAL_DEMOS):]
-        return bool(re.fullmatch(r'(?:videos/[A-Za-z0-9_-]+\.mp4|executions/[A-Za-z0-9_-]+/result\.json)', tail))
+        return bool(re.fullmatch(r'(?:videos/[A-Za-z0-9_-]+\.mp4|executions/[A-Za-z0-9_-]+/(?:initialization_retry_01/)?result\.json)', tail))
     prefixes = ("reports/replicator_", "reports/avoidance_trials/replicator/", "datasets/replicator/",
                 "datasets/avoidance_trials/replicator/", "docs/extensions/replicator/", "configs/extensions/replicator/",
                 VISUAL_ONLY_REPORTS, VISUAL_ONLY_CONFIGS)

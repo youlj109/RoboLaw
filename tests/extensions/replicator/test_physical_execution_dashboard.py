@@ -13,6 +13,7 @@ import urllib.request
 from scripts.extensions.replicator.progress_dashboard import (
     PHYSICAL_DEMOS, PHYSICAL_SOURCE, Progress, allowed_artifact, handler_for,
 )
+from tests.extensions.replicator.physical_history_fixture import initialization_fixture
 
 
 class PhysicalDashboardTests(unittest.TestCase):
@@ -70,6 +71,68 @@ class PhysicalDashboardTests(unittest.TestCase):
 
     def snapshot(self):
         return self.progress.physical_execution()
+
+    def recovered(self):
+        self.terminal(status='success')
+        initialization_fixture(self.root, self.root/PHYSICAL_DEMOS, self.row, self.result)
+        self.save_result()
+
+    def test_explicit_recovered_episode_counts_success_with_one_initialization_history(self):
+        self.recovered()
+        data = self.snapshot()
+        self.assertEqual(data['counts']['stale'], 0)
+        self.assertEqual(data['counts']['success'], 1)
+        self.assertEqual(data['counts']['video_count'], 1)
+        row = data['entries'][0]
+        self.assertEqual(row['additional_initialization_starts'], 1)
+        self.assertIn('/initialization_retry_01/result.json', row['result_url'])
+        self.assertTrue(allowed_artifact(row['result_url'].removeprefix('/artifact/')))
+
+    def test_recovery_rejects_changed_event_old_result_and_missing_history(self):
+        self.recovered()
+        item = self.row['initialization_history'][0]
+        for key in ('prior_result_path', 'recovery_event_path'):
+            path = self.root/item[key]
+            original = path.read_bytes()
+            path.write_bytes(b'changed history')
+            self.assertEqual(self.snapshot()['counts']['stale'], 1)
+            self.assertIsNone(self.snapshot()['entries'][0]['video_url'])
+            path.write_bytes(original)
+        self.result['initialization_history'] = []
+        self.save_result()
+        self.assertEqual(self.snapshot()['counts']['stale'], 1)
+
+    def test_arbitrary_retry_directory_and_started_old_episode_are_rejected(self):
+        self.recovered()
+        self.row['execution_subdirectory'] = '../other'
+        self.save_manifest()
+        self.assertEqual(self.snapshot()['counts']['stale'], 1)
+        self.row['execution_subdirectory'] = 'initialization_retry_01'
+        item = self.row['initialization_history'][0]
+        path = self.root/item['prior_result_path']
+        old = json.loads(path.read_text()); old.update(status='executing', executed=True)
+        self.write(self.rel(path), old)
+        item['prior_result_sha256'] = self.sha(path)
+        self.result['initialization_history'] = deepcopy(self.row['initialization_history'])
+        self.save_result()
+        self.assertEqual(self.snapshot()['counts']['stale'], 1)
+        self.assertFalse(allowed_artifact(PHYSICAL_DEMOS+'executions/'+self.sid+'/arbitrary/result.json'))
+
+    def test_recovered_result_http_requires_live_history_binding(self):
+        self.recovered()
+        server = ThreadingHTTPServer(('127.0.0.1', 0), handler_for(self.progress))
+        thread = threading.Thread(target=server.serve_forever, daemon=True); thread.start()
+        try:
+            url = 'http://127.0.0.1:'+str(server.server_port)+self.snapshot()['entries'][0]['result_url']
+            with urllib.request.urlopen(url) as response:
+                self.assertEqual(response.status, 200)
+            self.write(self.row['initialization_history'][0]['recovery_event_path'], b'changed event')
+            with self.assertRaises(urllib.error.HTTPError) as caught:
+                urllib.request.urlopen(url)
+            self.assertEqual(caught.exception.code, 404)
+            caught.exception.close()
+        finally:
+            server.shutdown(); server.server_close(); thread.join()
 
     def test_planning_counts_remain_separate_before_physical_manifest_exists(self):
         data = self.snapshot()

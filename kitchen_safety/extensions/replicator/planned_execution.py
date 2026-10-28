@@ -36,7 +36,7 @@ RUNTIME_SOURCES = (
     'third_party/IsaacLab-Arena/isaaclab_arena/tasks/predicates/object_settling.py',
     'third_party/IsaacLab-Arena/isaaclab_arena/tasks/predicates/temporal.py',
 )
-SETTING_KEYS = ('device', 'seed', 'width', 'height', 'video_stride', 'torch_threads',
+SETTING_KEYS = ('device', 'seed', 'width', 'height', 'video_stride', 'torch_threads', 'physics_threads',
     'episode_seconds', 'max_actions', 'initial_settle_seconds', 'close_seconds',
     'release_seconds', 'final_settle_seconds')
 
@@ -51,6 +51,33 @@ def runtime_hashes():
 
 def runtime_settings(args):
     return {k: getattr(args, k) for k in SETTING_KEYS}
+
+def configure_physics_threads(requested):
+    """Set native worker scheduling before scene initialization, with live readback."""
+    if not isinstance(requested, int) or isinstance(requested, bool) or requested < 1:
+        raise ValueError('physics_threads must be a positive integer')
+    import carb
+    import omni.physx
+    from omni.physx.bindings._physx import SETTING_NUM_THREADS
+    settings = carb.settings.get_settings()
+    previous = settings.get(SETTING_NUM_THREADS)
+    settings.set_int(SETTING_NUM_THREADS, requested)
+    omni.physx.get_physx_interface().set_thread_count(requested)
+    actual = settings.get(SETTING_NUM_THREADS)
+    if actual != requested:
+        raise RuntimeError(f'PhysX thread setting readback differs: requested={requested}, actual={actual}')
+    return dict(requested_physics_threads=requested, previous_persistent_physics_threads=previous,
+        live_physics_threads=actual, native_set_thread_count_called=True,
+        setting_path=SETTING_NUM_THREADS,
+        readback_scope='Live Carb setting after native set_thread_count; not an OS worker-thread census')
+
+def execution_output_path(output_root, entry):
+    """Only an explicitly archived initialization may use the one named child path."""
+    subdirectory = entry.get('execution_subdirectory', '')
+    if subdirectory not in ('', 'initialization_retry_01'):
+        raise ValueError('Unsupported execution_subdirectory')
+    out = Path(output_root)/'executions'/entry['scene_id']
+    return out/subdirectory if subdirectory else out
 
 def local(path):
     p = (ROOT / str(path).removeprefix('/workspace/')).resolve()
@@ -273,7 +300,7 @@ def execute_one(entry, output_root, args):
     from .task_collection_evidence import TaskPredicateRecorder
     from .overview import configure_overview
     from kitchen_safety.dataset import CameraWriter, decode_video
-    out = output_root/'executions'/entry['scene_id']; out.mkdir(parents=True, exist_ok=False)
+    out = execution_output_path(output_root, entry); out.mkdir(parents=True, exist_ok=False)
     started = time.monotonic()
     result = dict(kind='physical_execution', scene_id=entry['scene_id'], task_id=entry['task_id'], variant_id=entry['variant_id'],
         config_path=entry['config_path'], config_sha256=entry['config_sha256'], planning_result_path=entry['result_path'],
@@ -285,6 +312,10 @@ def execute_one(entry, output_root, args):
         runtime_revision_id=entry.get('runtime_revision_id', 0), runtime_settings=runtime_settings(args),
         execution_source_sha256_start=runtime_hashes(),
         scope='One native PhysX execution of frozen planned joint targets; physical task success measured separately, no safety acceptance.')
+    if entry.get('execution_subdirectory'):
+        result['execution_subdirectory'] = entry['execution_subdirectory']
+    if 'initialization_history' in entry:
+        result['initialization_history'] = copy.deepcopy(entry['initialization_history'])
     write_json(out/'result.json', result)
     env = recorder = writer = predicates = None
     original_reset = None
@@ -293,6 +324,10 @@ def execute_one(entry, output_root, args):
     try:
         plan, layout, data = load_inputs(entry)
         torch.set_num_threads(args.torch_threads)
+        result['runtime_threads'] = configure_physics_threads(args.physics_threads)
+        result['runtime_threads'].update(requested_torch_threads=args.torch_threads,
+            live_torch_threads=torch.get_num_threads(), requested_physics_device=args.device)
+        write_json(out/'result.json', result)
         definition = build_environment(plan, layout, output_root/'physical_overlays', args.episode_seconds)
         result['background_physics'] = definition.background_physics_provenance
         background_overlay_path = definition.scene.assets['kitchen'].usd_path
@@ -318,6 +353,7 @@ def execute_one(entry, output_root, args):
             physics_dt=cfg.sim.dt, control_dt=cfg.sim.dt*cfg.decimation)
         env = builder.make_registered(cfg, kwargs); env.reset()
         e, robot = env.unwrapped, env.unwrapped.scene['robot']
+        result['runtime_threads']['actual_environment_device'] = str(e.device)
         if abs(e.step_dt-float(data['dt'])) > 1e-8: raise ValueError('Native control interval differs from planning interval')
         predicates = TaskPredicateRecorder(e, definition)
         recorder = PhysicalRecorder(e, definition, predicates)

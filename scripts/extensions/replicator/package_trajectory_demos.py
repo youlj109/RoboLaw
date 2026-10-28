@@ -9,6 +9,8 @@ width, height and duration_seconds. Physical fields are execution_result_path,
 execution_result_sha256, planning_status, execution_status, task_success,
 attempts and executed. video_path is videos/<scene_id>.mp4. Failed/error trials
 are retained; an initialization error with executed=false is never a success.
+Optional initialization_history must match the actual result and bind retained
+pre-execution checkpoints, recovery events and evidence. It never replaces a video.
 
 Requires numpy and OpenCV. Every video is decoded fully on CPU. No simulation,
 rendering, planning, upload or git operation is performed by this script.
@@ -37,6 +39,7 @@ DEFAULT_DEMOS = ROOT / 'exports/replicator_154_physical_demos_20261028'
 PHASES = ('pregrasp', 'approach', 'lift', 'transfer', 'lower', 'retreat')
 TOTAL = 154
 NOTICE = '每景一次实际物理仿真尝试，失败与初始化错误均保留；安全与过程避障未单独验收。'
+INITIALIZATION_SOURCE = 'kitchen_safety/extensions/replicator/planned_execution.py'
 KNOWN_WARNINGS = {
     'g_shape_banana_bowl__human_default_mpfb',
     'u_shape_bowl_sink__robot_narrow_opening',
@@ -68,7 +71,7 @@ def repo_path(value):
 
 def demo_path(value, demos):
     value = str(value)
-    result = (demos / value).resolve() if value.startswith(('executions/', 'videos/')) else repo_path(value)
+    result = (demos / value).resolve() if value.startswith(('executions/', 'videos/', 'initialization_history/')) else repo_path(value)
     result.relative_to(demos)
     return result
 
@@ -132,6 +135,109 @@ def decode_video(path, entry):
                 width=width, height=height, fully_decoded=True)
 
 
+def validate_initialization_history(entry, physical, physical_path, demos):
+    """Validate retained initialization starts separately from the one episode.
+
+    The recovery event records the operator's checkpoint/stop review. SHA checks
+    bind that review to the old code and files; this is not a fresh code audit.
+    """
+    sid = entry['scene_id']
+    history = entry.get('initialization_history', [])
+    require(isinstance(history, list) and physical.get('initialization_history', []) == history,
+            sid + ': initialization history differs between manifest and actual result')
+    checked, seen_results, seen_events = [], set(), set()
+    for number, item in enumerate(history, 1):
+        label = f'{sid}: initialization {number}'
+        require(isinstance(item, dict) and item.get('kind') == 'initialization_interruption'
+                and item.get('execution_started') is False,
+                label + ': history must describe an unstarted physical episode')
+        require(isinstance(item.get('reason'), str) and item['reason'].strip(), label + ': missing reason')
+        old_path = demo_path(item['prior_result_path'], demos)
+        event_path = demo_path(item['recovery_event_path'], demos)
+        require(old_path != physical_path and old_path not in seen_results and event_path not in seen_events,
+                label + ': duplicate history or current result reused as history')
+        require(old_path.is_relative_to(demos/'executions'/sid)
+                and event_path.is_relative_to(demos/'initialization_history'/sid),
+                label + ': history path belongs to another scene')
+        seen_results.add(old_path); seen_events.add(event_path)
+        bound_file(old_path, item['prior_result_sha256'], label + ' old result')
+        bound_file(event_path, item['recovery_event_sha256'], label + ' event')
+        old, event = read(old_path), read(event_path)
+        require(old.get('initialization_history', []) == history[:number-1],
+                label + ': old checkpoint does not preserve the preceding initialization history')
+        require(old.get('kind') == 'physical_execution' and old.get('status') == 'initializing'
+                and old.get('executed') is False and old.get('task_success') is False
+                and old.get('execution_status') == 'error' and old.get('attempts') == 1,
+                label + ': old checkpoint may already have entered physical execution')
+        require(not old.get('video_path') and not old.get('video_sha256')
+                and all(old.get(key, 0) == 0 for key in ('action_count', 'physics_steps', 'executed_steps', 'frame_count')),
+                label + ': old checkpoint contains execution/video evidence')
+        for key in ('scene_id', 'task_id', 'variant_id', 'config_sha256', 'planning_status', 'trajectory_sha256'):
+            require(old.get(key) == entry.get(key), label + ': old source binding mismatch: ' + key)
+        require(old.get('planning_result_sha256') == entry['result_sha256']
+                and repo_path(old['planning_result_path']) == repo_path(entry['result_path'])
+                and repo_path(old['config_path']) == repo_path(entry['config_path'])
+                and repo_path(old['trajectory_path']) == repo_path(entry['trajectory_path']),
+                label + ': old planning inputs differ from the actual episode')
+        require(event.get('schema_version') == 1 and event.get('kind') == 'initialization_interruption'
+                and event.get('scene_id') == sid and event.get('execution_started') is False
+                and event.get('prior_process_confirmed_stopped') is True
+                and event.get('no_actuator_commands_verified') is True,
+                label + ': missing stopped-process / no-command evidence')
+        require(event.get('reason') == item['reason']
+                and all(isinstance(event.get(key), str) and event[key].strip()
+                        for key in ('checkpoint_basis', 'counter_interpretation')),
+                label + ': missing checkpoint/counter explanation')
+        evidence = [dict(role='recovery_event', path=str(event_path.relative_to(ROOT)),
+                         sha256=item['recovery_event_sha256'])]
+        refs = {}
+        for role in ('prior_result', 'prior_source', 'prior_log', 'prior_manifest', 'operator_stop', 'diagnosis'):
+            ref = event.get(role)
+            require(isinstance(ref, dict), label + ': missing evidence ' + role)
+            path = demo_path(ref['path'], demos)
+            bound_file(path, ref['sha256'], label + ' ' + role)
+            refs[role] = path
+            evidence.append(dict(role=role, path=str(path.relative_to(ROOT)), sha256=ref['sha256']))
+        require(refs['prior_result'] == old_path and event['prior_result']['sha256'] == item['prior_result_sha256'],
+                label + ': event/old-result binding mismatch')
+        require(old.get('execution_source_sha256_start', {}).get(INITIALIZATION_SOURCE)
+                == event['prior_source']['sha256'], label + ': checkpoint does not bind retained prior code')
+        before = read(refs['prior_manifest'])
+        old_rows = [r for r in before.get('entries', []) if r.get('scene_id') == sid]
+        require(before.get('kind') == 'physical_execution' and len(old_rows) == 1,
+                label + ': invalid pre-recovery manifest')
+        prior_row = old_rows[0]
+        require(prior_row.get('executed') is False and prior_row.get('task_success') is False
+                and prior_row.get('execution_status') == 'running' and prior_row.get('attempts') == 1,
+                label + ': old manifest does not record an unexecuted initialization')
+        for key in ('task_id', 'variant_id', 'result_sha256', 'config_sha256', 'trajectory_sha256'):
+            require(prior_row.get(key) == entry.get(key), label + ': pre-recovery source mismatch: ' + key)
+        stop = read(refs['operator_stop'])
+        require(type(event.get('prior_process_id')) is int and event['prior_process_id'] > 0
+                and stop.get('pid') == event['prior_process_id']
+                and stop.get('result_sha256') == item['prior_result_sha256']
+                and stop.get('status_before_signal') == 'initializing'
+                and (stop.get('pid_absent_after_signal') is True or stop.get('pid_absent_after_escalation') is True),
+                label + ': prior process termination is not evidenced')
+        require(read(refs['diagnosis']).get('scene_id') == sid, label + ': diagnosis belongs to another scene')
+        for ref in evidence:
+            # Same retained file/log bytes referenced by several events are stored once.
+            suffix = Path(ref['path']).suffix.lower()
+            require(suffix in ('.json', '.py', '.log'), label + ': unexpected history evidence file type')
+            ref['package_path'] = 'initialization_history/files/' + ref['sha256'] + suffix
+        checked.append(dict(number=number, kind=item['kind'], execution_started=False,
+                            reason=item['reason'], evidence_files=evidence))
+    if history:
+        subdirectory = f'initialization_retry_{len(history):02d}'
+        require(entry.get('execution_subdirectory') == physical.get('execution_subdirectory') == subdirectory
+                and physical_path == demos/'executions'/sid/subdirectory/'result.json',
+                sid + ': recovered physical result must use its separate initialization retry directory')
+    else:
+        require(not entry.get('execution_subdirectory') and not physical.get('execution_subdirectory'),
+                sid + ': retry directory requires retained initialization history')
+    return checked
+
+
 def validate_entry(entry, source_row, source, demos):
     sid = entry['scene_id']
     for key in ('scene_id', 'task_id', 'variant_id', 'config_sha256'):
@@ -186,6 +292,7 @@ def validate_entry(entry, source_row, source, demos):
     require(physical.get('trajectory_sha256') == entry['trajectory_sha256']
             and repo_path(physical['trajectory_path']) == trajectory,
             sid + ': physical result does not bind selected NPZ')
+    initialization_history = validate_initialization_history(entry, physical, physical_path, demos)
     require(entry['video_path'] == 'videos/' + sid + '.mp4', sid + ': unexpected video path')
     video = (demos / entry['video_path']).resolve()
     video.relative_to(demos)
@@ -211,6 +318,8 @@ def validate_entry(entry, source_row, source, demos):
                 execution_result_path=entry['execution_result_path'],
                 execution_result_sha256=entry['execution_result_sha256'],
                 execution_result_package_path='results/' + sid + '.json',
+                initialization_history=initialization_history,
+                additional_initialization_starts=len(initialization_history),
                 failure_reason=physical.get('failure_reason', physical.get('error', '')),
                 video_sha256=entry['video_sha256'], video_bytes=video.stat().st_size,
                 result_path=entry['result_path'], result_sha256=entry['result_sha256'],
@@ -249,6 +358,7 @@ $('search').oninput=filter;$('task').onchange=filter;$('variant').onchange=filte
 def readme(entries, source):
     counts = Counter(row['execution_status'] for row in entries)
     not_executed = sum(not row['executed'] for row in entries)
+    initialization_starts = sum(row['additional_initialization_starts'] for row in entries)
     warnings = [row for row in entries if row['scene_id'] in KNOWN_WARNINGS]
     warning_text = '\n'.join('- `' + row['scene_id'] + '`：' + '；'.join(row['historical_quality_issues'])
                              for row in warnings)
@@ -259,6 +369,8 @@ def readme(entries, source):
 解压后打开 `index.html`，按任务或变体筛选并播放；也可直接打开 `videos/` 下的 MP4。共 14 个原始任务 × 11 种增广变体 = 154 个视频。物理任务成功 {counts['success']}、失败 {counts['failed']}、错误 {counts['error']}；其中 {not_executed} 景标记为未进入物理执行。每景仅尝试一次，失败保留。
 
 规划输入来源：`{source.relative_to(ROOT)}`。每个视频在 `manifest.json` 中绑定规划结果、场景配置、NPZ 轨迹及实际执行结果的 SHA256。实际执行 JSON 位于 `results/`，明确记录 `planning_status`、`execution_status`、`task_success`、`attempts` 和 `executed`。初始化错误若 `executed=false`，不计为完成物理执行，视频仅能来自真实现场画面，不能使用占位图补足。
+
+本包另保留 {initialization_starts} 次进入物理 episode 前的初始化中断。154 个场景的唯一物理 episode 与额外初始化启动分别统计：旧 `initializing`、`executed=false` 结果保持原字节，新结果写入独立恢复目录，正式视频路径不变。`initialization_history/` 保存有 SHA 绑定的旧结果、源码、日志、恢复事件、旧清单、停止进程证据及诊断；相同日志只收录一次。逐项来源与包内路径见 `validation.json`。历史初始化文件不能替代 154 份实际结果及 154 个真实视频，已经开始执行的失败任务不因此获得重试。
 
 `validation.json` 记录真实逐帧解码的帧数、尺寸、时长，以及输入六阶段轨迹完整性。原始规划 NPZ 和场景资产未打包。
 
@@ -311,6 +423,7 @@ def package(demos, source, output, workers=2, validate_only=False):
         kind='physical_execution', planning_only=False, total=TOTAL,
         execution_counts=dict(Counter(row['execution_status'] for row in entries)),
         executed_count=sum(row['executed'] for row in entries),
+        additional_initialization_starts=sum(row['additional_initialization_starts'] for row in entries),
         task_success_count=sum(row['task_success'] for row in entries),
         safety_independently_verified=False,
         source_run=str(source.relative_to(ROOT)), source_progress_sha256=manifest['source_progress_sha256'],
@@ -325,6 +438,11 @@ def package(demos, source, output, workers=2, validate_only=False):
     files = {'manifest.json': manifest_path,
              **{row['video_path']: demos / row['video_path'] for row in entries},
              **{row['execution_result_package_path']: demo_path(row['execution_result_path'], demos) for row in entries}}
+    history_files = [ref for row in entries for event in row['initialization_history'] for ref in event['evidence_files']]
+    for ref in history_files:
+        path = repo_path(ref['path'])
+        bound_file(path, ref['sha256'], 'Initialization history before packaging')
+        files.setdefault(ref['package_path'], path)
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='.trajectory-package-', dir=output.parent) as temporary:
         temporary = Path(temporary)
@@ -354,6 +472,8 @@ def package(demos, source, output, workers=2, validate_only=False):
             bound_file(demos / row['video_path'], row['video_sha256'], row['scene_id'] + ' packaged video')
             bound_file(demo_path(row['execution_result_path'], demos), row['execution_result_sha256'],
                        row['scene_id'] + ' packaged physical result')
+        for ref in history_files:
+            bound_file(repo_path(ref['path']), ref['sha256'], 'Packaged initialization history')
         for name in (*generated, 'SHA256SUMS.txt'):
             shutil.copyfile(temporary / name, demos / name)
         zipped.replace(output)

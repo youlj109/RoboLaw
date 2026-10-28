@@ -726,7 +726,7 @@
       const data=state.data?.physical_execution||{},entry=arr(data.entries).find(row=>row.scene_id===physicalState.selected),video=byId('physicalVideo'),url=safeURL(entry?.video_url);
       byId('physicalTitle').textContent=entry?.scene_id||'没有匹配的场景';
       byId('physicalOutcome').textContent=entry?(entry.stale?'结果来源待核，暂不计入执行结论':physicalLabel(entry))+' · 规划：'+(entry.planning_status==='generated'?'已生成':'未完成')+(entry.attempts?' · 尝试 '+entry.attempts+' 次':''):'';
-      byId('physicalReason').textContent=[entry?.reason,entry?.video_note].filter(Boolean).join('\n');
+      byId('physicalReason').textContent=[entry?.additional_initialization_starts?'初始化恢复 '+entry.additional_initialization_starts+' 次；原启动未进入物理 episode，历史证据保留。':'',entry?.reason,entry?.video_note].filter(Boolean).join('\n');
       if(url){if(video.getAttribute('src')!==url)video.src=url;video.hidden=false;byId('physicalVideoEmpty').hidden=true;}
       else{if(video.hasAttribute('src')){video.pause();video.removeAttribute('src');video.load();}video.hidden=true;byId('physicalVideoEmpty').hidden=false;byId('physicalVideoEmpty').textContent=entry?.initialization_error?'初始化未完成，尚无已绑定的实际现场视频':entry?.execution_status==='running'?'本景执行中，视频将在保存并校验后显示':'尚无已验证来源的实际执行视频';}
       const quality=byId('physicalQuality');quality.replaceChildren();if(arr(entry?.historical_quality_issues).length){const box=el('div','trajectory-quality');box.append(el('b','','沿用场景的历史质量提示'));entry.historical_quality_issues.forEach(value=>box.append(el('p','',value)));quality.append(box);}
