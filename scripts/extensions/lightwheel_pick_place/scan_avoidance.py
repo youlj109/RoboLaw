@@ -46,6 +46,10 @@ def minimum(shapes,hazards,margin,cutoff=.08):
     return best
 
 def initial_intersections(source,hazards,*,intended_support_roots=()):
+    # Original B03 island tabletop is native support just like counter_ tops.
+    # Exact mesh path verified in property_native_support_context_review.json;
+    # the existing6mm classification bound and all FCL intersections stay unchanged.
+    intended_support_roots=tuple(intended_support_roots)+('/World/envs/env_0/kitchen/island_island_group/top_geometry_right',)
     sl=np.array([s[2] for s in source]);sh=np.array([s[3] for s in source]);bad=[];support=[]
     for hn,ho,hl,hh in hazards:
         bounds=np.linalg.norm(np.maximum(np.maximum(sl-hh,hl-sh),0),axis=1)

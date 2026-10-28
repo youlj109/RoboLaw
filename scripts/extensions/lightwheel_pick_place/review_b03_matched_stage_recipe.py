@@ -9,10 +9,12 @@ checks={'baseline_original_reset':not any(b.get(k) for k in ('prefix_replay','de
 provenance=read(Path('/root/autodl-tmp/B03-review/replay_control_provenance_review_20261028.json'))[target.parent.name]
 checks['variant_first_source_commands_verified']=all(x['actual_recorded_actions_and_phases_identical'] and sha(Path(x['episode'])/'result.json')==x['result_sha256'] for x in provenance['verified_replay_chain']) and Path(provenance['first_pick_source']).resolve()==first_path.parent.resolve()
 checks['variant_second_grasp_commands_verified']=all(provenance['second_grasp_prefix'].get(k) is True for k in ('sha256_matches','actual_commands_match'))
-keys=('seed','placement_seed','requested_grasp_tilt_deg','requested_grasp_yaw_deg','requested_grasp_height_offset_m','smooth_lift','allowed_grasp_fallback','dt','grasp_lateral_x_m','grasp_finger_bias_m','grasp_local_approach','pregrasp_planner_mode','planning_attachment_policy')
+keys=('seed','placement_seed','requested_grasp_tilt_deg','requested_grasp_yaw_deg','requested_grasp_height_offset_m','smooth_lift','allowed_grasp_fallback','dt','grasp_lateral_x_m','grasp_finger_bias_m','grasp_local_approach','pregrasp_planner_mode','planning_attachment_policy','transfer_route_policy')
 checks['first_input_controls']=all(k in b and k in first and b[k]==first[k] for k in keys)
 first_motion=dict(first['task_motion_parameters']);first_motion.setdefault('gentle_supported_placement',False);first_motion.setdefault('placement_feedback_lower',False)
 checks['first_motion_parameters']=b['task_motion_parameters']==first_motion
+checks['same_reset_layout_reference']=b.get('initial_state_layout_source')==first.get('initial_state_layout_source')
+checks['first_lower_policy']=all(b.get('place_lower',{}).get(k)==first.get('place_lower',{}).get(k) for k in ('mode','lower_z_m','skipped'))
 mapping={'gentle_supported_placement':'gentle_supported_placement','round10_second_placement':'round10_second_placement','release_ramp_steps':'release_ramp_steps','dual_first_place_offset_x':'dual_first_place_offset_x_m','dual_second_place_offset_x':'dual_second_place_offset_x_m','dual_first_place_offset_y':'dual_first_place_offset_y_m','align_second_grasp':'align_second_grasp','free_release':'free_release'}
 stage=profile['stages']['banana_2'];checks['second_motion_overrides']=all(stage['args'][k]==r['task_motion_parameters'][v] for k,v in mapping.items())
 checks['second_body_goal_file']=sha(Path(stage['placement_goals']))==stage['placement_goals_sha256']==r['task_motion_parameters']['placement_goals_sha256']
