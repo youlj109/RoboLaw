@@ -377,6 +377,7 @@ with SimulationAppContext(args):
     source_contacts=source_contact_trackers[PICK]
     step_wall_profile={'before_snapshot_s':0.,'camera_s':0.,'env_step_s':0.,'after_snapshot_s':0.,'contact_s':0.,'steps':0}
     def step(command,gripper):
+        if external_stop_requested:raise TimeoutError('External stop requested; native success not established')
         tick=time.perf_counter();before=snapshot();step_wall_profile['before_snapshot_s']+=time.perf_counter()-tick
         tick=time.perf_counter()
         if writer:
@@ -392,6 +393,7 @@ with SimulationAppContext(args):
                     'physics_step_before':before_capture,'physics_step_after':int(e.sim.get_physics_step_count()),
                     'simulation_time_s':before_capture*cfg.sim.dt})
         step_wall_profile['camera_s']+=time.perf_counter()-tick
+        if external_stop_requested:raise TimeoutError('External stop requested during capture; no next physics action')
         action=np.r_[command,gripper].astype(np.float32)
         tick=time.perf_counter()
         try:env.step(torch.tensor(action[None],device=e.device))
@@ -427,9 +429,12 @@ with SimulationAppContext(args):
         result['variant_spec']=json.loads(config_path.read_text())[args.variant]
         result['variant_config_source']={'path':str(config_path),'sha256':hashlib.sha256(config_path.read_bytes()).hexdigest()}
     import signal
+    external_stop_requested=[]
     def preserve_on_external_stop(signum,frame):
         result['success']=False;result['interruption_signal']=int(signum)
-        raise TimeoutError('External stop requested; preserve partial observations, never claim native success')
+        external_stop_requested.append(int(signum))
+        # Kit can swallow exceptions raised inside an async event callback.
+        # Exit from the ordinary action loop before any next physics action.
     if args.phase_joint_seeds:result['phase_joint_seed_reference']={'path':str(args.phase_joint_seeds),'sha256':hashlib.sha256(args.phase_joint_seeds.read_bytes()).hexdigest(),'policy':'IK initialization only; original current TCP goals and safety checks retained'}
     previous_signal_handlers={sig:signal.signal(sig,preserve_on_external_stop) for sig in (signal.SIGTERM,signal.SIGINT)}
     try:
