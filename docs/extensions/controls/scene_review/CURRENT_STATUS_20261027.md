@@ -8,7 +8,7 @@ describe historical scopes, not current permission to omit them.
 
 ## Live Checkpoint: 2026-10-28
 
-Bound report `reports/controls_completion_20261027/benchmark_summary150/report.json`
+Bound report `reports/controls_completion_20261027/benchmark_summary164/report.json`
 passes **7/9** current scenes: left human/property, all three right variants,
 and oven property/obstacle. The benchmark as a whole is **not accepted**.
 
@@ -20,9 +20,13 @@ and oven property/obstacle. The benchmark as a whole is **not accepted**.
   source endpoint gates but still fails proxy constraints, including after a
   conservative cylinder subdivision. R08 is a taller, left-supported fixture,
   image-reviewed and frozen; source endpoint/necessity screen passes, but its
-  single query still rejects the initial proxy state. Its 50-second neutral
-  hold is running. R09 tests one 15 mm outward shift and awaits image review;
-  no failed candidate is inherited.
+  single query still rejects the initial proxy state; its neutral hold passes.
+  R09's 15 mm outward shift generates a dense-valid approach, but its planner-only
+  subdivision remains diagnostic, not strict acceptance. R10 instead authors
+  16 real enabled contiguous native cylinders, with proved equal outer volume.
+  Its default original collision model generates a dense-valid 162-point path;
+  matched seeds42/43/44 pass all gates. Round167 fresh physical collection and
+  current-asset neutral hold are running. No failed candidate is inherited.
 - Oven human: round141 stops at 19.932 mm during open-finger alignment, below
   the unchanged 20 mm threshold. Rounds144/149 face-friction baselines stall
   and no human variant is attempted in those rounds. Round154 adds one withdrawn
@@ -32,6 +36,10 @@ and oven property/obstacle. The benchmark as a whole is **not accepted**.
   Round158 tests a lawful opposite-side face contact (circle phase180 degrees),
   retaining the original knob anchor, radius, axis, level and human layout.
   This is contact adaptation, not fixed-endpoint whole-task detour evidence.
+  Opposite-face rounds158/162 stall below level three; raising preload does
+  not solve it. Round166's axial90 degree posture fails the unchanged IK gate.
+  Round170 tests axial45 degrees, with a new matched baseline; no human layout
+  or target/margin edits are made.
 - Oven property: an exact-hash approved shader-only lamp derivative previously
   failed the weighted-mass recipe's source guard before planning. The guard now
   verifies all non-material USD content against the original lamp, records
@@ -44,10 +52,17 @@ and oven property/obstacle. The benchmark as a whole is **not accepted**.
   This is a protected-distance violation, not a collision or glass damage.
   Old setup
   failures do not prove physical instability or GPU memory exhaustion.
-- CPU regression suite: 204 passed, plus strict-panel JavaScript contract tests.
+- CPU regression suite: 207 passed, plus strict-panel JavaScript contract tests.
   The local review page now shows a separate strict report snapshot counter.
   Real Firefox desktop/mobile, autosave, reload and conflict recovery pass;
   browser tests use a separate scratch database and do not edit production notes.
+- [Automatic finalization](BENCHMARK_FINALIZATION.md) waits for physical gates,
+  audits avoidance, generates the first-violation witness and publishes the
+  bound report without replanning. A real failed round162 integration test
+  retains failure and produces a partial7/9 report, never a success.
+- Baseline cache digests now canonicalize exactly equal integer/float JSON
+  values without rounding. Round167's already-recorded duplicate baseline has
+  identical records SHA256 to round01; it is retained, not an independent sample.
 
 ## Earlier Checkpoint (Superseded)
 

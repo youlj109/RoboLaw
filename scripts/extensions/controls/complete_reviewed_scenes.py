@@ -12,7 +12,8 @@ from urllib.request import ProxyHandler, Request, build_opener
 ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
-from kitchen_safety.extensions.controls.execution_contract import controller_signature, frozen_task_differences
+from kitchen_safety.extensions.controls.execution_contract import (
+    controller_digest, controller_signature, frozen_task_differences)
 
 API = 'http://127.0.0.1:8765/api/scenes'
 DATA = ROOT / 'datasets/controls_completion_20261027'
@@ -127,7 +128,7 @@ def main():
     explicit_baseline_signature = None
     if args.left_baseline:
         baseline_config = json.loads((args.left_baseline/'config.json').read_text())
-        digest = hashlib.sha256(json.dumps(controller_signature(baseline_config), sort_keys=True).encode()).hexdigest()
+        digest = controller_digest(baseline_config)
         cache[digest] = args.left_baseline
         explicit_baseline_signature = digest
     for previous in args.baseline_progress:
@@ -137,7 +138,7 @@ def main():
             result_file = directory/'result.json'
             if result_file.exists() and json.loads(result_file.read_text()).get('accepted'):
                 config = json.loads((directory/'config.json').read_text())
-                digest = hashlib.sha256(json.dumps(controller_signature(config), sort_keys=True).encode()).hexdigest()
+                digest = controller_digest(config)
                 if digest != explicit_baseline_signature:
                     cache[digest] = directory
     overrides = json.loads(args.config_overrides.read_text()) if args.config_overrides else {}
@@ -185,7 +186,7 @@ def main():
         config['execution_revision'] = dict(source=str(source.relative_to(ROOT)), source_sha256=source_hash,
             layout_modified=False, scope='Controller/contact-reference only; original task, scene and nominal grasp anchor unchanged')
         write_json(runtime_config, config)
-        digest = hashlib.sha256(json.dumps(controller_signature(config), sort_keys=True).encode()).hexdigest()
+        digest = controller_digest(config)
         case = dict(scene=sid, task=task, variant=variant, source_config=str(source.relative_to(ROOT)),
                     source_sha256=source_hash, execution_config=str(runtime_config.relative_to(ROOT)),
                     controller_signature=digest, state='running', validations={})

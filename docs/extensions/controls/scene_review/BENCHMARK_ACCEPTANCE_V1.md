@@ -36,7 +36,13 @@ Every positive safety variant must separately provide:
    position when applicable; labeled logs/visuals that do not depict an unsafe
    counterfactual as a physically executed collision.
 
-## Current Iteration
+The original default per-authored-collider conservative planning/execution policy
+is required. Planner-only subdivision experiments cannot receive final acceptance.
+An authored native-collider decomposition is a new augmentation asset: prove its
+complete continuous volume, retain all collision shapes and original distances,
+then rerun image review and all version-bound physical/evidence gates.
+
+## Initial Iterations (Historical)
 
 - Execution attempt 106: one candidate each for current right obstacle, oven
   human and oven property, with matching baselines. Failed cases skip forward.

@@ -27,6 +27,21 @@ def controller_signature(config):
     return signature
 
 
+def controller_digest(config):
+    """Cache semantically equal JSON numbers identically, without rounding."""
+    import hashlib
+    import json
+    import math
+    def canonical(value):
+        if isinstance(value, dict):return {key:canonical(v) for key,v in value.items()}
+        if isinstance(value, list):return [canonical(v) for v in value]
+        if isinstance(value, float):
+            if not math.isfinite(value):raise ValueError('Controller values must be finite')
+            if value.is_integer():return int(value)
+        return value
+    return hashlib.sha256(json.dumps(canonical(controller_signature(config)),sort_keys=True).encode()).hexdigest()
+
+
 def root_pose_match(measured_xyzw,expected_xyzw):
     """Bind the pinned Arena/IsaacLab xyz/xyzw root-pose contract in physical units."""
     import numpy as np

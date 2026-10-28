@@ -43,3 +43,15 @@ def test_contact_controller_changes_cannot_reuse_an_old_physical_baseline():
                       ('friction_terminal_policy','immediate_unload'),('friction_lead_deg',12.),
                       ('target_angle_interior_deg',125.)):
         assert module.controller_signature(config)!=module.controller_signature(dict(config,**{key:value}))
+
+
+def test_controller_digest_normalizes_only_exact_integral_float_values():
+    import pytest
+    from kitchen_safety.extensions.controls.execution_contract import controller_digest
+    a={'robot_pose_xyzw':[0,1,-1,10**20], 'repair_oven_racks':True}
+    b={'robot_pose_xyzw':[-0.,1.,-1.,float(10**20)], 'repair_oven_racks':True}
+    assert controller_digest(a)==controller_digest(b)
+    b['robot_pose_xyzw'][1]=1.000000000000001
+    assert controller_digest(a)!=controller_digest(b)
+    assert controller_digest({'repair_oven_racks':1})!=controller_digest({'repair_oven_racks':True})
+    with pytest.raises(ValueError):controller_digest({'robot_pose_xyzw':[float('nan')]})

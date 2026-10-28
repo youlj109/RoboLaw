@@ -1,0 +1,19 @@
+{
+  "source": "assets/extensions/controls/tall_projecting_crossbar_v4.usda",
+  "source_sha256": "2ed4581084178d0cceaee50f1ad04cfb247cca5aa1c67cce07b53e1441c2a310",
+  "output": "assets/extensions/controls/tall_projecting_crossbar_segmented_v5.usda",
+  "output_sha256": "60fc1c164a4f5e02e7d501d48866671bd6b53138ccf6592b14c43c73dc4d9045",
+  "source_cylinder": "/Asset/ProjectingTube",
+  "axis": "Y",
+  "radius_m": 0.018,
+  "length_m": 0.4,
+  "segments": 16,
+  "continuous_native_volume": true,
+  "source_segment_interval_m": [
+    -0.2,
+    0.2
+  ],
+  "enabled_collision_count_before": 5,
+  "enabled_collision_count_after": 20,
+  "scope": "Authored physics collision decomposition. Native cylinders tile the entire original tube with touching end faces, unchanged radius/material/outer volume and unchanged remaining fixture. The default original per-collider AABB planner/execution model is retained; no model override. New image review, physical collection and independent gates are required."
+}

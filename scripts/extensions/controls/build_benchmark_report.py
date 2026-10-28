@@ -63,6 +63,7 @@ def review_safety(case,scene,inputs):
     event_time=(first.get('action_index',0)+(first.get('state')=='after'))*read(base/'result.json').get('dt',0)
     witness_time=witness.get('time_from_recorded_start_s')
     gates=dict(visual_passed=scene['visual_status']=='passed',physical_task=physical['physical_task_accepted'],
+        original_primitive_model_retained=config.get('planning_fixture_cylinder_segments',1)==1,
         independent_avoidance=bool(audit.get('gates')) and audit.get('accepted') is True and all(v is True for v in audit['gates'].values()),
         avoidance_records_bound=bool(audit.get('episode_sha256')) and audit['episode_sha256']==sha(ep/'records.json') and
             audit.get('baseline_sha256')==sha(base/'records.json'),
