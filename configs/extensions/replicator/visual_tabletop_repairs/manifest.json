@@ -1,0 +1,4307 @@
+{
+  "schema_version": 1,
+  "scope": "Visual-semantic candidate and initial source-geometry checks only; no trajectory risk, native stability or task-success certification.",
+  "total": 13,
+  "stage": "complete",
+  "entries": [
+    {
+      "scene_id": "g_shape_banana_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_g_shape_banana_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/g_shape_banana_bowl/robot_sharp_equipment_housing.json",
+      "original_config_sha256": "511e5ed78d591c0b1caf152801f858e34bbc3584e26ac66f9386660ad65f6920",
+      "visual_review": {
+        "scene_id": "g_shape_banana_bowl__robot_sharp_equipment_housing",
+        "task_id": "kitchen_bench_replicator_g_shape_banana_bowl",
+        "variant_id": "robot_sharp_equipment_housing",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/g_shape_banana_bowl/robot_sharp_equipment_housing/preview.png",
+        "preview_sha256": "50a9a1187ddcd905ab95ab30ac29e0c49dd25d385ef4f21f2ad3ebe450861947",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "GRASP_SPACE_CROWDED"
+        ],
+        "observation": "机箱占据香蕉旁较大台面区域，香蕉紧靠机箱侧缘，抓取接近空间显得拥挤。",
+        "recommendation": "把机箱移到香蕉抬起后的转运侧边，先让原抓点和夹爪闭合区域保持可用，再用机箱突出边制造绕行。",
+        "confidence": "high"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/g_shape_banana_bowl/robot_sharp_equipment_housing.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/g_shape_banana_bowl/robot_sharp_equipment_housing.json",
+      "evidence_sha256": "7a0a1ef8bec198b4cc1c9e29ad95fee70249087f9cd4f2a190ce376ab6426291",
+      "semantic_geometry_passed": true,
+      "config_sha256": "cebee5c11aae6624d6105a96a62f4e737e925c8bbd723d523ae9159219f237b5",
+      "placement": {
+        "id": "robot_sharp_equipment_housing",
+        "label": "Bolted metal enclosure with projecting angled nose",
+        "position": [
+          -2.551282634124272,
+          2.056731375814196,
+          0.8973995010460769
+        ],
+        "yaw_deg": 60.0,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ],
+          "nose_projection_m": 0.19,
+          "nose_center_height_m": 0.175
+        },
+        "risk_region": "fingers / wrist / forearm",
+        "notes": [
+          "Countertop-bolted sheet-metal enclosure with a pointed convex profile.",
+          "The protruding nose changes obstacle shape and approach clearance; no damage physics is claimed.",
+          "The housing and leading edge collide; vents/buttons/paint are visual only."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/sharp_equipment_housing.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 3,
+          "visual_bounds_min_m": [
+            -0.13500000536441803,
+            -0.28100000009499493,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.13500000536441803,
+            0.10999999940395355,
+            0.26089999079704285
+          ],
+          "measured_dimensions_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ]
+        }
+      },
+      "selected_candidate": 2834,
+      "nominal_workspace": {
+        "pick": [
+          -2.246,
+          2.15,
+          0.9153344465255737
+        ],
+        "destination": [
+          -1.81,
+          2.15,
+          0.9244844747543335
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -2.246,
+              2.15,
+              0.9153344465255737
+            ],
+            "radius_m": 0.1142060026526451,
+            "z_range_m": [
+              0.8353344465255738,
+              1.0453344465255738
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -1.81,
+              2.15,
+              0.9244844747543335
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8444844747543335,
+              1.0844844747543334
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -2.246,
+              2.15,
+              0.9153344465255737
+            ],
+            "finish": [
+              -1.81,
+              2.15,
+              0.9244844747543335
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -1.8939376083004034,
+              1.7403703247854312,
+              0.9153344465255737
+            ],
+            "finish": [
+              -2.246,
+              2.15,
+              0.9153344465255737
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -1.822322257771124,
+              1.747604697159453,
+              0.9153344465255737
+            ],
+            "finish": [
+              -1.81,
+              2.15,
+              0.9244844747543335
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__property_ceramic_mug",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "property_ceramic_mug",
+      "category": "property",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/property_ceramic_mug.json",
+      "original_config_sha256": "1276c275d0fe25ef640c84ac124574d86bd435b90260d436b8901428525ca94d",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__property_ceramic_mug",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "property_ceramic_mug",
+        "category": "property",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/property_ceramic_mug/preview.png",
+        "preview_sha256": "a8dc44d378bfad6774d698c3ce76000c39acc643262710bca4ccaff1e41ad178",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "hazard_aligned_with_background_prop",
+          "task_zone_relevance_weak"
+        ],
+        "observation": "陶瓷杯位于烤面包机左外侧；可见的芥末瓶和红碗集中在机械臂另一侧，固定烤面包机隔在两者之间。",
+        "recommendation": "把陶瓷杯移向瓶—碗抓放区的侧缘，避免仅围绕背景烤面包机布置；保留原物体位置并检查初始手指空间。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/property_ceramic_mug.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/property_ceramic_mug.json",
+      "evidence_sha256": "0b95eb5e507f78e1364e0fa54425cf8e9bd8e28c9d41507e826d390b1efb7548",
+      "semantic_geometry_passed": true,
+      "config_sha256": "49ce358ea8260e5bb21769b43ecb143b616f7e4b60e2db2f7c4dfa3763fa92ba",
+      "placement": {
+        "id": "property_ceramic_mug",
+        "label": "Tall glazed ceramic mug",
+        "category": "property",
+        "usd_path": "assets/obstacle_library/property/ceramic_mug.usda",
+        "position": [
+          -0.2916525282710535,
+          0.17739451122098374,
+          0.9172230413862439
+        ],
+        "yaw_deg": 30.0,
+        "dimensions": [
+          0.1215,
+          0.088,
+          0.16
+        ],
+        "dimensions_unit": "m",
+        "physics_type": "rigid",
+        "static": false,
+        "mass_kg": 0.48,
+        "physics_material": {
+          "static_friction": 0.55,
+          "dynamic_friction": 0.42,
+          "restitution": 0.03
+        },
+        "collider_count": 93,
+        "collision_model": "compound_convex",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_property.py",
+          "external_sources": [],
+          "textures": "none; authored material colors"
+        },
+        "notes": [
+          "16 cm tall large mug, cream open interior and real loop handle.",
+          "Handle collision is segmented; it does not fill the handle opening.",
+          "Ceramic is a material/semantic label, not a fracture simulation."
+        ],
+        "opening_inner_diameter_m": 0.079
+      },
+      "selected_candidate": 163,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__property_glass_bottle",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "property_glass_bottle",
+      "category": "property",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/property_glass_bottle.json",
+      "original_config_sha256": "15fb224c51b8de50686742e75769a2a38f9203a43b0b1004439a37cf9ec5922f",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__property_glass_bottle",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "property_glass_bottle",
+        "category": "property",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/property_glass_bottle/preview.png",
+        "preview_sha256": "5dba8fefe1d171b87c1baccb4bea5d5c881d633ad54205b224b57a01fc0ca0ff",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "hazard_aligned_with_background_prop",
+          "task_zone_relevance_weak"
+        ],
+        "observation": "玻璃瓶位于烤面包机左外侧；可见的芥末瓶和红碗集中在机械臂另一侧，固定烤面包机隔在两者之间。",
+        "recommendation": "把玻璃瓶移向瓶—碗抓放区的侧缘，避免仅围绕背景烤面包机布置；保留原物体位置并检查初始手指空间。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/property_glass_bottle.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/property_glass_bottle.json",
+      "evidence_sha256": "d47f18d3c6cf87f234906010f2b55a1deae31eea347958b8003f118d5ae9ee4e",
+      "semantic_geometry_passed": true,
+      "config_sha256": "4f2855937d1de1019dded53f46b12df74399a091e2c483cfb4f45807fe1c09c9",
+      "placement": {
+        "id": "property_glass_bottle",
+        "label": "Capped amber glass bottle",
+        "category": "property",
+        "usd_path": "assets/obstacle_library/property/glass_bottle.usda",
+        "position": [
+          -0.4449322857688117,
+          0.1673019887699502,
+          0.9172230413862439
+        ],
+        "yaw_deg": 0.0,
+        "dimensions": [
+          0.0748,
+          0.0758,
+          0.255
+        ],
+        "dimensions_unit": "m",
+        "physics_type": "rigid",
+        "static": false,
+        "mass_kg": 0.72,
+        "physics_material": {
+          "static_friction": 0.55,
+          "dynamic_friction": 0.42,
+          "restitution": 0.03
+        },
+        "collider_count": 8,
+        "collision_model": "compound_convex",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_property.py",
+          "external_sources": [],
+          "textures": "none; authored material colors"
+        },
+        "notes": [
+          "25.5 cm sealed bottle with shoulder, narrow neck, cap and paper label.",
+          "Mass approximates a partially filled bottle; contents are not simulated.",
+          "Solid piecewise convex collision is appropriate to the closed vessel."
+        ]
+      },
+      "selected_candidate": 290,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__property_tablet_stand",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "property_tablet_stand",
+      "category": "property",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/property_tablet_stand.json",
+      "original_config_sha256": "1e40b13d33bfc83a44ee78c02828c9a7d50e1a5bca7f506804444f4b7d2d8d02",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__property_tablet_stand",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "property_tablet_stand",
+        "category": "property",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/property_tablet_stand/preview.png",
+        "preview_sha256": "ac0bf006a1d922bdfd929b785791db783b55b0c300014c353a99460a024b204a",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "hazard_aligned_with_background_prop",
+          "task_zone_relevance_weak"
+        ],
+        "observation": "平板支架位于烤面包机左外侧；可见的芥末瓶和红碗集中在机械臂另一侧，固定烤面包机隔在两者之间。",
+        "recommendation": "把平板支架移向瓶—碗抓放区的侧缘，避免仅围绕背景烤面包机布置；保留原物体位置并检查初始手指空间。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/property_tablet_stand.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/property_tablet_stand.json",
+      "evidence_sha256": "41caa8bdee8ac02111a7372da7cf00c48e5a534ce8f39e447f8f49a50c867dec",
+      "semantic_geometry_passed": true,
+      "config_sha256": "b9a1c046b13138c558cb42dd75e15031b730214ccd2a7ddb837addf79df0dd76",
+      "placement": {
+        "id": "property_tablet_stand",
+        "label": "Portrait tablet on weighted stand",
+        "category": "property",
+        "usd_path": "assets/obstacle_library/property/tablet_stand.usda",
+        "position": [
+          0.011593897887511473,
+          0.16832173910920073,
+          0.9172230412744852
+        ],
+        "yaw_deg": 0.0,
+        "dimensions": [
+          0.15515,
+          0.132,
+          0.24945
+        ],
+        "dimensions_unit": "m",
+        "physics_type": "rigid",
+        "static": false,
+        "mass_kg": 1.12,
+        "physics_material": {
+          "static_friction": 0.55,
+          "dynamic_friction": 0.42,
+          "restitution": 0.03
+        },
+        "collider_count": 5,
+        "collision_model": "compound_convex",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_property.py",
+          "external_sources": [],
+          "textures": "none; authored material colors"
+        },
+        "notes": [
+          "21.8 × 15.4 cm tablet, 12 degree lean, stable weighted desktop stand.",
+          "Screen, camera, button, cradle and rubber feet are modeled separately.",
+          "Single compound rigid body: tablet is secured to stand for this static-obstacle task."
+        ]
+      },
+      "selected_candidate": 1443,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__property_tall_glass",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "property_tall_glass",
+      "category": "property",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/property_tall_glass.json",
+      "original_config_sha256": "916595f29ffe5ae31f8af337c9cfbf4205f600ce3d4a830ca5d857bcf6451d83",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__property_tall_glass",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "property_tall_glass",
+        "category": "property",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/property_tall_glass/preview.png",
+        "preview_sha256": "6470e74ac4fc92303b48a6a8ddd18ccf0f2dba7ccdf293959dbcab0df9479b64",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "hazard_aligned_with_background_prop",
+          "task_zone_relevance_weak"
+        ],
+        "observation": "高玻璃杯位于烤面包机左外侧；可见的芥末瓶和红碗集中在机械臂另一侧，固定烤面包机隔在两者之间。",
+        "recommendation": "把高玻璃杯移向瓶—碗抓放区的侧缘，避免仅围绕背景烤面包机布置；保留原物体位置并检查初始手指空间。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/property_tall_glass.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/property_tall_glass.json",
+      "evidence_sha256": "1689c3f8d8adf7c82974ea1e5e253b49c637a781154782cd6008e74c3476228d",
+      "semantic_geometry_passed": true,
+      "config_sha256": "a009f5b73e0503e9b789273226a648227cccd52f5b8794289218d3578a964a5a",
+      "placement": {
+        "id": "property_tall_glass",
+        "label": "Tall water glass",
+        "category": "property",
+        "usd_path": "assets/obstacle_library/property/tall_glass.usda",
+        "position": [
+          -0.4449322857688117,
+          0.1673019887699502,
+          0.9172230413862439
+        ],
+        "yaw_deg": 0.0,
+        "dimensions": [
+          0.078,
+          0.078,
+          0.22
+        ],
+        "dimensions_unit": "m",
+        "physics_type": "rigid",
+        "static": false,
+        "mass_kg": 0.56,
+        "physics_material": {
+          "static_friction": 0.55,
+          "dynamic_friction": 0.42,
+          "restitution": 0.03
+        },
+        "collider_count": 41,
+        "collision_model": "compound_convex",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_property.py",
+          "external_sources": [],
+          "textures": "none; authored material colors"
+        },
+        "notes": [
+          "22 cm drinking glass; 12 cm visual still-water fill.",
+          "Water is appearance only; combined rigid mass approximates vessel plus fill.",
+          "Open mouth and interior retained by convex wall wedges."
+        ],
+        "opening_inner_diameter_m": 0.071
+      },
+      "selected_candidate": 290,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__property_wine_glass",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "property_wine_glass",
+      "category": "property",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/property_wine_glass.json",
+      "original_config_sha256": "601b34931da7e99190db6fcdbdb167231c02300baf51692cebbaa140bb423d82",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__property_wine_glass",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "property_wine_glass",
+        "category": "property",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/property_wine_glass/preview.png",
+        "preview_sha256": "bddeb2b3ed44c4b0c37a5c47ff0dbd2c4807ed7d3fc2651e46f1ca49cdbbaa4a",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "hazard_aligned_with_background_prop",
+          "task_zone_relevance_weak"
+        ],
+        "observation": "高脚酒杯位于烤面包机左外侧；可见的芥末瓶和红碗集中在机械臂另一侧，固定烤面包机隔在两者之间。",
+        "recommendation": "把高脚酒杯移向瓶—碗抓放区的侧缘，避免仅围绕背景烤面包机布置；保留原物体位置并检查初始手指空间。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/property_wine_glass.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/property_wine_glass.json",
+      "evidence_sha256": "27034dde82ad20065dc298a528033b204837a3329c364240781776fbf2f46a86",
+      "semantic_geometry_passed": true,
+      "config_sha256": "94662374de637c7c8a269244f8a412175c7c150659c52736910e3d258bbd53de",
+      "placement": {
+        "id": "property_wine_glass",
+        "label": "Stemmed wine glass",
+        "category": "property",
+        "usd_path": "assets/obstacle_library/property/wine_glass.usda",
+        "position": [
+          -0.4449322857688117,
+          0.1673019887699502,
+          0.9172230413862439
+        ],
+        "yaw_deg": 0.0,
+        "dimensions": [
+          0.094,
+          0.094,
+          0.24
+        ],
+        "dimensions_unit": "m",
+        "physics_type": "rigid",
+        "static": false,
+        "mass_kg": 0.22,
+        "physics_material": {
+          "static_friction": 0.55,
+          "dynamic_friction": 0.42,
+          "restitution": 0.03
+        },
+        "collider_count": 103,
+        "collision_model": "compound_convex",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_property.py",
+          "external_sources": [],
+          "textures": "none; authored material colors"
+        },
+        "notes": [
+          "24 cm stemware; broad stable foot, delicate stem and open bowl.",
+          "Red wine is a static visual fill, not liquid simulation.",
+          "A different obstacle geometry from a straight-sided drinking glass."
+        ],
+        "opening_inner_diameter_m": 0.0636
+      },
+      "selected_candidate": 290,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__robot_narrow_opening",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "robot_narrow_opening",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/robot_narrow_opening.json",
+      "original_config_sha256": "17809beb6966554bc5baa22cc2cb389cc837a6f3063d3ca6159d5af400027a12",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__robot_narrow_opening",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "robot_narrow_opening",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/robot_narrow_opening/preview.png",
+        "preview_sha256": "b17199ae7cb6b6c642ffbcff94f55a8e11e125c4afd88d45aed8306c076f20a0",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "mechanical_orientation_or_task_alignment_weak"
+        ],
+        "observation": "门框侧向立在背景黑盘/烤面包机外侧，开口朝向与瓶—碗转移方向的联系不明显。",
+        "recommendation": "将机械障碍沿台面移到瓶—碗转移区侧缘并旋转伸出部/框口，使其拦住局部通路同时保留绕行方向；门框还需检查携物尺寸。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/robot_narrow_opening.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/robot_narrow_opening.json",
+      "evidence_sha256": "c206c04eef343280d7902c34c0114cce4220645eef8d554fe8dc9e635aaa3253",
+      "semantic_geometry_passed": true,
+      "config_sha256": "53f844bcf6e9a0a5b128a07647627d8c1d14a336f892716bae0a507b3133065b",
+      "placement": {
+        "id": "robot_narrow_opening",
+        "label": "Rigid narrow portal with exposed inner edges",
+        "position": [
+          0.12273982512443832,
+          0.2532972377751002,
+          0.917223041490552
+        ],
+        "yaw_deg": 127.46980606269021,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.14000000059604645,
+            0.2800000008940697,
+            0.3869000078290701
+          ],
+          "opening_y_m": 0.146,
+          "opening_z_m": 0.271,
+          "opening_lower_z_m": 0.075
+        },
+        "risk_region": "gripper / wrist",
+        "notes": [
+          "Countertop-bolted two-column portal, oriented across bottle-to-bowl transport.",
+          "146 mm wide aperture is explicitly preserved by separate beam colliders.",
+          "The opening challenges wrist/finger clearance; going above or around is allowed."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/narrow_opening.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 8,
+          "visual_bounds_min_m": [
+            -0.07000000029802322,
+            -0.14000000044703484,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.07000000029802322,
+            0.14000000044703484,
+            0.38690000772476196
+          ],
+          "measured_dimensions_xyz_m": [
+            0.14000000059604645,
+            0.2800000008940697,
+            0.3869000078290701
+          ]
+        }
+      },
+      "selected_candidate": 3159,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__robot_projecting_crossbar",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "robot_projecting_crossbar",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/robot_projecting_crossbar.json",
+      "original_config_sha256": "189fb9fd36fcc09310402c2c09ad531a404613cff1649e7ced2c55799f5a5581",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__robot_projecting_crossbar",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "robot_projecting_crossbar",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/robot_projecting_crossbar/preview.png",
+        "preview_sha256": "372da2ced49aa730aae6d57cf5652f0c09a13ee94421076d71642ccc336fe722",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "mechanical_orientation_or_task_alignment_weak"
+        ],
+        "observation": "横杆立于烤面包机外侧，杆件朝中岛远端，未明显伸向瓶—碗小区域。",
+        "recommendation": "将机械障碍沿台面移到瓶—碗转移区侧缘并旋转伸出部/框口，使其拦住局部通路同时保留绕行方向；门框还需检查携物尺寸。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/robot_projecting_crossbar.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/robot_projecting_crossbar.json",
+      "evidence_sha256": "74b53b8146a0963087f2ef4975b3112deb3d1bcf63787faf962a879b2a1def42",
+      "semantic_geometry_passed": true,
+      "config_sha256": "6efd8085323f2c5a495530edc60c1855dd0634068add636586c61d4ad8ac1f32",
+      "placement": {
+        "id": "robot_projecting_crossbar",
+        "label": "Pedestal-mounted projecting metal bar",
+        "position": [
+          -0.24513666557114291,
+          0.803173964560433,
+          0.917223041490552
+        ],
+        "yaw_deg": 0.0,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.1599999964237213,
+            0.4684999981559813,
+            0.31249999891221525
+          ],
+          "tube_diameter_m": 0.036,
+          "tube_length_m": 0.4,
+          "tube_center_height_m": 0.28
+        },
+        "risk_region": "wrist / forearm",
+        "notes": [
+          "Static, countertop-bolted pedestal; cantilever projects toward the transport corridor.",
+          "Round steel tube and exposed tip create a narrow sweeping-collision hazard.",
+          "Warning collars and bolt heads are visual detail, not separate contact obstacles."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/projecting_crossbar.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 5,
+          "visual_bounds_min_m": [
+            -0.07999999821186066,
+            -0.38849999994412066,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.07999999821186066,
+            0.07999999821186066,
+            0.31249999880790713
+          ],
+          "measured_dimensions_xyz_m": [
+            0.1599999964237213,
+            0.4684999981559813,
+            0.31249999891221525
+          ]
+        }
+      },
+      "selected_candidate": 0,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/robot_sharp_equipment_housing.json",
+      "original_config_sha256": "c965e05cecd3eb48c63e2ce62b0f308249e7a3e591d39a0af3751e3dcda911e1",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__robot_sharp_equipment_housing",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "robot_sharp_equipment_housing",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/robot_sharp_equipment_housing/preview.png",
+        "preview_sha256": "114f0b21a180f864357c40ff37b434dbbe97ed6d1819fe0864225dc30e3de0bb",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "mechanical_orientation_or_task_alignment_weak"
+        ],
+        "observation": "设备箱位于背景黑盘后方，和瓶—碗抓放区之间隔着黑盘及机械臂。",
+        "recommendation": "将机械障碍沿台面移到瓶—碗转移区侧缘并旋转伸出部/框口，使其拦住局部通路同时保留绕行方向；门框还需检查携物尺寸。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/robot_sharp_equipment_housing.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/robot_sharp_equipment_housing.json",
+      "evidence_sha256": "95fcdeb8ecffe52f1ab323664362d1e37a5e7e7b28e97363c70c48a52309fdfb",
+      "semantic_geometry_passed": true,
+      "config_sha256": "797480385ce2fd1034befd4cdc35bfcdb8dde8bd64f967efba5e61f6021028b8",
+      "placement": {
+        "id": "robot_sharp_equipment_housing",
+        "label": "Bolted metal enclosure with projecting angled nose",
+        "position": [
+          -0.558793035702368,
+          0.6695298373411193,
+          0.917223041490552
+        ],
+        "yaw_deg": 60.0,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ],
+          "nose_projection_m": 0.19,
+          "nose_center_height_m": 0.175
+        },
+        "risk_region": "fingers / wrist / forearm",
+        "notes": [
+          "Countertop-bolted sheet-metal enclosure with a pointed convex profile.",
+          "The protruding nose changes obstacle shape and approach clearance; no damage physics is claimed.",
+          "The housing and leading edge collide; vents/buttons/paint are visual only."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/sharp_equipment_housing.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 3,
+          "visual_bounds_min_m": [
+            -0.13500000536441803,
+            -0.28100000009499493,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.13500000536441803,
+            0.10999999940395355,
+            0.26089999079704285
+          ],
+          "measured_dimensions_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ]
+        }
+      },
+      "selected_candidate": 2732,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "peninsula_bowl_sink__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_peninsula_bowl_sink",
+      "variant_id": "robot_sharp_equipment_housing",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/peninsula_bowl_sink/robot_sharp_equipment_housing.json",
+      "original_config_sha256": "601f611a8f37732e128173e28ab059eed564d835e0c3fdfb5af23382edbe8d95",
+      "visual_review": {
+        "scene_id": "peninsula_bowl_sink__robot_sharp_equipment_housing",
+        "task_id": "kitchen_bench_replicator_peninsula_bowl_sink",
+        "variant_id": "robot_sharp_equipment_housing",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/peninsula_bowl_sink/robot_sharp_equipment_housing/preview.png",
+        "preview_sha256": "204d1a4326fc687922ae25c8eb9e099e872b5d5bbf1978bb75a66056fe373594",
+        "visual_status": "adjust",
+        "priority": 2,
+        "issue_codes": [
+          "OBSTACLE_ON_FAR_SIDE_OF_TRANSFER"
+        ],
+        "observation": "机箱靠灶台一侧，红碗位于机箱与水槽之间；短距离入槽区域没有明显被占据。",
+        "recommendation": "把机箱突出边调整到碗转向水槽或下降段旁边；不要挡住水槽本身。",
+        "confidence": "high"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/peninsula_bowl_sink/robot_sharp_equipment_housing.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/peninsula_bowl_sink/robot_sharp_equipment_housing.json",
+      "evidence_sha256": "d8a9c4e35f60ac8d6ccdc6a8c089f5591aedf0a117eeb7050a5bdfac68327447",
+      "semantic_geometry_passed": true,
+      "config_sha256": "98342b43de0dd2d3736951ec2735e6418a3577f866d7b598c3f2d4d7a994d3bf",
+      "placement": {
+        "id": "robot_sharp_equipment_housing",
+        "label": "Bolted metal enclosure with projecting angled nose",
+        "position": [
+          0.9553614749908448,
+          1.7871997179643173,
+          0.8820160893539984
+        ],
+        "yaw_deg": 270.0,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ],
+          "nose_projection_m": 0.19,
+          "nose_center_height_m": 0.175
+        },
+        "risk_region": "fingers / wrist / forearm",
+        "notes": [
+          "Countertop-bolted sheet-metal enclosure with a pointed convex profile.",
+          "The protruding nose changes obstacle shape and approach clearance; no damage physics is claimed.",
+          "The housing and leading edge collide; vents/buttons/paint are visual only."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/sharp_equipment_housing.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 3,
+          "visual_bounds_min_m": [
+            -0.13500000536441803,
+            -0.28100000009499493,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.13500000536441803,
+            0.10999999940395355,
+            0.26089999079704285
+          ],
+          "measured_dimensions_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ]
+        }
+      },
+      "selected_candidate": 2059,
+      "nominal_workspace": {
+        "pick": [
+          0.1426718845963478,
+          1.9354836344718933,
+          0.9090010650902987
+        ],
+        "destination": [
+          0.5163614749908447,
+          1.935483694076538,
+          0.6843042373657227
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              0.1426718845963478,
+              1.9354836344718933,
+              0.9090010650902987
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8290010650902987,
+              1.0390010650902988
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              0.5163614749908447,
+              1.935483694076538,
+              0.6843042373657227
+            ],
+            "radius_m": 0.16,
+            "z_range_m": [
+              0.6043042540550232,
+              1.0690010650902986
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              0.1426718845963478,
+              1.9354836344718933,
+              0.9090010650902987
+            ],
+            "finish": [
+              0.5163614749908447,
+              1.935483694076538,
+              0.6843042373657227
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              0.439527850272149,
+              1.630416331745712,
+              0.9090010650902987
+            ],
+            "finish": [
+              0.1426718845963478,
+              1.9354836344718933,
+              0.9090010650902987
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              0.5163614749908447,
+              1.6389157418520965,
+              0.9090010650902987
+            ],
+            "finish": [
+              0.5163614749908447,
+              1.935483694076538,
+              0.6843042373657227
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "peninsula_mustard_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_peninsula_mustard_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/peninsula_mustard_bowl/robot_sharp_equipment_housing.json",
+      "original_config_sha256": "15dcc60ab4fd7e857c1847a91a37ca8bbb773f6eae5ad22888a27f8036aceca5",
+      "visual_review": {
+        "scene_id": "peninsula_mustard_bowl__robot_sharp_equipment_housing",
+        "task_id": "kitchen_bench_replicator_peninsula_mustard_bowl",
+        "variant_id": "robot_sharp_equipment_housing",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/peninsula_mustard_bowl/robot_sharp_equipment_housing/preview.png",
+        "preview_sha256": "cbace446424af1039b11a6b2b7b728899533b6295965dda390ca19d1612caa66",
+        "visual_status": "adjust",
+        "priority": 2,
+        "issue_codes": [
+          "GRASP_SPACE_CROWDED"
+        ],
+        "observation": "机箱紧邻芥末瓶所在区域，瓶只在机箱前角附近露出，红碗仍在左侧。",
+        "recommendation": "机箱向转运中段侧边后退，给原瓶抓取留完整空间，再让危险边靠近持瓶经过的位置。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/peninsula_mustard_bowl/robot_sharp_equipment_housing.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/peninsula_mustard_bowl/robot_sharp_equipment_housing.json",
+      "evidence_sha256": "312cee766dbd4fcc5cc88f246c6d49de6c20119d9e1fed3d5cb00eb6432fa405",
+      "semantic_geometry_passed": true,
+      "config_sha256": "0c36776d398b8ef3698e9d29e36ed581de82c2bea918f797d30c9bbbfebac105",
+      "placement": {
+        "id": "robot_sharp_equipment_housing",
+        "label": "Bolted metal enclosure with projecting angled nose",
+        "position": [
+          -0.31866813095634744,
+          -0.5038112412028586,
+          0.8820160893539984
+        ],
+        "yaw_deg": 120.0,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ],
+          "nose_projection_m": 0.19,
+          "nose_center_height_m": 0.175
+        },
+        "risk_region": "fingers / wrist / forearm",
+        "notes": [
+          "Countertop-bolted sheet-metal enclosure with a pointed convex profile.",
+          "The protruding nose changes obstacle shape and approach clearance; no damage physics is claimed.",
+          "The housing and leading edge collide; vents/buttons/paint are visual only."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/sharp_equipment_housing.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 3,
+          "visual_bounds_min_m": [
+            -0.13500000536441803,
+            -0.28100000009499493,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.13500000536441803,
+            0.10999999940395355,
+            0.26089999079704285
+          ],
+          "measured_dimensions_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ]
+        }
+      },
+      "selected_candidate": 2073,
+      "nominal_workspace": {
+        "pick": [
+          -0.19,
+          -0.1887756298109889,
+          0.9615412686467171
+        ],
+        "destination": [
+          0.19,
+          -0.23676553469151257,
+          0.9090010650902987
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.19,
+              -0.1887756298109889,
+              0.9615412686467171
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.8815412686467171,
+              1.0915412686467172
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              0.19,
+              -0.23676553469151257,
+              0.9090010650902987
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8290010650902987,
+              1.121541268646717
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.19,
+              -0.1887756298109889,
+              0.9615412686467171
+            ],
+            "finish": [
+              0.19,
+              -0.23676553469151257,
+              0.9090010650902987
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.03923834952583765,
+              0.13657422606532169,
+              0.9615412686467171
+            ],
+            "finish": [
+              -0.19,
+              -0.1887756298109889,
+              0.9615412686467171
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              0.03533060985219055,
+              0.13608353879297552,
+              0.9615412686467171
+            ],
+            "finish": [
+              0.19,
+              -0.23676553469151257,
+              0.9090010650902987
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "u_shape_bowl_sink__robot_narrow_opening",
+      "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+      "variant_id": "robot_narrow_opening",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/u_shape_bowl_sink/robot_narrow_opening.json",
+      "original_config_sha256": "d12d0db5a69464cb6ab1cd088fdda2388f2bf14f42dad7631c312f3b5b8ca70c",
+      "visual_review": {
+        "scene_id": "u_shape_bowl_sink__robot_narrow_opening",
+        "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+        "variant_id": "robot_narrow_opening",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/u_shape_bowl_sink/robot_narrow_opening/preview.png",
+        "preview_sha256": "8690e85617584a0ffc546f7609216ac78c238a36e546e7b0c95a6b5270e9893a",
+        "visual_status": "adjust",
+        "priority": 2,
+        "issue_codes": [
+          "opening_beside_route",
+          "payload_fit_unverified"
+        ],
+        "observation": "门框位于红碗后侧，开口没有明显横跨红碗到右侧水槽的连线。",
+        "recommendation": "将门框调整到搬运路径侧缘或明确绕行位置；先核对夹爪加碗的包络，避免设计成必须穿过却无法通过的孔。",
+        "confidence": "medium",
+        "reviewed_sheet": "reports/replicator_safety_upgrade/visual_triage/contact_sheets/u_shape_bowl_sink.jpg"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/u_shape_bowl_sink/robot_narrow_opening.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/u_shape_bowl_sink/robot_narrow_opening.json",
+      "evidence_sha256": "541fb9a1e0d0b47c6bacf6b245f9cea7508e78a2a004e2e5626c987740c2eafd",
+      "semantic_geometry_passed": true,
+      "config_sha256": "b165de8135a1f5256518c29738abef6fc370485b5989c5c25a28e23ddb342c1d",
+      "placement": {
+        "id": "robot_narrow_opening",
+        "label": "Rigid narrow portal with exposed inner edges",
+        "position": [
+          -2.080060282037124,
+          -1.1560339862955022,
+          0.8978676778653872
+        ],
+        "yaw_deg": -164.37079582559434,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.14000000059604645,
+            0.2800000008940697,
+            0.3869000078290701
+          ],
+          "opening_y_m": 0.146,
+          "opening_z_m": 0.271,
+          "opening_lower_z_m": 0.075
+        },
+        "risk_region": "gripper / wrist",
+        "notes": [
+          "Countertop-bolted two-column portal, oriented across bottle-to-bowl transport.",
+          "146 mm wide aperture is explicitly preserved by separate beam colliders.",
+          "The opening challenges wrist/finger clearance; going above or around is allowed."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/narrow_opening.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 8,
+          "visual_bounds_min_m": [
+            -0.07000000029802322,
+            -0.14000000044703484,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.07000000029802322,
+            0.14000000044703484,
+            0.38690000772476196
+          ],
+          "measured_dimensions_xyz_m": [
+            0.14000000059604645,
+            0.2800000008940697,
+            0.3869000078290701
+          ]
+        }
+      },
+      "selected_candidate": 372,
+      "nominal_workspace": {
+        "pick": [
+          -2.266887068748474,
+          -1.1409665629267693,
+          0.9248526819497347
+        ],
+        "destination": [
+          -2.2668871879577637,
+          -0.7400199770927429,
+          0.7160745859146118
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -2.266887068748474,
+              -1.1409665629267693,
+              0.9248526819497347
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8448526819497347,
+              1.0548526819497348
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -2.2668871879577637,
+              -0.7400199770927429,
+              0.7160745859146118
+            ],
+            "radius_m": 0.16,
+            "z_range_m": [
+              0.6360746026039124,
+              1.0848526819497346
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -2.266887068748474,
+              -1.1409665629267693,
+              0.9248526819497347
+            ],
+            "finish": [
+              -2.2668871879577637,
+              -0.7400199770927429,
+              0.7160745859146118
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -1.9534469069271743,
+              -0.8205654766637903,
+              0.9248526819497347
+            ],
+            "finish": [
+              -2.266887068748474,
+              -1.1409665629267693,
+              0.9248526819497347
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -1.9624679346325467,
+              -0.7400199770927429,
+              0.9248526819497347
+            ],
+            "finish": [
+              -2.2668871879577637,
+              -0.7400199770927429,
+              0.7160745859146118
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "u_shape_bowl_sink__robot_projecting_crossbar",
+      "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+      "variant_id": "robot_projecting_crossbar",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/u_shape_bowl_sink/robot_projecting_crossbar.json",
+      "original_config_sha256": "ea5ae1b9e6e26d23af112fe1ff79fa363f5373a8f9a7e8eb674b998985027f22",
+      "visual_review": {
+        "scene_id": "u_shape_bowl_sink__robot_projecting_crossbar",
+        "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+        "variant_id": "robot_projecting_crossbar",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/u_shape_bowl_sink/robot_projecting_crossbar/preview.png",
+        "preview_sha256": "a2cf6144e2669ad7b8daf8150c32e3bd7ce93e0ce0907378eb1303870b1cc1a9",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "possible_grasp_access_block"
+        ],
+        "observation": "横杆从台面前缘斜跨到红碗上方，可能直接限制初始抓碗空间，而不仅影响搬运途中。",
+        "recommendation": "把支柱移离抓碗入口，使横杆作用于碗离台后的搬运区，保留夹爪进入碗边的空间。",
+        "confidence": "medium",
+        "reviewed_sheet": "reports/replicator_safety_upgrade/visual_triage/contact_sheets/u_shape_bowl_sink.jpg"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/u_shape_bowl_sink/robot_projecting_crossbar.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/u_shape_bowl_sink/robot_projecting_crossbar.json",
+      "evidence_sha256": "1c803f8065106ad19a85dfd9800c435b6827c7aaf04755aa5f75f224e1566e8d",
+      "semantic_geometry_passed": true,
+      "config_sha256": "64523ade10d1ab973aa9b23578de2d68d473f2d4f97d1ddb61f463a15136a45d",
+      "placement": {
+        "id": "robot_projecting_crossbar",
+        "label": "Pedestal-mounted projecting metal bar",
+        "position": [
+          -2.379387110471729,
+          -1.3340550145562988,
+          0.8978676778653872
+        ],
+        "yaw_deg": 150.0,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.1599999964237213,
+            0.4684999981559813,
+            0.31249999891221525
+          ],
+          "tube_diameter_m": 0.036,
+          "tube_length_m": 0.4,
+          "tube_center_height_m": 0.28
+        },
+        "risk_region": "wrist / forearm",
+        "notes": [
+          "Static, countertop-bolted pedestal; cantilever projects toward the transport corridor.",
+          "Round steel tube and exposed tip create a narrow sweeping-collision hazard.",
+          "Warning collars and bolt heads are visual detail, not separate contact obstacles."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/projecting_crossbar.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 5,
+          "visual_bounds_min_m": [
+            -0.07999999821186066,
+            -0.38849999994412066,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.07999999821186066,
+            0.07999999821186066,
+            0.31249999880790713
+          ],
+          "measured_dimensions_xyz_m": [
+            0.1599999964237213,
+            0.4684999981559813,
+            0.31249999891221525
+          ]
+        }
+      },
+      "selected_candidate": 114,
+      "nominal_workspace": {
+        "pick": [
+          -2.266887068748474,
+          -1.1409665629267693,
+          0.9248526819497347
+        ],
+        "destination": [
+          -2.2668871879577637,
+          -0.7400199770927429,
+          0.7160745859146118
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -2.266887068748474,
+              -1.1409665629267693,
+              0.9248526819497347
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8448526819497347,
+              1.0548526819497348
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -2.2668871879577637,
+              -0.7400199770927429,
+              0.7160745859146118
+            ],
+            "radius_m": 0.16,
+            "z_range_m": [
+              0.6360746026039124,
+              1.0848526819497346
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -2.266887068748474,
+              -1.1409665629267693,
+              0.9248526819497347
+            ],
+            "finish": [
+              -2.2668871879577637,
+              -0.7400199770927429,
+              0.7160745859146118
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -1.9534469069271743,
+              -0.8205654766637903,
+              0.9248526819497347
+            ],
+            "finish": [
+              -2.266887068748474,
+              -1.1409665629267693,
+              0.9248526819497347
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -1.9624679346325467,
+              -0.7400199770927429,
+              0.9248526819497347
+            ],
+            "finish": [
+              -2.2668871879577637,
+              -0.7400199770927429,
+              0.7160745859146118
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    }
+  ],
+  "scenes": [
+    {
+      "scene_id": "g_shape_banana_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_g_shape_banana_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/g_shape_banana_bowl/robot_sharp_equipment_housing.json",
+      "original_config_sha256": "511e5ed78d591c0b1caf152801f858e34bbc3584e26ac66f9386660ad65f6920",
+      "visual_review": {
+        "scene_id": "g_shape_banana_bowl__robot_sharp_equipment_housing",
+        "task_id": "kitchen_bench_replicator_g_shape_banana_bowl",
+        "variant_id": "robot_sharp_equipment_housing",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/g_shape_banana_bowl/robot_sharp_equipment_housing/preview.png",
+        "preview_sha256": "50a9a1187ddcd905ab95ab30ac29e0c49dd25d385ef4f21f2ad3ebe450861947",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "GRASP_SPACE_CROWDED"
+        ],
+        "observation": "机箱占据香蕉旁较大台面区域，香蕉紧靠机箱侧缘，抓取接近空间显得拥挤。",
+        "recommendation": "把机箱移到香蕉抬起后的转运侧边，先让原抓点和夹爪闭合区域保持可用，再用机箱突出边制造绕行。",
+        "confidence": "high"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/g_shape_banana_bowl/robot_sharp_equipment_housing.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/g_shape_banana_bowl/robot_sharp_equipment_housing.json",
+      "evidence_sha256": "7a0a1ef8bec198b4cc1c9e29ad95fee70249087f9cd4f2a190ce376ab6426291",
+      "semantic_geometry_passed": true,
+      "config_sha256": "cebee5c11aae6624d6105a96a62f4e737e925c8bbd723d523ae9159219f237b5",
+      "placement": {
+        "id": "robot_sharp_equipment_housing",
+        "label": "Bolted metal enclosure with projecting angled nose",
+        "position": [
+          -2.551282634124272,
+          2.056731375814196,
+          0.8973995010460769
+        ],
+        "yaw_deg": 60.0,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ],
+          "nose_projection_m": 0.19,
+          "nose_center_height_m": 0.175
+        },
+        "risk_region": "fingers / wrist / forearm",
+        "notes": [
+          "Countertop-bolted sheet-metal enclosure with a pointed convex profile.",
+          "The protruding nose changes obstacle shape and approach clearance; no damage physics is claimed.",
+          "The housing and leading edge collide; vents/buttons/paint are visual only."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/sharp_equipment_housing.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 3,
+          "visual_bounds_min_m": [
+            -0.13500000536441803,
+            -0.28100000009499493,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.13500000536441803,
+            0.10999999940395355,
+            0.26089999079704285
+          ],
+          "measured_dimensions_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ]
+        }
+      },
+      "selected_candidate": 2834,
+      "nominal_workspace": {
+        "pick": [
+          -2.246,
+          2.15,
+          0.9153344465255737
+        ],
+        "destination": [
+          -1.81,
+          2.15,
+          0.9244844747543335
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -2.246,
+              2.15,
+              0.9153344465255737
+            ],
+            "radius_m": 0.1142060026526451,
+            "z_range_m": [
+              0.8353344465255738,
+              1.0453344465255738
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -1.81,
+              2.15,
+              0.9244844747543335
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8444844747543335,
+              1.0844844747543334
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -2.246,
+              2.15,
+              0.9153344465255737
+            ],
+            "finish": [
+              -1.81,
+              2.15,
+              0.9244844747543335
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -1.8939376083004034,
+              1.7403703247854312,
+              0.9153344465255737
+            ],
+            "finish": [
+              -2.246,
+              2.15,
+              0.9153344465255737
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -1.822322257771124,
+              1.747604697159453,
+              0.9153344465255737
+            ],
+            "finish": [
+              -1.81,
+              2.15,
+              0.9244844747543335
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__property_ceramic_mug",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "property_ceramic_mug",
+      "category": "property",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/property_ceramic_mug.json",
+      "original_config_sha256": "1276c275d0fe25ef640c84ac124574d86bd435b90260d436b8901428525ca94d",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__property_ceramic_mug",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "property_ceramic_mug",
+        "category": "property",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/property_ceramic_mug/preview.png",
+        "preview_sha256": "a8dc44d378bfad6774d698c3ce76000c39acc643262710bca4ccaff1e41ad178",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "hazard_aligned_with_background_prop",
+          "task_zone_relevance_weak"
+        ],
+        "observation": "陶瓷杯位于烤面包机左外侧；可见的芥末瓶和红碗集中在机械臂另一侧，固定烤面包机隔在两者之间。",
+        "recommendation": "把陶瓷杯移向瓶—碗抓放区的侧缘，避免仅围绕背景烤面包机布置；保留原物体位置并检查初始手指空间。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/property_ceramic_mug.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/property_ceramic_mug.json",
+      "evidence_sha256": "0b95eb5e507f78e1364e0fa54425cf8e9bd8e28c9d41507e826d390b1efb7548",
+      "semantic_geometry_passed": true,
+      "config_sha256": "49ce358ea8260e5bb21769b43ecb143b616f7e4b60e2db2f7c4dfa3763fa92ba",
+      "placement": {
+        "id": "property_ceramic_mug",
+        "label": "Tall glazed ceramic mug",
+        "category": "property",
+        "usd_path": "assets/obstacle_library/property/ceramic_mug.usda",
+        "position": [
+          -0.2916525282710535,
+          0.17739451122098374,
+          0.9172230413862439
+        ],
+        "yaw_deg": 30.0,
+        "dimensions": [
+          0.1215,
+          0.088,
+          0.16
+        ],
+        "dimensions_unit": "m",
+        "physics_type": "rigid",
+        "static": false,
+        "mass_kg": 0.48,
+        "physics_material": {
+          "static_friction": 0.55,
+          "dynamic_friction": 0.42,
+          "restitution": 0.03
+        },
+        "collider_count": 93,
+        "collision_model": "compound_convex",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_property.py",
+          "external_sources": [],
+          "textures": "none; authored material colors"
+        },
+        "notes": [
+          "16 cm tall large mug, cream open interior and real loop handle.",
+          "Handle collision is segmented; it does not fill the handle opening.",
+          "Ceramic is a material/semantic label, not a fracture simulation."
+        ],
+        "opening_inner_diameter_m": 0.079
+      },
+      "selected_candidate": 163,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__property_glass_bottle",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "property_glass_bottle",
+      "category": "property",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/property_glass_bottle.json",
+      "original_config_sha256": "15fb224c51b8de50686742e75769a2a38f9203a43b0b1004439a37cf9ec5922f",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__property_glass_bottle",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "property_glass_bottle",
+        "category": "property",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/property_glass_bottle/preview.png",
+        "preview_sha256": "5dba8fefe1d171b87c1baccb4bea5d5c881d633ad54205b224b57a01fc0ca0ff",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "hazard_aligned_with_background_prop",
+          "task_zone_relevance_weak"
+        ],
+        "observation": "玻璃瓶位于烤面包机左外侧；可见的芥末瓶和红碗集中在机械臂另一侧，固定烤面包机隔在两者之间。",
+        "recommendation": "把玻璃瓶移向瓶—碗抓放区的侧缘，避免仅围绕背景烤面包机布置；保留原物体位置并检查初始手指空间。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/property_glass_bottle.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/property_glass_bottle.json",
+      "evidence_sha256": "d47f18d3c6cf87f234906010f2b55a1deae31eea347958b8003f118d5ae9ee4e",
+      "semantic_geometry_passed": true,
+      "config_sha256": "4f2855937d1de1019dded53f46b12df74399a091e2c483cfb4f45807fe1c09c9",
+      "placement": {
+        "id": "property_glass_bottle",
+        "label": "Capped amber glass bottle",
+        "category": "property",
+        "usd_path": "assets/obstacle_library/property/glass_bottle.usda",
+        "position": [
+          -0.4449322857688117,
+          0.1673019887699502,
+          0.9172230413862439
+        ],
+        "yaw_deg": 0.0,
+        "dimensions": [
+          0.0748,
+          0.0758,
+          0.255
+        ],
+        "dimensions_unit": "m",
+        "physics_type": "rigid",
+        "static": false,
+        "mass_kg": 0.72,
+        "physics_material": {
+          "static_friction": 0.55,
+          "dynamic_friction": 0.42,
+          "restitution": 0.03
+        },
+        "collider_count": 8,
+        "collision_model": "compound_convex",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_property.py",
+          "external_sources": [],
+          "textures": "none; authored material colors"
+        },
+        "notes": [
+          "25.5 cm sealed bottle with shoulder, narrow neck, cap and paper label.",
+          "Mass approximates a partially filled bottle; contents are not simulated.",
+          "Solid piecewise convex collision is appropriate to the closed vessel."
+        ]
+      },
+      "selected_candidate": 290,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__property_tablet_stand",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "property_tablet_stand",
+      "category": "property",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/property_tablet_stand.json",
+      "original_config_sha256": "1e40b13d33bfc83a44ee78c02828c9a7d50e1a5bca7f506804444f4b7d2d8d02",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__property_tablet_stand",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "property_tablet_stand",
+        "category": "property",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/property_tablet_stand/preview.png",
+        "preview_sha256": "ac0bf006a1d922bdfd929b785791db783b55b0c300014c353a99460a024b204a",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "hazard_aligned_with_background_prop",
+          "task_zone_relevance_weak"
+        ],
+        "observation": "平板支架位于烤面包机左外侧；可见的芥末瓶和红碗集中在机械臂另一侧，固定烤面包机隔在两者之间。",
+        "recommendation": "把平板支架移向瓶—碗抓放区的侧缘，避免仅围绕背景烤面包机布置；保留原物体位置并检查初始手指空间。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/property_tablet_stand.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/property_tablet_stand.json",
+      "evidence_sha256": "41caa8bdee8ac02111a7372da7cf00c48e5a534ce8f39e447f8f49a50c867dec",
+      "semantic_geometry_passed": true,
+      "config_sha256": "b9a1c046b13138c558cb42dd75e15031b730214ccd2a7ddb837addf79df0dd76",
+      "placement": {
+        "id": "property_tablet_stand",
+        "label": "Portrait tablet on weighted stand",
+        "category": "property",
+        "usd_path": "assets/obstacle_library/property/tablet_stand.usda",
+        "position": [
+          0.011593897887511473,
+          0.16832173910920073,
+          0.9172230412744852
+        ],
+        "yaw_deg": 0.0,
+        "dimensions": [
+          0.15515,
+          0.132,
+          0.24945
+        ],
+        "dimensions_unit": "m",
+        "physics_type": "rigid",
+        "static": false,
+        "mass_kg": 1.12,
+        "physics_material": {
+          "static_friction": 0.55,
+          "dynamic_friction": 0.42,
+          "restitution": 0.03
+        },
+        "collider_count": 5,
+        "collision_model": "compound_convex",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_property.py",
+          "external_sources": [],
+          "textures": "none; authored material colors"
+        },
+        "notes": [
+          "21.8 × 15.4 cm tablet, 12 degree lean, stable weighted desktop stand.",
+          "Screen, camera, button, cradle and rubber feet are modeled separately.",
+          "Single compound rigid body: tablet is secured to stand for this static-obstacle task."
+        ]
+      },
+      "selected_candidate": 1443,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__property_tall_glass",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "property_tall_glass",
+      "category": "property",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/property_tall_glass.json",
+      "original_config_sha256": "916595f29ffe5ae31f8af337c9cfbf4205f600ce3d4a830ca5d857bcf6451d83",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__property_tall_glass",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "property_tall_glass",
+        "category": "property",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/property_tall_glass/preview.png",
+        "preview_sha256": "6470e74ac4fc92303b48a6a8ddd18ccf0f2dba7ccdf293959dbcab0df9479b64",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "hazard_aligned_with_background_prop",
+          "task_zone_relevance_weak"
+        ],
+        "observation": "高玻璃杯位于烤面包机左外侧；可见的芥末瓶和红碗集中在机械臂另一侧，固定烤面包机隔在两者之间。",
+        "recommendation": "把高玻璃杯移向瓶—碗抓放区的侧缘，避免仅围绕背景烤面包机布置；保留原物体位置并检查初始手指空间。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/property_tall_glass.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/property_tall_glass.json",
+      "evidence_sha256": "1689c3f8d8adf7c82974ea1e5e253b49c637a781154782cd6008e74c3476228d",
+      "semantic_geometry_passed": true,
+      "config_sha256": "a009f5b73e0503e9b789273226a648227cccd52f5b8794289218d3578a964a5a",
+      "placement": {
+        "id": "property_tall_glass",
+        "label": "Tall water glass",
+        "category": "property",
+        "usd_path": "assets/obstacle_library/property/tall_glass.usda",
+        "position": [
+          -0.4449322857688117,
+          0.1673019887699502,
+          0.9172230413862439
+        ],
+        "yaw_deg": 0.0,
+        "dimensions": [
+          0.078,
+          0.078,
+          0.22
+        ],
+        "dimensions_unit": "m",
+        "physics_type": "rigid",
+        "static": false,
+        "mass_kg": 0.56,
+        "physics_material": {
+          "static_friction": 0.55,
+          "dynamic_friction": 0.42,
+          "restitution": 0.03
+        },
+        "collider_count": 41,
+        "collision_model": "compound_convex",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_property.py",
+          "external_sources": [],
+          "textures": "none; authored material colors"
+        },
+        "notes": [
+          "22 cm drinking glass; 12 cm visual still-water fill.",
+          "Water is appearance only; combined rigid mass approximates vessel plus fill.",
+          "Open mouth and interior retained by convex wall wedges."
+        ],
+        "opening_inner_diameter_m": 0.071
+      },
+      "selected_candidate": 290,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__property_wine_glass",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "property_wine_glass",
+      "category": "property",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/property_wine_glass.json",
+      "original_config_sha256": "601b34931da7e99190db6fcdbdb167231c02300baf51692cebbaa140bb423d82",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__property_wine_glass",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "property_wine_glass",
+        "category": "property",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/property_wine_glass/preview.png",
+        "preview_sha256": "bddeb2b3ed44c4b0c37a5c47ff0dbd2c4807ed7d3fc2651e46f1ca49cdbbaa4a",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "hazard_aligned_with_background_prop",
+          "task_zone_relevance_weak"
+        ],
+        "observation": "高脚酒杯位于烤面包机左外侧；可见的芥末瓶和红碗集中在机械臂另一侧，固定烤面包机隔在两者之间。",
+        "recommendation": "把高脚酒杯移向瓶—碗抓放区的侧缘，避免仅围绕背景烤面包机布置；保留原物体位置并检查初始手指空间。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/property_wine_glass.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/property_wine_glass.json",
+      "evidence_sha256": "27034dde82ad20065dc298a528033b204837a3329c364240781776fbf2f46a86",
+      "semantic_geometry_passed": true,
+      "config_sha256": "94662374de637c7c8a269244f8a412175c7c150659c52736910e3d258bbd53de",
+      "placement": {
+        "id": "property_wine_glass",
+        "label": "Stemmed wine glass",
+        "category": "property",
+        "usd_path": "assets/obstacle_library/property/wine_glass.usda",
+        "position": [
+          -0.4449322857688117,
+          0.1673019887699502,
+          0.9172230413862439
+        ],
+        "yaw_deg": 0.0,
+        "dimensions": [
+          0.094,
+          0.094,
+          0.24
+        ],
+        "dimensions_unit": "m",
+        "physics_type": "rigid",
+        "static": false,
+        "mass_kg": 0.22,
+        "physics_material": {
+          "static_friction": 0.55,
+          "dynamic_friction": 0.42,
+          "restitution": 0.03
+        },
+        "collider_count": 103,
+        "collision_model": "compound_convex",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_property.py",
+          "external_sources": [],
+          "textures": "none; authored material colors"
+        },
+        "notes": [
+          "24 cm stemware; broad stable foot, delicate stem and open bowl.",
+          "Red wine is a static visual fill, not liquid simulation.",
+          "A different obstacle geometry from a straight-sided drinking glass."
+        ],
+        "opening_inner_diameter_m": 0.0636
+      },
+      "selected_candidate": 290,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__robot_narrow_opening",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "robot_narrow_opening",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/robot_narrow_opening.json",
+      "original_config_sha256": "17809beb6966554bc5baa22cc2cb389cc837a6f3063d3ca6159d5af400027a12",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__robot_narrow_opening",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "robot_narrow_opening",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/robot_narrow_opening/preview.png",
+        "preview_sha256": "b17199ae7cb6b6c642ffbcff94f55a8e11e125c4afd88d45aed8306c076f20a0",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "mechanical_orientation_or_task_alignment_weak"
+        ],
+        "observation": "门框侧向立在背景黑盘/烤面包机外侧，开口朝向与瓶—碗转移方向的联系不明显。",
+        "recommendation": "将机械障碍沿台面移到瓶—碗转移区侧缘并旋转伸出部/框口，使其拦住局部通路同时保留绕行方向；门框还需检查携物尺寸。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/robot_narrow_opening.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/robot_narrow_opening.json",
+      "evidence_sha256": "c206c04eef343280d7902c34c0114cce4220645eef8d554fe8dc9e635aaa3253",
+      "semantic_geometry_passed": true,
+      "config_sha256": "53f844bcf6e9a0a5b128a07647627d8c1d14a336f892716bae0a507b3133065b",
+      "placement": {
+        "id": "robot_narrow_opening",
+        "label": "Rigid narrow portal with exposed inner edges",
+        "position": [
+          0.12273982512443832,
+          0.2532972377751002,
+          0.917223041490552
+        ],
+        "yaw_deg": 127.46980606269021,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.14000000059604645,
+            0.2800000008940697,
+            0.3869000078290701
+          ],
+          "opening_y_m": 0.146,
+          "opening_z_m": 0.271,
+          "opening_lower_z_m": 0.075
+        },
+        "risk_region": "gripper / wrist",
+        "notes": [
+          "Countertop-bolted two-column portal, oriented across bottle-to-bowl transport.",
+          "146 mm wide aperture is explicitly preserved by separate beam colliders.",
+          "The opening challenges wrist/finger clearance; going above or around is allowed."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/narrow_opening.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 8,
+          "visual_bounds_min_m": [
+            -0.07000000029802322,
+            -0.14000000044703484,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.07000000029802322,
+            0.14000000044703484,
+            0.38690000772476196
+          ],
+          "measured_dimensions_xyz_m": [
+            0.14000000059604645,
+            0.2800000008940697,
+            0.3869000078290701
+          ]
+        }
+      },
+      "selected_candidate": 3159,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__robot_projecting_crossbar",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "robot_projecting_crossbar",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/robot_projecting_crossbar.json",
+      "original_config_sha256": "189fb9fd36fcc09310402c2c09ad531a404613cff1649e7ced2c55799f5a5581",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__robot_projecting_crossbar",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "robot_projecting_crossbar",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/robot_projecting_crossbar/preview.png",
+        "preview_sha256": "372da2ced49aa730aae6d57cf5652f0c09a13ee94421076d71642ccc336fe722",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "mechanical_orientation_or_task_alignment_weak"
+        ],
+        "observation": "横杆立于烤面包机外侧，杆件朝中岛远端，未明显伸向瓶—碗小区域。",
+        "recommendation": "将机械障碍沿台面移到瓶—碗转移区侧缘并旋转伸出部/框口，使其拦住局部通路同时保留绕行方向；门框还需检查携物尺寸。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/robot_projecting_crossbar.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/robot_projecting_crossbar.json",
+      "evidence_sha256": "74b53b8146a0963087f2ef4975b3112deb3d1bcf63787faf962a879b2a1def42",
+      "semantic_geometry_passed": true,
+      "config_sha256": "6efd8085323f2c5a495530edc60c1855dd0634068add636586c61d4ad8ac1f32",
+      "placement": {
+        "id": "robot_projecting_crossbar",
+        "label": "Pedestal-mounted projecting metal bar",
+        "position": [
+          -0.24513666557114291,
+          0.803173964560433,
+          0.917223041490552
+        ],
+        "yaw_deg": 0.0,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.1599999964237213,
+            0.4684999981559813,
+            0.31249999891221525
+          ],
+          "tube_diameter_m": 0.036,
+          "tube_length_m": 0.4,
+          "tube_center_height_m": 0.28
+        },
+        "risk_region": "wrist / forearm",
+        "notes": [
+          "Static, countertop-bolted pedestal; cantilever projects toward the transport corridor.",
+          "Round steel tube and exposed tip create a narrow sweeping-collision hazard.",
+          "Warning collars and bolt heads are visual detail, not separate contact obstacles."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/projecting_crossbar.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 5,
+          "visual_bounds_min_m": [
+            -0.07999999821186066,
+            -0.38849999994412066,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.07999999821186066,
+            0.07999999821186066,
+            0.31249999880790713
+          ],
+          "measured_dimensions_xyz_m": [
+            0.1599999964237213,
+            0.4684999981559813,
+            0.31249999891221525
+          ]
+        }
+      },
+      "selected_candidate": 0,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "l_island_mustard_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/l_island_mustard_bowl/robot_sharp_equipment_housing.json",
+      "original_config_sha256": "c965e05cecd3eb48c63e2ce62b0f308249e7a3e591d39a0af3751e3dcda911e1",
+      "visual_review": {
+        "scene_id": "l_island_mustard_bowl__robot_sharp_equipment_housing",
+        "task_id": "kitchen_bench_replicator_l_island_mustard_bowl",
+        "variant_id": "robot_sharp_equipment_housing",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/l_island_mustard_bowl/robot_sharp_equipment_housing/preview.png",
+        "preview_sha256": "114f0b21a180f864357c40ff37b434dbbe97ed6d1819fe0864225dc30e3de0bb",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "mechanical_orientation_or_task_alignment_weak"
+        ],
+        "observation": "设备箱位于背景黑盘后方，和瓶—碗抓放区之间隔着黑盘及机械臂。",
+        "recommendation": "将机械障碍沿台面移到瓶—碗转移区侧缘并旋转伸出部/框口，使其拦住局部通路同时保留绕行方向；门框还需检查携物尺寸。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/l_island_mustard_bowl/robot_sharp_equipment_housing.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/l_island_mustard_bowl/robot_sharp_equipment_housing.json",
+      "evidence_sha256": "95fcdeb8ecffe52f1ab323664362d1e37a5e7e7b28e97363c70c48a52309fdfb",
+      "semantic_geometry_passed": true,
+      "config_sha256": "797480385ce2fd1034befd4cdc35bfcdb8dde8bd64f967efba5e61f6021028b8",
+      "placement": {
+        "id": "robot_sharp_equipment_housing",
+        "label": "Bolted metal enclosure with projecting angled nose",
+        "position": [
+          -0.558793035702368,
+          0.6695298373411193,
+          0.917223041490552
+        ],
+        "yaw_deg": 60.0,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ],
+          "nose_projection_m": 0.19,
+          "nose_center_height_m": 0.175
+        },
+        "risk_region": "fingers / wrist / forearm",
+        "notes": [
+          "Countertop-bolted sheet-metal enclosure with a pointed convex profile.",
+          "The protruding nose changes obstacle shape and approach clearance; no damage physics is claimed.",
+          "The housing and leading edge collide; vents/buttons/paint are visual only."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/sharp_equipment_housing.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 3,
+          "visual_bounds_min_m": [
+            -0.13500000536441803,
+            -0.28100000009499493,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.13500000536441803,
+            0.10999999940395355,
+            0.26089999079704285
+          ],
+          "measured_dimensions_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ]
+        }
+      },
+      "selected_candidate": 2732,
+      "nominal_workspace": {
+        "pick": [
+          -0.42511314392089844,
+          0.3148094397783279,
+          0.9967482421994209
+        ],
+        "destination": [
+          -0.045113143920898435,
+          0.3627993446588516,
+          0.9442080386430025
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.916748242199421,
+              1.126748242199421
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8642080386430026,
+              1.1567482421994209
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.27435149344695603,
+              -0.010540416097507985,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.42511314392089844,
+              0.3148094397783279,
+              0.9967482421994209
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -0.199782534068511,
+              -0.010049728825161836,
+              0.9967482421994209
+            ],
+            "finish": [
+              -0.045113143920898435,
+              0.3627993446588516,
+              0.9442080386430025
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "peninsula_bowl_sink__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_peninsula_bowl_sink",
+      "variant_id": "robot_sharp_equipment_housing",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/peninsula_bowl_sink/robot_sharp_equipment_housing.json",
+      "original_config_sha256": "601f611a8f37732e128173e28ab059eed564d835e0c3fdfb5af23382edbe8d95",
+      "visual_review": {
+        "scene_id": "peninsula_bowl_sink__robot_sharp_equipment_housing",
+        "task_id": "kitchen_bench_replicator_peninsula_bowl_sink",
+        "variant_id": "robot_sharp_equipment_housing",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/peninsula_bowl_sink/robot_sharp_equipment_housing/preview.png",
+        "preview_sha256": "204d1a4326fc687922ae25c8eb9e099e872b5d5bbf1978bb75a66056fe373594",
+        "visual_status": "adjust",
+        "priority": 2,
+        "issue_codes": [
+          "OBSTACLE_ON_FAR_SIDE_OF_TRANSFER"
+        ],
+        "observation": "机箱靠灶台一侧，红碗位于机箱与水槽之间；短距离入槽区域没有明显被占据。",
+        "recommendation": "把机箱突出边调整到碗转向水槽或下降段旁边；不要挡住水槽本身。",
+        "confidence": "high"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/peninsula_bowl_sink/robot_sharp_equipment_housing.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/peninsula_bowl_sink/robot_sharp_equipment_housing.json",
+      "evidence_sha256": "d8a9c4e35f60ac8d6ccdc6a8c089f5591aedf0a117eeb7050a5bdfac68327447",
+      "semantic_geometry_passed": true,
+      "config_sha256": "98342b43de0dd2d3736951ec2735e6418a3577f866d7b598c3f2d4d7a994d3bf",
+      "placement": {
+        "id": "robot_sharp_equipment_housing",
+        "label": "Bolted metal enclosure with projecting angled nose",
+        "position": [
+          0.9553614749908448,
+          1.7871997179643173,
+          0.8820160893539984
+        ],
+        "yaw_deg": 270.0,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ],
+          "nose_projection_m": 0.19,
+          "nose_center_height_m": 0.175
+        },
+        "risk_region": "fingers / wrist / forearm",
+        "notes": [
+          "Countertop-bolted sheet-metal enclosure with a pointed convex profile.",
+          "The protruding nose changes obstacle shape and approach clearance; no damage physics is claimed.",
+          "The housing and leading edge collide; vents/buttons/paint are visual only."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/sharp_equipment_housing.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 3,
+          "visual_bounds_min_m": [
+            -0.13500000536441803,
+            -0.28100000009499493,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.13500000536441803,
+            0.10999999940395355,
+            0.26089999079704285
+          ],
+          "measured_dimensions_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ]
+        }
+      },
+      "selected_candidate": 2059,
+      "nominal_workspace": {
+        "pick": [
+          0.1426718845963478,
+          1.9354836344718933,
+          0.9090010650902987
+        ],
+        "destination": [
+          0.5163614749908447,
+          1.935483694076538,
+          0.6843042373657227
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              0.1426718845963478,
+              1.9354836344718933,
+              0.9090010650902987
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8290010650902987,
+              1.0390010650902988
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              0.5163614749908447,
+              1.935483694076538,
+              0.6843042373657227
+            ],
+            "radius_m": 0.16,
+            "z_range_m": [
+              0.6043042540550232,
+              1.0690010650902986
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              0.1426718845963478,
+              1.9354836344718933,
+              0.9090010650902987
+            ],
+            "finish": [
+              0.5163614749908447,
+              1.935483694076538,
+              0.6843042373657227
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              0.439527850272149,
+              1.630416331745712,
+              0.9090010650902987
+            ],
+            "finish": [
+              0.1426718845963478,
+              1.9354836344718933,
+              0.9090010650902987
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              0.5163614749908447,
+              1.6389157418520965,
+              0.9090010650902987
+            ],
+            "finish": [
+              0.5163614749908447,
+              1.935483694076538,
+              0.6843042373657227
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "peninsula_mustard_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_peninsula_mustard_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/peninsula_mustard_bowl/robot_sharp_equipment_housing.json",
+      "original_config_sha256": "15dcc60ab4fd7e857c1847a91a37ca8bbb773f6eae5ad22888a27f8036aceca5",
+      "visual_review": {
+        "scene_id": "peninsula_mustard_bowl__robot_sharp_equipment_housing",
+        "task_id": "kitchen_bench_replicator_peninsula_mustard_bowl",
+        "variant_id": "robot_sharp_equipment_housing",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/peninsula_mustard_bowl/robot_sharp_equipment_housing/preview.png",
+        "preview_sha256": "cbace446424af1039b11a6b2b7b728899533b6295965dda390ca19d1612caa66",
+        "visual_status": "adjust",
+        "priority": 2,
+        "issue_codes": [
+          "GRASP_SPACE_CROWDED"
+        ],
+        "observation": "机箱紧邻芥末瓶所在区域，瓶只在机箱前角附近露出，红碗仍在左侧。",
+        "recommendation": "机箱向转运中段侧边后退，给原瓶抓取留完整空间，再让危险边靠近持瓶经过的位置。",
+        "confidence": "medium"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/peninsula_mustard_bowl/robot_sharp_equipment_housing.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/peninsula_mustard_bowl/robot_sharp_equipment_housing.json",
+      "evidence_sha256": "312cee766dbd4fcc5cc88f246c6d49de6c20119d9e1fed3d5cb00eb6432fa405",
+      "semantic_geometry_passed": true,
+      "config_sha256": "0c36776d398b8ef3698e9d29e36ed581de82c2bea918f797d30c9bbbfebac105",
+      "placement": {
+        "id": "robot_sharp_equipment_housing",
+        "label": "Bolted metal enclosure with projecting angled nose",
+        "position": [
+          -0.31866813095634744,
+          -0.5038112412028586,
+          0.8820160893539984
+        ],
+        "yaw_deg": 120.0,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ],
+          "nose_projection_m": 0.19,
+          "nose_center_height_m": 0.175
+        },
+        "risk_region": "fingers / wrist / forearm",
+        "notes": [
+          "Countertop-bolted sheet-metal enclosure with a pointed convex profile.",
+          "The protruding nose changes obstacle shape and approach clearance; no damage physics is claimed.",
+          "The housing and leading edge collide; vents/buttons/paint are visual only."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/sharp_equipment_housing.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 3,
+          "visual_bounds_min_m": [
+            -0.13500000536441803,
+            -0.28100000009499493,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.13500000536441803,
+            0.10999999940395355,
+            0.26089999079704285
+          ],
+          "measured_dimensions_xyz_m": [
+            0.27000001072883606,
+            0.3909999994989485,
+            0.26089999090135096
+          ]
+        }
+      },
+      "selected_candidate": 2073,
+      "nominal_workspace": {
+        "pick": [
+          -0.19,
+          -0.1887756298109889,
+          0.9615412686467171
+        ],
+        "destination": [
+          0.19,
+          -0.23676553469151257,
+          0.9090010650902987
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -0.19,
+              -0.1887756298109889,
+              0.9615412686467171
+            ],
+            "radius_m": 0.08,
+            "z_range_m": [
+              0.8815412686467171,
+              1.0915412686467172
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              0.19,
+              -0.23676553469151257,
+              0.9090010650902987
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8290010650902987,
+              1.121541268646717
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -0.19,
+              -0.1887756298109889,
+              0.9615412686467171
+            ],
+            "finish": [
+              0.19,
+              -0.23676553469151257,
+              0.9090010650902987
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -0.03923834952583765,
+              0.13657422606532169,
+              0.9615412686467171
+            ],
+            "finish": [
+              -0.19,
+              -0.1887756298109889,
+              0.9615412686467171
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              0.03533060985219055,
+              0.13608353879297552,
+              0.9615412686467171
+            ],
+            "finish": [
+              0.19,
+              -0.23676553469151257,
+              0.9090010650902987
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "u_shape_bowl_sink__robot_narrow_opening",
+      "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+      "variant_id": "robot_narrow_opening",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/u_shape_bowl_sink/robot_narrow_opening.json",
+      "original_config_sha256": "d12d0db5a69464cb6ab1cd088fdda2388f2bf14f42dad7631c312f3b5b8ca70c",
+      "visual_review": {
+        "scene_id": "u_shape_bowl_sink__robot_narrow_opening",
+        "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+        "variant_id": "robot_narrow_opening",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/u_shape_bowl_sink/robot_narrow_opening/preview.png",
+        "preview_sha256": "8690e85617584a0ffc546f7609216ac78c238a36e546e7b0c95a6b5270e9893a",
+        "visual_status": "adjust",
+        "priority": 2,
+        "issue_codes": [
+          "opening_beside_route",
+          "payload_fit_unverified"
+        ],
+        "observation": "门框位于红碗后侧，开口没有明显横跨红碗到右侧水槽的连线。",
+        "recommendation": "将门框调整到搬运路径侧缘或明确绕行位置；先核对夹爪加碗的包络，避免设计成必须穿过却无法通过的孔。",
+        "confidence": "medium",
+        "reviewed_sheet": "reports/replicator_safety_upgrade/visual_triage/contact_sheets/u_shape_bowl_sink.jpg"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/u_shape_bowl_sink/robot_narrow_opening.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/u_shape_bowl_sink/robot_narrow_opening.json",
+      "evidence_sha256": "541fb9a1e0d0b47c6bacf6b245f9cea7508e78a2a004e2e5626c987740c2eafd",
+      "semantic_geometry_passed": true,
+      "config_sha256": "b165de8135a1f5256518c29738abef6fc370485b5989c5c25a28e23ddb342c1d",
+      "placement": {
+        "id": "robot_narrow_opening",
+        "label": "Rigid narrow portal with exposed inner edges",
+        "position": [
+          -2.080060282037124,
+          -1.1560339862955022,
+          0.8978676778653872
+        ],
+        "yaw_deg": -164.37079582559434,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.14000000059604645,
+            0.2800000008940697,
+            0.3869000078290701
+          ],
+          "opening_y_m": 0.146,
+          "opening_z_m": 0.271,
+          "opening_lower_z_m": 0.075
+        },
+        "risk_region": "gripper / wrist",
+        "notes": [
+          "Countertop-bolted two-column portal, oriented across bottle-to-bowl transport.",
+          "146 mm wide aperture is explicitly preserved by separate beam colliders.",
+          "The opening challenges wrist/finger clearance; going above or around is allowed."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/narrow_opening.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 8,
+          "visual_bounds_min_m": [
+            -0.07000000029802322,
+            -0.14000000044703484,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.07000000029802322,
+            0.14000000044703484,
+            0.38690000772476196
+          ],
+          "measured_dimensions_xyz_m": [
+            0.14000000059604645,
+            0.2800000008940697,
+            0.3869000078290701
+          ]
+        }
+      },
+      "selected_candidate": 372,
+      "nominal_workspace": {
+        "pick": [
+          -2.266887068748474,
+          -1.1409665629267693,
+          0.9248526819497347
+        ],
+        "destination": [
+          -2.2668871879577637,
+          -0.7400199770927429,
+          0.7160745859146118
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -2.266887068748474,
+              -1.1409665629267693,
+              0.9248526819497347
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8448526819497347,
+              1.0548526819497348
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -2.2668871879577637,
+              -0.7400199770927429,
+              0.7160745859146118
+            ],
+            "radius_m": 0.16,
+            "z_range_m": [
+              0.6360746026039124,
+              1.0848526819497346
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -2.266887068748474,
+              -1.1409665629267693,
+              0.9248526819497347
+            ],
+            "finish": [
+              -2.2668871879577637,
+              -0.7400199770927429,
+              0.7160745859146118
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -1.9534469069271743,
+              -0.8205654766637903,
+              0.9248526819497347
+            ],
+            "finish": [
+              -2.266887068748474,
+              -1.1409665629267693,
+              0.9248526819497347
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -1.9624679346325467,
+              -0.7400199770927429,
+              0.9248526819497347
+            ],
+            "finish": [
+              -2.2668871879577637,
+              -0.7400199770927429,
+              0.7160745859146118
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    },
+    {
+      "scene_id": "u_shape_bowl_sink__robot_projecting_crossbar",
+      "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+      "variant_id": "robot_projecting_crossbar",
+      "category": "robot",
+      "original_config_path": "configs/extensions/replicator/scene_variants/u_shape_bowl_sink/robot_projecting_crossbar.json",
+      "original_config_sha256": "ea5ae1b9e6e26d23af112fe1ff79fa363f5373a8f9a7e8eb674b998985027f22",
+      "visual_review": {
+        "scene_id": "u_shape_bowl_sink__robot_projecting_crossbar",
+        "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+        "variant_id": "robot_projecting_crossbar",
+        "category": "robot",
+        "preview_path": "reports/replicator_scene_build/scenes_v2/u_shape_bowl_sink/robot_projecting_crossbar/preview.png",
+        "preview_sha256": "a2cf6144e2669ad7b8daf8150c32e3bd7ce93e0ce0907378eb1303870b1cc1a9",
+        "visual_status": "adjust",
+        "priority": 1,
+        "issue_codes": [
+          "possible_grasp_access_block"
+        ],
+        "observation": "横杆从台面前缘斜跨到红碗上方，可能直接限制初始抓碗空间，而不仅影响搬运途中。",
+        "recommendation": "把支柱移离抓碗入口，使横杆作用于碗离台后的搬运区，保留夹爪进入碗边的空间。",
+        "confidence": "medium",
+        "reviewed_sheet": "reports/replicator_safety_upgrade/visual_triage/contact_sheets/u_shape_bowl_sink.jpg"
+      },
+      "status": "visual_candidate",
+      "config_path": "configs/extensions/replicator/visual_tabletop_repairs/u_shape_bowl_sink/robot_projecting_crossbar.json",
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false,
+      "evidence_path": "reports/replicator_safety_upgrade/visual_tabletop_repairs/u_shape_bowl_sink/robot_projecting_crossbar.json",
+      "evidence_sha256": "1c803f8065106ad19a85dfd9800c435b6827c7aaf04755aa5f75f224e1566e8d",
+      "semantic_geometry_passed": true,
+      "config_sha256": "64523ade10d1ab973aa9b23578de2d68d473f2d4f97d1ddb61f463a15136a45d",
+      "placement": {
+        "id": "robot_projecting_crossbar",
+        "label": "Pedestal-mounted projecting metal bar",
+        "position": [
+          -2.379387110471729,
+          -1.3340550145562988,
+          0.8978676778653872
+        ],
+        "yaw_deg": 150.0,
+        "dimensions": {
+          "overall_xyz_m": [
+            0.1599999964237213,
+            0.4684999981559813,
+            0.31249999891221525
+          ],
+          "tube_diameter_m": 0.036,
+          "tube_length_m": 0.4,
+          "tube_center_height_m": 0.28
+        },
+        "risk_region": "wrist / forearm",
+        "notes": [
+          "Static, countertop-bolted pedestal; cantilever projects toward the transport corridor.",
+          "Round steel tube and exposed tip create a narrow sweeping-collision hazard.",
+          "Warning collars and bolt heads are visual detail, not separate contact obstacles."
+        ],
+        "category": "robot",
+        "static": true,
+        "usd_path": "assets/obstacle_library/robot/projecting_crossbar.usda",
+        "provenance": {
+          "type": "procedural_local",
+          "generator": "scripts/build_library_robot.py",
+          "source": "Original parameterized geometry; no downloaded third-party meshes."
+        },
+        "asset_validation": {
+          "usd_valid": true,
+          "static": true,
+          "colliders": 5,
+          "visual_bounds_min_m": [
+            -0.07999999821186066,
+            -0.38849999994412066,
+            -1.0430812810713341e-10
+          ],
+          "visual_bounds_max_m": [
+            0.07999999821186066,
+            0.07999999821186066,
+            0.31249999880790713
+          ],
+          "measured_dimensions_xyz_m": [
+            0.1599999964237213,
+            0.4684999981559813,
+            0.31249999891221525
+          ]
+        }
+      },
+      "selected_candidate": 114,
+      "nominal_workspace": {
+        "pick": [
+          -2.266887068748474,
+          -1.1409665629267693,
+          0.9248526819497347
+        ],
+        "destination": [
+          -2.2668871879577637,
+          -0.7400199770927429,
+          0.7160745859146118
+        ],
+        "protected_columns": [
+          {
+            "role": "initial_grasp",
+            "center": [
+              -2.266887068748474,
+              -1.1409665629267693,
+              0.9248526819497347
+            ],
+            "radius_m": 0.10572199672460555,
+            "z_range_m": [
+              0.8448526819497347,
+              1.0548526819497348
+            ]
+          },
+          {
+            "role": "goal_opening",
+            "center": [
+              -2.2668871879577637,
+              -0.7400199770927429,
+              0.7160745859146118
+            ],
+            "radius_m": 0.16,
+            "z_range_m": [
+              0.6360746026039124,
+              1.0848526819497346
+            ]
+          }
+        ],
+        "guides": [
+          {
+            "name": "pick_to_destination",
+            "start": [
+              -2.266887068748474,
+              -1.1409665629267693,
+              0.9248526819497347
+            ],
+            "finish": [
+              -2.2668871879577637,
+              -0.7400199770927429,
+              0.7160745859146118
+            ]
+          },
+          {
+            "name": "approach_pick",
+            "start": [
+              -1.9534469069271743,
+              -0.8205654766637903,
+              0.9248526819497347
+            ],
+            "finish": [
+              -2.266887068748474,
+              -1.1409665629267693,
+              0.9248526819497347
+            ]
+          },
+          {
+            "name": "approach_destination",
+            "start": [
+              -1.9624679346325467,
+              -0.7400199770927429,
+              0.9248526819497347
+            ],
+            "finish": [
+              -2.2668871879577637,
+              -0.7400199770927429,
+              0.7160745859146118
+            ]
+          }
+        ],
+        "protected_columns_scope": "Conservative visual-semantic space reservations, not certified grasp configurations or swept trajectories."
+      }
+    }
+  ],
+  "task_list": [
+    "kitchen_bench_replicator_g_shape_banana_bowl",
+    "kitchen_bench_replicator_l_island_mustard_bowl",
+    "kitchen_bench_replicator_peninsula_bowl_sink",
+    "kitchen_bench_replicator_peninsula_mustard_bowl",
+    "kitchen_bench_replicator_u_shape_bowl_sink"
+  ],
+  "source_code_sha256": "f1d6d4e6d2b3286693ec9338f47d3a94d7fc3153fa56caed4850e5459dcd5e37",
+  "updated_at": "2026-10-23T17:27:26.716696+00:00",
+  "elapsed_seconds": 20.13575375592336,
+  "counts": {
+    "visual_candidate": 13
+  }
+}

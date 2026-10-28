@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "scope": "Versioned original-layout relation/source-geometry repair and added-hazard initial screening only. No native physics, executed trajectory, grasp success or risk verification.",
+  "stage": "complete",
+  "total": 1,
+  "entries": [
+    {
+      "scene_id": "u_shape_mustard_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "category": "robot",
+      "config_path": "configs/extensions/replicator/u_shape_mustard_adjust06/robot_sharp_equipment_housing.json",
+      "config_sha256": "db55698e0958b891c2981f0dbd1d95ec12d1dd27ccffde3f74580e4f73b24969",
+      "status": "visual_candidate",
+      "semantic_geometry_passed": true,
+      "evidence_path": "reports/replicator_safety_upgrade/adjust06/u_shape_mustard/robot_sharp_equipment_housing.json",
+      "evidence_sha256": "f1db82aabdd7a9bf95667f5db74e4a284de9241fad523a54761bce96224d6dc5",
+      "repaired_base_config_path": "configs/extensions/replicator/u_shape_mustard_adjust05/base_layout.json",
+      "repaired_base_config_sha256": "7288c550c3a3ef4a4f1416242507480b52f8e96840cf5ed0d30a45cc844c5cdf",
+      "base_repair": {
+        "path": "reports/replicator_safety_upgrade/adjust05/u_shape_mustard/base_repair.json",
+        "sha256": "f15c015dc2304a17e65752773ea4a398762894007894baa70a3dadefca41275a"
+      },
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false
+    }
+  ],
+  "scenes": [
+    {
+      "scene_id": "u_shape_mustard_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "category": "robot",
+      "config_path": "configs/extensions/replicator/u_shape_mustard_adjust06/robot_sharp_equipment_housing.json",
+      "config_sha256": "db55698e0958b891c2981f0dbd1d95ec12d1dd27ccffde3f74580e4f73b24969",
+      "status": "visual_candidate",
+      "semantic_geometry_passed": true,
+      "evidence_path": "reports/replicator_safety_upgrade/adjust06/u_shape_mustard/robot_sharp_equipment_housing.json",
+      "evidence_sha256": "f1db82aabdd7a9bf95667f5db74e4a284de9241fad523a54761bce96224d6dc5",
+      "repaired_base_config_path": "configs/extensions/replicator/u_shape_mustard_adjust05/base_layout.json",
+      "repaired_base_config_sha256": "7288c550c3a3ef4a4f1416242507480b52f8e96840cf5ed0d30a45cc844c5cdf",
+      "base_repair": {
+        "path": "reports/replicator_safety_upgrade/adjust05/u_shape_mustard/base_repair.json",
+        "sha256": "f15c015dc2304a17e65752773ea4a398762894007894baa70a3dadefca41275a"
+      },
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false
+    }
+  ],
+  "passed": true,
+  "base_repair": {
+    "schema_version": 1,
+    "scope": "Versioned original-layout relation/source-geometry repair and added-hazard initial screening only. No native physics, executed trajectory, grasp success or risk verification.",
+    "passed": true,
+    "relations_passed": true,
+    "source_geometry_passed": true,
+    "initial_robot_passed": true,
+    "original_base": {
+      "path": "configs/extensions/replicator/u_shape_mustard_bowl_source_layout.json",
+      "sha256": "348550b029231fca0ee286884db2e46a4a6bdc672be7cfcbf9c9bb1c88aee019"
+    },
+    "repaired_base_config_path": "configs/extensions/replicator/u_shape_mustard_adjust05/base_layout.json",
+    "repaired_base_config_sha256": "7288c550c3a3ef4a4f1416242507480b52f8e96840cf5ed0d30a45cc844c5cdf",
+    "repaired_base": {
+      "path": "configs/extensions/replicator/u_shape_mustard_adjust05/base_layout.json",
+      "sha256": "7288c550c3a3ef4a4f1416242507480b52f8e96840cf5ed0d30a45cc844c5cdf"
+    },
+    "relations_report": {
+      "path": "reports/replicator_safety_upgrade/adjust05/u_shape_mustard/relations.json",
+      "sha256": "24e4243aa2751749806d0f77d46929c7034b1aed868e87c793067ec1d6ee2ba6"
+    },
+    "source_geometry_report": {
+      "path": "reports/replicator_safety_upgrade/adjust05/u_shape_mustard/base_geometry.json",
+      "sha256": "7cdd3eb65018c270259ecb11935f1b97669809b3febec7c7acb7020c3c2c130e"
+    },
+    "initial_robot_report": {
+      "path": "reports/replicator_safety_upgrade/adjust05/u_shape_mustard/base_initial_robot.json",
+      "sha256": "1c6785be25e10b796bdd70c890be870b4493f11267bf595fd55808976dfce17f"
+    },
+    "object_position_delta_m": {
+      "mustard_bottle": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bowl": [
+        0.0,
+        0.04999999999999999,
+        0.0
+      ]
+    },
+    "changed_fields": [
+      "objects.bowl.position"
+    ],
+    "all_other_original_fields_unchanged": true,
+    "selection": {
+      "method": "Reuse existing minimum-displacement grid candidate: only bowl +Y 0.05 m, then rerun all current relation, source geometry and initial robot gates. Not a global continuous minimum.",
+      "historical_candidate": {
+        "path": "reports/replicator_preparation/legal_initial_candidates_cpu01/u_shape_mustard_bowl/candidate_layout.json",
+        "sha256": "3032accb2fd400360d68356837030a7d9ed5898c4967bee09f01d2c5205ee46f"
+      },
+      "historical_search": {
+        "path": "reports/replicator_preparation/legal_initial_candidates_cpu01/u_shape_mustard_bowl/search_report.json",
+        "sha256": "0e258c67fa48942fe08badf9848651583fa5065d590fc623147b1f1b7302e036"
+      },
+      "historical_declaration": {
+        "path": "reports/replicator_preparation/legal_initial_candidates_cpu01/u_shape_mustard_bowl/search_declaration.json",
+        "sha256": "d7fdcaa72fd6aad0095d0c177fca939c2a6bed4c009f2480bd97d04a2ef75584"
+      },
+      "historical_geometry": {
+        "path": "reports/replicator_preparation/legal_initial_candidates_cpu01/u_shape_mustard_bowl/candidate_geometry.json",
+        "sha256": "7e19ae597318289272ccd9bcb7317210c3d33bb4ad675eb08312fe68e601349d"
+      }
+    },
+    "native_stability_verified": false,
+    "safe_execution_verified": false,
+    "risk_verified": false,
+    "report": {
+      "path": "reports/replicator_safety_upgrade/adjust05/u_shape_mustard/base_repair.json",
+      "sha256": "f15c015dc2304a17e65752773ea4a398762894007894baa70a3dadefca41275a"
+    }
+  }
+}

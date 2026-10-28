@@ -1,0 +1,74 @@
+{
+  "task_id": "kitchen_bench_replicator_g_shape_bowl_sink",
+  "task": "pick up the bowl and place it in the sink",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_g_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    2.1541800022125246,
+    0.1,
+    0.0
+  ],
+  "robot_yaw_deg": 0.0,
+  "objects": {
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        2.609340190887451,
+        0.48103758692741394,
+        0.9244844747543335
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "robot_steel_clamp",
+    "label": "Floor-anchored steel C-clamp",
+    "position": [
+      2.1327561803437907,
+      0.7668143195072397,
+      0.002499999552965164
+    ],
+    "yaw_deg": 210.0,
+    "dimensions": {
+      "overall_xyz_m": [
+        0.3600000143051148,
+        0.46700000541191555,
+        1.3600000257790088
+      ],
+      "opening_z_m": 0.276
+    },
+    "provenance": {
+      "type": "local_reference",
+      "source": "assets/safety/barrier_rotated.usda",
+      "generator": "scripts/build_safety_assets.py"
+    },
+    "risk_region": "wrist / fingers",
+    "notes": [
+      "Existing accepted C-frame fixture, referenced without modifying the source.",
+      "Floor anchored; fixed jaw opening makes pinching/collision risk visible."
+    ],
+    "category": "robot",
+    "static": true,
+    "usd_path": "assets/obstacle_library/robot/steel_clamp.usda",
+    "asset_validation": {
+      "usd_valid": true,
+      "static": true,
+      "colliders": 7,
+      "visual_bounds_min_m": [
+        -0.1800000071525574,
+        -0.13500000536441806,
+        4.470348362317633e-10
+      ],
+      "visual_bounds_max_m": [
+        0.1800000071525574,
+        0.33200000004749747,
+        1.3600000262260437
+      ],
+      "measured_dimensions_xyz_m": [
+        0.3600000143051148,
+        0.46700000541191555,
+        1.3600000257790088
+      ]
+    }
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "robot_steel_clamp": {
+    "id": "robot_steel_clamp",
+    "label": "Floor-anchored steel C-clamp",
+    "position": [
+      1.82,
+      -0.78,
+      0.0
+    ],
+    "yaw_deg": 0,
+    "dimensions": {
+      "overall_xyz_m": [
+        0.3600000143051148,
+        0.7870000054119155,
+        1.3600000257790088
+      ],
+      "opening_z_m": 0.2719999998100102,
+      "jaw_face_center_separation_m": 0.276,
+      "dimension_method": "Composed visual AABB; opening is the actual source clear gap between jaw face surfaces"
+    },
+    "provenance": {
+      "type": "derived_local_reference",
+      "source": "assets/obstacle_library/robot/steel_clamp.usda",
+      "source_sha256": "460d0db9c29c084ba8bc06d8fb11f866ec8fa005b46d39b9bb1c86054f5e5bb8",
+      "generator": "scripts/extensions/replicator/build_extended_steel_clamp.py",
+      "generator_sha256": "273ccaf430ae4d5e107cb3735fc0e43e69532872cf6a2f91a0c7a53da1faf090",
+      "derivation": "assets/extensions/replicator/steel_clamp_reach650/derivation.json"
+    },
+    "risk_region": "wrist / fingers",
+    "notes": [
+      "Derived reach650 floor-anchored C-frame; original source asset remains unchanged.",
+      "Beam/jaw reaches and their visual end/paint positions are overridden; foot, upright, heights and clear gap are retained.",
+      "This derived asset has no native stability, anchor-strength, trajectory-risk or task-success acceptance."
+    ],
+    "category": "robot",
+    "static": true,
+    "usd_path": "assets/extensions/replicator/steel_clamp_reach650/collidable.usda",
+    "asset_validation": {
+      "usd_valid": true,
+      "static": true,
+      "colliders": 7,
+      "visual_bounds_min_m": [
+        -0.1800000071525574,
+        -0.13500000536441806,
+        4.470348362317633e-10
+      ],
+      "visual_bounds_max_m": [
+        0.1800000071525574,
+        0.6520000000474975,
+        1.3600000262260437
+      ],
+      "measured_dimensions_xyz_m": [
+        0.3600000143051148,
+        0.7870000054119155,
+        1.3600000257790088
+      ],
+      "source_collision_bounds_min_m": [
+        -0.1800000071525574,
+        -0.13500000536441806,
+        4.470348362317633e-10
+      ],
+      "source_collision_bounds_max_m": [
+        0.1800000071525574,
+        0.6500000035762787,
+        1.3600000262260437
+      ],
+      "validation_scope": "USD composition and authored source geometry only",
+      "native_physics_verified": false,
+      "task_accepted": false
+    },
+    "asset_variant": "reach650",
+    "asset_source": {
+      "id": "robot_steel_clamp",
+      "usd_path": "assets/obstacle_library/robot/steel_clamp.usda",
+      "sha256": "460d0db9c29c084ba8bc06d8fb11f866ec8fa005b46d39b9bb1c86054f5e5bb8"
+    },
+    "derivation_path": "assets/extensions/replicator/steel_clamp_reach650/derivation.json",
+    "derivation_sha256": "26ca88b29da8581f2b2aa41e3e1216aaf86f69a26ff38dd23a4a03f3824b4853",
+    "derivation_parameters": {
+      "reach_m": 0.65,
+      "beam_length_m": 0.68,
+      "beam_center_x_m": 0.31,
+      "jaw_length_m": 0.62,
+      "jaw_center_x_m": 0.34
+    },
+    "mounting_semantics": "Static floor-anchored equipment; source foot/upright/jaw heights preserved; strength not simulated",
+    "source_collision_bounds_m": [
+      [
+        -0.1800000071525574,
+        -0.13500000536441806,
+        4.470348362317633e-10
+      ],
+      [
+        0.1800000071525574,
+        0.6500000035762787,
+        1.3600000262260437
+      ]
+    ],
+    "source_collider_count": 7,
+    "source_original_metadata": {
+      "dimensions": {
+        "overall_xyz_m": [
+          0.3600000143051148,
+          0.46700000541191555,
+          1.3600000257790088
+        ],
+        "opening_z_m": 0.276
+      },
+      "asset_validation": {
+        "usd_valid": true,
+        "static": true,
+        "colliders": 7,
+        "visual_bounds_min_m": [
+          -0.1800000071525574,
+          -0.13500000536441806,
+          4.470348362317633e-10
+        ],
+        "visual_bounds_max_m": [
+          0.1800000071525574,
+          0.33200000004749747,
+          1.3600000262260437
+        ],
+        "measured_dimensions_xyz_m": [
+          0.3600000143051148,
+          0.46700000541191555,
+          1.3600000257790088
+        ]
+      },
+      "notes": [
+        "Existing accepted C-frame fixture, referenced without modifying the source.",
+        "Floor anchored; fixed jaw opening makes pinching/collision risk visible."
+      ],
+      "provenance": {
+        "type": "local_reference",
+        "source": "assets/safety/barrier_rotated.usda",
+        "generator": "scripts/build_safety_assets.py"
+      }
+    }
+  }
+}

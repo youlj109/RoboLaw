@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "kitchen_bench_replicator_g_shape_banana_bowl",
+  "status": "cpu_candidate_only",
+  "physical_collection_verified": false,
+  "source_layout_sha256": "7a032245402428e2ec49305a96370a86301d836685812c6d95fae4704c66dfb1",
+  "source_kitchen_sha256": "3c502506532233850196fabe24f03dc488245de72951ce069e1e84f536a9fa01",
+  "source_object_sha256": {
+    "banana": "a0aee64b0d9f6aae5689c1787e176776696ff38f23d17da0e226da19f0d9b064",
+    "bowl": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e"
+  },
+  "grasp_rule": "original_source_midbody_with_closed_gripper_clearance",
+  "grasp_height_offset_m": 0.013,
+  "pregrasp_height_m": 0.125,
+  "lift_height_m": 0.15,
+  "transport_destination_raise_m": 0.2,
+  "release_gap_m": 0.003,
+  "baseline_and_variants_share_profile": true,
+  "selection": "Preserve the +13 mm candidate already checked on the original cuRobo robot spheres, with all 89 closure samples and source-region triangle partition. Not a claim that it is the minimum possible offset.",
+  "source_support_refinement": "Only payload banana / exact CornerCounter_00_0 pair during measured and loaded vertical departure. Original robot/world, payload/other-world, self/joint and full FCL gates retained.",
+  "evidence": {
+    "reports/replicator_preparation/banana_payload_layout_paths_cpu01/diagnostic.json": "ced917fef843cbce8124c98926f5d29fc581b733cb75a9a91627e5fad3c25ee5",
+    "reports/replicator_preparation/banana_payload_layout_source_geometry_cpu01.json": "8ee4439b6405af16dcca92deed43c80a1b7242c956d277d0f0d944f3c972dd84",
+    "reports/replicator_preparation/banana_payload_layout_initial_robot_cpu01.json": "a870c549d9a534b0838dc581ab1375186b27afeae9bf40a075fd70871e6ab7e2"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "task_id": "kitchen_bench_replicator_l_shape_bowl_sink",
+  "task": "pick up the bowl and place it in the sink",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_l_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    -1.6606820806860925,
+    0.38958901911973953,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 179.9087476710785,
+  "objects": {
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        -2.0563466548919678,
+        0.007413075864315027,
+        0.9256474502831697
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "property_tablet_stand",
+    "label": "Portrait tablet on weighted stand",
+    "category": "property",
+    "usd_path": "assets/obstacle_library/property/tablet_stand.usda",
+    "position": [
+      -2.256346654891968,
+      -0.041498956233262996,
+      0.8986624323539368
+    ],
+    "yaw_deg": -64.22157257062347,
+    "dimensions": [
+      0.15515,
+      0.132,
+      0.24945
+    ],
+    "dimensions_unit": "m",
+    "physics_type": "rigid",
+    "static": false,
+    "mass_kg": 1.12,
+    "physics_material": {
+      "static_friction": 0.55,
+      "dynamic_friction": 0.42,
+      "restitution": 0.03
+    },
+    "collider_count": 5,
+    "collision_model": "compound_convex",
+    "provenance": {
+      "type": "procedural_local",
+      "generator": "scripts/build_library_property.py",
+      "external_sources": [],
+      "textures": "none; authored material colors"
+    },
+    "notes": [
+      "21.8 × 15.4 cm tablet, 12 degree lean, stable weighted desktop stand.",
+      "Screen, camera, button, cradle and rubber feet are modeled separately.",
+      "Single compound rigid body: tablet is secured to stand for this static-obstacle task."
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "kitchen_bench_replicator_g_shape_banana_bowl",
+  "candidate_id": "retain_actual_lift_end_height",
+  "status": "gpu_path_candidate_only",
+  "physical_collection_verified": false,
+  "base_profile_sha256": "faed59616700cb201a72692a2754f008d0a8dc802789c62cdf56b5db56b6418a",
+  "source_layout_sha256": "7a032245402428e2ec49305a96370a86301d836685812c6d95fae4704c66dfb1",
+  "source_kitchen_sha256": "3c502506532233850196fabe24f03dc488245de72951ce069e1e84f536a9fa01",
+  "source_object_sha256": {
+    "banana": "a0aee64b0d9f6aae5689c1787e176776696ff38f23d17da0e226da19f0d9b064",
+    "bowl": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e"
+  },
+  "payload_root_z_rule": "current_observed_payload_root_z",
+  "destination_xy_rule": "current_original_bowl_root_xy",
+  "payload_orientation_rule": "current_observed_payload_orientation",
+  "attachment_rule": "unchanged_original_close_planning_attachment",
+  "additional_height_m": 0.0,
+  "source_clearance_m": 0.002,
+  "full_original_world_and_self_and_source_checks_required": true,
+  "baseline_and_variants_share_candidate": true,
+  "scope": "Replace only the local 0.20 m destination-root raise with current measured lift-end payload height. No fixed recorded world goal, attachment rebind, grasp/physics/source/collision change. Fresh physical transport and original task success remain pending.",
+  "evidence": {
+    "reports/replicator_execution_20261023/g_banana/attempt05_transport_vertical_band01.json": "aabb065634b4151f998f1382c1ac772c9b54a0d52d181e5991a135f39b3e112b",
+    "reports/replicator_execution_20261023/g_banana/attempt05_transport_heights_old_attachment_cpu01.json": "9a1957606d2a7b95e6b812780934774a308a7d97e2069286b4f685b07d87e0b8",
+    "reports/replicator_preparation/banana_transport_height00_gpu01/diagnostic.json": "c2f0192fd1e54de0879ff04a07ab2db91adef9b2e3a6ae340fced10c2511915a",
+    "reports/replicator_preparation/banana_transport_height00_gpu01/independent_cpu_review01.json": "1f0ea24a36a268ea8d12049de5eb27042e9714a6097bb27ba04fcd362325e799"
+  }
+}

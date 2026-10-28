@@ -1,0 +1,54 @@
+{
+  "selected_grasp": {
+    "radius_from_pivot_m": 0.055,
+    "horizontal_direction_from_radial_deg": -150.0,
+    "downward_approach_angle_deg": 45.0,
+    "roll_about_tcp_x_deg": 0.0,
+    "tcp_retraction_m": 0.03,
+    "centering_correction_m": 0.0
+  },
+  "search_summary": {
+    "water_grasp_search.json": {
+      "candidates": 162,
+      "passed": 22
+    },
+    "water_ik_search.json": {
+      "candidates": 44,
+      "passed": 0
+    },
+    "water_side_search.json": {
+      "candidates": 216,
+      "passed": 20
+    },
+    "water_side_ik.json": {
+      "candidates": 40,
+      "passed": 0
+    },
+    "water_tilt_side_search.json": {
+      "candidates": 240,
+      "passed": 61
+    },
+    "water_tilt_ik.json": {
+      "candidates": 122,
+      "passed": 9
+    }
+  },
+  "selected_source_fcl": true,
+  "samples": 275,
+  "minimum_stream_clearance_m": 0.011212508993744857,
+  "selected_evidence": "configs/extensions/replicator/hard_execution_v1/water/cpu_candidate_04.json",
+  "actual_contact_diagnosis": "configs/extensions/replicator/hard_execution_v1/water/full01_contact_diagnosis.json",
+  "full01_flow_report": "configs/extensions/replicator/hard_execution_v1/water/full01_flow_and_centering.json",
+  "physics_assets_unchanged_from_neutral03": true,
+  "sources_sha256": {
+    "scripts/extensions/replicator/hard_execution_v1/water_collect.py": "541af02d4c92267d4cab6db99ed40e7769f00319b14430144b734b5a08fd0bdf",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/water_runtime.py": "62a2601acf3a836298b076fe5ffb3104b4485b05c446005d69285ff6314dc57a",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/water_control.py": "ed176818528ebc12be9705724774f680f0a8f1bdd7c5feb41dfc678524ec2615",
+    "assets/extensions/replicator/hard_execution_v1/water/water_valve.usda": "fba3f2faaf7c3ebaf25e42567043f3718b02ed0b25a53d594049fd5fb0909277",
+    "assets/extensions/replicator/hard_execution_v1/water/water_visual.usda": "8a5a092c47e2cfdc7260b0875ce11251fb8d9f2a684bb01dc9e3b1d6deca017d"
+  },
+  "next_command": "bash scripts/arena_python.sh scripts/extensions/replicator/hard_execution_v1/water_collect.py --mode full --output datasets/hard_execution_v1/water/full_02 --seed 42 --device cpu --headless --physics-threads 2 --torch-threads 2 --max-steps 2400 --episode-length-s 180",
+  "physics_launched": false,
+  "accepted": false,
+  "scope": "CPU candidate gates only; native contact-driven closure and original bowl success still required. Collision geometry and native joint definitions are unchanged from neutral03."
+}

@@ -1,0 +1,49 @@
+{
+  "task_id": "kitchen_bench_replicator_g_shape_banana_bowl",
+  "task": "pick up the banana and place it in the red bowl",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_g_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    -1.825,
+    1.6601604223251343,
+    0.0
+  ],
+  "robot_yaw_deg": 89.95437383553924,
+  "objects": {
+    "banana": {
+      "usd_path": "assets/extensions/replicator/source/Isaac/IsaacLab/Arena/assets/object_library/srl_robolab_assets/objects/ycb/banana.usd",
+      "position": [
+        -2.246,
+        2.15,
+        0.9153344465255737
+      ],
+      "yaw_deg": 0.0
+    },
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        -1.81,
+        2.15,
+        0.9244844747543335
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "human_default_mpfb",
+    "category": "human",
+    "label": "MPFB 人体",
+    "static": true,
+    "usd_path": "assets/extensions/replicator/human_visual_low_reach01/collidable.usda",
+    "position": [
+      -1.2665082774338394,
+      1.7273066930491994,
+      0.002499997206032276
+    ],
+    "yaw_deg": 15.0,
+    "provenance": {
+      "source": "configs/layout.json",
+      "field": "human.asset"
+    }
+  }
+}

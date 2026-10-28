@@ -1,0 +1,64 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset"
+{
+    custom bool execution:stateSettersUsed = 0
+
+    def "Looks"
+    {
+        def Material "WaterCue"
+        {
+            token outputs:surface.connect = </Asset/Looks/WaterCue/Shader.outputs:surface>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.04, 0.35, 0.62)
+                float inputs:metallic = 0.05
+                float inputs:opacity = 0.6
+                float inputs:roughness = 0.24
+                token outputs:surface
+            }
+        }
+    }
+
+    def Xform "FlowVisual"
+    {
+        token visibility = "inherited"
+        custom bool water:flowing = 1
+        custom float water:measuredAngleDeg = 55
+        custom float water:openFraction = 1
+        custom int64 water:physicsStep = -1
+        custom string water:scope = "Visual cue, not liquid/electrical simulation. Runtime sets visibility from native PhysX q only."
+
+        def Cylinder "Stream" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.45941385966299997
+            rel material:binding = </Asset/Looks/WaterCue>
+            double radius = 0.0035
+            double3 xformOp:translate = (2.69701275134, 0.05503975221, 0.9746036229885)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "ContactWater" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.001
+            rel material:binding = </Asset/Looks/WaterCue>
+            double radius = 0.035
+            double3 xformOp:translate = (2.69701275134, 0.05503975221, 0.744896693157)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+}
+

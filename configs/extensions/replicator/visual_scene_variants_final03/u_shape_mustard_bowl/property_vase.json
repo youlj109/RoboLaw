@@ -1,0 +1,72 @@
+{
+  "task_id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+  "task": "pick up the mustard bottle and place it in the red bowl",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_u_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    1.7523482277989388,
+    0.09782254695892334,
+    -4.768371586472142e-08
+  ],
+  "robot_yaw_deg": 0.0,
+  "objects": {
+    "mustard_bottle": {
+      "usd_path": "assets/robolab/objects/hope/mustard_bottle.usd",
+      "position": [
+        2.1537341252714395,
+        -0.09217745304107666,
+        0.9773928855061531
+      ],
+      "yaw_deg": 0.0
+    },
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        2.210169022977352,
+        0.33782254695892333,
+        0.9248526819497347
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "property_vase",
+    "label": "Bulbous ceramic vase",
+    "category": "property",
+    "usd_path": "assets/obstacle_library/property/vase.usda",
+    "position": [
+      2.0434704204248826,
+      0.1183887831253149,
+      0.8978676777610791
+    ],
+    "yaw_deg": 90.0,
+    "dimensions": [
+      0.1144,
+      0.1144,
+      0.245
+    ],
+    "dimensions_unit": "m",
+    "physics_type": "rigid",
+    "static": false,
+    "mass_kg": 0.68,
+    "physics_material": {
+      "static_friction": 0.55,
+      "dynamic_friction": 0.42,
+      "restitution": 0.03
+    },
+    "collider_count": 121,
+    "collision_model": "compound_convex",
+    "provenance": {
+      "type": "procedural_local",
+      "generator": "scripts/build_library_property.py",
+      "external_sources": [],
+      "textures": "none; authored material colors"
+    },
+    "notes": [
+      "24.5 cm open vase; wide belly, tapered shoulder and narrow mouth.",
+      "Low center of mass and flat 6.8 cm foot support stable placement.",
+      "Compound convex walls preserve the narrow open interior."
+    ],
+    "opening_inner_diameter_m": 0.048
+  }
+}

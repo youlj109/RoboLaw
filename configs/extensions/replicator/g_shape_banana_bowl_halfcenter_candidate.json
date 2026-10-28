@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "kitchen_bench_replicator_g_shape_banana_bowl",
+  "candidate_id": "contactcenter1_jaw0",
+  "status": "gpu_planning_prerequisites_only_not_physically_verified",
+  "physical_collection_verified": false,
+  "source_departure_authorized": false,
+  "base_profile_sha256": "faed59616700cb201a72692a2754f008d0a8dc802789c62cdf56b5db56b6418a",
+  "source_banana_sha256": "a0aee64b0d9f6aae5689c1787e176776696ff38f23d17da0e226da19f0d9b064",
+  "geometric_centroid_fraction_xy": 0.5,
+  "additional_yaw_rad": 0.0,
+  "additional_world_height_m": 0.0,
+  "baseline_and_variants_share_candidate": true,
+  "rule": "Recompute original source y=0 section and closed-mesh volume centroid; shift source-local XY halfway using current actual payload rotation. Retain original world Z, jaw orientation, contact region and every safety threshold.",
+  "native_com_or_force_closure_verified": false,
+  "evidence_sha256": {
+    "reports/replicator_preparation/banana_grasp_stability_cpu01/declaration.json": "e40e42d8f6626cbd7df18360be0c01b5c073661a9fc04908201549834d1b2f5c",
+    "reports/replicator_preparation/banana_grasp_stability_cpu01/search_report.json": "a9eba4712c985ac37c9624f4fa379828396912c01d0cbc5c2eda3a707b67c05b",
+    "reports/replicator_preparation/banana_grasp_stability_cpu01/contactcenter1_jaw0.json": "bc418d21d60f39944605d04bd6523868385e42f249869dd61fa32f05338ed05d",
+    "reports/replicator_preparation/banana_grasp_stability_cpu01/contact_lines02.json": "0eb5083f119fe41d15abf67d2d12478d3db26163243973d9adfab2895b419ff6",
+    "reports/replicator_preparation/banana_grasp_stability_gpu_halfcenter01/diagnostic.json": "cf822fd712b845ad9791c8eb58e6d5998b1913b268b173e2b01596697a914cef",
+    "reports/replicator_preparation/banana_grasp_stability_gpu_halfcenter01/independent_review01.json": "8c857975cf8efa79eb67a745a20d6f8fe01b0a6b1272e160efdff95f85cff87b"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "command": "bash scripts/arena_python.sh scripts/extensions/replicator/hard_execution_v1/water_collect.py --mode full --output datasets/hard_execution_v1/water/full_03 --seed 42 --device cpu --headless --physics-threads 2 --torch-threads 2 --max-steps 2400 --episode-length-s 180",
+  "profile": "Same accepted physical geometry and candidate04 orientation, with -11.30083175669125mm centering along TCP Y based on equal predicted inner-finger contact angle",
+  "cpu_bilateral_touch_rad": [
+    0.4125587344169617,
+    0.412558788061142
+  ],
+  "cpu_scope": "275 source/FCL points plus 316 independent checks only; native loaded pinch not proven. Closing sweep bounded to predicted touch+.01rad; overclosure q=.65 violates a real knuckle/Grip gap and is preserved as a rejected case.",
+  "actuator_control": {
+    "kind": "Original binary request, per-physics-step target slew; never q state assignment",
+    "close_rate_rad_s": 0.1,
+    "maximum_close_s": 8.0,
+    "hold_condition": "At least one allowed inner finger actually loaded >.01N with same-contact gap<=.25mm inside Grip in every last10steps; all loaded fingers remain within declared region. Bilateral contact is diagnostic only.",
+    "held_target": "Last commanded actuator position target, retained through turn, cleared by original binary open",
+    "bowl_continuation": "Disable local limiter after valve release/stable close; original bowl binary action semantics restored"
+  },
+  "runtime_recording": "water_physics rows retain original binary request, applied gripper target, all6 actual q, rate/hold flags, native valve q/dq, signed raw contacts and flow-volume proof",
+  "source_sha256": {
+    "scripts/extensions/replicator/hard_execution_v1/water_collect.py": "9b99c55f782fd6a70cb7bc2b12dd1739e5745a2322b81fa1719b7886788acca0",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/water_actions.py": "497ba73c222b4fcd30b47f5f47f882a9cd47ec926b45610568bd595b9a3332a0",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/water_control.py": "9b493422218cb02f28aa96db6cedb0251485d3fcbb96da710d9b6dbe9ad78ded",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/water_runtime.py": "081872e1caf8b0007da9101e57048b00f3968fb2508c01417f6daa7a53077c57",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/water_mechanism.py": "882858818c3329b6acd6f3abf470c321e6d0c3468a6611ddbcf63db789343fff",
+    "assets/extensions/replicator/hard_execution_v1/water/water_valve.usda": "fba3f2faaf7c3ebaf25e42567043f3718b02ed0b25a53d594049fd5fb0909277",
+    "assets/extensions/replicator/hard_execution_v1/water/water_visual.usda": "8a5a092c47e2cfdc7260b0875ce11251fb8d9f2a684bb01dc9e3b1d6deca017d"
+  },
+  "execution_verified": false,
+  "accepted": false,
+  "user_requirement": "One-sided pressure or pinch that truly closes the valve is allowed; do not require bilateral pinch."
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "task_id": "kitchen_bench_replicator_g_shape_bowl_sink",
+  "accepted": false,
+  "diagnostic_only": true,
+  "maximum_update_calls": 300,
+  "maximum_wait_seconds": 30,
+  "maximum_control_actions": 0,
+  "explicit_simulation_steps": 0,
+  "targets": {
+    "bowl": "/World/envs/env_0/bowl/obj_000013_Mesh",
+    "floor": "/World/envs/env_0/kitchen/Sink/BasinBottom"
+  },
+  "source_sha256": {
+    "configs/extensions/replicator/g_shape_bowl_sink_source_layout.json": "052d3c155ebf3ccb20b9285812fdd415a0a169c09626ee993ce75237435cdaa5",
+    "assets/robolab/objects/ycb/bowl.usd": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e",
+    "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_g_shape.usda": "3c502506532233850196fabe24f03dc488245de72951ce069e1e84f536a9fa01"
+  },
+  "scope": "Fresh same-source initialized stage, paused after reset; public cooking query plus native inventory. Not a replay of the historical contact state, not native shape geometry equivalence, not a contact allowance. No source cache clearing, state setters, object motion or control actions."
+}

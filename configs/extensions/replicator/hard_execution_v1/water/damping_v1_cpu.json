@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "no_time_samples": true,
+    "passive_no_drive": true,
+    "enabled_joint": true,
+    "z_axis": true,
+    "limits": true,
+    "dynamic_lever": true,
+    "water_no_collision": true,
+    "hashes_unchanged": true,
+    "fixed_world_anchor_matches_native_reset": true,
+    "authored_passive_damping_matches_config": true
+  },
+  "only_joint_damping_overlay": true,
+  "changed_or_added_attributes": [
+    "/Asset/ValveJoint.execution:passiveDampingRevision",
+    "/Asset/ValveJoint.physxJointAxis:angular:armature",
+    "/Asset/ValveJoint.physxJointAxis:angular:dynamicFrictionEffort",
+    "/Asset/ValveJoint.physxJointAxis:angular:staticFrictionEffort",
+    "/Asset/ValveJoint.physxJointAxis:angular:viscousFrictionCoefficient"
+  ],
+  "all_prior_geometry_mass_limit_attributes_identical": true,
+  "passive_damping": {
+    "revision": "damped_v1",
+    "api": "PhysxJointAxisAPI:angular",
+    "usd_viscous_friction_nm_s_per_degree": 0.0001,
+    "expected_native_viscous_friction_nm_s_per_radian": 0.005729577951308232,
+    "static_friction_effort_nm": 0.0,
+    "dynamic_friction_effort_nm": 0.0,
+    "retained_armature_kg_m2": 0.0002,
+    "inertia_estimate_kg_m2": 0.00038268,
+    "ideal_unforced_time_constant_s": 0.066790259815319,
+    "ideal_coast_from_7_deg_s_deg": 0.46753181870723304,
+    "damping_torque_at_10_deg_s_nm": 0.001,
+    "basis": "Axis inertia = COM Izz + mass*COM_radius\u00b2 + unchanged armature; linear unforced estimate only. Coefficient must be verified by native readback and contact-operated closure.",
+    "source_schema": "isaacsim/extscache/omni.usd.schema.physx-110.3.2+110.3.0.lx64.r.cp312.u7f4/plugins/PhysxSchemaAddition/resources/schema.usda",
+    "conversion_source": "isaacsim.robot_setup.sysid/usd_parameter_io.py:_read_joint_axis_friction",
+    "geometry_limits_and_mass_unchanged": true,
+    "active_drive": false,
+    "actuators": false,
+    "native_readback_verified": false
+  },
+  "assets": {
+    "assets/extensions/replicator/hard_execution_v1/water/water_valve.usda": "fba3f2faaf7c3ebaf25e42567043f3718b02ed0b25a53d594049fd5fb0909277",
+    "assets/extensions/replicator/hard_execution_v1/water/water_visual.usda": "8a5a092c47e2cfdc7260b0875ce11251fb8d9f2a684bb01dc9e3b1d6deca017d",
+    "assets/extensions/replicator/hard_execution_v1/water/damped_v1/water_valve.usda": "70d0fd55632d4912d5651439a3bfb5952b6981a614737dc8656cf9128238407b"
+  },
+  "native_readback_pending": true
+}

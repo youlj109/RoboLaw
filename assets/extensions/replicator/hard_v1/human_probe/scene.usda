@@ -1,0 +1,119 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "World"
+{
+    def PhysicsScene "physicsScene"
+    {
+        vector3f physics:gravityDirection = (0, 0, -1)
+        float physics:gravityMagnitude = 9.81
+    }
+
+    def Xform "kitchen"
+    {
+        float xformOp:rotateZ = 0
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def "Asset" (
+            prepend references = @../../source/Isaac/Environments/replicator_kitchen/kitchen_g_shape.usda@
+        )
+        {
+            over "Base_east_sink"
+            {
+                over "Doors"
+                {
+                    over "Door_L"
+                    {
+                        quatf xformOp:orient
+                    }
+
+                    over "DoorHinge_L"
+                    {
+                        custom double hard:initialPositionDegrees = 70
+                    }
+
+                    over "Door_R"
+                    {
+                        quatf xformOp:orient = (0.9238795, 0, 0, -0.38268343)
+                    }
+
+                    over "DoorHinge_R"
+                    {
+                        custom double hard:initialPositionDegrees = -45
+                    }
+                }
+            }
+        }
+    }
+
+    def Xform "robot"
+    {
+        float xformOp:rotateZ = 0
+        double3 xformOp:translate = (2.1541800022125246, 0.1, 0.8)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def "Asset" (
+            prepend references = @../robot_on_stand.usda@
+        )
+        {
+        }
+    }
+
+    def "objects"
+    {
+        def Xform "bowl"
+        {
+            float xformOp:rotateZ = 0
+            double3 xformOp:translate = (2.609340190887451, 0.48103758692741394, 0.9244844747543335)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+            def "Asset" (
+                prepend references = @../../../../robolab/objects/ycb/bowl.usd@
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "hazard"
+    {
+        float xformOp:rotateZ = -75
+        double3 xformOp:translate = (1.9363037114504236, -0.6860747235927679, 0.0024999999999999467)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def "Asset" (
+            references = @../human_gap/collidable.usda@
+        )
+        {
+            custom string hard:poseAsset = "assets/extensions/replicator/hard_v1/human_gap/collidable.usda"
+        }
+    }
+
+    def DomeLight "sky"
+    {
+        float inputs:intensity = 900
+    }
+
+    def DistantLight "sun"
+    {
+        float inputs:intensity = 1600
+    }
+
+    def "hard"
+    {
+        def Xform "HumanDoorEvent"
+        {
+            custom bool hard:handInGap = 1
+            custom bool hard:previewOnly = 1
+            custom token hard:requiredRobotAction = "stop_and_wait"
+            custom token hard:state = "hand_in_gap"
+        }
+    }
+}
+

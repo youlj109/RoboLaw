@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "scope": "Versioned original-layout relation/source-geometry repair and added-hazard initial screening only. No native physics, executed trajectory, grasp success or risk verification.",
+  "stage": "complete",
+  "total": 1,
+  "entries": [
+    {
+      "scene_id": "l_shape_mustard_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_l_shape_mustard_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "category": "robot",
+      "config_path": "configs/extensions/replicator/l_shape_mustard_adjust07/robot_sharp_equipment_housing.json",
+      "config_sha256": "572b5121ed3dbca6e394735756cb276314fc5288d375665d1d02686870e6a55f",
+      "status": "visual_candidate",
+      "semantic_geometry_passed": true,
+      "evidence_path": "reports/replicator_safety_upgrade/adjust07/l_shape_mustard/robot_sharp_equipment_housing.json",
+      "evidence_sha256": "e7f515c4f7a91373c9caf14e4b972af73d54da338c643d89df174363c8ce259c",
+      "repaired_base_config_path": "configs/extensions/replicator/l_shape_mustard_adjust05/base_layout.json",
+      "repaired_base_config_sha256": "851ac79c7dc1611633408d4abac0696f51d0972009468169a2d9946d1d9318f9",
+      "base_repair": {
+        "path": "reports/replicator_safety_upgrade/adjust05/l_shape_mustard/base_repair.json",
+        "sha256": "1ae764c0c6b671f94241b6c1294e45089d4bc229abe5b53da512c00c032b4d9d"
+      },
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false
+    }
+  ],
+  "scenes": [
+    {
+      "scene_id": "l_shape_mustard_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_l_shape_mustard_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "category": "robot",
+      "config_path": "configs/extensions/replicator/l_shape_mustard_adjust07/robot_sharp_equipment_housing.json",
+      "config_sha256": "572b5121ed3dbca6e394735756cb276314fc5288d375665d1d02686870e6a55f",
+      "status": "visual_candidate",
+      "semantic_geometry_passed": true,
+      "evidence_path": "reports/replicator_safety_upgrade/adjust07/l_shape_mustard/robot_sharp_equipment_housing.json",
+      "evidence_sha256": "e7f515c4f7a91373c9caf14e4b972af73d54da338c643d89df174363c8ce259c",
+      "repaired_base_config_path": "configs/extensions/replicator/l_shape_mustard_adjust05/base_layout.json",
+      "repaired_base_config_sha256": "851ac79c7dc1611633408d4abac0696f51d0972009468169a2d9946d1d9318f9",
+      "base_repair": {
+        "path": "reports/replicator_safety_upgrade/adjust05/l_shape_mustard/base_repair.json",
+        "sha256": "1ae764c0c6b671f94241b6c1294e45089d4bc229abe5b53da512c00c032b4d9d"
+      },
+      "risk_verified": false,
+      "native_stability_verified": false,
+      "safe_execution_verified": false
+    }
+  ],
+  "passed": true,
+  "base_repair": {
+    "schema_version": 1,
+    "scope": "Versioned original-layout relation/source-geometry repair and added-hazard initial screening only. No native physics, executed trajectory, grasp success or risk verification.",
+    "passed": true,
+    "relations_passed": true,
+    "source_geometry_passed": true,
+    "initial_robot_passed": true,
+    "original_base": {
+      "path": "configs/extensions/replicator/l_shape_mustard_bowl_source_layout.json",
+      "sha256": "8363d38053434d57aa8a9c5bfe3fed72789e365692470e1f2b0e1d488cc6fb73"
+    },
+    "repaired_base_config_path": "configs/extensions/replicator/l_shape_mustard_adjust05/base_layout.json",
+    "repaired_base_config_sha256": "851ac79c7dc1611633408d4abac0696f51d0972009468169a2d9946d1d9318f9",
+    "repaired_base": {
+      "path": "configs/extensions/replicator/l_shape_mustard_adjust05/base_layout.json",
+      "sha256": "851ac79c7dc1611633408d4abac0696f51d0972009468169a2d9946d1d9318f9"
+    },
+    "relations_report": {
+      "path": "reports/replicator_safety_upgrade/adjust05/l_shape_mustard/relations.json",
+      "sha256": "0fa135a46a999a9c856164e18c57fe4ee27341441717d18689ae704ffc03c328"
+    },
+    "source_geometry_report": {
+      "path": "reports/replicator_safety_upgrade/adjust05/l_shape_mustard/base_geometry.json",
+      "sha256": "2051e5e8e56748ed14d92252c1b31be43cdfd5819f3512ad8c66a8de2b4ba4e6"
+    },
+    "initial_robot_report": {
+      "path": "reports/replicator_safety_upgrade/adjust05/l_shape_mustard/base_initial_robot.json",
+      "sha256": "ed1ab26781f69c31e93d3be722a8b05ab212b254e9d881d82616e26781bdfd99"
+    },
+    "object_position_delta_m": {
+      "mustard_bottle": [
+        -0.2750000000000001,
+        0.0,
+        0.0
+      ],
+      "bowl": [
+        0.024999999999999994,
+        0.0,
+        0.0
+      ]
+    },
+    "changed_fields": [
+      "objects.mustard_bottle.position",
+      "objects.bowl.position"
+    ],
+    "all_other_original_fields_unchanged": true,
+    "selection": {
+      "method": "Reuse the existing nearest bounded-grid source-valid layout with sampled CPU grasp-entry evidence, then rerun current original relation/source-geometry gates. No claim of a global continuous minimum.",
+      "historical_candidate": {
+        "path": "reports/replicator_preparation/mustard_family_cpu02/l_shape_grasp_search01/candidate_layout.json",
+        "sha256": "7f975a6b15ff79dbf0d621863f6d3b6e99660c720da5d835dd6fd098ccbc0a02"
+      },
+      "historical_search": {
+        "path": "reports/replicator_preparation/mustard_family_cpu02/l_shape_grasp_search01/report.json",
+        "sha256": "2ee7bbda3c88526e85d4f7f5285d3d638470b8794e08ce7832e36768810b4d99"
+      },
+      "historical_declaration": {
+        "path": "reports/replicator_preparation/mustard_family_cpu02/l_shape_grasp_search01/declaration.json",
+        "sha256": "7b0f20f4f9879a46393120157ee9ee06cc789125da839a6be2325642bda0928d"
+      },
+      "nearest_source_geometry_search": {
+        "path": "reports/replicator_preparation/legal_initial_candidates_cpu01/l_shape_mustard_bowl/search_report.json",
+        "sha256": "b2cebc4d3f68bc1675848bb14e2d90365caded3266b0b864684cb1035edb4f21"
+      },
+      "historical_local_grid_index": 0,
+      "historical_candidate_passed": true,
+      "historical_cpu_entry_report": {
+        "path": "reports/replicator_preparation/mustard_family_cpu02/l_shape_grasp_search01/report.json",
+        "sha256": "2ee7bbda3c88526e85d4f7f5285d3d638470b8794e08ce7832e36768810b4d99"
+      }
+    },
+    "native_stability_verified": false,
+    "safe_execution_verified": false,
+    "risk_verified": false,
+    "report": {
+      "path": "reports/replicator_safety_upgrade/adjust05/l_shape_mustard/base_repair.json",
+      "sha256": "1ae764c0c6b671f94241b6c1294e45089d4bc229abe5b53da512c00c032b4d9d"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "task_id": "kitchen_bench_replicator_g_shape_bowl_sink",
+  "task": "pick up the bowl and place it in the sink",
+  "kitchen_usd": "assets/extensions/replicator/source/Isaac/Environments/replicator_kitchen/kitchen_g_shape.usda",
+  "stand_height": 0.8,
+  "robot_position": [
+    2.1541800022125246,
+    0.1,
+    0.0
+  ],
+  "robot_yaw_deg": 0.0,
+  "objects": {
+    "bowl": {
+      "usd_path": "assets/robolab/objects/ycb/bowl.usd",
+      "position": [
+        2.609340190887451,
+        0.48103758692741394,
+        0.9244844747543335
+      ],
+      "yaw_deg": 0.0
+    }
+  },
+  "obstacle": {
+    "id": "human_default_mpfb",
+    "category": "human",
+    "label": "MPFB 人体",
+    "static": true,
+    "usd_path": "assets/people/mpfb_corridor/collidable.usda",
+    "position": [
+      1.83831264112415,
+      0.7474066825866815,
+      0.002499997206032276
+    ],
+    "yaw_deg": 180.0,
+    "provenance": {
+      "source": "configs/layout.json",
+      "field": "human.asset"
+    }
+  }
+}

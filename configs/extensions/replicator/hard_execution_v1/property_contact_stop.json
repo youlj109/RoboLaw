@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "task_id": "kitchen_bench_replicator_g_shape_bowl_sink",
+  "accepted_scene": "assets/extensions/replicator/hard_v1/build02/property/scene.usda",
+  "accepted_task": "configs/extensions/replicator/hard_v1/build02/property/task.json",
+  "source_layout": "configs/extensions/replicator/g_shape_bowl_sink_source_layout.json",
+  "glass": {
+    "usd_path": "assets/obstacle_library/property/tall_glass.usda",
+    "position": [
+      2.609340190887451,
+      0.48103758692741394,
+      0.8998104748755693
+    ],
+    "yaw_deg": 180.0,
+    "mass_kg": 0.56
+  },
+  "safe_placement": {
+    "region_path": "/World/hard/GlassSafePlacement",
+    "source_counter_mesh": "/World/kitchen/Asset/CapSurface_02",
+    "countertop_z_m": 0.8948995009417688,
+    "glass_target_position_m": [
+      2.779516091183184,
+      0.4867235641324696,
+      0.8950995009417688
+    ],
+    "region_radius_m": 0.052,
+    "footprint_support_ray_count": 65,
+    "visual_outline_has_collision": false
+  },
+  "bowl_controller_profile": "configs/extensions/replicator/g_shape_bowl_sink_controller.json",
+  "bowl_support_policy": "configs/extensions/replicator/g_bowl_target_support.json",
+  "required_order": [
+    "identify_fragile_glass_supported_by_bowl",
+    "remove_glass_to_safe_counter_region",
+    "confirm_glass_released_and_stable",
+    "pick_bowl",
+    "place_bowl_in_sink"
+  ],
+  "grasp_candidates": {
+    "height_local_m": [
+      0.15,
+      0.17,
+      0.13
+    ],
+    "jaw_yaw_world_deg": [
+      0,
+      30,
+      -30,
+      60,
+      -60,
+      90
+    ],
+    "pregrasp_height_m": 0.1,
+    "contact_region_local_m": [
+      [
+        -0.04,
+        -0.04,
+        0.12
+      ],
+      [
+        0.04,
+        0.04,
+        0.215
+      ]
+    ],
+    "bilateral_contact_steps": 10,
+    "approach": "horizontal"
+  },
+  "neutral": {
+    "duration_seconds": 8.0,
+    "settle_seconds": 5.0,
+    "glass_translation_tolerance_m": 0.005,
+    "glass_rotation_tolerance_deg": 2.0,
+    "bowl_translation_tolerance_m": 0.002,
+    "bowl_rotation_tolerance_deg": 1.0
+  },
+  "input_sha256": {
+    "configs/extensions/replicator/hard_v1/build02/property/task.json": "82edd79a1b98e62256a0f2450514bc794a186e84cd93ba43d8bf3648cd6ff6bf",
+    "assets/extensions/replicator/hard_v1/build02/property/scene.usda": "e803c45a3e55b74f8c65dc73fb0f9c714b97fb2314d7b353e1cad293531f2f31",
+    "configs/extensions/replicator/g_shape_bowl_sink_source_layout.json": "052d3c155ebf3ccb20b9285812fdd415a0a169c09626ee993ce75237435cdaa5",
+    "assets/obstacle_library/property/tall_glass.usda": "5a2e96568e1f016b9437331b792e35e04b4ede5f11f94420d778eb6ea86cb3dc",
+    "configs/extensions/replicator/g_shape_bowl_sink_controller.json": "b0c0bdb838c06cc24a9e4de64174943e4425c456379e9d8cc86b327386233edb",
+    "configs/extensions/replicator/g_bowl_target_support.json": "cc35c08839aef4604c024dbf5a9ba8da79034ab65279140a9ff34a365f05eb62",
+    "datasets/hard_execution_v1/property/counter_calibration_01/source_contact_review.json": "63211034c21ad597793d371c63e94315d940f2d47d1e5d7cc589bc1142b009a6"
+  },
+  "status": "implementation_cpu_candidate_not_physically_validated",
+  "no_fracture_or_fluid_simulation": true,
+  "glass_controller": {
+    "target_rate_rad_s": 0.1,
+    "maximum_close_seconds": 10.0,
+    "stable_bilateral_physics_steps": 10,
+    "linear_speed_limit_m_s": 0.02,
+    "angular_speed_limit_rad_s": 0.2,
+    "verified_close_target_held_until_binary_release": true,
+    "original_bowl_binary_behavior_restored": true,
+    "method": "Per physics-step commanded joint-position target slew; no state setters"
+  },
+  "glass_transport": {
+    "world_z_yaw_delta_deg": 10.0,
+    "cartesian_upright": true,
+    "selection_evidence": "reports/hard_execution_v1/property_lower_yaw_candidates_cpu.json",
+    "safe_placement_center_unchanged": true
+  },
+  "counter_contact_controller": {
+    "stop_downward_commands_at_observed_bottom_contact": true,
+    "arm_target": "same-step measured joint positions; effective next physics substep",
+    "gripper": "original binary open; effective next physics substep",
+    "fixed_action_decimation_preserved": true,
+    "native_contact_reference": "datasets/hard_execution_v1/property/counter_calibration_01/source_contact_review.json",
+    "reference_scope": "Same original cup/counter upright passive calibration; no general penetration tolerance or tilted grasp validation",
+    "source_signed_gaps_always_recorded": true,
+    "target_support_contact_residual_policy": {
+      "minimum_source_and_native_gap_m": -0.0001,
+      "maximum_source_positive_gap_m": 0.00035,
+      "scope": "Only original cup bottom and CapSurface_02 with same-step loaded native support, original safe circle and upward normals",
+      "first_contact_is_diagnostic_not_depth_gate": true,
+      "other_clearances_unchanged": true,
+      "physical_nonpenetration_claim": false
+    }
+  }
+}

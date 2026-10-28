@@ -1,0 +1,4188 @@
+{
+  "episode": "/home/oem/Code/RoboLaw/datasets/hard_execution_v1/water/full_03",
+  "candidate": "/home/oem/Code/RoboLaw/datasets/hard_execution_v1/water/full_03/valve_plan_005_valve_turn.npz",
+  "physics_step": 2784,
+  "native_valve_angle_deg": 51.5722039320167,
+  "actual_gripper_q": [
+    0.4133046269416809,
+    0.413046270608902,
+    -0.41793563961982727,
+    0.4194888472557068,
+    -0.4134797155857086,
+    -0.41325998306274414
+  ],
+  "cpu_full_world": [
+    {
+      "valid": true,
+      "violation": null,
+      "flow": {
+        "distance_m": 0.07178713594012046,
+        "robot_part": "gripper/left_inner_finger",
+        "intersecting": false,
+        "active": true,
+        "flowing": true,
+        "parts_checked": 17,
+        "required_m": 0.002,
+        "valid": true,
+        "obstacle": "water_visual/FlowVisual/Stream",
+        "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+      }
+    },
+    {
+      "valid": true,
+      "violation": null,
+      "flow": {
+        "distance_m": 0.07135535253253916,
+        "robot_part": "gripper/left_inner_finger",
+        "intersecting": false,
+        "active": true,
+        "flowing": true,
+        "parts_checked": 17,
+        "required_m": 0.002,
+        "valid": true,
+        "obstacle": "water_visual/FlowVisual/Stream",
+        "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+      }
+    },
+    {
+      "valid": true,
+      "violation": null,
+      "flow": {
+        "distance_m": 0.07091186792217728,
+        "robot_part": "gripper/left_inner_finger",
+        "intersecting": false,
+        "active": true,
+        "flowing": true,
+        "parts_checked": 17,
+        "required_m": 0.002,
+        "valid": true,
+        "obstacle": "water_visual/FlowVisual/Stream",
+        "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+      }
+    },
+    {
+      "valid": true,
+      "violation": null,
+      "flow": {
+        "distance_m": 0.07048457699585177,
+        "robot_part": "gripper/left_inner_finger",
+        "intersecting": false,
+        "active": true,
+        "flowing": true,
+        "parts_checked": 17,
+        "required_m": 0.002,
+        "valid": true,
+        "obstacle": "water_visual/FlowVisual/Stream",
+        "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+      }
+    },
+    {
+      "valid": true,
+      "violation": null,
+      "flow": {
+        "distance_m": 0.07004543421745064,
+        "robot_part": "gripper/left_inner_finger",
+        "intersecting": false,
+        "active": true,
+        "flowing": true,
+        "parts_checked": 17,
+        "required_m": 0.002,
+        "valid": true,
+        "obstacle": "water_visual/FlowVisual/Stream",
+        "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+      }
+    }
+  ],
+  "no_physics_advance": true,
+  "accepted": false,
+  "sources": {
+    "/home/oem/Code/RoboLaw/datasets/hard_execution_v1/water/full_03/physics_states.npz": "10905677aa9e3d72c5aa1e57c565da355c60ce7ca7b381b622d220a014aa7af1",
+    "/home/oem/Code/RoboLaw/datasets/hard_execution_v1/water/full_03/water_physics.json": "742031d553eee4028ef187f9c59ea09c5cd1f72e8b8cbf4ac9c77de622182c65",
+    "/home/oem/Code/RoboLaw/datasets/hard_execution_v1/water/full_03/valve_plan_005_valve_turn.npz": "fea915e6dc78e31b2664207530f4e036aa20e662ebe538133155bc8713795a91"
+  },
+  "implementation_sources": {
+    "scripts/extensions/replicator/hard_execution_v1/water_rejected_diagnostics.py": "b54cfa5714efc57353c0472d72b8670ea3d89a71fc992407f210faf116262b65",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/water_control.py": "2ba617da302a4aa8d61f18c47ca290664361a38917122ac298b26b1b814f2dd5",
+    "kitchen_safety/extensions/replicator/hard_execution_v1/water_mechanism.py": "882858818c3329b6acd6f3abf470c321e6d0c3468a6611ddbcf63db789343fff"
+  },
+  "valve_geometry_refinement": [
+    {
+      "path": "/World/envs/env_0/water_valve/Base/Mount",
+      "source_schema": "Cylinder",
+      "representation": "Exact source analytic FCL collider; source-oriented CUDA mesh",
+      "cuda_mesh_vertices": 192,
+      "cuda_mesh_triangles": 380,
+      "cylinder_radial_conservative_excess_m": 1.2321084906754404e-05,
+      "original_world_aabb_m": [
+        [
+          2.78514020579,
+          0.03203975221,
+          0.93139950094
+        ],
+        [
+          2.83114020579,
+          0.07803975221000001,
+          0.95739950094
+        ]
+      ],
+      "no_collision_masks_or_padding_changed": true
+    },
+    {
+      "path": "/World/envs/env_0/water_valve/Base/Connector",
+      "source_schema": "Cube",
+      "representation": "Exact source analytic FCL collider; source-oriented CUDA mesh",
+      "cuda_mesh_vertices": 8,
+      "cuda_mesh_triangles": 12,
+      "cylinder_radial_conservative_excess_m": 0.0,
+      "original_world_aabb_m": [
+        [
+          2.801140204866128,
+          0.04703975183002039,
+          0.9328995007239332
+        ],
+        [
+          2.835140206713872,
+          0.06303975258997961,
+          0.9468995011560669
+        ]
+      ],
+      "no_collision_masks_or_padding_changed": true
+    },
+    {
+      "path": "/World/envs/env_0/water_valve/Lever/Hub",
+      "source_schema": "Cylinder",
+      "representation": "Exact source analytic FCL collider; source-oriented CUDA mesh",
+      "cuda_mesh_vertices": 192,
+      "cuda_mesh_triangles": 380,
+      "cylinder_radial_conservative_excess_m": 1.2321084906754404e-05,
+      "original_world_aabb_m": [
+        [
+          2.78514020579,
+          0.03203975221,
+          0.95839950094
+        ],
+        [
+          2.83114020579,
+          0.07803975221000001,
+          0.97639950094
+        ]
+      ],
+      "no_collision_masks_or_padding_changed": true
+    },
+    {
+      "path": "/World/envs/env_0/water_valve/Lever/Grip",
+      "source_schema": "Cube",
+      "representation": "Exact source analytic FCL collider; source-oriented CUDA mesh",
+      "cuda_mesh_vertices": 8,
+      "cuda_mesh_triangles": 12,
+      "cylinder_radial_conservative_excess_m": 0.0,
+      "original_world_aabb_m": [
+        [
+          2.7431646173058164,
+          -0.03179206587467431,
+          0.9593995005600204
+        ],
+        [
+          2.8111695391482705,
+          0.053403149511463216,
+          0.9753995013199797
+        ]
+      ],
+      "no_collision_masks_or_padding_changed": true
+    }
+  ],
+  "dense_arc": {
+    "scope": "Planning hypothesis using recorded push reference and six measured finger joints, each angle changes planning geometry only; no future physical state assumed",
+    "reference_physics_step": 2672,
+    "push_reference_tcp_in_lever": [
+      [
+        -0.6135002786739867,
+        -0.6113725825237419,
+        -0.4998409481076868,
+        0.08057458949316554
+      ],
+      [
+        -0.3539919454753228,
+        -0.3528890502769127,
+        0.8661172095815065,
+        0.014769197486367958
+      ],
+      [
+        -0.7059087126573357,
+        0.7083028190914596,
+        7.656078803267564e-05,
+        0.013389994400723637
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "samples": 110,
+    "cpu_valid": true,
+    "rows": [
+      {
+        "angle_deg": 55.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.8658391426266955e-08,
+          6.42519884249565e-08,
+          0.8870108405476692,
+          -0.46174859907845184
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6598834234767809,
+          0.5681970699293817,
+          0.26609583546741455,
+          -1.6518291493212753,
+          0.6212978486601262,
+          1.8496717251467458,
+          -0.6124225153705388
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.07474699594348724,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 54.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.837786251417028e-08,
+          6.433278912488398e-08,
+          0.8890171487933443,
+          -0.4578739009283543
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6608304213832832,
+          0.5616901255818147,
+          0.26605363534207194,
+          -1.6627045071052295,
+          0.6271190789802291,
+          1.857802473399109,
+          -0.6108091398350143
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.07430290260360903,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 54.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.809698371406245e-08,
+          6.441236502124026e-08,
+          0.8910065314339968,
+          -0.453990485519194
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6617531059547948,
+          0.5552242857899183,
+          0.2660420161288934,
+          -1.6734967198764155,
+          0.6329615394452017,
+          1.8659088978257337,
+          -0.6091985986958947
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.07386076067053438,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 53.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.7815760373470956e-08,
+          6.449071459901494e-08,
+          0.8929789505946492,
+          -0.45009842678560263
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6626517747487497,
+          0.548799566685482,
+          0.2660611272567031,
+          -1.684205949600384,
+          0.6388254041233727,
+          1.8739909763823692,
+          -0.6075906459743073
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.07342072379653718,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 53.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.7534197846482813e-08,
+          6.456783636654505e-08,
+          0.8949343687232838,
+          -0.4461977988267683
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6635267733091639,
+          0.5424152691784567,
+          0.2661111626182033,
+          -1.6948335014350715,
+          0.6447113005417344,
+          1.8820495904966572,
+          -0.6059853807639629
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.07298282415535862,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 52.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.7252301493642673e-08,
+          6.464372885554325e-08,
+          0.8968727485915579,
+          -0.44228867590502446
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6643784393051646,
+          0.5360707355497857,
+          0.2661923300888631,
+          -1.705380605060264,
+          0.6506198523560441,
+          1.8900855921461053,
+          -0.6043828989564995
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.0725472082948956,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 52.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.6970076681850743e-08,
+          6.471839062112593e-08,
+          0.898794053295513,
+          -0.4383711324444367
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6652070950368176,
+          0.5297653462683102,
+          0.26630484132716614,
+          -1.715848418168689,
+          0.65655168450924,
+          1.898099803134323,
+          -0.6027832963420766
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.07211391110017464,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 51.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.668752878426064e-08,
+          6.479182024184078e-08,
+          0.9006982462562771,
+          -0.4344452430293858
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6660130588968413,
+          0.5234985197949782,
+          0.26644892456641883,
+          -1.7262380303215772,
+          0.6625074172713712,
+          1.9060930197471542,
+          -0.601186665546467
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.07168300594487838,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 51.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.6404663180177036e-08,
+          6.486401631969363e-08,
+          0.9025852912207613,
+          -0.43051108240314684
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6667966333627561,
+          0.5172697092879767,
+          0.2666248092854097,
+          -1.7365504655740145,
+          0.6684876737485469,
+          1.914066010699124,
+          -0.5995931003870332
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.07125456141812565,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 50.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.6121485254953296e-08,
+          6.49349774801752e-08,
+          0.9044551522623491,
+          -0.42656872546646735
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6675580944718099,
+          0.5110783997260671,
+          0.2668327130188706,
+          -1.74678668487235,
+          0.6744930859740529,
+          1.9220195153881645,
+          -0.598002699387393
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.07082866435697918,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 50.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.583800039988892e-08,
+          6.500470237228731e-08,
+          0.906307793781582,
+          -0.42261824727614045
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.668297702481656,
+          0.5049241078837137,
+          0.2670728534687154,
+          -1.756947589481314,
+          0.6805242890965268,
+          1.9299542482207201,
+          -0.5964155628606957
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.07040538589385688,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 49.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.5554214012126918e-08,
+          6.507318966856853e-08,
+          0.9081431805068357,
+          -0.4186597230435767
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6690157462854707,
+          0.4988063862529555,
+          0.2673454998144511,
+          -1.7670340259910298,
+          0.6865818981236801,
+          1.9378709119231143,
+          -0.5948317804493769
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.0699848040213327,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 49.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.527013149455104e-08,
+          6.51404380651194e-08,
+          0.9099612774949929,
+          -0.41469322813337095
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6697124943481644,
+          0.4927248158329352,
+          0.2676509139565253,
+          -1.777046785870122,
+          0.6926665353045643,
+          1.9457701848051094,
+          -0.5932514461783599
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.0695669977344474,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 48.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.4985758255682925e-08,
+          6.520644628162746e-08,
+          0.9117620501321075,
+          -0.41071883806186904
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6703882166487505,
+          0.48667900758899585,
+          0.26798937558033553,
+          -1.786986608992537,
+          0.6987788188174144,
+          1.9536527278554814,
+          -0.5916746525448978
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06915204651228044,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 48.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.4701099709579131e-08,
+          6.527121306139138e-08,
+          0.9135454641340642,
+          -0.406736628495729
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6710431730215897,
+          0.48066859990005606,
+          0.26836116777568925,
+          -1.7968541851180908,
+          0.7049193694132208,
+          1.9615191823566775,
+          -0.5901014943248348
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.0687400315736203,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 47.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.4416161275728051e-08,
+          6.533473717134505e-08,
+          0.9153114855472313,
+          -0.40274667525048063
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6716776168898675,
+          0.47469325799406265,
+          0.2687665807773865,
+          -1.8066501560766324,
+          0.7110888087938562,
+          1.9693701717644194,
+          -0.5885320678932792
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06833103530140598,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 47.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.4130948378946723e-08,
+          6.539701740208096e-08,
+          0.9170600807491066,
+          -0.3987490542890822
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6722917928800988,
+          0.46875267287649447,
+          0.269205908652281,
+          -1.8163751172758613,
+          0.7172877610768944,
+          1.9772063018393673,
+          -0.5869664721584928
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06792514086293643,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 46.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.3845466449277585e-08,
+          6.545805256787333e-08,
+          0.9187912164489583,
+          -0.39474384172047455
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6728859441509352,
+          0.46284656109148986,
+          0.2696794570877659,
+          -1.8260296200379422,
+          0.7235168495054777,
+          1.9850281633521445,
+          -0.5854048070478017
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06752243260184426,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 46.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.355972092188506e-08,
+          6.551784150670052e-08,
+          0.9205048596884576,
+          -0.3907311137981315
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6734603017282974,
+          0.4569746628698632,
+          0.2701875306141334,
+          -1.8356141724808575,
+          0.7297767019663868,
+          1.992836329936993,
+          -0.5838471766512752
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06712108011193185,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 45.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.3273717236952101e-08,
+          6.557638308026737e-08,
+          0.9222009778423078,
+          -0.3867109469186085
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6740150969056733,
+          0.45113674269238324,
+          0.27073044627540976,
+          -1.8451292416892506,
+          0.7360679451488092,
+          2.000631362036813,
+          -0.5822936862458417
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06672049290197572,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 45.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.2987460839576604e-08,
+          6.563367617402671e-08,
+          0.9238795386188638,
+          -0.3826834176200881
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6745505513167037,
+          0.4453325875221356,
+          0.2713085217380936,
+          -1.8545752546087313,
+          0.7423912096022238,
+          2.0084138049046953,
+          -0.580744445255564
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06632337324047811,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 44.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.270095717966774e-08,
+          6.56897196972006e-08,
+          0.9255405100607482,
+          -0.3786486025809224
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6750668789262243,
+          0.43956200639249965,
+          0.27192207709988625,
+          -1.8639525994373745,
+          0.7487471288717911,
+          2.0161841897216974,
+          -0.5791995669742729
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06592502126523599,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 44.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.2414211711842216e-08,
+          6.574451258280114e-08,
+          0.9271838605454591,
+          -0.37460657861817387
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6755642920472804,
+          0.4338248303635455,
+          0.2725714411997483,
+          -1.8732616273385867,
+          0.7551363369008277,
+          2.0239430357792583,
+          -0.5776591674172143
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06552794212898258,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 43.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.2127229895320392e-08,
+          6.579805378765077e-08,
+          0.928809558785972,
+          -0.37055742268615216
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.676042996818395,
+          0.4281209116934257,
+          0.273256946065865,
+          -1.882502652991304,
+          0.7615594702097165,
+          2.031690849778736,
+          -0.5761233665791007
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06512058661843763,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 43.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.1840017193822391e-08,
+          6.585034229240215e-08,
+          0.9304175738313356,
+          -0.3665012118749495
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6765031906699641,
+          0.4224501229001845,
+          0.27397892355411313,
+          -1.8916759558241294,
+          0.7680171691791883,
+          2.0394281257088123,
+          -0.5745922894422614
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06470022098126516,
+          "robot_part": "gripper/left_inner_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 42.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.1552579075464035e-08,
+          6.590137710155751e-08,
+          0.9320078750672617,
+          -0.3624380234089728
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.676945067238666,
+          0.41681235681282514,
+          0.27473771044093337,
+          -1.9007817813189816,
+          0.7745100759015713,
+          2.0471553466739785,
+          -0.5730660650546061
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06419160960972956,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 42.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.1264921012652771e-08,
+          6.595115724348762e-08,
+          0.9335804322167067,
+          -0.3583679346454736
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6773688152686859,
+          0.4112075260996718,
+          0.2755336467443909,
+          -1.9098203417320543,
+          0.7810388347140176,
+          2.0548729850146215,
+          -0.5715448269691052
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.0636528141974558,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 41.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.0977048481983457e-08,
+          6.599968177045039e-08,
+          0.9351352153404497,
+          -0.3542910230730751
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6777746184313704,
+          0.4056355627759313,
+          0.27636707507396685,
+          -1.9187918171069578,
+          0.7876040923522223,
+          2.062581502768539,
+          -0.5700287136033673
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06311667764575024,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 41.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.068896696413412e-08,
+          6.604694975860873e-08,
+          0.936672194837661,
+          -0.3502073663102967
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6781626523738509,
+          0.4000964176774455,
+          0.27723833692737243,
+          -1.9276963558056064,
+          0.7942064991576313,
+          2.070281351342339,
+          -0.5685178690810792
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06258330601610684,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 40.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.0400681943761598e-08,
+          6.60929603080483e-08,
+          0.9381913414464664,
+          -0.34611704210407673
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6785330888010955,
+          0.39459006028756466,
+          0.27814777672831564,
+          -1.9365340758346388,
+          0.8008467074176636,
+          2.077972972993002,
+          -0.5670124426937767
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.062052807888220964,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 40.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.0112198909397134e-08,
+          6.613771254279456e-08,
+          0.9396926262445044,
+          -0.3420201283282923
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.678886093289861,
+          0.38911647842383695,
+          0.2790957390659613,
+          -1.9453050651671426,
+          0.8075253721452227,
+          2.0856568007002005,
+          -0.5655125894362095
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06152529447875943,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 39.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -9.823523353341848e-09,
+          6.618120561082945e-08,
+          0.9411760206494765,
+          -0.3379167029822757
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6792218228930806,
+          0.38367567773601363,
+          0.28008256558323086,
+          -1.9540093823973417,
+          0.8142431519996426,
+          2.093333257997727,
+          -0.5640184708432693
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.06100087970388062,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 39.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -9.534660771562224e-09,
+          6.622343868410769e-08,
+          0.9426414964196915,
+          -0.3338068441893309
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6795404354187932,
+          0.3782676821230808,
+          0.2811086047401627,
+          -1.9626470580762823,
+          0.8210007055444575,
+          2.1010027616620492,
+          -0.5625302532786506
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.060479680814321896,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 38.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -9.245616663585427e-09,
+          6.62644109585724e-08,
+          0.9440890256546031,
+          -0.32969063019524486
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.679842069921362,
+          0.3728925318883076,
+          0.28217418995657595,
+          -1.9712180941026656,
+          0.827798698775794,
+          2.108665717295495,
+          -0.5610481121665379
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05996181593203423,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 38.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -8.956396532394623e-09,
+          6.630412165417054e-08,
+          0.9455185807953412,
+          -0.3255681393667988
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6801268732069722,
+          0.36755028588657,
+          0.28327966831496953,
+          -1.9797224658337365,
+          0.8346377946236896,
+          2.1163225262884993,
+          -0.5595722267741124
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.059447407895626775,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 37.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -8.667005884324209e-09,
+          6.634257001486773e-08,
+          0.9469301346252367,
+          -0.3214394501902754
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.680394975963134,
+          0.36224101920668567,
+          0.28442537390224926,
+          -1.9881601212462636,
+          0.8415186620672621,
+          2.1239735802842405,
+          -0.5581027852473897
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05893658356267188,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 37.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -8.377450228954977e-09,
+          6.637975530866259e-08,
+          0.9483236602703393,
+          -0.3173046412699655
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6806465038951631,
+          0.3569648238440232,
+          0.28561163954829366,
+          -1.9965309823994726,
+          0.8484419716999151,
+          2.1316192643568814,
+          -0.5566399827525703
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05842946752178985,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 36.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -8.087735079009224e-09,
+          6.641567682760073e-08,
+          0.9496991311999297,
+          -0.3131637913266706
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6808815768169241,
+          0.3517218088317567,
+          0.28683879549649177,
+          -2.0048349453683203,
+          0.8554083957447769,
+          2.1392599571978175,
+          -0.5551840216106004
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05792619680902857,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 36.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -7.797865950245783e-09,
+          6.645033388778821e-08,
+          0.9510565212270236,
+          -0.3090169791962047
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6811003041508562,
+          0.3465120991043327,
+          0.28810716382954665,
+          -2.013071881219747,
+          0.8624186097144303,
+          2.1468960302987994,
+          -0.5537351127398523
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05742311868566445,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 35.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -7.507848361355028e-09,
+          6.648372582940456e-08,
+          0.9523958045088718,
+          -0.30486428382789327
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6813027909765107,
+          0.3413358367586289,
+          0.28941706491994373,
+          -2.0212416357801146,
+          0.8694732896161814,
+          2.1545278499834297,
+          -0.5522934742328333
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05692077924244529,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 35.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -7.2176878338538094e-09,
+          6.651585201671537e-08,
+          0.9537169555474513,
+          -0.30070578428307027
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.681489129985378,
+          0.33619317943897914,
+          0.2907688078823826,
+          -2.029344030694472,
+          0.8765731149179949,
+          2.1621557757351346,
+          -0.5508593336428736
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05642261312412705,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 34.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -6.9273898919803e-09,
+          6.654671183808427e-08,
+          0.9550199491899506,
+          -0.2965415597335724
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6816594091700657,
+          0.3310843014045819,
+          0.2921626986576622,
+          -2.037378863565488,
+          0.8837187653050311,
+          2.169780162495292,
+          -0.5494329264010982
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.0559287636965822,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 34.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -6.636960062588871e-09,
+          6.657630470598484e-08,
+          0.9563047606292487,
+          -0.29237168946023273
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6818137062870678,
+          0.32600939274599006,
+          0.29359903340880394,
+          -2.0453459083810133,
+          0.8909109224251569,
+          2.1774013597093553,
+          -0.5480144972710599
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05543931459588871,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 33.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -6.3464038750448244e-09,
+          6.660463005701146e-08,
+          0.9575713654043881,
+          -0.28819625285137057
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6819520883398738,
+          0.32096865958747517,
+          0.2950780975842858,
+          -2.0532449155775336,
+          0.898150269593345,
+          2.1850197117264067,
+          -0.546604300528275
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.054954540356442656,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 33.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -6.0557268611191375e-09,
+          6.66316873518903e-08,
+          0.9588197394010399,
+          -0.28401532940127994
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6820746105774637,
+          0.3159623235242626,
+          0.2966001642048888,
+          -2.061075612791629,
+          0.9054374918619887,
+          2.192635557865456,
+          -0.5452026005195405
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05447453230867356,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 32.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -5.764934554883162e-09,
+          6.665747607548949e-08,
+          0.9600498588519621,
+          -0.27982899870871697
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6821813205838118,
+          0.31099062239410113,
+          0.2981654978823156,
+          -2.068837704948754,
+          0.9127732741805934,
+          2.2002492339278312,
+          -0.5438096710734818
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05399944679628537,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 32.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -5.474032492603222e-09,
+          6.668199573682885e-08,
+          0.9612617003374541,
+          -0.27563734047538313
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6822722555930821,
+          0.30605380972058105,
+          0.29977435130263125,
+          -2.076530874690376,
+          0.9201583019306415,
+          2.207861071854617,
+          -0.5424257962636199
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.053529443874156805,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 31.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -5.183026212635281e-09,
+          6.670524586908944e-08,
+          0.9624552407858004,
+          -0.27144043450440947
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6823474380174251,
+          0.30115215445731414,
+          0.3014269598893195,
+          -2.0841547826019973,
+          0.9275932620232809,
+          2.2154713993400383,
+          -0.5410512715941449
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05306843462289787,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 31.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -4.891921255319425e-09,
+          6.672722602962222e-08,
+          0.9636304574737115,
+          -0.2672383606988359
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6824068828935922,
+          0.29628594162004723,
+          0.30312354927983237,
+          -2.0917090675819336,
+          0.9350788399714064,
+          2.2230805418213238,
+          -0.5396864028219718
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05259785373211028,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 30.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -4.6007231628744165e-09,
+          6.67479357999566e-08,
+          0.9647873280267557,
+          -0.2630311990600902
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6824505880898605,
+          0.2914554714119441,
+          0.3048643242070303,
+          -2.099193346946241,
+          0.942615722564484,
+          2.230688820822706,
+          -0.5383315079788963
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05212372630622464,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 30.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -4.309437479292184e-09,
+          6.676737478580844e-08,
+          0.9659258304197853,
+          -0.2588190296864658
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6824785366148063,
+          0.2866610598491365,
+          0.30664947054826536,
+          -2.106607216376172,
+          0.9502045965129047,
+          2.23829655508383,
+          -0.536986917124224
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.051642938515781237,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 29.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -4.018069750232274e-09,
+          6.678554261708746e-08,
+          0.9670459429773558,
+          -0.2546019327715959
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.682490703920375,
+          0.2819030384431243,
+          0.30847916216140875,
+          -2.113950251528368,
+          0.957846146160291,
+          2.2459040623572815,
+          -0.5356529720315193
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05115357712032867,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 29.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -3.726625522916238e-09,
+          6.680243894790435e-08,
+          0.9681476443741387,
+          -0.25037998860292665
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6824870437462015,
+          0.2771817543782556,
+          0.3103535456476317,
+          -2.121222006264491,
+          0.9655410566523784,
+          2.2535116571927034,
+          -0.5343300279937362
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05065735568711263,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 28.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -3.435110346022058e-09,
+          6.681806345657728e-08,
+          0.9692309136353277,
+          -0.24615327756018945
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6824675000935273,
+          0.27249757032911853,
+          0.3122727520381452,
+          -2.128422014799862,
+          0.9732900104536283,
+          2.261119653744142,
+          -0.5330184530933864
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.05015403568775272,
+          "robot_part": "gripper/left_outer_finger",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 28.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -3.1435297695784963e-09,
+          6.68324158456382e-08,
+          0.9702957301370372,
+          -0.2419218801138698
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6824319974892136,
+          0.26785086475382364,
+          0.31423688612176426,
+          -2.1355497904059817,
+          0.9810936892299006,
+          2.2687283644523455,
+          -0.5317186294903815
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.04959389728518783,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 27.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -2.8518893448594236e-09,
+          6.684549584183826e-08,
+          0.971342073606696,
+          -0.2376858768236757
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6823804463039698,
+          0.2632420316827141,
+          0.31624603121096795,
+          -2.1426048266675353,
+          0.9889527721274588,
+          2.2763381015844897,
+          -0.5304309534647362
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.04894694009772095,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 27.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -2.560194624278134e-09,
+          6.685730319615319e-08,
+          0.9723699241234328,
+          -0.2334453483370036
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6823127360494212,
+          0.25867148056322126,
+          0.31830024142126156,
+          -2.1495865971147694,
+          0.9968679369449227,
+          2.2839491764160593,
+          -0.529155836623185
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.04829370334636594,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 26.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -2.2684511612816388e-09,
+          6.686783768378798e-08,
+          0.9733792621184555,
+          -0.22920037538740345
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6822287395725476,
+          0.254139636691289,
+          0.32039954543664056,
+          -2.1564945556975075,
+          1.004839858564075,
+          2.2915619007703225,
+          -0.5278937059183658
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.04763423660799672,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 26.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.9766645102449353e-09,
+          6.687709910418121e-08,
+          0.9743700683754235,
+          -0.22495103879304115
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.682128315371545,
+          0.24964694139852028,
+          0.3225439482227416,
+          -2.1633281370047177,
+          1.0128692078474688,
+          2.2991765879321315,
+          -0.5266450037974323
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.04696859021222301,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 25.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.684840226365258e-09,
+          6.688508728100876e-08,
+          0.9753423240308136,
+          -0.22069741945516014
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6820112922756353,
+          0.24519385117871778,
+          0.32473341410620615,
+          -2.1700867559188786,
+          1.0209566550459586,
+          2.306793550331938,
+          -0.5254101907875112
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.046296814884989344,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 25.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.3929838655563214e-09,
+          6.689180206218725e-08,
+          0.9762960105742801,
+          -0.21643959835654136
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6818774857237708,
+          0.24078083870771397,
+          0.326967883194342,
+          -2.1767698086026916,
+          1.0291028652564966,
+          2.314413103252976,
+          -0.5241897440890667
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.04562161729482615,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 24.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -1.1011009843425186e-09,
+          6.689724331987693e-08,
+          0.9772311098490055,
+          -0.21217765655996065
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6817266896060546,
+          0.23640839260111665,
+          0.32924726197792475,
+          -2.183376672202292,
+          1.0373085000101356,
+          2.322035563923066,
+          -0.5229841592174195
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.04493508245081956,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 24.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -8.091971397531803e-10,
+          6.69014109504841e-08,
+          0.9781476040520476,
+          -0.20791167520664658
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.681558676402731,
+          0.23207701742488296,
+          0.33157142270222084,
+          -2.189906705234955,
+          1.045574216925517,
+          2.3296612521479463,
+          -0.5217939509142677
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.044245228856430265,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 23.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -5.172778892167286e-10,
+          6.690430487466308e-08,
+          0.9790454757346783,
+          -0.20364173551473477
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6813731940945319,
+          0.2277872336526074,
+          0.3339401993058364,
+          -2.196359247460222,
+          1.0539006699009585,
+          2.3372904903384746,
+          -0.5206196539970254
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.04354945336993855,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 23.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          -2.2534879045491009e-10,
+          6.690592503731773e-08,
+          0.9799247078027145,
+          -0.19936791877772203
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6811699678550391,
+          0.22353957800764535,
+          0.33635338842718787,
+          -2.2027336201213865,
+          1.0622885083970692,
+          2.3449236045603015,
+          -0.5194618241292592
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.042847810171629655,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 22.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          6.658459862304392e-11,
+          6.690627140760248e-08,
+          0.9807852835168451,
+          -0.19509030636291852
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6809487027558788,
+          0.21933460359126478,
+          0.33881075127571986,
+          -2.209029126395531,
+          1.0707383766804908,
+          2.3525609255555375,
+          -0.5183210386080161
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.042140351601787786,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 22.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          3.5851672002621887e-10,
+          6.690534397892293e-08,
+          0.9816271864929492,
+          -0.19080897970989838
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6807090693515468,
+          0.21517287898388163,
+          0.34131199773305065,
+          -2.21524505111968,
+          1.079250916687325,
+          2.3602027868313447,
+          -0.517197898776773
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.04142713180860788,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 21.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          6.504420157878402e-10,
+          6.690314276893602e-08,
+          0.9824504007024075,
+          -0.18652402032894977
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6804507276696046,
+          0.211054990408762,
+          0.34385681058191003,
+          -2.2213806613453135,
+          1.0878267626078963,
+          2.3678495296840003,
+          -0.5160930286547356
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.04070820488965923,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 21.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          9.423549280710667e-10,
+          6.689966781954958e-08,
+          0.9832549104724083,
+          -0.18223550979952283
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.680173302574009,
+          0.20698153973155275,
+          0.346444818787612,
+          -2.2274352061286598,
+          1.0964665462377772,
+          2.375501499323209,
+          -0.5150070787440281
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.03998362584622718,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 20.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.2342498992748392e-09,
+          6.689491919692166e-08,
+          0.984040700486245,
+          -0.17794352976867606
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6798763936589346,
+          0.20295314571477063,
+          0.34907560702607426,
+          -2.233407916390825,
+          1.105170894487994,
+          2.3831590473565236,
+          -0.5139407258973786
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.0392534485666417,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 20.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.5261213721396598e-09,
+          6.688889699145918e-08,
+          0.9848077557836088,
+          -0.17364816194952257
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.679559576562139,
+          0.1989704436496426,
+          0.3517487158992079,
+          -2.239298006034735,
+          1.113940429807014,
+          2.390822532577488,
+          -0.5128946754066257
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.03851773103092455,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 19.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.8179637898534254e-09,
+          6.688160131781625e-08,
+          0.9855560617608721,
+          -0.16934948811967387
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6792224016675774,
+          0.19503408604873373,
+          0.35446363985619544,
+          -2.245104670907602,
+          1.1227757700432583,
+          2.3984923213928684,
+          -0.5118696617880851
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.0377765634679154,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 19.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          2.109771596157156e-09,
+          6.687303231489199e-08,
+          0.9862856041713681,
+          -0.16504759011968356
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6788643909161195,
+          0.1911447422114783,
+          0.3572198227479673,
+          -2.2508270894735736,
+          1.1316775297849466,
+          2.406168787892161,
+          -0.5108664512953455
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.03702989624432106,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 18.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          2.4015392354508734e-09,
+          6.686319014582783e-08,
+          0.9869963691256607,
+          -0.16074254985148825
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6784850347546816,
+          0.18730309818788213,
+          0.36001665370140423,
+          -2.2564644226325448,
+          1.1406463211386877,
+          2.413852313844777,
+          -0.5098858437003736
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.036277893725930245,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 18.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          2.693261152899293e-09,
+          6.685207499800451e-08,
+          0.9876883430918096,
+          -0.15643444927684913
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6780838053490017,
+          0.18350985784024743,
+          0.3628534798009622,
+          -2.262015814106062,
+          1.149682752004688,
+          2.4215432915082182,
+          -0.5089286732993646
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.03552057496514648,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 17.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          2.984931794537615e-09,
+          6.683968708303845e-08,
+          0.9883615128956285,
+          -0.1521233704157913
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6776601391222445,
+          0.17976574207029297,
+          0.3657295871236339,
+          -2.267480389539338,
+          1.1587874295972798,
+          2.4292421213429742,
+          -0.5079958118634696
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.03475799912333852,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 17.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          3.276545607377249e-09,
+          6.682602663677763e-08,
+          0.989015865720934,
+          -0.14780939534504184
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6772134528735152,
+          0.17607148904590642,
+          0.3686442159331284,
+          -2.272857258282133,
+          1.1679609593069122,
+          2.436949214770955,
+          -0.5070881707757097
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.0339902241623867,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 16.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          3.568097039511557e-09,
+          6.681109391929732e-08,
+          0.989651389109792,
+          -0.14349260619646773
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6767431309679072,
+          0.17242785481217307,
+          0.37159654693599625,
+          -2.2781455111952797,
+          1.1772039469679483,
+          2.444664993054774,
+          -0.5062067030727192
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.03321730861898631,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 16.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          3.859580540221536e-09,
+          6.679488921489488e-08,
+          0.9902680709627532,
+          -0.13917308515551172
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6762485344882913,
+          0.1688356131595945,
+          0.37458570929202784,
+          -2.2833442220283793,
+          1.186516999293287,
+          2.452389888835541,
+          -0.5053524063671064
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.03243931134000467,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 15.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          4.150990560081491e-09,
+          6.677741283208456e-08,
+          0.9908658995390837,
+          -0.13485091445962802
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6757289907613313,
+          0.1652955551074297,
+          0.3776107687619983,
+          -2.2884524467880594,
+          1.1959007267519859,
+          2.46012434493078,
+          -0.5045263259374329
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.031656291826534295,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 15.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          4.442321551064715e-09,
+          6.675866510359148e-08,
+          0.9914448634569897,
+          -0.13052617639671635
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.675183812946401,
+          0.16180849030988942,
+          0.3806707468561505,
+          -2.293469223997634,
+          1.2053557422347518,
+          2.4678688175371732,
+          -0.5037295566201476
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.03086830922915852,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 14.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          4.733567966649068e-09,
+          6.673864638634537e-08,
+          0.9920049516938323,
+          -0.1261989533035557
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6746122751420258,
+          0.15837524561929975,
+          0.383764594023794,
+          -2.2983935741041925,
+          1.2148826669652677,
+          2.475623772912519,
+          -0.5029632477890653
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.030085134833817542,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 14.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          5.024724261922627e-09,
+          6.671735706147376e-08,
+          0.992546153586339,
+          -0.1218693275642359
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6740136268487049,
+          0.15499666590109196,
+          0.38689120336373406,
+          -2.3032244993666495,
+          1.224482130110237,
+          2.4833896895070247,
+          -0.5022286055376016
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.029288696833832156,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 13.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          5.315784893689231e-09,
+          6.66947975342947e-08,
+          0.9930684588308059,
+          -0.11753738160859012
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6733871025825471,
+          0.15167361515207775,
+          0.3900494195297994,
+          -2.3079609837306854,
+          1.2341547702234943,
+          2.4911670597474904,
+          -0.501526896379897
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.028484854927934605,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 13.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          5.606744320573997e-09,
+          6.667096823430906e-08,
+          0.9935718574832941,
+          -0.11320319791062497
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6727319076289344,
+          0.14840697453877144,
+          0.3932380225645744,
+          -2.3126019928723474,
+          1.243901240057343,
+          2.4989563874261798,
+          -0.5008594518907935
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.027707044803079454,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 12.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          5.8975970031288395e-09,
+          6.66458696151924e-08,
+          0.9940563399598189,
+          -0.10886685898695062
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6709629649770473,
+          0.14513563998290235,
+          0.39534022669234137,
+          -2.3171318174639866,
+          1.253864091122943,
+          2.5066160982708454,
+          -0.500286085684825
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.02689074618543171,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 12.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          6.188337403937953e-09,
+          6.661950215478617e-08,
+          0.994521897036532,
+          -0.10452844739520925
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6691578932052649,
+          0.14192381389629027,
+          0.3974656103226473,
+          -2.3215651317304746,
+          1.263894570338903,
+          2.514293023725888,
+          -0.49974513985412566
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.02609151665907549,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 11.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          6.4789599877231865e-09,
+          6.659186635508889e-08,
+          0.9949685198498982,
+          -0.10018804573250406
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6673169290533301,
+          0.13877248942835121,
+          0.3996138624269941,
+          -2.325900859209126,
+          1.273993432709807,
+          2.5219878192486567,
+          -0.4992382309374749
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.0252978743661402,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 11.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          6.769459221449472e-09,
+          6.65629627422463e-08,
+          0.9953961998968625,
+          -0.09584573663382609
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6654403326127363,
+          0.13568266156301453,
+          0.4017846495915383,
+          -2.3301378901912835,
+          1.2841614358048927,
+          2.52970113029397,
+          -0.4987670295341208
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.02451047264911297,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 10.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          7.059829574430157e-09,
+          6.653279186654156e-08,
+          0.9958049290350136,
+          -0.09150160277048114
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6635283896999419,
+          0.1326553396970938,
+          0.4039776222830602,
+          -2.334275091462288,
+          1.2943993851213462,
+          2.537433600541556,
+          -0.4983333046811988
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.02372922800166541,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 10.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          7.35006551843226e-09,
+          6.650135430238463e-08,
+          0.9961946994827379,
+          -0.08715572684851627
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6615814041472448,
+          0.12969154678615127,
+          0.4061924055702799,
+          -2.3383113056148894,
+          1.3047081397309925,
+          2.5451858699801795,
+          -0.497938929972874
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.02295583707698919,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 9.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          7.640161527781783e-09,
+          6.646865064830141e-08,
+          0.9965655038193676,
+          -0.08280819160714449
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6595997065560022,
+          0.1267923193572673,
+          0.4084286067208662,
+          -2.3422453505125005,
+          1.3150886163075572,
+          2.5529585749807624,
+          -0.49758588926436065
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.022189850557516818,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 9.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          7.930112079468877e-09,
+          6.643468152692234e-08,
+          0.9969173349853229,
+          -0.07845907981716989
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6575836497478132,
+          0.12395870678236375,
+          0.4106858091116117,
+          -2.346076018530869,
+          1.3255417950905581,
+          2.5607523466809403,
+          -0.4972762833695587
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.021436477439969234,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 8.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          8.21991165325299e-09,
+          6.639944758497055e-08,
+          0.9972501862822455,
+          -0.07410847427941196
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6555336097063609,
+          0.12119177082136649,
+          0.4129635717435258,
+          -2.349802075810931,
+          1.3360687255852408,
+          2.568567810002344,
+          -0.4970123369120529
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.020679872151705588,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 8.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          8.509554731767964e-09,
+          6.636294949324948e-08,
+          0.9975640513731264,
+          -0.06975645782312882
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6534499863061799,
+          0.1184925851310308,
+          0.4152614284998993,
+          -2.353422261439113,
+          1.3466705327205455,
+          2.576405582586022,
+          -0.49679640563692595
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.01991800343771455,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 7.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          8.799035800627117e-09,
+          6.632518794663021e-08,
+          0.9978589242824268,
+          -0.06540311330444042
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6513332037739268,
+          0.11586223473364321,
+          0.41757888708883667,
+          -2.3569352865517277,
+          1.357348423498973,
+          2.584266273640827,
+          -0.4966309842172203
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.01915092938832123,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 7.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          9.088349348528156e-09,
+          6.628616366403811e-08,
+          0.9981347993961917,
+          -0.061048523604751305
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6491837088509229,
+          0.11330181535013549,
+          0.4199154255877684,
+          -2.360339833342025,
+          1.3681036943533085,
+          2.592150482489743,
+          -0.4965187146533918
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.018378708488002535,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 6.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          9.377489867358168e-09,
+          6.624587738843929e-08,
+          0.9983916714621561,
+          -0.05669277162917233
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6470019709739563,
+          0.1108124328125861,
+          0.42227049100565645,
+          -2.3636345540043355,
+          1.3789377388198691,
+          2.600058797296958,
+          -0.4964623951574907
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.017601412063084527,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 6.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          9.666451852298475e-09,
+          6.620432988682637e-08,
+          0.9986295355898468,
+          -0.05233594030494233
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6447884807265348,
+          0.1083952023745871,
+          0.4246434960192212,
+          -2.3668180695705905,
+          1.3898520559335628,
+          2.6079917935587646,
+          -0.4964649896952319
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.01681907391797948,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 5.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          9.955229801929396e-09,
+          6.616152195020392e-08,
+          0.9988483872506733,
+          -0.04797811257984969
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.642543754457273,
+          0.10605124828913493,
+          0.4270338219455475,
+          -2.369888968693078,
+          1.4008482587127014,
+          2.615950033175725,
+          -0.49652963802949707
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.016031766702082926,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 5.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.0243818218335054e-08,
+          6.611745439357328e-08,
+          0.9990482222780154,
+          -0.0436193714206523
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6402683274277726,
+          0.10378170282290844,
+          0.42944080991869804,
+          -2.3728458062320135,
+          1.4119280843070996,
+          2.6239340622733316,
+          -0.49665966679358964
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.015239550428796789,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 4.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.0532211607207975e-08,
+          6.607212805591728e-08,
+          0.9992290368673022,
+          -0.039259799811499164
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6379627552035031,
+          0.10158770564763703,
+          0.4318637604099095,
+          -2.375687101789764,
+          1.4230934041294807,
+          2.6319444098360614,
+          -0.49685860111212754
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.014440208278514714,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 4.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.082040447795375e-08,
+          6.602554380018399e-08,
+          0.999390827576085,
+          -0.034899480752349374
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6356276137887654,
+          0.0994704031441905,
+          0.4343019313645415,
+          -2.3784113381067913,
+          1.43434623490065,
+          2.6399815861318525,
+          -0.49713017712278385
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.013638486788487654,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 3.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.1108391343795542e-08,
+          6.597770251327053e-08,
+          0.9995335913241015,
+          -0.030538497257392574
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6332634995984068,
+          0.0974309476850853,
+          0.43675453606279324,
+          -2.3810169593087296,
+          1.4456887505742821,
+          2.648046081047405,
+          -0.49747835544436403
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.0128320345768129,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 3.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.1396166721878547e-08,
+          6.592860510600605e-08,
+          0.9996573253933357,
+          -0.026176932353468362
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6308710225472662,
+          0.09547049659000885,
+          0.43922073383796145,
+          -2.383502368973991,
+          1.457123295676297,
+          2.6561383617051137,
+          -0.49790733578096597
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.0120209130601135,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 2.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.1683725133374396e-08,
+          6.587825251313436e-08,
+          0.9997620274280695,
+          -0.02181486907848527
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6284508126472578,
+          0.09359021166670406,
+          0.44169963442762933,
+          -2.3858659281032315,
+          1.468652398674737,
+          2.664258871283637,
+          -0.49842157239859247
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.011208312037362137,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 2.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.1971061103585424e-08,
+          6.582664569329628e-08,
+          0.999847695434927,
+          -0.017452390479840447
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6260035104896177,
+          0.0917912580268757,
+          0.44419028573259833,
+          -2.388105952829479,
+          1.4802787875957768,
+          2.672408026244251,
+          -0.49902579109824124
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.010387997755650942,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 1.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.2258169162048952e-08,
+          6.577378562901126e-08,
+          0.9999143277829129,
+          -0.013089579612837998
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6235297676599152,
+          0.09007480332333027,
+          0.4466916715187318,
+          -2.3902207119896617,
+          1.4920054061189942,
+          2.680586214407731,
+          -0.4997250073467371
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.009563160718270278,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 1.0,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.2545043842641415e-08,
+          6.571967332665876e-08,
+          0.9999619232034433,
+          -0.008726519539107863
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6210302472881818,
+          0.08844201697074637,
+          0.44920270903959647,
+          -2.3922084244788038,
+          1.5038354310148474,
+          2.688793792921567,
+          -0.5005245458989332
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.008733947298737563,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      },
+      {
+        "angle_deg": 0.5,
+        "lever_pose": [
+          2.808140277862549,
+          0.05503975600004196,
+          0.9673994779586792,
+          1.28316796836824e-08,
+          6.566430981645897e-08,
+          0.9999904807903699,
+          -0.004363293325024699
+        ],
+        "flow_forced_on": true,
+        "q": [
+          -0.6185056197322598,
+          0.08689406914648377,
+          0.4517222414600713,
+          -2.3940672563546435,
+          1.5157722913317329,
+          2.697031085683574,
+          -0.5014300620942511
+        ],
+        "cpu_valid": true,
+        "violation": null,
+        "flow": {
+          "distance_m": 0.007900379314716231,
+          "robot_part": "gripper/left_inner_knuckle",
+          "intersecting": false,
+          "active": true,
+          "flowing": true,
+          "parts_checked": 17,
+          "required_m": 0.002,
+          "valid": true,
+          "obstacle": "water_visual/FlowVisual/Stream",
+          "scope": "Configured 3.5mm-radius visual cylinder versus source-derived robot part hulls; not fluid or electrical simulation"
+        }
+      }
+    ]
+  }
+}

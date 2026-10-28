@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "task_id": "kitchen_bench_replicator_g_shape_banana_bowl",
+  "payload": "/World/envs/env_0/banana",
+  "target": "/World/envs/env_0/bowl",
+  "target_mesh": "/World/envs/env_0/bowl/obj_000013_Mesh",
+  "noncontact_clearance_m": 0.002,
+  "lower_clearance_m": 0.002,
+  "release_gap_window_m": [
+    0.003,
+    0.005
+  ],
+  "maximum_extra_lower_hold_actions": 5,
+  "maximum_release_actions": 30,
+  "maximum_release_physics_steps": 240,
+  "release_seconds": 2.0,
+  "smooth_opening_ramp_actions": 15,
+  "additional_zero_target_actions": 15,
+  "retreat_height_m": 0.15,
+  "final_settle_seconds": 4.0,
+  "physics_dt_s": 0.008333333333333333,
+  "action_dt_s": 0.06666666666666667,
+  "force_threshold_n": 0.1,
+  "velocity_threshold_m_s": 0.003,
+  "support_cone_half_angle_rad": 0.7853981633974483,
+  "placement_consecutive_steps": 1,
+  "contact_capacity": 4096,
+  "original_joint_bound_allowance_rad": 1e-05,
+  "unloaded_transition_rule": "complete_native_contacts_all_separations_nonnegative_and_no_downward_aggregate",
+  "action_interface": "droid_arm7_and_gripper1_joint_position_radians_v1",
+  "support_phases": [
+    "final_settle",
+    "release",
+    "retreat"
+  ],
+  "retreat_destination_cuda_enabled": true,
+  "source_assets": {
+    "banana": {
+      "path": "assets/extensions/replicator/source/Isaac/IsaacLab/Arena/assets/object_library/srl_robolab_assets/objects/ycb/banana.usd",
+      "sha256": "a0aee64b0d9f6aae5689c1787e176776696ff38f23d17da0e226da19f0d9b064"
+    },
+    "bowl": {
+      "path": "assets/robolab/objects/ycb/bowl.usd",
+      "sha256": "5f968172a13915a4db8f20d1ba17e794f825153d5f72d26d699252a4ca79c81e"
+    }
+  },
+  "scope": "Original curved banana/bowl pair only. Exact source triangle intersections and native contacts inside actual bowl-local source bounds; original spawned banana bounds center, not whole-banana containment. Source intersections and negative native gaps retained, no fitted penetration allowance. Full original robot/other-pair gates remain.",
+  "accepted": false,
+  "execution_ready": false,
+  "independent_new_run_required": true,
+  "evidence_sha256": {
+    "kitchen_safety/extensions/replicator/bowl_target_support.py": "3faeae36b7d4d9d3dd2dce92a4a0a478da7216183aae68036a65dfcf872443b9",
+    "kitchen_safety/extensions/replicator/banana_destination_probe.py": "2b5b6ebea7e6c77aa89dc0d466d1fe39d057065a67bab83435ea37f4cd6b350b",
+    "kitchen_safety/extensions/replicator/banana_smooth_destination_probe.py": "5238a3f369d73136efae33d7d6dd262da6dca7b706c6c9f54581bfa9ec4a69e8",
+    "kitchen_safety/extensions/replicator/banana_release_schedule_candidate.py": "e03c48b64195c7d0e649865ca8326e8cfffb7cfca67ab76bdd7ba3aa7a2dd485",
+    "kitchen_safety/extensions/replicator/banana_command_recording.py": "d02ee3854aea9ec97f6ae2aae73a2ecbe96f46d250e3a8bded502bcb2c5a190c",
+    "scripts/extensions/replicator/banana_smooth_destination_contact_probe.py": "97fd04234f29cf89f4a2b8c2bcb490ed2308e2c7c11d73a13d6cf2b9fba9144c",
+    "scripts/extensions/replicator/task_collect.py": "9b105d072423f5cc23039b85c7c181d7b175d417664f663779bb4ef1b8649e95",
+    "reports/replicator_execution_20261023/g_banana/destination_contact_probe_04_review01/root_diagnostic_review01.json": "be52626d76720c27249316062ae72af979d5e73a69fa320f351c94d178b7445a"
+  }
+}
