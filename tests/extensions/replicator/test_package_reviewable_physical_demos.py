@@ -162,6 +162,33 @@ class ReviewableDemoPackagingTests(unittest.TestCase):
         self.change_actual(physical_attempt_number=1)
         with self.assertRaisesRegex(ValueError,'physical attempt 2'):self.run_package()
 
+    def test_non_retake_first_pass_cannot_conceal_a_second_physical_attempt(self):
+        row=self.first_entries[2]
+        actual=original.read(self.first/row['execution_result_path'])
+        row['physical_attempt_number']=actual['physical_attempt_number']=2
+        self.bind(self.first,row,actual);self.write(self.first/'manifest.json',self.first_manifest)
+        with self.assertRaisesRegex(ValueError,'first physical attempt 1'):
+            self.run_package()
+        self.assertFalse(self.dest.exists());self.assertFalse(self.zip.exists())
+
+    def test_non_retake_initialization_video_is_not_a_first_physical_episode(self):
+        row=self.first_entries[2]
+        actual=original.read(self.first/row['execution_result_path'])
+        for record in (row,actual):
+            record.update(execution_status='error',task_success=False,executed=False)
+        self.bind(self.first,row,actual);self.write(self.first/'manifest.json',self.first_manifest)
+        with self.assertRaisesRegex(ValueError,'actual physical execution'):
+            self.run_package()
+        self.assertFalse(self.dest.exists());self.assertFalse(self.zip.exists())
+
+    def test_first_pass_attempt_number_must_agree_with_actual_result(self):
+        row=self.first_entries[2]
+        actual=original.read(self.first/row['execution_result_path'])
+        actual['physical_attempt_number']=2  # Legacy manifest omits the field.
+        self.bind(self.first,row,actual);self.write(self.first/'manifest.json',self.first_manifest)
+        with self.assertRaisesRegex(ValueError,'first physical attempt 1'):
+            self.run_package()
+
     def test_forged_first_pass_outcome_is_rejected(self):
         first=deepcopy(self.retake_entries[0]['first_pass']);first['task_success']=False
         self.change_actual(first_pass=first)

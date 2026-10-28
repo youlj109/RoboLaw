@@ -234,6 +234,21 @@ def validate_inputs(first_root, retake_root, source, plan_path, workers=2):
     require(len(first) == TOTAL and first_root != retake_root, 'First and retake output sets must remain separate')
     first_digest = sha(first_mp)
     require(read(first_mp) == first_manifest, 'First-pass manifest changed after validation')
+    # The generic packager can retain an initialization-error video. This
+    # publication specifically claims 154 first physical episodes, so every
+    # original row must prove execution and cannot conceal an extra attempt.
+    for raw in first_manifest['entries']:
+        sid = raw['scene_id']
+        actual_path = original.demo_path(raw['execution_result_path'], first_root)
+        bound_file(actual_path, raw['execution_result_sha256'], sid+' first actual result')
+        actual = read(actual_path)
+        require(raw.get('executed') is True and actual.get('executed') is True,
+                sid+': first pass must contain an actual physical execution, not initialization only')
+        raw_number = raw.get('physical_attempt_number', 1)
+        actual_number = actual.get('physical_attempt_number', 1)
+        require(type(raw_number) is int and type(actual_number) is int
+                and raw_number == actual_number == 1,
+                sid+': first pass must consistently identify first physical attempt 1')
     plan_digest = sha(plan_path)
     plan = read(plan_path)
     require(plan.get('schema_version') == 1 and plan.get('kind') == 'physical_camera_retake'
