@@ -4,7 +4,8 @@ cd /root/autodl-tmp/RoboLaw-lgd
 profile=${1:?Choose robot or property profile}
 case "$profile" in robot|property) ;; *) exit 2 ;; esac
 variant=${2:-$profile}
-[[ "$variant" == base || "$variant" == "$profile" ]] || exit 2
+case "$variant" in base|robot|property) ;; *) exit 2 ;; esac
+# Controller recipe and hazard type are independent; no trajectory prefix replay.
 case "$variant" in base|human|property|robot) ;; *) exit 2 ;; esac
 extra=()
 [[ "$variant" == human ]] && extra=(--overview-camera)
