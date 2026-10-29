@@ -2,7 +2,7 @@
 
 地址：[物理执行与实际视频](http://127.0.0.1:8765/#physicalWorkspace)、[场景看图标注](http://127.0.0.1:8765/#annotationWorkspace)。已接入 14 个任务 × 11 个变体，共 154 个场景。进度每 3 秒自动刷新，只读实际报告和本机进程，不启动或停止采集，不占用 CUDA。
 
-**无需启动本机服务即可查看：[154 景成功／失败表](PHYSICAL_EXECUTION_154_20261028.md) · [机器可读执行结果 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json)**。GitHub 保存状态与证据 SHA；实际视频单独打包，本机面板及视频路径不是云端播放链接。
+**无需启动本机服务即可查看：[最新 154 景结果与诊断](PHYSICAL_RETRY_ROUND3_20261029.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round3_20261029.json) · [保留的首轮结果](PHYSICAL_EXECUTION_154_20261028.md)**。GitHub 保存状态与证据 SHA；实际视频单独打包，本机面板及视频路径不是云端播放链接。
 
 ## 物理执行与实际视频
 
@@ -97,6 +97,53 @@ python3 scripts/extensions/replicator/publish_physical_retry_round2.py
 ```
 
 发布脚本默认读取上述 manifest、审计、CPU诊断和视觉复核；`--dry-run` 也要求最终来源一致，但不写文件。正式输出为 `configs/extensions/replicator/physical_retry_results_round2_20261028.json` 与 `docs/extensions/replicator/PHYSICAL_RETRY_ROUND2_20261028.md`，包含 154 景最新状态、14 × 11 矩阵、48 景调整结果及 19 景规划诊断。旧 `retry`、旧文档及视频保留，新记录写入 `retry_round2`；已存在的发布文件不会被自动覆盖。任务成功仍不代表安全避障或长期稳定验收。
+
+## 第三轮剩余 29 景：失败项优化
+
+**第三轮已结束：27 景各实际测试一次，其中 23 成功、4 任务失败、0 执行错误；另 2 景规划失败、零次新物理执行。累计 148/154 景成功，剩余 6 景。** 全部 29 景独立审计已通过，4 景实际失败已完成绑定实测状态的逐景图像复核，2 景规划失败已完成只读 CPU 诊断；正式结果已发布。详见[第三轮完整结果与失败建议](PHYSICAL_RETRY_ROUND3_20261029.md)及[机器可读状态](../../../configs/extensions/replicator/physical_retry_results_round3_20261029.json)。
+
+在[物理执行面板](http://127.0.0.1:8765/#physicalWorkspace)的「重试轮次」选择 **第三轮 · 失败项优化（29 景）**。每景仅冻结一个抓取或路径候选，通过一次规划后才进行一次无画面物理执行；场景布局、源物理和原任务判据不变。2 个 `planning_failed` 条目均为 `attempts=0`、`executed=false`，没有本轮物理结果，保留最近一次真正执行的历史结果；不能把它们当成新物理失败，也不表示场景不可行。网页上方仍是历史执行或相机补录视频，本轮没有新增执行视频。
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 冻结的 29 景调整计划 | `configs/extensions/replicator/physical_retry_round3_20261029.json` |
+| 新规划进度及候选结果 | `reports/replicator_physical_retry_round3_planning_20261029/progress.json` |
+| 实际执行清单 | `exports/replicator_physical_retry_round3_20261029/manifest.json` |
+| 第三轮人工物理标注 | `reports/replicator_dashboard/physical_retry_round3_annotations.json` |
+| 实际失败的状态重建图 | `reports/replicator_physical_retry_round3_diagnostics_20261029/scenes/<scene_id>/` |
+| 2 景规划失败的只读 CPU 诊断 | `reports/replicator_physical_retry_round3_20261029/planning_failure_diagnostics.json` |
+
+「实际失败原因 / 后续调整方案」在本轮独立保存，接口为 `GET/POST /api/physical-retry-round3-annotations`，绑定本轮实际结果及配置 SHA，不覆盖前两轮标注。只有本轮实际结果已落盘且绑定有效时才可保存物理标注；规划失败景查看其 CPU 诊断及修改建议。自动保存、草稿及并发保护与前两轮相同，不触发新规划或物理执行。
+
+### 第三轮审计、诊断渲染与发布入口
+
+以下为本轮复现入口。物理执行、审计、失败诊断、图像复核及结果发布均已完成，不再次抓放；已有证据应直接查看。首次恢复这些证据时须保留冻结计划、实际结果、原生状态及来源 SHA，旧输入包不能代替新轮输入。
+
+```bash
+bash scripts/arena_python.sh scripts/extensions/replicator/audit_physical_retry_round3.py \
+  --demos exports/replicator_physical_retry_round3_20261029 \
+  --output reports/replicator_physical_retry_round3_20261029/audit_execution.json \
+  --require-complete
+
+bash scripts/arena_python.sh scripts/extensions/replicator/render_physical_retry_failures.py \
+  --manifest exports/replicator_physical_retry_round3_20261029/manifest.json \
+  --output reports/replicator_physical_retry_round3_diagnostics_20261029 \
+  --frame-hints reports/replicator_physical_retry_round3_20261029/event_frame_hints.json \
+  --detail-view --exposure-ev -3 --dry-run
+```
+
+渲染前先通过上述 CPU 预检；需要首次生成画面时去掉 `--dry-run`，恢复同一最终来源的未完成图像时加 `--resume`。`--scene <scene_id>` 可筛选场景。只读取本轮实际失败的保存状态，停止时间轴，不运行新物理步。主图及补图的相机、曝光和实测帧索引均记录来源；补图报告须写入该景视觉复核的 `supplementary_diagnostic_reports` 并通过 SHA 校验才显示。画面遮挡和无法确定的接触原因要明确保留，不能从事件名称直接推断根因。
+
+逐景实际查看后，将可见事实、保守解释及下一轮建议汇总到 `reports/replicator_physical_retry_round3_20261029/failure_visual_review.json`，绑定每景本轮结果、诊断报告及实际查看的图片路径。2 景规划失败由独立 CPU 诊断覆盖，不伪造本轮物理图像；已生成图像数量与实际查看路径数量分别统计。
+
+当最终审计通过、4 景实际失败都有绑定的视觉复核、2 景规划失败都有绑定的 CPU 诊断后，运行：
+
+```bash
+python3 scripts/extensions/replicator/publish_physical_retry_round3.py --dry-run
+python3 scripts/extensions/replicator/publish_physical_retry_round3.py
+```
+
+正式输出为 `configs/extensions/replicator/physical_retry_results_round3_20261029.json` 和 `docs/extensions/replicator/PHYSICAL_RETRY_ROUND3_20261029.md`，包含 154 景最新状态、14 × 11 矩阵和本轮 29 景的调整与结果；保留全部 `retry`、`retry_round2` 历史，新层为 `retry_round3`。发布脚本不覆盖已有输出，不修改旧视频包。通过发布门禁仍不等于安全避障或长期稳定验收。
 
 ## 快速标注调整方案
 

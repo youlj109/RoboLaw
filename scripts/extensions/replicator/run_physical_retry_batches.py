@@ -36,9 +36,9 @@ def local(value):
 def pending_task(manifest):
     rows = manifest['entries']
     version = manifest.get('schema_version', 1)
-    if version not in (1, 2) or version == 2 and manifest.get('retry_round') != 2:
+    if version not in (1, 2) or version == 2 and manifest.get('retry_round') not in (2, 3):
         raise ValueError('Unsupported retry cohort schema/round')
-    expected = 48 if version == 2 else 84
+    expected = {2: 48, 3: 29}[manifest['retry_round']] if version == 2 else 84
     if len(rows) != expected or len({row['scene_id'] for row in rows}) != expected:
         raise ValueError(f'Expected exactly the fixed {expected}-scene cohort')
     for row in rows:

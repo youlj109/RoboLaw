@@ -21,6 +21,7 @@ SOURCES = tuple(dict.fromkeys(base.RUNTIME_SOURCES + (
     'scripts/extensions/replicator/execute_failure_retry.py',
     'kitchen_safety/extensions/replicator/retry_physical_execution.py',
     'kitchen_safety/extensions/replicator/physical_retry_plan.py',
+    'kitchen_safety/extensions/replicator/physical_retry_round3.py',
     'third_party/IsaacLab-Arena/isaaclab_arena/utils/isaaclab_utils/simulation_app.py',
     'third_party/IsaacLab-Arena/submodules/IsaacLab/source/isaaclab/isaaclab/app/app_launcher.py',
     'third_party/IsaacLab-Arena/submodules/IsaacLab/source/isaaclab/isaaclab/envs/manager_based_rl_env.py',
@@ -35,8 +36,8 @@ PREDICATE_SOURCES = tuple(p for p in base.RUNTIME_SOURCES if
 def round_two(plan):
     version = plan.get('schema_version', 1)
     if version not in (1, 2): raise ValueError('Unsupported retry schema')
-    if version == 2 and plan.get('retry_round') != 2:
-        raise ValueError('Schema 2 is restricted to the authorized second retry round')
+    if version == 2 and plan.get('retry_round') not in (2, 3):
+        raise ValueError('Unsupported source-bound grasp retry round')
     return version == 2
 
 
@@ -127,8 +128,9 @@ def validate_previous_retry(row, original, history, manifest):
                 'source_trajectory_path','source_trajectory_sha256','physical_attempt_number',
                 'executed','task_success','execution_status','attempts','prior_physical_attempts'):
         if result.get(key) != row.get(key): raise ValueError('Previous retry result differs: '+key)
-    if (result['planning_result_path'] != original['result_path']
-            or result['planning_result_sha256'] != original['result_sha256']
+    planning = planning_result_bindings(row)
+    if (result['planning_result_path'] != planning['planning_result_path']
+            or result['planning_result_sha256'] != planning['planning_result_sha256']
             or result['prior_physical_attempts'] != history
             or result['source_trajectory_path'] != original['trajectory_path']
             or result['source_trajectory_sha256'] != original['trajectory_sha256']):
@@ -228,6 +230,9 @@ def load_retry_inputs(entry):
 def validate_plan(path):
     path = local(path); plan = json.loads(path.read_text())
     if plan.get('kind') != 'physical_failure_retry_plan': raise ValueError('Explicit failure retry plan required')
+    if plan.get('retry_round') == 3:
+        from .physical_retry_round3 import validate_round3_plan
+        return validate_round3_plan(path, plan)
     second = round_two(plan)
     first = rows_by_id(bound_json(plan['source_first_pass_manifest']))
     retakes = rows_by_id(bound_json(plan['source_camera_retake_manifest']))

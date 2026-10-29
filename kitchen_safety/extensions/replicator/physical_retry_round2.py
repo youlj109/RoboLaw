@@ -19,7 +19,7 @@ from .scene_build_runtime import ROOT, atomic_json, relative, sha, stamp
 
 
 class GraspRetryPlanner(QuickPlanner):
-    def constrained_plan(self, q, target, phase, masks, hold_orientation, timeout=8.):
+    def constrained_plan(self, q, target, phase, masks, hold_orientation, timeout=8., linear_vertical=False):
         from curobo.types.math import Pose
         from curobo.types.robot import JointState
         from curobo.wrap.reacher.motion_gen import MotionGenPlanConfig
@@ -34,6 +34,9 @@ class GraspRetryPlanner(QuickPlanner):
         goal = Pose.from_list(self._pose_list(self.T_B_W @ target @ np.linalg.inv(self.T_ee_tcp)), self.args)
         metric = PoseCostMetric(hold_partial_pose=True,
             hold_vec_weight=self.args.to_device([1.,1.,1.,0.,0.,0.])) if hold_orientation else None
+        if linear_vertical:
+            metric = PoseCostMetric(hold_partial_pose=True, project_to_goal_frame=False,
+                hold_vec_weight=self.args.to_device([1.,1.,1.,1.,1.,0.]))
         begin=time.monotonic()
         output=self.motion_gen.plan_single(start, goal, MotionGenPlanConfig(
             max_attempts=1,timeout=timeout,enable_graph=True,enable_graph_attempt=1,
@@ -45,7 +48,8 @@ class GraspRetryPlanner(QuickPlanner):
             solver_status='SUCCESS' if output.status is None else str(output.status),
             planning_seconds=time.monotonic()-begin, contact_masks=masks,
             nominal_payload_attached=self.world.attachment is not None,
-            orientation_hold_requested=hold_orientation,physical_grasp_verified=False)
+            orientation_hold_requested=hold_orientation, vertical_motion_cost_requested=linear_vertical,
+            physical_grasp_verified=False)
         if not ok: return None,detail
         path=output.get_interpolated_plan().position.detach().cpu().numpy()
         if path.ndim!=2 or path.shape[1]!=7 or not np.isfinite(path).all() or np.max(np.abs(path[0]-q))>1e-4:
@@ -92,7 +96,7 @@ def run_candidate(row,recipe,output,timeout=8.):
         start_q=old['start_q'],composition=deepcopy(old['composition']),layout_fixed=True,
         candidate_count=1,attempts=1,per_stage_max_attempts=1,started_at=stamp(),
         recipe=recipe,prior_result_path=row['result_path'],prior_result_sha256=row['result_sha256'],
-        scope='Round2 one frozen grasp/placement candidate; layout and source predicate unchanged; not physical success or safety evidence.')
+        scope='One frozen grasp/placement candidate; layout and source predicate unchanged; not physical success or safety evidence.')
     paths=[];labels=[];grips=[];planner=None;kin=None;begin=time.monotonic()
     try:
         for path,key in [('config_path','config_sha256'),('result_path','result_sha256'),('source_scene_path','source_scene_sha256')]:
@@ -128,7 +132,14 @@ def run_candidate(row,recipe,output,timeout=8.):
             # deliberate grasp/placement reorientation is planned normally.
             rotation_error=Rotation.from_matrix(kin.fk(q)[:3,:3]@targets[phase][:3,:3].T).magnitude()
             hold=bool(hold and rotation_error<.04)
-            path,detail=planner.constrained_plan(q,targets[phase],phase,masks,hold,timeout)
+            vertical = phase in recipe.get('linear_motion_phases', [])
+            if vertical and (rotation_error >= .04 or np.linalg.norm(kin.fk(q)[:2,3]-targets[phase][:2,3]) > .004):
+                raise ValueError('Vertical motion cost requires aligned orientation and XY start')
+            path,detail=planner.constrained_plan(q,targets[phase],phase,masks,hold,timeout,linear_vertical=vertical)
+            if path is not None and vertical:
+                poses=fk_batch(kin,path)
+                detail['max_tcp_xy_goal_deviation_m']=float(np.max(np.linalg.norm(poses[:,:2,3]-targets[phase][:2,3],axis=1)))
+                detail['vertical_motion_scope']='Soft planner cost; measured TCP deviation, not a physical path guarantee'
             result['phases'].append(detail)
             if path is None:
                 result.update(status='failed',failure_reason='cuRobo rejected '+phase+': '+detail['solver_status'],failed_phase=phase)

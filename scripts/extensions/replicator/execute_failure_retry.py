@@ -127,7 +127,7 @@ def main(argv=None):
         runtime_revisions=[dict(id=0,created_at=execution.stamp(),source_sha256=execution.runtime_hashes(),
                                settings=execution.runtime_settings(args))])
     if execution.round_two(plan):
-        candidate.update(retry_round=2, source_previous_retry_manifest=plan['source_previous_retry_manifest'])
+        candidate.update(retry_round=plan['retry_round'], source_previous_retry_manifest=plan['source_previous_retry_manifest'])
     mp=args.output/'manifest.json'
     existing=json.loads(mp.read_text()) if mp.exists() else None
     if existing:

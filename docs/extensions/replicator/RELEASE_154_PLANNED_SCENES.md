@@ -2,7 +2,9 @@
 
 历史规划冻结结果：截至 2026-10-28，14 个 Replicator 原始任务 × 11 种安全增广变体，共 **154 景已生成完整 cuRobo 轨迹，0 景规划失败**。每条完整轨迹包含预抓取、接近、抬升、转运、下放和撤离六阶段。
 
-**GitHub 最新逐景结果：[154 景结果与失败诊断](PHYSICAL_RETRY_ROUND2_20261028.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round2_20261028.json)**。首轮 [70/84 结果表](PHYSICAL_EXECUTION_154_20261028.md) 与 [首轮 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json) 保留。视频在独立 ZIP 中提供，未上传为 GitHub 在线视频。
+**GitHub 最新逐景结果：[154 景结果与失败诊断](PHYSICAL_RETRY_ROUND3_20261029.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round3_20261029.json)**。首轮 [70/84 结果表](PHYSICAL_EXECUTION_154_20261028.md) 与 [首轮 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json) 保留。视频在独立 ZIP 中提供，未上传为 GitHub 在线视频。
+
+第三轮物理重试已完成：剩余 29 景各冻结一个抓姿或轨迹候选，布局、源物理及原始任务判据不变。27 景新规划通过后各实际测试一次，**23 成功、4 任务失败、0 执行异常，累计 148/154 成功、剩余 6 景**；另 2 景新规划失败、零次新物理执行，沿用此前实际失败。全部 29 景独立审计已通过，4 景实际失败已有绑定本轮状态的图像复核，2 景规划失败已有 CPU 诊断，逐景结果已发布。没有新增执行视频；状态重建诊断图不是执行相机帧。下方历史输入包、视频包及首轮统计保持不变，不包含第三轮新增轨迹、原生状态和诊断图。任务成功不等于安全避障或长期稳定验收。
 
 第二轮物理重试已完成：48 景各冻结一个抓点、抓姿、夹爪或轨迹目标调整候选，布局及原任务判据不变。29 景新规划通过后各实际测试一次，**19 成功、10 失败、0 执行异常，累计 125/154 成功**；另 19 景新规划失败、零次新物理执行，保留其历史轨迹和上一轮实际失败。新规划失败不能解释成没有历史轨迹或已证明场景不可行。本轮没有新增执行视频，状态重建诊断图只用于解释已保存的实际失败。第二轮代码、冻结方案和结果状态随 Git 发布，原生状态、新轨迹 NPZ 与诊断图保留本机；下方旧输入包和视频包不包含本轮新增证据。
 
@@ -36,7 +38,7 @@
 
 ## 完整索引
 
-使用 [final_154_scenes_20261028.json](../../../configs/extensions/replicator/final_154_scenes_20261028.json) 获取全部 154 景的冻结规划输入。它保留规划完成时的历史状态，`physical_execution_verified: false` 及“物理执行准备中”不代表当前结果；最新物理状态见独立的 [执行结果索引](../../../configs/extensions/replicator/physical_retry_results_round2_20261028.json)。不要将 `trajectory_retry_v10.json` 当作完整清单：它只包含第十轮最后两景的重试方案。
+使用 [final_154_scenes_20261028.json](../../../configs/extensions/replicator/final_154_scenes_20261028.json) 获取全部 154 景的冻结规划输入。它保留规划完成时的历史状态，`physical_execution_verified: false` 及“物理执行准备中”不代表当前结果；最新物理状态见独立的 [执行结果索引](../../../configs/extensions/replicator/physical_retry_results_round3_20261029.json)。不要将 `trajectory_retry_v10.json` 当作完整清单：它只包含第十轮最后两景的重试方案。
 
 索引逐景保存：
 
@@ -59,7 +61,7 @@ NPZ 包含实际规划关节序列 `q`、名义 TCP `tcp_world`、阶段 `phase`
 | `g_shape_banana_bowl__human_default_mpfb` | 一次 CPU 检查仍发现人体衣服与厨房橱柜源网格相交 | 虽已生成轨迹，场景质量不通过 |
 | `u_shape_bowl_sink__robot_narrow_opening` | 障碍底座 AABB 超出台面 AABB 边界 | 支撑质量待复核；AABB 提示不等于已经证实实际悬空 |
 
-这两项不会因轨迹完整或视频录制完成而自动消失。其余 152 景也不能仅凭没有这两项提示就判为安全或避障合格；实际任务结果以上面的首轮统计为准。
+这两项不会因轨迹完整或视频录制完成而自动消失。其余 152 景也不能仅凭没有这两项提示就判为安全或避障合格；最新实际任务结果见上方独立结果索引，首轮统计作为历史保留。
 
 ## 从 Git 获取什么，从证据包恢复什么
 

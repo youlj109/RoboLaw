@@ -56,3 +56,18 @@ test('planning-only and execution-only round 2 responses both retain round 2', (
     assert.equal(context.physicalState.retryRound, 2);
   }
 });
+
+test('round 3 remains selected while loading and when its planning list arrives', () => {
+  const {context, render} = harness(null, 3);
+  render();
+  assert.equal(context.physicalState.retryRound, 3);
+  context.state.data = {physical_execution: {failure_retry_round3: {planning_present: true}}};
+  render();
+  assert.equal(context.byId('physicalRetryRound').value, '3');
+});
+
+test('round 3 falls back to an available round 2, not to round 1', () => {
+  const {context, render} = harness({physical_execution: {failure_retry_round2: {manifest_present: true}}}, 3);
+  render();
+  assert.equal(context.physicalState.retryRound, 2);
+});

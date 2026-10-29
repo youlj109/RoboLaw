@@ -295,7 +295,7 @@ def apply_state(stage, mapping, poses):
             raise ValueError('Diagnostic world pose readback differs: '+item['source_path'])
 
 
-def detail_camera(stage, arrays, state_index):
+def detail_camera(stage, arrays, state_index, high=False):
     """Observation-only tracking view of the measured first task object."""
     from pxr import Gf, UsdGeom
     close=np.flatnonzero(arrays['phase'].astype(str)=='close')
@@ -307,12 +307,13 @@ def detail_camera(stage, arrays, state_index):
     if length<.05:raise ValueError('Cannot choose diagnostic oblique direction')
     outward/=length;side=np.array([-outward[1],outward[0],0.])
     target=arrays['task_object_states'][state_index,0,:3].astype(float)+[0,0,.06]
-    eye=target+.7*outward+.55*side+[0,0,.45]
+    eye=(target+.25*outward-.20*side+[0,0,.85] if high
+         else target+.7*outward+.55*side+[0,0,.45])
     camera=UsdGeom.Camera(stage.GetPrimAtPath('/World/overview_camera'))
     camera.ClearXformOpOrder()
     camera.AddTransformOp().Set(Gf.Matrix4d().SetLookAt(Gf.Vec3d(*eye),Gf.Vec3d(*target),Gf.Vec3d(0,0,1)).GetInverse())
     camera.GetFocalLengthAttr().Set(24.)
-    return dict(mode='measured_object_tracking_oblique',eye=eye.tolist(),target=target.tolist(),focal_length_mm=24.,
+    return dict(mode='measured_object_tracking_high_oblique' if high else 'measured_object_tracking_oblique',eye=eye.tolist(),target=target.tolist(),focal_length_mm=24.,
                 note='Diagnostic camera follows actual task object 0; source geometry and measured body poses unchanged.')
 
 
@@ -323,12 +324,14 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--scene',default='')
     parser.add_argument('--detail-view',action='store_true',help='Supplementary oblique camera following measured task object; no physical changes')
+    parser.add_argument('--top-view',action='store_true',help='Supplementary steep view into a sink; observation only, no physical changes')
     parser.add_argument('--exposure-ev',type=float,default=0.,help='Diagnostic RTX camera exposure compensation, in [-6, 0]')
     parser.add_argument('--frame-hints',type=Path,help='Hash-bound measured event indices; defaults retained, at most 10 total images per scene')
     parser.add_argument('--dry-run',action='store_true')
     parser.add_argument('--resume',action='store_true')
     parser.add_argument('--width',type=int,default=960);parser.add_argument('--height',type=int,default=640)
     args=parser.parse_args();args.manifest=local(args.manifest);args.output=local(args.output)
+    if args.detail_view and args.top_view:raise ValueError('Select only one diagnostic camera override')
     if not -6.<=args.exposure_ev<=0.:raise ValueError('Invalid diagnostic exposure compensation')
     manifest=json.loads(args.manifest.read_text());manifest_sha=sha(args.manifest)
     if manifest.get('stage') != 'complete': raise ValueError('Wait for the physical retry manifest to complete')
@@ -352,7 +355,7 @@ def main():
                 frames=select_frames_with_hints(arrays,binding,hints.get(row['scene_id']))
                 for frame in frames:
                     apply_state(stage,mapping,arrays['all_rigid_body_pose_w'][frame['state_index']])
-                    if args.detail_view:detail_camera(stage,arrays,frame['state_index'])
+                    if args.detail_view or args.top_view:detail_camera(stage,arrays,frame['state_index'],high=args.top_view)
             checks.append(dict(scene_id=row['scene_id'],frames=len(frames),selected_frames=frames,mapped_bodies=len(mapping)))
         print(json.dumps(dict(passed=True,kind=KIND,scene_count=len(checks),entries=checks,frame_hints=hints_binding,physics_launched=False,rendering_launched=False),ensure_ascii=False));return 0
     # GPU rendering is only requested by the coordinator invoking this mode.
@@ -363,6 +366,7 @@ def main():
     progress_path=args.output/'progress.json'
     progress=dict(schema_version=1,kind=KIND,scope=SCOPE,stage='rendering',total=len(rows),manifest_path=relative(args.manifest),manifest_sha256=manifest_sha,frame_hints=hints_binding,entries=[])
     observation_policy=dict(detail_view=args.detail_view,exposure_ev=args.exposure_ev)
+    if args.top_view:observation_policy['top_view']=True
     progress['observation_policy']=observation_policy
     if progress_path.exists():
         old=json.loads(progress_path.read_text())
@@ -410,11 +414,11 @@ def main():
                     actual_execution_status=result['execution_status'],timeline_playing=False,binding=binding,frame_hints=hints_binding,
                     mapped_bodies=mapping,frames=[],appearance_note='Recorded camera pose/optics and source geometry; diagnostic lighting may differ from execution camera.')
                 report.update(observation_policy=observation_policy,renderer_settings=dict(original=original_exposure,applied=applied_exposure))
-                if args.detail_view:report['appearance_note']='Supplementary camera follows measured object from oblique direction; original geometry and measured poses retained. Camera differs from execution.'
+                if args.detail_view or args.top_view:report['appearance_note']='Supplementary camera follows measured object from an oblique or steep upper direction; original geometry and measured poses retained. Camera differs from execution.'
                 selected_frames=select_frames_with_hints(arrays,binding,hints.get(sid))
                 for ordinal,frame in enumerate(selected_frames):
                     apply_state(stage,mapping,arrays['all_rigid_body_pose_w'][frame['state_index']])
-                    if args.detail_view:frame['diagnostic_camera']=detail_camera(stage,arrays,frame['state_index'])
+                    if args.detail_view or args.top_view:frame['diagnostic_camera']=detail_camera(stage,arrays,frame['state_index'],high=args.top_view)
                     for _ in range(24):app.update()
                     exposure_readback={key:settings.get(key) for key in EXPOSURE_KEYS}
                     if exposure_readback!=applied_exposure:raise RuntimeError('Diagnostic exposure settings changed after stage load')
@@ -423,7 +427,7 @@ def main():
                     if timeline.is_playing() or timeline.get_current_time()!=0:raise RuntimeError('Diagnostic timeline unexpectedly advanced')
                     if rgb.shape!=(args.height,args.width,4) or float(rgb[:,:,:3].std())<=2:raise ValueError('Missing/blank diagnostic RGB')
                     image=Image.fromarray(rgb[:,:,:3].astype(np.uint8));draw=ImageDraw.Draw(image)
-                    draw.rectangle((0,0,args.width,28),fill=(0,0,0));draw.text((8,8),f'DIAGNOSTIC STATE REPLAY | {frame["phase"]} | measured step {frame["physics_step"]} | no new execution'+(' | OBLIQUE' if args.detail_view else ''),fill=(255,255,255))
+                    draw.rectangle((0,0,args.width,28),fill=(0,0,0));draw.text((8,8),f'DIAGNOSTIC STATE REPLAY | {frame["phase"]} | measured step {frame["physics_step"]} | no new execution'+(' | TOP VIEW' if args.top_view else ' | OBLIQUE' if args.detail_view else ''),fill=(255,255,255))
                     if frame.get('events'):
                         # Event labels remain separate from actual NPZ phase.
                         label='; '.join(event['event'] for event in frame['events']).encode('ascii','replace').decode()[:145]
