@@ -77,9 +77,91 @@ def validate_recipe(recipe, old, layout):
     region=recipe.get('destination_region_check',{})
     if old['payload_name']=='bowl' and region.get('passed') is True:
         if sha(ROOT/region['evidence_path'])!=region['sha256']:raise ValueError('Sink region evidence changed')
-    if np.linalg.norm(final[:2,3]-old_final[:2,3])>.06 or abs(final[2,3]-old_final[2,3])>.06:
+    z_limit=float(recipe.get('destination_nominal_z_limit_m',.06))
+    if z_limit != .06:
+        permitted={'l_shape_bowl_sink__human_default_mpfb','u_shape_bowl_sink__human_default_mpfb'}
+        if (recipe['scene_id'] not in permitted or z_limit != .09 or
+                region.get('passed') is not True or sha(ROOT/region['evidence_path'])!=region['sha256']):
+            raise ValueError('Expanded nominal TCP compensation requires bound sink geometry evidence')
+        evidence=json.loads((ROOT/region['evidence_path']).read_text())
+        floor=np.asarray(evidence['sink_floor_world_bounds_m'],dtype=float)
+        bowl=np.asarray(evidence['predicted_source_bowl_world_bounds_m'],dtype=float)
+        if (evidence.get('passed') is not True or floor.shape!=(2,3) or bowl.shape!=(2,3)
+                or not np.isfinite(floor).all() or not np.isfinite(bowl).all()
+                or not np.all(bowl[0,:2]>=floor[0,:2]) or not np.all(bowl[1,:2]<=floor[1,:2])
+                or abs(bowl[0,2]-floor[1,2]-.003)>1e-6
+                or not np.allclose(evidence['nominal_goal_world'],final,atol=1e-7,rtol=0)):
+            raise ValueError('Nominal compensation must preserve the measured-reference bowl floor target')
+        for field in ('original_config','original_source_scene'):
+            binding=evidence[field]
+            if sha(ROOT/binding['path'])!=binding['sha256']:raise ValueError('Compensation source geometry changed')
+    if np.linalg.norm(final[:2,3]-old_final[:2,3])>.06 or abs(final[2,3]-old_final[2,3])>z_limit:
         raise ValueError('Release goal moved outside the bounded original destination neighborhood')
+    waypoints=recipe.get('phase_waypoints_world',{})
+    limits=recipe.get('segment_deviation_limits_m',{})
+    if not isinstance(waypoints,dict) or not isinstance(limits,dict) or not set(waypoints)<=set(PHASES) or not set(limits)<=set(PHASES):
+        raise ValueError('Unknown segment phase')
+    if sum(len(points) for points in waypoints.values())>16:
+        raise ValueError('Too many frozen intermediate waypoints')
+    for phase,points in waypoints.items():
+        if not isinstance(points,list) or len(points)>8:raise ValueError('Too many phase waypoints')
+        for point in points:checked_pose(point)
+    for limit in limits.values():
+        if not np.isfinite(float(limit)) or not 0<float(limit)<=.02:raise ValueError('Invalid segment deviation limit')
     return targets,attachment,grip
+
+
+def segment_deviation(poses,start,end):
+    """Maximum actual FK TCP distance from the finite frozen line segment."""
+    xyz=np.asarray(poses)[:,:3,3];a=np.asarray(start)[:3,3];b=np.asarray(end)[:3,3]
+    direction=b-a;denom=float(direction@direction)
+    t=np.clip((xyz-a)@direction/denom,0.,1.) if denom>1e-20 else np.zeros(len(xyz))
+    return float(np.max(np.linalg.norm(xyz-(a+t[:,None]*direction),axis=1)))
+
+
+def plan_phase(planner,kin,q,target,phase,masks,recipe,folder,timeout):
+    """Execute each declared segment once; preserve rejected solver paths."""
+    waypoints=recipe.get('phase_waypoints_world',{}).get(phase,[])
+    limit=recipe.get('segment_deviation_limits_m',{}).get(phase)
+    segmented=bool(waypoints) or limit is not None
+    endpoints=[checked_pose(p) for p in waypoints]+[target]
+    segments=[];paths=[]
+    for index,endpoint in enumerate(endpoints):
+        start=kin.fk(q)
+        rotation_error=Rotation.from_matrix(start[:3,:3]@endpoint[:3,:3].T).magnitude()
+        hold=bool(phase in recipe.get('hold_orientation_phases',['lift','transfer','lower']) and rotation_error<.04)
+        vertical=phase in recipe.get('linear_motion_phases',[])
+        if vertical and (rotation_error>=.04 or np.linalg.norm(start[:2,3]-endpoint[:2,3])>.004):
+            raise ValueError('Vertical motion cost requires aligned orientation and XY start')
+        path,detail=planner.constrained_plan(q,endpoint,phase,masks,hold,timeout,linear_vertical=vertical)
+        if path is not None:
+            poses=fk_batch(kin,path)
+            if vertical:
+                detail['max_tcp_xy_goal_deviation_m']=float(np.max(np.linalg.norm(poses[:,:2,3]-endpoint[:2,3],axis=1)))
+                detail['vertical_motion_scope']='Soft planner cost; measured TCP deviation, not a physical path guarantee'
+        if not segmented:return path,detail
+        detail.update(segment_index=index,target_world=endpoint.tolist(),start_world=start.tolist(),
+            attempts=1,max_attempts=1,start_q=np.asarray(q).tolist(),samples=0 if path is None else len(path),
+            phase_sample_start=sum(map(len,paths)),phase_sample_stop=sum(map(len,paths))+(0 if path is None else len(path)))
+        if path is not None:
+            file=folder/f'{phase}_segment_{index:02d}.npz'
+            with file.open('xb') as f:np.savez_compressed(f,q=path,tcp_world=poses)
+            detail['trajectory']=dict(path=relative(file),sha256=sha(file))
+            deviation=segment_deviation(poses,start,endpoint)
+            detail.update(max_tcp_segment_deviation_m=deviation,deviation_limit_m=limit,
+                deviation_gate_passed=limit is None or deviation<=float(limit))
+            if not detail['deviation_gate_passed']:
+                detail.update(status='failed',solver_status_before_gate=detail['solver_status'],solver_status='TCP_SEGMENT_DEVIATION_LIMIT')
+        segments.append(detail)
+        if path is None or detail.get('deviation_gate_passed') is False:
+            parent=dict(detail,segments=segments,failed_segment_index=index,samples=sum(map(len,paths)),
+                segment_count_declared=len(endpoints),segment_count_attempted=len(segments),per_segment_max_attempts=1)
+            return None,parent
+        paths.append(path);q=path[-1].copy()
+    parent=dict(segments[-1],segments=segments,samples=sum(map(len,paths)),
+        segment_count_declared=len(endpoints),segment_count_attempted=len(segments),per_segment_max_attempts=1)
+    # Each complete segment, including its repeated start vertex, is retained.
+    return np.concatenate(paths),parent
 
 
 def run_candidate(row,recipe,output,timeout=8.):
@@ -127,19 +209,7 @@ def run_candidate(row,recipe,output,timeout=8.):
             world.attachment=attachment if carrying else None
             world.gripper_joint_position=planning_grip if carrying else 0.
             masks=prior_masks[phase]
-            hold=phase in recipe.get('hold_orientation_phases',['lift','transfer','lower'])
-            # Constraints require aligned initial and final orientations. A
-            # deliberate grasp/placement reorientation is planned normally.
-            rotation_error=Rotation.from_matrix(kin.fk(q)[:3,:3]@targets[phase][:3,:3].T).magnitude()
-            hold=bool(hold and rotation_error<.04)
-            vertical = phase in recipe.get('linear_motion_phases', [])
-            if vertical and (rotation_error >= .04 or np.linalg.norm(kin.fk(q)[:2,3]-targets[phase][:2,3]) > .004):
-                raise ValueError('Vertical motion cost requires aligned orientation and XY start')
-            path,detail=planner.constrained_plan(q,targets[phase],phase,masks,hold,timeout,linear_vertical=vertical)
-            if path is not None and vertical:
-                poses=fk_batch(kin,path)
-                detail['max_tcp_xy_goal_deviation_m']=float(np.max(np.linalg.norm(poses[:,:2,3]-targets[phase][:2,3],axis=1)))
-                detail['vertical_motion_scope']='Soft planner cost; measured TCP deviation, not a physical path guarantee'
+            path,detail=plan_phase(planner,kin,q,targets[phase],phase,masks,recipe,folder,timeout)
             result['phases'].append(detail)
             if path is None:
                 result.update(status='failed',failure_reason='cuRobo rejected '+phase+': '+detail['solver_status'],failed_phase=phase)

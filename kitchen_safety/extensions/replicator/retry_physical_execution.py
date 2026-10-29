@@ -22,6 +22,7 @@ SOURCES = tuple(dict.fromkeys(base.RUNTIME_SOURCES + (
     'kitchen_safety/extensions/replicator/retry_physical_execution.py',
     'kitchen_safety/extensions/replicator/physical_retry_plan.py',
     'kitchen_safety/extensions/replicator/physical_retry_round3.py',
+    'kitchen_safety/extensions/replicator/physical_retry_round4.py',
     'third_party/IsaacLab-Arena/isaaclab_arena/utils/isaaclab_utils/simulation_app.py',
     'third_party/IsaacLab-Arena/submodules/IsaacLab/source/isaaclab/isaaclab/app/app_launcher.py',
     'third_party/IsaacLab-Arena/submodules/IsaacLab/source/isaaclab/isaaclab/envs/manager_based_rl_env.py',
@@ -36,7 +37,7 @@ PREDICATE_SOURCES = tuple(p for p in base.RUNTIME_SOURCES if
 def round_two(plan):
     version = plan.get('schema_version', 1)
     if version not in (1, 2): raise ValueError('Unsupported retry schema')
-    if version == 2 and plan.get('retry_round') not in (2, 3):
+    if version == 2 and plan.get('retry_round') not in (2, 3, 4):
         raise ValueError('Unsupported source-bound grasp retry round')
     return version == 2
 
@@ -230,6 +231,9 @@ def load_retry_inputs(entry):
 def validate_plan(path):
     path = local(path); plan = json.loads(path.read_text())
     if plan.get('kind') != 'physical_failure_retry_plan': raise ValueError('Explicit failure retry plan required')
+    if plan.get('retry_round') == 4:
+        from .physical_retry_round4 import validate_round4_plan
+        return validate_round4_plan(path, plan)
     if plan.get('retry_round') == 3:
         from .physical_retry_round3 import validate_round3_plan
         return validate_round3_plan(path, plan)

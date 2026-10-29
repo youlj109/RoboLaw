@@ -71,3 +71,38 @@ test('round 3 falls back to an available round 2, not to round 1', () => {
   render();
   assert.equal(context.physicalState.retryRound, 2);
 });
+
+test('round 4 stays selected during loading and with planning-only or execution-only data', () => {
+  for (const presence of [{planning_present: true}, {manifest_present: true}]) {
+    const {context, render} = harness(null, 4);
+    render();
+    assert.equal(context.physicalState.retryRound, 4);
+    context.state.data = {physical_execution: {failure_retry_round4: presence}};
+    render();
+    assert.equal(context.byId('physicalRetryRound').value, '4');
+  }
+});
+
+test('round 4 falls back through 3 and 2 according to the first available round', () => {
+  for (const [available, expected] of [
+    [{failure_retry_round3: {planning_present: true}, failure_retry_round2: {manifest_present: true}}, 3],
+    [{failure_retry_round2: {manifest_present: true}}, 2],
+    [{}, 1],
+  ]) {
+    const {context, render} = harness({physical_execution: available}, 4);
+    render();
+    assert.equal(context.physicalState.retryRound, expected);
+    assert.equal(context.byId('physicalRetryRound').value, String(expected));
+  }
+});
+
+test('manual historical selection remains unchanged when round 4 is available', () => {
+  for (const selected of [1, 2, 3]) {
+    const {context, render} = harness({physical_execution: {
+      failure_retry_round4: {manifest_present: true}, failure_retry_round3: {manifest_present: true},
+      failure_retry_round2: {manifest_present: true},
+    }}, selected);
+    render(); render();
+    assert.equal(context.physicalState.retryRound, selected);
+  }
+});
