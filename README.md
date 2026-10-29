@@ -10,7 +10,9 @@
 
 **[查看最新 154 景结果与失败诊断](docs/extensions/replicator/PHYSICAL_RETRY_ROUND13_20261029.md)** · [最新结果 JSON](configs/extensions/replicator/physical_retry_results_round13_20261029.json) · [保留的首轮结果](docs/extensions/replicator/PHYSICAL_EXECUTION_154_20261028.md) · [发布说明与输入恢复](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md)
 
-Git 保存逐景状态与证据 SHA；规划输入、原始物理状态、接触记录及媒体通过独立分包分发，不随代码提交。新增[重跑文件与历史证据恢复指南](docs/extensions/replicator/REPRODUCTION_BUNDLE_20261029.md)：默认重跑6包（约2.00GB）已公开发布，包含清单和元数据的17个对象均通过匿名完整GET及SHA校验；其余历史材料仍在上传。当前可用的旧资产与旧规划输入下载链接保持。文档中的本机视频路径不是 GitHub 在线视频链接。实际任务成功不等于安全避障验收。
+Git 保存逐景状态与证据 SHA；规划输入、原始物理状态、接触记录及媒体通过独立分包分发，不随代码提交。[重跑文件与历史证据恢复指南](docs/extensions/replicator/REPRODUCTION_BUNDLE_20261029.md)：截至北京时间2026-10-30，原121包（含清单及元数据共247对象）已公开发布，全部通过云端大小／SHA元数据和匿名Range访问核验；其中默认重跑6包（约2.00GB）的17个对象另已通过匿名完整GET及实测SHA校验。当前可用的旧资产与旧规划输入下载链接保持。文档中的本机视频路径不是 GitHub 在线视频链接。实际任务成功不等于安全避障验收。
+
+四组学生历史范例的[独立增补包](docs/extensions/replicator/REPRODUCTION_BUNDLE_20261029.md#四组学生历史范例增补包)也已公开发布：16个分包、4,420个文件，约10.66GB，连同清单及元数据共37对象；本地完整恢复与SHA校验、远端37对象的云端大小／SHA元数据和匿名Range访问核验均通过。完整学生范例还需原包中13个指定分包（约9.79GB）及既有厨房镜像，无需下载完整39GB原包。启动仿真须保留仓库到 `/workspace`、`runtime/home` 到 `/home/user` 的容器挂载。
 
 ## 原始 Lightwheel 11 个场景
 

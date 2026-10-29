@@ -1,6 +1,6 @@
-# Replicator 重跑文件与历史证据分包
+# 重跑文件、历史证据与学生范例分包
 
-**发布状态：默认重跑所需6包已公开发布；6个归档、6份逐文件清单及5份元数据共17个对象，均已通过匿名完整GET、字节数与SHA-256校验，0失败。其余历史材料仍在上传。** 这6包约2.00GB，恢复器下载后仍会核对归档、逐文件清单及文件内容SHA，再写入仓库。其他profile待上传完成后使用。
+**发布状态（北京时间2026-10-30）：原121包与学生增补16包均已公开发布。原247对象、增补37对象的云端大小／SHA元数据及匿名Range访问核验全部通过；其中默认重跑6包的17个对象另已通过匿名完整GET、字节数与实测SHA-256校验。** 默认6包约2.00GB，恢复器下载后仍会核对归档、逐文件清单及文件内容SHA，再写入仓库；其他profile现也可下载。
 
 这批文件补充 Git 忽略的 Replicator 规划输入、历史报告、实际状态、图像和视频，覆盖原始154景及物理重试第1—13轮，并保留源相对路径与原文件字节。代码、配置及最新结果仍从 `ylj` 分支获取；当前采用版本154/154、原布局151/154的历史区别不变。恢复文件不代表新的任务执行、安全验收或稳定成功率测量。
 
@@ -21,7 +21,7 @@
 
 分包不包含完整仿真运行环境、虚拟环境、编译缓存或凭据；固定版本的 IsaacLab-Arena、Isaac Lab、cuRobo 和运行环境仍按[仓库安装说明](../../../README.md)准备。PID、锁文件和缓存等不用于复现的内容不恢复。旧输入ZIP、旧视频ZIP、旧报告及它们的SHA保持原样。
 
-发布目录为 [ModelScope 数据集](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety) 的 `robolaw/replicator-reproduction-20261029-r13-v1/`。默认集合的6个归档、6份逐文件清单及5份元数据已提交；完整锁文件列出全部121包，不表示其余分包已全部上传或通过远端校验。
+发布目录为 [ModelScope 数据集](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety) 的 `robolaw/replicator-reproduction-20261029-r13-v1/`。全部121个归档、121份逐文件清单和5份元数据均已提交，247对象的云端元数据及匿名访问检查通过；完整GET覆盖范围仍为默认集合17对象。
 
 ## 在线快速开始：默认重跑集合
 
@@ -35,7 +35,7 @@ python3 scripts/extensions/replicator/restore_reproduction_bundle.py
 python3 scripts/extensions/replicator/restore_reproduction_bundle.py --verify-only
 ```
 
-完整历史上传完成后，可加 `--profile all` 恢复大型状态与媒体；当前不要把其他profile的未上传文件当作下载故障。
+加 `--profile all` 可恢复已发布的大型状态与媒体；不传profile则仍只恢复默认6包。
 
 默认缓存目录是 `assets/.downloads/replicator-reproduction/replicator-reproduction-20261029-r13-v1/`。中断后重复同一命令，下载器尝试HTTP Range续传；服务器不支持Range时重新下载该包，仍须通过整包SHA后才能使用。`--no-resume` 可明确重启未完成下载。
 
@@ -63,6 +63,44 @@ python3 scripts/extensions/replicator/restore_reproduction_bundle.py \
 
 恢复本身不会启动规划、渲染或物理执行。实际重跑应写入新的输出目录，保留已完成的历史manifest；历史 `--resume` 只用于其绑定且尚未完成的运行，不用于覆盖已有结果。相关执行入口和原始154景命令见[发布与输入恢复说明](RELEASE_154_PLANNED_SCENES.md)。
 
+## 四组学生历史范例增补包
+
+**已公开发布，本地完整恢复与37对象的云端大小／SHA元数据、匿名Range访问核验均通过。** 这批文件补充四个学生技能已文档化的试用、避障修复、保留失败、共同审查记录、视频与准确场景资产，属于独立包 `student-examples-reproduction-20261029-v1`，不改变原121包。
+
+锁文件为 [student_examples_reproduction_20261029.json](../../../configs/extensions/student_examples_reproduction_20261029.json)，SHA-256为 `9afbcc8710b3b3154ea8fc8a15cda1e383ef5e018438320c8df8d4244e2a4229`。16个归档共10,659,331,478字节（约10.66GB），恢复4,420个文件、14,794,135,518字节；连同16份逐文件清单和5份元数据，共37个公开对象。来源是4,419个历史文件与1份冻结依赖清单。相同内容位于不同引用路径时仍分别保存，不需要别名安装逻辑。
+
+增补包默认 `rerun` 为资产与小型输入，共6包、1,330,065,641字节；完整历史HDF5与媒体使用 `--profile all`。本机目录是 `/home/oem/Code/RoboLaw/exports/student_examples_reproduction_20261029_v1/`；发布目录为同一ModelScope数据集下的 `robolaw/student-examples-reproduction-20261029-v1/`。本地已在全新空目录恢复全部4,420个文件，逐个验证成员SHA，再运行只读复核通过；这些是文件完整性检查，没有重新运行历史仿真或安全验收。
+
+完整学生范例还依赖原121包中**13个指定分包**，共9,789,063,867字节（约9.79GB），覆盖924个已发布的相同路径文件；不需要下载完整39GB原包。此外，48个相同路径的原始厨房文件由既有 `restore_modelscope_assets.py` 恢复。按以下顺序在仓库根目录运行：
+
+```bash
+# 已有厨房镜像；按原清单核对资产
+python3 scripts/restore_modelscope_assets.py
+
+# 原包的精确依赖，包含历史数据、HDF5、媒体与报告
+python3 scripts/extensions/replicator/restore_reproduction_bundle.py \
+  --config configs/extensions/replicator/reproduction_bundle_20261029.json \
+  --parts assets-002 evidence-001 evidence-002 evidence-003 evidence-004 \
+    evidence-005 evidence-006 evidence-007 evidence-008 evidence-107 \
+    inputs-001 inputs-002 media-001
+
+# 学生独立增补包
+python3 scripts/extensions/replicator/restore_reproduction_bundle.py \
+  --config configs/extensions/student_examples_reproduction_20261029.json \
+  --profile all
+
+# 只读核对增补包的全部已恢复文件
+python3 scripts/extensions/replicator/restore_reproduction_bundle.py \
+  --config configs/extensions/student_examples_reproduction_20261029.json \
+  --profile all --verify-only
+```
+
+`evidence-107` 包含保留的 `reports/replicator_physics/neutral_mount_01.log`；选择粒度为既有完整分包，所以也会恢复其中其他文件。对前置13包可重复相同命令并追加 `--verify-only`，厨房镜像也支持 `--verify-only`。离线使用时，为两份配置分别指定对应分包目录的 `--cache` 并追加 `--offline`。
+
+仿真运行环境和固定源码仍按仓库安装说明准备。必须沿用 `scripts/start_arena.sh` 的挂载：**宿主机仓库→`/workspace`，仓库内 `runtime/home`→`/home/user`，容器 `HOME=/home/user`**。Lightwheel抓放组、controls组及机器人台架组合层保留这两类绝对资产引用；须核实复用容器的挂载，不要通过修改历史USD或哈希来绕过解析错误。
+
+四组技能的原成功、失败、撤回标签均保留；增补包不包含与文档化范例无关的后期独立doors动画或hard-demo，也不包含凭据、虚拟环境、轮子缓存。仅保留拒绝报告而原候选资产已不存在的试验，不声称能完整重演该候选。具体入口见 `student_skills/` 内对应技能与references。
+
 ## 上传与公开地址核对
 
 上传使用本机已登录的ModelScope SDK，凭据由SDK读取，不写入仓库、分包或日志。普通下载与公开校验不需要登录。
@@ -80,7 +118,7 @@ uv run --no-project --with modelscope-hub python \
 # 完整下载默认集合及5份元数据，计算远端内容SHA（较慢）
 python3 scripts/extensions/replicator/verify_public_reproduction_bundle.py --profile rerun
 
-# 全部上传完成后：完整下载并核对247个对象（较慢）
+# 可选慢复核：完整下载并核对已发布的247个对象
 python3 scripts/extensions/replicator/verify_public_reproduction_bundle.py --profile all
 ```
 
@@ -93,7 +131,18 @@ python3 scripts/extensions/replicator/verify_public_reproduction_bundle.py --pro
 | 云端清单与匿名Range访问 | 云端报告的文件大小、SHA-256对照锁文件，并匿名读取实际响应片段 | 文件已提交、云端元数据一致且可公开访问；没有重新计算整个远端文件的内容SHA |
 | 匿名完整GET | 下载整个对象并重新计算字节数、SHA-256 | 该对象完整下载内容与本地冻结文件一致 |
 
-默认集合17个对象已在2026-10-29 21:33（北京时间）完成匿名完整GET，实际读取2,009,362,656字节，全部大小与实测SHA匹配。对应receipt的profile为 `rerun`，`complete=true`、`passed=true`、`failed_objects=0`，SHA-256为 `8916db0dc8bcb86dacd8e3614d50f18c219a86b8d810974258efc5ed5b65c341`。其余分包上传及全量云端清单／匿名访问检查仍在进行；默认集合通过不代表全部247对象已完整下载核验。
+默认集合17个对象已在2026-10-29 21:33（北京时间）完成匿名完整GET，实际读取2,009,362,656字节，全部大小与实测SHA匹配。对应[核心完整下载校验记录](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/reproduction-public-verification-20261030-v1/core_full_get_verification.json)的profile为 `rerun`，`complete=true`、`passed=true`、`failed_objects=0`，SHA-256为 `8916db0dc8bcb86dacd8e3614d50f18c219a86b8d810974258efc5ed5b65c341`。
+
+两批全量公开检查均已完成，全部对象的云端大小与SHA声明匹配本地冻结清单，匿名响应前缀也与本地内容一致。学生包提交后再次检查原包，确认旧发布没有回退：
+
+| 集合 | 完成时间（北京时间2026-10-30） | 对象数／全部对象字节数 | 实际读取的响应前缀字节数 |
+| --- | --- | --- | ---: |
+| 原Replicator包，学生提交后复核 | 00:41:48 | 247／38,906,035,233 | 246,022 |
+| 学生增补包 | 00:42:14 | 37／10,660,402,428 | 37,888 |
+
+[原包提交后复核报告](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/reproduction-public-verification-20261030-v1/replicator_metadata_and_access.json)的SHA为 `16fe5f47ede495f809980c12f25f30fe6ad0a08665461c347db11dcd649f2154`；[学生包复核报告](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/reproduction-public-verification-20261030-v1/student_examples_metadata_and_access.json)的SHA为 `d7123978e4696b98d02893ee4ee9304822c7e8ddad6fdbd13cd85f6c49e4be06`。两份报告均 `complete=true`、`passed=true`、`authentication_used=false`、`full_download_verified=false`。因此，284对象全部通过的是云端元数据与匿名访问检查，不能表述为284对象全部经过完整下载和独立内容SHA重算。冻结包名和日期仍保留20261029。
+
+这三份记录保留原始字节，另存于独立公开目录；[说明](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/reproduction-public-verification-20261030-v1/README.md)和[SHA256SUMS](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety/resolve/master/robolaw/reproduction-public-verification-20261030-v1/SHA256SUMS)一并提供。该目录5个小文件共459,851字节，也已匿名完整GET并逐文件重算SHA通过；这项核验没有扩大上述284个归档／清单对象的完整下载范围。
 
 ## 校验范围
 
@@ -101,4 +150,4 @@ python3 scripts/extensions/replicator/verify_public_reproduction_bundle.py --pro
 
 真实121包的清单与SHA链已核对，32,319条原路径全局唯一；还完整解压读取了全部归档成员并核对逐文件SHA，103,473,898,726字节全部通过。默认6包已在空Git归档目录恢复21,952个文件，并完成逐文件哈希验证。另一次独立新目录检查通过原始154景、当前采用版本154景及全部13轮冻结计划的输入加载：0次读取旧仓库数据、0次向新根目录写入，没有网络、GPU或Kit运行。
 
-该独立检查另外准备了34个上游依赖文件，与既有固定源码镜像的SHA一致；这些仍属于安装流程中的依赖，不能把分包误认为包含完整仿真环境。这些是文件恢复及CPU输入检查，不是重新执行154次物理仿真。默认6包及对应清单、元数据共17对象现已通过匿名完整GET与SHA校验；其他历史分包还在上传。
+该独立检查另外准备了34个上游依赖文件，与既有固定源码镜像的SHA一致；这些仍属于安装流程中的依赖，不能把分包误认为包含完整仿真环境。这些是文件恢复及CPU输入检查，不是重新执行154次物理仿真。默认核心17对象已通过匿名完整GET与SHA校验；原247对象和学生37对象全部通过上述云端元数据与匿名访问检查。

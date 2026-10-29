@@ -90,7 +90,7 @@ def main():
             repo_id=REPO_ID, repo_type="dataset", folder_path=str(args.folder),
             path_in_repo="robolaw/" + lock["bundle_id"],
             allow_patterns=names, max_workers=args.workers, use_cache=True, disable_tqdm=True,
-            sync_remote_repo=False, commit_message="Add Replicator 154 scenes and rounds 1–13 reproduction artifacts",
+            sync_remote_repo=False, commit_message=f"Add reproduction bundle {lock['bundle_id']}",
             tracker_path=str(args.folder / (".ms_upload_cache_" + args.profile
                              + ("_without_" + args.exclude_profile if args.exclude_profile else ""))),
             progress_callback=progress,
