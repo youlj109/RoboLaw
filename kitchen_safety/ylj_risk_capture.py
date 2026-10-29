@@ -16,12 +16,15 @@ def select_entry(index, scene_id):
     if len(rows) != 1:
         raise ValueError('Select one exact ylj scene ID; no implicit variant selection')
     row = rows[0]
-    return dict(scene_id=row['scene_id'], task_id=row['task_id'], variant_id=row['variant_id'],
+    entry = dict(scene_id=row['scene_id'], task_id=row['task_id'], variant_id=row['variant_id'],
         config_path=row['config_path'], config_sha256=row['config_sha256'],
         result_path=row['source_result_path'], result_sha256=row['source_result_sha256'],
         trajectory_path=row['artifacts']['trajectory']['path'],
         trajectory_sha256=row['artifacts']['trajectory']['sha256'],
         source_scene_path=row['source_scene']['path'], source_scene_sha256=row['source_scene']['sha256'])
+    for key in ('ylj_source_binding', 'ylj_retry_entry'):
+        if key in row: entry[key] = deepcopy(row[key])
+    return entry
 
 
 def input_preflight(contract, index, scene_id, lock, *, allow_added_obstacle=False):
@@ -29,17 +32,18 @@ def input_preflight(contract, index, scene_id, lock, *, allow_added_obstacle=Fal
     if entry['task_id'] != 'kitchen_bench_'+contract['task_id']:
         raise ValueError('ylj scene belongs to another native task')
     missing = []; changed = []
-    for name in ('config', 'result', 'trajectory', 'source_scene'):
-        path = ROOT/entry[name+'_path']
-        if not path.is_file(): missing.append(entry[name+'_path'])
-        elif hashlib.sha256(path.read_bytes()).hexdigest() != entry[name+'_sha256']:
-            changed.append(entry[name+'_path'])
+    from kitchen_safety.ylj_execution_source import required_source_bindings, local
+    for relative, expected_hash in required_source_bindings(entry).items():
+        path = local(ROOT, relative)
+        if not path.is_file(): missing.append(relative)
+        elif hashlib.sha256(path.read_bytes()).hexdigest() != expected_hash:
+            changed.append(relative)
     new_human = entry['variant_id'] == 'human_default_mpfb' and not lock['human_collision_paths']
     source_gate_error=None
     if not missing and not changed:
-        from kitchen_safety.extensions.replicator.planned_execution import load_inputs
+        from kitchen_safety.ylj_execution_source import load_selected_inputs
         try:
-            _,layout,_=load_inputs(entry)  # Original frozen inputs remain authoritative.
+            _,layout,_=load_selected_inputs(ROOT, entry)
             if allow_added_obstacle:
                 from kitchen_safety.variant_risk_admission import declaration
                 declaration(ROOT,contract,entry,layout)
@@ -88,7 +92,9 @@ def capture(args, contract, entry, lock):
     from kitchen_safety.task_contract import digest
     from kitchen_safety.articulation_capture import array
     output = args.output; output.mkdir(parents=True, exist_ok=False)
-    plan, layout, data = load_inputs(entry)  # Original SHA gates, no fallback/replan.
+    from kitchen_safety.ylj_execution_source import load_selected_inputs, apply_execution_overrides
+    args = apply_execution_overrides(entry, args)
+    plan, layout, data = load_selected_inputs(ROOT, entry)
     admission=None
     if getattr(args,'admit_added_obstacle',False):
         from kitchen_safety.variant_risk_admission import declaration
@@ -130,7 +136,7 @@ def capture(args, contract, entry, lock):
     receipt = dict(version=VERSION, task_id=contract['task_id'], scene_id=entry['scene_id'],
         execution_variant=metadata['execution_variant'],added_obstacle_spawned=not getattr(args,'baseline',False),
         baseline_derivation='Reuse frozen optimized commands and layout; omit the explicitly added hazard only' if getattr(args,'baseline',False) else None,
-        ylj_source_commit='e8c8fedfba335e3a1c7bcc979f380eb63138689f',task_sha256=digest(contract),
+        ylj_source_commit=entry.get('ylj_source_binding',{}).get('source_commit','e8c8fedfba335e3a1c7bcc979f380eb63138689f'),task_sha256=digest(contract),
         entry=entry, reviewed_lock_sha256=digest(lock), background_physics=metadata['background_physics'],
         threads=threads, risk_evaluation_status='pending_offline', IR='disabled',
         online_risk_queries=0, online_risk_features=0, online_grades=0, online_RGB_frames=0,
@@ -173,6 +179,22 @@ def capture(args, contract, entry, lock):
         import shutil
         for role in ('config','result','trajectory','source_scene'):
             source=ROOT/entry[role+'_path']; shutil.copy2(source, frozen/(role+source.suffix))
+        if entry.get('ylj_source_binding'):
+            write_json(frozen/'ylj_source_selection.json', entry['ylj_source_binding'])
+            from kitchen_safety.ylj_execution_source import required_source_bindings
+            refs = required_source_bindings(entry)
+            provenance = frozen/'source_provenance'; provenance.mkdir()
+            for index, (relative, expected_hash) in enumerate(sorted(refs.items())):
+                source=ROOT/relative
+                if hashlib.sha256(source.read_bytes()).hexdigest()!=expected_hash:
+                    raise ValueError('ylj source changed before freezing: '+relative)
+                shutil.copy2(source, provenance/(str(index)+'_'+source.name))
+            source_code={}
+            for relative in ('kitchen_safety/ylj_execution_source.py','kitchen_safety/ylj_risk_capture.py',
+                             'kitchen_safety/extensions/replicator/retry_physical_execution.py'):
+                source=ROOT/relative;source_code[relative]=hashlib.sha256(source.read_bytes()).hexdigest()
+                shutil.copy2(source, provenance/source.name)
+            write_json(provenance/'source_paths.json', dict(references=refs,execution_adapter_sources=source_code))
         write_json(recorder.directory/'policy_binding.json', dict(factory=VERSION, entry=entry,
             risk_phase_aliases={'close':'grasp','initial_settle':'settle','final_settle':'settle'},
             physical_holds_s=dict(initial_settle=args.initial_settle_seconds,close=args.close_seconds,

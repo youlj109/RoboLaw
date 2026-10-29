@@ -22,6 +22,8 @@ def run(args):
         write(ledger,entries)
     if stage=='capture':
         ylj_scene=getattr(args,'ylj_scene',None)
+        ylj_source=(getattr(args,'ylj_source',None) or 'current') if ylj_scene else None
+        max_actions=args.max_actions if args.max_actions is not None else (6000 if ylj_source=='current' else 3000)
         if not args.task_contract or not (args.policy_factory or ylj_scene) or not args.asset_cache:
             raise ValueError('Native capture requires --task-contract, --asset-cache and either --policy-factory or --ylj-scene')
         if ylj_scene and (args.policy_factory or args.policy_config or args.obstacle_binding):
@@ -34,25 +36,25 @@ def run(args):
         for key,value in required.items():
             if policy.get(key)!=value:raise ValueError('Unsupported native workflow policy override: '+key)
         if 'IR' not in policy.get('disabled_categories',[]):raise ValueError('Native IR must remain disabled')
-        if args.max_actions<=0:raise ValueError('Native capture needs a positive action limit')
+        if max_actions<=0:raise ValueError('Native capture needs a positive action limit')
         write(base/'workflow_policy.json',policy)
         binding=dict(version='robolaw-native-workflow-1',task_contract=str(args.task_contract.resolve()),
             task_sha256=hashlib.sha256(args.task_contract.read_bytes()).hexdigest(),
             asset_cache=str(args.asset_cache.resolve()),policy_factory=args.policy_factory,ylj_scene=ylj_scene,
-            ylj_baseline=bool(getattr(args,'ylj_baseline',False)),ylj_admit_obstacle=bool(getattr(args,'ylj_admit_obstacle',False)))
+            ylj_baseline=bool(getattr(args,'ylj_baseline',False)),ylj_admit_obstacle=bool(getattr(args,'ylj_admit_obstacle',False)),ylj_source=ylj_source)
         write(base/'native_workflow.json',binding)
         command=[sys.executable,str(ROOT/'scripts/collect_native_task.py'),'--task-contract',str(args.task_contract.resolve()),
             '--output',str(base/'capture/native_000'),'--asset-cache',binding['asset_cache'],
-            '--policy-factory',args.policy_factory,'--max-actions',str(args.max_actions),'--device','cpu','--num_envs','1']
+            '--policy-factory',args.policy_factory,'--max-actions',str(max_actions),'--device','cpu','--num_envs','1']
         if args.policy_config:command+=['--policy-config',str(args.policy_config.resolve())]
         command+=['--seed',str(args.seed)]
         if args.placement_seed is not None:command+=['--placement_seed',str(args.placement_seed)]
         if args.obstacle_binding:command+=['--obstacle-binding',str(args.obstacle_binding.resolve())]
         if ylj_scene:
             command=[sys.executable,str(ROOT/'scripts/collect_ylj_risk_task.py'),
-                '--task-contract',str(args.task_contract.resolve()),'--scene',ylj_scene,
+                '--task-contract',str(args.task_contract.resolve()),'--scene',ylj_scene,'--ylj-source',ylj_source,
                 '--output',str(base/'capture/native_000'),'--asset-cache',binding['asset_cache'],
-                '--max-actions',str(args.max_actions),'--seed',str(args.seed),'--device','cpu','--num_envs','1']
+                '--max-actions',str(max_actions),'--seed',str(args.seed),'--device','cpu','--num_envs','1']
             if getattr(args,'ylj_baseline',False):command+=['--baseline']
             if getattr(args,'ylj_admit_obstacle',False):command+=['--admit-added-obstacle']
     else:

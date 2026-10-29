@@ -27,6 +27,8 @@ def run(args):
     stage,base=args.stage,args.output.resolve()
     if getattr(args,'ylj_scene',None) and (stage!='capture' or not args.task_contract):
         raise ValueError('--ylj-scene requires capture with an explicit --task-contract; later stages replay frozen inputs')
+    if getattr(args,'ylj_source',None) and not getattr(args,'ylj_scene',None):
+        raise ValueError('--ylj-source requires one explicit --ylj-scene')
     if getattr(args,'ylj_admit_obstacle',False) and (not getattr(args,'ylj_scene',None) or getattr(args,'ylj_baseline',False)):
         raise ValueError('--ylj-admit-obstacle requires one added-obstacle ylj scene')
     if getattr(args,'ylj_baseline',False) and not getattr(args,'ylj_scene',None):
@@ -159,11 +161,12 @@ def main():
     p.add_argument('--policy-factory',help='Explicit native task controller module:function')
     p.add_argument('--policy-config',type=Path)
     p.add_argument('--ylj-scene',help='Exact ylj scene ID; use frozen ylj layout/NPZ with the current reviewed risk scope')
+    p.add_argument('--ylj-source',choices=['legacy','current'],default=None,help='ylj defaults to the latest frozen adopted revision; legacy is explicit and never an automatic fallback')
     p.add_argument('--ylj-baseline',action='store_true',help='Run the native scene without the source variant added obstacle')
     p.add_argument('--ylj-admit-obstacle',action='store_true',help='Add only the explicitly selected preset obstacle to the reviewed native risk scope')
     p.add_argument('--asset-cache',type=Path)
     p.add_argument('--obstacle-binding',type=Path)
-    p.add_argument('--max-actions',type=int,default=3000)
+    p.add_argument('--max-actions',type=int,default=None)
     p.add_argument('--seed',type=int,default=42,help='Native environment and default placement seed')
     p.add_argument('--placement-seed',type=int,help='Explicit native placement sampler seed')
     p.add_argument('--camera-config',type=Path,help='Native render only: task-bound offline camera configuration')
