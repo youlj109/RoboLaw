@@ -31,9 +31,17 @@ def main():
     modes.add_argument("--upload", action="store_true")
     modes.add_argument("--verify-public", action="store_true")
     parser.add_argument("--profile", default="all")
+    parser.add_argument("--exclude-profile", help="Exclude another profile's parts, e.g. upload all except rerun")
+    parser.add_argument("--workers", type=int, default=16, help="Concurrent SDK transfers; must be positive")
     args = parser.parse_args()
+    if args.workers < 1:
+        parser.error("--workers must be positive")
     lock = json.loads(args.config.read_text())
     selected = set(lock["profiles"][args.profile])
+    if args.exclude_profile:
+        selected -= set(lock["profiles"][args.exclude_profile])
+    if not selected:
+        parser.error("No parts selected")
     records = []
     for part in lock["parts"]:
         if part["id"] in selected:
@@ -76,13 +84,15 @@ def main():
         def progress(event):
             print(json.dumps({key: event.get(key) for key in (
                 "event", "batch_index", "num_batches", "committed_files", "total_files",
-                "committed_bytes", "total_bytes", "elapsed")}), flush=True)
+                "committed_bytes", "uploaded_files", "uploaded_bytes", "total_bytes", "elapsed")}), flush=True)
 
         api.upload_folder(
             repo_id=REPO_ID, repo_type="dataset", folder_path=str(args.folder),
             path_in_repo="robolaw/" + lock["bundle_id"],
-            allow_patterns=names, max_workers=4, use_cache=True, disable_tqdm=True,
+            allow_patterns=names, max_workers=args.workers, use_cache=True, disable_tqdm=True,
             sync_remote_repo=False, commit_message="Add Replicator 154 scenes and rounds 1–13 reproduction artifacts",
+            tracker_path=str(args.folder / (".ms_upload_cache_" + args.profile
+                             + ("_without_" + args.exclude_profile if args.exclude_profile else ""))),
             progress_callback=progress,
         )
         print("Upload call completed. Run --verify-public before claiming verified public availability.")

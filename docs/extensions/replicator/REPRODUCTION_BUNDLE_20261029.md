@@ -1,6 +1,6 @@
 # Replicator 重跑文件与历史证据分包
 
-**上传状态：121个分包已在本地生成，尚未上传至 ModelScope，等待本机魔搭登录凭据；新分包目前没有可用的云端下载入口。** 完成上传并从公开地址核对后再使用在线恢复命令。持有本地分包的机器可以按下方离线流程验证和恢复；本文不会把本地生成误写成云端已发布。
+**发布状态：默认重跑所需6包已上传至ModelScope，可公开下载；完整历史材料仍在上传。默认集合的完整下载SHA校验正在进行，尚未宣称其17个远端对象全部通过完整下载校验。** 这6包约2.00GB，恢复器下载后仍会核对归档、逐文件清单及文件内容SHA，再写入仓库。其他profile待上传完成后使用。
 
 这批文件补充 Git 忽略的 Replicator 规划输入、历史报告、实际状态、图像和视频，覆盖原始154景及物理重试第1—13轮，并保留源相对路径与原文件字节。代码、配置及最新结果仍从 `ylj` 分支获取；当前采用版本154/154、原布局151/154的历史区别不变。恢复文件不代表新的任务执行、安全验收或稳定成功率测量。
 
@@ -21,9 +21,9 @@
 
 分包不包含完整仿真运行环境、虚拟环境、编译缓存或凭据；固定版本的 IsaacLab-Arena、Isaac Lab、cuRobo 和运行环境仍按[仓库安装说明](../../../README.md)准备。PID、锁文件和缓存等不用于复现的内容不恢复。旧输入ZIP、旧视频ZIP、旧报告及它们的SHA保持原样。
 
-计划发布位置为 [ModelScope 数据集](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety) 的 `robolaw/replicator-reproduction-20261029-r13-v1/` 目录。该路径是预定位置；上方状态未改为已验证发布前，不表示这些新分包已存在于云端。
+发布目录为 [ModelScope 数据集](https://www.modelscope.cn/datasets/YouLinjing/Isaac-Arena-Kitchen-Safety) 的 `robolaw/replicator-reproduction-20261029-r13-v1/`。默认集合的6个归档、6份逐文件清单及5份元数据已提交；完整锁文件列出全部121包，不表示其余分包已全部上传或通过远端校验。
 
-## 在线恢复：公开上传验证完成后使用
+## 在线快速开始：默认重跑集合
 
 先获取 `ylj` 分支的最新代码，在仓库根目录运行。恢复器仅使用Python标准库，适用于本项目的Linux环境，不需要ModelScope SDK或下载Token。
 
@@ -31,12 +31,11 @@
 # 默认：重跑输入和精确资产
 python3 scripts/extensions/replicator/restore_reproduction_bundle.py
 
-# 加载完整历史材料，包括大型状态与媒体
-python3 scripts/extensions/replicator/restore_reproduction_bundle.py --profile all
-
-# 只核查已恢复文件；不联网、不写入
-python3 scripts/extensions/replicator/restore_reproduction_bundle.py --profile all --verify-only
+# 只核查默认集合已恢复的文件；不联网、不写入
+python3 scripts/extensions/replicator/restore_reproduction_bundle.py --verify-only
 ```
+
+完整历史上传完成后，可加 `--profile all` 恢复大型状态与媒体；当前不要把其他profile的未上传文件当作下载故障。
 
 默认缓存目录是 `assets/.downloads/replicator-reproduction/replicator-reproduction-20261029-r13-v1/`。中断后重复同一命令，下载器尝试HTTP Range续传；服务器不支持Range时重新下载该包，仍须通过整包SHA后才能使用。`--no-resume` 可明确重启未完成下载。
 
@@ -66,9 +65,9 @@ python3 scripts/extensions/replicator/restore_reproduction_bundle.py \
 
 ## 上传与公开地址核对
 
-用户已授权上传；当前缺的是本机ModelScope SDK的有效登录凭据，不是再次审批。先在本机完成魔搭登录，凭据由SDK读取，不写入仓库、分包或日志。
+上传使用本机已登录的ModelScope SDK，凭据由SDK读取，不写入仓库、分包或日志。普通下载与公开校验不需要登录。
 
-上传助手默认只校验本地文件，`--upload` 才上传到既有数据集的新目录，不删除远端旧文件。`--verify-public` 直接从公开地址流式读取每个选中分包及逐文件清单，核对大小和SHA；它与 `--upload` 互斥。
+上传助手默认只校验本地文件，`--upload` 才上传到既有数据集的新目录，不删除远端旧文件。独立公开校验器 `verify_public_reproduction_bundle.py` 最多4路流式下载，包含选中分包、逐文件清单及5份元数据；每个对象必须完整HTTP GET成功且大小、实测SHA均匹配，才保存成功receipt。
 
 ```bash
 # 无凭据也可运行：核对本地默认重跑集合
@@ -78,11 +77,23 @@ python3 scripts/extensions/replicator/publish_reproduction_bundle.py --profile r
 uv run --no-project --with modelscope-hub python \
   scripts/extensions/replicator/publish_reproduction_bundle.py --upload
 
-# 上传完成后：从公开地址完整复核，不使用登录凭据
-python3 scripts/extensions/replicator/publish_reproduction_bundle.py --verify-public
+# 完整下载默认集合及5份元数据，计算远端内容SHA（较慢）
+python3 scripts/extensions/replicator/verify_public_reproduction_bundle.py --profile rerun
+
+# 全部上传完成后：完整下载并核对247个对象（较慢）
+python3 scripts/extensions/replicator/verify_public_reproduction_bundle.py --profile all
 ```
 
-上传助手默认选择 `all`；`--profile rerun` 可用于只验证或发布默认集合，但不能据此宣称121包全部已发布。完整公开验证会读取约38.90GB归档，另含逐文件清单。上传调用完成本身不代表公开下载SHA已通过；只有对应公开验证完成后才更新本文的发布状态。
+上传助手默认选择 `all`；`--profile rerun` 只处理默认集合。完整公开GET会读取约38.90GB归档，另含逐文件清单和元数据，网络较慢时可能耗时数小时。校验器默认保存 `exports/robolaw_reproduction_20261029_r13_v1/public_verification_receipts.json`，中断后重复命令，只复用同一锁文件、URL、大小、预期SHA及实测SHA均一致的已成功记录；下载器和校验器均不会把失败记录当成成功。
+
+远端验证分两层，报告中分别计数：
+
+| 层次 | 检查内容 | 能说明什么 |
+| --- | --- | --- |
+| 云端清单与匿名Range访问 | 云端报告的文件大小、SHA-256对照锁文件，并匿名读取实际响应片段 | 文件已提交、云端元数据一致且可公开访问；没有重新计算整个远端文件的内容SHA |
+| 匿名完整GET | 下载整个对象并重新计算字节数、SHA-256 | 该对象完整下载内容与本地冻结文件一致 |
+
+当前默认6包已提交可下载，完整GET仍在进行；其余分包上传及全量云端清单／匿名访问检查也在进行。上传调用完成、云端返回SHA和完整GET成功是不同结论，不互相替代。
 
 ## 校验范围
 
@@ -90,4 +101,4 @@ python3 scripts/extensions/replicator/publish_reproduction_bundle.py --verify-pu
 
 真实121包的清单与SHA链已核对，32,319条原路径全局唯一；还完整解压读取了全部归档成员并核对逐文件SHA，103,473,898,726字节全部通过。默认6包已在空Git归档目录恢复21,952个文件，并完成逐文件哈希验证。另一次独立新目录检查通过原始154景、当前采用版本154景及全部13轮冻结计划的输入加载：0次读取旧仓库数据、0次向新根目录写入，没有网络、GPU或Kit运行。
 
-该独立检查另外准备了34个上游依赖文件，与既有固定源码镜像的SHA一致；这些仍属于安装流程中的依赖，不能把分包误认为包含完整仿真环境。这些是文件恢复及CPU输入检查，不是重新执行154次物理仿真。新目录目前尚未上传，远端下载验证尚未完成。
+该独立检查另外准备了34个上游依赖文件，与既有固定源码镜像的SHA一致；这些仍属于安装流程中的依赖，不能把分包误认为包含完整仿真环境。这些是文件恢复及CPU输入检查，不是重新执行154次物理仿真。默认6包现已上传可公开下载；其完整GET校验尚在进行，其他历史分包还在上传。
