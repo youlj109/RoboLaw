@@ -154,9 +154,8 @@ test('round 6 presence never replaces a manual historical choice', () => {
   }
 });
 
-test('round 7 is the actual UI default and survives initial loading and available data', () => {
-  const initial = Number(html.match(/const physicalState=\{[^\n]*?retryRound:(\d+)/)[1]);
-  assert.equal(initial, 7);
+test('round 7 selection survives initial loading and available data', () => {
+  const initial = 7;
   assert.match(html, /<option value="7">第七轮 · 场景修订 r7（3 景）<\/option>/);
   for (const presence of [{planning_present:true},{manifest_present:true}]) {
     const {context,render}=harness(null,initial);render();
@@ -179,6 +178,37 @@ test('round 7 falls back only after a response and chooses the newest available 
 test('round 7 availability preserves all six manual historical selections', () => {
   const available=Object.fromEntries([2,3,4,5,6,7].map(round=>['failure_retry_round'+round,{manifest_present:true}]));
   for (const selected of [1,2,3,4,5,6]) {
+    const {context,render}=harness({physical_execution:available},selected);render();render();
+    assert.equal(context.physicalState.retryRound,selected);
+    assert.equal(context.byId('physicalRetryRound').value,String(selected));
+  }
+});
+
+test('round 8 is the actual UI default and survives initial loading and available data', () => {
+  const initial = Number(html.match(/const physicalState=\{[^\n]*?retryRound:(\d+)/)[1]);
+  assert.equal(initial, 8);
+  assert.match(html, /<option value="8">第八轮 · 场景修订 r8（2 景）<\/option>/);
+  for (const presence of [{planning_present:true},{manifest_present:true}]) {
+    const {context,render}=harness(null,initial);render();
+    assert.equal(context.byId('physicalRetryRound').value,'8');
+    context.state.data={physical_execution:{failure_retry_round8:presence}};render();
+    assert.equal(context.physicalState.retryRound,8);
+    assert.equal(context.byId('physicalRetryRound').value,'8');
+  }
+});
+
+test('round 8 falls back only after a response and chooses the newest available history', () => {
+  for (const expected of [7,6,5,4,3,2,1]) {
+    const available=expected>1?{['failure_retry_round'+expected]:{manifest_present:true}}:{};
+    const {context,render}=harness({physical_execution:available},8);render();
+    assert.equal(context.physicalState.retryRound,expected);
+    assert.equal(context.byId('physicalRetryRound').value,String(expected));
+  }
+});
+
+test('round 8 availability preserves all seven manual historical selections', () => {
+  const available=Object.fromEntries([2,3,4,5,6,7,8].map(round=>['failure_retry_round'+round,{manifest_present:true}]));
+  for (const selected of [1,2,3,4,5,6,7]) {
     const {context,render}=harness({physical_execution:available},selected);render();render();
     assert.equal(context.physicalState.retryRound,selected);
     assert.equal(context.byId('physicalRetryRound').value,String(selected));

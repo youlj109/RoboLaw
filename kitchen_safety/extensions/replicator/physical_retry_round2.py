@@ -245,6 +245,8 @@ def run_candidate(row,recipe,output,timeout=8.):
     try:
         if 'scene_revision' in row:
             from .scene_revision import validate_scene_revision
+            if json.loads((ROOT/row['scene_revision']['path']).read_text()).get('retry_round') == 8:
+                from .scene_revision_round8 import validate_scene_revision
             checked=validate_scene_revision(ROOT,row['scene_revision'],expected_scene_id=row['scene_id'],current=row)
             policy=recipe.get('planning_path_policy',{})
             if (policy.get('kind')!='collision_checked_free_path' or policy.get('previous_straight_line_gate_removed') is not True

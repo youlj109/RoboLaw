@@ -6,9 +6,9 @@
 
 ## Replicator 154 景：逐景成功与失败
 
-截至 2026-10-29，**当前采用版本实际成功 152/154，剩余 2 景；原布局记录保持 151/154**。第七轮按授权为剩余 3 景分别保存新增人体／设备外壳摆位的新版本，原机器人、任务物品、碰撞资产、控制器及成功判据保持不变。L 型带中岛香蕉／尖锐设备外壳完成一次无画面物理抓放并成功；U 型芥末瓶／尖锐设备外壳在 `approach` 返回 `FINETUNE_TRAJOPT_FAIL`，U 型放碗／人体在 `transfer` 返回 `IK_FAIL`，两者未进入物理执行。本轮采用碰撞检查下的自由路径，取消先前额外的 5mm 贴近直线门槛；不把 CPU 理想路径或旧布局成功当作新布局执行证据。旧布局和全部历史结果保留，规划失败不等于场景无解，任务成功不等于安全避障或长期稳定验收。
+截至 2026-10-29，**当前采用版本实际成功 152/154，剩余 2 景；原布局记录保持 151/154**。第八轮继续调整剩余人体／设备外壳场景，原机器人、任务物品、碰撞资产、控制器及成功判据不变。U 型芥末瓶／外壳完成全部规划，但一次无画面物理测试失败：闭合时双指有接触，起提初段先横移，瓶子倾斜后失持；已保存实测状态诊断图和接触分析。U 型放碗／人体通过上轮失败的搬运阶段，在 `lower` 返回 `IK_FAIL`，未进入物理执行。本轮无新增成功，第七轮香蕉新布局成功及此前历史全部保留。下一步分别检查夹持后的初始竖直抬升、下放时腕臂与人体的相对姿态；有限次失败不证明场景无解。任务成功不等于安全避障或长期稳定验收。
 
-**[查看最新 154 景结果与失败诊断](docs/extensions/replicator/PHYSICAL_RETRY_ROUND7_20261029.md)** · [最新结果 JSON](configs/extensions/replicator/physical_retry_results_round7_20261029.json) · [保留的首轮结果](docs/extensions/replicator/PHYSICAL_EXECUTION_154_20261028.md) · [发布说明与输入恢复](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md)
+**[查看最新 154 景结果与失败诊断](docs/extensions/replicator/PHYSICAL_RETRY_ROUND8_20261029.md)** · [最新结果 JSON](configs/extensions/replicator/physical_retry_results_round8_20261029.json) · [保留的首轮结果](docs/extensions/replicator/PHYSICAL_EXECUTION_154_20261028.md) · [发布说明与输入恢复](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md)
 
 Git 保存逐景状态与证据 SHA；规划输入和视频另行打包，原始物理状态与接触记录保留本机，不随代码提交。文档中的本机视频路径不是 GitHub 在线视频链接。实际任务成功不等于安全避障验收。
 

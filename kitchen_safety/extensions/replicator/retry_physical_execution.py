@@ -26,6 +26,8 @@ SOURCES = tuple(dict.fromkeys(base.RUNTIME_SOURCES + (
     'kitchen_safety/extensions/replicator/physical_retry_round5.py',
     'kitchen_safety/extensions/replicator/physical_retry_round6.py',
     'kitchen_safety/extensions/replicator/physical_retry_round7.py',
+    'kitchen_safety/extensions/replicator/physical_retry_round8.py',
+    'kitchen_safety/extensions/replicator/scene_revision_round8.py',
     'kitchen_safety/extensions/replicator/scene_revision.py',
     'third_party/IsaacLab-Arena/isaaclab_arena/utils/isaaclab_utils/simulation_app.py',
     'third_party/IsaacLab-Arena/submodules/IsaacLab/source/isaaclab/isaaclab/app/app_launcher.py',
@@ -41,7 +43,7 @@ PREDICATE_SOURCES = tuple(p for p in base.RUNTIME_SOURCES if
 def round_two(plan):
     version = plan.get('schema_version', 1)
     if version not in (1, 2): raise ValueError('Unsupported retry schema')
-    if version == 2 and plan.get('retry_round') not in (2, 3, 4, 5, 6, 7):
+    if version == 2 and plan.get('retry_round') not in (2, 3, 4, 5, 6, 7, 8):
         raise ValueError('Unsupported source-bound grasp retry round')
     return version == 2
 
@@ -167,6 +169,8 @@ def load_grasp_candidate(entry, original_plan, layout):
     revised = 'scene_revision' in entry
     if revised:
         from .scene_revision import validate_scene_revision
+        if bound_json(entry['scene_revision']).get('retry_round') == 8:
+            from .scene_revision_round8 import validate_scene_revision
         checked = validate_scene_revision(ROOT, entry['scene_revision'], expected_scene_id=entry['scene_id'], current=entry)
         if (candidate.get('scene_revision') != entry['scene_revision'] or candidate.get('layout_changed') is not True
                 or candidate.get('scene_settings_changed_once') is not True
@@ -227,8 +231,10 @@ def load_retry_inputs(entry):
     revision = None
     if 'scene_revision' in entry:
         from .scene_revision import validate_scene_revision
+        if bound_json(entry['scene_revision']).get('retry_round') == 8:
+            from .scene_revision_round8 import validate_scene_revision
         revision = validate_scene_revision(ROOT, entry['scene_revision'], expected_scene_id=entry['scene_id'], current=entry)
-        original.update(revision['document']['prior_row_source'])
+        original.update(revision.get('root_source',revision['document']['prior_row_source']))
     plan, layout, source_data = base.load_inputs(original)
     if revision is not None: layout = revision['new_config']
     adjustment = entry['adjustment']
@@ -255,6 +261,9 @@ def load_retry_inputs(entry):
 def validate_plan(path):
     path = local(path); plan = json.loads(path.read_text())
     if plan.get('kind') != 'physical_failure_retry_plan': raise ValueError('Explicit failure retry plan required')
+    if plan.get('retry_round') == 8:
+        from .physical_retry_round8 import validate_round8_plan
+        return validate_round8_plan(path, plan)
     if plan.get('retry_round') == 7:
         from .physical_retry_round7 import validate_round7_plan
         return validate_round7_plan(path, plan)
