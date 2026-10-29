@@ -38,7 +38,8 @@ def run(args):
         write(base/'workflow_policy.json',policy)
         binding=dict(version='robolaw-native-workflow-1',task_contract=str(args.task_contract.resolve()),
             task_sha256=hashlib.sha256(args.task_contract.read_bytes()).hexdigest(),
-            asset_cache=str(args.asset_cache.resolve()),policy_factory=args.policy_factory,ylj_scene=ylj_scene)
+            asset_cache=str(args.asset_cache.resolve()),policy_factory=args.policy_factory,ylj_scene=ylj_scene,
+            ylj_baseline=bool(getattr(args,'ylj_baseline',False)),ylj_admit_obstacle=bool(getattr(args,'ylj_admit_obstacle',False)))
         write(base/'native_workflow.json',binding)
         command=[sys.executable,str(ROOT/'scripts/collect_native_task.py'),'--task-contract',str(args.task_contract.resolve()),
             '--output',str(base/'capture/native_000'),'--asset-cache',binding['asset_cache'],
@@ -52,6 +53,8 @@ def run(args):
                 '--task-contract',str(args.task_contract.resolve()),'--scene',ylj_scene,
                 '--output',str(base/'capture/native_000'),'--asset-cache',binding['asset_cache'],
                 '--max-actions',str(args.max_actions),'--seed',str(args.seed),'--device','cpu','--num_envs','1']
+            if getattr(args,'ylj_baseline',False):command+=['--baseline']
+            if getattr(args,'ylj_admit_obstacle',False):command+=['--admit-added-obstacle']
     else:
         binding=read(base/'native_workflow.json');episode=base/'capture/native_000/raw_episode'
         risk=base/'risk/native_000';render=base/'rendered/native_000'

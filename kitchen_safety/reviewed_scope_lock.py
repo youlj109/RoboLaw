@@ -79,7 +79,8 @@ def apply_lock(scope, inventory, lock):
         authorization=lock['authorization'], approved_PT_assets=len(allowed),
         actual_PT_assets=len(actual), approved_target_paths=sorted(allowed),
         actual_target_paths=sorted(actual), omitted_surface_relations=len(removed),
-        added_evaluated_assets=[], source_scope_sha256=lock['source_scope_sha256'],
+        added_evaluated_assets=[lock['variant_risk_admission']['asset_root']] if lock.get('variant_risk_admission') else [],
+        variant_admission=deepcopy(lock.get('variant_risk_admission')),source_scope_sha256=lock['source_scope_sha256'],
         coverage='Only user-reviewed exact surfaces; scene extras are outside risk coverage, not safe')
     result['reviewed_scope_ceiling'] = report
     result['bindings']['reviewed_scope_lock'] = deepcopy(lock)

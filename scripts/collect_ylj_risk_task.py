@@ -9,6 +9,8 @@ def main():
     parser=get_isaaclab_arena_cli_parser()
     parser.add_argument('--task-contract',type=Path,required=True)
     parser.add_argument('--scene',required=True)
+    parser.add_argument('--baseline',action='store_true',help='Native no-added-obstacle execution; preserve the explicitly selected frozen optimized command stream')
+    parser.add_argument('--admit-added-obstacle',action='store_true',help='Explicit 154-variant authorization: add only this scene hazard to the reviewed native ceiling')
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--asset-cache',type=Path,required=True)
     parser.add_argument('--dry-run',action='store_true')
@@ -24,7 +26,8 @@ def main():
     from kitchen_safety.ylj_risk_capture import input_preflight,capture
     contract=json.loads(args.task_contract.read_text());lock=load_lock(ROOT,contract)
     index=json.loads((ROOT/'configs/extensions/replicator/final_154_scenes_20261028.json').read_text())
-    preflight=input_preflight(contract,index,args.scene,lock)
+    if args.baseline and args.admit_added_obstacle:raise ValueError('Baseline cannot admit an added obstacle')
+    preflight=input_preflight(contract,index,args.scene,lock,allow_added_obstacle=args.admit_added_obstacle)
     if args.dry_run or not preflight['ready']:
         print(json.dumps(preflight,ensure_ascii=False,indent=2),flush=True)
         return 0 if preflight['ready'] else 2

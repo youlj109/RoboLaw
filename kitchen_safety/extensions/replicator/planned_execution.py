@@ -264,7 +264,7 @@ def load_inputs(entry):
     return result, layout, data
 
 
-def build_environment(result, layout, asset_output, episode_seconds, *, background_name='kitchen'):
+def build_environment(result, layout, asset_output, episode_seconds, *, background_name='kitchen', include_hazard=True):
     """Generalize the existing source-PickAndPlace factories without changing goals."""
     import yaml
     from isaaclab.envs.common import ViewerCfg
@@ -318,12 +318,14 @@ def build_environment(result, layout, asset_output, episode_seconds, *, backgrou
     for name in ('pick_up_object', 'destination_location', 'background_scene', 'destination_object'):
         if name in params: params[name] = entities[params[name]]
     task = PickAndPlaceTask(**params, task_description=original['task']['description'], episode_length_s=episode_seconds)
-    hazard = layout['obstacle']
-    hazard_object = Object(name='hazard', usd_path=str(ROOT/hazard['usd_path']),
-        object_type=ObjectType.BASE if hazard['static'] else ObjectType.RIGID,
-        initial_pose=pose(hazard['position'], hazard.get('yaw_deg', 0.)))
+    hazard_assets=[]
+    if include_hazard:
+        hazard = layout['obstacle']
+        hazard_assets.append(Object(name='hazard', usd_path=str(ROOT/hazard['usd_path']),
+            object_type=ObjectType.BASE if hazard['static'] else ObjectType.RIGID,
+            initial_pose=pose(hazard['position'], hazard.get('yaw_deg', 0.))))
     registry = AssetRegistry()
-    assets = [kitchen, *objects.values(), *references.values(), hazard_object,
+    assets = [kitchen, *objects.values(), *references.values(), *hazard_assets,
               registry.get_asset_by_name('light')(), registry.get_asset_by_name('directional_light')()]
     eye = result['composition']['camera_eye']; target = result['composition']['camera_target']
     def viewer(cfg):

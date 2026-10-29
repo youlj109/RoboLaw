@@ -24,7 +24,7 @@ def select_entry(index, scene_id):
         source_scene_path=row['source_scene']['path'], source_scene_sha256=row['source_scene']['sha256'])
 
 
-def input_preflight(contract, index, scene_id, lock):
+def input_preflight(contract, index, scene_id, lock, *, allow_added_obstacle=False):
     entry = select_entry(index, scene_id)
     if entry['task_id'] != 'kitchen_bench_'+contract['task_id']:
         raise ValueError('ylj scene belongs to another native task')
@@ -38,12 +38,17 @@ def input_preflight(contract, index, scene_id, lock):
     source_gate_error=None
     if not missing and not changed:
         from kitchen_safety.extensions.replicator.planned_execution import load_inputs
-        try:load_inputs(entry)  # Also validate original NPZ arrays and direct external asset SHA.
+        try:
+            _,layout,_=load_inputs(entry)  # Original frozen inputs remain authoritative.
+            if allow_added_obstacle:
+                from kitchen_safety.variant_risk_admission import declaration
+                declaration(ROOT,contract,entry,layout)
         except Exception as exc:source_gate_error=repr(exc)
     return dict(version=VERSION, entry=entry, missing_inputs=missing, changed_inputs=changed,
         original_source_gate_error=source_gate_error,
         unreviewed_human_would_expand_scope=new_human,
-        ready=not missing and not changed and not new_human and source_gate_error is None,
+        added_obstacle_admission_authorized=bool(allow_added_obstacle),
+        ready=not missing and not changed and (not new_human or allow_added_obstacle) and source_gate_error is None,
         approved_PT_assets=len(lock['pt_targets']), online_risk_queries=0,
         simulation_started=False, replanned=False)
 
@@ -84,11 +89,16 @@ def capture(args, contract, entry, lock):
     from kitchen_safety.articulation_capture import array
     output = args.output; output.mkdir(parents=True, exist_ok=False)
     plan, layout, data = load_inputs(entry)  # Original SHA gates, no fallback/replan.
+    admission=None
+    if getattr(args,'admit_added_obstacle',False):
+        from kitchen_safety.variant_risk_admission import declaration
+        admission=declaration(ROOT,contract,entry,layout)
     if abs(float(data['dt'])-1/30) > 1e-9: raise ValueError('Frozen command clock differs')
     threads = configure_physics_threads(args.physics_threads)
     torch.set_num_threads(4)
     definition = build_environment(plan, layout, output/'physical_overlays', args.episode_seconds,
-                                   background_name=contract['environment_id'])
+                                   background_name=contract['environment_id'],
+                                   include_hazard=not getattr(args,'baseline',False))
     original_callback=definition.env_cfg_callback
     def causal_clock(cfg):
         cfg=original_callback(cfg)
@@ -102,7 +112,11 @@ def capture(args, contract, entry, lock):
                               for aid, row in contract['asset_declarations'].items()},
         source='ylj frozen layout without relation solving',
         background_physics=deepcopy(definition.background_physics_provenance))
-    metadata['asset_path_templates']['hazard'] = assets['hazard'].get_prim_path()
+    if not getattr(args,'baseline',False):
+        metadata['asset_path_templates']['hazard'] = assets['hazard'].get_prim_path()
+    metadata['hazard_spec']=None if getattr(args,'baseline',False) else deepcopy(layout['obstacle'])
+    metadata['execution_variant']='baseline' if getattr(args,'baseline',False) else entry['variant_id']
+    metadata['source_scene_id']=entry['scene_id']
     builder = ArenaEnvBuilder(definition, ArenaEnvBuilderCfg(num_envs=1, seed=args.seed,
         device=args.device, presets='physx', solve_relations=False, resolve_on_reset=False, disable_fabric=True))
     env = builder.make_registered(); e = env.unwrapped
@@ -114,6 +128,8 @@ def capture(args, contract, entry, lock):
     e._reset_idx = keep_episode
     recorder = None; error = None; sequence_complete = False
     receipt = dict(version=VERSION, task_id=contract['task_id'], scene_id=entry['scene_id'],
+        execution_variant=metadata['execution_variant'],added_obstacle_spawned=not getattr(args,'baseline',False),
+        baseline_derivation='Reuse frozen optimized commands and layout; omit the explicitly added hazard only' if getattr(args,'baseline',False) else None,
         ylj_source_commit='e8c8fedfba335e3a1c7bcc979f380eb63138689f',task_sha256=digest(contract),
         entry=entry, reviewed_lock_sha256=digest(lock), background_physics=metadata['background_physics'],
         threads=threads, risk_evaluation_status='pending_offline', IR='disabled',
@@ -122,8 +138,12 @@ def capture(args, contract, entry, lock):
         scene_namespace_change_only={'kitchen':contract['environment_id']})
     try:
         # Humans require an already reviewed HS scope. Never assert absence for an added person.
-        obstacle = dict(asset_id='hazard', category='HS' if entry['variant_id']=='human_default_mpfb' else 'PT')
-        setup = prepare(env, contract, metadata, output, obstacle=obstacle, reviewed_lock=lock)
+        obstacle = None if getattr(args,'baseline',False) else dict(asset_id='hazard', category='HS' if entry['variant_id']=='human_default_mpfb' else 'PT')
+        if admission:
+            from kitchen_safety.variant_risk_admission import obstacle_binding,POLICY
+            obstacle=obstacle_binding(admission,json.loads((ROOT/POLICY).read_text()))
+        setup = prepare(env, contract, metadata, output, obstacle=obstacle, reviewed_lock=lock,variant_admission=admission)
+        receipt['added_obstacle_risk_admission']=setup['bindings'].get('variant_risk_admission')
         if not setup['inventory']['complete'] or not setup['measured']['complete'] or setup['scope']['unresolved']:
             raise ValueError('Incomplete ylj scene evidence or unresolved task bindings')
         robot = e.scene['robot']; arm = [robot.joint_names.index('panda_joint'+str(i)) for i in range(1,8)]

@@ -27,6 +27,9 @@ def resolve_target_scope(contract, inventory, bindings, targets):
             or policy.get('active_phases') != ['all'] or not policy.get('authorization')):
         raise ValueError('PT target subset requires exact task identity and full authorized scope')
     env_root = inventory['env_root'].rstrip('/')
+    if bindings.get('variant_risk_admission'):
+        from kitchen_safety.variant_risk_admission import add_targets
+        policy=add_targets(policy,bindings,targets,env_root)
     declarations = policy.get('included_targets')
     if not isinstance(declarations, list) or not declarations:
         raise ValueError('PT target subset requires explicit retained targets')
