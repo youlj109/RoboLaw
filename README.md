@@ -10,7 +10,7 @@
 
 **[查看最新 154 景结果与失败诊断](docs/extensions/replicator/PHYSICAL_RETRY_ROUND13_20261029.md)** · [最新结果 JSON](configs/extensions/replicator/physical_retry_results_round13_20261029.json) · [保留的首轮结果](docs/extensions/replicator/PHYSICAL_EXECUTION_154_20261028.md) · [发布说明与输入恢复](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md)
 
-Git 保存逐景状态与证据 SHA；规划输入、原始物理状态、接触记录及媒体通过独立分包分发，不随代码提交。新增[重跑文件与历史证据恢复指南](docs/extensions/replicator/REPRODUCTION_BUNDLE_20261029.md)：默认重跑6包（约2.00GB）已上传并可公开下载，完整默认下载SHA校验进行中；其余历史材料仍在上传；当前可用的旧资产与旧规划输入下载链接保持。文档中的本机视频路径不是 GitHub 在线视频链接。实际任务成功不等于安全避障验收。
+Git 保存逐景状态与证据 SHA；规划输入、原始物理状态、接触记录及媒体通过独立分包分发，不随代码提交。新增[重跑文件与历史证据恢复指南](docs/extensions/replicator/REPRODUCTION_BUNDLE_20261029.md)：默认重跑6包（约2.00GB）已公开发布，包含清单和元数据的17个对象均通过匿名完整GET及SHA校验；其余历史材料仍在上传。当前可用的旧资产与旧规划输入下载链接保持。文档中的本机视频路径不是 GitHub 在线视频链接。实际任务成功不等于安全避障验收。
 
 ## 原始 Lightwheel 11 个场景
 
