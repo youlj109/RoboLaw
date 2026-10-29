@@ -19,7 +19,7 @@ from .scene_build_runtime import ROOT, atomic_json, relative, sha, stamp
 
 
 class GraspRetryPlanner(QuickPlanner):
-    def constrained_plan(self, q, target, phase, masks, hold_orientation, timeout=8., linear_vertical=False, planning_options=None):
+    def constrained_plan(self, q, target, phase, masks, hold_orientation, timeout=8., linear_vertical=False, planning_options=None, joint_space_goal_q=None):
         from curobo.types.math import Pose
         from curobo.types.robot import JointState
         from curobo.wrap.reacher.motion_gen import MotionGenPlanConfig
@@ -42,10 +42,18 @@ class GraspRetryPlanner(QuickPlanner):
             metric = PoseCostMetric(hold_partial_pose=True, project_to_goal_frame=False,
                 hold_vec_weight=self.args.to_device([weight,weight,weight,weight,weight,0.]))
         begin=time.monotonic()
-        output=self.motion_gen.plan_single(start, goal, MotionGenPlanConfig(
+        config=MotionGenPlanConfig(
             max_attempts=1,timeout=timeout,enable_graph=graph,enable_graph_attempt=1 if graph else None,
             enable_finetune_trajopt=True,finetune_attempts=1,ik_fail_return=1,
-            pose_cost_metric=metric))
+            pose_cost_metric=metric)
+        if joint_space_goal_q is None:
+            output=self.motion_gen.plan_single(start, goal, config)
+        else:
+            if hold_orientation or linear_vertical or 'constraint_weight' in options or graph:
+                raise ValueError('Joint-space branch must not imply Cartesian soft constraints or graph fallback')
+            goal_state=JointState.from_position(self.args.to_device(np.asarray(joint_space_goal_q)[None]),
+                joint_names=[f'panda_joint{i}' for i in range(1,8)])
+            output=self.motion_gen.plan_single_js(start, goal_state, config)
         self.torch.cuda.synchronize()
         ok=bool(output.success.all())
         detail=dict(phase=phase,status='generated' if ok else 'failed',solver_success=ok,
@@ -58,6 +66,9 @@ class GraspRetryPlanner(QuickPlanner):
             detail.update(planning_options=options,planner_seed_reset='all_including_finetune',
                 graph_enabled=graph,graph_fallback_enabled=graph,
                 pose_metric_hold_weights=None if metric is None else metric.hold_vec_weight.detach().cpu().tolist())
+        if joint_space_goal_q is not None:
+            detail.update(planner_api='MotionGen.plan_single_js',joint_space_goal_q=np.asarray(joint_space_goal_q).tolist(),
+                joint_space_seed_scope='Frozen continuous-IK goal branch; cuRobo supplies its joint-space seed. No CPU path is executed.')
         if not ok: return None,detail
         path=output.get_interpolated_plan().position.detach().cpu().numpy()
         if path.ndim!=2 or path.shape[1]!=7 or not np.isfinite(path).all() or np.max(np.abs(path[0]-q))>1e-4:
@@ -132,6 +143,17 @@ def validate_recipe(recipe, old, layout):
     options=recipe.get('planning_options_by_phase',{})
     if not isinstance(options,dict) or not set(options)<=set(PHASES):raise ValueError('Unknown planning option phase')
     for option in options.values():checked_planning_options(option)
+    joint_targets=recipe.get('joint_space_target_q_by_phase',{})
+    if not isinstance(joint_targets,dict) or not set(joint_targets)<=set(PHASES):
+        raise ValueError('Unknown joint-space phase')
+    for phase,values in joint_targets.items():
+        array=np.asarray(values,dtype=float)
+        if array.shape!=(len(waypoints.get(phase,[]))+1,7) or not np.isfinite(array).all():
+            raise ValueError('Joint targets must match every frozen endpoint')
+        if (phase in recipe.get('hold_orientation_phases',['lift','transfer','lower'])
+                or phase in recipe.get('linear_motion_phases',[])
+                or options.get(phase)!={'enable_graph':False}):
+            raise ValueError('Joint-space phase requires explicit no-graph options and no Cartesian soft cost')
     return targets,attachment,grip
 
 
@@ -159,7 +181,21 @@ def plan_phase(planner,kin,q,target,phase,masks,recipe,folder,timeout):
             raise ValueError('Vertical motion cost requires aligned orientation and XY start')
         options=recipe.get('planning_options_by_phase',{}).get(phase)
         extra={} if not options else dict(planning_options=options)
+        joint_targets=recipe.get('joint_space_target_q_by_phase',{}).get(phase)
+        goal_check={}
+        if joint_targets is not None:
+            goal_q=np.asarray(joint_targets[index],dtype=float)
+            if goal_q.shape!=(7,) or not np.isfinite(goal_q).all() or np.any(goal_q<kin.limits[:,0]) or np.any(goal_q>kin.limits[:,1]):
+                raise ValueError('Frozen joint goal outside source joint limits')
+            goal_fk=kin.fk(goal_q)
+            position_error=float(np.linalg.norm(goal_fk[:3,3]-endpoint[:3,3]))
+            rotation_error=float(Rotation.from_matrix(goal_fk[:3,:3]@endpoint[:3,:3].T).magnitude())
+            if position_error>.001 or rotation_error>.01:
+                raise ValueError('Frozen joint goal does not reach the declared TCP endpoint')
+            extra['joint_space_goal_q']=goal_q
+            goal_check=dict(target_goal_fk_position_error_m=position_error,target_goal_fk_rotation_error_rad=rotation_error)
         path,detail=planner.constrained_plan(q,endpoint,phase,masks,hold,timeout,linear_vertical=vertical,**extra)
+        detail.update(goal_check)
         if path is not None:
             poses=fk_batch(kin,path)
             if vertical:

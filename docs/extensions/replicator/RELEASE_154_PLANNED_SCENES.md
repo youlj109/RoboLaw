@@ -2,7 +2,9 @@
 
 历史规划冻结结果：截至 2026-10-28，14 个 Replicator 原始任务 × 11 种安全增广变体，共 **154 景已生成完整 cuRobo 轨迹，0 景规划失败**。每条完整轨迹包含预抓取、接近、抬升、转运、下放和撤离六阶段。
 
-**GitHub 最新逐景结果：[154 景结果与失败诊断](PHYSICAL_RETRY_ROUND5_20261029.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round5_20261029.json)**。首轮 [70/84 结果表](PHYSICAL_EXECUTION_154_20261028.md) 与 [首轮 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json) 保留。视频在独立 ZIP 中提供，未上传为 GitHub 在线视频。
+**GitHub 最新逐景结果：[154 景结果与失败诊断](PHYSICAL_RETRY_ROUND6_20261029.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round6_20261029.json)**。首轮 [70/84 结果表](PHYSICAL_EXECUTION_154_20261028.md) 与 [首轮 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json) 保留。视频在独立 ZIP 中提供，未上传为 GitHub 在线视频。
+
+第六轮候选处理已完成：剩余 3 景各冻结一个候选，使用公开 `MotionGen.plan_single_js` 固定 CPU 连续 IK 选定的关节目标分支。三景均到达局部目标，但中间路径超出原 5mm 分段偏差上限（香蕉101.948mm、人体碗7.669mm、芥末瓶174.518mm），**本轮0景新成功、3景规划拒绝、0次物理执行；累计仍为151/154成功、剩余3景**。人体场景的旧90mm实测补偿引用已移除，新名义放置目标回到60mm范围；该新目标尚未实际执行。CPU检查的关节直线只是准备阶段参考，并未作为完整路径注入cuRobo，不能当作实际生成结果。所有失败段、历史实际失败和后续修改提示保留；不新增物理失败渲染或视频，不改布局、碰撞掩码及原任务成功判据。
 
 第五轮物理重试已完成：5 个剩余场景各冻结一个候选，**2 景规划通过且实际物理成功、0 物理失败、3 景规划失败，累计 151/154 成功、剩余 3 景**。新增成功为 L 型碗放水槽的 `property_wine_glass` 与 `robot_narrow_opening`；调整落点和放置姿态后，两者原支撑、范围、低速判据均通过。本轮没有实际失败，不新增失败渲染或视频；三景规划失败保留上一轮实际失败与诊断图，详见最新逐景报告。人体景新抓姿沿用的旧补偿测量不能证明新抓姿的实际落碗支撑；该候选在抬升阶段已被拒绝、零物理执行，下一轮须重建有效补偿依据或恢复默认调整范围。下方历史输入包/视频包不包含第五轮新增轨迹和原生状态。
 
@@ -42,7 +44,7 @@
 
 ## 完整索引
 
-使用 [final_154_scenes_20261028.json](../../../configs/extensions/replicator/final_154_scenes_20261028.json) 获取全部 154 景的冻结规划输入。它保留规划完成时的历史状态，`physical_execution_verified: false` 及“物理执行准备中”不代表当前结果；最新物理状态见独立的 [执行结果索引](../../../configs/extensions/replicator/physical_retry_results_round5_20261029.json)。不要将 `trajectory_retry_v10.json` 当作完整清单：它只包含第十轮最后两景的重试方案。
+使用 [final_154_scenes_20261028.json](../../../configs/extensions/replicator/final_154_scenes_20261028.json) 获取全部 154 景的冻结规划输入。它保留规划完成时的历史状态，`physical_execution_verified: false` 及“物理执行准备中”不代表当前结果；最新物理状态见独立的 [执行结果索引](../../../configs/extensions/replicator/physical_retry_results_round6_20261029.json)。不要将 `trajectory_retry_v10.json` 当作完整清单：它只包含第十轮最后两景的重试方案。
 
 索引逐景保存：
 
