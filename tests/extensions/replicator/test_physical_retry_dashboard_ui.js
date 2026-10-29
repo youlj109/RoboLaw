@@ -184,9 +184,8 @@ test('round 7 availability preserves all six manual historical selections', () =
   }
 });
 
-test('round 8 is the actual UI default and survives initial loading and available data', () => {
-  const initial = Number(html.match(/const physicalState=\{[^\n]*?retryRound:(\d+)/)[1]);
-  assert.equal(initial, 8);
+test('round 8 selection survives initial loading and available data', () => {
+  const initial = 8;
   assert.match(html, /<option value="8">第八轮 · 场景修订 r8（2 景）<\/option>/);
   for (const presence of [{planning_present:true},{manifest_present:true}]) {
     const {context,render}=harness(null,initial);render();
@@ -212,5 +211,128 @@ test('round 8 availability preserves all seven manual historical selections', ()
     const {context,render}=harness({physical_execution:available},selected);render();render();
     assert.equal(context.physicalState.retryRound,selected);
     assert.equal(context.byId('physicalRetryRound').value,String(selected));
+  }
+});
+
+test('round 9 selection survives initial loading and available data', () => {
+  const initial = 9;
+  assert.match(html, /<option value="9">第九轮 · 沿用 r8 布局（2 景）<\/option>/);
+  for (const presence of [{planning_present:true},{manifest_present:true}]) {
+    const {context,render}=harness(null,initial);render();
+    assert.equal(context.byId('physicalRetryRound').value,'9');
+    context.state.data={physical_execution:{failure_retry_round9:presence}};render();
+    assert.equal(context.physicalState.retryRound,9);
+    assert.equal(context.byId('physicalRetryRound').value,'9');
+  }
+});
+
+test('round 9 falls back only after a response and chooses the newest available history', () => {
+  for (const expected of [8,7,6,5,4,3,2,1]) {
+    const available=expected>1?{['failure_retry_round'+expected]:{manifest_present:true}}:{};
+    const {context,render}=harness({physical_execution:available},9);render();
+    assert.equal(context.physicalState.retryRound,expected);
+    assert.equal(context.byId('physicalRetryRound').value,String(expected));
+  }
+});
+
+test('round 9 availability preserves all eight manual historical selections', () => {
+  const available=Object.fromEntries([2,3,4,5,6,7,8,9].map(round=>['failure_retry_round'+round,{manifest_present:true}]));
+  for (const selected of [1,2,3,4,5,6,7,8]) {
+    const {context,render}=harness({physical_execution:available},selected);render();render();
+    assert.equal(context.physicalState.retryRound,selected);
+    assert.equal(context.byId('physicalRetryRound').value,String(selected));
+  }
+});
+
+test('round 10 selection survives initial loading and available data', () => {
+  const initial = 10;
+  assert.match(html, /<option value="10">第十轮 · 固定关节目标（2 景）<\/option>/);
+  for (const presence of [{planning_present:true},{manifest_present:true}]) {
+    const {context,render}=harness(null,initial);render();
+    assert.equal(context.byId('physicalRetryRound').value,'10');
+    context.state.data={physical_execution:{failure_retry_round10:presence}};render();
+    assert.equal(context.physicalState.retryRound,10);
+    assert.equal(context.byId('physicalRetryRound').value,'10');
+  }
+});
+
+
+test('round 10 falls back through all available history and preserves manual selections', () => {
+  for (const expected of [9,8,7,6,5,4,3,2,1]) {
+    const available=expected>1?{['failure_retry_round'+expected]:{manifest_present:true}}:{};
+    const {context,render}=harness({physical_execution:available},10);render();
+    assert.equal(context.physicalState.retryRound,expected);
+  }
+  const available=Object.fromEntries([2,3,4,5,6,7,8,9,10].map(round=>['failure_retry_round'+round,{manifest_present:true}]));
+  for (const selected of [1,2,3,4,5,6,7,8,9]) {
+    const {context,render}=harness({physical_execution:available},selected);render();render();
+    assert.equal(context.physicalState.retryRound,selected);
+  }
+});
+
+test('round 11 survives initial loading and available data', () => {
+  const initial = 11;
+  assert.match(html, /<option value="11">第十一轮 · 求解策略修复（2 景）<\/option>/);
+  for (const presence of [{planning_present:true},{manifest_present:true}]) {
+    const {context,render}=harness(null,initial);render();
+    assert.equal(context.byId('physicalRetryRound').value,'11');
+    context.state.data={physical_execution:{failure_retry_round11:presence}};render();
+    assert.equal(context.physicalState.retryRound,11);
+    assert.equal(context.byId('physicalRetryRound').value,'11');
+  }
+});
+
+
+
+test('round 11 falls back through all history and preserves manual choices', () => {
+  for (const expected of [10,9,8,7,6,5,4,3,2,1]) {
+    const available=expected>1?{['failure_retry_round'+expected]:{manifest_present:true}}:{};
+    const {context,render}=harness({physical_execution:available},11);render();assert.equal(context.physicalState.retryRound,expected);
+  }
+  const available=Object.fromEntries([2,3,4,5,6,7,8,9,10,11].map(round=>['failure_retry_round'+round,{manifest_present:true}]));
+  for (const selected of [1,2,3,4,5,6,7,8,9,10]) {
+    const {context,render}=harness({physical_execution:available},selected);render();assert.equal(context.physicalState.retryRound,selected);
+  }
+});
+
+
+test('round 12 retains the successful round 11 history', () => {
+  const initial = 12;
+  assert.match(html, /<option value="12">第十二轮 · 携带路径修复（1 景）<\/option>/);
+  for (const presence of [{planning_present:true},{manifest_present:true}]) {
+    const {context,render}=harness(null,initial);render();assert.equal(context.physicalState.retryRound,12);
+    context.state.data={physical_execution:{failure_retry_round12:presence}};render();assert.equal(context.physicalState.retryRound,12);
+  }
+  for (const expected of [11,10,9,8,7,6,5,4,3,2,1]) {
+    const available=expected>1?{['failure_retry_round'+expected]:{manifest_present:true}}:{};
+    const {context,render}=harness({physical_execution:available},12);render();assert.equal(context.physicalState.retryRound,expected);
+  }
+});
+
+test('round 12 availability does not change manually selected history', () => {
+  const available=Object.fromEntries([2,3,4,5,6,7,8,9,10,11,12].map(round=>['failure_retry_round'+round,{manifest_present:true}]));
+  for (const selected of [1,2,3,4,5,6,7,8,9,10,11]) {
+    const {context,render}=harness({physical_execution:available},selected);render();assert.equal(context.physicalState.retryRound,selected);
+  }
+});
+
+
+test('round 13 is the actual UI default, supports one remaining scene and all history', () => {
+  const initial=Number(html.match(/const physicalState=\{[^\n]*?retryRound:(\d+)/)[1]);assert.equal(initial,13);
+  assert.match(html, /<option value="13">第十三轮 · 提前释放（1 景）<\/option>/);
+  for (const presence of [{planning_present:true},{manifest_present:true}]) {
+    const {context,render}=harness(null,initial);render();assert.equal(context.physicalState.retryRound,13);
+    context.state.data={physical_execution:{failure_retry_round13:presence}};render();assert.equal(context.physicalState.retryRound,13);
+  }
+  for (const expected of [12,11,10,9,8,7,6,5,4,3,2,1]) {
+    const available=expected>1?{['failure_retry_round'+expected]:{manifest_present:true}}:{};
+    const {context,render}=harness({physical_execution:available},13);render();assert.equal(context.physicalState.retryRound,expected);
+  }
+});
+
+test('round 13 availability preserves earlier selected outcomes and annotations', () => {
+  const available=Object.fromEntries([2,3,4,5,6,7,8,9,10,11,12,13].map(round=>['failure_retry_round'+round,{manifest_present:true}]));
+  for (const selected of [1,2,3,4,5,6,7,8,9,10,11,12]) {
+    const {context,render}=harness({physical_execution:available},selected);render();assert.equal(context.physicalState.retryRound,selected);
   }
 });

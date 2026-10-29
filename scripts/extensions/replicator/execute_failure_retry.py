@@ -131,6 +131,9 @@ def main(argv=None):
     if plan.get('retry_round') in (7, 8):
         candidate.update(layout_changed=True, success_predicate_changed=False,
             scope='Separately versioned added-hazard poses; one frozen candidate and at most one actual no-render episode each. Original task assets/predicate and all prior-layout histories retained.')
+    if plan.get('retry_round') in (9,10,11,12,13):
+        candidate.update(layout_changed=False,layout_changed_from_original=True,success_predicate_changed=False,
+            scope='Exact round 8 scene retained; one trajectory repair and at most one no-render native episode per complete candidate. Original task/predicate and all historical trials retained.')
     mp=args.output/'manifest.json'
     existing=json.loads(mp.read_text()) if mp.exists() else None
     if existing:

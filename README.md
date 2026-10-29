@@ -6,9 +6,9 @@
 
 ## Replicator 154 景：逐景成功与失败
 
-截至 2026-10-29，**当前采用版本实际成功 152/154，剩余 2 景；原布局记录保持 151/154**。第八轮继续调整剩余人体／设备外壳场景，原机器人、任务物品、碰撞资产、控制器及成功判据不变。U 型芥末瓶／外壳完成全部规划，但一次无画面物理测试失败：闭合时双指有接触，起提初段先横移，瓶子倾斜后失持；已保存实测状态诊断图和接触分析。U 型放碗／人体通过上轮失败的搬运阶段，在 `lower` 返回 `IK_FAIL`，未进入物理执行。本轮无新增成功，第七轮香蕉新布局成功及此前历史全部保留。下一步分别检查夹持后的初始竖直抬升、下放时腕臂与人体的相对姿态；有限次失败不证明场景无解。任务成功不等于安全避障或长期稳定验收。
+截至 2026-10-29，**当前采用版本实际成功 154/154，剩余 0 景；原布局记录保持 151/154**。本次续修完成两景：第十一轮 U 型芥末瓶／设备外壳成功，第十三轮 U 型放碗／人体成功。第十三轮沿用第八轮布局，把下放终点提升25mm至上一轮已成功的中间点；唯一一次无画面物理执行通过原任务及最终范围、支撑、低速判据，22,029个原生物理状态经独立复核。第十二轮规划失败与第十一轮启动前退出139／同候选恢复记录完整保留，未把未开始的episode计作物理尝试，也未确认单一崩溃根因。本轮没有实际失败，未新增失败图或执行视频。154/154表示当前采用版本的任务执行结果，不代表安全避障或长期稳定认证。
 
-**[查看最新 154 景结果与失败诊断](docs/extensions/replicator/PHYSICAL_RETRY_ROUND8_20261029.md)** · [最新结果 JSON](configs/extensions/replicator/physical_retry_results_round8_20261029.json) · [保留的首轮结果](docs/extensions/replicator/PHYSICAL_EXECUTION_154_20261028.md) · [发布说明与输入恢复](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md)
+**[查看最新 154 景结果与失败诊断](docs/extensions/replicator/PHYSICAL_RETRY_ROUND13_20261029.md)** · [最新结果 JSON](configs/extensions/replicator/physical_retry_results_round13_20261029.json) · [保留的首轮结果](docs/extensions/replicator/PHYSICAL_EXECUTION_154_20261028.md) · [发布说明与输入恢复](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md)
 
 Git 保存逐景状态与证据 SHA；规划输入和视频另行打包，原始物理状态与接触记录保留本机，不随代码提交。文档中的本机视频路径不是 GitHub 在线视频链接。实际任务成功不等于安全避障验收。
 

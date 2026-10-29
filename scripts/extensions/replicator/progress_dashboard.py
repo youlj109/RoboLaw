@@ -29,6 +29,11 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 from scripts.extensions.replicator.scene_revision_review import validate_scene_revision
 from scripts.extensions.replicator.scene_revision_review_round8 import validate_scene_revision as validate_scene_revision8
+from scripts.extensions.replicator.retained_scene_revision_review import validate_retained_scene_revision
+from scripts.extensions.replicator.retained_scene_revision_review_round10 import validate_retained_scene_revision as validate_retained_scene_revision10
+from scripts.extensions.replicator.retained_scene_revision_review_round11 import validate_retained_scene_revision as validate_retained_scene_revision11
+from scripts.extensions.replicator.retained_scene_revision_review_round12 import validate_retained_scene_revision as validate_retained_scene_revision12
+from scripts.extensions.replicator.retained_scene_revision_review_round13 import validate_retained_scene_revision as validate_retained_scene_revision13
 PREFIX = "kitchen_bench_replicator_"
 LAYOUTS = {"g_shape": "G 型", "l_island": "L 型带中岛", "l_shape": "L 型", "peninsula": "半岛式", "u_shape": "U 型"}
 OPERATIONS = {"mustard_bowl": "芥末瓶放入碗", "banana_bowl": "香蕉放入碗", "bowl_sink": "碗放入水槽"}
@@ -162,6 +167,65 @@ PHYSICAL_RETRY8_TOP_DIAGNOSTICS = 'reports/replicator_physical_retry_round8_diag
 PHYSICAL_RETRY8_TOTAL = 2
 PHYSICAL_RETRY8_RESULTS = 'configs/extensions/replicator/physical_retry_results_round8_20261029.json'
 PHYSICAL_RETRY8_REPORT = 'docs/extensions/replicator/PHYSICAL_RETRY_ROUND8_20261029.md'
+PHYSICAL_RETRY9_DEMOS = 'exports/replicator_physical_retry_round9_20261029/'
+PHYSICAL_RETRY9_PLAN = 'configs/extensions/replicator/physical_retry_round9_20261029.json'
+PHYSICAL_RETRY9_PLANNING = 'reports/replicator_physical_retry_round9_planning_20261029/'
+PHYSICAL_RETRY9_DIAGNOSTICS = 'reports/replicator_physical_retry_round9_diagnostics_20261029/'
+PHYSICAL_RETRY9_DETAIL_DIAGNOSTICS = 'reports/replicator_physical_retry_round9_diagnostics_detail_20261029/'
+PHYSICAL_RETRY9_DARK_DIAGNOSTICS = 'reports/replicator_physical_retry_round9_diagnostics_dark_20261029/'
+PHYSICAL_RETRY9_OVERVIEW_DIAGNOSTICS = 'reports/replicator_physical_retry_round9_diagnostics_overview_20261029/'
+PHYSICAL_RETRY9_TOP_DIAGNOSTICS = 'reports/replicator_physical_retry_round9_diagnostics_top_20261029/'
+PHYSICAL_RETRY9_TOTAL = 2
+PHYSICAL_RETRY9_RESULTS = 'configs/extensions/replicator/physical_retry_results_round9_20261029.json'
+PHYSICAL_RETRY9_REPORT = 'docs/extensions/replicator/PHYSICAL_RETRY_ROUND9_20261029.md'
+
+PHYSICAL_RETRY10_DEMOS = 'exports/replicator_physical_retry_round10_20261029/'
+PHYSICAL_RETRY10_PLAN = 'configs/extensions/replicator/physical_retry_round10_20261029.json'
+PHYSICAL_RETRY10_PLANNING = 'reports/replicator_physical_retry_round10_planning_20261029/'
+PHYSICAL_RETRY10_DIAGNOSTICS = 'reports/replicator_physical_retry_round10_diagnostics_20261029/'
+PHYSICAL_RETRY10_DETAIL_DIAGNOSTICS = 'reports/replicator_physical_retry_round10_diagnostics_detail_20261029/'
+PHYSICAL_RETRY10_DARK_DIAGNOSTICS = 'reports/replicator_physical_retry_round10_diagnostics_dark_20261029/'
+PHYSICAL_RETRY10_OVERVIEW_DIAGNOSTICS = 'reports/replicator_physical_retry_round10_diagnostics_overview_20261029/'
+PHYSICAL_RETRY10_TOP_DIAGNOSTICS = 'reports/replicator_physical_retry_round10_diagnostics_top_20261029/'
+PHYSICAL_RETRY10_TOTAL = 2
+PHYSICAL_RETRY10_RESULTS = 'configs/extensions/replicator/physical_retry_results_round10_20261029.json'
+PHYSICAL_RETRY10_REPORT = 'docs/extensions/replicator/PHYSICAL_RETRY_ROUND10_20261029.md'
+
+PHYSICAL_RETRY11_DEMOS = 'exports/replicator_physical_retry_round11_20261029/'
+PHYSICAL_RETRY11_PLAN = 'configs/extensions/replicator/physical_retry_round11_20261029.json'
+PHYSICAL_RETRY11_PLANNING = 'reports/replicator_physical_retry_round11_planning_20261029/'
+PHYSICAL_RETRY11_DIAGNOSTICS = 'reports/replicator_physical_retry_round11_diagnostics_20261029/'
+PHYSICAL_RETRY11_DETAIL_DIAGNOSTICS = 'reports/replicator_physical_retry_round11_diagnostics_detail_20261029/'
+PHYSICAL_RETRY11_DARK_DIAGNOSTICS = 'reports/replicator_physical_retry_round11_diagnostics_dark_20261029/'
+PHYSICAL_RETRY11_OVERVIEW_DIAGNOSTICS = 'reports/replicator_physical_retry_round11_diagnostics_overview_20261029/'
+PHYSICAL_RETRY11_TOP_DIAGNOSTICS = 'reports/replicator_physical_retry_round11_diagnostics_top_20261029/'
+PHYSICAL_RETRY11_TOTAL = 2
+PHYSICAL_RETRY11_RESULTS = 'configs/extensions/replicator/physical_retry_results_round11_20261029.json'
+PHYSICAL_RETRY11_REPORT = 'docs/extensions/replicator/PHYSICAL_RETRY_ROUND11_20261029.md'
+
+PHYSICAL_RETRY12_DEMOS = 'exports/replicator_physical_retry_round12_20261029/'
+PHYSICAL_RETRY12_PLAN = 'configs/extensions/replicator/physical_retry_round12_20261029.json'
+PHYSICAL_RETRY12_PLANNING = 'reports/replicator_physical_retry_round12_planning_20261029/'
+PHYSICAL_RETRY12_DIAGNOSTICS = 'reports/replicator_physical_retry_round12_diagnostics_20261029/'
+PHYSICAL_RETRY12_DETAIL_DIAGNOSTICS = 'reports/replicator_physical_retry_round12_diagnostics_detail_20261029/'
+PHYSICAL_RETRY12_DARK_DIAGNOSTICS = 'reports/replicator_physical_retry_round12_diagnostics_dark_20261029/'
+PHYSICAL_RETRY12_OVERVIEW_DIAGNOSTICS = 'reports/replicator_physical_retry_round12_diagnostics_overview_20261029/'
+PHYSICAL_RETRY12_TOP_DIAGNOSTICS = 'reports/replicator_physical_retry_round12_diagnostics_top_20261029/'
+PHYSICAL_RETRY12_TOTAL = 1
+PHYSICAL_RETRY12_RESULTS = 'configs/extensions/replicator/physical_retry_results_round12_20261029.json'
+PHYSICAL_RETRY12_REPORT = 'docs/extensions/replicator/PHYSICAL_RETRY_ROUND12_20261029.md'
+
+PHYSICAL_RETRY13_DEMOS = 'exports/replicator_physical_retry_round13_20261029/'
+PHYSICAL_RETRY13_PLAN = 'configs/extensions/replicator/physical_retry_round13_20261029.json'
+PHYSICAL_RETRY13_PLANNING = 'reports/replicator_physical_retry_round13_planning_20261029/'
+PHYSICAL_RETRY13_DIAGNOSTICS = 'reports/replicator_physical_retry_round13_diagnostics_20261029/'
+PHYSICAL_RETRY13_DETAIL_DIAGNOSTICS = 'reports/replicator_physical_retry_round13_diagnostics_detail_20261029/'
+PHYSICAL_RETRY13_DARK_DIAGNOSTICS = 'reports/replicator_physical_retry_round13_diagnostics_dark_20261029/'
+PHYSICAL_RETRY13_OVERVIEW_DIAGNOSTICS = 'reports/replicator_physical_retry_round13_diagnostics_overview_20261029/'
+PHYSICAL_RETRY13_TOP_DIAGNOSTICS = 'reports/replicator_physical_retry_round13_diagnostics_top_20261029/'
+PHYSICAL_RETRY13_TOTAL = 1
+PHYSICAL_RETRY13_RESULTS = 'configs/extensions/replicator/physical_retry_results_round13_20261029.json'
+PHYSICAL_RETRY13_REPORT = 'docs/extensions/replicator/PHYSICAL_RETRY_ROUND13_20261029.md'
 
 
 def retry_paths(retry_round=1):
@@ -203,12 +267,37 @@ def retry_paths(retry_round=1):
                     detail_diagnostics=PHYSICAL_RETRY8_DETAIL_DIAGNOSTICS,dark_diagnostics=PHYSICAL_RETRY8_DARK_DIAGNOSTICS,
                     overview_diagnostics=PHYSICAL_RETRY8_OVERVIEW_DIAGNOSTICS,top_diagnostics=PHYSICAL_RETRY8_TOP_DIAGNOSTICS,
                     total=PHYSICAL_RETRY8_TOTAL,results=PHYSICAL_RETRY8_RESULTS,report=PHYSICAL_RETRY8_REPORT)
+    if retry_round == 9:
+        return dict(demos=PHYSICAL_RETRY9_DEMOS,plan=PHYSICAL_RETRY9_PLAN,diagnostics=PHYSICAL_RETRY9_DIAGNOSTICS,
+                    detail_diagnostics=PHYSICAL_RETRY9_DETAIL_DIAGNOSTICS,dark_diagnostics=PHYSICAL_RETRY9_DARK_DIAGNOSTICS,
+                    overview_diagnostics=PHYSICAL_RETRY9_OVERVIEW_DIAGNOSTICS,top_diagnostics=PHYSICAL_RETRY9_TOP_DIAGNOSTICS,
+                    total=PHYSICAL_RETRY9_TOTAL,results=PHYSICAL_RETRY9_RESULTS,report=PHYSICAL_RETRY9_REPORT)
+    if retry_round == 10:
+        return dict(demos=PHYSICAL_RETRY10_DEMOS,plan=PHYSICAL_RETRY10_PLAN,diagnostics=PHYSICAL_RETRY10_DIAGNOSTICS,
+                    detail_diagnostics=PHYSICAL_RETRY10_DETAIL_DIAGNOSTICS,dark_diagnostics=PHYSICAL_RETRY10_DARK_DIAGNOSTICS,
+                    overview_diagnostics=PHYSICAL_RETRY10_OVERVIEW_DIAGNOSTICS,top_diagnostics=PHYSICAL_RETRY10_TOP_DIAGNOSTICS,
+                    total=PHYSICAL_RETRY10_TOTAL,results=PHYSICAL_RETRY10_RESULTS,report=PHYSICAL_RETRY10_REPORT)
+    if retry_round == 11:
+        return dict(demos=PHYSICAL_RETRY11_DEMOS,plan=PHYSICAL_RETRY11_PLAN,diagnostics=PHYSICAL_RETRY11_DIAGNOSTICS,
+                    detail_diagnostics=PHYSICAL_RETRY11_DETAIL_DIAGNOSTICS,dark_diagnostics=PHYSICAL_RETRY11_DARK_DIAGNOSTICS,
+                    overview_diagnostics=PHYSICAL_RETRY11_OVERVIEW_DIAGNOSTICS,top_diagnostics=PHYSICAL_RETRY11_TOP_DIAGNOSTICS,
+                    total=PHYSICAL_RETRY11_TOTAL,results=PHYSICAL_RETRY11_RESULTS,report=PHYSICAL_RETRY11_REPORT)
+    if retry_round == 12:
+        return dict(demos=PHYSICAL_RETRY12_DEMOS,plan=PHYSICAL_RETRY12_PLAN,diagnostics=PHYSICAL_RETRY12_DIAGNOSTICS,
+                    detail_diagnostics=PHYSICAL_RETRY12_DETAIL_DIAGNOSTICS,dark_diagnostics=PHYSICAL_RETRY12_DARK_DIAGNOSTICS,
+                    overview_diagnostics=PHYSICAL_RETRY12_OVERVIEW_DIAGNOSTICS,top_diagnostics=PHYSICAL_RETRY12_TOP_DIAGNOSTICS,
+                    total=PHYSICAL_RETRY12_TOTAL,results=PHYSICAL_RETRY12_RESULTS,report=PHYSICAL_RETRY12_REPORT)
+    if retry_round == 13:
+        return dict(demos=PHYSICAL_RETRY13_DEMOS,plan=PHYSICAL_RETRY13_PLAN,diagnostics=PHYSICAL_RETRY13_DIAGNOSTICS,
+                    detail_diagnostics=PHYSICAL_RETRY13_DETAIL_DIAGNOSTICS,dark_diagnostics=PHYSICAL_RETRY13_DARK_DIAGNOSTICS,
+                    overview_diagnostics=PHYSICAL_RETRY13_OVERVIEW_DIAGNOSTICS,top_diagnostics=PHYSICAL_RETRY13_TOP_DIAGNOSTICS,
+                    total=PHYSICAL_RETRY13_TOTAL,results=PHYSICAL_RETRY13_RESULTS,report=PHYSICAL_RETRY13_REPORT)
     raise ValueError('Unsupported physical retry round')
 
 
 def retry2_candidate_path(root, path, scene_id, retry_round=2):
     """Only the current planning tree and retained pre-solver startup recoveries."""
-    try:tail=path.relative_to(root/({2:PHYSICAL_RETRY2_PLANNING,3:PHYSICAL_RETRY3_PLANNING,4:PHYSICAL_RETRY4_PLANNING,5:PHYSICAL_RETRY5_PLANNING,6:PHYSICAL_RETRY6_PLANNING,7:PHYSICAL_RETRY7_PLANNING,8:PHYSICAL_RETRY8_PLANNING}[retry_round])).as_posix()
+    try:tail=path.relative_to(root/({2:PHYSICAL_RETRY2_PLANNING,3:PHYSICAL_RETRY3_PLANNING,4:PHYSICAL_RETRY4_PLANNING,5:PHYSICAL_RETRY5_PLANNING,6:PHYSICAL_RETRY6_PLANNING,7:PHYSICAL_RETRY7_PLANNING,8:PHYSICAL_RETRY8_PLANNING,9:PHYSICAL_RETRY9_PLANNING,10:PHYSICAL_RETRY10_PLANNING,11:PHYSICAL_RETRY11_PLANNING,12:PHYSICAL_RETRY12_PLANNING,13:PHYSICAL_RETRY13_PLANNING}[retry_round])).as_posix()
     except ValueError:return False
     return bool(re.fullmatch(r'(?:startup_recovery_[0-9]+/)?scenes/'+re.escape(scene_id)+r'/result\.json',tail))
 
@@ -942,25 +1031,35 @@ class Progress:
         retry6 = self.physical_retries(entries, indexed, retry_round=6, previous_retry=retry5)
         retry7 = self.physical_retries(entries, indexed, retry_round=7, previous_retry=retry6)
         retry8 = self.physical_retries(entries, indexed, retry_round=8, previous_retry=retry7)
+        retry9 = self.physical_retries(entries, indexed, retry_round=9, previous_retry=retry8)
+        retry10 = self.physical_retries(entries, indexed, retry_round=10, previous_retry=retry9)
+        retry11 = self.physical_retries(entries, indexed, retry_round=11, previous_retry=retry10)
+        retry12 = self.physical_retries(entries, indexed, retry_round=12, previous_retry=retry11)
+        retry13 = self.physical_retries(entries, indexed, retry_round=13, previous_retry=retry12)
         promotions=retry['counts']['success']+retry2['counts']['success']+retry3['counts']['success']+retry4['counts']['success']+retry5['counts']['success']+retry6['counts']['success']
         executed_errors=sum(r.get('result_valid') and r.get('executed') and r.get('execution_status')=='error'
                             for group in (retry,retry2,retry3,retry4,retry5,retry6) for r in group['entries'])
         latest=dict(total=counts['total'],success=counts['success']+promotions,
                     failed=counts['failed']-promotions-executed_errors,error=counts['error']+executed_errors)
-        revision_errors=sum(r.get('result_valid') and r.get('executed') and r.get('execution_status')=='error' for group in (retry7,retry8) for r in group['entries'])
-        current_revision=dict(total=latest['total'],success=latest['success']+retry7['counts']['success']+retry8['counts']['success'],
-            failed=latest['failed']-retry7['counts']['success']-retry8['counts']['success']-revision_errors,error=latest['error']+revision_errors,
+        revision_errors=sum(r.get('result_valid') and r.get('executed') and r.get('execution_status')=='error' for group in (retry7,retry8,retry9,retry10,retry11,retry12,retry13) for r in group['entries'])
+        current_revision=dict(total=latest['total'],success=latest['success']+retry7['counts']['success']+retry8['counts']['success']+retry9['counts']['success']+retry10['counts']['success']+retry11['counts']['success']+retry12['counts']['success']+retry13['counts']['success'],
+            failed=latest['failed']-retry7['counts']['success']-retry8['counts']['success']-retry9['counts']['success']-retry10['counts']['success']-retry11['counts']['success']-retry12['counts']['success']-retry13['counts']['success']-revision_errors,error=latest['error']+revision_errors,
             revised_scenes=retry7['total'],revision_success=retry7['counts']['success'],
-            revision_success_by_round={'7':retry7['counts']['success'],'8':retry8['counts']['success']})
+            revision_success_by_round={'7':retry7['counts']['success'],'8':retry8['counts']['success'],
+                **({'9':retry9['counts']['success']} if retry9.get('manifest_present') or retry9.get('planning_present') else {}),
+                **({'10':retry10['counts']['success']} if retry10.get('manifest_present') or retry10.get('planning_present') else {}),
+                **({'11':retry11['counts']['success']} if retry11.get('manifest_present') or retry11.get('planning_present') else {}),
+                **({'12':retry12['counts']['success']} if retry12.get('manifest_present') or retry12.get('planning_present') else {}),
+                **({'13':retry13['counts']['success']} if retry13.get('manifest_present') or retry13.get('planning_present') else {})})
         return dict(kind='physical_execution', manifest_present=bool(manifest), manifest_valid=manifest_valid,
                     manifest_path=PHYSICAL_DEMOS + 'manifest.json', counts=counts, entries=entries,
                     updated_at=manifest.get('updated_at'), stage=manifest.get('stage', manifest.get('status', 'waiting')),
-                    camera_retakes=retakes, failure_retry=retry, failure_retry_round2=retry2, failure_retry_round3=retry3, failure_retry_round4=retry4, failure_retry_round5=retry5, failure_retry_round6=retry6, failure_retry_round7=retry7, failure_retry_round8=retry8, combined_latest_counts=latest, current_revision_counts=current_revision,
+                    camera_retakes=retakes, failure_retry=retry, failure_retry_round2=retry2, failure_retry_round3=retry3, failure_retry_round4=retry4, failure_retry_round5=retry5, failure_retry_round6=retry6, failure_retry_round7=retry7, failure_retry_round8=retry8, failure_retry_round9=retry9, failure_retry_round10=retry10, failure_retry_round11=retry11, failure_retry_round12=retry12, failure_retry_round13=retry13, combined_latest_counts=latest, current_revision_counts=current_revision,
                     notice='首轮每景一次物理仿真，成功、失败和错误分别记录；相机补录独立展示，不改变首轮成绩。安全及过程避障未单独验收。')
 
     def physical_retry2_planning(self, previous_retry, retry_round=2):
         """Show preparation independently of execution; completed artifacts need SHA bindings."""
-        document=self.json(self.root/({2:PHYSICAL_RETRY2_PLANNING,3:PHYSICAL_RETRY3_PLANNING,4:PHYSICAL_RETRY4_PLANNING,5:PHYSICAL_RETRY5_PLANNING,6:PHYSICAL_RETRY6_PLANNING,7:PHYSICAL_RETRY7_PLANNING,8:PHYSICAL_RETRY8_PLANNING}[retry_round])/'progress.json')
+        document=self.json(self.root/({2:PHYSICAL_RETRY2_PLANNING,3:PHYSICAL_RETRY3_PLANNING,4:PHYSICAL_RETRY4_PLANNING,5:PHYSICAL_RETRY5_PLANNING,6:PHYSICAL_RETRY6_PLANNING,7:PHYSICAL_RETRY7_PLANNING,8:PHYSICAL_RETRY8_PLANNING,9:PHYSICAL_RETRY9_PLANNING,10:PHYSICAL_RETRY10_PLANNING,11:PHYSICAL_RETRY11_PLANNING,12:PHYSICAL_RETRY12_PLANNING,13:PHYSICAL_RETRY13_PLANNING}[retry_round])/'progress.json')
         data=dict(present=bool(document),entries=[],counts={s:0 for s in ('pending','running','generated','failed','stale')})
         if not document:return data
         try:
@@ -984,15 +1083,17 @@ class Progress:
             try:
                 if status not in ('pending','running','generated','failed'):raise ValueError('未知本轮规划状态。')
                 if retry_round>=7:
-                    revision_ref=raw.get('scene_revision') or raw.get('recipe',{}).get('scene_revision')
+                    revision_ref=raw.get('scene_revision') or raw.get('recipe',{}).get('scene_revision') or (source.get('scene_revision') if retry_round>=9 else None)
                     if revision_ref is None and status=='pending' and raw.get('attempts',0)==0 and not raw.get('candidate_planning_result'):
                         row.update(layout_revision_label=f'场景修订 r{retry_round} · 方案准备中',revision_preparation_pending=True)
                     else:
-                        revised=(validate_scene_revision8 if retry_round==8 else validate_scene_revision)(self.root,revision_ref,expected_scene_id=sid,digest=self.file_sha256)
+                        revised=((validate_retained_scene_revision13 if retry_round==13 else validate_retained_scene_revision12 if retry_round==12 else validate_retained_scene_revision11 if retry_round==11 else validate_retained_scene_revision10 if retry_round==10 else validate_retained_scene_revision)(self.root,revision_ref,document['source_previous_retry_manifest'],expected_scene_id=sid,digest=self.file_sha256) if retry_round>=9 else
+                            (validate_scene_revision8 if retry_round>=8 else validate_scene_revision)(self.root,revision_ref,expected_scene_id=sid,digest=self.file_sha256))
                         revision=revised['document']
                         source=dict(source,config_path=revision['new_config']['path'],config_sha256=revision['new_config']['sha256'])
                         row.update(config_sha256=source['config_sha256'],scene_revision=revision_ref,layout_changed=True,
-                            layout_revision_label=f'场景修订 r{retry_round}',original_config_sha256=revision['old_config']['sha256'])
+                            layout_revision_label='沿用 r8 布局' if retry_round>=9 else f'场景修订 r{retry_round}',original_config_sha256=revision['old_config']['sha256'])
+                if retry_round>=9:row.update(retained_scene_revision=True,scene_settings_changed_this_round=False,selected_layout_revision=8)
                 config=self.local(source['config_path'])
                 if self.file_sha256(config)!=source['config_sha256']:raise ValueError('本轮规划的冻结布局已变化。')
                 if status in ('generated','failed'):
@@ -1001,6 +1102,8 @@ class Progress:
                             or not valid_digest(ref.get('sha256')) or self.file_sha256(path)!=ref['sha256']):
                         raise ValueError('本轮规划结果来源 SHA 待核。')
                     result=self.json(path)
+                    if retry_round>=9 and (result.get('retained_scene_revision') is not True or result.get('scene_settings_changed_this_round') is not False):
+                        raise ValueError('本轮规划未确认沿用 r8 布局。')
                     if retry_round>=7 and (result.get('scene_revision')!=revision_ref or result.get('layout_changed') is not True):
                         raise ValueError('本轮规划结果未绑定修订布局。')
                     if (any(result.get(k)!=source[k] for k in ('scene_id','task_id','variant_id','config_path','config_sha256'))
@@ -1046,6 +1149,9 @@ class Progress:
         try:
             plan_path=bound(manifest['retry_plan_path'],manifest['retry_plan_sha256']);plan=self.json(plan_path)
             require(plan_path==self.root/paths['plan'] and plan.get('kind')=='physical_failure_retry_plan','重试计划类型或路径错误。')
+            if retry_round>=9:
+                require(plan.get('layout_changed') is False and plan.get('layout_changed_from_original') is True,
+                        '第九轮必须原样沿用 r8 布局，区分本轮未改与相对原布局已改。')
             require(manifest.get('kind')=='physical_failure_retry' and manifest.get('rendering_enabled') is False
                     and manifest.get('video_expected') is False,'本轮必须为无渲染物理测试。')
             for key,prefix in [('source_first_pass_manifest',PHYSICAL_DEMOS),('source_camera_retake_manifest',CAMERA_RETAKE_DEMOS)]:
@@ -1080,9 +1186,11 @@ class Progress:
                 require(all(raw.get(k)==v for k,v in planned[sid].items()),'重试条目与冻结计划不一致。')
                 require(raw.get('retry_plan_sha256')==manifest['retry_plan_sha256'] and self.local(raw['retry_plan_path'])==plan_path,'条目重试计划绑定错误。')
                 if retry_round>=7:
-                    revised=(validate_scene_revision8 if retry_round==8 else validate_scene_revision)(self.root,raw.get('scene_revision'),expected_scene_id=sid,current=raw,digest=self.file_sha256)
-                    row.update(scene_revision=raw['scene_revision'],layout_changed=True,layout_revision_label=f'场景修订 r{retry_round}',
+                    revised=((validate_retained_scene_revision13 if retry_round==13 else validate_retained_scene_revision12 if retry_round==12 else validate_retained_scene_revision11 if retry_round==11 else validate_retained_scene_revision10 if retry_round==10 else validate_retained_scene_revision)(self.root,raw.get('scene_revision'),manifest['source_previous_retry_manifest'],expected_scene_id=sid,current=raw,digest=self.file_sha256) if retry_round>=9 else
+                        (validate_scene_revision8 if retry_round>=8 else validate_scene_revision)(self.root,raw.get('scene_revision'),expected_scene_id=sid,current=raw,digest=self.file_sha256))
+                    row.update(scene_revision=raw['scene_revision'],layout_changed=True,layout_revision_label='沿用 r8 布局' if retry_round>=9 else f'场景修订 r{retry_round}',
                         original_config_sha256=revised['document']['old_config']['sha256'])
+                if retry_round>=9:row.update(retained_scene_revision=True,scene_settings_changed_this_round=False,selected_layout_revision=8)
                 for key in (('scene_id','task_id','variant_id') if retry_round>=7 else ('scene_id','task_id','variant_id','config_sha256')):
                     require(raw.get(key)==first_raw[sid].get(key),'重试改变原场景身份或配置。')
                 for name in ('config','trajectory','source_trajectory','result','source_scene'):
@@ -1108,6 +1216,8 @@ class Progress:
                     if raw.get('planning_status')=='generated':
                         require(candidate.get('trajectory_complete') is True,'新轨迹尚未完整生成。')
                         ref=candidate['artifacts']['trajectory'];bound(ref['path'],ref['sha256'])
+                    if retry_round>=9:
+                        require(candidate.get('retained_scene_revision') is True and candidate.get('scene_settings_changed_this_round') is False,'本轮候选不是沿用 r8 布局。')
                     if retry_round>=7:
                         require(candidate.get('scene_revision')==raw['scene_revision'] and candidate.get('layout_changed') is True,'本轮规划未绑定修订布局。')
                     row.update(planning_status=raw['planning_status'],candidate_planning_result=raw['candidate_planning_result'],
@@ -1146,6 +1256,8 @@ class Progress:
                             'source_trajectory_path','source_trajectory_sha256','physical_attempt_number','prior_physical_attempts',
                             'retry_plan_path','retry_plan_sha256','adjustment','execution_status','task_success','executed','attempts'):
                     require(result.get(key)==raw.get(key),'重试实际结果/清单不一致：'+key)
+                if retry_round>=9:
+                    require(result.get('retained_scene_revision') is True and result.get('scene_settings_changed_this_round') is False,'实际执行的布局沿用标记不一致。')
                 if retry_round>=7:
                     require(result.get('scene_revision')==raw['scene_revision'] and result.get('layout_changed') is True,'实际执行未绑定修订布局。')
                 planning_ref=raw['candidate_planning_result'] if retry_round>=2 else dict(path=raw['result_path'],sha256=raw['result_sha256'])
@@ -1182,7 +1294,7 @@ class Progress:
                                 require(binding.get('scene_revision')==raw['scene_revision'] and binding.get('layout_changed') is True
                                         and binding.get('camera_reference_scope')=='historical_camera_pose_only','诊断未绑定本轮场景修订。')
                                 camera_config=revised.get('historical_camera_config',revised['document']['old_config'])
-                                if retry_round==8:
+                                if retry_round>=8:
                                     require(binding.get('historical_camera_config')==camera_config,'诊断沿用相机的历史配置错误。')
                                 observation=dict(path=binding.get('observation_reference_path'),sha256=binding.get('observation_reference_sha256'))
                                 require(any(h['result_path']==observation['path'] and h['result_sha256']==observation['sha256'] for h in raw['prior_physical_attempts']),
@@ -1261,7 +1373,7 @@ class Progress:
                             or source_report.get('physical_execution_started') is not False
                             or source_report.get('kit_started') is not False
                             or source_report.get('curobo_planning_calls')!=0 or source_report.get('new_target_candidates')!=0
-                            or source_report.get('layout_changed') is not (retry_round>=7) or source_report.get('source_plan_unchanged') is not True
+                            or source_report.get('layout_changed') is not (7<=retry_round<=8) or (retry_round>=9 and (source_report.get('layout_changed_from_original') is not True or source_report.get('retained_scene_revision') is not True)) or source_report.get('source_plan_unchanged') is not True
                             or source_report.get('source_plan')!=dict(path=manifest['retry_plan_path'],sha256=manifest['retry_plan_sha256'])):continue
                     source_entries=source_report['entries'];source_index={r['scene_id']:r for r in source_entries}
                     if (len(source_index)!=len(source_entries)
@@ -2640,6 +2752,36 @@ def allowed_artifact(rel: str) -> bool:
         return bool(re.fullmatch(r'(?:startup_recovery_[0-9]+/)?scenes/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY6_PLANNING):]))
     if rel.startswith(PHYSICAL_RETRY6_DIAGNOSTICS):
         return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/(?:diagnostic\.json|frame_[0-9]{2}\.jpg)',rel[len(PHYSICAL_RETRY6_DIAGNOSTICS):]))
+    if rel.startswith(PHYSICAL_RETRY11_DEMOS):
+        return bool(re.fullmatch(r'executions/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY11_DEMOS):]))
+    if rel.startswith(PHYSICAL_RETRY11_PLANNING):
+        return bool(re.fullmatch(r'(?:startup_recovery_[0-9]+/)?scenes/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY11_PLANNING):]))
+    if rel.startswith(PHYSICAL_RETRY11_DIAGNOSTICS):
+        return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/(?:diagnostic\.json|frame_[0-9]{2}\.jpg)',rel[len(PHYSICAL_RETRY11_DIAGNOSTICS):]))
+    if rel.startswith(PHYSICAL_RETRY12_DEMOS):
+        return bool(re.fullmatch(r'executions/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY12_DEMOS):]))
+    if rel.startswith(PHYSICAL_RETRY12_PLANNING):
+        return bool(re.fullmatch(r'(?:startup_recovery_[0-9]+/)?scenes/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY12_PLANNING):]))
+    if rel.startswith(PHYSICAL_RETRY12_DIAGNOSTICS):
+        return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/(?:diagnostic\.json|frame_[0-9]{2}\.jpg)',rel[len(PHYSICAL_RETRY12_DIAGNOSTICS):]))
+    if rel.startswith(PHYSICAL_RETRY13_DEMOS):
+        return bool(re.fullmatch(r'executions/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY13_DEMOS):]))
+    if rel.startswith(PHYSICAL_RETRY13_PLANNING):
+        return bool(re.fullmatch(r'(?:startup_recovery_[0-9]+/)?scenes/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY13_PLANNING):]))
+    if rel.startswith(PHYSICAL_RETRY13_DIAGNOSTICS):
+        return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/(?:diagnostic\.json|frame_[0-9]{2}\.jpg)',rel[len(PHYSICAL_RETRY13_DIAGNOSTICS):]))
+    if rel.startswith(PHYSICAL_RETRY10_DEMOS):
+        return bool(re.fullmatch(r'executions/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY10_DEMOS):]))
+    if rel.startswith(PHYSICAL_RETRY10_PLANNING):
+        return bool(re.fullmatch(r'(?:startup_recovery_[0-9]+/)?scenes/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY10_PLANNING):]))
+    if rel.startswith(PHYSICAL_RETRY10_DIAGNOSTICS):
+        return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/(?:diagnostic\.json|frame_[0-9]{2}\.jpg)',rel[len(PHYSICAL_RETRY10_DIAGNOSTICS):]))
+    if rel.startswith(PHYSICAL_RETRY9_DEMOS):
+        return bool(re.fullmatch(r'executions/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY9_DEMOS):]))
+    if rel.startswith(PHYSICAL_RETRY9_PLANNING):
+        return bool(re.fullmatch(r'(?:startup_recovery_[0-9]+/)?scenes/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY9_PLANNING):]))
+    if rel.startswith(PHYSICAL_RETRY9_DIAGNOSTICS):
+        return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/(?:diagnostic\.json|frame_[0-9]{2}\.jpg)',rel[len(PHYSICAL_RETRY9_DIAGNOSTICS):]))
     if rel.startswith(PHYSICAL_RETRY8_DEMOS):
         return bool(re.fullmatch(r'executions/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY8_DEMOS):]))
     if rel.startswith(PHYSICAL_RETRY8_PLANNING):
@@ -2669,10 +2811,10 @@ def allowed_artifact(rel: str) -> bool:
     if rel.startswith(PHYSICAL_RETRY_DIAGNOSTICS):
         return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/(?:diagnostic\.json|frame_[0-9]{2}\.jpg)',rel[len(PHYSICAL_RETRY_DIAGNOSTICS):]))
     for prefix in (PHYSICAL_RETRY_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY2_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY3_DETAIL_DIAGNOSTICS,
-                   PHYSICAL_RETRY3_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY3_TOP_DIAGNOSTICS,PHYSICAL_RETRY4_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY4_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY4_TOP_DIAGNOSTICS,PHYSICAL_RETRY5_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY5_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY5_TOP_DIAGNOSTICS,PHYSICAL_RETRY6_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY6_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY6_TOP_DIAGNOSTICS,PHYSICAL_RETRY7_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY8_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY7_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY8_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY7_TOP_DIAGNOSTICS,PHYSICAL_RETRY8_TOP_DIAGNOSTICS):
+                   PHYSICAL_RETRY3_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY3_TOP_DIAGNOSTICS,PHYSICAL_RETRY4_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY4_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY4_TOP_DIAGNOSTICS,PHYSICAL_RETRY5_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY5_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY5_TOP_DIAGNOSTICS,PHYSICAL_RETRY6_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY6_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY6_TOP_DIAGNOSTICS,PHYSICAL_RETRY7_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY8_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY9_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY10_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY11_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY12_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY13_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY7_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY8_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY9_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY10_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY11_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY12_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY13_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY7_TOP_DIAGNOSTICS,PHYSICAL_RETRY8_TOP_DIAGNOSTICS,PHYSICAL_RETRY9_TOP_DIAGNOSTICS,PHYSICAL_RETRY10_TOP_DIAGNOSTICS,PHYSICAL_RETRY11_TOP_DIAGNOSTICS,PHYSICAL_RETRY12_TOP_DIAGNOSTICS,PHYSICAL_RETRY13_TOP_DIAGNOSTICS):
         if rel.startswith(prefix):
             return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/frame_[0-9]{2}\.jpg',rel[len(prefix):]))
-    for prefix in (PHYSICAL_RETRY_DARK_DIAGNOSTICS,PHYSICAL_RETRY2_DARK_DIAGNOSTICS,PHYSICAL_RETRY3_DARK_DIAGNOSTICS,PHYSICAL_RETRY4_DARK_DIAGNOSTICS,PHYSICAL_RETRY5_DARK_DIAGNOSTICS,PHYSICAL_RETRY6_DARK_DIAGNOSTICS,PHYSICAL_RETRY7_DARK_DIAGNOSTICS,PHYSICAL_RETRY8_DARK_DIAGNOSTICS):
+    for prefix in (PHYSICAL_RETRY_DARK_DIAGNOSTICS,PHYSICAL_RETRY2_DARK_DIAGNOSTICS,PHYSICAL_RETRY3_DARK_DIAGNOSTICS,PHYSICAL_RETRY4_DARK_DIAGNOSTICS,PHYSICAL_RETRY5_DARK_DIAGNOSTICS,PHYSICAL_RETRY6_DARK_DIAGNOSTICS,PHYSICAL_RETRY7_DARK_DIAGNOSTICS,PHYSICAL_RETRY8_DARK_DIAGNOSTICS,PHYSICAL_RETRY9_DARK_DIAGNOSTICS,PHYSICAL_RETRY10_DARK_DIAGNOSTICS,PHYSICAL_RETRY11_DARK_DIAGNOSTICS,PHYSICAL_RETRY12_DARK_DIAGNOSTICS,PHYSICAL_RETRY13_DARK_DIAGNOSTICS):
         if rel.startswith(prefix):
             return bool(re.fullmatch(r'(?:attempt_[0-9]{2}/)?scenes/[A-Za-z0-9_-]+/frame_[0-9]{2}\.jpg',rel[len(prefix):]))
     if rel.startswith(CAMERA_RETAKE_DEMOS):
@@ -2731,7 +2873,7 @@ def handler_for(progress: Progress):
 
         def do_POST(self):
             route = urlsplit(self.path).path
-            if route not in ("/api/annotations", "/api/trajectory-annotations", "/api/physical-retry-annotations", "/api/physical-retry-round2-annotations", "/api/physical-retry-round3-annotations", "/api/physical-retry-round4-annotations", "/api/physical-retry-round5-annotations", "/api/physical-retry-round6-annotations", "/api/physical-retry-round7-annotations", "/api/physical-retry-round8-annotations"):
+            if route not in ("/api/annotations", "/api/trajectory-annotations", "/api/physical-retry-annotations", "/api/physical-retry-round2-annotations", "/api/physical-retry-round3-annotations", "/api/physical-retry-round4-annotations", "/api/physical-retry-round5-annotations", "/api/physical-retry-round6-annotations", "/api/physical-retry-round7-annotations", "/api/physical-retry-round8-annotations", "/api/physical-retry-round9-annotations", "/api/physical-retry-round10-annotations", "/api/physical-retry-round11-annotations", "/api/physical-retry-round12-annotations", "/api/physical-retry-round13-annotations"):
                 self.json_response(404, {"error": "Unknown endpoint"})
                 return
             try:
@@ -2756,7 +2898,7 @@ def handler_for(progress: Progress):
                 except (UnicodeError, ValueError) as exc:
                     raise AnnotationError(400, "JSON 内容无效。") from exc
                 save = progress.save_physical_retry_annotation if route == "/api/physical-retry-annotations" else progress.save_trajectory_annotation if route == "/api/trajectory-annotations" else progress.save_annotation
-                entry=progress.save_physical_retry_annotation(payload,retry_round=8) if route=="/api/physical-retry-round8-annotations" else progress.save_physical_retry_annotation(payload,retry_round=7) if route=="/api/physical-retry-round7-annotations" else progress.save_physical_retry_annotation(payload,retry_round=6) if route=="/api/physical-retry-round6-annotations" else progress.save_physical_retry_annotation(payload,retry_round=5) if route=="/api/physical-retry-round5-annotations" else progress.save_physical_retry_annotation(payload,retry_round=4) if route=="/api/physical-retry-round4-annotations" else progress.save_physical_retry_annotation(payload,retry_round=3) if route=="/api/physical-retry-round3-annotations" else progress.save_physical_retry_annotation(payload,retry_round=2) if route=="/api/physical-retry-round2-annotations" else save(payload)
+                entry=progress.save_physical_retry_annotation(payload,retry_round=13) if route=="/api/physical-retry-round13-annotations" else progress.save_physical_retry_annotation(payload,retry_round=12) if route=="/api/physical-retry-round12-annotations" else progress.save_physical_retry_annotation(payload,retry_round=11) if route=="/api/physical-retry-round11-annotations" else progress.save_physical_retry_annotation(payload,retry_round=10) if route=="/api/physical-retry-round10-annotations" else progress.save_physical_retry_annotation(payload,retry_round=9) if route=="/api/physical-retry-round9-annotations" else progress.save_physical_retry_annotation(payload,retry_round=8) if route=="/api/physical-retry-round8-annotations" else progress.save_physical_retry_annotation(payload,retry_round=7) if route=="/api/physical-retry-round7-annotations" else progress.save_physical_retry_annotation(payload,retry_round=6) if route=="/api/physical-retry-round6-annotations" else progress.save_physical_retry_annotation(payload,retry_round=5) if route=="/api/physical-retry-round5-annotations" else progress.save_physical_retry_annotation(payload,retry_round=4) if route=="/api/physical-retry-round4-annotations" else progress.save_physical_retry_annotation(payload,retry_round=3) if route=="/api/physical-retry-round3-annotations" else progress.save_physical_retry_annotation(payload,retry_round=2) if route=="/api/physical-retry-round2-annotations" else save(payload)
                 self.json_response(200, {"entry": entry})
             except AnnotationError as exc:
                 result = {"error": exc.message}
@@ -2778,10 +2920,10 @@ def handler_for(progress: Progress):
 
         def respond(self, head=False):
             route = unquote(urlsplit(self.path).path)
-            if route in ("/api/annotations", "/api/trajectory-annotations", "/api/physical-retry-annotations", "/api/physical-retry-round2-annotations", "/api/physical-retry-round3-annotations", "/api/physical-retry-round4-annotations", "/api/physical-retry-round5-annotations", "/api/physical-retry-round6-annotations", "/api/physical-retry-round7-annotations", "/api/physical-retry-round8-annotations"):
+            if route in ("/api/annotations", "/api/trajectory-annotations", "/api/physical-retry-annotations", "/api/physical-retry-round2-annotations", "/api/physical-retry-round3-annotations", "/api/physical-retry-round4-annotations", "/api/physical-retry-round5-annotations", "/api/physical-retry-round6-annotations", "/api/physical-retry-round7-annotations", "/api/physical-retry-round8-annotations", "/api/physical-retry-round9-annotations", "/api/physical-retry-round10-annotations", "/api/physical-retry-round11-annotations", "/api/physical-retry-round12-annotations", "/api/physical-retry-round13-annotations"):
                 try:
                     read = progress.physical_retry_annotations if route == "/api/physical-retry-annotations" else progress.trajectory_annotations if route == "/api/trajectory-annotations" else progress.annotations
-                    data=progress.physical_retry_annotations(8) if route=="/api/physical-retry-round8-annotations" else progress.physical_retry_annotations(7) if route=="/api/physical-retry-round7-annotations" else progress.physical_retry_annotations(6) if route=="/api/physical-retry-round6-annotations" else progress.physical_retry_annotations(5) if route=="/api/physical-retry-round5-annotations" else progress.physical_retry_annotations(4) if route=="/api/physical-retry-round4-annotations" else progress.physical_retry_annotations(3) if route=="/api/physical-retry-round3-annotations" else progress.physical_retry_annotations(2) if route=="/api/physical-retry-round2-annotations" else read()
+                    data=progress.physical_retry_annotations(13) if route=="/api/physical-retry-round13-annotations" else progress.physical_retry_annotations(12) if route=="/api/physical-retry-round12-annotations" else progress.physical_retry_annotations(11) if route=="/api/physical-retry-round11-annotations" else progress.physical_retry_annotations(10) if route=="/api/physical-retry-round10-annotations" else progress.physical_retry_annotations(9) if route=="/api/physical-retry-round9-annotations" else progress.physical_retry_annotations(8) if route=="/api/physical-retry-round8-annotations" else progress.physical_retry_annotations(7) if route=="/api/physical-retry-round7-annotations" else progress.physical_retry_annotations(6) if route=="/api/physical-retry-round6-annotations" else progress.physical_retry_annotations(5) if route=="/api/physical-retry-round5-annotations" else progress.physical_retry_annotations(4) if route=="/api/physical-retry-round4-annotations" else progress.physical_retry_annotations(3) if route=="/api/physical-retry-round3-annotations" else progress.physical_retry_annotations(2) if route=="/api/physical-retry-round2-annotations" else read()
                     self.json_response(200, data, head=head)
                 except AnnotationError as exc:
                     self.json_response(exc.status, {"error": exc.message}, head=head)
@@ -2808,9 +2950,9 @@ def handler_for(progress: Progress):
                     path = progress.local(rel)
                     if not allowed_artifact(path.relative_to(progress.root).as_posix()):
                         raise ValueError("Not a dashboard artifact")
-                    if path.relative_to(progress.root).as_posix().startswith((PHYSICAL_DEMOS, CAMERA_RETAKE_DEMOS, PHYSICAL_RETRY_DEMOS, PHYSICAL_RETRY_DIAGNOSTICS, PHYSICAL_RETRY_DETAIL_DIAGNOSTICS, PHYSICAL_RETRY_DARK_DIAGNOSTICS,PHYSICAL_RETRY2_DEMOS,PHYSICAL_RETRY2_DIAGNOSTICS,PHYSICAL_RETRY2_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY2_DARK_DIAGNOSTICS,PHYSICAL_RETRY2_PLANNING,PHYSICAL_RETRY3_DEMOS,PHYSICAL_RETRY3_DIAGNOSTICS,PHYSICAL_RETRY3_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY3_DARK_DIAGNOSTICS,PHYSICAL_RETRY3_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY3_TOP_DIAGNOSTICS,PHYSICAL_RETRY3_PLANNING,PHYSICAL_RETRY4_DEMOS,PHYSICAL_RETRY4_DIAGNOSTICS,PHYSICAL_RETRY4_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY4_DARK_DIAGNOSTICS,PHYSICAL_RETRY4_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY4_TOP_DIAGNOSTICS,PHYSICAL_RETRY4_PLANNING,PHYSICAL_RETRY5_DEMOS,PHYSICAL_RETRY5_DIAGNOSTICS,PHYSICAL_RETRY5_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY5_DARK_DIAGNOSTICS,PHYSICAL_RETRY5_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY5_TOP_DIAGNOSTICS,PHYSICAL_RETRY5_PLANNING,PHYSICAL_RETRY6_DEMOS,PHYSICAL_RETRY6_DIAGNOSTICS,PHYSICAL_RETRY6_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY6_DARK_DIAGNOSTICS,PHYSICAL_RETRY6_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY6_TOP_DIAGNOSTICS,PHYSICAL_RETRY6_PLANNING,PHYSICAL_RETRY7_DEMOS,PHYSICAL_RETRY8_DEMOS,PHYSICAL_RETRY7_DIAGNOSTICS,PHYSICAL_RETRY8_DIAGNOSTICS,PHYSICAL_RETRY7_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY8_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY7_DARK_DIAGNOSTICS,PHYSICAL_RETRY8_DARK_DIAGNOSTICS,PHYSICAL_RETRY7_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY8_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY7_TOP_DIAGNOSTICS,PHYSICAL_RETRY8_TOP_DIAGNOSTICS,PHYSICAL_RETRY7_PLANNING,PHYSICAL_RETRY8_PLANNING)):
+                    if path.relative_to(progress.root).as_posix().startswith((PHYSICAL_DEMOS, CAMERA_RETAKE_DEMOS, PHYSICAL_RETRY_DEMOS, PHYSICAL_RETRY_DIAGNOSTICS, PHYSICAL_RETRY_DETAIL_DIAGNOSTICS, PHYSICAL_RETRY_DARK_DIAGNOSTICS,PHYSICAL_RETRY2_DEMOS,PHYSICAL_RETRY2_DIAGNOSTICS,PHYSICAL_RETRY2_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY2_DARK_DIAGNOSTICS,PHYSICAL_RETRY2_PLANNING,PHYSICAL_RETRY3_DEMOS,PHYSICAL_RETRY3_DIAGNOSTICS,PHYSICAL_RETRY3_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY3_DARK_DIAGNOSTICS,PHYSICAL_RETRY3_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY3_TOP_DIAGNOSTICS,PHYSICAL_RETRY3_PLANNING,PHYSICAL_RETRY4_DEMOS,PHYSICAL_RETRY4_DIAGNOSTICS,PHYSICAL_RETRY4_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY4_DARK_DIAGNOSTICS,PHYSICAL_RETRY4_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY4_TOP_DIAGNOSTICS,PHYSICAL_RETRY4_PLANNING,PHYSICAL_RETRY5_DEMOS,PHYSICAL_RETRY5_DIAGNOSTICS,PHYSICAL_RETRY5_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY5_DARK_DIAGNOSTICS,PHYSICAL_RETRY5_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY5_TOP_DIAGNOSTICS,PHYSICAL_RETRY5_PLANNING,PHYSICAL_RETRY6_DEMOS,PHYSICAL_RETRY6_DIAGNOSTICS,PHYSICAL_RETRY6_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY6_DARK_DIAGNOSTICS,PHYSICAL_RETRY6_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY6_TOP_DIAGNOSTICS,PHYSICAL_RETRY6_PLANNING,PHYSICAL_RETRY7_DEMOS,PHYSICAL_RETRY8_DEMOS,PHYSICAL_RETRY9_DEMOS,PHYSICAL_RETRY10_DEMOS,PHYSICAL_RETRY11_DEMOS,PHYSICAL_RETRY12_DEMOS,PHYSICAL_RETRY13_DEMOS,PHYSICAL_RETRY7_DIAGNOSTICS,PHYSICAL_RETRY8_DIAGNOSTICS,PHYSICAL_RETRY9_DIAGNOSTICS,PHYSICAL_RETRY10_DIAGNOSTICS,PHYSICAL_RETRY11_DIAGNOSTICS,PHYSICAL_RETRY12_DIAGNOSTICS,PHYSICAL_RETRY13_DIAGNOSTICS,PHYSICAL_RETRY7_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY8_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY9_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY10_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY11_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY12_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY13_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY7_DARK_DIAGNOSTICS,PHYSICAL_RETRY8_DARK_DIAGNOSTICS,PHYSICAL_RETRY9_DARK_DIAGNOSTICS,PHYSICAL_RETRY10_DARK_DIAGNOSTICS,PHYSICAL_RETRY11_DARK_DIAGNOSTICS,PHYSICAL_RETRY12_DARK_DIAGNOSTICS,PHYSICAL_RETRY13_DARK_DIAGNOSTICS,PHYSICAL_RETRY7_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY8_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY9_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY10_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY11_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY12_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY13_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY7_TOP_DIAGNOSTICS,PHYSICAL_RETRY8_TOP_DIAGNOSTICS,PHYSICAL_RETRY9_TOP_DIAGNOSTICS,PHYSICAL_RETRY10_TOP_DIAGNOSTICS,PHYSICAL_RETRY11_TOP_DIAGNOSTICS,PHYSICAL_RETRY12_TOP_DIAGNOSTICS,PHYSICAL_RETRY13_TOP_DIAGNOSTICS,PHYSICAL_RETRY7_PLANNING,PHYSICAL_RETRY8_PLANNING,PHYSICAL_RETRY9_PLANNING,PHYSICAL_RETRY10_PLANNING,PHYSICAL_RETRY11_PLANNING,PHYSICAL_RETRY12_PLANNING,PHYSICAL_RETRY13_PLANNING)):
                         physical = progress.physical_execution()
-                        retry_rows=[*physical['failure_retry']['entries'],*physical['failure_retry_round2']['entries'],*physical['failure_retry_round3']['entries'],*physical['failure_retry_round4']['entries'],*physical['failure_retry_round5']['entries'],*physical['failure_retry_round6']['entries'],*physical['failure_retry_round7']['entries'],*physical['failure_retry_round8']['entries']]
+                        retry_rows=[*physical['failure_retry']['entries'],*physical['failure_retry_round2']['entries'],*physical['failure_retry_round3']['entries'],*physical['failure_retry_round4']['entries'],*physical['failure_retry_round5']['entries'],*physical['failure_retry_round6']['entries'],*physical['failure_retry_round7']['entries'],*physical['failure_retry_round8']['entries'],*physical['failure_retry_round9']['entries'],*physical['failure_retry_round10']['entries'],*physical['failure_retry_round11']['entries'],*physical['failure_retry_round12']['entries'],*physical['failure_retry_round13']['entries']]
                         valid_urls = {entry.get(key) for entry in [*physical['entries'], *physical['camera_retakes']['entries'], *retry_rows]
                                       for key in ('video_url', 'result_url', 'diagnostic_report_url','planning_result_url')}
                         valid_urls.update(frame['url'] for entry in retry_rows for frame in entry.get('diagnostics',[]))

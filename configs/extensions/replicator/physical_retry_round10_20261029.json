@@ -1,0 +1,138 @@
+{
+  "kind": "physical_failure_retry_plan",
+  "schema_version": 2,
+  "retry_round": 10,
+  "source_first_pass_manifest": {
+    "path": "exports/replicator_154_physical_demos_20261028/manifest.json",
+    "sha256": "fe3e8d5d213f1c377d0f74cce8fa7f4cd8eb6dfa77a3d948f8ee9e8161547951"
+  },
+  "source_camera_retake_manifest": {
+    "path": "exports/replicator_u_banana_camera_retakes_20261028/manifest.json",
+    "sha256": "51893c8da70803aa36c8a1ef8e9dcf407f7dce171602c422b7a0333fc5693edd"
+  },
+  "source_previous_retry_manifest": {
+    "path": "exports/replicator_physical_retry_round9_20261029/manifest.json",
+    "sha256": "789e49363e908e0590b30bd9e8a29cd470f51a96dba4e6f81042691f9705cced"
+  },
+  "expected_scene_count": 2,
+  "candidate_count_per_scene": 1,
+  "physical_retries_per_scene": 1,
+  "layout_changed": false,
+  "layout_changed_from_original": true,
+  "success_predicate_changed": false,
+  "execution_settings": {
+    "device": "cpu",
+    "seed": 42,
+    "physics_threads": 8,
+    "initial_settle_seconds": 5.0,
+    "close_seconds": 2.0,
+    "release_seconds": 2.0,
+    "final_settle_seconds": 3.0,
+    "episode_seconds": 200.0,
+    "max_actions": 6000
+  },
+  "entries": [
+    {
+      "scene_id": "u_shape_bowl_sink__human_default_mpfb",
+      "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+      "variant_id": "human_default_mpfb",
+      "result_path": "reports/replicator_trajectory_retry10_20261028/scenes/u_shape_bowl_sink__human_default_mpfb/result.json",
+      "result_sha256": "0b4366f147ad0009d945ec3944f0d47c4e0479ade262f3335fee0f00d1c2422e",
+      "config_path": "configs/extensions/replicator/round8_layouts_20261029/u_shape_bowl_sink__human_default_mpfb.json",
+      "config_sha256": "d69ac7d228fa47b37eec314eea4c8665e3d42e430a7b0c243123b0cdc840f969",
+      "source_scene_path": "reports/replicator_physical_retry_round8_20261029/scene_revisions/u_shape_bowl_sink__human_default_mpfb/source_scene.usda",
+      "source_scene_sha256": "268f938eea8ff01917c1f2b9356e29950b493d82d09fc0dcc374edbad2d8942c",
+      "source_trajectory_path": "reports/replicator_trajectory_retry6_20261026/scenes/u_shape_bowl_sink__human_default_mpfb/trajectory.npz",
+      "source_trajectory_sha256": "aa0f87334367c552aee19f2df4e5b0d062b3a0a1839e01b85b55340270420930",
+      "scene_revision": {
+        "path": "reports/replicator_physical_retry_round8_20261029/scene_revisions/u_shape_bowl_sink__human_default_mpfb/scene_revision.json",
+        "sha256": "28b8597342799dd2e42e8791696c842c13e855d62051a55ef44d8f7628956b92"
+      },
+      "layout_changed": true,
+      "retained_scene_revision": true,
+      "scene_settings_changed_this_round": false,
+      "scene_settings_changed_once": true,
+      "planning_status": "failed",
+      "candidate_planning_result": {
+        "path": "reports/replicator_physical_retry_round10_planning_20261029/scenes/u_shape_bowl_sink__human_default_mpfb/result.json",
+        "sha256": "47598b2fc24b97990c004b84094c88b56a6fe2b25fff6d1ac23101d2e53ab997"
+      },
+      "previous_retry_result": {
+        "path": "exports/replicator_physical_retry_round4_20261029/executions/u_shape_bowl_sink__human_default_mpfb/result.json",
+        "sha256": "5896b05c10943a6bc58fc0de70c291fb9f1616e63bdfb2987113b066f6564a77"
+      },
+      "physical_attempt_number": 5,
+      "trajectory_path": null,
+      "trajectory_sha256": null,
+      "execution_overrides": {},
+      "adjustment": {
+        "kind": "retained_layout_joint_goal_repair_round10",
+        "description": "保持第九轮105度直立下放姿态和原全部目标；lower指定已GPU静态验证的无碰关节分支，retreat指定原两段CPU连续分支端点（22点已GPU静态复核）。采用显式joint-space目标接口，不再靠笛卡尔IK重新找到同一分支。布局、原物理判据和collision masks不变。",
+        "evidence_path": "reports/replicator_physical_retry_round10_20261029/human_joint_goal/gpu_validated_existing_goals.json",
+        "evidence_sha256": "e2bbc28319636679c00ee9e1df204b2a967ff686e27b9f4286d2a2b4383b3519",
+        "candidate_count": 1,
+        "recipe_source": {
+          "path": "configs/extensions/replicator/physical_retry_round10_human_recipes_20261029.json",
+          "sha256": "c8f0abeefabded8847c5ec11f88e3fc2024e4566ac14771fed02f23fbaacd7d8"
+        },
+        "root_cause_confirmed": false
+      },
+      "timing_validation": null,
+      "failure_reason": "cuRobo rejected lower: MotionGenStatus.TRAJOPT_FAIL"
+    },
+    {
+      "scene_id": "u_shape_mustard_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "result_path": "reports/replicator_trajectory_retry10_20261028/scenes/u_shape_mustard_bowl__robot_sharp_equipment_housing/result.json",
+      "result_sha256": "a5dc2984a0948805ed2bc23a98ead7604d85151b11dfdca601c0d5b9df84d073",
+      "config_path": "configs/extensions/replicator/round8_layouts_20261029/u_shape_mustard_bowl__robot_sharp_equipment_housing.json",
+      "config_sha256": "c3e8357bf9533be03cd05be5b6e2431768088a35ca95cfad97cec0bb8c484d2a",
+      "source_scene_path": "reports/replicator_physical_retry_round8_20261029/scene_revisions/u_shape_mustard_bowl__robot_sharp_equipment_housing/source_scene.usda",
+      "source_scene_sha256": "8a69fb6a80b29985e4b98dbfe028c0244a6da9f9ddc1dc57d1830201d614529a",
+      "source_trajectory_path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_mustard_bowl__robot_sharp_equipment_housing/trajectory.npz",
+      "source_trajectory_sha256": "28a660f511a0a495781db3ec85c344c09759af3ca994172a427bba8107da011f",
+      "scene_revision": {
+        "path": "reports/replicator_physical_retry_round8_20261029/scene_revisions/u_shape_mustard_bowl__robot_sharp_equipment_housing/scene_revision.json",
+        "sha256": "c248e9170ffe5bfb9f6dea7525dc34329f1e0a9b4c1899660cb93e3be2fbbbbc"
+      },
+      "layout_changed": true,
+      "retained_scene_revision": true,
+      "scene_settings_changed_this_round": false,
+      "scene_settings_changed_once": true,
+      "planning_status": "failed",
+      "candidate_planning_result": {
+        "path": "reports/replicator_physical_retry_round10_planning_20261029/scenes/u_shape_mustard_bowl__robot_sharp_equipment_housing/result.json",
+        "sha256": "9d3839199c72af2fd64baaf6fe73d4a9ecad03186cbbea93003c26a674e0cb9e"
+      },
+      "previous_retry_result": {
+        "path": "exports/replicator_physical_retry_round8_20261029/executions/u_shape_mustard_bowl__robot_sharp_equipment_housing/result.json",
+        "sha256": "bcd501ac2a27cf3139ac615c6d9aa7bb3b28d38c82fb68e3caf8bc4f1a9cf14d"
+      },
+      "physical_attempt_number": 5,
+      "trajectory_path": null,
+      "trajectory_sha256": null,
+      "execution_overrides": {},
+      "adjustment": {
+        "kind": "retained_layout_joint_goal_repair_round10",
+        "description": "保留第八轮布局和第九轮全部TCP目标、夹爪指令及抬升合同。lift三段改用公开plan_single_js固定已验证的关节终点，graph关闭；不注入CPU理想轨迹，不放宽真实FK门槛。",
+        "evidence_path": "reports/replicator_physical_retry_round10_20261029/mustard_joint_goal_preparation.json",
+        "evidence_sha256": "c6bba1b80e173c252b467988552704c8e3a7dd4ea00a0726c299be31e166d3d7",
+        "candidate_count": 1,
+        "recipe_source": {
+          "path": "configs/extensions/replicator/physical_retry_round10_mustard_recipes_20261029.json",
+          "sha256": "b0aafc90ff25d65c2300143d8a64e688e251f098184c0fe29f500d6ead2f22cb"
+        },
+        "root_cause_confirmed": false
+      },
+      "timing_validation": null,
+      "failure_reason": "cuRobo rejected lift: LIFT_PATH_CONSTRAINT_LIMIT"
+    }
+  ],
+  "created_at": "2026-10-29T10:20:37.771343+00:00",
+  "planning_progress": {
+    "path": "reports/replicator_physical_retry_round10_planning_20261029/progress.json",
+    "sha256": "ca361fa6a7ad8fd36dfb2283b107ca32f4c75df0c9dfbda0c391bcae1ec77270"
+  },
+  "scope": "Retain exact round 8 scene, adjust only one frozen trajectory candidate per unresolved scene. Targeted FK lift corridor where declared; one no-render native test per complete plan. Original task/assets/predicate unchanged; all historical attempts retained."
+}

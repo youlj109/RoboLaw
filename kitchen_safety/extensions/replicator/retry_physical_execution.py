@@ -27,6 +27,16 @@ SOURCES = tuple(dict.fromkeys(base.RUNTIME_SOURCES + (
     'kitchen_safety/extensions/replicator/physical_retry_round6.py',
     'kitchen_safety/extensions/replicator/physical_retry_round7.py',
     'kitchen_safety/extensions/replicator/physical_retry_round8.py',
+    'kitchen_safety/extensions/replicator/physical_retry_round9.py',
+    'kitchen_safety/extensions/replicator/physical_retry_round10.py',
+    'kitchen_safety/extensions/replicator/physical_retry_round11.py',
+    'kitchen_safety/extensions/replicator/planner_refinement_round11.py',
+    'kitchen_safety/extensions/replicator/physical_retry_round12.py',
+    'kitchen_safety/extensions/replicator/planner_refinement_round12.py',
+    'kitchen_safety/extensions/replicator/physical_retry_round13.py',
+    'kitchen_safety/extensions/replicator/planner_refinement_round13.py',
+    'kitchen_safety/extensions/replicator/joint_goal_repair.py',
+    'kitchen_safety/extensions/replicator/lift_path_validation.py',
     'kitchen_safety/extensions/replicator/scene_revision_round8.py',
     'kitchen_safety/extensions/replicator/scene_revision.py',
     'third_party/IsaacLab-Arena/isaaclab_arena/utils/isaaclab_utils/simulation_app.py',
@@ -43,7 +53,7 @@ PREDICATE_SOURCES = tuple(p for p in base.RUNTIME_SOURCES if
 def round_two(plan):
     version = plan.get('schema_version', 1)
     if version not in (1, 2): raise ValueError('Unsupported retry schema')
-    if version == 2 and plan.get('retry_round') not in (2, 3, 4, 5, 6, 7, 8):
+    if version == 2 and plan.get('retry_round') not in (2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13):
         raise ValueError('Unsupported source-bound grasp retry round')
     return version == 2
 
@@ -178,7 +188,22 @@ def load_grasp_candidate(entry, original_plan, layout):
                 or candidate.get('source_asset_geometry_unchanged') is not True):
             raise ValueError('Candidate revision composition/binding differs')
         recipe = candidate['recipe']
-        if (recipe.get('planning_path_policy', {}).get('kind') != 'collision_checked_free_path'
+        if recipe.get('retry_round') in (9,10,11,12,13):
+            if recipe['retry_round']==9:
+                from .lift_path_validation import validate_round9_policy as validate_policy
+            elif recipe['retry_round']==10:
+                from .joint_goal_repair import validate_round10_policy as validate_policy
+            elif recipe['retry_round']==11:
+                from .planner_refinement_round11 import validate_round11_policy as validate_policy
+            elif recipe['retry_round']==12:
+                from .planner_refinement_round12 import validate_round12_policy as validate_policy
+            else:
+                from .planner_refinement_round13 import validate_round13_policy as validate_policy
+            validate_policy(recipe)
+            for record in (entry,candidate):
+                if record.get('retained_scene_revision') is not True or record.get('scene_settings_changed_this_round') is not False:
+                    raise ValueError('Trajectory repair must retain the previous scene revision')
+        elif (recipe.get('planning_path_policy', {}).get('kind') != 'collision_checked_free_path'
                 or recipe.get('planning_path_policy', {}).get('previous_straight_line_gate_removed') is not True
                 or recipe.get('segment_deviation_limits_m') or recipe.get('joint_space_target_q_by_phase')):
             raise ValueError('Revised candidate changed the predeclared free-path policy')
@@ -222,6 +247,12 @@ def load_grasp_candidate(entry, original_plan, layout):
     validate_candidate(raw, data)
     if not np.allclose(data['tcp_world'][data['source_vertex_output_index']], raw['tcp_world'], atol=2e-6, rtol=0):
         raise ValueError('Retimed candidate TCP vertices differ')
+    if candidate.get('recipe',{}).get('retry_round') in (9,10,11,12,13):
+        from .lift_path_validation import array_lift_gate
+        for samples in (raw,data):
+            lift_check=array_lift_gate(samples,candidate['recipe'])
+            if lift_check is not None and not lift_check['passed']:
+                raise ValueError('Executable path violates frozen lift corridor')
     return candidate, layout, data
 
 
@@ -261,6 +292,21 @@ def load_retry_inputs(entry):
 def validate_plan(path):
     path = local(path); plan = json.loads(path.read_text())
     if plan.get('kind') != 'physical_failure_retry_plan': raise ValueError('Explicit failure retry plan required')
+    if plan.get('retry_round') == 13:
+        from .physical_retry_round13 import validate_round13_plan
+        return validate_round13_plan(path, plan)
+    if plan.get('retry_round') == 12:
+        from .physical_retry_round12 import validate_round12_plan
+        return validate_round12_plan(path, plan)
+    if plan.get('retry_round') == 11:
+        from .physical_retry_round11 import validate_round11_plan
+        return validate_round11_plan(path, plan)
+    if plan.get('retry_round') == 10:
+        from .physical_retry_round10 import validate_round10_plan
+        return validate_round10_plan(path, plan)
+    if plan.get('retry_round') == 9:
+        from .physical_retry_round9 import validate_round9_plan
+        return validate_round9_plan(path, plan)
     if plan.get('retry_round') == 8:
         from .physical_retry_round8 import validate_round8_plan
         return validate_round8_plan(path, plan)
@@ -417,7 +463,8 @@ def execute_one(entry, output_root, args):
                 'retry_plan_path','retry_plan_sha256'):
         result[key] = copy.deepcopy(entry[key])
     for key in ('retry_schema_version','candidate_planning_result','previous_retry_result','execution_overrides',
-                'scene_revision','layout_changed','source_scene_path','source_scene_sha256'):
+                'scene_revision','layout_changed','source_scene_path','source_scene_sha256',
+                'retained_scene_revision','scene_settings_changed_this_round','scene_settings_changed_once'):
         if key in entry: result[key] = copy.deepcopy(entry[key])
     retry_plan = json.loads(local(args.plan).read_text())
     for key in ('source_first_pass_manifest','source_camera_retake_manifest'):

@@ -19,7 +19,7 @@ from .scene_build_runtime import ROOT, atomic_json, relative, sha, stamp
 
 
 class GraspRetryPlanner(QuickPlanner):
-    def constrained_plan(self, q, target, phase, masks, hold_orientation, timeout=8., linear_vertical=False, planning_options=None, joint_space_goal_q=None):
+    def constrained_plan(self, q, target, phase, masks, hold_orientation, timeout=8., linear_vertical=False, planning_options=None, joint_space_goal_q=None, record_solver_diagnostics=False, allow_joint_graph=False):
         from curobo.types.math import Pose
         from curobo.types.robot import JointState
         from curobo.wrap.reacher.motion_gen import MotionGenPlanConfig
@@ -42,6 +42,7 @@ class GraspRetryPlanner(QuickPlanner):
             metric = PoseCostMetric(hold_partial_pose=True, project_to_goal_frame=False,
                 hold_vec_weight=self.args.to_device([weight,weight,weight,weight,weight,0.]))
         begin=time.monotonic()
+        if record_solver_diagnostics:self.motion_gen.store_debug_in_result=True
         config=MotionGenPlanConfig(
             max_attempts=1,timeout=timeout,enable_graph=graph,enable_graph_attempt=1 if graph else None,
             enable_finetune_trajopt=True,finetune_attempts=1,ik_fail_return=1,
@@ -49,7 +50,7 @@ class GraspRetryPlanner(QuickPlanner):
         if joint_space_goal_q is None:
             output=self.motion_gen.plan_single(start, goal, config)
         else:
-            if hold_orientation or linear_vertical or 'constraint_weight' in options or graph:
+            if hold_orientation or linear_vertical or 'constraint_weight' in options or (graph and not allow_joint_graph):
                 raise ValueError('Joint-space branch must not imply Cartesian soft constraints or graph fallback')
             goal_state=JointState.from_position(self.args.to_device(np.asarray(joint_space_goal_q)[None]),
                 joint_names=[f'panda_joint{i}' for i in range(1,8)])
@@ -62,6 +63,9 @@ class GraspRetryPlanner(QuickPlanner):
             nominal_payload_attached=self.world.attachment is not None,
             orientation_hold_requested=hold_orientation, vertical_motion_cost_requested=linear_vertical,
             physical_grasp_verified=False)
+        if record_solver_diagnostics:
+            from .joint_goal_repair import solver_diagnostics
+            detail['solver_diagnostics']=solver_diagnostics(output)
         if options:
             detail.update(planning_options=options,planner_seed_reset='all_including_finetune',
                 graph_enabled=graph,graph_fallback_enabled=graph,
@@ -136,7 +140,8 @@ def validate_recipe(recipe, old, layout):
     if sum(len(points) for points in waypoints.values())>16:
         raise ValueError('Too many frozen intermediate waypoints')
     for phase,points in waypoints.items():
-        if not isinstance(points,list) or len(points)>8:raise ValueError('Too many phase waypoints')
+        max_points=12 if recipe.get('retry_round') in (12,13) and phase=='lower' else 8
+        if not isinstance(points,list) or len(points)>max_points:raise ValueError('Too many phase waypoints')
         for point in points:checked_pose(point)
     for limit in limits.values():
         if not np.isfinite(float(limit)) or not 0<float(limit)<=.02:raise ValueError('Invalid segment deviation limit')
@@ -152,8 +157,8 @@ def validate_recipe(recipe, old, layout):
             raise ValueError('Joint targets must match every frozen endpoint')
         if (phase in recipe.get('hold_orientation_phases',['lift','transfer','lower'])
                 or phase in recipe.get('linear_motion_phases',[])
-                or options.get(phase)!={'enable_graph':False}):
-            raise ValueError('Joint-space phase requires explicit no-graph options and no Cartesian soft cost')
+                or options.get(phase)!={'enable_graph':recipe.get('retry_round') in (11,12,13)}):
+            raise ValueError('Joint-space phase requires its declared graph option and no Cartesian soft cost')
     return targets,attachment,grip
 
 
@@ -165,11 +170,16 @@ def segment_deviation(poses,start,end):
     return float(np.max(np.linalg.norm(xyz-(a+t[:,None]*direction),axis=1)))
 
 
-def plan_phase(planner,kin,q,target,phase,masks,recipe,folder,timeout):
+def plan_phase(planner,kin,q,target,phase,masks,recipe,folder,timeout,lift_reference=None):
     """Execute each declared segment once; preserve rejected solver paths."""
     waypoints=recipe.get('phase_waypoints_world',{}).get(phase,[])
     limit=recipe.get('segment_deviation_limits_m',{}).get(phase)
-    segmented=bool(waypoints) or limit is not None
+    from .lift_path_validation import checked_limits, measure_lift
+    lift_limits=checked_limits(recipe) if phase=='lift' else None
+    if lift_limits is not None and lift_reference is None:
+        lift_reference=kin.fk(q)
+    joint_gate=recipe.get('retry_round') in (10,11,12,13) and phase in recipe.get('joint_space_target_q_by_phase',{})
+    segmented=bool(waypoints) or limit is not None or lift_limits is not None or joint_gate
     endpoints=[checked_pose(p) for p in waypoints]+[target]
     segments=[];paths=[]
     for index,endpoint in enumerate(endpoints):
@@ -181,6 +191,8 @@ def plan_phase(planner,kin,q,target,phase,masks,recipe,folder,timeout):
             raise ValueError('Vertical motion cost requires aligned orientation and XY start')
         options=recipe.get('planning_options_by_phase',{}).get(phase)
         extra={} if not options else dict(planning_options=options)
+        if recipe.get('retry_round') in (10,11,12,13):extra['record_solver_diagnostics']=True
+        if recipe.get('retry_round') in (11,12,13):extra['allow_joint_graph']=True
         joint_targets=recipe.get('joint_space_target_q_by_phase',{}).get(phase)
         goal_check={}
         if joint_targets is not None:
@@ -214,14 +226,33 @@ def plan_phase(planner,kin,q,target,phase,masks,recipe,folder,timeout):
                 deviation_gate_passed=limit is None or deviation<=float(limit))
             if not detail['deviation_gate_passed']:
                 detail.update(status='failed',solver_status_before_gate=detail['solver_status'],solver_status='TCP_SEGMENT_DEVIATION_LIMIT')
+            if lift_limits is not None:
+                check=measure_lift(poses,lift_reference,lift_limits)
+                detail['lift_path_validation']=check
+                if not check['passed']:
+                    detail.setdefault('solver_status_before_gate',detail['solver_status'])
+                    detail.update(status='failed',solver_status='LIFT_PATH_CONSTRAINT_LIMIT')
+            if joint_gate:
+                q_error=float(np.max(np.abs(path[-1]-goal_q)))
+                p_error=float(np.linalg.norm(poses[-1,:3,3]-endpoint[:3,3]))
+                r_error=float(Rotation.from_matrix(poses[-1,:3,:3]@endpoint[:3,:3].T).magnitude())
+                detail.update(joint_space_endpoint_error_rad=q_error,endpoint_fk_position_error_m=p_error,
+                    endpoint_fk_orientation_error_rad=r_error,
+                    joint_goal_endpoint_gate_passed=q_error<=.001 and p_error<=.002 and r_error<=.02)
+                if not detail['joint_goal_endpoint_gate_passed']:
+                    detail.setdefault('solver_status_before_gate',detail['solver_status'])
+                    detail.update(status='failed',solver_status='JOINT_GOAL_ENDPOINT_LIMIT')
         segments.append(detail)
-        if path is None or detail.get('deviation_gate_passed') is False:
+        if (path is None or detail.get('deviation_gate_passed') is False or detail.get('lift_path_validation',{}).get('passed') is False
+                or detail.get('joint_goal_endpoint_gate_passed') is False):
             parent=dict(detail,segments=segments,failed_segment_index=index,samples=sum(map(len,paths)),
                 segment_count_declared=len(endpoints),segment_count_attempted=len(segments),per_segment_max_attempts=1)
             return None,parent
         paths.append(path);q=path[-1].copy()
     parent=dict(segments[-1],segments=segments,samples=sum(map(len,paths)),
         segment_count_declared=len(endpoints),segment_count_attempted=len(segments),per_segment_max_attempts=1)
+    if lift_limits is not None:
+        parent['lift_path_validation']=measure_lift(fk_batch(kin,np.concatenate(paths)),lift_reference,lift_limits)
     # Each complete segment, including its repeated start vertex, is retained.
     return np.concatenate(paths),parent
 
@@ -249,13 +280,30 @@ def run_candidate(row,recipe,output,timeout=8.):
                 from .scene_revision_round8 import validate_scene_revision
             checked=validate_scene_revision(ROOT,row['scene_revision'],expected_scene_id=row['scene_id'],current=row)
             policy=recipe.get('planning_path_policy',{})
-            if (policy.get('kind')!='collision_checked_free_path' or policy.get('previous_straight_line_gate_removed') is not True
+            if recipe.get('retry_round') in (9,10,11,12,13):
+                if recipe['retry_round']==9:
+                    from .lift_path_validation import validate_round9_policy as validate_policy
+                elif recipe['retry_round']==10:
+                    from .joint_goal_repair import validate_round10_policy as validate_policy
+                elif recipe['retry_round']==11:
+                    from .planner_refinement_round11 import validate_round11_policy as validate_policy
+                elif recipe['retry_round']==12:
+                    from .planner_refinement_round12 import validate_round12_policy as validate_policy
+                else:
+                    from .planner_refinement_round13 import validate_round13_policy as validate_policy
+                validate_policy(recipe)
+                if row.get('retained_scene_revision') is not True or row.get('scene_settings_changed_this_round') is not False:
+                    raise ValueError('Trajectory repair must retain its prior scene revision')
+            elif (policy.get('kind')!='collision_checked_free_path' or policy.get('previous_straight_line_gate_removed') is not True
                     or recipe.get('segment_deviation_limits_m') or recipe.get('joint_space_target_q_by_phase')):
                 raise ValueError('Revision must freeze the declared collision-checked free-path policy')
             result.update(scene_revision=deepcopy(row['scene_revision']), layout_changed=True,
                 scene_settings_changed_once=True,source_asset_geometry_unchanged=True,
                 composition=deepcopy(checked['document']['new_composition']),
                 scope='One candidate on a separately versioned added-hazard pose; original task/assets/predicate unchanged. Collision-checked free path; no physical success or safety claim.')
+            if recipe.get('retry_round') in (9,10,11,12,13):
+                result.update(retained_scene_revision=True,scene_settings_changed_this_round=False,
+                    scope='One trajectory repair retaining the exact round 8 scene; declared lift FK limits apply only when present. Original task and physical predicate unchanged.')
         for path,key in [('config_path','config_sha256'),('result_path','result_sha256'),('source_scene_path','source_scene_sha256')]:
             if sha(ROOT/row[path])!=row[key]: raise ValueError('Frozen source changed: '+path)
         for path,digest in old['composition']['source_paths_sha256'].items():
@@ -279,18 +327,20 @@ def run_candidate(row,recipe,output,timeout=8.):
         atomic_json(folder/'result.json',result)
         planner=GraspRetryPlanner(world,kin,dt=1/30,seed=42,max_joint_speed=.4,use_cuda_graph=False)
         prior_masks={p['phase']:p['contact_masks'] for p in old['phases']}
+        lift_reference=None
         for phase in PHASES:
             result['stage']=phase;atomic_json(folder/'result.json',result)
             carrying=phase in ('lift','transfer','lower')
             world.attachment=attachment if carrying else None
             world.gripper_joint_position=planning_grip if carrying else 0.
             masks=prior_masks[phase]
-            path,detail=plan_phase(planner,kin,q,targets[phase],phase,masks,recipe,folder,timeout)
+            path,detail=plan_phase(planner,kin,q,targets[phase],phase,masks,recipe,folder,timeout,lift_reference=lift_reference)
             result['phases'].append(detail)
             if path is None:
                 result.update(status='failed',failure_reason='cuRobo rejected '+phase+': '+detail['solver_status'],failed_phase=phase)
                 break
             paths.append(path);labels.append(phase);grips.append(grip if carrying else 0.);q=path[-1].copy()
+            if phase=='approach':lift_reference=kin.fk(q)
         else:result.update(status='generated',stage='complete',failure_reason=None,failed_phase=None)
     except Exception as error:
         result.update(status='failed',failure_reason=repr(error),traceback=traceback.format_exc())

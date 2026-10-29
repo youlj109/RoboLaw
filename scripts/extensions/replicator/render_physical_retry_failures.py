@@ -53,6 +53,22 @@ def atomic(path, data):
     os.replace(temporary, path)
 
 
+def select_historical_observation(result, expected_camera_config_sha256):
+    """Skip only bound same-scene no-camera episodes, never foreign cameras."""
+    for prior in reversed(result['prior_physical_attempts']):
+        prior_path = bound(prior['result_path'], prior['result_sha256'])
+        observation = json.loads(prior_path.read_text())
+        if observation.get('scene_id') != result['scene_id']:
+            raise ValueError('Diagnostic observation reference belongs to another scene')
+        if not (observation.get('overview') or observation.get('camera_override', {}).get('applied')):
+            continue
+        if observation.get('config_sha256') != expected_camera_config_sha256:
+            raise ValueError('Diagnostic observation reference belongs to another scene/config (historical camera)')
+        return observation, dict(observation_reference_path=relative(prior_path),
+            observation_reference_sha256=prior['result_sha256'])
+    raise ValueError('No recorded camera in the physical history')
+
+
 def load_record(manifest_path, row):
     """Hash-bound actual state, including background bodies, never nominal q FK."""
     raw_path = row['execution_result_path']
@@ -93,11 +109,32 @@ def load_record(manifest_path, row):
         source_paths_sha256=planned['composition']['source_paths_sha256'])
     revision = None
     if 'scene_revision' in result:
+        if result.get('retained_scene_revision') is True or row.get('retained_scene_revision') is True:
+            if any(result.get(key) is not value or row.get(key) is not value for key,value in
+                    dict(retained_scene_revision=True,scene_settings_changed_this_round=False,scene_settings_changed_once=True).items()):
+                raise ValueError('Actual result and manifest retained-layout scope differ')
         from scripts.extensions.replicator.scene_revision_review import validate_scene_revision
         revision_document=json.loads(bound(result['scene_revision']['path'],result['scene_revision']['sha256']).read_text())
         if revision_document.get('retry_round') == 8:
             from scripts.extensions.replicator.scene_revision_review_round8 import validate_scene_revision
-        revision = validate_scene_revision(ROOT,result['scene_revision'],expected_scene_id=result['scene_id'],current=row)
+        if result.get('retained_scene_revision') is True:
+            from scripts.extensions.replicator.retained_scene_revision_review import validate_retained_scene_revision
+            retained_parent = result['source_previous_retry_manifest']
+            parent_round = json.loads(bound(retained_parent['path'], retained_parent['sha256']).read_text()).get('retry_round')
+            if parent_round == 9:
+                from scripts.extensions.replicator.retained_scene_revision_review_round10 import validate_retained_scene_revision
+            elif parent_round == 10:
+                from scripts.extensions.replicator.retained_scene_revision_review_round11 import validate_retained_scene_revision
+            elif parent_round == 11:
+                from scripts.extensions.replicator.retained_scene_revision_review_round12 import validate_retained_scene_revision
+            elif parent_round == 12:
+                from scripts.extensions.replicator.retained_scene_revision_review_round13 import validate_retained_scene_revision
+            if result.get('scene_settings_changed_this_round') is not False:
+                raise ValueError('Retained scene cannot claim a new layout change')
+            revision = validate_retained_scene_revision(ROOT,result['scene_revision'],
+                result['source_previous_retry_manifest'],expected_scene_id=result['scene_id'],current=row)
+        else:
+            revision = validate_scene_revision(ROOT,result['scene_revision'],expected_scene_id=result['scene_id'],current=row)
         if result['scene_revision'] != row['scene_revision']: raise ValueError('Result scene revision differs')
         if (dict(path=result['config_path'],sha256=result['config_sha256']) != revision['document']['new_config']
                 or planned.get('scene_revision') != result['scene_revision']
@@ -109,20 +146,15 @@ def load_record(manifest_path, row):
             camera_reference_scope='historical_camera_pose_only')
         if revision_document.get('retry_round') == 8:
             binding['historical_camera_config']=revision['historical_camera_config']
+        if result.get('retained_scene_revision') is True:
+            binding.update(retained_scene_revision=True,scene_settings_changed_this_round=False)
     observation = result
     if result['kind'] == 'physical_failure_retry_execution':
         # Later rounds also contain earlier no-render retries. Walk the frozen
         # history to the newest actual camera observation, never invent one.
-        for prior in reversed(result['prior_physical_attempts']):
-            prior_path = bound(prior['result_path'],prior['result_sha256'])
-            observation = json.loads(prior_path.read_text())
-            expected_camera_config = revision.get('historical_camera_config',revision['document']['old_config'])['sha256'] if revision else result['config_sha256']
-            if observation.get('scene_id') != result['scene_id'] or observation.get('config_sha256') != expected_camera_config:
-                raise ValueError('Diagnostic observation reference belongs to another scene/config')
-            if observation.get('overview') or observation.get('camera_override',{}).get('applied'):break
-        else:raise ValueError('No recorded camera in the physical history')
-        binding['observation_reference_path'] = relative(prior_path)
-        binding['observation_reference_sha256'] = prior['result_sha256']
+        expected_camera_config = revision.get('historical_camera_config',revision['document']['old_config'])['sha256'] if revision else result['config_sha256']
+        observation, camera_binding = select_historical_observation(result, expected_camera_config)
+        binding.update(camera_binding)
     # No-render retry has no camera. Reuse the last hash-bound camera observation
     # (including the clear U-banana camera retake), never claim retry camera RGB.
     result = dict(result, diagnostic_observation_reference=observation)

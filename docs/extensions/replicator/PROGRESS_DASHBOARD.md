@@ -2,7 +2,100 @@
 
 地址：[物理执行与实际视频](http://127.0.0.1:8765/#physicalWorkspace)、[场景看图标注](http://127.0.0.1:8765/#annotationWorkspace)。已接入 14 个任务 × 11 个变体，共 154 个场景。进度每 3 秒自动刷新，只读实际报告和本机进程，不启动或停止采集，不占用 CUDA。
 
-**无需启动本机服务即可查看：[最新 154 景结果与诊断](PHYSICAL_RETRY_ROUND3_20261029.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round3_20261029.json) · [保留的首轮结果](PHYSICAL_EXECUTION_154_20261028.md)**。GitHub 保存状态与证据 SHA；实际视频单独打包，本机面板及视频路径不是云端播放链接。
+**无需启动本机服务即可查看：[最新 154 景结果与诊断](PHYSICAL_RETRY_ROUND13_20261029.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round13_20261029.json) · [保留的首轮结果](PHYSICAL_EXECUTION_154_20261028.md)**。GitHub 保存状态与证据 SHA；实际视频单独打包，本机面板及视频路径不是云端播放链接。
+
+## 第十三轮物理重试：人体放碗释放高度
+
+**第十三轮已完成：1 景实际成功、0 失败；当前采用版本154/154，原布局151/154。** U 型放碗／人体沿用第八轮布局，lower终点提升25mm至第十二轮已成功的中间点，并删去其后的失败下放段。其他阶段目标、抓姿、夹爪、retreat与原物理判据保持。本次续修的另一景是第十一轮已成功的芥末瓶／设备外壳，其结果不重复执行或计数。
+
+在「重试轮次」选择第十三轮，查看本轮唯一实际episode与独立审计。22,029个原生物理状态确认原任务及最终范围、支撑、低速判据通过。执行未开启渲染，本轮无失败诊断图或新视频；播放器仍显示明确标记轮次的历史视频。154/154不是安全避障或长期稳定认证。
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 冻结计划 | `configs/extensions/replicator/physical_retry_round13_20261029.json` |
+| 终态清单与原生状态 | `exports/replicator_physical_retry_round13_20261029/manifest.json`、`executions/` |
+| 独立审计 | `reports/replicator_physical_retry_round13_20261029/audit_execution.json` |
+| 独立人工物理标注 | `reports/replicator_dashboard/physical_retry_round13_annotations.json` |
+
+标注接口 `GET/POST /api/physical-retry-round13-annotations` 与历史轮分开保存，实际结果SHA一致才可保存。只读核对发布来源：
+
+```bash
+python3 scripts/extensions/replicator/publish_physical_retry_round13.py --dry-run
+```
+
+完整矩阵和逐景记录见[第十三轮报告](PHYSICAL_RETRY_ROUND13_20261029.md)。第十二轮规划失败、第十一轮启动恢复及全部历史来源继续保留，原视频包与SHA不变。
+
+## 第十二轮物理重试：人体放碗下放路点
+
+**第十二轮已完成：1 景规划失败、0 次新增物理执行；当前采用版本153/154，原布局151/154。** 本轮只处理 U 型放碗／人体，沿用第八轮布局、原抓姿及六阶段最终 TCP。lower 前9段共351个实际返回路径点通过独立源 FK 复核，最后一段 TRAJOPT_FAIL，没有返回路径。第十一轮芥末瓶成功与全部历史保持。
+
+在「重试轮次」选择第十二轮，查看本轮冻结路点、成功前缀和规划失败建议。`retry_round12.result=null`、`attempts=0`、`executed=false`；历史视频与实际结果仍明确标记所属轮次，不当作本轮执行。本轮没有实际失败，无新增诊断图或执行视频。
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 冻结计划 | `configs/extensions/replicator/physical_retry_round12_20261029.json` |
+| 终态清单 | `exports/replicator_physical_retry_round12_20261029/manifest.json` |
+| 独立审计及规划失败诊断 | `reports/replicator_physical_retry_round12_20261029/audit_execution.json`、`planning_failure_diagnostics.json` |
+| 独立人工物理标注 | `reports/replicator_dashboard/physical_retry_round12_annotations.json` |
+
+标注接口 `GET/POST /api/physical-retry-round12-annotations` 与历史轮分开保存；本轮没有实际结果，物理标注保存保持禁用。只读核对发布来源：
+
+```bash
+python3 scripts/extensions/replicator/publish_physical_retry_round12.py --dry-run
+```
+
+完整矩阵和逐景诊断见[第十二轮报告](PHYSICAL_RETRY_ROUND12_20261029.md)。已有正式输出不自动覆盖，旧报告、标注、视频及原包SHA保持。
+
+## 第十一轮物理重试：求解策略修复
+
+**第十一轮已完成：1 景实际物理成功、1 景规划失败、0 实际失败；当前采用版本153/154，原布局151/154。** 新成功是 U 型芥末瓶／尖锐设备外壳，独立原生状态复核确认原任务及最终范围、支撑、低速判据通过。U 型放碗／人体在 lower 返回 TRAJOPT_FAIL，失败段没有路径，零次本轮物理执行。两景仍采用第八轮布局，没有修改障碍摆位。
+
+在「重试轮次」选择 **第十一轮 · 求解策略修复（2 景）**。芥末瓶本轮结果是一次无画面物理执行，上方仍为历史视频；本轮没有实际失败，不新增失败图或执行视频。人体 `retry_round11.result=null`、`attempts=0`、`executed=false`，显示绑定本轮候选的规划诊断，不可用旧图冒充本轮执行。
+
+芥末瓶启动进程曾退出139。恢复前manifest原始字节、日志、源代码及目录检查均已保存，审计确认目标场景episode尚未开始；START记账标记不是物理episode证据。恢复后只执行原冻结候选一次，启动失败消耗0个物理episode。保留该记录不等于确认SciPy、protobuf或其他单一组件为根因。
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 本轮冻结计划 | `configs/extensions/replicator/physical_retry_round11_20261029.json` |
+| 本轮终态清单 | `exports/replicator_physical_retry_round11_20261029/manifest.json` |
+| 原生审计及规划失败诊断 | `reports/replicator_physical_retry_round11_20261029/audit_execution.json`、`planning_failure_diagnostics.json` |
+| 启动恢复来源复核 | `reports/replicator_physical_retry_round11_20261029/pre_episode_startup_failure_01_review.json` |
+| 独立人工物理标注 | `reports/replicator_dashboard/physical_retry_round11_annotations.json` |
+
+标注接口为 `GET/POST /api/physical-retry-round11-annotations`，与前十轮分别保存；只允许绑定有效本轮实际结果的标注，不自动重新执行。人体规划失败没有本轮实际结果，查看规划诊断即可。
+
+第十轮记录仍可从轮次选择器查阅：两景规划失败、0物理。芥末瓶JS路径的终点准确但中途旋转约21.215度，硬门槛正确拒绝；第十一轮改回有姿态／竖直软代价的笛卡尔lift，权重1并启用graph，保留8mm／4度／-2mm硬门槛。任务通过不等于安全避障验收。
+
+最终结果已发布；只读核对来源用：
+
+```bash
+python3 scripts/extensions/replicator/publish_physical_retry_round11.py --dry-run
+```
+
+完整矩阵、各景结果与启动恢复记录见[第十一轮报告](PHYSICAL_RETRY_ROUND11_20261029.md)。已存在的正式输出不会自动覆盖，前十轮报告、标注、视频及原包SHA均保留。
+
+## 第九轮物理重试：保留布局的轨迹优化
+
+**第九轮已完成：2 景规划失败、0 次新增物理执行，当前采用版本仍为 152/154，原布局保持 151/154。** 本轮保留第八轮配置、源 USD 与场景版本，不调整摆位。芥末瓶通过 pregrasp／approach，在首个 lift 段优化失败；人体通过前四阶段，在 lower 返回 IK_FAIL。两景独立审计及只读诊断已完成，没有新增执行视频或诊断图。
+
+物理面板的「重试轮次」选择第九轮，分别显示规划状态、成功前缀、后续建议及零物理尝试。本轮 `retry_round9.result=null`、`attempts=0`、`executed=false`。同一采用布局已有的实际结果不被清空：芥末瓶 `current_revision_result` 仍为第八轮实测失败，附 `current_revision_result_retry_round=8` 与 `current_revision_result_scope=latest_physical_attempt_on_retained_layout`，不是第九轮执行。上方播放器及第八轮诊断图均为明确标注的历史记录。
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 两景冻结计划 | `configs/extensions/replicator/physical_retry_round9_20261029.json` |
+| 规划与终态进度 | `reports/replicator_physical_retry_round9_planning_20261029/progress.json`、`exports/replicator_physical_retry_round9_20261029/manifest.json` |
+| 独立审计与规划失败诊断 | `reports/replicator_physical_retry_round9_20261029/audit_execution.json`、`planning_failure_diagnostics.json` |
+| 本轮独立人工标注 | `reports/replicator_dashboard/physical_retry_round9_annotations.json` |
+
+标注接口为 `GET/POST /api/physical-retry-round9-annotations`，不会覆盖前八轮。本轮没有实际结果，物理标注保存保持禁用；查看规划诊断及后续建议即可。芥末瓶的抬升合同是相对实际 approach 末端 FK 的横移≤8mm、转角≤4°、下沉≤2mm；本轮失败段没有返回路径，不能标记为合同通过或拒绝，更不能当作已验证抓取修复。
+
+结果已正式发布；需要只读核对发布来源时运行下列命令，不启动 Kit、物理或再次规划，也不覆盖已有文件：
+
+```bash
+python3 scripts/extensions/replicator/publish_physical_retry_round9.py --dry-run
+```
+
+逐景明细和完整 14 × 11 矩阵见[第九轮报告](PHYSICAL_RETRY_ROUND9_20261029.md)。原物理判据与历史记录保持；独立审计通过不表示两景任务通过，也不代表安全避障验收。
 
 ## 物理执行与实际视频
 

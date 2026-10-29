@@ -1,0 +1,94 @@
+{
+  "kind": "physical_failure_retry_plan",
+  "schema_version": 2,
+  "retry_round": 12,
+  "source_first_pass_manifest": {
+    "path": "exports/replicator_154_physical_demos_20261028/manifest.json",
+    "sha256": "fe3e8d5d213f1c377d0f74cce8fa7f4cd8eb6dfa77a3d948f8ee9e8161547951"
+  },
+  "source_camera_retake_manifest": {
+    "path": "exports/replicator_u_banana_camera_retakes_20261028/manifest.json",
+    "sha256": "51893c8da70803aa36c8a1ef8e9dcf407f7dce171602c422b7a0333fc5693edd"
+  },
+  "source_previous_retry_manifest": {
+    "path": "exports/replicator_physical_retry_round11_20261029/manifest.json",
+    "sha256": "e5fcd402f57c47dc86c773da94011b529a52a78af6286085de866f01eaf70e11"
+  },
+  "source_previous_retry_audit": {
+    "path": "reports/replicator_physical_retry_round11_20261029/audit_execution.json",
+    "sha256": "aca315f899376ada5d450acab8831c41a18d4f1eb6341b0d685792c5e65c3b62"
+  },
+  "expected_scene_count": 1,
+  "candidate_count_per_scene": 1,
+  "physical_retries_per_scene": 1,
+  "layout_changed": false,
+  "layout_changed_from_original": true,
+  "success_predicate_changed": false,
+  "execution_settings": {
+    "device": "cpu",
+    "seed": 42,
+    "physics_threads": 8,
+    "initial_settle_seconds": 5.0,
+    "close_seconds": 2.0,
+    "release_seconds": 2.0,
+    "final_settle_seconds": 3.0,
+    "episode_seconds": 200.0,
+    "max_actions": 6000
+  },
+  "entries": [
+    {
+      "scene_id": "u_shape_bowl_sink__human_default_mpfb",
+      "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+      "variant_id": "human_default_mpfb",
+      "result_path": "reports/replicator_trajectory_retry10_20261028/scenes/u_shape_bowl_sink__human_default_mpfb/result.json",
+      "result_sha256": "0b4366f147ad0009d945ec3944f0d47c4e0479ade262f3335fee0f00d1c2422e",
+      "config_path": "configs/extensions/replicator/round8_layouts_20261029/u_shape_bowl_sink__human_default_mpfb.json",
+      "config_sha256": "d69ac7d228fa47b37eec314eea4c8665e3d42e430a7b0c243123b0cdc840f969",
+      "source_scene_path": "reports/replicator_physical_retry_round8_20261029/scene_revisions/u_shape_bowl_sink__human_default_mpfb/source_scene.usda",
+      "source_scene_sha256": "268f938eea8ff01917c1f2b9356e29950b493d82d09fc0dcc374edbad2d8942c",
+      "source_trajectory_path": "reports/replicator_trajectory_retry6_20261026/scenes/u_shape_bowl_sink__human_default_mpfb/trajectory.npz",
+      "source_trajectory_sha256": "aa0f87334367c552aee19f2df4e5b0d062b3a0a1839e01b85b55340270420930",
+      "scene_revision": {
+        "path": "reports/replicator_physical_retry_round8_20261029/scene_revisions/u_shape_bowl_sink__human_default_mpfb/scene_revision.json",
+        "sha256": "28b8597342799dd2e42e8791696c842c13e855d62051a55ef44d8f7628956b92"
+      },
+      "layout_changed": true,
+      "retained_scene_revision": true,
+      "scene_settings_changed_this_round": false,
+      "scene_settings_changed_once": true,
+      "planning_status": "failed",
+      "candidate_planning_result": {
+        "path": "reports/replicator_physical_retry_round12_planning_20261029/scenes/u_shape_bowl_sink__human_default_mpfb/result.json",
+        "sha256": "850d9a66268a1bfdb57c030f3c9dd0570862f5533fc11db05dc132bdc3f55964"
+      },
+      "previous_retry_result": {
+        "path": "exports/replicator_physical_retry_round4_20261029/executions/u_shape_bowl_sink__human_default_mpfb/result.json",
+        "sha256": "5896b05c10943a6bc58fc0de70c291fb9f1616e63bdfb2987113b066f6564a77"
+      },
+      "physical_attempt_number": 5,
+      "trajectory_path": null,
+      "trajectory_sha256": null,
+      "execution_overrides": {},
+      "adjustment": {
+        "kind": "retained_layout_carry_waypoint_repair_round12",
+        "description": "保持人体站位与抓姿。下放先同TCP换支，侧绕人体后于落点上方160mm转正，再经130/100/75/50/25mm路点下降；所有原最终TCP、最终关节目标、夹爪与退出路点保持。有限CPU几何通过仍不等于真实路径或物理成功。",
+        "evidence_path": "reports/replicator_physical_retry_round12_20261029/human_cpu/early_upright_final_candidate.json",
+        "evidence_sha256": "dc6b018af3b196054edd5fc743627df73e81634cff5c77fe218b45b018efef96",
+        "candidate_count": 1,
+        "recipe_source": {
+          "path": "configs/extensions/replicator/physical_retry_round12_human_recipes_20261029.json",
+          "sha256": "e03160069d041c9ee8c45f5a4a97d260c302f06b2d232b52ff1969b2a478c0f0"
+        },
+        "root_cause_confirmed": false
+      },
+      "timing_validation": null,
+      "failure_reason": "cuRobo rejected lower: MotionGenStatus.TRAJOPT_FAIL"
+    }
+  ],
+  "created_at": "2026-10-29T10:50:14.227573+00:00",
+  "planning_progress": {
+    "path": "reports/replicator_physical_retry_round12_planning_20261029/progress.json",
+    "sha256": "b1b335cee107730a71eb408828c4c40aa8bf104e0953bc8ef60f378ce475a6f2"
+  },
+  "scope": "Retain exact round 8 scene, adjust only one frozen trajectory candidate per unresolved scene. Targeted FK lift corridor where declared; one no-render native test per complete plan. Original task/assets/predicate unchanged; all historical attempts retained."
+}

@@ -2,7 +2,13 @@
 
 历史规划冻结结果：截至 2026-10-28，14 个 Replicator 原始任务 × 11 种安全增广变体，共 **154 景已生成完整 cuRobo 轨迹，0 景规划失败**。每条完整轨迹包含预抓取、接近、抬升、转运、下放和撤离六阶段。
 
-**GitHub 最新逐景结果：[154 景结果与失败诊断](PHYSICAL_RETRY_ROUND8_20261029.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round8_20261029.json)**。首轮 [70/84 结果表](PHYSICAL_EXECUTION_154_20261028.md) 与 [首轮 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json) 保留。视频在独立 ZIP 中提供，未上传为 GitHub 在线视频。
+**GitHub 最新逐景结果：[154 景结果与失败诊断](PHYSICAL_RETRY_ROUND13_20261029.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round13_20261029.json)**。首轮 [70/84 结果表](PHYSICAL_EXECUTION_154_20261028.md) 与 [首轮 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json) 保留。视频在独立 ZIP 中提供，未上传为 GitHub 在线视频。
+
+第十三轮已完成：**U 型放碗／人体完成一次无画面原生物理执行并成功，当前采用版本 154/154，剩余 0 景；原布局仍为 151/154**。本次续修还包含第十一轮芥末瓶／设备外壳成功，两景均保留第八轮采用布局。第十三轮将 lower 终点提升25mm至第十二轮已成功的中间点，删除最后失败下放段，其他阶段目标、抓姿、夹爪和retreat保持。唯一实际episode的22,029个原生状态及原谓词计算经独立审计，原任务和最终范围、支撑、低速条件通过；物理判据未改。本轮无实际失败，无新增执行视频或失败诊断图。第十二轮零episode规划失败、第十一轮启动前退出139／同候选恢复证据与所有旧轮次保持；不声称已确认单一崩溃根因。旧包不含后续新原生状态，原包SHA不变。154/154是当前采用版本的任务结果，不是安全避障或长期稳定认证。
+
+第十轮已完成：两景固定已验证的关节终点后仍规划失败，零新物理执行，当前采用版本保持152/154。芥末瓶首个lift段关节终点准确，但返回路径中途姿态偏差约21.215度，超过冻结的4度上限，被独立FK门槛拒绝；人体lower没有返回可用路径。保存的CPU关节采样只用于选择终点，没有作为执行轨迹注入。详见[保留的第十轮报告](PHYSICAL_RETRY_ROUND10_20261029.md)。
+
+第九轮已完成：保留第八轮的两个采用布局，仅冻结新的抓姿／轨迹候选，**两景均规划失败、零次新增物理执行；当前采用版本仍为 152/154，原布局仍为 151/154**。芥末瓶通过 pregrasp／approach，首个 lift 段返回 FINETUNE_TRAJOPT_FAIL，没有可检验的失败段路径；人体通过 pregrasp／approach／lift／transfer，在 lower 返回 IK_FAIL。已保存成功前缀的独立源 FK 审计及只读诊断，没有新增图片或视频。`retry_round9.result=null` 不代表抹去旧结果：芥末瓶 `current_revision_result` 仍引用同布局第八轮实际失败，同时记录 `current_revision_result_retry_round=8` 与来源范围，不能将其计为本轮 episode。全部前八轮记录保留，旧包不包含本轮新候选与诊断。
 
 第八轮已完成：剩余两景各冻结一个新增障碍摆位／抓姿候选，**芥末瓶完整规划后实际物理失败，人体场景在下放阶段规划失败；本轮无新增成功，当前采用版本仍为 152/154、剩余 2 景**。芥末瓶闭合时有双指接触，起提初段以横向移动为主，瓶子随后倾倒失持；已完成只读接触分析和 10 张实测状态诊断图，图像重建不增加物理尝试。人体通过搬运阶段，在 lower 返回 IK_FAIL，零物理执行；冻结 CPU 腕臂／人体近邻警告仅作旁证，不证明场景全局无解。原布局 151/154、第七轮香蕉新布局成功、全部旧版本及标注保留。本轮原生数据和诊断图保存在本机，Git 提供代码、新配置、逐景状态和证据 SHA；旧输入包／视频包不含第八轮新增证据。
 
@@ -48,7 +54,7 @@
 
 ## 完整索引
 
-使用 [final_154_scenes_20261028.json](../../../configs/extensions/replicator/final_154_scenes_20261028.json) 获取全部 154 景的冻结规划输入。它保留规划完成时的历史状态，`physical_execution_verified: false` 及“物理执行准备中”不代表当前结果；最新物理状态见独立的 [执行结果索引](../../../configs/extensions/replicator/physical_retry_results_round8_20261029.json)。不要将 `trajectory_retry_v10.json` 当作完整清单：它只包含第十轮最后两景的重试方案。
+使用 [final_154_scenes_20261028.json](../../../configs/extensions/replicator/final_154_scenes_20261028.json) 获取全部 154 景的冻结规划输入。它保留规划完成时的历史状态，`physical_execution_verified: false` 及“物理执行准备中”不代表当前结果；最新物理状态见独立的 [执行结果索引](../../../configs/extensions/replicator/physical_retry_results_round13_20261029.json)。不要将 `trajectory_retry_v10.json` 当作完整清单：它只包含第十轮最后两景的重试方案。
 
 索引逐景保存：
 
