@@ -6,9 +6,9 @@
 
 ## Replicator 154 景：逐景成功与失败
 
-截至 2026-10-29，**154 景均有历史完整规划；最新实际成功 149 景，剩余 5 景**。第四轮针对剩余 6 景各冻结一个候选，4 景新规划通过后各做一次无渲染物理测试：**1 成功、3 任务失败、0 执行异常**；另 **2 景因规划路径超出预设分段偏差上限被拒绝，零次新物理执行**。新增成功为 L 型厨房／人体变体／碗放入水槽。六景独立审计、3 景实际失败图像复核、2 景规划路径 CPU 复算及逐景修改建议均已完成。首轮及前三轮历史记录保留；规划失败不等于场景无解，任务成功不等于安全或长期稳定验收。
+截至 2026-10-29，**154 景均有历史完整规划；最新实际成功 151 景，剩余 3 景**。第五轮针对剩余 5 景各冻结一个候选：红酒杯和窄开口两个 L 型碗放水槽变体规划通过，各做一次无渲染物理测试，**2 成功、0 任务失败、0 执行异常**；另 **3 景新规划失败，零次新物理执行**。剩余为 L 型带中岛香蕉／尖锐设备外壳、U 型芥末瓶／尖锐设备外壳、U 型放碗／人体。前两景未通过轨迹优化，人体景抬升路径偏差 5.748mm 超过预设 5mm 上限。原布局、原成功判据和历史记录保留；规划失败不等于场景无解，任务成功不等于安全或长期稳定验收。
 
-**[查看最新 154 景结果与失败诊断](docs/extensions/replicator/PHYSICAL_RETRY_ROUND4_20261029.md)** · [最新结果 JSON](configs/extensions/replicator/physical_retry_results_round4_20261029.json) · [保留的首轮结果](docs/extensions/replicator/PHYSICAL_EXECUTION_154_20261028.md) · [发布说明与输入恢复](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md)
+**[查看最新 154 景结果与失败诊断](docs/extensions/replicator/PHYSICAL_RETRY_ROUND5_20261029.md)** · [最新结果 JSON](configs/extensions/replicator/physical_retry_results_round5_20261029.json) · [保留的首轮结果](docs/extensions/replicator/PHYSICAL_EXECUTION_154_20261028.md) · [发布说明与输入恢复](docs/extensions/replicator/RELEASE_154_PLANNED_SCENES.md)
 
 Git 保存逐景状态与证据 SHA；规划输入和视频另行打包，原始物理状态与接触记录保留本机，不随代码提交。文档中的本机视频路径不是 GitHub 在线视频链接。实际任务成功不等于安全避障验收。
 

@@ -19,7 +19,7 @@ from .scene_build_runtime import ROOT, atomic_json, relative, sha, stamp
 
 
 class GraspRetryPlanner(QuickPlanner):
-    def constrained_plan(self, q, target, phase, masks, hold_orientation, timeout=8., linear_vertical=False):
+    def constrained_plan(self, q, target, phase, masks, hold_orientation, timeout=8., linear_vertical=False, planning_options=None):
         from curobo.types.math import Pose
         from curobo.types.robot import JointState
         from curobo.wrap.reacher.motion_gen import MotionGenPlanConfig
@@ -28,18 +28,22 @@ class GraspRetryPlanner(QuickPlanner):
             self.motion_gen.world_coll_checker.enable_obstacle(name,
                 enable=not any(self.world._matches(name, mask) for mask in masks))
         self._sync_gripper_and_attachment(self.world.attachment is not None)
-        self.motion_gen.reset(reset_seed=True)
+        options=checked_planning_options(planning_options or {})
+        if options:self._reset_all_seeds()
+        else:self.motion_gen.reset(reset_seed=True)
+        weight=float(options.get('constraint_weight',1.))
+        graph=options.get('enable_graph',True)
         start = JointState.from_position(self.args.to_device(np.asarray(q)[None]),
             joint_names=[f'panda_joint{i}' for i in range(1,8)])
         goal = Pose.from_list(self._pose_list(self.T_B_W @ target @ np.linalg.inv(self.T_ee_tcp)), self.args)
         metric = PoseCostMetric(hold_partial_pose=True,
-            hold_vec_weight=self.args.to_device([1.,1.,1.,0.,0.,0.])) if hold_orientation else None
+            hold_vec_weight=self.args.to_device([weight,weight,weight,0.,0.,0.])) if hold_orientation else None
         if linear_vertical:
             metric = PoseCostMetric(hold_partial_pose=True, project_to_goal_frame=False,
-                hold_vec_weight=self.args.to_device([1.,1.,1.,1.,1.,0.]))
+                hold_vec_weight=self.args.to_device([weight,weight,weight,weight,weight,0.]))
         begin=time.monotonic()
         output=self.motion_gen.plan_single(start, goal, MotionGenPlanConfig(
-            max_attempts=1,timeout=timeout,enable_graph=True,enable_graph_attempt=1,
+            max_attempts=1,timeout=timeout,enable_graph=graph,enable_graph_attempt=1 if graph else None,
             enable_finetune_trajopt=True,finetune_attempts=1,ik_fail_return=1,
             pose_cost_metric=metric))
         self.torch.cuda.synchronize()
@@ -50,12 +54,29 @@ class GraspRetryPlanner(QuickPlanner):
             nominal_payload_attached=self.world.attachment is not None,
             orientation_hold_requested=hold_orientation, vertical_motion_cost_requested=linear_vertical,
             physical_grasp_verified=False)
+        if options:
+            detail.update(planning_options=options,planner_seed_reset='all_including_finetune',
+                graph_enabled=graph,graph_fallback_enabled=graph,
+                pose_metric_hold_weights=None if metric is None else metric.hold_vec_weight.detach().cpu().tolist())
         if not ok: return None,detail
         path=output.get_interpolated_plan().position.detach().cpu().numpy()
         if path.ndim!=2 or path.shape[1]!=7 or not np.isfinite(path).all() or np.max(np.abs(path[0]-q))>1e-4:
             raise ValueError('Invalid cuRobo path or discontinuous start')
         detail.update(samples=len(path),interpolation_dt=float(output.interpolation_dt))
         return path,detail
+
+
+def checked_planning_options(options):
+    """Only predeclared solver options; no retries or physics changes."""
+    if not isinstance(options,dict) or set(options)-{'constraint_weight','enable_graph'}:
+        raise ValueError('Unknown frozen planning option')
+    if 'constraint_weight' in options:
+        value=options['constraint_weight']
+        if isinstance(value,bool) or not isinstance(value,(int,float)) or not np.isfinite(value) or not 1.<=value<=50.:
+            raise ValueError('Invalid frozen constraint weight')
+    if 'enable_graph' in options and type(options['enable_graph']) is not bool:
+        raise ValueError('Graph option must be Boolean')
+    return deepcopy(options)
 
 
 def validate_recipe(recipe, old, layout):
@@ -108,6 +129,9 @@ def validate_recipe(recipe, old, layout):
         for point in points:checked_pose(point)
     for limit in limits.values():
         if not np.isfinite(float(limit)) or not 0<float(limit)<=.02:raise ValueError('Invalid segment deviation limit')
+    options=recipe.get('planning_options_by_phase',{})
+    if not isinstance(options,dict) or not set(options)<=set(PHASES):raise ValueError('Unknown planning option phase')
+    for option in options.values():checked_planning_options(option)
     return targets,attachment,grip
 
 
@@ -133,7 +157,9 @@ def plan_phase(planner,kin,q,target,phase,masks,recipe,folder,timeout):
         vertical=phase in recipe.get('linear_motion_phases',[])
         if vertical and (rotation_error>=.04 or np.linalg.norm(start[:2,3]-endpoint[:2,3])>.004):
             raise ValueError('Vertical motion cost requires aligned orientation and XY start')
-        path,detail=planner.constrained_plan(q,endpoint,phase,masks,hold,timeout,linear_vertical=vertical)
+        options=recipe.get('planning_options_by_phase',{}).get(phase)
+        extra={} if not options else dict(planning_options=options)
+        path,detail=planner.constrained_plan(q,endpoint,phase,masks,hold,timeout,linear_vertical=vertical,**extra)
         if path is not None:
             poses=fk_batch(kin,path)
             if vertical:

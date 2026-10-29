@@ -106,3 +106,27 @@ test('manual historical selection remains unchanged when round 4 is available', 
     assert.equal(context.physicalState.retryRound, selected);
   }
 });
+
+
+test('round 5 loading and planning/execution presence retain selection', () => {
+  for (const presence of [{planning_present:true},{manifest_present:true}]) {
+    const {context,render}=harness(null,5);render();assert.equal(context.physicalState.retryRound,5);
+    context.state.data={physical_execution:{failure_retry_round5:presence}};render();
+    assert.equal(context.byId('physicalRetryRound').value,'5');
+  }
+});
+test('round 5 defaults back through all four historical rounds', () => {
+  for (const expected of [4,3,2,1]) {
+    const available=expected>1?{['failure_retry_round'+expected]:{manifest_present:true}}:{};
+    const {context,render}=harness({physical_execution:available},5);render();
+    assert.equal(context.physicalState.retryRound,expected);
+  }
+});
+test('round 5 presence never replaces a manual historical choice', () => {
+  for (const selected of [1,2,3,4]) {
+    const available={failure_retry_round5:{manifest_present:true},failure_retry_round2:{manifest_present:true},
+      failure_retry_round3:{manifest_present:true},failure_retry_round4:{manifest_present:true}};
+    const {context,render}=harness({physical_execution:available},selected);render();render();
+    assert.equal(context.physicalState.retryRound,selected);
+  }
+});

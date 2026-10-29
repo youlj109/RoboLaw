@@ -2,7 +2,9 @@
 
 历史规划冻结结果：截至 2026-10-28，14 个 Replicator 原始任务 × 11 种安全增广变体，共 **154 景已生成完整 cuRobo 轨迹，0 景规划失败**。每条完整轨迹包含预抓取、接近、抬升、转运、下放和撤离六阶段。
 
-**GitHub 最新逐景结果：[154 景结果与失败诊断](PHYSICAL_RETRY_ROUND4_20261029.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round4_20261029.json)**。首轮 [70/84 结果表](PHYSICAL_EXECUTION_154_20261028.md) 与 [首轮 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json) 保留。视频在独立 ZIP 中提供，未上传为 GitHub 在线视频。
+**GitHub 最新逐景结果：[154 景结果与失败诊断](PHYSICAL_RETRY_ROUND5_20261029.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round5_20261029.json)**。首轮 [70/84 结果表](PHYSICAL_EXECUTION_154_20261028.md) 与 [首轮 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json) 保留。视频在独立 ZIP 中提供，未上传为 GitHub 在线视频。
+
+第五轮物理重试已完成：5 个剩余场景各冻结一个候选，**2 景规划通过且实际物理成功、0 物理失败、3 景规划失败，累计 151/154 成功、剩余 3 景**。新增成功为 L 型碗放水槽的 `property_wine_glass` 与 `robot_narrow_opening`；调整落点和放置姿态后，两者原支撑、范围、低速判据均通过。本轮没有实际失败，不新增失败渲染或视频；三景规划失败保留上一轮实际失败与诊断图，详见最新逐景报告。人体景新抓姿沿用的旧补偿测量不能证明新抓姿的实际落碗支撑；该候选在抬升阶段已被拒绝、零物理执行，下一轮须重建有效补偿依据或恢复默认调整范围。下方历史输入包/视频包不包含第五轮新增轨迹和原生状态。
 
 第四轮物理重试已完成：6 个剩余场景各冻结一个候选，4 景规划通过后各做一次无画面原生物理测试，**新增成功 1 景、物理失败 3 景、规划失败 2 景，累计 149/154 成功、剩余 5 景**。新增成功为 `l_shape_bowl_sink__human_default_mpfb`。两条新规划的实际 TCP 路径超过事先固定的 5mm 分段偏差门限，未进入物理执行；没有放宽该门限或原任务判据。人体放碗场景允许有实测夹持和源几何证据的末端补偿：名义 Z 调整最多 90mm，预测实际碗底仍为原槽底上方 3mm，布局不变。六景独立审计通过，3 景实际失败已保存 28 张主诊断图及 18 张补充俯视图；图像来自本轮实际状态重建，没有新增物理或视频。完整新原生状态、新轨迹和图片保留本机，不包含在下方历史输入包/视频包中；代码、冻结方案与逐景状态随 Git 发布。
 
@@ -40,7 +42,7 @@
 
 ## 完整索引
 
-使用 [final_154_scenes_20261028.json](../../../configs/extensions/replicator/final_154_scenes_20261028.json) 获取全部 154 景的冻结规划输入。它保留规划完成时的历史状态，`physical_execution_verified: false` 及“物理执行准备中”不代表当前结果；最新物理状态见独立的 [执行结果索引](../../../configs/extensions/replicator/physical_retry_results_round4_20261029.json)。不要将 `trajectory_retry_v10.json` 当作完整清单：它只包含第十轮最后两景的重试方案。
+使用 [final_154_scenes_20261028.json](../../../configs/extensions/replicator/final_154_scenes_20261028.json) 获取全部 154 景的冻结规划输入。它保留规划完成时的历史状态，`physical_execution_verified: false` 及“物理执行准备中”不代表当前结果；最新物理状态见独立的 [执行结果索引](../../../configs/extensions/replicator/physical_retry_results_round5_20261029.json)。不要将 `trajectory_retry_v10.json` 当作完整清单：它只包含第十轮最后两景的重试方案。
 
 索引逐景保存：
 
