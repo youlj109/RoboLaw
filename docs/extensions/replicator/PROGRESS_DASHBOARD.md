@@ -2,7 +2,100 @@
 
 地址：[物理执行与实际视频](http://127.0.0.1:8765/#physicalWorkspace)、[场景看图标注](http://127.0.0.1:8765/#annotationWorkspace)。已接入 14 个任务 × 11 个变体，共 154 个场景。进度每 3 秒自动刷新，只读实际报告和本机进程，不启动或停止采集，不占用 CUDA。
 
-**无需启动本机服务即可查看：[154 景成功／失败表](PHYSICAL_EXECUTION_154_20261028.md) · [机器可读执行结果 JSON](../../../configs/extensions/replicator/physical_execution_154_20261028.json)**。GitHub 保存状态与证据 SHA；实际视频单独打包，本机面板及视频路径不是云端播放链接。
+**无需启动本机服务即可查看：[最新 154 景结果与诊断](PHYSICAL_RETRY_ROUND13_20261029.md) · [最新结果 JSON](../../../configs/extensions/replicator/physical_retry_results_round13_20261029.json) · [保留的首轮结果](PHYSICAL_EXECUTION_154_20261028.md)**。GitHub 保存状态与证据 SHA；实际视频单独打包，本机面板及视频路径不是云端播放链接。
+
+## 第十三轮物理重试：人体放碗释放高度
+
+**第十三轮已完成：1 景实际成功、0 失败；当前采用版本154/154，原布局151/154。** U 型放碗／人体沿用第八轮布局，lower终点提升25mm至第十二轮已成功的中间点，并删去其后的失败下放段。其他阶段目标、抓姿、夹爪、retreat与原物理判据保持。本次续修的另一景是第十一轮已成功的芥末瓶／设备外壳，其结果不重复执行或计数。
+
+在「重试轮次」选择第十三轮，查看本轮唯一实际episode与独立审计。22,029个原生物理状态确认原任务及最终范围、支撑、低速判据通过。执行未开启渲染，本轮无失败诊断图或新视频；播放器仍显示明确标记轮次的历史视频。154/154不是安全避障或长期稳定认证。
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 冻结计划 | `configs/extensions/replicator/physical_retry_round13_20261029.json` |
+| 终态清单与原生状态 | `exports/replicator_physical_retry_round13_20261029/manifest.json`、`executions/` |
+| 独立审计 | `reports/replicator_physical_retry_round13_20261029/audit_execution.json` |
+| 独立人工物理标注 | `reports/replicator_dashboard/physical_retry_round13_annotations.json` |
+
+标注接口 `GET/POST /api/physical-retry-round13-annotations` 与历史轮分开保存，实际结果SHA一致才可保存。只读核对发布来源：
+
+```bash
+python3 scripts/extensions/replicator/publish_physical_retry_round13.py --dry-run
+```
+
+完整矩阵和逐景记录见[第十三轮报告](PHYSICAL_RETRY_ROUND13_20261029.md)。第十二轮规划失败、第十一轮启动恢复及全部历史来源继续保留，原视频包与SHA不变。
+
+## 第十二轮物理重试：人体放碗下放路点
+
+**第十二轮已完成：1 景规划失败、0 次新增物理执行；当前采用版本153/154，原布局151/154。** 本轮只处理 U 型放碗／人体，沿用第八轮布局、原抓姿及六阶段最终 TCP。lower 前9段共351个实际返回路径点通过独立源 FK 复核，最后一段 TRAJOPT_FAIL，没有返回路径。第十一轮芥末瓶成功与全部历史保持。
+
+在「重试轮次」选择第十二轮，查看本轮冻结路点、成功前缀和规划失败建议。`retry_round12.result=null`、`attempts=0`、`executed=false`；历史视频与实际结果仍明确标记所属轮次，不当作本轮执行。本轮没有实际失败，无新增诊断图或执行视频。
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 冻结计划 | `configs/extensions/replicator/physical_retry_round12_20261029.json` |
+| 终态清单 | `exports/replicator_physical_retry_round12_20261029/manifest.json` |
+| 独立审计及规划失败诊断 | `reports/replicator_physical_retry_round12_20261029/audit_execution.json`、`planning_failure_diagnostics.json` |
+| 独立人工物理标注 | `reports/replicator_dashboard/physical_retry_round12_annotations.json` |
+
+标注接口 `GET/POST /api/physical-retry-round12-annotations` 与历史轮分开保存；本轮没有实际结果，物理标注保存保持禁用。只读核对发布来源：
+
+```bash
+python3 scripts/extensions/replicator/publish_physical_retry_round12.py --dry-run
+```
+
+完整矩阵和逐景诊断见[第十二轮报告](PHYSICAL_RETRY_ROUND12_20261029.md)。已有正式输出不自动覆盖，旧报告、标注、视频及原包SHA保持。
+
+## 第十一轮物理重试：求解策略修复
+
+**第十一轮已完成：1 景实际物理成功、1 景规划失败、0 实际失败；当前采用版本153/154，原布局151/154。** 新成功是 U 型芥末瓶／尖锐设备外壳，独立原生状态复核确认原任务及最终范围、支撑、低速判据通过。U 型放碗／人体在 lower 返回 TRAJOPT_FAIL，失败段没有路径，零次本轮物理执行。两景仍采用第八轮布局，没有修改障碍摆位。
+
+在「重试轮次」选择 **第十一轮 · 求解策略修复（2 景）**。芥末瓶本轮结果是一次无画面物理执行，上方仍为历史视频；本轮没有实际失败，不新增失败图或执行视频。人体 `retry_round11.result=null`、`attempts=0`、`executed=false`，显示绑定本轮候选的规划诊断，不可用旧图冒充本轮执行。
+
+芥末瓶启动进程曾退出139。恢复前manifest原始字节、日志、源代码及目录检查均已保存，审计确认目标场景episode尚未开始；START记账标记不是物理episode证据。恢复后只执行原冻结候选一次，启动失败消耗0个物理episode。保留该记录不等于确认SciPy、protobuf或其他单一组件为根因。
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 本轮冻结计划 | `configs/extensions/replicator/physical_retry_round11_20261029.json` |
+| 本轮终态清单 | `exports/replicator_physical_retry_round11_20261029/manifest.json` |
+| 原生审计及规划失败诊断 | `reports/replicator_physical_retry_round11_20261029/audit_execution.json`、`planning_failure_diagnostics.json` |
+| 启动恢复来源复核 | `reports/replicator_physical_retry_round11_20261029/pre_episode_startup_failure_01_review.json` |
+| 独立人工物理标注 | `reports/replicator_dashboard/physical_retry_round11_annotations.json` |
+
+标注接口为 `GET/POST /api/physical-retry-round11-annotations`，与前十轮分别保存；只允许绑定有效本轮实际结果的标注，不自动重新执行。人体规划失败没有本轮实际结果，查看规划诊断即可。
+
+第十轮记录仍可从轮次选择器查阅：两景规划失败、0物理。芥末瓶JS路径的终点准确但中途旋转约21.215度，硬门槛正确拒绝；第十一轮改回有姿态／竖直软代价的笛卡尔lift，权重1并启用graph，保留8mm／4度／-2mm硬门槛。任务通过不等于安全避障验收。
+
+最终结果已发布；只读核对来源用：
+
+```bash
+python3 scripts/extensions/replicator/publish_physical_retry_round11.py --dry-run
+```
+
+完整矩阵、各景结果与启动恢复记录见[第十一轮报告](PHYSICAL_RETRY_ROUND11_20261029.md)。已存在的正式输出不会自动覆盖，前十轮报告、标注、视频及原包SHA均保留。
+
+## 第九轮物理重试：保留布局的轨迹优化
+
+**第九轮已完成：2 景规划失败、0 次新增物理执行，当前采用版本仍为 152/154，原布局保持 151/154。** 本轮保留第八轮配置、源 USD 与场景版本，不调整摆位。芥末瓶通过 pregrasp／approach，在首个 lift 段优化失败；人体通过前四阶段，在 lower 返回 IK_FAIL。两景独立审计及只读诊断已完成，没有新增执行视频或诊断图。
+
+物理面板的「重试轮次」选择第九轮，分别显示规划状态、成功前缀、后续建议及零物理尝试。本轮 `retry_round9.result=null`、`attempts=0`、`executed=false`。同一采用布局已有的实际结果不被清空：芥末瓶 `current_revision_result` 仍为第八轮实测失败，附 `current_revision_result_retry_round=8` 与 `current_revision_result_scope=latest_physical_attempt_on_retained_layout`，不是第九轮执行。上方播放器及第八轮诊断图均为明确标注的历史记录。
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 两景冻结计划 | `configs/extensions/replicator/physical_retry_round9_20261029.json` |
+| 规划与终态进度 | `reports/replicator_physical_retry_round9_planning_20261029/progress.json`、`exports/replicator_physical_retry_round9_20261029/manifest.json` |
+| 独立审计与规划失败诊断 | `reports/replicator_physical_retry_round9_20261029/audit_execution.json`、`planning_failure_diagnostics.json` |
+| 本轮独立人工标注 | `reports/replicator_dashboard/physical_retry_round9_annotations.json` |
+
+标注接口为 `GET/POST /api/physical-retry-round9-annotations`，不会覆盖前八轮。本轮没有实际结果，物理标注保存保持禁用；查看规划诊断及后续建议即可。芥末瓶的抬升合同是相对实际 approach 末端 FK 的横移≤8mm、转角≤4°、下沉≤2mm；本轮失败段没有返回路径，不能标记为合同通过或拒绝，更不能当作已验证抓取修复。
+
+结果已正式发布；需要只读核对发布来源时运行下列命令，不启动 Kit、物理或再次规划，也不覆盖已有文件：
+
+```bash
+python3 scripts/extensions/replicator/publish_physical_retry_round9.py --dry-run
+```
+
+逐景明细和完整 14 × 11 矩阵见[第九轮报告](PHYSICAL_RETRY_ROUND9_20261029.md)。原物理判据与历史记录保持；独立审计通过不表示两景任务通过，也不代表安全避障验收。
 
 ## 物理执行与实际视频
 
@@ -19,6 +112,131 @@ G 型香蕉人体的源网格相交、U 型碗窄口的底座支撑边界两项�
 已有批次在没有 running 项且上一进程退出后，推荐主机运行 `python3 scripts/extensions/replicator/run_physical_demo_batches.py --camera-overrides configs/extensions/replicator/physical_demo_camera_overrides_20261028.json`，按原始任务启动新 Kit 进程并使用 8 个 PhysX 线程。该协调器的 `--dry-run` 只核对待执行分组，不代替执行器的源文件、轨迹及资产 SHA 检查；调度器不会重试已经执行的失败场景或自动处理初始化恢复。
 
 U 型香蕉 11 景因首轮相机被天花板遮挡，另在独立目录各真实补录一次。面板的首轮成功/失败计数与原视频入口保持不变，额外显示「相机补录已保存 N/11」。选择这些场景时，有效新视频可以默认播放，但明确标注「相机补录 · 第2次」，同时列出原首轮成绩与链接。补录结果与首轮、冻结计划、控制参数及视频 SHA 绑定才可访问；无论新录成败，最终演示包固定选择全部 11 个新视频，不按成绩择优。补录计划仅供本机已有物理证据使用，新克隆首次执行使用相机 override 配置即可。
+
+## 首轮失败 84 景：单次调整与无渲染物理测试
+
+本轮已完成：**36 景转为成功、48 景仍失败、0 执行错误，最新合计 106/154 景成功**。48 景已完成状态回放渲染和逐景视觉复核；自动观察、推断及后续修改建议与人工标注分开显示。详见 [本轮结果与全部失败诊断](PHYSICAL_RETRY_ROUND1_20261028.md)。
+
+本轮只处理首轮的 84 个失败场景，每景冻结一份调整方案后实际测试一次。调整为原轨迹的速度、加速度与阶段停留时间，保留原场景、几何路径、夹爪指令和原始任务判据。执行时不启用相机或渲染，也不生成本轮视频；已结束的结果保留，不自动再试。
+
+物理面板新增独立的「本轮重试」计数与筛选，读取 `exports/replicator_physical_retry_round1_20261028/manifest.json`。首轮 **70 成功 / 84 失败**和相机补录记录保持不变；「最新实际成功」合并首轮成功与本轮新增成功，尚未完成的场景保留此前实际结论。4 个已经做过相机补录的失败场景显示累计第 3 次物理 episode，其余为第 2 次，本轮均只尝试一次。
+
+1. 用「本轮重试」筛选运行中、成功或失败，选择场景查看本次调整说明及实际执行结果。**上方播放器仍是首轮或明确标记的相机补录视频，不是本轮测试视频。**
+2. 本轮测试结束后，仅对仍失败且有实际状态记录的场景生成默认 6 张关键阶段诊断图；可通过 `--frame-hints <JSON>` 额外加入失持等事件的实测状态，去重后最多 10 张。事件提示必须匹配该景实际结果与状态 NPZ 的 SHA，索引范围及阶段逐项核对，不做插值。图片读取实际保存的机器人、任务物体和厨房动态刚体姿态，在停止的时间轴上重建画面；不再运行抓放或推进物理步骤。图片带 `DIAGNOSTIC STATE REPLAY` 水印，是**实测状态重建图**，不能称为执行相机原始帧或新的成功证据。
+3. 诊断图及报告保存在 `reports/replicator_physical_retry_round1_diagnostics_20261028/`。网页仅展示与本轮实际结果、状态 NPZ、metadata、物理背景及图片 SHA 匹配的内容；尚未生成显示等待，初始化未执行或缺少状态不会伪造画面。
+   补充视角在 `reports/replicator_physical_retry_round1_diagnostics_detail_20261028/`，暗曝光补图在 `reports/replicator_physical_retry_round1_diagnostics_dark_20261028/`。只展示视觉复核引用并通过同一实际状态及 SHA 校验的补图；更换观察相机不改变场景布局。曝光标签区分请求参数与实际效果，遮挡限制也在逐景观察中说明。
+4. 在「实际失败原因 / 后续调整方案」中填写观察，约 0.65 秒后自动保存，失败时可点击「保存 / 重试保存」。内容独立保存到 `reports/replicator_dashboard/physical_retry_annotations.json`，绑定实际结果与配置 SHA，不覆盖原场景或轨迹标注，也不触发再次执行。来源变化或并发编辑会拒绝覆盖并保留当前页面草稿；遇到冲突先复制草稿，再比较服务器内容。
+
+本轮是独立结果集，原 154 景发布快照、首轮视频及已发布视频包不被改写。任务成功、诊断回放和安全避障验收仍分别记录。
+
+## 第二轮剩余 48 景：抓姿与轨迹调整
+
+**第二轮 48 景已结束：29 景各实际测试一次，其中 19 成功、10 失败、0 执行错误；另有 19 景规划失败，零次新物理测试。最新累计 125/154 景通过，剩余 29 景。** 每景只冻结一个抓点、抓姿、夹爪指令或轨迹目标调整候选，保持场景布局及原始任务判据。全部 48 景审计已通过，10 景实际失败已完成逐景视觉复核，19 景规划失败已完成绑定候选结果的只读 CPU 诊断。详见[第二轮完整结果与失败建议](PHYSICAL_RETRY_ROUND2_20261028.md)及[机器可读状态](../../../configs/extensions/replicator/physical_retry_results_round2_20261028.json)。
+
+已生成 **190 张可用状态重建图：95 张主图、95 张有效补图**。逐景复核记录明确列出实际查看的 **164 个图像路径**，覆盖全部 10 景实际失败；可用图片总数不代表每张均已人工查看。补图只改变观察视角和曝光，仍使用同一次真实执行保存的物理状态，没有新增物理执行。原图遮挡、曝光及无法确认的接触原因保留在各景复核说明中。
+
+在[物理执行面板](http://127.0.0.1:8765/#physicalWorkspace)的「重试轮次」选择 **第二轮 · 抓姿与轨迹（48 景）**，再用「所选轮次」筛选全部 48 景、等待规划、规划中、规划失败、待测、运行、成功、失败或错误。切回 **第一轮 · 时序优化（84 景）** 可查看历史结果；「首轮执行结果」仍筛选最初的 154 景。上方播放器仍播放首轮或明确标记的相机补录视频，第二轮无渲染测试没有新执行视频。
+
+第二轮已有 **19 景规划失败，均为 `planning_failed`、`attempts=0`、`executed=false`**；这些景没有本轮物理结果或新诊断图，不能计为本轮实际抓放失败或成功。网页保留其上一轮实际失败，并显示新规划的失败阶段和原因。其余候选的待测、运行及实际结果分别统计；「最新实际成功」只合并已验证的新物理成功，不把规划生成或CPU诊断当作成功。
+
+本轮来源彼此独立：
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 冻结的 48 景调整计划 | `configs/extensions/replicator/physical_retry_round2_20261028.json` |
+| 新规划进度及候选结果 | `reports/replicator_physical_retry_round2_planning_20261028/progress.json` |
+| 实际执行进度 | `exports/replicator_physical_retry_round2_20261028/manifest.json` |
+| 第二轮人工物理标注 | `reports/replicator_dashboard/physical_retry_round2_annotations.json` |
+| 实际失败的状态重建图 | `reports/replicator_physical_retry_round2_diagnostics_20261028/scenes/<scene_id>/` |
+| 19 景规划失败的只读CPU诊断 | `reports/replicator_physical_retry_round2_20261028/planning_failure_diagnostics.json` |
+
+第二轮的「实际失败原因 / 后续调整方案」约 0.65 秒自动保存，绑定第二轮实际结果及配置 SHA；接口为 `GET/POST /api/physical-retry-round2-annotations`。第一轮仍使用原来的 `physical_retry_annotations.json` 和 `/api/physical-retry-annotations`，同一场景跨轮次也不会覆盖标注。只有本轮实际结果已落盘且来源有效时才能保存物理标注；规划失败景没有本轮实际结果，查看其规划诊断及建议即可。来源变化、并发编辑或保存失败时保留草稿，先核对再重试，不会触发新规划或物理执行。
+
+### 第二轮结束后的审计、渲染与发布命令
+
+以下命令在仓库根目录执行，要求第二轮 manifest 为 `complete`。本轮实际执行、审计、失败诊断、视觉复核及结果发布现已完成；以下保留复现入口，发布脚本仍须验证终态来源及逐景绑定，且不会覆盖已存在的发布文件。命令不会再做一轮抓放。
+
+先完成全部 48 景的只读审计，包括 19 景规划失败的零物理尝试检查：
+
+```bash
+bash scripts/arena_python.sh scripts/extensions/replicator/audit_physical_retry_round2.py \
+  --demos exports/replicator_physical_retry_round2_20261028 \
+  --output reports/replicator_physical_retry_round2_20261028/audit_execution.json \
+  --require-complete
+```
+
+仅为本轮 `executed=true` 的实际失败生成诊断图。先做不启动 Kit 的来源与状态预检，再运行渲染：
+
+```bash
+bash scripts/arena_python.sh scripts/extensions/replicator/render_physical_retry_failures.py \
+  --manifest exports/replicator_physical_retry_round2_20261028/manifest.json \
+  --output reports/replicator_physical_retry_round2_diagnostics_20261028 \
+  --dry-run
+
+bash scripts/arena_python.sh scripts/extensions/replicator/render_physical_retry_failures.py \
+  --manifest exports/replicator_physical_retry_round2_20261028/manifest.json \
+  --output reports/replicator_physical_retry_round2_diagnostics_20261028
+```
+
+需要单景时增加 `--scene <scene_id>`；恢复同一最终 manifest 的未完成渲染使用 `--resume`。`--frame-hints <JSON>` 可加入绑定实际状态 SHA 的事件帧。若本轮没有实际执行失败，跳过渲染。诊断图来自保存的实测状态，时间轴停止且没有新物理步；规划失败不参与此渲染。
+
+实际查看所有本轮失败图片后，将逐景可见事实、保守推断和下一步建议保存为 `reports/replicator_physical_retry_round2_20261028/failure_visual_review.json`。每条复核需绑定该景本轮 `execution_result_sha256` 和 `diagnostic_report_sha256`，不能复用上一轮图片冒充本轮观察。无实际失败时可没有该文件，或保留合法的空 `entries`；19 景规划失败另由CPU诊断完整覆盖，不宣称根因确认或场景无解。
+
+最后先核对发布条件，再生成独立的第二轮结果：
+
+```bash
+python3 scripts/extensions/replicator/publish_physical_retry_round2.py --dry-run
+python3 scripts/extensions/replicator/publish_physical_retry_round2.py
+```
+
+发布脚本默认读取上述 manifest、审计、CPU诊断和视觉复核；`--dry-run` 也要求最终来源一致，但不写文件。正式输出为 `configs/extensions/replicator/physical_retry_results_round2_20261028.json` 与 `docs/extensions/replicator/PHYSICAL_RETRY_ROUND2_20261028.md`，包含 154 景最新状态、14 × 11 矩阵、48 景调整结果及 19 景规划诊断。旧 `retry`、旧文档及视频保留，新记录写入 `retry_round2`；已存在的发布文件不会被自动覆盖。任务成功仍不代表安全避障或长期稳定验收。
+
+## 第三轮剩余 29 景：失败项优化
+
+**第三轮已结束：27 景各实际测试一次，其中 23 成功、4 任务失败、0 执行错误；另 2 景规划失败、零次新物理执行。累计 148/154 景成功，剩余 6 景。** 全部 29 景独立审计已通过，4 景实际失败已完成绑定实测状态的逐景图像复核，2 景规划失败已完成只读 CPU 诊断；正式结果已发布。详见[第三轮完整结果与失败建议](PHYSICAL_RETRY_ROUND3_20261029.md)及[机器可读状态](../../../configs/extensions/replicator/physical_retry_results_round3_20261029.json)。
+
+在[物理执行面板](http://127.0.0.1:8765/#physicalWorkspace)的「重试轮次」选择 **第三轮 · 失败项优化（29 景）**。每景仅冻结一个抓取或路径候选，通过一次规划后才进行一次无画面物理执行；场景布局、源物理和原任务判据不变。2 个 `planning_failed` 条目均为 `attempts=0`、`executed=false`，没有本轮物理结果，保留最近一次真正执行的历史结果；不能把它们当成新物理失败，也不表示场景不可行。网页上方仍是历史执行或相机补录视频，本轮没有新增执行视频。
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 冻结的 29 景调整计划 | `configs/extensions/replicator/physical_retry_round3_20261029.json` |
+| 新规划进度及候选结果 | `reports/replicator_physical_retry_round3_planning_20261029/progress.json` |
+| 实际执行清单 | `exports/replicator_physical_retry_round3_20261029/manifest.json` |
+| 第三轮人工物理标注 | `reports/replicator_dashboard/physical_retry_round3_annotations.json` |
+| 实际失败的状态重建图 | `reports/replicator_physical_retry_round3_diagnostics_20261029/scenes/<scene_id>/` |
+| 2 景规划失败的只读 CPU 诊断 | `reports/replicator_physical_retry_round3_20261029/planning_failure_diagnostics.json` |
+
+「实际失败原因 / 后续调整方案」在本轮独立保存，接口为 `GET/POST /api/physical-retry-round3-annotations`，绑定本轮实际结果及配置 SHA，不覆盖前两轮标注。只有本轮实际结果已落盘且绑定有效时才可保存物理标注；规划失败景查看其 CPU 诊断及修改建议。自动保存、草稿及并发保护与前两轮相同，不触发新规划或物理执行。
+
+### 第三轮审计、诊断渲染与发布入口
+
+以下为本轮复现入口。物理执行、审计、失败诊断、图像复核及结果发布均已完成，不再次抓放；已有证据应直接查看。首次恢复这些证据时须保留冻结计划、实际结果、原生状态及来源 SHA，旧输入包不能代替新轮输入。
+
+```bash
+bash scripts/arena_python.sh scripts/extensions/replicator/audit_physical_retry_round3.py \
+  --demos exports/replicator_physical_retry_round3_20261029 \
+  --output reports/replicator_physical_retry_round3_20261029/audit_execution.json \
+  --require-complete
+
+bash scripts/arena_python.sh scripts/extensions/replicator/render_physical_retry_failures.py \
+  --manifest exports/replicator_physical_retry_round3_20261029/manifest.json \
+  --output reports/replicator_physical_retry_round3_diagnostics_20261029 \
+  --frame-hints reports/replicator_physical_retry_round3_20261029/event_frame_hints.json \
+  --detail-view --exposure-ev -3 --dry-run
+```
+
+渲染前先通过上述 CPU 预检；需要首次生成画面时去掉 `--dry-run`，恢复同一最终来源的未完成图像时加 `--resume`。`--scene <scene_id>` 可筛选场景。只读取本轮实际失败的保存状态，停止时间轴，不运行新物理步。主图及补图的相机、曝光和实测帧索引均记录来源；补图报告须写入该景视觉复核的 `supplementary_diagnostic_reports` 并通过 SHA 校验才显示。画面遮挡和无法确定的接触原因要明确保留，不能从事件名称直接推断根因。
+
+逐景实际查看后，将可见事实、保守解释及下一轮建议汇总到 `reports/replicator_physical_retry_round3_20261029/failure_visual_review.json`，绑定每景本轮结果、诊断报告及实际查看的图片路径。2 景规划失败由独立 CPU 诊断覆盖，不伪造本轮物理图像；已生成图像数量与实际查看路径数量分别统计。
+
+当最终审计通过、4 景实际失败都有绑定的视觉复核、2 景规划失败都有绑定的 CPU 诊断后，运行：
+
+```bash
+python3 scripts/extensions/replicator/publish_physical_retry_round3.py --dry-run
+python3 scripts/extensions/replicator/publish_physical_retry_round3.py
+```
+
+正式输出为 `configs/extensions/replicator/physical_retry_results_round3_20261029.json` 和 `docs/extensions/replicator/PHYSICAL_RETRY_ROUND3_20261029.md`，包含 154 景最新状态、14 × 11 矩阵和本轮 29 景的调整与结果；保留全部 `retry`、`retry_round2` 历史，新层为 `retry_round3`。发布脚本不覆盖已有输出，不修改旧视频包。通过发布门禁仍不等于安全避障或长期稳定验收。
 
 ## 快速标注调整方案
 

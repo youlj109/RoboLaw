@@ -1,0 +1,138 @@
+{
+  "kind": "physical_failure_retry_plan",
+  "schema_version": 2,
+  "retry_round": 9,
+  "source_first_pass_manifest": {
+    "path": "exports/replicator_154_physical_demos_20261028/manifest.json",
+    "sha256": "fe3e8d5d213f1c377d0f74cce8fa7f4cd8eb6dfa77a3d948f8ee9e8161547951"
+  },
+  "source_camera_retake_manifest": {
+    "path": "exports/replicator_u_banana_camera_retakes_20261028/manifest.json",
+    "sha256": "51893c8da70803aa36c8a1ef8e9dcf407f7dce171602c422b7a0333fc5693edd"
+  },
+  "source_previous_retry_manifest": {
+    "path": "exports/replicator_physical_retry_round8_20261029/manifest.json",
+    "sha256": "985fb7bfbb01ef332877eed0b23d79f71140960fe3a4117b46d8b2a5a713ab7e"
+  },
+  "expected_scene_count": 2,
+  "candidate_count_per_scene": 1,
+  "physical_retries_per_scene": 1,
+  "layout_changed": false,
+  "layout_changed_from_original": true,
+  "success_predicate_changed": false,
+  "execution_settings": {
+    "device": "cpu",
+    "seed": 42,
+    "physics_threads": 8,
+    "initial_settle_seconds": 5.0,
+    "close_seconds": 2.0,
+    "release_seconds": 2.0,
+    "final_settle_seconds": 3.0,
+    "episode_seconds": 200.0,
+    "max_actions": 6000
+  },
+  "entries": [
+    {
+      "scene_id": "u_shape_bowl_sink__human_default_mpfb",
+      "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+      "variant_id": "human_default_mpfb",
+      "result_path": "reports/replicator_trajectory_retry10_20261028/scenes/u_shape_bowl_sink__human_default_mpfb/result.json",
+      "result_sha256": "0b4366f147ad0009d945ec3944f0d47c4e0479ade262f3335fee0f00d1c2422e",
+      "config_path": "configs/extensions/replicator/round8_layouts_20261029/u_shape_bowl_sink__human_default_mpfb.json",
+      "config_sha256": "d69ac7d228fa47b37eec314eea4c8665e3d42e430a7b0c243123b0cdc840f969",
+      "source_scene_path": "reports/replicator_physical_retry_round8_20261029/scene_revisions/u_shape_bowl_sink__human_default_mpfb/source_scene.usda",
+      "source_scene_sha256": "268f938eea8ff01917c1f2b9356e29950b493d82d09fc0dcc374edbad2d8942c",
+      "source_trajectory_path": "reports/replicator_trajectory_retry6_20261026/scenes/u_shape_bowl_sink__human_default_mpfb/trajectory.npz",
+      "source_trajectory_sha256": "aa0f87334367c552aee19f2df4e5b0d062b3a0a1839e01b85b55340270420930",
+      "scene_revision": {
+        "path": "reports/replicator_physical_retry_round8_20261029/scene_revisions/u_shape_bowl_sink__human_default_mpfb/scene_revision.json",
+        "sha256": "28b8597342799dd2e42e8791696c842c13e855d62051a55ef44d8f7628956b92"
+      },
+      "layout_changed": true,
+      "retained_scene_revision": true,
+      "scene_settings_changed_this_round": false,
+      "scene_settings_changed_once": true,
+      "planning_status": "failed",
+      "candidate_planning_result": {
+        "path": "reports/replicator_physical_retry_round9_planning_20261029/scenes/u_shape_bowl_sink__human_default_mpfb/result.json",
+        "sha256": "2f7561f9cc2670089d307cd288756dd1b44cf01235dd4ce01d48d811933b86cf"
+      },
+      "previous_retry_result": {
+        "path": "exports/replicator_physical_retry_round4_20261029/executions/u_shape_bowl_sink__human_default_mpfb/result.json",
+        "sha256": "5896b05c10943a6bc58fc0de70c291fb9f1616e63bdfb2987113b066f6564a77"
+      },
+      "physical_attempt_number": 5,
+      "trajectory_path": null,
+      "trajectory_sha256": null,
+      "execution_overrides": {},
+      "adjustment": {
+        "kind": "retained_layout_trajectory_repair_round9",
+        "description": "保持r8人体和源场景不变，保留已规划通过的抓取、抬升、搬运目标；仅把直立碗下放朝向改为105度并调整退出目标。原名义落点60mm邻域、底距槽25mm和Drain净空保持；CPU端点/源几何与有限理想段分别记录，真实轨迹与任务成功仍需本轮单次规划/物理判定。 退出先垂直升100mm再离开，定向CPU复核已逐点检查全开夹爪源几何及机械臂，但不等于实际规划路径或物理成功。",
+        "evidence_path": "reports/replicator_physical_retry_round9_20261029/human_cpu/withdraw_direction_correction.json",
+        "evidence_sha256": "ca7fc5ef1f4e521b13050e2f9aae7b31895dc66f659aaa81a31b74bcf89fc725",
+        "candidate_count": 1,
+        "recipe_source": {
+          "path": "configs/extensions/replicator/physical_retry_round9_human_recipes_20261029.json",
+          "sha256": "b6aa17eb32d6449d0fab56151d2521d272c93131e35363ee7c787aad8b94e151"
+        },
+        "root_cause_confirmed": false
+      },
+      "timing_validation": null,
+      "failure_reason": "cuRobo rejected lower: MotionGenStatus.IK_FAIL"
+    },
+    {
+      "scene_id": "u_shape_mustard_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "result_path": "reports/replicator_trajectory_retry10_20261028/scenes/u_shape_mustard_bowl__robot_sharp_equipment_housing/result.json",
+      "result_sha256": "a5dc2984a0948805ed2bc23a98ead7604d85151b11dfdca601c0d5b9df84d073",
+      "config_path": "configs/extensions/replicator/round8_layouts_20261029/u_shape_mustard_bowl__robot_sharp_equipment_housing.json",
+      "config_sha256": "c3e8357bf9533be03cd05be5b6e2431768088a35ca95cfad97cec0bb8c484d2a",
+      "source_scene_path": "reports/replicator_physical_retry_round8_20261029/scene_revisions/u_shape_mustard_bowl__robot_sharp_equipment_housing/source_scene.usda",
+      "source_scene_sha256": "8a69fb6a80b29985e4b98dbfe028c0244a6da9f9ddc1dc57d1830201d614529a",
+      "source_trajectory_path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_mustard_bowl__robot_sharp_equipment_housing/trajectory.npz",
+      "source_trajectory_sha256": "28a660f511a0a495781db3ec85c344c09759af3ca994172a427bba8107da011f",
+      "scene_revision": {
+        "path": "reports/replicator_physical_retry_round8_20261029/scene_revisions/u_shape_mustard_bowl__robot_sharp_equipment_housing/scene_revision.json",
+        "sha256": "c248e9170ffe5bfb9f6dea7525dc34329f1e0a9b4c1899660cb93e3be2fbbbbc"
+      },
+      "layout_changed": true,
+      "retained_scene_revision": true,
+      "scene_settings_changed_this_round": false,
+      "scene_settings_changed_once": true,
+      "planning_status": "failed",
+      "candidate_planning_result": {
+        "path": "reports/replicator_physical_retry_round9_planning_20261029/scenes/u_shape_mustard_bowl__robot_sharp_equipment_housing/result.json",
+        "sha256": "6d2c18b3fbd2a4b681c6692357b10fcbb83878e3bdd5bf2f3e761aad266d5660"
+      },
+      "previous_retry_result": {
+        "path": "exports/replicator_physical_retry_round8_20261029/executions/u_shape_mustard_bowl__robot_sharp_equipment_housing/result.json",
+        "sha256": "bcd501ac2a27cf3139ac615c6d9aa7bb3b28d38c82fb68e3caf8bc4f1a9cf14d"
+      },
+      "physical_attempt_number": 5,
+      "trajectory_path": null,
+      "trajectory_sha256": null,
+      "execution_overrides": {},
+      "adjustment": {
+        "kind": "retained_layout_trajectory_repair_round9",
+        "description": "保留第八轮场景、45度瓶身抓姿和0.70闭合指令/0.22规划夹持角；lift先同XY、同姿态上提30mm、60mm，再到原152.485mm抬升终点。仅lift采用强姿态/竖直代价且关闭graph，并以实际返回FK硬检查8mm横移、4度旋转和-2mm下沉限制；离台后的transfer保留自由避障。",
+        "evidence_path": "reports/replicator_physical_retry_round9_20261029/mustard_lift_corridor_cpu_preparation.json",
+        "evidence_sha256": "d59c5baca9fdbdce0d7a9cb88f2a90435d5d220da873899147a49eb54b76a40e",
+        "candidate_count": 1,
+        "recipe_source": {
+          "path": "configs/extensions/replicator/physical_retry_round9_mustard_recipes_20261029.json",
+          "sha256": "60be0caf94f574e9c6ee6040996781d6a6f2ee2590d26dfd4b79d1136c624ee1"
+        },
+        "root_cause_confirmed": false
+      },
+      "timing_validation": null,
+      "failure_reason": "cuRobo rejected lift: MotionGenStatus.FINETUNE_TRAJOPT_FAIL"
+    }
+  ],
+  "created_at": "2026-10-29T10:07:56.850797+00:00",
+  "planning_progress": {
+    "path": "reports/replicator_physical_retry_round9_planning_20261029/progress.json",
+    "sha256": "f9e05ff2433a42a8aedf9afe1a560d13865c41c9e01cefc976e3a423296c3380"
+  },
+  "scope": "Retain exact round 8 scene, adjust only one frozen trajectory candidate per unresolved scene. Targeted FK lift corridor where declared; one no-render native test per complete plan. Original task/assets/predicate unchanged; all historical attempts retained."
+}

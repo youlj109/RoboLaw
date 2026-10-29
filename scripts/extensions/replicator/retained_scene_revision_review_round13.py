@@ -1,0 +1,43 @@
+"""Read-only round13 retention gate; round12 failures did not create episodes."""
+import hashlib
+import json
+from pathlib import Path
+from scripts.extensions.replicator.retained_scene_revision_review_round12 import validate_retained_scene_revision as validate_round12_retention
+from scripts.extensions.replicator.scene_revision_review_round8 import SOURCE_KEYS
+
+COHORT_SIZE = 1
+
+
+def validate_retained_scene_revision(root,reference,previous_manifest,*,expected_scene_id=None,current=None,digest=None):
+    root=Path(root).resolve()
+    def require(value,message):
+        if not value:raise ValueError(message)
+    def local(value):
+        path=(root/str(value).removeprefix('/workspace/')).resolve()
+        require(path.is_relative_to(root),'Retained layout path outside checkout');return path
+    path=local(previous_manifest['path'])
+    if digest:actual=digest(path)
+    else:
+        with path.open('rb') as stream:actual=hashlib.file_digest(stream,'sha256').hexdigest()
+    require(actual==previous_manifest['sha256'],'Retained round13 prior manifest SHA differs')
+    previous=json.loads(path.read_text());rows=previous['entries'];indexed={r['scene_id']:r for r in rows}
+    require(len(indexed)==len(rows)==COHORT_SIZE and previous.get('retry_round')==12 and previous.get('stage')=='complete',
+            'Retained round13 needs completed single-scene round12')
+    for row in rows:
+        require(row.get('execution_status')=='planning_failed' and row.get('planning_status')=='failed'
+                and row.get('attempts')==0 and row.get('executed') is False and row.get('task_success') is False
+                and not row.get('execution_result_path') and not row.get('execution_result_sha256'),
+                'Round12 failed planning invented an actual episode')
+    sid=expected_scene_id
+    require(sid in indexed,'Retained round13 scene missing from prior cohort')
+    prior=indexed[sid]
+    require(prior.get('scene_revision')==reference,'Round13 changed selected revision')
+    checked=validate_round12_retention(root,reference,previous['source_previous_retry_manifest'],
+        expected_scene_id=sid,current=prior,digest=digest)
+    if current is not None:
+        for key in SOURCE_KEYS:
+            require(current.get(key)==prior.get(key),'Retained round13 changed a selected scene source: '+key)
+        for key,value in dict(layout_changed=True,scene_settings_changed_this_round=False,retained_scene_revision=True,scene_settings_changed_once=True).items():
+            require(current.get(key) is value,'Retained round13 layout scope differs: '+key)
+    return dict(checked,retained_from_manifest=previous_manifest,retained_from_row=prior,
+        previous_retention_manifest=previous['source_previous_retry_manifest'])

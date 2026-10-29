@@ -1,0 +1,1904 @@
+{
+  "schema_version": 1,
+  "recipes": {
+    "l_island_banana_bowl__robot_projecting_crossbar": {
+      "scene_id": "l_island_banana_bowl__robot_projecting_crossbar",
+      "task_id": "kitchen_bench_replicator_l_island_banana_bowl",
+      "payload_name": "banana",
+      "layout_fixed": true,
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.10938165494661493,
+            0.9659258262890683,
+            -0.2345697160098043,
+            -2.369802958755424
+          ],
+          [
+            0.40821789367673483,
+            -0.2588190451025206,
+            -0.875426098065593,
+            2.1543552410759554
+          ],
+          [
+            -0.9063077870366499,
+            0.0,
+            -0.4226182617406994,
+            1.0097230386734009
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.10938165494661493,
+            0.9659258262890683,
+            -0.2345697160098043,
+            -2.4080178301130126
+          ],
+          [
+            0.40821789367673483,
+            -0.2588190451025206,
+            -0.875426098065593,
+            2.2246376969744435
+          ],
+          [
+            -0.9063077870366499,
+            0.0,
+            -0.4226182617406994,
+            0.9597230386734009
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.10938165494661493,
+            0.9659258262890683,
+            -0.2345697160098043,
+            -2.3889103944342183
+          ],
+          [
+            0.40821789367673483,
+            -0.2588190451025206,
+            -0.875426098065593,
+            2.1894964690251992
+          ],
+          [
+            -0.9063077870366499,
+            0.0,
+            -0.4226182617406994,
+            1.0397230386734009
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.10938165494661492,
+            0.9659258262890683,
+            -0.23456971600980428,
+            -2.0280178301130123
+          ],
+          [
+            0.4082178936767347,
+            -0.2588190451025205,
+            -0.8754260980655929,
+            2.215988198750186
+          ],
+          [
+            -0.90630778703665,
+            1.375557693733725e-17,
+            -0.42261826174069944,
+            1.0722080386430026
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.10938165494661492,
+            0.9659258262890683,
+            -0.23456971600980428,
+            -2.0280178301130123
+          ],
+          [
+            0.4082178936767347,
+            -0.2588190451025205,
+            -0.8754260980655929,
+            2.215988198750186
+          ],
+          [
+            -0.90630778703665,
+            1.375557693733725e-17,
+            -0.42261826174069944,
+            0.9922080386430026
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.10938165494661492,
+            0.9659258262890683,
+            -0.23456971600980428,
+            -2.0280178301130123
+          ],
+          [
+            0.4082178936767347,
+            -0.2588190451025205,
+            -0.8754260980655929,
+            2.215988198750186
+          ],
+          [
+            -0.90630778703665,
+            1.375557693733725e-17,
+            -0.42261826174069944,
+            1.0922080386430026
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.10938165494661498,
+          0.4082178936767348,
+          -0.90630778703665,
+          0.030806447091620892
+        ],
+        [
+          0.9659258262890683,
+          -0.2588190451025206,
+          5.182752442226614e-18,
+          0.030802600551301573
+        ],
+        [
+          -0.23456971600980442,
+          -0.875426098065593,
+          -0.4226182617406994,
+          -0.007702276179879952
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "nominal_gripper_joint_rad": 0.55,
+      "planning_gripper_joint_rad": 0.55,
+      "grasp_info": {
+        "rule": "Measured source midbody plane; one fixed candidate",
+        "center_local_m": [
+          -0.03492940829141905,
+          -0.011346216864418966,
+          -0.00033556077456364103
+        ],
+        "section_width_m": 0.03750539539855631,
+        "section_offset_m": -0.02,
+        "jaw_yaw_local_deg": -15.0,
+        "section_plane_normal_local": [
+          0.25881904510252074,
+          0.9659258262890683,
+          0.0
+        ]
+      },
+      "description": "在同一源香蕉中段截面调整张爪接近方位和腕部倾角；预抓目标位于抓点上方5cm、朝机器人8cm，起抬8cm并朝机器人平移4cm，绕开横杆/外壳对腕部与携物包络的限制。保留原最终物体目标和原碰撞mask。 固定选择源中段截面偏移-20mm、截面角-15°、腕部倾角-25°。",
+      "execution_overrides": {
+        "release_seconds": 4.0
+      },
+      "hold_orientation_phases": [
+        "lift",
+        "transfer",
+        "lower"
+      ],
+      "linear_motion_phases": [],
+      "evidence": {
+        "path": "reports/replicator_physical_retry_round2_20261028/planning_failure_diagnostics.json",
+        "sha256": "ad85fa8876dda4f741206ab39119cc020b2bd502cbb416fcd7839c8749b05339"
+      },
+      "cpu_endpoint_ik": {
+        "pregrasp": {
+          "solved": true,
+          "q": [
+            0.39481429925487044,
+            -0.40652943679179016,
+            0.13880015364750406,
+            -2.798148251621051,
+            -0.5488656997093965,
+            2.645835492930183,
+            -1.8960261767944875
+          ],
+          "position_error_m": 6.069777542648692e-06,
+          "angle_error_rad": 5.480670965258879e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": []
+          },
+          "score": 0
+        },
+        "approach": {
+          "solved": true,
+          "q": [
+            2.1029669504743285,
+            -0.9851766334445766,
+            -1.4715591840581812,
+            -2.476943702844455,
+            -1.5773024504908204,
+            1.8990721164086015,
+            -1.3389448176253365
+          ],
+          "position_error_m": 4.487834244453929e-06,
+          "angle_error_rad": 3.752154440706125e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana"
+            ]
+          },
+          "score": 0
+        },
+        "lift": {
+          "solved": true,
+          "q": [
+            1.9237539033521036,
+            -1.052380226450334,
+            -1.1723472031458817,
+            -2.5502643506244946,
+            -1.406855861797225,
+            1.7501324431206051,
+            -1.4215692277555072
+          ],
+          "position_error_m": 3.892298556708738e-06,
+          "angle_error_rad": 3.2485028289388374e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/kitchen/Asset/CornerCounter_00_0",
+              "/World/kitchen/Asset/CornerCounter_00_1"
+            ]
+          },
+          "score": 0
+        },
+        "transfer": {
+          "solved": true,
+          "q": [
+            1.5718015654918214,
+            1.0842723848291183,
+            -2.02482201060538,
+            -2.601969107868415,
+            1.3020648200772689,
+            2.055581462703423,
+            2.201312668159137
+          ],
+          "position_error_m": 3.2895295096962706e-06,
+          "angle_error_rad": 2.4614777946929567e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana"
+            ]
+          },
+          "score": 0
+        },
+        "lower": {
+          "solved": true,
+          "q": [
+            1.687687074160058,
+            0.6226236703551645,
+            -1.9042518735981424,
+            -2.677376604828731,
+            1.2728893752499404,
+            2.58095276599029,
+            2.1695344821825193
+          ],
+          "position_error_m": 2.9926454015861487e-06,
+          "angle_error_rad": 2.336956745766029e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/objects/bowl"
+            ]
+          },
+          "score": 0
+        },
+        "retreat": {
+          "solved": true,
+          "q": [
+            1.696865459143411,
+            0.9210828465701298,
+            -2.1253944223749985,
+            -2.5932612445597916,
+            1.1287867397385525,
+            2.1872055343528363,
+            2.2864620808886795
+          ],
+          "position_error_m": 2.9793650526639066e-06,
+          "angle_error_rad": 2.3350515160894095e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/objects/bowl"
+            ]
+          },
+          "score": 0
+        }
+      },
+      "source_config_sha256": "7ffb49367fe547ebf4b60b6327f928aa0abae632c6e64de402202c9186fd6e5d",
+      "source_result_sha256": "aae8fc44509ac946305ad8260dfb94c740b64ebcbd74afb80a70b130afef9a7a",
+      "previous_candidate_planning_result": {
+        "path": "reports/replicator_physical_retry_round2_planning_20261028/startup_recovery_2/scenes/l_island_banana_bowl__robot_projecting_crossbar/result.json",
+        "sha256": "70ca81c183d59d355fcd4ace90f53622ce9aee45a64fff01e794ba3ae133f0ff"
+      },
+      "limitations": "CPU endpoint/sampled-path sphere checks only; exactly one final frozen candidate, no new cuRobo/physics. Actual task success and collision-free execution are not established.",
+      "retry_round": 3,
+      "frozen_candidate_count": 1,
+      "remaining_cpu_warnings": [],
+      "cpu_preselection_target_set_count": 9,
+      "cpu_endpoint_clear_of_detected_pairs": true,
+      "selected_grasp_adjustment": {
+        "yaw_deg": -15.0,
+        "tilt_deg": -25.0,
+        "pregrasp_height_m": 0.05,
+        "pregrasp_toward_robot_m": 0.08,
+        "lift_toward_robot_m": 0.04
+      },
+      "cpu_preparation_evidence": {
+        "path": "reports/replicator_physical_retry_round3_20261029/banana_short_descent_cpu_validation.json",
+        "sha256": "762700602ddf91698252978207fd6708ced8736d690c5c018855af03075f12db"
+      },
+      "superseded_preparation_recipe": {
+        "path": "reports/replicator_physical_retry_round3_20261029/banana_recipes_before_authorized_short_descent.json",
+        "sha256": "5405c4c87b45d66c5b7670ee9d57a8d028f7805c4bfa703e30a662729a5445ad"
+      }
+    },
+    "l_island_banana_bowl__robot_sharp_equipment_housing": {
+      "scene_id": "l_island_banana_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_l_island_banana_bowl",
+      "payload_name": "banana",
+      "layout_fixed": true,
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            0.10938165494661493,
+            0.9659258262890683,
+            -0.2345697160098043,
+            -2.3698029587554243
+          ],
+          [
+            0.40821789367673483,
+            -0.2588190451025206,
+            -0.875426098065593,
+            2.1543552410759563
+          ],
+          [
+            -0.9063077870366499,
+            0.0,
+            -0.4226182617406994,
+            1.0097230386734009
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            0.10938165494661493,
+            0.9659258262890683,
+            -0.2345697160098043,
+            -2.408017830113013
+          ],
+          [
+            0.40821789367673483,
+            -0.2588190451025206,
+            -0.875426098065593,
+            2.2246376969744444
+          ],
+          [
+            -0.9063077870366499,
+            0.0,
+            -0.4226182617406994,
+            0.9597230386734009
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            0.10938165494661493,
+            0.9659258262890683,
+            -0.2345697160098043,
+            -2.3889103944342187
+          ],
+          [
+            0.40821789367673483,
+            -0.2588190451025206,
+            -0.875426098065593,
+            2.1894964690252
+          ],
+          [
+            -0.9063077870366499,
+            0.0,
+            -0.4226182617406994,
+            1.0397230386734009
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            0.10938165494661492,
+            0.9659258262890683,
+            -0.23456971600980428,
+            -2.0280178301130123
+          ],
+          [
+            0.4082178936767347,
+            -0.2588190451025205,
+            -0.8754260980655929,
+            2.2159881987501864
+          ],
+          [
+            -0.90630778703665,
+            1.375557693733725e-17,
+            -0.42261826174069944,
+            1.0722080386430026
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            0.10938165494661492,
+            0.9659258262890683,
+            -0.23456971600980428,
+            -2.0280178301130123
+          ],
+          [
+            0.4082178936767347,
+            -0.2588190451025205,
+            -0.8754260980655929,
+            2.2159881987501864
+          ],
+          [
+            -0.90630778703665,
+            1.375557693733725e-17,
+            -0.42261826174069944,
+            0.9922080386430024
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            0.10938165494661492,
+            0.9659258262890683,
+            -0.23456971600980428,
+            -2.0280178301130123
+          ],
+          [
+            0.4082178936767347,
+            -0.2588190451025205,
+            -0.8754260980655929,
+            2.2159881987501864
+          ],
+          [
+            -0.90630778703665,
+            1.375557693733725e-17,
+            -0.42261826174069944,
+            1.0922080386430026
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          0.10938165494661498,
+          0.4082178936767348,
+          -0.90630778703665,
+          0.030806447091620892
+        ],
+        [
+          0.9659258262890683,
+          -0.2588190451025206,
+          5.182752442226614e-18,
+          0.030802600551301573
+        ],
+        [
+          -0.23456971600980442,
+          -0.875426098065593,
+          -0.4226182617406994,
+          -0.007702276179880174
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "nominal_gripper_joint_rad": 0.55,
+      "planning_gripper_joint_rad": 0.55,
+      "grasp_info": {
+        "rule": "Measured source midbody plane; one fixed candidate",
+        "center_local_m": [
+          -0.03492940829141905,
+          -0.011346216864418966,
+          -0.00033556077456364103
+        ],
+        "section_width_m": 0.03750539539855631,
+        "section_offset_m": -0.02,
+        "jaw_yaw_local_deg": -15.0,
+        "section_plane_normal_local": [
+          0.25881904510252074,
+          0.9659258262890683,
+          0.0
+        ]
+      },
+      "description": "在同一源香蕉中段截面调整张爪接近方位和腕部倾角；预抓目标位于抓点上方5cm、朝机器人8cm，起抬8cm并朝机器人平移4cm，绕开横杆/外壳对腕部与携物包络的限制。保留原最终物体目标和原碰撞mask。 固定选择源中段截面偏移-20mm、截面角-15°、腕部倾角-25°。 尚有CPU几何警告，必须保留；不能据此声明成功或改动布局，本轮cuRobo只求解一次，失败直接记录。",
+      "execution_overrides": {
+        "release_seconds": 4.0
+      },
+      "hold_orientation_phases": [
+        "lift",
+        "transfer",
+        "lower"
+      ],
+      "linear_motion_phases": [],
+      "evidence": {
+        "path": "reports/replicator_physical_retry_round2_20261028/planning_failure_diagnostics.json",
+        "sha256": "ad85fa8876dda4f741206ab39119cc020b2bd502cbb416fcd7839c8749b05339"
+      },
+      "cpu_endpoint_ik": {
+        "pregrasp": {
+          "solved": true,
+          "q": [
+            0.3975906641324288,
+            -0.40631729382854886,
+            0.1358016551224557,
+            -2.7979548068472377,
+            -0.5509527413222872,
+            2.6452511847059426,
+            -1.8945605791186027
+          ],
+          "position_error_m": 6.0667564441258454e-06,
+          "angle_error_rad": 5.484962812086784e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": []
+          },
+          "score": 0
+        },
+        "approach": {
+          "solved": true,
+          "q": [
+            2.0970469813701453,
+            -0.9353367777729585,
+            -1.476585370293539,
+            -2.477001935287499,
+            -1.5529639061325382,
+            1.9436804439202384,
+            -1.339168156556948
+          ],
+          "position_error_m": 4.685708833747913e-06,
+          "angle_error_rad": 3.812214169466769e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana"
+            ]
+          },
+          "score": 0
+        },
+        "lift": {
+          "solved": true,
+          "q": [
+            1.5663711153915045,
+            -0.5811991667616903,
+            -0.9675219645179184,
+            -2.582769739549957,
+            -1.0963084856521992,
+            2.207036947529892,
+            -1.5561136145752634
+          ],
+          "position_error_m": 3.6695518794348367e-06,
+          "angle_error_rad": 3.9124910862560514e-05,
+          "collision": {
+            "world_pairs": [
+              {
+                "link": "attached_object",
+                "world_object": "/World/hazard/Asset/AngledHousing"
+              }
+            ],
+            "world_intersection_pairs": 17,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/kitchen/Asset/CornerCounter_00_0",
+              "/World/kitchen/Asset/CornerCounter_00_1"
+            ]
+          },
+          "score": 1
+        },
+        "transfer": {
+          "solved": true,
+          "q": [
+            1.5987963647512788,
+            1.0383557272015542,
+            -2.0346468809168994,
+            -2.6049899843021027,
+            1.272520737088973,
+            2.1003926296653783,
+            2.2135896229234677
+          ],
+          "position_error_m": 3.2220081544391285e-06,
+          "angle_error_rad": 2.454645839217206e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana"
+            ]
+          },
+          "score": 0
+        },
+        "lower": {
+          "solved": true,
+          "q": [
+            1.5878832488484227,
+            0.8261116793690899,
+            -1.8330488777071559,
+            -2.6636428316737892,
+            1.4108725383957137,
+            2.3914359701189323,
+            2.1140496016269528
+          ],
+          "position_error_m": 3.1722504514857556e-06,
+          "angle_error_rad": 2.4491162844007294e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/objects/bowl"
+            ]
+          },
+          "score": 0
+        },
+        "retreat": {
+          "solved": true,
+          "q": [
+            1.5642977657651946,
+            1.1071871787347998,
+            -2.069387958079499,
+            -2.577074404226899,
+            1.2658174497155215,
+            2.0039700894409465,
+            2.218594230976127
+          ],
+          "position_error_m": 3.2490072910886344e-06,
+          "angle_error_rad": 2.4562278776130465e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/objects/bowl"
+            ]
+          },
+          "score": 0
+        }
+      },
+      "source_config_sha256": "4eac59b2fec64e67b2c65bbc1e59bc26dc150ff5fedf084723aa6c322d4500a4",
+      "source_result_sha256": "cd33b64e2ede087fe8a1a181d975f7b6e217b76c17beef365814feae4b75d5c2",
+      "previous_candidate_planning_result": {
+        "path": "reports/replicator_physical_retry_round2_planning_20261028/startup_recovery_2/scenes/l_island_banana_bowl__robot_sharp_equipment_housing/result.json",
+        "sha256": "8e55c9602fb059c4b2a3ae63adbfd8a8619bcf4486b79337dac91d66fc8b5373"
+      },
+      "limitations": "CPU endpoint/sampled-path sphere checks only; exactly one final frozen candidate, no new cuRobo/physics. Actual task success and collision-free execution are not established.",
+      "retry_round": 3,
+      "frozen_candidate_count": 1,
+      "remaining_cpu_warnings": [
+        {
+          "scope": "endpoint",
+          "phase": "lift",
+          "details": {
+            "solved": true,
+            "q": [
+              1.5663711153915045,
+              -0.5811991667616903,
+              -0.9675219645179184,
+              -2.582769739549957,
+              -1.0963084856521992,
+              2.207036947529892,
+              -1.5561136145752634
+            ],
+            "position_error_m": 3.6695518794348367e-06,
+            "angle_error_rad": 3.9124910862560514e-05,
+            "collision": {
+              "world_pairs": [
+                {
+                  "link": "attached_object",
+                  "world_object": "/World/hazard/Asset/AngledHousing"
+                }
+              ],
+              "world_intersection_pairs": 17,
+              "self_sphere_overlaps": [],
+              "masked_objects": [
+                "/World/objects/banana",
+                "/World/kitchen/Asset/CornerCounter_00_0",
+                "/World/kitchen/Asset/CornerCounter_00_1"
+              ]
+            },
+            "score": 1
+          }
+        }
+      ],
+      "cpu_preselection_target_set_count": 9,
+      "cpu_endpoint_clear_of_detected_pairs": false,
+      "selected_grasp_adjustment": {
+        "yaw_deg": -15.0,
+        "tilt_deg": -25.0,
+        "pregrasp_height_m": 0.05,
+        "pregrasp_toward_robot_m": 0.08,
+        "lift_toward_robot_m": 0.04
+      },
+      "cpu_preparation_evidence": {
+        "path": "reports/replicator_physical_retry_round3_20261029/banana_short_descent_cpu_validation.json",
+        "sha256": "762700602ddf91698252978207fd6708ced8736d690c5c018855af03075f12db"
+      },
+      "superseded_preparation_recipe": {
+        "path": "reports/replicator_physical_retry_round3_20261029/banana_recipes_before_authorized_short_descent.json",
+        "sha256": "5405c4c87b45d66c5b7670ee9d57a8d028f7805c4bfa703e30a662729a5445ad"
+      }
+    },
+    "l_shape_banana_bowl__human_default_mpfb": {
+      "scene_id": "l_shape_banana_bowl__human_default_mpfb",
+      "task_id": "kitchen_bench_replicator_l_shape_banana_bowl",
+      "payload_name": "banana",
+      "layout_fixed": true,
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            2.0004289199289017e-17,
+            1.0,
+            -3.464844526246992e-17,
+            -1.8648895723592027
+          ],
+          [
+            0.49999999999999994,
+            -4.000857839857804e-17,
+            -0.8660254037844387,
+            1.7047346607337
+          ],
+          [
+            -0.8660254037844387,
+            0.0,
+            -0.49999999999999994,
+            1.0611624503135682
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            2.0004289199289017e-17,
+            1.0,
+            -3.464844526246992e-17,
+            -1.8724315723592027
+          ],
+          [
+            0.49999999999999994,
+            -4.000857839857804e-17,
+            -0.8660254037844387,
+            1.7232586607337
+          ],
+          [
+            -0.8660254037844387,
+            0.0,
+            -0.49999999999999994,
+            0.9411624503135682
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            2.0004289199289017e-17,
+            1.0,
+            -3.464844526246992e-17,
+            -1.8724315723592027
+          ],
+          [
+            0.4999999999999999,
+            -4.000857839857804e-17,
+            -0.8660254037844388,
+            1.7232586607337
+          ],
+          [
+            -0.8660254037844387,
+            -1.2037362847502804e-33,
+            -0.4999999999999999,
+            1.0211624503135681
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            2.0004289199289017e-17,
+            1.0,
+            -3.464844526246992e-17,
+            -1.507941631603512
+          ],
+          [
+            0.49999999999999994,
+            -4.000857839857804e-17,
+            -0.8660254037844387,
+            1.67332966998403
+          ],
+          [
+            -0.8660254037844387,
+            0.0,
+            -0.49999999999999994,
+            1.0129395206671246
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            2.0004289199289017e-17,
+            1.0,
+            -3.464844526246992e-17,
+            -1.507941631603512
+          ],
+          [
+            0.49999999999999994,
+            -4.000857839857804e-17,
+            -0.8660254037844387,
+            1.67332966998403
+          ],
+          [
+            -0.8660254037844387,
+            0.0,
+            -0.49999999999999994,
+            0.9829395206671245
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            2.0004289199289017e-17,
+            1.0,
+            -3.464844526246992e-17,
+            -1.507941631603512
+          ],
+          [
+            0.49999999999999994,
+            -4.000857839857804e-17,
+            -0.8660254037844387,
+            1.67332966998403
+          ],
+          [
+            -0.8660254037844387,
+            0.0,
+            -0.49999999999999994,
+            1.0429395206671246
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          2.0004289199289017e-17,
+          0.49999999999999994,
+          -0.8660254037844387,
+          0.03136051686102173
+        ],
+        [
+          1.0,
+          -4.000857839857804e-17,
+          2.0475123153615593e-33,
+          0.035816782396434155
+        ],
+        [
+          -3.464844526246992e-17,
+          -0.8660254037844387,
+          -0.4999999999999999,
+          -0.004988007915948112
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "nominal_gripper_joint_rad": 0.55,
+      "planning_gripper_joint_rad": 0.46516233682632446,
+      "grasp_info": {
+        "rule": "Measured source midbody plane; one fixed candidate",
+        "center_local_m": [
+          -0.03581678239643404,
+          -0.02,
+          -0.0006806997637046255
+        ],
+        "section_width_m": 0.037197864154647,
+        "section_offset_m": -0.02,
+        "jaw_yaw_local_deg": 0,
+        "section_plane_normal_local": [
+          -0.0,
+          1.0,
+          0.0
+        ],
+        "source_sha256": "a0aee64b0d9f6aae5689c1787e176776696ff38f23d17da0e226da19f0d9b064",
+        "nominal_only": true,
+        "physical_contacts_verified": false,
+        "target_tcp_world_m": [
+          -1.8724315723592027,
+          1.7232586607337,
+          0.9411624503135682
+        ]
+      },
+      "description": "保留已能真实抬起和搬运的抓点与0.55 rad闭合命令；用上轮lift末实际物体/TCP偏移对准原碗开口内位置，transfer与lower同XY、lower请求竖直下降；放置高度限定在上轮原目标附近，避免斜向低位横扫碗沿。 CPU选定目标在原碗开口内朝机器人偏45mm，物体目标高度较上一轮增加16mm；规划闭合角取上一轮lift末实测值，实际闭合命令仍为0.55 rad。 尚有CPU几何警告，必须保留；不能据此声明成功或改动布局，本轮cuRobo只求解一次，失败直接记录。 冻结前仅作一次确定性缩短：常规transfer绕行至lower上方3cm，再作同XY竖直下放，保留20cm长段被人体包络阻挡的旧CPU记录；未增加抓点搜索或GPU求解。",
+      "execution_overrides": {
+        "release_seconds": 4.0
+      },
+      "hold_orientation_phases": [
+        "lift",
+        "transfer",
+        "lower"
+      ],
+      "linear_motion_phases": [
+        "lower"
+      ],
+      "evidence": {
+        "path": "reports/replicator_physical_retry_round2_20261028/failure_visual_review_bananas.json",
+        "sha256": "fdc178ef07d1ca96aae7022a974bce38b3b783f51554ed39a61ba9f400a9941b"
+      },
+      "cpu_endpoint_ik": {
+        "pregrasp": {
+          "solved": true,
+          "q": [
+            0.2975521824165117,
+            -0.4006374900223251,
+            0.22030083488492433,
+            -2.7106970076183927,
+            -0.4417163968115128,
+            2.7451268810341904,
+            -2.2492061363157543
+          ],
+          "position_error_m": 2.2190814076189278e-11,
+          "angle_error_rad": 1.0787585170770053e-10,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": []
+          },
+          "score": 0
+        },
+        "approach": {
+          "solved": true,
+          "q": [
+            0.20239907514296923,
+            -0.008562853403516795,
+            0.20248613873724564,
+            -2.600736251557891,
+            -1.2716652233174415,
+            2.935985324004568,
+            -1.5204873930007308
+          ],
+          "position_error_m": 1.3356287637322247e-08,
+          "angle_error_rad": 4.227879496026045e-08,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana"
+            ]
+          },
+          "score": 0
+        },
+        "lift": {
+          "solved": true,
+          "q": [
+            0.3396051607875289,
+            -0.23776884964773132,
+            0.1334493323726256,
+            -2.663317780395314,
+            -0.7028917660473802,
+            2.829406160435851,
+            -2.0352781010367975
+          ],
+          "position_error_m": 1.1830011823404315e-10,
+          "angle_error_rad": 8.378194759535509e-10,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/kitchen/Asset/CornerCounter_00_0",
+              "/World/kitchen/Asset/CornerCounter_00_1"
+            ]
+          },
+          "score": 0
+        },
+        "transfer": {
+          "solved": true,
+          "q": [
+            1.5566812463624498,
+            0.2590196869124393,
+            -2.29808170865834,
+            -2.558926574790583,
+            -2.0705405751677293,
+            3.7524954088434233,
+            -1.5849974500000499
+          ],
+          "position_error_m": 1.0335771299637106e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/objects/bowl"
+            ]
+          },
+          "score": 0
+        },
+        "lower": {
+          "solved": true,
+          "q": [
+            1.2789128721116054,
+            0.27766465337642665,
+            -2.0396495783083184,
+            -2.6394744441727642,
+            -1.8471059666493514,
+            3.7524988733107763,
+            -1.8316315056101684
+          ],
+          "position_error_m": 1.988153529777198e-05,
+          "angle_error_rad": 5.986681123696115e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/objects/bowl"
+            ]
+          },
+          "score": 0
+        },
+        "retreat": {
+          "solved": true,
+          "q": [
+            -0.016150217407692624,
+            -0.2147348754290312,
+            -0.5071387454643288,
+            -2.396908441931683,
+            -2.812114643262292,
+            3.6412412156586087,
+            -0.7937032541902781
+          ],
+          "position_error_m": 1.4237096461629516e-06,
+          "angle_error_rad": 1.1079225983767022e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/objects/bowl"
+            ]
+          },
+          "score": 0
+        }
+      },
+      "source_config_sha256": "9eedb4c38d95854a080a86f833c780ea2b14dfef4a21d01b526ef30c422906ed",
+      "source_result_sha256": "1e0997965387b0448bb6a7ce7a5d53692cb279bba7d14fbd35a8b6c0202006f7",
+      "previous_candidate_planning_result": {
+        "path": "reports/replicator_physical_retry_round2_planning_20261028/startup_recovery_2/scenes/l_shape_banana_bowl__human_default_mpfb/result.json",
+        "sha256": "cc528e7358ef1499d4c5181617ca56df15f62eca4ab0f5bc8ba65146be40f97f"
+      },
+      "limitations": "CPU endpoint/sampled-path sphere checks only; exactly one final frozen candidate, no new cuRobo/physics. Actual task success and collision-free execution are not established.",
+      "retry_round": 3,
+      "frozen_candidate_count": 1,
+      "remaining_cpu_warnings": [],
+      "cpu_preselection_target_set_count": 12,
+      "cpu_endpoint_clear_of_detected_pairs": true,
+      "actual_payload_alignment": {
+        "result": {
+          "path": "exports/replicator_physical_retry_round2_20261028/executions/l_shape_banana_bowl__human_default_mpfb/result.json",
+          "sha256": "466285c4587aad4e3ac890ebf4a390d8568b7e88846a890fa42152ac61221caf"
+        },
+        "states": {
+          "path": "exports/replicator_physical_retry_round2_20261028/executions/l_shape_banana_bowl__human_default_mpfb/physics_states.npz",
+          "sha256": "d5686e31ecfab4d1d1bfa7a9224b6b21d5d84e907f869fcd9ec147699e3e1911"
+        },
+        "metadata": {
+          "path": "exports/replicator_physical_retry_round2_20261028/executions/l_shape_banana_bowl__human_default_mpfb/physics_metadata.json",
+          "sha256": "07354fcc456eb244ac429147fbe3a7c3de229249b94effb427f180017f350afa"
+        },
+        "sampled_phase": "lift",
+        "sample_indices": [
+          7057,
+          7058,
+          7059,
+          7060,
+          7061,
+          7062,
+          7063,
+          7064,
+          7065,
+          7066,
+          7067,
+          7068,
+          7069,
+          7070,
+          7071,
+          7072,
+          7073,
+          7074,
+          7075,
+          7076,
+          7077,
+          7078,
+          7079,
+          7080,
+          7081,
+          7082,
+          7083,
+          7084,
+          7085,
+          7086,
+          7087,
+          7088,
+          7089,
+          7090,
+          7091,
+          7092,
+          7093,
+          7094,
+          7095,
+          7096,
+          7097,
+          7098,
+          7099,
+          7100,
+          7101,
+          7102,
+          7103,
+          7104,
+          7105,
+          7106,
+          7107,
+          7108,
+          7109,
+          7110,
+          7111,
+          7112,
+          7113,
+          7114,
+          7115,
+          7116
+        ],
+        "actual_payload_in_tcp": [
+          [
+            -0.06015174116418376,
+            0.5737417546206742,
+            -0.8168244407702959,
+            0.03234670596986826
+          ],
+          [
+            0.997235858459532,
+            -0.0012153582944473135,
+            -0.07429108632060916,
+            0.03406182946381475
+          ],
+          [
+            -0.043616632577459735,
+            -0.8190353605974565,
+            -0.5720827452856769,
+            -0.004111996790431949
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "settled_bowl_world": [
+          [
+            0.9999995996887154,
+            -5.0201102122056696e-06,
+            -0.0008947609778028869,
+            -1.4566397666931152
+          ],
+          [
+            5.7005598050861745e-06,
+            0.9999997108180009,
+            0.0007604810440867206,
+            1.7346307039260864
+          ],
+          [
+            0.000894756901355463,
+            -0.0007604858402960423,
+            0.9999993105354494,
+            0.923513650894165
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "measured_closed_finger_joint_rad": 0.46516233682632446
+      },
+      "opening_target_payload_origin_world_m": [
+        -1.4738798021396973,
+        1.6930641166497584,
+        0.9569824499636889
+      ],
+      "selected_destination_adjustment": {
+        "toward_robot_m": 0.045,
+        "raise_from_previous_payload_goal_m": 0.016
+      },
+      "cpu_preparation_evidence": {
+        "path": "reports/replicator_physical_retry_round3_20261029/banana_short_descent_cpu_validation.json",
+        "sha256": "762700602ddf91698252978207fd6708ced8736d690c5c018855af03075f12db"
+      },
+      "superseded_preparation_recipe": {
+        "path": "reports/replicator_physical_retry_round3_20261029/banana_recipes_before_authorized_short_descent.json",
+        "sha256": "5405c4c87b45d66c5b7670ee9d57a8d028f7805c4bfa703e30a662729a5445ad"
+      }
+    },
+    "u_shape_banana_bowl__human_default_mpfb": {
+      "scene_id": "u_shape_banana_bowl__human_default_mpfb",
+      "task_id": "kitchen_bench_replicator_u_shape_banana_bowl",
+      "payload_name": "banana",
+      "layout_fixed": true,
+      "target_poses_world": {
+        "pregrasp": [
+          [
+            2.0004289199289017e-17,
+            1.0,
+            -3.464844526246992e-17,
+            -2.1246843440304977
+          ],
+          [
+            0.49999999999999994,
+            -4.000857839857804e-17,
+            -0.8660254037844387,
+            1.7817380205283166
+          ],
+          [
+            -0.8660254037844387,
+            0.0,
+            -0.49999999999999994,
+            1.060367681980133
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "approach": [
+          [
+            2.0004289199289017e-17,
+            1.0,
+            -3.464844526246992e-17,
+            -2.1322263440304976
+          ],
+          [
+            0.49999999999999994,
+            -4.000857839857804e-17,
+            -0.8660254037844387,
+            1.8002620205283166
+          ],
+          [
+            -0.8660254037844387,
+            0.0,
+            -0.49999999999999994,
+            0.9403676819801331
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lift": [
+          [
+            2.0004289199289017e-17,
+            1.0,
+            -3.464844526246992e-17,
+            -2.1322263440304976
+          ],
+          [
+            0.4999999999999999,
+            -4.000857839857804e-17,
+            -0.8660254037844388,
+            1.8002620205283162
+          ],
+          [
+            -0.8660254037844387,
+            -1.2037362847502804e-33,
+            -0.4999999999999999,
+            1.0203676819801328
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "transfer": [
+          [
+            2.0004289199289017e-17,
+            1.0,
+            -3.464844526246992e-17,
+            -1.7677258773243665
+          ],
+          [
+            0.49999999999999994,
+            -4.000857839857804e-17,
+            -0.8660254037844387,
+            1.750426619890422
+          ],
+          [
+            -0.8660254037844387,
+            0.0,
+            -0.49999999999999994,
+            1.012229020257825
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "lower": [
+          [
+            2.0004289199289017e-17,
+            1.0,
+            -3.464844526246992e-17,
+            -1.7677258773243665
+          ],
+          [
+            0.49999999999999994,
+            -4.000857839857804e-17,
+            -0.8660254037844387,
+            1.750426619890422
+          ],
+          [
+            -0.8660254037844387,
+            0.0,
+            -0.49999999999999994,
+            0.9822290202578251
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "retreat": [
+          [
+            2.0004289199289017e-17,
+            1.0,
+            -3.464844526246992e-17,
+            -1.7677258773243665
+          ],
+          [
+            0.49999999999999994,
+            -4.000857839857804e-17,
+            -0.8660254037844387,
+            1.750426619890422
+          ],
+          [
+            -0.8660254037844387,
+            0.0,
+            -0.49999999999999994,
+            1.042229020257825
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      },
+      "nominal_attachment": [
+        [
+          2.0004289199289017e-17,
+          0.49999999999999994,
+          -0.8660254037844387,
+          0.03136051686102179
+        ],
+        [
+          1.0,
+          -4.000857839857804e-17,
+          2.0475123153615593e-33,
+          0.03581678239643393
+        ],
+        [
+          -3.464844526246992e-17,
+          -0.8660254037844387,
+          -0.4999999999999999,
+          -0.004988007915948334
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "nominal_gripper_joint_rad": 0.55,
+      "planning_gripper_joint_rad": 0.46454787254333496,
+      "grasp_info": {
+        "rule": "Measured source midbody plane; one fixed candidate",
+        "center_local_m": [
+          -0.03581678239643404,
+          -0.02,
+          -0.0006806997637046255
+        ],
+        "section_width_m": 0.037197864154647,
+        "section_offset_m": -0.02,
+        "jaw_yaw_local_deg": 0,
+        "section_plane_normal_local": [
+          -0.0,
+          1.0,
+          0.0
+        ],
+        "source_sha256": "a0aee64b0d9f6aae5689c1787e176776696ff38f23d17da0e226da19f0d9b064",
+        "nominal_only": true,
+        "physical_contacts_verified": false,
+        "target_tcp_world_m": [
+          -2.1322263440304976,
+          1.8002620205283166,
+          0.9403676819801331
+        ]
+      },
+      "description": "保留已能真实抬起和搬运的抓点与0.55 rad闭合命令；用上轮lift末实际物体/TCP偏移对准原碗开口内位置，transfer与lower同XY、lower请求竖直下降；放置高度限定在上轮原目标附近，避免斜向低位横扫碗沿。 CPU选定目标在原碗开口内朝机器人偏45mm，物体目标高度较上一轮增加16mm；规划闭合角取上一轮lift末实测值，实际闭合命令仍为0.55 rad。 尚有CPU几何警告，必须保留；不能据此声明成功或改动布局，本轮cuRobo只求解一次，失败直接记录。 冻结前仅作一次确定性缩短：常规transfer绕行至lower上方3cm，再作同XY竖直下放，保留20cm长段被人体包络阻挡的旧CPU记录；未增加抓点搜索或GPU求解。",
+      "execution_overrides": {
+        "release_seconds": 4.0
+      },
+      "hold_orientation_phases": [
+        "lift",
+        "transfer",
+        "lower"
+      ],
+      "linear_motion_phases": [
+        "lower"
+      ],
+      "evidence": {
+        "path": "reports/replicator_physical_retry_round2_20261028/failure_visual_review_bananas.json",
+        "sha256": "fdc178ef07d1ca96aae7022a974bce38b3b783f51554ed39a61ba9f400a9941b"
+      },
+      "cpu_endpoint_ik": {
+        "pregrasp": {
+          "solved": true,
+          "q": [
+            0.1829706572535545,
+            -0.41439768343542965,
+            0.3457216434632776,
+            -2.719092060094201,
+            -0.33170370015310646,
+            2.765564252445132,
+            -2.3269165662441194
+          ],
+          "position_error_m": 1.0497594049942336e-09,
+          "angle_error_rad": 3.5028570734060833e-09,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": []
+          },
+          "score": 0
+        },
+        "approach": {
+          "solved": true,
+          "q": [
+            0.21255956837627177,
+            -0.0060245358840228256,
+            0.1919315285051997,
+            -2.599475694773469,
+            -1.2782651138704708,
+            2.936066440501175,
+            -1.5143908931751542
+          ],
+          "position_error_m": 4.1844078926913015e-09,
+          "angle_error_rad": 3.145295917088946e-08,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana"
+            ]
+          },
+          "score": 0
+        },
+        "lift": {
+          "solved": true,
+          "q": [
+            0.3460766263320754,
+            -0.2354596186183279,
+            0.12602581952292327,
+            -2.6629563209225133,
+            -0.7107615246499998,
+            2.8300224445493414,
+            -2.0289377942642535
+          ],
+          "position_error_m": 2.592724700531888e-10,
+          "angle_error_rad": 2.545982978757207e-09,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/kitchen/Asset/CornerCounter_00_0",
+              "/World/kitchen/Asset/CornerCounter_00_1"
+            ]
+          },
+          "score": 0
+        },
+        "transfer": {
+          "solved": true,
+          "q": [
+            -0.27425683537681267,
+            -0.1507690194161292,
+            -0.33638943566244417,
+            -2.470645211513704,
+            -2.544981955514676,
+            3.5875217644476254,
+            -1.113950201406683
+          ],
+          "position_error_m": 4.209641687017165e-06,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/objects/bowl"
+            ]
+          },
+          "score": 0
+        },
+        "lower": {
+          "solved": true,
+          "q": [
+            -0.1971031948878835,
+            -0.10318343405989916,
+            -0.465075670397252,
+            -2.540512257688649,
+            -2.340524181108909,
+            3.5219447936287698,
+            -1.3764594499421094
+          ],
+          "position_error_m": 5.774180666460399e-06,
+          "angle_error_rad": 4.052411546722917e-05,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/objects/bowl"
+            ]
+          },
+          "score": 0
+        },
+        "retreat": {
+          "solved": true,
+          "q": [
+            -0.32191860648920156,
+            -0.1926366531744481,
+            -0.2545674432551052,
+            -2.4143828984880136,
+            -2.660586812846543,
+            3.65917841794757,
+            -0.9567429338746019
+          ],
+          "position_error_m": 1.0752807354374447e-06,
+          "angle_error_rad": 9.767798268556378e-06,
+          "collision": {
+            "world_pairs": [],
+            "world_intersection_pairs": 0,
+            "self_sphere_overlaps": [],
+            "masked_objects": [
+              "/World/objects/banana",
+              "/World/objects/bowl"
+            ]
+          },
+          "score": 0
+        }
+      },
+      "source_config_sha256": "ed47d8491144fef220b6f9be90dea47b8ad8eccdbeace6ecd2b60473f082afbc",
+      "source_result_sha256": "08a47dae76685f09966b911d5c2eddda1d23e90898b3f5fd5e10bf27079ebe9e",
+      "previous_candidate_planning_result": {
+        "path": "reports/replicator_physical_retry_round2_planning_20261028/startup_recovery_2/scenes/u_shape_banana_bowl__human_default_mpfb/result.json",
+        "sha256": "163433658e30d43ea53fc28d58b476d9c99f1e9f5d6ba18dbf957f4cf3889163"
+      },
+      "limitations": "CPU endpoint/sampled-path sphere checks only; exactly one final frozen candidate, no new cuRobo/physics. Actual task success and collision-free execution are not established.",
+      "retry_round": 3,
+      "frozen_candidate_count": 1,
+      "remaining_cpu_warnings": [],
+      "cpu_preselection_target_set_count": 12,
+      "cpu_endpoint_clear_of_detected_pairs": true,
+      "actual_payload_alignment": {
+        "result": {
+          "path": "exports/replicator_physical_retry_round2_20261028/executions/u_shape_banana_bowl__human_default_mpfb/result.json",
+          "sha256": "af2f244c731b128d03863b11722ec91d0061e0fc8553cfffe4666666ab2439a8"
+        },
+        "states": {
+          "path": "exports/replicator_physical_retry_round2_20261028/executions/u_shape_banana_bowl__human_default_mpfb/physics_states.npz",
+          "sha256": "58b29681dc31c3eac963019c2cd989c6acd6b267ca540e5dba18b760400420ce"
+        },
+        "metadata": {
+          "path": "exports/replicator_physical_retry_round2_20261028/executions/u_shape_banana_bowl__human_default_mpfb/physics_metadata.json",
+          "sha256": "a5b35ecf719c81f379553055427b4df06d7cffca75d8a6c9d407b308e777e084"
+        },
+        "sampled_phase": "lift",
+        "sample_indices": [
+          7197,
+          7198,
+          7199,
+          7200,
+          7201,
+          7202,
+          7203,
+          7204,
+          7205,
+          7206,
+          7207,
+          7208,
+          7209,
+          7210,
+          7211,
+          7212,
+          7213,
+          7214,
+          7215,
+          7216,
+          7217,
+          7218,
+          7219,
+          7220,
+          7221,
+          7222,
+          7223,
+          7224,
+          7225,
+          7226,
+          7227,
+          7228,
+          7229,
+          7230,
+          7231,
+          7232,
+          7233,
+          7234,
+          7235,
+          7236,
+          7237,
+          7238,
+          7239,
+          7240,
+          7241,
+          7242,
+          7243,
+          7244,
+          7245,
+          7246,
+          7247,
+          7248,
+          7249,
+          7250,
+          7251,
+          7252,
+          7253,
+          7254,
+          7255,
+          7256
+        ],
+        "actual_payload_in_tcp": [
+          [
+            -0.05497070202444859,
+            0.5775015613086699,
+            -0.8145367816157769,
+            0.032372884291597424
+          ],
+          [
+            0.9977112991532394,
+            -0.0004005327710718126,
+            -0.06761658905516105,
+            0.03405102856588926
+          ],
+          [
+            -0.039374934424002694,
+            -0.8163894819628361,
+            -0.5761578154286875,
+            -0.003988803125452245
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "settled_bowl_world": [
+          [
+            0.9999996008389735,
+            -9.15436988168947e-06,
+            -0.0008934417109378094,
+            -1.7164348363876343
+          ],
+          [
+            9.836487509979141e-06,
+            0.9999997085079936,
+            0.0007634704782888152,
+            1.8116340637207031
+          ],
+          [
+            0.0008934344614155405,
+            -0.0007634789618693861,
+            0.9999993094371304,
+            0.9227188229560852
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "measured_closed_finger_joint_rad": 0.46454787254333496
+      },
+      "opening_target_payload_origin_world_m": [
+        -1.7336748487584772,
+        1.770067466873557,
+        0.9561876816302537
+      ],
+      "selected_destination_adjustment": {
+        "toward_robot_m": 0.045,
+        "raise_from_previous_payload_goal_m": 0.016
+      },
+      "cpu_preparation_evidence": {
+        "path": "reports/replicator_physical_retry_round3_20261029/banana_short_descent_cpu_validation.json",
+        "sha256": "762700602ddf91698252978207fd6708ced8736d690c5c018855af03075f12db"
+      },
+      "superseded_preparation_recipe": {
+        "path": "reports/replicator_physical_retry_round3_20261029/banana_recipes_before_authorized_short_descent.json",
+        "sha256": "5405c4c87b45d66c5b7670ee9d57a8d028f7805c4bfa703e30a662729a5445ad"
+      }
+    }
+  },
+  "retry_round": 3,
+  "layout_fixed": true,
+  "source_previous_manifest": {
+    "path": "exports/replicator_physical_retry_round2_20261028/manifest.json",
+    "sha256": "73d13bf6dcb8678a8dd020d8a3b348519958e70edafd8e1f5217d35f8f04925c"
+  },
+  "source_cpu_preparation": {
+    "path": "reports/replicator_physical_retry_round3_20261029/banana_short_descent_cpu_validation.json",
+    "sha256": "762700602ddf91698252978207fd6708ced8736d690c5c018855af03075f12db"
+  },
+  "frozen_candidate_count_per_scene": 1
+}

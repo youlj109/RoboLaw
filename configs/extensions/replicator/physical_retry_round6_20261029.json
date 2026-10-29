@@ -1,0 +1,163 @@
+{
+  "kind": "physical_failure_retry_plan",
+  "schema_version": 2,
+  "retry_round": 6,
+  "source_first_pass_manifest": {
+    "path": "exports/replicator_154_physical_demos_20261028/manifest.json",
+    "sha256": "fe3e8d5d213f1c377d0f74cce8fa7f4cd8eb6dfa77a3d948f8ee9e8161547951"
+  },
+  "source_camera_retake_manifest": {
+    "path": "exports/replicator_u_banana_camera_retakes_20261028/manifest.json",
+    "sha256": "51893c8da70803aa36c8a1ef8e9dcf407f7dce171602c422b7a0333fc5693edd"
+  },
+  "source_previous_retry_manifest": {
+    "path": "exports/replicator_physical_retry_round5_20261029/manifest.json",
+    "sha256": "1e7042244774393074936ffbfd2ed053712938d05959f7fcfb1de449581ca3ed"
+  },
+  "expected_scene_count": 3,
+  "candidate_count_per_scene": 1,
+  "physical_retries_per_scene": 1,
+  "layout_changed": false,
+  "success_predicate_changed": false,
+  "execution_settings": {
+    "device": "cpu",
+    "seed": 42,
+    "physics_threads": 8,
+    "initial_settle_seconds": 5.0,
+    "close_seconds": 2.0,
+    "release_seconds": 2.0,
+    "final_settle_seconds": 3.0,
+    "episode_seconds": 200.0,
+    "max_actions": 6000
+  },
+  "entries": [
+    {
+      "scene_id": "l_island_banana_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_l_island_banana_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "result_path": "reports/replicator_trajectory_retry10_20261028/scenes/l_island_banana_bowl__robot_sharp_equipment_housing/result.json",
+      "result_sha256": "cd33b64e2ede087fe8a1a181d975f7b6e217b76c17beef365814feae4b75d5c2",
+      "config_path": "configs/extensions/replicator/visual_only_review_v1/l_island_banana_bowl/robot_sharp_equipment_housing/attempt04/layout.json",
+      "config_sha256": "4eac59b2fec64e67b2c65bbc1e59bc26dc150ff5fedf084723aa6c322d4500a4",
+      "source_scene_path": "reports/replicator_trajectory_retry10_20261028/scenes/l_island_banana_bowl__robot_sharp_equipment_housing/source_scene.usda",
+      "source_scene_sha256": "c688101392400d734d0d025e85a33cf3d8d4055cd089477869f32017463a5be6",
+      "source_trajectory_path": "reports/replicator_trajectory_retry4_20261026/scenes/l_island_banana_bowl__robot_sharp_equipment_housing/trajectory.npz",
+      "source_trajectory_sha256": "9831fc82c222cc6033d3d83ed985c620b9f127a0f28515fd0d4d188a8f45a7f6",
+      "planning_status": "failed",
+      "candidate_planning_result": {
+        "path": "reports/replicator_physical_retry_round6_planning_20261029/scenes/l_island_banana_bowl__robot_sharp_equipment_housing/result.json",
+        "sha256": "e30f92aaaf2ac88a63b5cc1984ccdf813753cace873152a2bb6d3f50dc528690"
+      },
+      "previous_retry_result": {
+        "path": "exports/replicator_physical_retry_round1_20261028/executions/l_island_banana_bowl__robot_sharp_equipment_housing/result.json",
+        "sha256": "3c9a1b8d458d87b528f05c9449b18a1afd8db0913fab037b7cf4f10d5f12c451"
+      },
+      "physical_attempt_number": 3,
+      "trajectory_path": null,
+      "trajectory_sha256": null,
+      "execution_overrides": {
+        "release_seconds": 4.0
+      },
+      "adjustment": {
+        "kind": "grasp_placement_orientation_round6",
+        "description": "保留原避壳折线与抓姿，固定连续IK的9个lift关节端点，前序pregrasp/approach也固定上轮已成功的关节分支。 使用公开plan_single_js，每段一次，不再增加软权重；原5mm实际FK验收限制不变。",
+        "evidence_path": "reports/replicator_physical_retry_round6_20261029/other_joint_goal_cpu_preparation.json",
+        "evidence_sha256": "5adde48641e5315ca5d790958b6b445a8ce3c8e5a63ec63188193be16c4b899b",
+        "candidate_count": 1,
+        "recipe_source": {
+          "path": "configs/extensions/replicator/physical_retry_round6_other_recipes_20261029.json",
+          "sha256": "d1ba9f9ffd44992f8696d7790d72310b8bbff30c44c7043c2cd91b402ee6ae0a"
+        },
+        "root_cause_confirmed": false
+      },
+      "timing_validation": null,
+      "failure_reason": "cuRobo rejected lift: TCP_SEGMENT_DEVIATION_LIMIT"
+    },
+    {
+      "scene_id": "u_shape_bowl_sink__human_default_mpfb",
+      "task_id": "kitchen_bench_replicator_u_shape_bowl_sink",
+      "variant_id": "human_default_mpfb",
+      "result_path": "reports/replicator_trajectory_retry10_20261028/scenes/u_shape_bowl_sink__human_default_mpfb/result.json",
+      "result_sha256": "0b4366f147ad0009d945ec3944f0d47c4e0479ade262f3335fee0f00d1c2422e",
+      "config_path": "configs/extensions/replicator/visual_scene_variants_final03/u_shape_bowl_sink/human_default_mpfb.json",
+      "config_sha256": "0fd1423de5faf02b48f0b29d65b52f7cf0ca0eb1a53976050ffd0dbd5f8a3029",
+      "source_scene_path": "reports/replicator_trajectory_retry10_20261028/scenes/u_shape_bowl_sink__human_default_mpfb/source_scene.usda",
+      "source_scene_sha256": "57ed8833591b6ba994b0552c39b137767aa30787b1a6e26c2d3ccb703dc1210f",
+      "source_trajectory_path": "reports/replicator_trajectory_retry6_20261026/scenes/u_shape_bowl_sink__human_default_mpfb/trajectory.npz",
+      "source_trajectory_sha256": "aa0f87334367c552aee19f2df4e5b0d062b3a0a1839e01b85b55340270420930",
+      "planning_status": "failed",
+      "candidate_planning_result": {
+        "path": "reports/replicator_physical_retry_round6_planning_20261029/scenes/u_shape_bowl_sink__human_default_mpfb/result.json",
+        "sha256": "f803694399a6b95c7667625632c9ad71c66b62a8c10a4d19582a4aa7933b5dbd"
+      },
+      "previous_retry_result": {
+        "path": "exports/replicator_physical_retry_round4_20261029/executions/u_shape_bowl_sink__human_default_mpfb/result.json",
+        "sha256": "5896b05c10943a6bc58fc0de70c291fb9f1616e63bdfb2987113b066f6564a77"
+      },
+      "physical_attempt_number": 5,
+      "trajectory_path": null,
+      "trajectory_sha256": null,
+      "execution_overrides": {},
+      "adjustment": {
+        "kind": "grasp_placement_orientation_round6",
+        "description": "保留round5新碗缘抓姿；pregrasp/approach固定已通过源几何检查的IK分支，lift每个原分段固定连续IK关节目标并保持原5mm实际TCP路径门禁。放置以本轮nominal_attachment重新计算，碗直立偏航-90°，原目标X偏移-50mm、名义源碗底距原槽底3mm、Z变化-15.72mm；全开爪后竖直退出200mm。不继承旧90mm实测补偿；新实际支撑未验证。lower保守携物球仍有排水口冲突、retreat单一IK分支另有link5水龙头冲突警告。",
+        "evidence_path": "reports/replicator_physical_retry_round6_20261029/human_frozen_cpu_evidence.json",
+        "evidence_sha256": "39878044320e874a1efa3186903b7ae0bba13408e8f6886f650c16f3732e8e54",
+        "candidate_count": 1,
+        "recipe_source": {
+          "path": "configs/extensions/replicator/physical_retry_round6_human_recipes_20261029.json",
+          "sha256": "4d9b6c6f223181d52143ace5530163c5f68be9d07f90f53df71d68f3fcf6c6c0"
+        },
+        "root_cause_confirmed": false
+      },
+      "timing_validation": null,
+      "failure_reason": "cuRobo rejected lift: TCP_SEGMENT_DEVIATION_LIMIT"
+    },
+    {
+      "scene_id": "u_shape_mustard_bowl__robot_sharp_equipment_housing",
+      "task_id": "kitchen_bench_replicator_u_shape_mustard_bowl",
+      "variant_id": "robot_sharp_equipment_housing",
+      "result_path": "reports/replicator_trajectory_retry10_20261028/scenes/u_shape_mustard_bowl__robot_sharp_equipment_housing/result.json",
+      "result_sha256": "a5dc2984a0948805ed2bc23a98ead7604d85151b11dfdca601c0d5b9df84d073",
+      "config_path": "configs/extensions/replicator/visual_scene_variants_final03/u_shape_mustard_bowl/robot_sharp_equipment_housing.json",
+      "config_sha256": "db55698e0958b891c2981f0dbd1d95ec12d1dd27ccffde3f74580e4f73b24969",
+      "source_scene_path": "reports/replicator_trajectory_retry10_20261028/scenes/u_shape_mustard_bowl__robot_sharp_equipment_housing/source_scene.usda",
+      "source_scene_sha256": "218911be16d1e51bbae7194a1abb34569c414ef765c1921dc451ba5d8329bdec",
+      "source_trajectory_path": "reports/replicator_trajectory_retry2_20261026/scenes/u_shape_mustard_bowl__robot_sharp_equipment_housing/trajectory.npz",
+      "source_trajectory_sha256": "28a660f511a0a495781db3ec85c344c09759af3ca994172a427bba8107da011f",
+      "planning_status": "failed",
+      "candidate_planning_result": {
+        "path": "reports/replicator_physical_retry_round6_planning_20261029/scenes/u_shape_mustard_bowl__robot_sharp_equipment_housing/result.json",
+        "sha256": "b10adbe0ed3aea2a8df238add7a6f4262660c38b800a7ea079140efc352180c6"
+      },
+      "previous_retry_result": {
+        "path": "exports/replicator_physical_retry_round3_20261029/executions/u_shape_mustard_bowl__robot_sharp_equipment_housing/result.json",
+        "sha256": "8a5d1319a8d9d14756f6d8890d7689f89df07622eb74d6cadb0be0fd73dc206c"
+      },
+      "physical_attempt_number": 4,
+      "trajectory_path": null,
+      "trajectory_sha256": null,
+      "execution_overrides": {},
+      "adjustment": {
+        "kind": "grasp_placement_orientation_round6",
+        "description": "保留瓶身抓姿及60mm预抓下降，固定连续IK的6个approach和9个lift关节端点，pregrasp固定上轮已成功关节分支。 使用公开plan_single_js，每段一次，不再增加软权重；原5mm实际FK验收限制不变。",
+        "evidence_path": "reports/replicator_physical_retry_round6_20261029/other_joint_goal_cpu_preparation.json",
+        "evidence_sha256": "5adde48641e5315ca5d790958b6b445a8ce3c8e5a63ec63188193be16c4b899b",
+        "candidate_count": 1,
+        "recipe_source": {
+          "path": "configs/extensions/replicator/physical_retry_round6_other_recipes_20261029.json",
+          "sha256": "d1ba9f9ffd44992f8696d7790d72310b8bbff30c44c7043c2cd91b402ee6ae0a"
+        },
+        "root_cause_confirmed": false
+      },
+      "timing_validation": null,
+      "failure_reason": "cuRobo rejected approach: TCP_SEGMENT_DEVIATION_LIMIT"
+    }
+  ],
+  "created_at": "2026-10-29T08:14:23.295733+00:00",
+  "planning_progress": {
+    "path": "reports/replicator_physical_retry_round6_planning_20261029/progress.json",
+    "sha256": "dac028e99fa99730fc39afae7b6cfb3321a254c39a88bedd7c99cdf0dfeb86eb"
+  },
+  "scope": "One fixed-layout grasp/placement adjustment and one no-render native test per generated candidate; failed planning consumes zero physical attempts."
+}
