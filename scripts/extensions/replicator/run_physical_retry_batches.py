@@ -36,9 +36,9 @@ def local(value):
 def pending_task(manifest):
     rows = manifest['entries']
     version = manifest.get('schema_version', 1)
-    if version not in (1, 2) or version == 2 and manifest.get('retry_round') not in (2, 3, 4, 5, 6):
+    if version not in (1, 2) or version == 2 and manifest.get('retry_round') not in (2, 3, 4, 5, 6, 7):
         raise ValueError('Unsupported retry cohort schema/round')
-    expected = {2: 48, 3: 29, 4: 6, 5: 5, 6: 3}[manifest['retry_round']] if version == 2 else 84
+    expected = {2: 48, 3: 29, 4: 6, 5: 5, 6: 3, 7: 3}[manifest['retry_round']] if version == 2 else 84
     if len(rows) != expected or len({row['scene_id'] for row in rows}) != expected:
         raise ValueError(f'Expected exactly the fixed {expected}-scene cohort')
     for row in rows:
@@ -82,7 +82,7 @@ def verify(before, after, chosen):
                     'trajectory_sha256', 'source_scene_path', 'source_scene_sha256',
                     'source_trajectory_path', 'source_trajectory_sha256', 'physical_attempt_number',
                     'candidate_planning_result','previous_retry_result','execution_overrides','retry_schema_version',
-                    'planning_status','prior_physical_attempts'):
+                    'planning_status','prior_physical_attempts','scene_revision','layout_changed'):
             if row.get(key) != updated.get(key):
                 raise ValueError('Source/attempt identity changed: '+sid+' '+key)
 

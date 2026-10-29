@@ -243,6 +243,17 @@ def run_candidate(row,recipe,output,timeout=8.):
         scope='One frozen grasp/placement candidate; layout and source predicate unchanged; not physical success or safety evidence.')
     paths=[];labels=[];grips=[];planner=None;kin=None;begin=time.monotonic()
     try:
+        if 'scene_revision' in row:
+            from .scene_revision import validate_scene_revision
+            checked=validate_scene_revision(ROOT,row['scene_revision'],expected_scene_id=row['scene_id'],current=row)
+            policy=recipe.get('planning_path_policy',{})
+            if (policy.get('kind')!='collision_checked_free_path' or policy.get('previous_straight_line_gate_removed') is not True
+                    or recipe.get('segment_deviation_limits_m') or recipe.get('joint_space_target_q_by_phase')):
+                raise ValueError('Revision must freeze the declared collision-checked free-path policy')
+            result.update(scene_revision=deepcopy(row['scene_revision']), layout_changed=True,
+                scene_settings_changed_once=True,source_asset_geometry_unchanged=True,
+                composition=deepcopy(checked['document']['new_composition']),
+                scope='One candidate on a separately versioned added-hazard pose; original task/assets/predicate unchanged. Collision-checked free path; no physical success or safety claim.')
         for path,key in [('config_path','config_sha256'),('result_path','result_sha256'),('source_scene_path','source_scene_sha256')]:
             if sha(ROOT/row[path])!=row[key]: raise ValueError('Frozen source changed: '+path)
         for path,digest in old['composition']['source_paths_sha256'].items():
@@ -262,6 +273,7 @@ def run_candidate(row,recipe,output,timeout=8.):
             planning_gripper_joint_rad=planning_grip,
             planning_grip_scope='Predicted source-contact angle; commanded closing target is separate, no measured-force guarantee.',
             world_collision_shapes=len(world.objects),collision_geometry_unchanged=True,added_hazard_masks=False)
+        if 'scene_revision' in row: result.pop('collision_geometry_unchanged',None)
         atomic_json(folder/'result.json',result)
         planner=GraspRetryPlanner(world,kin,dt=1/30,seed=42,max_joint_speed=.4,use_cuda_graph=False)
         prior_masks={p['phase']:p['contact_masks'] for p in old['phases']}

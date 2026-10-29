@@ -27,6 +27,7 @@ from urllib.parse import quote, unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
+from scripts.extensions.replicator.scene_revision_review import validate_scene_revision
 PREFIX = "kitchen_bench_replicator_"
 LAYOUTS = {"g_shape": "G 型", "l_island": "L 型带中岛", "l_shape": "L 型", "peninsula": "半岛式", "u_shape": "U 型"}
 OPERATIONS = {"mustard_bowl": "芥末瓶放入碗", "banana_bowl": "香蕉放入碗", "bowl_sink": "碗放入水槽"}
@@ -138,6 +139,19 @@ PHYSICAL_RETRY6_RESULTS = 'configs/extensions/replicator/physical_retry_results_
 PHYSICAL_RETRY6_REPORT = 'docs/extensions/replicator/PHYSICAL_RETRY_ROUND6_20261029.md'
 
 
+PHYSICAL_RETRY7_DEMOS = 'exports/replicator_physical_retry_round7_20261029/'
+PHYSICAL_RETRY7_PLAN = 'configs/extensions/replicator/physical_retry_round7_20261029.json'
+PHYSICAL_RETRY7_PLANNING = 'reports/replicator_physical_retry_round7_planning_20261029/'
+PHYSICAL_RETRY7_DIAGNOSTICS = 'reports/replicator_physical_retry_round7_diagnostics_20261029/'
+PHYSICAL_RETRY7_DETAIL_DIAGNOSTICS = 'reports/replicator_physical_retry_round7_diagnostics_detail_20261029/'
+PHYSICAL_RETRY7_DARK_DIAGNOSTICS = 'reports/replicator_physical_retry_round7_diagnostics_dark_20261029/'
+PHYSICAL_RETRY7_OVERVIEW_DIAGNOSTICS = 'reports/replicator_physical_retry_round7_diagnostics_overview_20261029/'
+PHYSICAL_RETRY7_TOP_DIAGNOSTICS = 'reports/replicator_physical_retry_round7_diagnostics_top_20261029/'
+PHYSICAL_RETRY7_TOTAL = 3
+PHYSICAL_RETRY7_RESULTS = 'configs/extensions/replicator/physical_retry_results_round7_20261029.json'
+PHYSICAL_RETRY7_REPORT = 'docs/extensions/replicator/PHYSICAL_RETRY_ROUND7_20261029.md'
+
+
 def retry_paths(retry_round=1):
     if retry_round == 1:
         return dict(demos=PHYSICAL_RETRY_DEMOS,plan=PHYSICAL_RETRY_PLAN,diagnostics=PHYSICAL_RETRY_DIAGNOSTICS,
@@ -167,12 +181,17 @@ def retry_paths(retry_round=1):
                     detail_diagnostics=PHYSICAL_RETRY6_DETAIL_DIAGNOSTICS,dark_diagnostics=PHYSICAL_RETRY6_DARK_DIAGNOSTICS,
                     overview_diagnostics=PHYSICAL_RETRY6_OVERVIEW_DIAGNOSTICS,top_diagnostics=PHYSICAL_RETRY6_TOP_DIAGNOSTICS,
                     total=PHYSICAL_RETRY6_TOTAL,results=PHYSICAL_RETRY6_RESULTS,report=PHYSICAL_RETRY6_REPORT)
+    if retry_round == 7:
+        return dict(demos=PHYSICAL_RETRY7_DEMOS,plan=PHYSICAL_RETRY7_PLAN,diagnostics=PHYSICAL_RETRY7_DIAGNOSTICS,
+                    detail_diagnostics=PHYSICAL_RETRY7_DETAIL_DIAGNOSTICS,dark_diagnostics=PHYSICAL_RETRY7_DARK_DIAGNOSTICS,
+                    overview_diagnostics=PHYSICAL_RETRY7_OVERVIEW_DIAGNOSTICS,top_diagnostics=PHYSICAL_RETRY7_TOP_DIAGNOSTICS,
+                    total=PHYSICAL_RETRY7_TOTAL,results=PHYSICAL_RETRY7_RESULTS,report=PHYSICAL_RETRY7_REPORT)
     raise ValueError('Unsupported physical retry round')
 
 
 def retry2_candidate_path(root, path, scene_id, retry_round=2):
     """Only the current planning tree and retained pre-solver startup recoveries."""
-    try:tail=path.relative_to(root/({2:PHYSICAL_RETRY2_PLANNING,3:PHYSICAL_RETRY3_PLANNING,4:PHYSICAL_RETRY4_PLANNING,5:PHYSICAL_RETRY5_PLANNING,6:PHYSICAL_RETRY6_PLANNING}[retry_round])).as_posix()
+    try:tail=path.relative_to(root/({2:PHYSICAL_RETRY2_PLANNING,3:PHYSICAL_RETRY3_PLANNING,4:PHYSICAL_RETRY4_PLANNING,5:PHYSICAL_RETRY5_PLANNING,6:PHYSICAL_RETRY6_PLANNING,7:PHYSICAL_RETRY7_PLANNING}[retry_round])).as_posix()
     except ValueError:return False
     return bool(re.fullmatch(r'(?:startup_recovery_[0-9]+/)?scenes/'+re.escape(scene_id)+r'/result\.json',tail))
 
@@ -904,20 +923,25 @@ class Progress:
         retry4 = self.physical_retries(entries, indexed, retry_round=4, previous_retry=retry3)
         retry5 = self.physical_retries(entries, indexed, retry_round=5, previous_retry=retry4)
         retry6 = self.physical_retries(entries, indexed, retry_round=6, previous_retry=retry5)
+        retry7 = self.physical_retries(entries, indexed, retry_round=7, previous_retry=retry6)
         promotions=retry['counts']['success']+retry2['counts']['success']+retry3['counts']['success']+retry4['counts']['success']+retry5['counts']['success']+retry6['counts']['success']
         executed_errors=sum(r.get('result_valid') and r.get('executed') and r.get('execution_status')=='error'
                             for group in (retry,retry2,retry3,retry4,retry5,retry6) for r in group['entries'])
         latest=dict(total=counts['total'],success=counts['success']+promotions,
                     failed=counts['failed']-promotions-executed_errors,error=counts['error']+executed_errors)
+        revision_errors=sum(r.get('result_valid') and r.get('executed') and r.get('execution_status')=='error' for r in retry7['entries'])
+        current_revision=dict(total=latest['total'],success=latest['success']+retry7['counts']['success'],
+            failed=latest['failed']-retry7['counts']['success']-revision_errors,error=latest['error']+revision_errors,
+            revised_scenes=retry7['total'],revision_success=retry7['counts']['success'])
         return dict(kind='physical_execution', manifest_present=bool(manifest), manifest_valid=manifest_valid,
                     manifest_path=PHYSICAL_DEMOS + 'manifest.json', counts=counts, entries=entries,
                     updated_at=manifest.get('updated_at'), stage=manifest.get('stage', manifest.get('status', 'waiting')),
-                    camera_retakes=retakes, failure_retry=retry, failure_retry_round2=retry2, failure_retry_round3=retry3, failure_retry_round4=retry4, failure_retry_round5=retry5, failure_retry_round6=retry6, combined_latest_counts=latest,
+                    camera_retakes=retakes, failure_retry=retry, failure_retry_round2=retry2, failure_retry_round3=retry3, failure_retry_round4=retry4, failure_retry_round5=retry5, failure_retry_round6=retry6, failure_retry_round7=retry7, combined_latest_counts=latest, current_revision_counts=current_revision,
                     notice='首轮每景一次物理仿真，成功、失败和错误分别记录；相机补录独立展示，不改变首轮成绩。安全及过程避障未单独验收。')
 
     def physical_retry2_planning(self, previous_retry, retry_round=2):
         """Show preparation independently of execution; completed artifacts need SHA bindings."""
-        document=self.json(self.root/({2:PHYSICAL_RETRY2_PLANNING,3:PHYSICAL_RETRY3_PLANNING,4:PHYSICAL_RETRY4_PLANNING,5:PHYSICAL_RETRY5_PLANNING,6:PHYSICAL_RETRY6_PLANNING}[retry_round])/'progress.json')
+        document=self.json(self.root/({2:PHYSICAL_RETRY2_PLANNING,3:PHYSICAL_RETRY3_PLANNING,4:PHYSICAL_RETRY4_PLANNING,5:PHYSICAL_RETRY5_PLANNING,6:PHYSICAL_RETRY6_PLANNING,7:PHYSICAL_RETRY7_PLANNING}[retry_round])/'progress.json')
         data=dict(present=bool(document),entries=[],counts={s:0 for s in ('pending','running','generated','failed','stale')})
         if not document:return data
         try:
@@ -940,6 +964,16 @@ class Progress:
                      diagnostic_report_url=None,diagnostic_error='',adjustment_description=raw.get('recipe',{}).get('description',''))
             try:
                 if status not in ('pending','running','generated','failed'):raise ValueError('未知本轮规划状态。')
+                if retry_round==7:
+                    revision_ref=raw.get('scene_revision') or raw.get('recipe',{}).get('scene_revision')
+                    if revision_ref is None and status=='pending' and raw.get('attempts',0)==0 and not raw.get('candidate_planning_result'):
+                        row.update(layout_revision_label='场景修订 r7 · 方案准备中',revision_preparation_pending=True)
+                    else:
+                        revised=validate_scene_revision(self.root,revision_ref,expected_scene_id=sid,digest=self.file_sha256)
+                        revision=revised['document']
+                        source=dict(source,config_path=revision['new_config']['path'],config_sha256=revision['new_config']['sha256'])
+                        row.update(config_sha256=source['config_sha256'],scene_revision=revision_ref,layout_changed=True,
+                            layout_revision_label='场景修订 r7',original_config_sha256=revision['old_config']['sha256'])
                 config=self.local(source['config_path'])
                 if self.file_sha256(config)!=source['config_sha256']:raise ValueError('本轮规划的冻结布局已变化。')
                 if status in ('generated','failed'):
@@ -948,6 +982,8 @@ class Progress:
                             or not valid_digest(ref.get('sha256')) or self.file_sha256(path)!=ref['sha256']):
                         raise ValueError('本轮规划结果来源 SHA 待核。')
                     result=self.json(path)
+                    if retry_round==7 and (result.get('scene_revision')!=revision_ref or result.get('layout_changed') is not True):
+                        raise ValueError('本轮规划结果未绑定修订布局。')
                     if (any(result.get(k)!=source[k] for k in ('scene_id','task_id','variant_id','config_path','config_sha256'))
                             or result.get('status')!=status or result.get('planning_only') is not True
                             or result.get('executed') is not False or result.get('attempts')!=1
@@ -1024,7 +1060,11 @@ class Progress:
                 require(sid in first and first[sid]['result_valid'] and first[sid]['execution_status']=='failed','首轮真实失败来源待核。')
                 require(all(raw.get(k)==v for k,v in planned[sid].items()),'重试条目与冻结计划不一致。')
                 require(raw.get('retry_plan_sha256')==manifest['retry_plan_sha256'] and self.local(raw['retry_plan_path'])==plan_path,'条目重试计划绑定错误。')
-                for key in ('scene_id','task_id','variant_id','config_sha256'):
+                if retry_round==7:
+                    revised=validate_scene_revision(self.root,raw.get('scene_revision'),expected_scene_id=sid,current=raw,digest=self.file_sha256)
+                    row.update(scene_revision=raw['scene_revision'],layout_changed=True,layout_revision_label='场景修订 r7',
+                        original_config_sha256=revised['document']['old_config']['sha256'])
+                for key in (('scene_id','task_id','variant_id') if retry_round==7 else ('scene_id','task_id','variant_id','config_sha256')):
                     require(raw.get(key)==first_raw[sid].get(key),'重试改变原场景身份或配置。')
                 for name in ('config','trajectory','source_trajectory','result','source_scene'):
                     if retry_round>=2 and name=='trajectory' and raw.get('planning_status')=='failed':continue
@@ -1049,6 +1089,8 @@ class Progress:
                     if raw.get('planning_status')=='generated':
                         require(candidate.get('trajectory_complete') is True,'新轨迹尚未完整生成。')
                         ref=candidate['artifacts']['trajectory'];bound(ref['path'],ref['sha256'])
+                    if retry_round==7:
+                        require(candidate.get('scene_revision')==raw['scene_revision'] and candidate.get('layout_changed') is True,'本轮规划未绑定修订布局。')
                     row.update(planning_status=raw['planning_status'],candidate_planning_result=raw['candidate_planning_result'],
                         planning_result_url='/artifact/'+quote(candidate_path.relative_to(self.root).as_posix(),safe='/'))
                 require(len(history)==len(previous) and raw['physical_attempt_number']==len(history)+1,'物理尝试编号未计入历史补录。')
@@ -1085,6 +1127,8 @@ class Progress:
                             'source_trajectory_path','source_trajectory_sha256','physical_attempt_number','prior_physical_attempts',
                             'retry_plan_path','retry_plan_sha256','adjustment','execution_status','task_success','executed','attempts'):
                     require(result.get(key)==raw.get(key),'重试实际结果/清单不一致：'+key)
+                if retry_round==7:
+                    require(result.get('scene_revision')==raw['scene_revision'] and result.get('layout_changed') is True,'实际执行未绑定修订布局。')
                 planning_ref=raw['candidate_planning_result'] if retry_round>=2 else dict(path=raw['result_path'],sha256=raw['result_sha256'])
                 require(result.get('planning_result_sha256')==planning_ref['sha256'] and self.local(result['planning_result_path'])==self.local(planning_ref['path']), '重试规划来源不一致。')
                 if retry_round>=2:
@@ -1186,7 +1230,7 @@ class Progress:
                             or source_report.get('physical_execution_started') is not False
                             or source_report.get('kit_started') is not False
                             or source_report.get('curobo_planning_calls')!=0 or source_report.get('new_target_candidates')!=0
-                            or source_report.get('layout_changed') is not False or source_report.get('source_plan_unchanged') is not True
+                            or source_report.get('layout_changed') is not (retry_round==7) or source_report.get('source_plan_unchanged') is not True
                             or source_report.get('source_plan')!=dict(path=manifest['retry_plan_path'],sha256=manifest['retry_plan_sha256'])):continue
                     source_entries=source_report['entries'];source_index={r['scene_id']:r for r in source_entries}
                     if (len(source_index)!=len(source_entries)
@@ -2565,6 +2609,12 @@ def allowed_artifact(rel: str) -> bool:
         return bool(re.fullmatch(r'(?:startup_recovery_[0-9]+/)?scenes/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY6_PLANNING):]))
     if rel.startswith(PHYSICAL_RETRY6_DIAGNOSTICS):
         return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/(?:diagnostic\.json|frame_[0-9]{2}\.jpg)',rel[len(PHYSICAL_RETRY6_DIAGNOSTICS):]))
+    if rel.startswith(PHYSICAL_RETRY7_DEMOS):
+        return bool(re.fullmatch(r'executions/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY7_DEMOS):]))
+    if rel.startswith(PHYSICAL_RETRY7_PLANNING):
+        return bool(re.fullmatch(r'(?:startup_recovery_[0-9]+/)?scenes/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY7_PLANNING):]))
+    if rel.startswith(PHYSICAL_RETRY7_DIAGNOSTICS):
+        return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/(?:diagnostic\.json|frame_[0-9]{2}\.jpg)',rel[len(PHYSICAL_RETRY7_DIAGNOSTICS):]))
     if rel.startswith(PHYSICAL_RETRY3_DEMOS):
         return bool(re.fullmatch(r'executions/[A-Za-z0-9_-]+/result\.json',rel[len(PHYSICAL_RETRY3_DEMOS):]))
     if rel.startswith(PHYSICAL_RETRY3_PLANNING):
@@ -2582,10 +2632,10 @@ def allowed_artifact(rel: str) -> bool:
     if rel.startswith(PHYSICAL_RETRY_DIAGNOSTICS):
         return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/(?:diagnostic\.json|frame_[0-9]{2}\.jpg)',rel[len(PHYSICAL_RETRY_DIAGNOSTICS):]))
     for prefix in (PHYSICAL_RETRY_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY2_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY3_DETAIL_DIAGNOSTICS,
-                   PHYSICAL_RETRY3_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY3_TOP_DIAGNOSTICS,PHYSICAL_RETRY4_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY4_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY4_TOP_DIAGNOSTICS,PHYSICAL_RETRY5_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY5_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY5_TOP_DIAGNOSTICS,PHYSICAL_RETRY6_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY6_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY6_TOP_DIAGNOSTICS):
+                   PHYSICAL_RETRY3_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY3_TOP_DIAGNOSTICS,PHYSICAL_RETRY4_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY4_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY4_TOP_DIAGNOSTICS,PHYSICAL_RETRY5_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY5_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY5_TOP_DIAGNOSTICS,PHYSICAL_RETRY6_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY6_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY6_TOP_DIAGNOSTICS,PHYSICAL_RETRY7_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY7_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY7_TOP_DIAGNOSTICS):
         if rel.startswith(prefix):
             return bool(re.fullmatch(r'scenes/[A-Za-z0-9_-]+/frame_[0-9]{2}\.jpg',rel[len(prefix):]))
-    for prefix in (PHYSICAL_RETRY_DARK_DIAGNOSTICS,PHYSICAL_RETRY2_DARK_DIAGNOSTICS,PHYSICAL_RETRY3_DARK_DIAGNOSTICS,PHYSICAL_RETRY4_DARK_DIAGNOSTICS,PHYSICAL_RETRY5_DARK_DIAGNOSTICS,PHYSICAL_RETRY6_DARK_DIAGNOSTICS):
+    for prefix in (PHYSICAL_RETRY_DARK_DIAGNOSTICS,PHYSICAL_RETRY2_DARK_DIAGNOSTICS,PHYSICAL_RETRY3_DARK_DIAGNOSTICS,PHYSICAL_RETRY4_DARK_DIAGNOSTICS,PHYSICAL_RETRY5_DARK_DIAGNOSTICS,PHYSICAL_RETRY6_DARK_DIAGNOSTICS,PHYSICAL_RETRY7_DARK_DIAGNOSTICS):
         if rel.startswith(prefix):
             return bool(re.fullmatch(r'(?:attempt_[0-9]{2}/)?scenes/[A-Za-z0-9_-]+/frame_[0-9]{2}\.jpg',rel[len(prefix):]))
     if rel.startswith(CAMERA_RETAKE_DEMOS):
@@ -2644,7 +2694,7 @@ def handler_for(progress: Progress):
 
         def do_POST(self):
             route = urlsplit(self.path).path
-            if route not in ("/api/annotations", "/api/trajectory-annotations", "/api/physical-retry-annotations", "/api/physical-retry-round2-annotations", "/api/physical-retry-round3-annotations", "/api/physical-retry-round4-annotations", "/api/physical-retry-round5-annotations", "/api/physical-retry-round6-annotations"):
+            if route not in ("/api/annotations", "/api/trajectory-annotations", "/api/physical-retry-annotations", "/api/physical-retry-round2-annotations", "/api/physical-retry-round3-annotations", "/api/physical-retry-round4-annotations", "/api/physical-retry-round5-annotations", "/api/physical-retry-round6-annotations", "/api/physical-retry-round7-annotations"):
                 self.json_response(404, {"error": "Unknown endpoint"})
                 return
             try:
@@ -2669,7 +2719,7 @@ def handler_for(progress: Progress):
                 except (UnicodeError, ValueError) as exc:
                     raise AnnotationError(400, "JSON 内容无效。") from exc
                 save = progress.save_physical_retry_annotation if route == "/api/physical-retry-annotations" else progress.save_trajectory_annotation if route == "/api/trajectory-annotations" else progress.save_annotation
-                entry=progress.save_physical_retry_annotation(payload,retry_round=6) if route=="/api/physical-retry-round6-annotations" else progress.save_physical_retry_annotation(payload,retry_round=5) if route=="/api/physical-retry-round5-annotations" else progress.save_physical_retry_annotation(payload,retry_round=4) if route=="/api/physical-retry-round4-annotations" else progress.save_physical_retry_annotation(payload,retry_round=3) if route=="/api/physical-retry-round3-annotations" else progress.save_physical_retry_annotation(payload,retry_round=2) if route=="/api/physical-retry-round2-annotations" else save(payload)
+                entry=progress.save_physical_retry_annotation(payload,retry_round=7) if route=="/api/physical-retry-round7-annotations" else progress.save_physical_retry_annotation(payload,retry_round=6) if route=="/api/physical-retry-round6-annotations" else progress.save_physical_retry_annotation(payload,retry_round=5) if route=="/api/physical-retry-round5-annotations" else progress.save_physical_retry_annotation(payload,retry_round=4) if route=="/api/physical-retry-round4-annotations" else progress.save_physical_retry_annotation(payload,retry_round=3) if route=="/api/physical-retry-round3-annotations" else progress.save_physical_retry_annotation(payload,retry_round=2) if route=="/api/physical-retry-round2-annotations" else save(payload)
                 self.json_response(200, {"entry": entry})
             except AnnotationError as exc:
                 result = {"error": exc.message}
@@ -2691,10 +2741,10 @@ def handler_for(progress: Progress):
 
         def respond(self, head=False):
             route = unquote(urlsplit(self.path).path)
-            if route in ("/api/annotations", "/api/trajectory-annotations", "/api/physical-retry-annotations", "/api/physical-retry-round2-annotations", "/api/physical-retry-round3-annotations", "/api/physical-retry-round4-annotations", "/api/physical-retry-round5-annotations", "/api/physical-retry-round6-annotations"):
+            if route in ("/api/annotations", "/api/trajectory-annotations", "/api/physical-retry-annotations", "/api/physical-retry-round2-annotations", "/api/physical-retry-round3-annotations", "/api/physical-retry-round4-annotations", "/api/physical-retry-round5-annotations", "/api/physical-retry-round6-annotations", "/api/physical-retry-round7-annotations"):
                 try:
                     read = progress.physical_retry_annotations if route == "/api/physical-retry-annotations" else progress.trajectory_annotations if route == "/api/trajectory-annotations" else progress.annotations
-                    data=progress.physical_retry_annotations(6) if route=="/api/physical-retry-round6-annotations" else progress.physical_retry_annotations(5) if route=="/api/physical-retry-round5-annotations" else progress.physical_retry_annotations(4) if route=="/api/physical-retry-round4-annotations" else progress.physical_retry_annotations(3) if route=="/api/physical-retry-round3-annotations" else progress.physical_retry_annotations(2) if route=="/api/physical-retry-round2-annotations" else read()
+                    data=progress.physical_retry_annotations(7) if route=="/api/physical-retry-round7-annotations" else progress.physical_retry_annotations(6) if route=="/api/physical-retry-round6-annotations" else progress.physical_retry_annotations(5) if route=="/api/physical-retry-round5-annotations" else progress.physical_retry_annotations(4) if route=="/api/physical-retry-round4-annotations" else progress.physical_retry_annotations(3) if route=="/api/physical-retry-round3-annotations" else progress.physical_retry_annotations(2) if route=="/api/physical-retry-round2-annotations" else read()
                     self.json_response(200, data, head=head)
                 except AnnotationError as exc:
                     self.json_response(exc.status, {"error": exc.message}, head=head)
@@ -2721,9 +2771,9 @@ def handler_for(progress: Progress):
                     path = progress.local(rel)
                     if not allowed_artifact(path.relative_to(progress.root).as_posix()):
                         raise ValueError("Not a dashboard artifact")
-                    if path.relative_to(progress.root).as_posix().startswith((PHYSICAL_DEMOS, CAMERA_RETAKE_DEMOS, PHYSICAL_RETRY_DEMOS, PHYSICAL_RETRY_DIAGNOSTICS, PHYSICAL_RETRY_DETAIL_DIAGNOSTICS, PHYSICAL_RETRY_DARK_DIAGNOSTICS,PHYSICAL_RETRY2_DEMOS,PHYSICAL_RETRY2_DIAGNOSTICS,PHYSICAL_RETRY2_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY2_DARK_DIAGNOSTICS,PHYSICAL_RETRY2_PLANNING,PHYSICAL_RETRY3_DEMOS,PHYSICAL_RETRY3_DIAGNOSTICS,PHYSICAL_RETRY3_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY3_DARK_DIAGNOSTICS,PHYSICAL_RETRY3_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY3_TOP_DIAGNOSTICS,PHYSICAL_RETRY3_PLANNING,PHYSICAL_RETRY4_DEMOS,PHYSICAL_RETRY4_DIAGNOSTICS,PHYSICAL_RETRY4_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY4_DARK_DIAGNOSTICS,PHYSICAL_RETRY4_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY4_TOP_DIAGNOSTICS,PHYSICAL_RETRY4_PLANNING,PHYSICAL_RETRY5_DEMOS,PHYSICAL_RETRY5_DIAGNOSTICS,PHYSICAL_RETRY5_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY5_DARK_DIAGNOSTICS,PHYSICAL_RETRY5_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY5_TOP_DIAGNOSTICS,PHYSICAL_RETRY5_PLANNING,PHYSICAL_RETRY6_DEMOS,PHYSICAL_RETRY6_DIAGNOSTICS,PHYSICAL_RETRY6_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY6_DARK_DIAGNOSTICS,PHYSICAL_RETRY6_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY6_TOP_DIAGNOSTICS,PHYSICAL_RETRY6_PLANNING)):
+                    if path.relative_to(progress.root).as_posix().startswith((PHYSICAL_DEMOS, CAMERA_RETAKE_DEMOS, PHYSICAL_RETRY_DEMOS, PHYSICAL_RETRY_DIAGNOSTICS, PHYSICAL_RETRY_DETAIL_DIAGNOSTICS, PHYSICAL_RETRY_DARK_DIAGNOSTICS,PHYSICAL_RETRY2_DEMOS,PHYSICAL_RETRY2_DIAGNOSTICS,PHYSICAL_RETRY2_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY2_DARK_DIAGNOSTICS,PHYSICAL_RETRY2_PLANNING,PHYSICAL_RETRY3_DEMOS,PHYSICAL_RETRY3_DIAGNOSTICS,PHYSICAL_RETRY3_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY3_DARK_DIAGNOSTICS,PHYSICAL_RETRY3_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY3_TOP_DIAGNOSTICS,PHYSICAL_RETRY3_PLANNING,PHYSICAL_RETRY4_DEMOS,PHYSICAL_RETRY4_DIAGNOSTICS,PHYSICAL_RETRY4_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY4_DARK_DIAGNOSTICS,PHYSICAL_RETRY4_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY4_TOP_DIAGNOSTICS,PHYSICAL_RETRY4_PLANNING,PHYSICAL_RETRY5_DEMOS,PHYSICAL_RETRY5_DIAGNOSTICS,PHYSICAL_RETRY5_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY5_DARK_DIAGNOSTICS,PHYSICAL_RETRY5_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY5_TOP_DIAGNOSTICS,PHYSICAL_RETRY5_PLANNING,PHYSICAL_RETRY6_DEMOS,PHYSICAL_RETRY6_DIAGNOSTICS,PHYSICAL_RETRY6_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY6_DARK_DIAGNOSTICS,PHYSICAL_RETRY6_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY6_TOP_DIAGNOSTICS,PHYSICAL_RETRY6_PLANNING,PHYSICAL_RETRY7_DEMOS,PHYSICAL_RETRY7_DIAGNOSTICS,PHYSICAL_RETRY7_DETAIL_DIAGNOSTICS,PHYSICAL_RETRY7_DARK_DIAGNOSTICS,PHYSICAL_RETRY7_OVERVIEW_DIAGNOSTICS,PHYSICAL_RETRY7_TOP_DIAGNOSTICS,PHYSICAL_RETRY7_PLANNING)):
                         physical = progress.physical_execution()
-                        retry_rows=[*physical['failure_retry']['entries'],*physical['failure_retry_round2']['entries'],*physical['failure_retry_round3']['entries'],*physical['failure_retry_round4']['entries'],*physical['failure_retry_round5']['entries'],*physical['failure_retry_round6']['entries']]
+                        retry_rows=[*physical['failure_retry']['entries'],*physical['failure_retry_round2']['entries'],*physical['failure_retry_round3']['entries'],*physical['failure_retry_round4']['entries'],*physical['failure_retry_round5']['entries'],*physical['failure_retry_round6']['entries'],*physical['failure_retry_round7']['entries']]
                         valid_urls = {entry.get(key) for entry in [*physical['entries'], *physical['camera_retakes']['entries'], *retry_rows]
                                       for key in ('video_url', 'result_url', 'diagnostic_report_url','planning_result_url')}
                         valid_urls.update(frame['url'] for entry in retry_rows for frame in entry.get('diagnostics',[]))

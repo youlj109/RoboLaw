@@ -91,6 +91,19 @@ def load_record(manifest_path, row):
         physics_metadata_path=relative(metadata_path), physics_metadata_sha256=sha(metadata_path),
         physical_overlay_path=relative(overlay_path), physical_overlay_sha256=sha(overlay_path),
         source_paths_sha256=planned['composition']['source_paths_sha256'])
+    revision = None
+    if 'scene_revision' in result:
+        from scripts.extensions.replicator.scene_revision_review import validate_scene_revision
+        revision = validate_scene_revision(ROOT,result['scene_revision'],expected_scene_id=result['scene_id'],current=row)
+        if result['scene_revision'] != row['scene_revision']: raise ValueError('Result scene revision differs')
+        if (dict(path=result['config_path'],sha256=result['config_sha256']) != revision['document']['new_config']
+                or planned.get('scene_revision') != result['scene_revision']
+                or planned.get('composition') != revision['document']['new_composition']
+                or planned.get('config_path') != result['config_path']
+                or planned.get('config_sha256') != result['config_sha256']):
+            raise ValueError('Rendered actual state/planning sources differ from the new scene revision')
+        binding.update(scene_revision=result['scene_revision'],layout_changed=True,
+            camera_reference_scope='historical_camera_pose_only')
     observation = result
     if result['kind'] == 'physical_failure_retry_execution':
         # Later rounds also contain earlier no-render retries. Walk the frozen
@@ -98,7 +111,8 @@ def load_record(manifest_path, row):
         for prior in reversed(result['prior_physical_attempts']):
             prior_path = bound(prior['result_path'],prior['result_sha256'])
             observation = json.loads(prior_path.read_text())
-            if observation.get('scene_id') != result['scene_id'] or observation.get('config_sha256') != result['config_sha256']:
+            expected_camera_config = revision['document']['old_config']['sha256'] if revision else result['config_sha256']
+            if observation.get('scene_id') != result['scene_id'] or observation.get('config_sha256') != expected_camera_config:
                 raise ValueError('Diagnostic observation reference belongs to another scene/config')
             if observation.get('overview') or observation.get('camera_override',{}).get('applied'):break
         else:raise ValueError('No recorded camera in the physical history')

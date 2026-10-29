@@ -128,6 +128,9 @@ def main(argv=None):
                                settings=execution.runtime_settings(args))])
     if execution.round_two(plan):
         candidate.update(retry_round=plan['retry_round'], source_previous_retry_manifest=plan['source_previous_retry_manifest'])
+    if plan.get('retry_round') == 7:
+        candidate.update(layout_changed=True, success_predicate_changed=False,
+            scope='Three separately versioned added-hazard poses; one frozen candidate and at most one actual no-render episode each. Original task assets/predicate and all prior-layout histories retained.')
     mp=args.output/'manifest.json'
     existing=json.loads(mp.read_text()) if mp.exists() else None
     if existing:
